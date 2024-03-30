@@ -1,17 +1,322 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Login from "./pages/Login";
+import MapScreen from "./pages/MapScreen";
+import DoerMessageList from "./pages/Doer/Messaging/DoerMessageList";
+import DoerDashboard from "./pages/Doer/DoerDashboard";
+import DoerHome from "./pages/Doer/DoerHome";
+import DoerProfile from "./pages/Doer/DoerProfile";
+import DoerMapScreen from "./pages/Doer/DoerMapScreen";
+import PostedJobDoerView from "./pages/Doer/Jobs/PostedJobDoerView";
+import DoerPaymentHistory from "./pages/Doer/AvatarMenu/DoerPaymentHistory";
+import { createStandaloneToast } from "@chakra-ui/toast";
+import { ChakraProvider } from "@chakra-ui/react";
+import { StreamChat } from "stream-chat";
+import DoerContactForm from "./pages/Doer/AvatarMenu/DoerContactForm";
+import DoerPrivacyPolicy from "./pages/Doer/AvatarMenu/DoerPrivacyPolicy";
+import DoerUserAgreement from "./pages/Doer/FinishOnboarding/DoerUserAgreement";
+import DoerIDVerify from "./pages/Doer/FinishOnboarding/DoerIDVerify";
+import DoerInProgressList from "./pages/Doer/JobLists/DoerInProgressList";
+import DoerSavedList from "./pages/Doer/JobLists/DoerSavedList";
+import DoerInReviewList from "./pages/Doer/JobLists/DoerInReviewList";
+import DoerCompletedList from "./pages/Doer/JobLists/DoerCompletedList";
+
+
+//Needer Components
+import NeederAccountManager from "./pages/Needer/AvatarMenu/NeederAccountManager";
+import NeederContactForm from "./pages/Needer/AvatarMenu/NeederContactForm";
+import NeederPaymentHistory from "./pages/Needer/AvatarMenu/NeederPaymentHistory";
+import NeederPrivacyPolicy from "./pages/Needer/AvatarMenu/NeederPrivacyPolicy"
+import NeederThirdPartySoftware from "./pages/Needer/AvatarMenu/NeederThirdPartySoftware";
+import NeederIDVerify from "./pages/Needer/FinishOnboarding/NeederIDVerify";
+import NeederTaxAgreement from "./pages/Needer/FinishOnboarding/NeederTaxAgreement";
+import NeederUserAgreement from "./pages/Needer/FinishOnboarding/NeederUserAgreement";
+import NeederCompletedList from "./pages/Needer/JobLists/NeederCompletedList";
+import NeederInProgressList from "./pages/Needer/JobLists/NeederInProgressList";
+import NeederInReviewList from "./pages/Needer/JobLists/NeederInReviewList";
+import NeederPostedList from "./pages/Needer/JobLists/NeederPostedList";
+//didnt import anything from jobs folder
+import NeederDoerMessageList from "./pages/Needer/Messaging/NeederMessageList";
+import NeederDashboard from "./pages/Needer/NeederDashboard";
+import NeederHeader from "./pages/Needer/NeederHeader";
+import NeederHome from "./pages/Needer/NeederHome";
+import NeederMapScreen from "./pages/Needer/NeederMapScreen";
+import NeederMapSelectedJob from "./pages/Needer/NeederMapSelectedJob";
+import NeederProfile from "./pages/Needer/NeederProfile";
+import NeederMessageList from "./pages/Needer/Messaging/NeederMessageList";
+import AddJobStart from "./pages/Needer/Jobs/AddJob/AddJobStart";
+import AddJobInfo from "./pages/Needer/Jobs/AddJob/AddJobInfo";
+import NeederApplicants from "./pages/Needer/Jobs/NeederApplicants";
+import ApplicantProfile from "./pages/Needer/Jobs/Applicants/ApplicantProfile";
+
+
+//Stream Chat
+import {
+  Chat,
+  Channel,
+  ChannelList,
+  Window,
+  ChannelHeader,
+  MessageList,
+  MessageInput,
+  Thread,
+  useCreateChatClient,
+} from "stream-chat-react";
+
+import "stream-chat-react/dist/css/v2/index.css";
+import DoerAccountManager from "./pages/Doer/AvatarMenu/DoerAccountManager";
+import DoerTaxAgreement from "./pages/Doer/FinishOnboarding/DoerTaxAgreement";
+import NeederAccountCreation from "./pages/Register/Needer/NeederAccountCreation";
+import AddProfileInfo from "./pages/Register/Needer/AddProfileInfo";
+import OnboardingNeederUserAgreement from "./pages/Register/Needer/OnboardingNeederUserAgreement"
+import OnboardingNeederIDVerify from "./pages/Register/Needer/OnboardingNeederIDVerify";
+import NeederNewProfile from "./pages/Needer/NeederNewProfile";
+import DoerAccountCreation from "./pages/Register/Doer/DoerAccountCreation";
+import DoerAddProfileInfo from "./pages/Register/Doer/DoerAddProfileInfo";
+import OnboardingDoerUserAgreement from "./pages/Register/Doer/OnboardingDoerUserAgreement";
+import OnboardingDoerTaxAgreement from "./pages/Register/Doer/OnboardingDoerTaxAgreement";
+import OnboardingDoerIDVerify from "./pages/Register/Doer/OnboardingDoerIDVerify";
+import StripeSetUp from "./pages/Register/Doer/StripeSetUp";
+
+
+
+const { ToastContainer, toast } = createStandaloneToast();
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+  {
+    path: "/Login",
+    element: <Login />,
+  },
+  {
+    path: "/MapScreen",
+    element: <MapScreen />,
+  },
+
+  {
+    path: "/DoerHome",
+    element: <DoerHome />,
+  },
+  {
+    path: "/DoerDashboard",
+    element: <DoerDashboard />,
+  },
+  {
+    path: "/DoerMapScreen",
+    element: <DoerMapScreen />,
+  },
+  {
+    path: "/DoerMessageList",
+    element: <DoerMessageList />,
+  },
+  {
+    path: "/DoerProfile",
+    element: <DoerProfile />,
+  },
+  {
+    path: "/DoerAccountCreation",
+    element: <DoerAccountCreation />,
+  },
+  {
+    path: "/PostedJobDoerView",
+    element: <PostedJobDoerView />,
+  },
+  {
+    path: "/DoerPaymentHistory",
+    element: <DoerPaymentHistory />,
+  },
+  {
+    path: "/DoerContactForm",
+    element: <DoerContactForm />,
+  },
+  {
+    path: "/DoerPrivacyPolicy",
+    element: <DoerPrivacyPolicy />,
+  },
+  {
+    path: "/DoerAccountManager",
+    element: <DoerAccountManager />,
+  },
+  {
+    path: "/DoerUserAgreement",
+    element: <DoerUserAgreement />,
+  },
+  {
+    path: "/DoerIDVerify",
+    element: <DoerIDVerify />,
+  },
+  {
+    path: "/DoerTaxAgreement",
+    element: <DoerTaxAgreement />,
+  },
+  {
+    path: "/DoerInProgressList",
+    element: <DoerInProgressList />,
+  },
+  {
+    path: "/DoerSavedList",
+    element: <DoerSavedList />,
+  },
+  {
+    path: "/DoerInReviewList",
+    element: <DoerInReviewList />,
+  },
+  {
+    path: "/DoerCompletedList",
+    element: <DoerCompletedList />,
+  },
+//now this is the Needer section
+  {
+    path: "/NeederMapScreen",
+    element: <NeederMapScreen />,
+  },
+
+  {
+    path: "/NeederHome",
+    element: <NeederHome />,
+  },
+  {
+    path: "/NeederDashboard",
+    element: <NeederDashboard />,
+  },
+  
+  {
+    path: "/NeederMessageList",
+    element: <NeederMessageList />,
+  },
+  {
+    path: "/NeederProfile",
+    element: <NeederProfile />,
+  },
+  {
+    path: "/NeederNewProfile",
+    element: <NeederNewProfile />,
+  },
+
+  {
+    path: "/NeederPaymentHistory",
+    element: <NeederPaymentHistory />,
+  },
+  {
+    path: "/NeederContactForm",
+    element: <NeederContactForm />,
+  },
+  {
+    path: "/NeederPrivacyPolicy",
+    element: <NeederPrivacyPolicy />,
+  },
+  {
+    path: "/NeederAccountManager",
+    element: <NeederAccountManager />,
+  },
+  {
+    path: "/NeederUserAgreement",
+    element: <NeederUserAgreement />,
+  },
+  {
+    path: "/NeederIDVerify",
+    element: <NeederIDVerify />,
+  },
+  {
+    path: "/NeederTaxAgreement",
+    element: <NeederTaxAgreement />,
+  },
+  {
+    path: "/NeederInProgressList",
+    element: <NeederInProgressList />,
+  },
+  {
+    path: "/NeederPostedList",
+    element: <NeederPostedList />,
+  },
+  {
+    path: "/NeederInReviewList",
+    element: <NeederInReviewList />,
+  },
+  {
+    path: "/NeederCompletedList",
+    element: <NeederCompletedList />,
+  },
+  {
+    path: "/AddJobStart",
+    element: <AddJobStart />,
+  },
+  {
+    path: "/AddJobInfo",
+    element: <AddJobInfo />,
+  },
+  {
+    path: "/NeederApplicants",
+    element: <NeederApplicants />,
+  },
+  {
+    path: "/ApplicantProfile",
+    element: <ApplicantProfile />,
+  },
+  {
+    path: "/NeederAccountCreation",
+    element: <NeederAccountCreation />,
+  },
+  {
+    path: "/AddProfileInfo",
+    element: <AddProfileInfo />,
+  },
+  {
+    path: "/OnboardingNeederUserAgreement",
+    element: <OnboardingNeederUserAgreement />,
+  },
+
+  {
+    path: "/OnboardingNeederIDVerify",
+    element: <OnboardingNeederIDVerify />,
+  },
+  {
+    path: "/DoerAddProfileInfo",
+    element: <DoerAddProfileInfo />,
+  },
+  {
+    path: "/OnboardingDoerUserAgreement",
+    element: <OnboardingDoerUserAgreement />,
+  },
+  {
+    path: "/OnboardingDoerTaxAgreement",
+    element: <OnboardingDoerTaxAgreement />,
+  },
+  {
+    path: "/OnboardingDoerIDVerify",
+    element: <OnboardingDoerIDVerify />,
+  },
+  {
+    path: "/StripeSetUp",
+    element: <StripeSetUp />,
+  },
+
+]);
+
+const client = StreamChat.getInstance(process.env.STREAM_CHAT_API_KEY);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <>
+    <ChakraProvider>
+      <Chat client={client}>
+        <RouterProvider router={router} />
+      </Chat>
+    </ChakraProvider>
+  </>
 );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+toast({ title: "Chakra UI" });

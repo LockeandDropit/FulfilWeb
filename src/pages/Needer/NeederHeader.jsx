@@ -94,7 +94,7 @@ const NeederHeader = () => {
       "employers/" + user.uid + "/profilePicture.jpg"
     );
 
-    console.log(reference.service)
+    // console.log(reference.service)
     if (!reference.service ) {
     } else {
       await getDownloadURL(reference).then((response) => {

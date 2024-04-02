@@ -37,10 +37,11 @@ import {
   updateDoc,
   addDoc,
   setDoc,
-  deleteDoc
+  deleteDoc,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
+import { StreamChat } from "stream-chat";
+import { useChatContext } from "stream-chat-react";
 import {
   Editable,
   EditableInput,
@@ -83,30 +84,54 @@ const ApplicantProfile = () => {
   const [rating, setRating] = useState(null); //make dynamic, pull from Backend
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
 
+  //grabs client using streamChat api
+
   const starImgFilled = `url(${star_filled})`;
   const starImgCorner = `url(${star_corner})`;
 
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   //New code
   const location = useLocation();
 
   const [applicant, setApplicant] = useState(null);
-  const [jobTitle, setJobTitle] = useState(null)
-  const [jobID, setJobID] = useState(null)
-  const [employerFirstName, setEmployerFirstName] = useState(null)
-  const [employerLastName, setEmployerLastName] = useState(null)
-  const [isHourly, setIsHourly] = useState(null)
-
+  const [jobTitle, setJobTitle] = useState(null);
+  const [jobID, setJobID] = useState(null);
+  const [employerFirstName, setEmployerFirstName] = useState(null);
+  const [employerLastName, setEmployerLastName] = useState(null);
+  const [isHourly, setIsHourly] = useState(null);
+  const [userID, setUserID] = useState(null);
 
   useEffect(() => {
     if (location.state === null) {
     } else {
+      console.log("is this the bug?", location.state);
       setApplicant(location.state.applicant);
-      setJobTitle(location.state.jobTitle)
-      setJobID(location.state.jobID)
-      setIsHourly(location.state.isHourly)
+      setJobTitle(location.state.jobTitle);
+      setJobID(location.state.jobID);
+      setIsHourly(location.state.isHourly);
     }
   }, [location]);
+
+  useEffect(() => {
+    if (hasRun === false) {
+      onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+        setUserID(currentUser.uid);
+        console.log(currentUser.uid);
+      });
+      setHasRun(true);
+    } else {
+    }
+  });
+
+  useEffect(() => {
+    //get rid of useEffect that calls this data from FB. Check if is hourly, then set isFlat rate based off of that. This will negate that weird crash???
+
+    if (isHourly === true) {
+    } else {
+      setIsFlatRate(true);
+    }
+  }, [isHourly]);
 
   useEffect(() => {
     if (applicant != null) {
@@ -135,21 +160,21 @@ const ApplicantProfile = () => {
     }
   }, [applicant]);
 
-    //gets employer info to place in db (messages) for applicant use
-    useEffect(() => {
-      if (user != null) {
-        const docRef = doc(db, "employers", user.uid);
-  
-        getDoc(docRef).then((snapshot) => {
-          console.log(snapshot.data());
-          setEmployerFirstName(snapshot.data().firstName);
-          setEmployerLastName(snapshot.data().lastName);
-          //get profile picture here as well?
-        });
-      } else {
-        console.log("oops!");
-      }
-    }, [user]);
+  //gets employer info to place in db (messages) for applicant use
+  useEffect(() => {
+    if (user != null) {
+      const docRef = doc(db, "employers", user.uid);
+
+      getDoc(docRef).then((snapshot) => {
+        console.log(snapshot.data());
+        setEmployerFirstName(snapshot.data().firstName);
+        setEmployerLastName(snapshot.data().lastName);
+        //get profile picture here as well?
+      });
+    } else {
+      console.log("oops!");
+    }
+  }, [user]);
 
   // this gets the profile picture
   // const profilePictureURL = useSelector(selectUserProfilePicture)
@@ -197,17 +222,6 @@ const ApplicantProfile = () => {
   const [] = useState();
   const [hasRun, setHasRun] = useState(false);
   const [updatedBio, setUpdatedBio] = useState(null);
-
-  useEffect(() => {
-    if (hasRun === false) {
-      onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser);
-        console.log(currentUser.uid);
-      });
-      setHasRun(true);
-    } else {
-    }
-  });
 
   useEffect(() => {
     if (applicant != null) {
@@ -332,27 +346,27 @@ const ApplicantProfile = () => {
     }
   }, [applicant]);
 
-//help from https://www.youtube.com/watch?v=276IyIIdJnA fro star stuff.
+  //help from https://www.youtube.com/watch?v=276IyIIdJnA fro star stuff.
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const [isVolunteer, setIsVolunteer] = useState(null)
+  const [isVolunteer, setIsVolunteer] = useState(null);
 
-//gets whether or not job is volunteer
-useEffect(() => {
-  if (jobID != null) {
-    const docRef = doc(db, "All Jobs", jobID);
+  //gets whether or not job is volunteer
+  // useEffect(() => {
+  //   if (jobID != null) {
+  //     const docRef = doc(db, "All Jobs", jobID);
 
-    getDoc(docRef).then((snapshot) => {
-      console.log(snapshot.data());
-      setIsVolunteer(snapshot.data().isVolunteer)
-    });
-  } else {
-    console.log("oops!");
-  }
-}, [jobID]);
+  //     getDoc(docRef).then((snapshot) => {
+  //       if (snapshot.data()) {
 
-
+  //       }
+  //       setIsVolunteer(snapshot.data().isVolunteer);
+  //     });
+  //   } else {
+  //     console.log("oops!");
+  //   }
+  // }, [jobID]);
 
   //deletes applicant
   const deleteApplicant = () => {
@@ -367,11 +381,11 @@ useEffect(() => {
         applicant.streamChatID
       )
     )
-      .then(  () => {
+      .then(() => {
         //user info submitted to Job applicant file
         console.log("Applicant Deleted");
-      
-        navigate("ListOfApplicants", { props: jobTitle });
+
+        navigate(-1);
       })
       .catch((error) => {
         //uh oh
@@ -390,8 +404,9 @@ useEffect(() => {
       employerID: user.uid,
       isHired: false,
       isHourly: isHourly,
-      isVolunteer: isVolunteer,
-      needsDeposit: false
+      isFlatRate: isFlatRate,
+      isVolunteer: false,
+      needsDeposit: false,
       // applicantAvatar: profilePictureURL,
       // employerAvatar: employerProfilePictureURL
     })
@@ -413,10 +428,11 @@ useEffect(() => {
       employerID: user.uid,
       isHired: false,
       isHourly: isHourly,
+      isFlatRate: isFlatRate,
       confirmedRate: 0,
       jobOffered: false,
       applicationSent: false,
-      isVolunteer: isVolunteer
+      isVolunteer: false,
       // applicantAvatar: profilePictureURL,
       // employerAvatar: employerProfilePictureURL,
       // applicantInitials: here,
@@ -451,9 +467,129 @@ useEffect(() => {
       });
 
     //add JobID to active chat list for both applicant and employer
- 
-    // testNewChannel()
+
+    testNewChannel();
   };
+
+  //modal control
+
+  const [isFlatRate, setIsFlatRate] = useState(null);
+  const [applicantFirstName, setApplicantFirstName] = useState(null);
+
+  // useEffect(() => {
+  //   if (user !== null) {
+  //     const docRef = doc(db, "employers", user.uid, "Posted Jobs", jobTitle);
+
+  //     getDoc(docRef).then((snapshot) => {
+  //       if (snapshot.data()) {
+  //         console.log("hellp", snapshot.data())
+  //         setIsFlatRate(snapshot.data().isFlatRate);
+  //         setIsHourly(snapshot.data().isHourly);
+  //         // setApplicantFirstName(snapshot.data().applicantFirstName)
+  //       } else {
+  //       }
+  //     });
+  //   } else {
+  //     console.log("oops!");
+  //   }
+  // }, [user]);
+
+  const handleModalOpen = () => {
+    if (isHourly === true) {
+      onOpen();
+    } else {
+    }
+    if (isFlatRate === true) {
+      onOpenFlatRate();
+    } else {
+    }
+  };
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenFlatRate,
+    onOpen: onOpenFlatRate,
+    onClose: onCloseFlatRate,
+  } = useDisclosure();
+
+  console.log(isHourly);
+
+  console.log("isFlat rate?", isFlatRate);
+
+  const [jobOffered, setJobOffered] = useState(null);
+  const [confirmedRate, setConfirmedRate] = useState(null);
+
+  const [isHired, setIsHired] = useState(null);
+
+  //credit https://www.code-sample.com/2019/12/react-allow-only-numbers-in-textbox.html
+  const numberOnlyRegexMinimumCharacterInput = /^[0-9\b]{1,7}$/;
+
+  const [flatRateValidationMessage, setFlatRateValidationMessage] = useState();
+
+  const [flatRateValidationBegun, setFlatRateValidationBegun] = useState(false);
+
+  const flatRateValidate = (flatRate) => {
+    setFlatRateValidationBegun(true);
+    const isValid = numberOnlyRegexMinimumCharacterInput.test(flatRate);
+    if (!isValid) {
+      setFlatRateValidationMessage("Please enter valid rate");
+      console.log(flatRateValidationMessage);
+    } else {
+      setFlatRateValidationMessage();
+      setConfirmedRate(flatRate);
+    }
+  };
+
+  //credit typeof help https://flaviocopes.com/how-to-check-undefined-property-javascript/
+
+  const minLengthRegEx = /^.{1,}$/;
+
+  const checkLength = () => {
+    const rateValid = minLengthRegEx.test(confirmedRate);
+
+    if (!rateValid || typeof confirmedRate === "undefined") {
+      alert("Please enter valid rate");
+      setFlatRateValidationMessage("Please enter valid rate");
+    } else {
+      // sendOffer();
+    }
+  };
+
+  //initiate interview channel logic
+
+  const client = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
+  const userInfo = {
+    id: userID,
+    // name: userName,
+    // image: `https://getstream.io/random_png/?id=${userId}&name=${userName}`,
+  };
+
+  const testNewChannel = async () => {
+    client.connectUser(userInfo, client.devToken(userID));
+    
+    const channel = client.channel("messaging", jobID, {
+      members: [applicant.streamChatID, user.uid],
+      name: jobTitle,
+    });
+
+    await channel.create();
+    // setNewChannel(newChannel);
+
+    // trying to see if this will return access to "unread" message count
+    const startWatching = channel.watch();
+    console.log(startWatching);
+
+    setTimeout(() => {
+      navigate("/NeederMessageList", {
+        state: {
+          selectedChannel: channel.cid,
+        
+        },
+      });
+    }, 1000);
+  };
+
+  console.log("you are here");
 
   return (
     <>
@@ -499,22 +635,20 @@ useEffect(() => {
                 {" "}
                 {userCity}, {userState}
               </Heading>
-             
-               
-                <Flex>
+
+              <Flex>
                 {maxRating.map((item, key) => {
                   return (
                     <Box activeopacity={0.7} key={item} marginTop="8px">
                       <Image
-                       boxSize='24px'
+                        boxSize="24px"
                         src={item <= rating ? star_filled : star_corner}
-                        
                       ></Image>
                     </Box>
                   );
                 })}
-                </Flex>
-           
+              </Flex>
+
               {/* <Center flexDirection="column"> */}
               <Flex>
                 <Heading size="lg" marginTop="16px" marginRight="640px">
@@ -659,37 +793,117 @@ useEffect(() => {
                 ))
               )}
               <Flex>
-               <Button
-              color="red"
-              backgroundColor="white"
-              width="240px"
-              marginTop="60px"
-              // position="absolute"
-              bottom="2"
-              // right="500"
-              // left="300"
-              // onClick={() => deleteApplicant()}
-            >
-          Delete
-            </Button>
-               <Button
-              colorScheme="blue"
-              width="240px"
-              marginTop="60px"
-              // position="absolute"
-              bottom="2"
-              marginLeft="60px"
-              // right="500"
-              // left="300"
-              // onClick={() => checkLength()}
-            >
-         Interview
-            </Button>
-            </Flex>
+                <Button
+                  color="red"
+                  backgroundColor="white"
+                  width="240px"
+                  marginTop="60px"
+                  // position="absolute"
+                  bottom="2"
+                  // right="500"
+                  // left="300"
+                  onClick={() => deleteApplicant()}
+                >
+                  Delete
+                </Button>
+                <Button
+                  colorScheme="blue"
+                  width="240px"
+                  marginTop="60px"
+                  // position="absolute"
+                  bottom="2"
+                  marginLeft="60px"
+                  // right="500"
+                  // left="300"
+                  onClick={() => createInterviewChat()}
+                >
+                  Interview
+                </Button>
+              </Flex>
             </Center>
           </Box>
         ) : null}
       </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Offer Position</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <>
+              <FormLabel marginTop="8" width>
+                Enter your offer
+              </FormLabel>
+              <Flex>
+                <Heading size="sm" marginTop="8px">
+                  {" "}
+                  $
+                </Heading>
+                <Input
+                  marginLeft="8px"
+                  width="240px"
+                  placeholder="Enter budget here"
+                  onChange={(e) => flatRateValidate(e.target.value)}
+                />
+              </Flex>
+              {flatRateValidationBegun === true ? (
+                <Text color="red" marginLeft="32px">
+                  {flatRateValidationMessage}
+                </Text>
+              ) : null}
+            </>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button variant="ghost" mr={3} onClick={onCloseFlatRate}>
+              Close
+            </Button>
+            <Button colorScheme="blue">Send Offer</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isOpenFlatRate} onClose={onCloseFlatRate} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Offer Position</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <>
+              <FormLabel marginTop="8" width>
+                Enter your offer
+              </FormLabel>
+              <Flex>
+                <Heading size="sm" marginTop="8px">
+                  {" "}
+                  $
+                </Heading>
+                <Input
+                  marginLeft="8px"
+                  width="240px"
+                  placeholder="Enter budget here"
+                  onChange={(e) => flatRateValidate(e.target.value)}
+                />
+              </Flex>
+              {flatRateValidationBegun === true ? (
+                <Text color="red" marginLeft="32px">
+                  {flatRateValidationMessage}
+                </Text>
+              ) : null}
+            </>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button variant="ghost" mr={3} onClick={onCloseFlatRate}>
+              Close
+            </Button>
+            <Button colorScheme="blue" onClick={() => checkLength()}>
+              Send Offer
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

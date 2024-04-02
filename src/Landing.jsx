@@ -41,9 +41,9 @@ const Landing = () => {
                 <Heading type="blackAlpha" size="xl">Need work done?</Heading>
                 <Flex direction="row">
                   
-                  <Heading size="xl">Find the right person.</Heading>
-                  <Heading marginLeft="4px" color="#01A2E8" size="xl">
-                    Today.
+                  <Heading size="xl">Find the right person</Heading>
+                  <Heading marginLeft="8px" color="#01A2E8" size="xl">
+                    today.
                   </Heading>
                 </Flex>
                 {/* <Flex direction="row" alignContent="baseline" marginTop="16px" onClick={() => navigate("/NeederAccountCreation")}>

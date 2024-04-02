@@ -85,6 +85,11 @@ import StripeSetUp from "./pages/Register/Doer/StripeSetUp";
 
 
 
+
+
+
+
+
 const { ToastContainer, toast } = createStandaloneToast();
 
 const router = createBrowserRouter([

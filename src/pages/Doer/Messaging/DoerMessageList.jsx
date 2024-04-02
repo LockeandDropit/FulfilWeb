@@ -33,9 +33,13 @@ import {
   SearchBar,
   Thread,
   Window,
-  useChatContext,
+ChannelListMessengerProps,
   InfiniteScroll,
   ChannelListMessenger,
+  useChannelStateContext,
+  useChatContext,
+  useChannelListContext,
+  ChannelListContext
 } from "stream-chat-react";
 import { StreamChat } from "stream-chat";
 import { Spinner } from "@chakra-ui/react";
@@ -121,6 +125,7 @@ const DoerMessageList = () => {
 
   const [endRun, setEndRun] = useState(false)
 
+
   const loadTest = async (passedChannel) => {
     if (clientIsSet) {
       chatClient.connectUser(userInfo, chatClient.devToken(userID));
@@ -131,6 +136,7 @@ const DoerMessageList = () => {
         // console.log("list of channels user is in", channelSort.data.name, channelSort.cid)
         if (channelSort.cid === passedChannel) {
           setSelectedChannel(channelSort);
+          // setActiveChannel(channelSort)
      
           //or just navigate from here to selected channel??
           //pass whole channel object to navigate
@@ -160,12 +166,26 @@ console.log("debug", selectedChannel)
 
 
   //testing stuff 
+  
+const [locallySelectedChannel, setLocallySelectedChannel] = useState(null)
 
-  const testChannels = () => {
-    ChannelListMessenger()
 
-    console.log(ChannelListMessenger())
+// const { setActiveChannel, channel: activeChannel } = useChatContext()
+
+const { channel, watchers } = useChannelStateContext();
+
+// const { channels, setChannels } = useChannelListContext();
+
+  const testChannels = (channel) => {
+  console.log("channel from context", channel)
   }
+
+
+
+
+
+  
+  
 
   return (
     <>
@@ -188,7 +208,7 @@ console.log("debug", selectedChannel)
             </Heading>
               <Flex marginTop="4">
                 <Chat client={chatClient}>
-                  <ChannelList filters={filter} Paginator={InfiniteScroll} />
+                  <ChannelList filters={filter} Paginator={InfiniteScroll} onSelect={() => console.log("click")} />
 
                   <Channel channel={selectedChannel}>
                     <Box
@@ -219,7 +239,7 @@ console.log("debug", selectedChannel)
                 <Chat client={chatClient}>
                   <ChannelList filters={filter} Paginator={InfiniteScroll} />
 
-                  <Channel>
+                  <Channel channel={channel}>
                     <Box
                       width="50vw"
                       height="80vh"
@@ -227,9 +247,9 @@ console.log("debug", selectedChannel)
                       borderColor="red"
                     >
                       <Window>
-                        {/* <ChannelHeader /> */}
                         <ChannelHireHeader />
-                        <Button onClick={() => testChannels()}>Test</Button>
+                      
+                        
                         <MessageList />
                         <MessageInput />
                       </Window>
@@ -261,6 +281,7 @@ console.log("debug", selectedChannel)
             />
           </Center>
         )}
+  
       </Flex>
     </>
   );

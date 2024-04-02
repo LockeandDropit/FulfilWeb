@@ -1,5 +1,5 @@
 import React from "react";
-import { Heading } from "@chakra-ui/react";
+import { Center, Heading } from "@chakra-ui/react";
 import {
   Card,
   CardHeader,
@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
-import { query, collection, onSnapshot, getDoc, doc } from "firebase/firestore";
+import { query, collection, onSnapshot, getDoc, doc, setDoc } from "firebase/firestore";
 
 import { useEffect, useState } from "react";
 import {
@@ -30,6 +30,19 @@ import { ChatIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import { StreamChat } from "stream-chat";
 import { Spinner } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  FormLabel,
+} from "@chakra-ui/react";
+
 
 const InProgressCard = () => {
   const [postedJobs, setPostedJobs] = useState(null);
@@ -92,19 +105,17 @@ const InProgressCard = () => {
     // }
   };
 
-
-
   const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
 
-    const userInfo = {
+  const userInfo = {
     id: userID,
     // name: userName,
     // image: `https://getstream.io/random_png/?id=${userId}&name=${userName}`,
   };
 
-  const [userConnected, setUserConnected] = useState(false)
+  const [userConnected, setUserConnected] = useState(false);
 
-  const filter = { type: 'messaging', members: { $in: [userID] } };
+  const filter = { type: "messaging", members: { $in: [userID] } };
 
   // useEffect(() => {
   //   if (userID && chatClient && userConnected === false) {
@@ -115,19 +126,16 @@ const InProgressCard = () => {
   //   }
   // }, [userID, chatClient]);
 
-
   // const client = StreamChat.getInstance(STREAM_CHAT_API_KEY);
   const [selectedChannel, setSelectedChannel] = useState(null);
-//props passed https://stackoverflow.com/questions/64566405/react-router-dom-v6-usenavigate-passing-value-to-another-component
-const navigateToChannel = (x) => {
-navigate("/DoerMessageList", {state: {selectedChannel: x.channelID}})
-console.log(x.channelID)
-}
+  //props passed https://stackoverflow.com/questions/64566405/react-router-dom-v6-usenavigate-passing-value-to-another-component
+  const navigateToChannel = (x) => {
+    navigate("/DoerMessageList", { state: { selectedChannel: x.channelID } });
+    console.log(x.channelID);
+  };
 
   const getChannels = async (x) => {
-    const channelSort = await chatClient.queryChannels(filter, {
-
-    })
+    const channelSort = await chatClient.queryChannels(filter, {});
 
     setTimeout(() => {
       channelSort.map((channelSort) => {
@@ -142,10 +150,7 @@ console.log(x.channelID)
           console.log("no luck", channelSort.cid);
         }
       });
-    }, 1000)
-      
-   
-    
+    }, 1000);
   };
   const navigate = useNavigate();
 
@@ -157,6 +162,31 @@ console.log(x.channelID)
       console.log("nope");
     }
   }, [selectedChannel]);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleModalOpen = (postedJobs) => {
+ onOpen()
+  }
+
+
+  const completeAndReview = (postedJobs) => {
+    //set hasbeenRated to false so employer can check if they have been rated yet
+    setDoc(doc(db, "users", user.uid, "Ratings", postedJobs.jobTitle), {
+      ratingComplete: false
+    })
+      .then(() => {
+        navigate("ReviewEmployer", {
+          // employerID: employerID,
+          // jobID: jobID,
+          // jobTitle: jobTitle,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    //navigate to modal
+  };
 
   return (
     <div>
@@ -183,8 +213,13 @@ console.log(x.channelID)
             >
               <Stack>
                 <CardBody>
-                  <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap"
-                  marginLeft="16px">
+                  <Flex
+                    flex="1"
+                    gap="4"
+                    alignItems="center"
+                    flexWrap="wrap"
+                    marginLeft="16px"
+                  >
                     <Heading fontSize="24">{postedJobs.jobTitle}</Heading>
                     {/* <Flex
                       direction="column"
@@ -233,20 +268,24 @@ console.log(x.channelID)
                   >
                     Go To Messages
                   </Button> */}
-    <Flex direction="column" marginLeft="16px">
-                  <Heading size="sm" marginTop="2">
-                    Description
-                  </Heading>
-                  <Text>{postedJobs.description}</Text>
+                  <Flex direction="column" marginLeft="16px">
+                    <Heading size="sm" marginTop="2">
+                      Description
+                    </Heading>
+                    <Text>{postedJobs.description}</Text>
                   </Flex>
                   <Accordion allowMultiple>
-                    <AccordionItem  >
-                     <Flex direction="row-reverse" width="890px">
-                        <AccordionButton width="120px" position="flex-start" bottom="8px">
+                    <AccordionItem>
+                      <Flex direction="row-reverse" width="890px">
+                        <AccordionButton
+                          width="120px"
+                          position="flex-start"
+                          bottom="8px"
+                        >
                           <Box>See More</Box>
                           <AccordionIcon />
                         </AccordionButton>
-                        </Flex>
+                      </Flex>
                       <AccordionPanel pb={4}>
                         <Heading size="sm" marginTop="2">
                           Requirements
@@ -305,31 +344,68 @@ console.log(x.channelID)
                   >
                    Messages <ArrowForwardIcon marginLeft="4" />
                   </Button> */}
+            <Center>
                         <Button
-                          colorScheme="blue"
-                          textColor="white"
-                          width="180px"
+                         backgroundColor="white"
+                         textColor="black"
+                      borderWidth=".5px"
+                      // borderColor="black"
+                          width="240px"
                           height="40px"
-                          position="absolute"
-                          right="10"
-                          bottom="8"
+                          // position="absolute"
+                          // right="10"
+                          // bottom="8"
                           alignItems="center"
+                          marginRight="16px"
                           // onClick={() => getChannels(postedJobs)}
                           onClick={() => navigateToChannel(postedJobs)}
                         >
-                          Messages{" "}
-                          <ArrowForwardIcon marginLeft="2" marginTop="2px" />
+                          Go To Messages
+                          {/* <ArrowForwardIcon marginLeft="2" marginTop="2px" /> */}
                         </Button>
+
+                        <Button colorScheme="blue" width="240px"
+                          height="40px" onClick={() => handleModalOpen(postedJobs)}>Mark Complete</Button>
+                        </Center>
                       </AccordionPanel>
                     </AccordionItem>
                   </Accordion>
-              
                 </CardBody>
               </Stack>
             </Card>
           </div>
         ))
       )}
+
+<Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Rate This User (optional)</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <>
+              <FormLabel marginTop="8" width>
+                Enter your offer
+              </FormLabel>
+              <Flex>
+                <Heading size="sm" marginTop="8px">
+                  {" "}
+                  $
+                </Heading>
+               
+              </Flex>
+             
+            </>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button variant="ghost" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button colorScheme="blue">Send Offer</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

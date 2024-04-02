@@ -97,7 +97,7 @@ const NeederApplicants = () => {
   return (
     <>
       <NeederHeader />
-      <Box paddingTop="4" backgroundColor="#fff9e6" paddingRight="72" height="90vh" >
+      <Box paddingTop="4"  paddingRight="72" height="90vh" >
       <Flex>
         <NeederDashboard />
 

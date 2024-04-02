@@ -92,9 +92,9 @@ const NeederInProgressCard = () => {
     // }
   };
 
-  const apiKey = "gheexx2834gr";
 
-  const chatClient = new StreamChat(apiKey);
+
+  const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
 
     const userInfo = {
     id: userID,

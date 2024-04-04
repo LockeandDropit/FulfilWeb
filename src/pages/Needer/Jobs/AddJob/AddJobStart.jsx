@@ -204,24 +204,30 @@ const AddJobStart = () => {
     //check for null values https://stackoverflow.com/questions/6003884/how-do-i-check-for-null-values-in-javascript user578895
 
     if (!jobTitleValid || isOneTime === null) {
+      console.log("1")
       alert("Please fill out all fields");
+      console.log("1")
     } else {
       if (isOneTime === true && isFlatRate === true && !flatRateValid) {
         alert("Please fill out all fields");
+        console.log("2")
       } else {
         if (
           (isOneTime === true && isHourly === true && !upperRateValid) ||
           !lowerRateValid
         ) {
+          console.log("3")
           alert("Please fill out all fields");
         } else {
           if (isOneTime === false && isFlatRate === true && !flatRateValid) {
+            console.log("4")
             alert("Please fill out all fields");
           } else {
             if (
               (isOneTime === false && isHourly !== null && !upperRateValid) ||
               !lowerRateValid
             ) {
+              console.log("5")
               alert("Please fill out all fields");
             } else {
             }
@@ -229,18 +235,18 @@ const AddJobStart = () => {
         }
       }
     }
-    checkAddress()
-
+    checkAddress();
   };
-
 
   const checkAddress = () => {
     if (!streetAddress || !locationLat) {
-      alert("Please fill out all fields")
+      console.log(streetAddress, locationLat)
+      alert("Please fill out all fields");
+      console.log("6")
     } else {
-      submitJob()
+      submitJob();
     }
-  }
+  };
 
   const [payType, setPayType] = useState(null);
 
@@ -498,40 +504,40 @@ const AddJobStart = () => {
       category: jobCategory,
 
       streetAddress: streetAddress,
- 
+
       zipCode: zipCode,
       locationLat: locationLat,
       locationLng: locationLng,
     })
       .then(() => {
         //all good
-        console.log("submitted")
-      
+        console.log("submitted");
       })
       .catch((error) => {
         // no bueno
         console.log(error);
       });
 
-      navigate("/AddJobInfo", {state : { 
+    navigate("/AddJobInfo", {
+      state: {
         jobTitle: jobTitle,
         isVolunteer: isVolunteer,
         jobID: jobID,
-        firstName: firstName
-  }})
-  }
-
+        firstName: firstName,
+      },
+    });
+  };
 
   const testButtonNavigate = () => {
-    navigate("/AddJobInfo", {state : { 
-      jobTitle: jobTitle,
-      isVolunteer: isVolunteer,
-      jobID: jobID,
-      firstName: firstName
-}})
-  }
-
-   
+    navigate("/AddJobInfo", {
+      state: {
+        jobTitle: jobTitle,
+        isVolunteer: isVolunteer,
+        jobID: jobID,
+        firstName: firstName,
+      },
+    });
+  };
 
   const [lowerCaseJobTitle, setLowerCaseJobTitle] = useState(null);
 
@@ -589,7 +595,7 @@ const AddJobStart = () => {
       // if true, push to corresponding state
       // firstAddress.forEach((firstAddress) => {
       if (firstAddress) {
-        console.log(firstAddress)
+        console.log(firstAddress);
         setStreetNumber(firstAddress[0].long_name);
         // setStreetNumber(firstAddress[0].long_name);
         // console.log("first one", firstAddress[0].long_name);
@@ -629,11 +635,11 @@ const AddJobStart = () => {
     if (rawAddress) {
       geocodeByAddress(rawAddress.value.description)
         .then((results) => getLatLng(results[0]))
-        .then(({ lat }) => setLocationLat(lat))
-        // .then(({ lng }) => setLocationLng(lng));
-        geocodeByAddress(rawAddress.value.description)
+        .then(({ lat }) => setLocationLat(lat));
+      // .then(({ lng }) => setLocationLng(lng));
+      geocodeByAddress(rawAddress.value.description)
         .then((results) => getLatLng(results[0]))
-        .then(({ lng }) => setLocationLng(lng))
+        .then(({ lng }) => setLocationLng(lng));
       geocodeByPlaceId(rawAddress.value.place_id)
         .then((results) => setFirstAddress(results[0].address_components))
         .catch((error) => console.error(error));
@@ -684,7 +690,10 @@ const AddJobStart = () => {
               <GooglePlacesAutocomplete
                 apiKey="AIzaSyD1hJslP80ZJB_hvkyj4OLnsVPiqnox8pE"
                 fetchDetails={true}
-                selectProps={{ rawAddress, onChange: setRawAddress }}
+                selectProps={
+                  ({ rawAddress, onChange: setRawAddress })
+                 
+                }
                 onLoadFailed={(error) =>
                   alert("There was an error, please try again later.", error)
                 }
@@ -760,7 +769,7 @@ const AddJobStart = () => {
                   </Heading>
                   <Input
                     width="120px"
-                    placeholder="lower rate here..."
+                    placeholder="lower rate"
                     // onChange={(e) => setLowerRate(e.target.value)
                     onChange={(e) => lowerRateValidate(e.target.value)}
                   />
@@ -774,7 +783,7 @@ const AddJobStart = () => {
                   </Heading>
                   <Input
                     width="120px"
-                    placeholder="upper rate here..."
+                    placeholder="upper rate"
                     onChange={(e) => upperRateValidate(e.target.value)}
                   />
                   <Heading size="sm" marginTop="10px" marginLeft="2px">

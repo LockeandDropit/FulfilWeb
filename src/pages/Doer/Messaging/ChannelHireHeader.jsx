@@ -200,7 +200,7 @@ useEffect(() => {
 console.log("is hired", isHired)
 
 useEffect(() => {
-  if (userID != null && isHired === false && employerID != null && jobTitle !== null || undefined) {
+  if (userID != null && isHired === false || undefined && employerID != null && jobTitle !== null || undefined) {
     console.log("here?")
     const docRef = doc(db, "employers", employerID, "Posted Jobs", jobTitle);
 
@@ -227,10 +227,10 @@ useEffect(() => {
       setEmployerFirstName(snapshot.data().firstName)
     });
   } else {
-    console.log("oops!a");
+    console.log("oops!a", userID, isHired, employerID, jobTitle);
   }
  
-}, [userID, employerID, jobTitle]);
+}, [userID, employerID, jobTitle, isHired]);
 
 const [category, setCategory] = useState(null)
 const [businessName, setBusinessName] = useState(null);

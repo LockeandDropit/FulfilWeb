@@ -195,9 +195,15 @@ console.log("channel from FB", channelID)
                   <Box marginTop="2">
                     <Heading size="sm"> {postedJobs.employerName}</Heading>
                     <Text> {postedJobs.city}, MN</Text>
-                    <Text size="sm">
-                      Total Pay ${postedJobs.confirmedRate}
-                    </Text>
+
+                    {postedJobs.isHourly ? (<Text size="sm">
+                      Total Pay Pending  
+                    </Text>) : (
+                        <Text size="sm">
+                        Total Pay ${postedJobs.confirmedRate}
+                      </Text>
+                    )}
+                    
                   </Box>
                 </Flex>
 

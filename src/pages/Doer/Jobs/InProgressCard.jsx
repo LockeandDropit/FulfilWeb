@@ -9,10 +9,19 @@ import {
   Stack,
   Text,
   Flex,
+  Image,
 } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
-import { query, collection, onSnapshot, getDoc, doc, setDoc } from "firebase/firestore";
+import {
+  query,
+  collection,
+  onSnapshot,
+  getDoc,
+  doc,
+  setDoc,
+  deleteDoc,
+} from "firebase/firestore";
 
 import { useEffect, useState } from "react";
 import {
@@ -24,6 +33,7 @@ import {
   Button,
   Box,
   Avatar,
+  Input,
 } from "@chakra-ui/react";
 
 import { ChatIcon, ArrowForwardIcon } from "@chakra-ui/icons";
@@ -43,6 +53,8 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 
+import star_corner from "../../../images/star_corner.png";
+import star_filled from "../../../images/star_filled.png";
 
 const InProgressCard = () => {
   const [postedJobs, setPostedJobs] = useState(null);
@@ -163,31 +175,586 @@ const InProgressCard = () => {
     }
   }, [selectedChannel]);
 
+  //get and set data
+  const [requirements, setRequirements] = useState(null);
+  const [requirements2, setRequirements2] = useState(null);
+  const [requirements3, setRequirements3] = useState(null);
+  const [niceToHave, setNiceToHave] = useState(null);
+  const [streetAddress, setStreetAddress] = useState(null);
+  const [city, setCity] = useState(null);
+  const [state, setState] = useState(null);
+  const [zipCode, setZipCode] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [lowerRate, setLowerRate] = useState(null);
+  const [upperRate, setUpperRate] = useState(null);
+  const [businessName, setBusinessName] = useState(null);
+  const [isOneTime, setIsOneTime] = useState(null);
+  const [isVolunteer, setIsVolunteer] = useState(null);
+  const [confirmedRate, setConfirmedRate] = useState(null);
+  const [isHourly, setIsHourly] = useState(null);
+  const [confirmHours, setConfirmHours] = useState(null);
+  const [category, setCategory] = useState(null);
+
+  //get data
+  const getSelectedData = (postedJobs) => {
+    console.log(postedJobs)
+    setConfirmedRate(postedJobs.confirmedRate);
+    setLowerRate(postedJobs.lowerRate);
+    setUpperRate(postedJobs.upperRate);
+    setDescription(postedJobs.description);
+    setCity(postedJobs.city);
+    setIsHourly(postedJobs.isHourly);
+    // setEmployerID(snapshot.data().employerID);
+    setZipCode(postedJobs.zipCode);
+    setCategory(postedJobs.category);
+    setState(postedJobs.state);
+    setBusinessName(postedJobs.businessName);
+    setStreetAddress(postedJobs.streetAddress);
+    setRequirements(postedJobs.requirements);
+    setNiceToHave(postedJobs.niceToHave);
+    setRequirements2(postedJobs.requirements2);
+    setRequirements3(postedJobs.requirements3);
+    setIsOneTime(postedJobs.isOneTime);
+  };
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenHourly,
+    onOpen: onOpenHourly,
+    onClose: onCloseHourly,
+  } = useDisclosure();
+
+  //rate then
+  //if flatrate, submit rating and disperse all other necissary info
+  //else if hourly: confirm hours worked and submit to employer, move all other data
 
   const handleModalOpen = (postedJobs) => {
- onOpen()
-  }
+
+    getSelectedData(postedJobs)
+    onOpen();
+  };
+
+  // credit: https://www.youtube.com/watch?v=276IyIIdJnA
+
+  const [defaultRating, setDefaultRating] = useState(0);
+  const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+
+  const numberOnlyRegexMinimumCharacterInput = /^[0-9\b]{1,3}$/;
+
+  const [confirmHoursValidationMessage, setConfirmHoursValidationMessage] =
+    useState();
+
+  const [confirmHoursValidationBegun, setConfirmHoursValidationBegun] =
+    useState(false);
+
+  const confirmHoursValidate = (confirmHours) => {
+    setConfirmHoursValidationBegun(true);
+    const isValid = numberOnlyRegexMinimumCharacterInput.test(confirmHours);
+    if (!isValid) {
+      setConfirmHoursValidationMessage("Please enter valid hours");
+      console.log(confirmHoursValidationMessage);
+      setConfirmHours(confirmHours);
+    } else {
+      setConfirmHoursValidationMessage();
+      setConfirmHours(confirmHours);
+    }
+  };
+
+  const minLengthRegEx = /^.{1,}$/;
+
+  const checkLength = (postedJobs) => {
+    const rateValid = minLengthRegEx.test(confirmHours);
+
+    if (!rateValid || typeof confirmHours === "undefined" || !confirmHours || confirmHours === "0") {
+      alert("Please enter valid rate");
+    } else {
+      addHoursWorkedNavigate(postedJobs);
+    
+    }
+  };
 
 
-  const completeAndReview = (postedJobs) => {
+
+  const addHoursWorkedNavigate = (postedJobs) => {
+    //push to respective In Review dbs, user and employer
+
+    // setIsLoading(true)
+
     //set hasbeenRated to false so employer can check if they have been rated yet
-    setDoc(doc(db, "users", user.uid, "Ratings", postedJobs.jobTitle), {
-      ratingComplete: false
+
+    setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
+      ratingComplete: false,
+    });
+
+    setDoc(doc(db, "users", user.uid, "In Review", postedJobs[0].jobTitle), {
+      confirmedRate: confirmedRate,
+      confirmHours: confirmHours,
+      employerID: postedJobs[0].employerID,
+      isHourly: isHourly,
+      jobTitle: postedJobs[0].jobTitle,
+      jobID: postedJobs[0].jobID,
+      description: description,
+      city: city,
+      lowerRate: lowerRate,
+      upperRate: upperRate,
+
+      isOneTime: isOneTime,
+      streetAddress: streetAddress,
+      state: state,
+      zipCode: zipCode,
+      requirements: requirements,
+      requirements2: requirements2,
+      requirements3: requirements3,
+      niceToHave: niceToHave,
+      // locationLat: locationLat,
+      // locationLng: locationLng,
+      hiredApplicant: user.uid,
+      jobCompleteApplicant: true,
+      jobCompleteEmployer: false,
     })
       .then(() => {
-        navigate("ReviewEmployer", {
-          // employerID: employerID,
-          // jobID: jobID,
-          // jobTitle: jobTitle,
-        });
+        console.log("moved to review for USER");
       })
       .catch((error) => {
         console.log(error);
       });
-    //navigate to modal
+
+    setDoc(
+      doc(
+        db,
+        "employers",
+        postedJobs[0].employerID,
+        "In Review",
+        postedJobs[0].jobTitle
+      ),
+      {
+        confirmedRate: confirmedRate,
+        confirmHours: confirmHours,
+        employerID: postedJobs[0].employerID,
+        jobTitle: postedJobs[0].jobTitle,
+        jobID: postedJobs[0].jobID,
+        isHourly: isHourly,
+        description: description,
+
+        city: city,
+        lowerRate: lowerRate,
+        upperRate: upperRate,
+
+        isOneTime: isOneTime,
+        streetAddress: streetAddress,
+        state: state,
+        zipCode: zipCode,
+        requirements: requirements,
+        requirements2: requirements2,
+        requirements3: requirements3,
+        niceToHave: niceToHave,
+        // locationLat: locationLat,
+        // locationLng: locationLng,
+        hiredApplicant: user.uid,
+        jobCompleteApplicant: true,
+        jobCompleteEmployer: false,
+      }
+    )
+      .then(() => {
+        console.log("moved to review for USER");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    deleteDoc(
+      doc(db, "users", user.uid, "Jobs In Progress", postedJobs[0].jobTitle)
+    )
+      .then(() => {
+        //all good
+        console.log("removed from users saved Jobs");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+
+    deleteDoc(
+      doc(
+        db,
+        "employers",
+        postedJobs[0].employerID,
+        "Jobs In Progress",
+        postedJobs[0].jobTitle
+      )
+    )
+      .then(() => {
+        //all good
+        console.log("removed from users saved Jobs");
+      
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+
+    //submit data
+    setDoc(
+      doc(
+        db,
+        "employers",  
+        postedJobs[0].employerID,
+        "Ratings",
+        postedJobs[0].jobTitle
+      ),
+      {
+        rating: defaultRating,
+      }
+    )
+      .then(() => {
+        //all good
+        console.log("data submitted");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+
+      setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
+        ratingComplete: false
+      })
+        .then(() => {
+        
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+    
+
+    setTimeout(() => {
+      // setIsLoading(false)
+      alert(
+        "Job complete! Payment pending verification from employer. Paymenty can take 3-5 business days to transfer."
+      );
+      onCloseHourly()
+      navigate("/DoerInProgressList")
+    }, 2500);
   };
 
+  const addRating = (postedJobs) => {
+
+    console.log(postedJobs[0])
+    if (isHourly === true) {
+      //modal opened then hours worked confirmed, sent to addHoursWorkedNavigate()
+      onClose()
+      onOpenHourly()
+    } else {
+      //move to under Review.. should this be for both users? Most likely
+
+      // setIsLoading(true)
+
+      //submitted if flat rate
+
+      setDoc(doc(db, "users", user.uid, "In Review", postedJobs[0].jobTitle), {
+        confirmedRate: confirmedRate,
+        employerID: postedJobs[0].employerID,
+        jobTitle: postedJobs[0].jobTitle,
+        isHourly: isHourly,
+        jobID: postedJobs[0].jobID,
+        description: description,
+
+        city: city,
+        lowerRate: lowerRate,
+        upperRate: upperRate,
+        isVolunteer: isVolunteer,
+        isOneTime: isOneTime,
+        streetAddress: streetAddress,
+        state: state,
+        zipCode: zipCode,
+        requirements: requirements,
+        requirements2: requirements2,
+        requirements3: requirements3,
+        niceToHave: niceToHave,
+        hiredApplicant: user.uid,
+        jobCompleteApplicant: true,
+        jobCompleteEmployer: false,
+      })
+        .then(() => {
+          console.log("moved to review for USER");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      setDoc(
+        doc(
+          db,
+          "employers",
+          postedJobs[0].employerID,
+          "In Review",
+          postedJobs[0].jobTitle
+        ),
+        {
+          confirmedRate: confirmedRate,
+          employerID: postedJobs[0].employerID,
+          jobTitle: postedJobs[0].jobTitle,
+          isHourly: isHourly,
+          jobID: postedJobs[0].jobID,
+          description: description,
+
+          city: city,
+          lowerRate: lowerRate,
+          upperRate: upperRate,
+          isVolunteer: isVolunteer,
+          isOneTime: isOneTime,
+          streetAddress: streetAddress,
+          state: state,
+          zipCode: zipCode,
+          requirements: requirements,
+          requirements2: requirements2,
+          requirements3: requirements3,
+          niceToHave: niceToHave,
+          // locationLat: locationLat,
+          // locationLng: locationLng,
+          hiredApplicant: user.uid,
+          jobCompleteApplicant: true,
+          jobCompleteEmployer: false,
+        }
+      )
+        .then(() => {
+          console.log("moved to review for USER");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      deleteDoc(
+        doc(db, "users", user.uid, "Jobs In Progress", postedJobs[0].jobTitle)
+      )
+        .then(() => {
+          //all good
+          console.log("removed from users saved Jobs");
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
+      deleteDoc(
+        doc(
+          db,
+          "employers",
+          postedJobs[0].employerID,
+          "Jobs In Progress",
+          postedJobs[0].jobTitle
+        )
+      )
+        .then(() => {
+          //all good
+          console.log("removed from users saved Jobs");
+         
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
+      //submit data
+
+
+      setDoc(
+        doc(
+          db,
+          "employers",
+          postedJobs[0].employerID,
+          "Ratings",
+          postedJobs[0].jobTitle
+        ),
+        {
+          rating: defaultRating,
+        }
+      )
+        .then(() => {
+          //all good
+          console.log("data submitted");
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
+        setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
+          ratingComplete: false
+        })
+          .then(() => {
+          
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+      
+
+      setTimeout(() => {
+        // setIsLoading(false)
+        alert(
+          "Job complete! Payment pending verification from employer. Paymenty can take 3-5 business days to transfer."
+        );
+        onClose()
+     navigate("/DoerInProgressList")
+      }, 2500);
+    }
+  };
+
+  const addWithNoRating = (postedJobs) => {
+    if (isHourly === true) {
+      //modal opened then hours worked confirmed, sent to addHoursWorkedNavigate()
+      onClose()
+      onOpenHourly()
+    } else {
+      //move to under Review.. should this be for both users? Most likely
+
+      // setIsLoading(true)
+
+      //submitted if flat rate
+
+      setDoc(doc(db, "users", user.uid, "In Review", postedJobs[0].jobTitle), {
+        confirmedRate: confirmedRate,
+        employerID: postedJobs[0].employerID,
+        jobTitle: postedJobs[0].jobTitle,
+        isHourly: isHourly,
+        jobID: postedJobs[0].jobID,
+        description: description,
+
+        city: city,
+        lowerRate: lowerRate,
+        upperRate: upperRate,
+        isVolunteer: isVolunteer,
+        isOneTime: isOneTime,
+        streetAddress: streetAddress,
+        state: state,
+        zipCode: zipCode,
+        requirements: requirements,
+        requirements2: requirements2,
+        requirements3: requirements3,
+        niceToHave: niceToHave,
+        hiredApplicant: user.uid,
+        jobCompleteApplicant: true,
+        jobCompleteEmployer: false,
+      })
+        .then(() => {
+          console.log("moved to review for USER");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      setDoc(
+        doc(
+          db,
+          "employers",
+          postedJobs[0].employerID,
+          "In Review",
+          postedJobs[0].jobTitle
+        ),
+        {
+          confirmedRate: confirmedRate,
+          employerID: postedJobs[0].employerID,
+          jobTitle: postedJobs[0].jobTitle,
+          isHourly: isHourly,
+          jobID: postedJobs[0].jobID,
+          description: description,
+
+          city: city,
+          lowerRate: lowerRate,
+          upperRate: upperRate,
+          isVolunteer: isVolunteer,
+          isOneTime: isOneTime,
+          streetAddress: streetAddress,
+          state: state,
+          zipCode: zipCode,
+          requirements: requirements,
+          requirements2: requirements2,
+          requirements3: requirements3,
+          niceToHave: niceToHave,
+          // locationLat: locationLat,
+          // locationLng: locationLng,
+          hiredApplicant: user.uid,
+          jobCompleteApplicant: true,
+          jobCompleteEmployer: false,
+        }
+      )
+        .then(() => {
+          console.log("moved to review for USER");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      deleteDoc(
+        doc(db, "users", user.uid, "Jobs In Progress", postedJobs[0].jobTitle)
+      )
+        .then(() => {
+          //all good
+          console.log("removed from users saved Jobs");
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
+      deleteDoc(
+        doc(
+          db,
+          "employers",
+          postedJobs[0].employerID,
+          "Jobs In Progress",
+          postedJobs[0].jobTitle
+        )
+      )
+        .then(() => {
+          //all good
+          console.log("removed from users saved Jobs");
+          
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
+
+        setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
+          ratingComplete: false
+        })
+          .then(() => {
+          
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+      
+
+      setTimeout(() => {
+        // setIsLoading(false)
+        alert(
+          "Job complete! Payment pending verification from employer. Paymenty can take 3-5 business days to transfer."
+        );
+        onClose()
+       navigate("/DoerInProgressList")
+      }, 2500);
+    }
+  };
+
+
+  const handleCloseAndOpen = (postedJobs) => {
+
+   if (isHourly === true) {
+    onClose()
+    onOpenHourly()
+   } else {
+    onClose()
+   addWithNoRating(postedJobs)
+   }
+    
+
+  }
   return (
     <div>
       {!postedJobs ? (
@@ -344,28 +911,35 @@ const InProgressCard = () => {
                   >
                    Messages <ArrowForwardIcon marginLeft="4" />
                   </Button> */}
-            <Center>
-                        <Button
-                         backgroundColor="white"
-                         textColor="black"
-                      borderWidth=".5px"
-                      // borderColor="black"
-                          width="240px"
-                          height="40px"
-                          // position="absolute"
-                          // right="10"
-                          // bottom="8"
-                          alignItems="center"
-                          marginRight="16px"
-                          // onClick={() => getChannels(postedJobs)}
-                          onClick={() => navigateToChannel(postedJobs)}
-                        >
-                          Go To Messages
-                          {/* <ArrowForwardIcon marginLeft="2" marginTop="2px" /> */}
-                        </Button>
+                        <Center>
+                          <Button
+                            backgroundColor="white"
+                            textColor="black"
+                            borderWidth=".5px"
+                            // borderColor="black"
+                            width="240px"
+                            height="40px"
+                            // position="absolute"
+                            // right="10"
+                            // bottom="8"
+                            alignItems="center"
+                            marginRight="16px"
+                            // onClick={() => getChannels(postedJobs)}
+                            onClick={() => navigateToChannel(postedJobs)}
+                          >
+                            Go To Messages
+                            {/* <ArrowForwardIcon marginLeft="2" marginTop="2px" /> */}
+                          </Button>
 
-                        <Button colorScheme="blue" width="240px"
-                          height="40px" onClick={() => handleModalOpen(postedJobs)}>Mark Complete</Button>
+                          <Button
+                            colorScheme="blue"
+                            width="240px"
+                            height="40px"
+                            onClick={() => handleModalOpen(postedJobs)}
+                            
+                          >
+                            Mark Complete
+                          </Button>
                         </Center>
                       </AccordionPanel>
                     </AccordionItem>
@@ -377,32 +951,84 @@ const InProgressCard = () => {
         ))
       )}
 
-<Modal isOpen={isOpen} onClose={onClose} size="xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Rate This User (optional)</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <>
-              <FormLabel marginTop="8" width>
-                Enter your offer
-              </FormLabel>
               <Flex>
-                <Heading size="sm" marginTop="8px">
-                  {" "}
-                  $
-                </Heading>
-               
+                {maxRating.map((item, key) => {
+                  return (
+                    <Button
+                      activeopacity={0.7}
+                      key={item}
+                      marginTop="8px"
+                      onClick={() => setDefaultRating(item)}
+                    >
+                      <Image
+                        boxSize="24px"
+                        src={item <= defaultRating ? star_filled : star_corner}
+                      ></Image>
+                    </Button>
+                  );
+                })}
               </Flex>
-             
             </>
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onClose}>
-              Close
+            <Button variant="ghost" mr={3} onClick={() => handleCloseAndOpen(postedJobs)}>
+              Skip
             </Button>
-            <Button colorScheme="blue">Send Offer</Button>
+            <Button
+              colorScheme="blue"
+              onClick={() => addRating(postedJobs)}
+            >
+              Submit
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isOpenHourly} onClose={onCloseHourly} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Hours worked</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <>
+              <FormLabel marginTop="8" width>
+                How many hours did you work?
+              </FormLabel>
+              <Flex>
+                <Input
+                  width="240px"
+                  placeholder="Enter hours worked here"
+                  onChange={(e) => confirmHoursValidate(e.target.value)}
+                />{" "}
+                <Heading size="sm" marginTop="8px" marginLeft="8px">
+                  {" "}
+                  Hours
+                </Heading>
+              </Flex>
+              {confirmHoursValidationBegun === true ? (
+                <Text color="red">{confirmHoursValidationMessage}</Text>
+              ) : null}
+              <Text>{confirmHours}</Text>
+            </>
+          </ModalBody>
+
+          <ModalFooter>
+            {/* <Button variant="ghost" mr={3} onClick={onCloseHourly}>
+              Skip
+            </Button> */}
+            <Button
+              colorScheme="blue"
+              onClick={() => checkLength(postedJobs)}
+            >
+              Submit
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

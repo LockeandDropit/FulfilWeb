@@ -28,6 +28,7 @@ import DoerCompletedList from "./pages/Doer/JobLists/DoerCompletedList";
 
 
 //Needer Components
+import NeederPaymentComplete from "./pages/Needer/Jobs/NeederPaymentComplete";
 import NeederAccountManager from "./pages/Needer/AvatarMenu/NeederAccountManager";
 import NeederContactForm from "./pages/Needer/AvatarMenu/NeederContactForm";
 import NeederPaymentHistory from "./pages/Needer/AvatarMenu/NeederPaymentHistory";
@@ -302,6 +303,10 @@ const router = createBrowserRouter([
   {
     path: "/StripeSetUp",
     element: <StripeSetUp />,
+  },
+  {
+    path: "/NeederPaymentComplete/success",
+    element: <NeederPaymentComplete />,
   },
 
 ]);

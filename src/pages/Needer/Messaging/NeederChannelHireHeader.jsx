@@ -65,6 +65,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
+
+
 const NeederChannelHireHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -541,7 +543,7 @@ const NeederChannelHireHeader = () => {
             <Button variant="ghost" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button colorScheme="blue">Send Offer</Button>
+            <Button colorScheme="blue" onClick={() => checkLength()}>Send Offer</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

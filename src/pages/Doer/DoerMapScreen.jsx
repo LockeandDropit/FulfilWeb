@@ -410,8 +410,7 @@ const DoerMapScreen = () => {
       <DoerHeader />
       <Flex marginTop="4">
         <DoerDashboard />
-
-        <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
+{process.env.REACT_APP_GOOGLE_API_KEY ? (  <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
           <div style={{ height: "90vh", width: "93vw" }}>
             <Map
               defaultCenter={{ lat: defaultLat, lng: defaultLong }}
@@ -613,7 +612,8 @@ const DoerMapScreen = () => {
                 ))}
             </Map>
           </div>
-        </APIProvider>
+        </APIProvider>) : (<Text>loading...</Text>)}
+      
       </Flex>
     </div>
   );

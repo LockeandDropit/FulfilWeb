@@ -245,7 +245,7 @@ const DoerAccountManager = () => {
   const verifyStripeStatus = async () => {
     // const interval = setInterval( async () => {
     const response = await fetch(
-      `http://192.168.0.9:3000/verify-stripe-account`,
+      `https://fulfil-api.onrender.com/verify-stripe-account`,
 
       // "https://fulfil-api.onrender.com/create-stripe-account",
       {
@@ -296,7 +296,7 @@ const DoerAccountManager = () => {
     //setLoadingTrue for button once clicked to allow for redirect
     setPaymentsLoading(true);
     const response = await fetch(
-      "http://192.168.0.9:3000/create-stripe-account-web",
+      "https://fulfil-api.onrender.com/create-stripe-account-web",
       // "http://192.168.0.9:3001/test",
       // "https://fulfil-api.onrender.com/create-stripe-account",
       {

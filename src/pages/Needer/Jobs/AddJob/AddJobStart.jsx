@@ -688,7 +688,7 @@ const AddJobStart = () => {
             </FormLabel>
             <Box width="560px">
               <GooglePlacesAutocomplete
-                apiKey="AIzaSyD1hJslP80ZJB_hvkyj4OLnsVPiqnox8pE"
+                apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
                 fetchDetails={true}
                 selectProps={
                   ({ rawAddress, onChange: setRawAddress })

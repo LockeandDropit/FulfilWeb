@@ -69,7 +69,7 @@ import star_corner from "../../../images/star_corner.png";
 import star_filled from "../../../images/star_filled.png";
 
 const stripePromise = loadStripe(
-  "pk_test_51M4J4VGOViWTUZKU1CUvpwah6i9Z8pb8as8rEcHOhCzSzq2jzoai8Fmv6NHUbFojP2yJ6T922uunZ7rL9kcaFwuS00hxGtkfr1"
+process.env.REACT_APP_STRIPE_PUBLIC_KEY
 );
 
 const NeederInReviewCard = () => {
@@ -400,7 +400,7 @@ const NeederInReviewCard = () => {
   const fetchClientSecret = useCallback(() => {
     // Create a Checkout Session
     console.log("job info", jobInfo);
-    return fetch("http://192.168.0.9:3000/create-checkout-web-embedded", {
+    return fetch("https://fulfil-api.onrender.com/create-checkout-web-embedded", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -430,7 +430,7 @@ const NeederInReviewCard = () => {
       // "https://fulfil-api.onrender.com/create-checkout-web",
 
       //this is test
-      "http://192.168.0.9:3000/create-checkout-web",
+      "https://fulfil-api.onrender.com/create-checkout-web",
 
       {
         method: "POST",
@@ -570,7 +570,7 @@ const NeederInReviewCard = () => {
 
     if (sessionId) {
       setHasRun(false);
-      fetch(`http://192.168.0.9:3000/session-status?session_id=${sessionId}`)
+      fetch(`https://fulfil-api.onrender.com/session-status?session_id=${sessionId}`)
         .then((res) => res.json())
         .then((data) => {
           setStatus(data.status);

@@ -103,7 +103,7 @@ const DoerHeader = () => {
       // "https://fulfil-api.onrender.com/create-checkout-web",
 
       //this is test
-      "http://192.168.0.9:3000/stripe-log-in",
+      "https://fulfil-api.onrender.com/stripe-log-in",
 
       {
         method: "POST",

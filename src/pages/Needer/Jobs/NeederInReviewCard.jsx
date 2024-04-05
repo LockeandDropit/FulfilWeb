@@ -14,6 +14,7 @@ import {
   Avatar,
   Center,
   Image,
+  CloseButton
 } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { loadStripe } from "@stripe/stripe-js";
@@ -30,7 +31,7 @@ import {
   getDoc,
   setDoc,
   updateDoc,
-  deleteDoc
+  deleteDoc,
 } from "firebase/firestore";
 
 import { useEffect, useState, useCallback } from "react";
@@ -41,7 +42,12 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from "@chakra-ui/react";
+import { useToast } from '@chakra-ui/react'
 
 import { ChatIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import { StreamChat } from "stream-chat";
@@ -83,7 +89,7 @@ const NeederInReviewCard = () => {
       setHasRun(true);
     } else {
     }
-  }, []);
+  }, [hasRun]);
 
   useEffect(() => {
     if (user != null) {
@@ -283,8 +289,8 @@ const NeederInReviewCard = () => {
     // pushToJobInfo(postedJobs);
     onOpen();
     setTimeout(() => {
-      setRatingLoading(false)
-    }, 1500)
+      setRatingLoading(false);
+    }, 1500);
   };
 
   //get all info for payments
@@ -347,7 +353,7 @@ const NeederInReviewCard = () => {
 
   console.log("confirmedPrice", confirmedPrice);
 
-  const [stripeOpen, setStripeOpen] = useState(false)
+  const [stripeOpen, setStripeOpen] = useState(false);
 
   const sendPaymentInfo = () => {
     // setPaymentStatusFB(postedJobs)
@@ -355,7 +361,7 @@ const NeederInReviewCard = () => {
     onClosePayment();
     // paymentForm();
     // fetchClientSecret();
-    setStripeOpen(true)
+    setStripeOpen(true);
   };
 
   const [sessionUrl, setSessionUrl] = useState(null);
@@ -389,8 +395,7 @@ const NeederInReviewCard = () => {
     );
   };
 
-
-  const [clientSecret, setClientSecret] = useState(null)
+  const [clientSecret, setClientSecret] = useState(null);
 
   const fetchClientSecret = useCallback(() => {
     // Create a Checkout Session
@@ -404,20 +409,18 @@ const NeederInReviewCard = () => {
       body: JSON.stringify(jobInfo),
     })
       .then((res) => res.json())
-      .then((data) =>  data.clientSecret)
+      .then((data) => data.clientSecret);
+    // .then((data) => console.log("all session data",data))
 
-
-      //pass data or data.clientSecret?
-      // const { client_secret } = await response.json()
-      // setClientSecret(data.clientSecret)
-      // console.log("session", client_secret);
-      // onOpenStripe()
-  }, [])
+    //pass data or data.clientSecret?
+    // const { client_secret } = await response.json()
+    // setClientSecret(data.clientSecret)
+    // console.log("session", client_secret);
+    // onOpenStripe()
+  }, []);
 
   const options = { fetchClientSecret };
 
-
- 
   const paymentForm = async () => {
     console.log("job info", jobInfo);
     console.log("jobTitle", jobInfo[5]);
@@ -478,221 +481,387 @@ const NeederInReviewCard = () => {
     }
   });
 
-
-
   useEffect(() => {
-    onOpenStripe()
-  })
+    onOpenStripe();
+  });
 
   const handleReviewOpen = (postedJobs) => {
     onOpenPayment();
     pushToJobInfo(postedJobs);
   };
 
+  const [status, setStatus] = useState(null);
+  const [customerEmail, setCustomerEmail] = useState("");
 
-   const [status, setStatus] = useState(null);
-  const [customerEmail, setCustomerEmail] = useState('');
+  //  const [confirmedPrice, setConfirmedPrice] = useState(null);
+  const [confirmedPriceUI, setConfirmedPriceUI] = useState(null);
+
+  useEffect(() => {
+    if (confirmedPrice !== null) {
+      setConfirmedPriceUI(confirmedPrice * 0.01);
+    } else {
+    }
+  }, [confirmedPrice]);
+
+  const [isReady, setIsReady] = useState(false) 
+
+  const getJobDataAgain = (data) => {
+    const docRef = doc(
+      db,
+      "employers",
+      data.userID,
+      "In Review",
+      data.jobTitle
+    );
+
+    getDoc(docRef)
+      .then((snapshot) => {
+        console.log("getdatAgain", snapshot.data());
+        setHiredApplicantID(snapshot.data().hiredApplicant);
+        setJobTitle(snapshot.data().jobTitle);
+        setJobID(snapshot.data().jobID);
+        setIsHourly(snapshot.data().isHourly);
+        setConfirmHours(snapshot.data().confirmHours);
+        setConfirmedRate(snapshot.data().confirmedRate);
+        setLowerRate(snapshot.data().lowerRate);
+        setUpperRate(snapshot.data().upperRate);
+        setCity(snapshot.data().city);
+        setIsHourly(snapshot.data().isHourly);
+        // setEmployerID(snapshot.data().employerID);
+        setDescription(snapshot.data().description);
+        setZipCode(snapshot.data().zipCode);
+        setHiredApplicantID(snapshot.data().hiredApplicant);
+        setState(snapshot.data().state);
+        setBusinessName(snapshot.data().businessName);
+        setStreetAddress(snapshot.data().streetAddress);
+        setRequirements(snapshot.data().requirements);
+        setBusinessName(snapshot.data().businessName);
+        setNiceToHave(snapshot.data().niceToHave);
+        setRequirements2(snapshot.data().requirements2);
+        setRequirements3(snapshot.data().requirements3);
+        setIsOneTime(snapshot.data().isOneTime);
+        setIsVolunteer(snapshot.data().IsVolunteer);
+
+       
+      })
+      .then(() => {
+        setTimeout(() => {
+         setIsReady(true)
+        }, 2000)
+      })
+      
+  };
+
+
+  useEffect(() => {
+    if (isReady === true) {
+      moveAllData()
+    } else {
+
+    }
+  }, [isReady])
 
   useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const sessionId = urlParams.get('session_id');
+    const sessionId = urlParams.get("session_id");
 
-    console.log("client return", queryString, urlParams, sessionId)
-
+    console.log("client return", queryString, urlParams, sessionId);
 
     if (sessionId) {
+      setHasRun(false);
       fetch(`http://192.168.0.9:3000/session-status?session_id=${sessionId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setStatus(data.status);
-        setCustomerEmail(data.customer_email);
-        console.log("data final retuirn", data)
-        if (data.status === "complete") {
-          setTimeout(() => {
-            //add loading logic here
-            moveAllData()
-          }, 1500)
-        
-        } else {
-          alert("there was an issue completing your payment, please try again soon")
-        }
-      });
-    } else {}
+        .then((res) => res.json())
+        .then((data) => {
+          setStatus(data.status);
+          setCustomerEmail(data.customer_email);
+          setJobTitle(data.jobTitle);
+          setUserID(data.userID);
+          setConfirmedPriceUI(data.confirmedPrice * 0.1);
+          console.log("data final retuirn", data);
+          if (data.status === "complete" && data.jobTitle) {
+            setIsLoading(true);
+            getJobDataAgain(data);
+            setTimeout(() => {
+              //add loading logic here
+              // checkData();
+              // moveAllData()
 
-    
+          
+            }, 2000);
+          } else {
+            alert(
+              "There was an error processing your paymetn. Please try again later."
+            );
+          }
+        });
+    } else {
+    }
   }, []);
 
-
-    //  const [confirmedPrice, setConfirmedPrice] = useState(null);
-     const [confirmedPriceUI, setConfirmedPriceUI] = useState(null)
-
-
-     useEffect(() => {
-   if (confirmedPrice !== null) {
-   setConfirmedPriceUI(confirmedPrice *.01)
-   } else{
-   }
-     }, [confirmedPrice])
-
-       const checkData = () => {
+  const checkData = () => {
     console.log(
-        
-      "employerID", user.uid,
-      "jobTitle",jobTitle,
-      "jobID", jobID,
-     " confirmedRate", confirmedRate,
-      "confirmHours", confirmHours,
-     " totalPay", confirmedPriceUI,
-     " isHourly", isHourly,
-     " confirmedRate", confirmedRate,
-     " businessName", businessName,
-     " description", description,
-     " city", city,
-     " lowerRate", lowerRate,
-      "upperRate", upperRate,
-     " isVolunteer", isVolunteer,
-     " isOneTime", isOneTime,
-     " streetAddress", streetAddress,
-      "state", state,
-      "zipCode", zipCode,
-      "requirements ",requirements,
-      "requirements2", requirements2,
-      "requirements3", requirements3,
-      "niceToHave", niceToHave,
+      "employerID",
+      userID,
+      "jobTitle",
+      jobTitle,
+      "jobID",
+      jobID,
+      " confirmedRate",
+      confirmedRate,
+      "confirmHours",
+      confirmHours,
+      " totalPay",
+      confirmedPriceUI,
+      " isHourly",
+      isHourly,
+      " confirmedRate",
+      confirmedRate,
+      " businessName",
+      businessName,
+      " description",
+      description,
+      " city",
+      city,
+      " lowerRate",
+      lowerRate,
+      "upperRate",
+      upperRate,
+      " isVolunteer",
+      isVolunteer,
+      " isOneTime",
+      isOneTime,
+      " streetAddress",
+      streetAddress,
+      "state",
+      state,
+      "zipCode",
+      zipCode,
+      "requirements ",
+      requirements,
+      "requirements2",
+      requirements2,
+      "requirements3",
+      requirements3,
+      "niceToHave",
+      niceToHave,
       // locationLat: locationLat,
       // locationLng: locationLng,
-      "hiredApplicant", hiredApplicantID,
-     
-    )
-  }
+      "hiredApplicant",
+      hiredApplicantID
+    );
+  };
 
-  
-  const [dateCompleted, setDateCompleted] = useState(null)
+  const [dateCompleted, setDateCompleted] = useState(null);
 
   useEffect(() => {
-      //credit https://stackoverflow.com/questions/37271356/how-to-get-the-current-date-in-reactnative Irfan wani
-    setDateCompleted(new Date().toLocaleString())
-  }, [])
+    //credit https://stackoverflow.com/questions/37271356/how-to-get-the-current-date-in-reactnative Irfan wani
+    setDateCompleted(new Date().toLocaleString());
+  }, []);
 
-    const moveAllData = () => {
-        //this was all taken from ReviewWorker (in case something doesnt work and it needs to be moved back)
-    
-     
-         //delete from In Review
-         deleteDoc(doc(db, "employers", user.uid, "In Review", jobTitle))
-         .then(() => {
-           //all good
-           console.log("removed from users saved Jobs");
-         })
-         .catch((error) => {
-           // no bueno
-           console.log(error);
-         });
-    
-       deleteDoc(doc(db, "users", hiredApplicantID, "In Review", jobTitle))
-         .then(() => {
-           //all good
-           console.log("removed from users db");
-         })
-         .catch((error) => {
-           // no bueno
-           console.log(error);
-         });
-    
-       //add to Jobs Completed
-    
-       //add to Jobs Completed
-       setDoc(doc(db, "users", hiredApplicantID, "Past Jobs", jobTitle), {
-         employerID: user.uid,
-         jobTitle: jobTitle,
-         jobID: jobID,
-         confirmedRate: confirmedRate,
-         paymentComplete: paymentComplete,
-         dateCompleted: dateCompleted,
-         confirmHours: confirmHours,
-         totalPay: confirmedPriceUI,
-         isHourly: isHourly,
-         confirmedRate: confirmedRate,
-         paymentId: paymentId,
-        //  businessName: businessName,
-         description: description,
-         city: city,
-         lowerRate: lowerRate,
-         upperRate: upperRate,
-         isVolunteer: isVolunteer,
-         isOneTime: isOneTime,
-         streetAddress: streetAddress,
-         state: state,
-         zipCode: zipCode,
-         requirements: requirements,
-         requirements2: requirements2,
-         requirements3: requirements3,
-         niceToHave: niceToHave,
-         // locationLat: locationLat,
-         // locationLng: locationLng,
-         hiredApplicant: hiredApplicantID,
-         jobCompleteApplicant: true,
-         jobCompleteEmployer: false,
-         paymentPending: true
-       })
-         .then(() => {
-           console.log("moved to completed for user");
-         })
-         .catch((error) => {
-           console.log(error);
-         });
-    
-       setDoc(doc(db, "employers", user.uid, "Past Jobs", jobTitle), {
-         employerID: user.uid,
-         jobTitle: jobTitle,
-         jobID: jobID,
-         confirmedRate: confirmedRate,
-         paymentComplete: paymentComplete,
-         dateCompleted: dateCompleted,
-         confirmHours: confirmHours,
-        paymentId: paymentId,
-         totalPay: confirmedPriceUI,
-         isHourly: isHourly,
-        //  businessName: businessName,
-         description: description,
-         city: city,
-         lowerRate: lowerRate,
-         upperRate: upperRate,
-         isVolunteer: isVolunteer,
-         isOneTime: isOneTime,
-         streetAddress: streetAddress,
-         state: state,
-         zipCode: zipCode,
-         requirements: requirements,
-         requirements2: requirements2,
-         requirements3: requirements3,
-         niceToHave: niceToHave,
-         // locationLat: locationLat,
-         // locationLng: locationLng,
-         hiredApplicant: hiredApplicantID,
-         jobCompleteApplicant: true,
-         jobCompleteEmployer: false,
-       
-       })
-         .then(() => {
-           console.log("moved to completed for Employer");
-         
-         })
-         .catch((error) => {
-           console.log(error);
-         });
-      }
+  const moveAllData = () => {
+    //this was all taken from ReviewWorker (in case something doesnt work and it needs to be moved back)
+    console.log(
+      "employerID",
+      userID,
+      "jobTitle",
+      jobTitle,
+      "jobID",
+      jobID,
+      " confirmedRate",
+      confirmedRate,
+      "confirmHours",
+      confirmHours,
+      " totalPay",
+      confirmedPriceUI,
+      " isHourly",
+      isHourly,
+      " confirmedRate",
+      confirmedRate,
+      " businessName",
+      businessName,
+      " description",
+      description,
+      " city",
+      city,
+      " lowerRate",
+      lowerRate,
+      "upperRate",
+      upperRate,
+      " isVolunteer",
+      isVolunteer,
+      " isOneTime",
+      isOneTime,
+      " streetAddress",
+      streetAddress,
+      "state",
+      state,
+      "zipCode",
+      zipCode,
+      "requirements ",
+      requirements,
+      "requirements2",
+      requirements2,
+      "requirements3",
+      requirements3,
+      "niceToHave",
+      niceToHave,
+      // locationLat: locationLat,
+      // locationLng: locationLng,
+      "hiredApplicant",
+      hiredApplicantID
+    );
 
+    //delete from In Review
+    deleteDoc(doc(db, "employers", userID, "In Review", jobTitle))
+      .then(() => {
+        //all good
+        console.log("removed from users saved Jobs");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
 
-  const [ratingLoading, setRatingLoading] = useState(true)
+    deleteDoc(doc(db, "users", hiredApplicantID, "In Review", jobTitle))
+      .then(() => {
+        //all good
+        console.log("removed from users db");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+
+    // //  //add to Jobs Completed
+
+    // //  //add to Jobs Completed
+    setDoc(doc(db, "users", hiredApplicantID, "Past Jobs", jobTitle), {
+      employerID: userID ? userID : null,
+      jobTitle: jobTitle ? jobTitle : null,
+      jobID: jobID ? jobID :null,
+      confirmedRate: confirmedRate ? confirmedRate : null,
+      paymentComplete: paymentComplete ? paymentComplete : null,
+      dateCompleted: dateCompleted ? dateCompleted : null,
+      confirmHours: confirmHours ? confirmHours : null,
+      
+      totalPay: confirmedPriceUI ? confirmedPriceUI : null,
+      isHourly: isHourly ? isHourly : null,
+      paymentId: paymentId ? paymentId : null,
+      description: description ? description : null,
+      city: city ? city  : null,
+      lowerRate: lowerRate ? lowerRate : null,
+      upperRate: upperRate ? upperRate : null,
+      isVolunteer: isVolunteer ? isVolunteer : false,
+      isOneTime: isOneTime ? isOneTime : null,
+      streetAddress: streetAddress ? streetAddress : null,
+      state: state ? state : null,
+      zipCode: zipCode ? zipCode : null,
+      requirements: requirements ? requirements : null,
+      requirements2: requirements2 ? requirements2 : null,
+      requirements3: requirements3 ? requirements3 : null,
+      niceToHave: niceToHave ? niceToHave : null,
+      hiredApplicant: hiredApplicantID ? hiredApplicantID : null,
+      jobCompleteApplicant: true,
+      jobCompleteEmployer: false,
+      paymentCompletedAndPending: true,
+    })
+      .then(() => {
+        console.log("moved to completed for user");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setDoc(doc(db, "employers", userID, "Past Jobs", jobTitle), {
+      employerID: userID ? userID : null,
+      jobTitle: jobTitle ? jobTitle : null,
+      jobID: jobID ? jobID :null,
+      confirmedRate: confirmedRate ? confirmedRate : null,
+      paymentComplete: paymentComplete ? paymentComplete : null,
+      dateCompleted: dateCompleted ? dateCompleted : null,
+      confirmHours: confirmHours ? confirmHours : null,
+      
+      totalPay: confirmedPriceUI ? confirmedPriceUI : null,
+      isHourly: isHourly ? isHourly : null,
+      paymentId: paymentId ? paymentId : null,
+      description: description ? description : null,
+      city: city ? city  : null,
+      lowerRate: lowerRate ? lowerRate : null,
+      upperRate: upperRate ? upperRate : null,
+      isVolunteer: isVolunteer ? isVolunteer : false,
+      isOneTime: isOneTime ? isOneTime : null,
+      streetAddress: streetAddress ? streetAddress : null,
+      state: state ? state : null,
+      zipCode: zipCode ? zipCode : null,
+      requirements: requirements ? requirements : null,
+      requirements2: requirements2 ? requirements2 : null,
+      requirements3: requirements3 ? requirements3 : null,
+      niceToHave: niceToHave ? niceToHave : null,
+      hiredApplicant: hiredApplicantID ? hiredApplicantID : null,
+      jobCompleteApplicant: true,
+      jobCompleteEmployer: false,
+      paymentCompletedAndPending: true,
+    })
+      .then(() => {
+        console.log("moved to completed for Employer");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setIsLoading(false);
+    setPaymentAlertShow(true)
+  };
+
+  const [ratingLoading, setRatingLoading] = useState(true);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [paymentAlertShow, setPaymentAlertShow] = useState(false)
+
+  const {
+    isOpen: isVisible,
+    onClose: onCloseAlert,
+    onOpen : onOpenAlert,
+  } = useDisclosure()
+
+  if (isLoading === true) {
+    return (
+      <>
+        <Center>
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        </Center>
+      </>
+    );
+  }
   return (
-    <div>
+    <div> 
+      {paymentAlertShow && ( <Alert status='success'>
+    <AlertIcon />
+    Payment completed!
+    <CloseButton
+        alignSelf='flex-start'
+        position='absolute'
+        right={-1}
+        top={-1}
+        onClick={() => setPaymentAlertShow(false)}
+      />
+  </Alert>)}
+     
       {!postedJobs ? (
         <Text>No jobs in review</Text>
       ) : (
         postedJobs?.map((postedJobs) => (
           <div>
+            
+  
             <Card
               direction={{ base: "column", sm: "row" }}
               overflow="hidden"
@@ -738,11 +907,8 @@ const NeederInReviewCard = () => {
                     marginTop="4"
                     marginLeft="16px"
                   >
-                    <Avatar
-                      name="Segun Adebayo"
-                      src="https://bit.ly/sage-adebayo"
-                      size="lg"
-                    />
+                     <Avatar src='https://bit.ly/broken-link' bg="#01A2E8" size="lg" />
+
 
                     <Box marginTop="2">
                       <Heading size="sm"> {postedJobs.employerName}</Heading>
@@ -856,33 +1022,37 @@ const NeederInReviewCard = () => {
                 <ModalCloseButton />
                 <ModalBody>
                   <>
-                  {ratingLoading ? (<Spinner />) : (<><Flex>
-                      {maxRating.map((item, key) => {
-                        return (
-                          <Button
-                            activeopacity={0.7}
-                            key={item}
-                            marginTop="8px"
-                            onClick={() => setDefaultRating(item)}
-                          >
-                            <Image
-                              boxSize="24px"
-                              src={
-                                item <= defaultRating
-                                  ? star_filled
-                                  : star_corner
-                              }
-                            ></Image>
-                          </Button>
-                        );
-                      })}
-                    </Flex></>)}
-                    
+                    {ratingLoading ? (
+                      <Spinner />
+                    ) : (
+                      <>
+                        <Flex>
+                          {maxRating.map((item, key) => {
+                            return (
+                              <Button
+                                activeopacity={0.7}
+                                key={item}
+                                marginTop="8px"
+                                onClick={() => setDefaultRating(item)}
+                              >
+                                <Image
+                                  boxSize="24px"
+                                  src={
+                                    item <= defaultRating
+                                      ? star_filled
+                                      : star_corner
+                                  }
+                                ></Image>
+                              </Button>
+                            );
+                          })}
+                        </Flex>
+                      </>
+                    )}
                   </>
                 </ModalBody>
 
                 <ModalFooter>
-
                   <Button colorScheme="blue" onClick={() => handleReviewOpen()}>
                     Submit
                   </Button>
@@ -948,31 +1118,23 @@ const NeederInReviewCard = () => {
         ))
       )}
 
-{stripeOpen && (
-  <Modal
-              isOpen={isOpenStripe}
-              onClose={() => setStripeOpen(false)}
-              size="xl"
-              alignContent="center"
-            >
-              <ModalOverlay />
-              <ModalContent>
-             
-                <ModalCloseButton />
-               
-                   <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
-    <EmbeddedCheckout />
-  </EmbeddedCheckoutProvider>
-            
+      {stripeOpen && (
+        <Modal
+          isOpen={isOpenStripe}
+          onClose={() => setStripeOpen(false)}
+          size="xl"
+          alignContent="center"
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalCloseButton />
 
-              
-              </ModalContent>
-            </Modal>
-) }
-    
-
- 
-      
+            <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
+              <EmbeddedCheckout />
+            </EmbeddedCheckoutProvider>
+          </ModalContent>
+        </Modal>
+      )}
     </div>
   );
 };

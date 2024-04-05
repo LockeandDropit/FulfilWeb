@@ -412,7 +412,7 @@ const DoerMapScreen = () => {
         <DoerDashboard />
 
         <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-          <div style={{ height: "95vh", width: "95vw" }}>
+          <div style={{ height: "90vh", width: "93vw" }}>
             <Map
               defaultCenter={{ lat: defaultLat, lng: defaultLong }}
               defaultZoom={12}

@@ -16,7 +16,7 @@ import {
   MenuGroup,
   MenuOptionGroup,
   MenuDivider,
-  Button,
+  
 } from "@chakra-ui/react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { StreamChat } from "stream-chat";
@@ -55,6 +55,7 @@ const DoerHeader = () => {
   }, []);
 
   const [userFirstName, setUserFirstName] = useState("User");
+  const [stripeID, setStripeID] = useState(null)
 
   useEffect(() => {
     if (user != null) {
@@ -63,7 +64,7 @@ const DoerHeader = () => {
       getDoc(docRef).then((snapshot) => {
         // console.log(snapshot.data());
         setUserFirstName(snapshot.data().firstName);
-
+        setStripeID({"stripeID" :snapshot.data().stripeID})
       });
     } else {
       console.log("oops!");
@@ -75,6 +76,8 @@ const DoerHeader = () => {
 
   const [profilePicture, setProfilePicture] = useState(null);
 
+  const [sessionUrl, setSessionUrl] = useState(null)
+
   useEffect(() => {
     if (user) {
       getProfilePicture();
@@ -85,14 +88,61 @@ const DoerHeader = () => {
   const getProfilePicture = async () => {
     const storage = getStorage();
     const reference = ref(storage, "users/" + user.uid + "/profilePicture.jpg");
-    await getDownloadURL(reference).then((response) => {
-      setProfilePicture(response);
-    });
+    if (!reference.service) {
+    
+    } else {
+      await getDownloadURL(reference).then((response) => {
+        setProfilePicture(response);
+      });
+    }
   };
+
+  const logInStripe = async () => {
+    const response = await fetch(
+      //this one is the live one
+      // "https://fulfil-api.onrender.com/create-checkout-web",
+
+      //this is test
+      "http://192.168.0.9:3000/stripe-log-in",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(stripeID),
+      }
+    );
+
+    const { loginLink } = await response.json();
+
+    console.log("client data",loginLink);
+
+
+   setTimeout(() => {
+if (loginLink) {
+  setSessionUrl(loginLink)
+}
+   }, 1000)
+  }
+
+
+  useEffect(() => {
+    if (sessionUrl !== null) {
+      setTimeout(() => {
+        // setPaymentsLoading(false)
+        // window.location.replace(sessionUrl);
+        // help from gun https://stackoverflow.com/questions/45046030/maintaining-href-open-in-new-tab-with-an-onclick-handler-in-react
+        window.open(sessionUrl, "_blank") 
+      }, 1000);
+    } else {
+    }
+  });
 
   return (
     <div className="header">
-      <div className="headerLogo" onClick={() => navigate(`/DoerInProgressList`)}>
+      <div className="headerLogo" onClick={() => navigate(`/DoerMapScreen`)}>
         <img src={fulfil180} alt="Fulfil Logo"></img>
       </div>
 
@@ -107,14 +157,16 @@ const DoerHeader = () => {
             <Avatar bg="#01A2E8" marginRight="16px"  src={profilePicture ? profilePicture : <Avatar />}/>
           </MenuButton>
           <MenuList>
-           
+          <MenuItem type="primary" onClick={() => logInStripe()}>Access Stripe Account</MenuItem>
+              
               <MenuItem onClick={() => navigate("/DoerAccountManager")}>My Account</MenuItem>
-              <MenuItem onClick={() => navigate("/DoerPaymentHistory")}>Payment History</MenuItem>
+              {/* <MenuItem onClick={() => navigate("/DoerPaymentHistory")}>Payment History</MenuItem> */}
         
            <MenuItem onClick={() => navigate("/DoerPrivacyPolicy")}>Privacy Policy</MenuItem>
            
               <MenuItem onClick={() => navigate("/DoerContactForm")}>Contact Us</MenuItem>
               <MenuItem onClick={() => handleLogOut()}>Log Out</MenuItem>
+              
         
           </MenuList>
         </Menu>

@@ -83,10 +83,10 @@ const NeederCompletedJobCard = () => {
           >
             <Stack>
               <CardBody>
-                <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap"
+                {/* <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap"
                 marginLeft="16px">
                   <Heading fontSize="24">{postedJobs.jobTitle}</Heading>
-                  {/* <Flex
+                  <Flex
                     direction="column"
                     position="absolute"
                     right="8"
@@ -95,8 +95,8 @@ const NeederCompletedJobCard = () => {
                   >
                     <ChatIcon boxSize={6} color="#01A2E8"></ChatIcon>
                     <Text>Messages</Text>
-                  </Flex> */}
-                </Flex>
+                  </Flex>
+                </Flex> */}
 
                 {/* <Text size="sm">Total Pay ${postedJobs.confirmedRate}</Text> */}
                 <Flex
@@ -107,11 +107,8 @@ const NeederCompletedJobCard = () => {
                   marginTop="4"
                   marginLeft="16px"
                 >
-                  <Avatar
-                    name="Segun Adebayo"
-                    src="https://bit.ly/sage-adebayo"
-                    size="lg"
-                  />
+                    <Avatar src='https://bit.ly/broken-link' bg="#01A2E8" size="lg" />
+
 
                   <Box marginTop="2">
                     <Heading size="sm"> {postedJobs.employerName}</Heading>

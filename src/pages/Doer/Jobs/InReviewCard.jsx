@@ -186,11 +186,8 @@ console.log("channel from FB", channelID)
                   marginTop="4"
                   marginLeft="16px"
                 >
-                  <Avatar
-                    name="Segun Adebayo"
-                    src="https://bit.ly/sage-adebayo"
-                    size="lg"
-                  />
+                    <Avatar src='https://bit.ly/broken-link' bg="#01A2E8" size="lg" />
+
 
                   <Box marginTop="2">
                     <Heading size="sm"> {postedJobs.employerName}</Heading>

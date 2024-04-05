@@ -199,26 +199,29 @@ const { channel, watchers } = useChannelStateContext();
         <Box marginBottom="22px" marginTop="4">
           <DoerDashboard />
         </Box>
+        <Box height="90vh">
         {doneLoading ? (
           chatClient ? (
             selectedChannel ? (
               <>
-              <Heading width="500px" marginLeft="320px" marginBottom="16px">
+                <Flex direction="column">
+                <Box marginLeft="24px" >
+              <Heading width="500px"  marginTop="8px" marginBottom="16px">
               Messages
             </Heading>
               <Flex marginTop="4">
                 <Chat client={chatClient}>
+                <Box height="800px" >
                   <ChannelList filters={filter} Paginator={InfiniteScroll} onSelect={() => console.log("click")} />
-
+</Box>
                   <Channel channel={selectedChannel}>
                     <Box
                       width="50vw"
                       height="80vh"
-                      borderWidth="1"
-                      borderColor="red"
+                    
                     >
                       <Window>
-                        <ChannelHeader />
+                        <ChannelHireHeader />
                         <MessageList />
                         <MessageInput />
                       </Window>
@@ -227,24 +230,26 @@ const { channel, watchers } = useChannelStateContext();
                   </Channel>
                 </Chat>
               </Flex>
+              </Box>
+              </Flex>
               </>
             ) : (
               <>
               <Flex direction="column">
                 <Box marginLeft="24px" >
-              <Heading width="500px"  marginBottom="16px" marginTop="16px">
+              <Heading width="500px"  marginBottom="16px" marginRight="320px" marginTop="16px">
               Messages
             </Heading>
               <Flex>
                 <Chat client={chatClient}>
+                <Box height="800px">
                   <ChannelList filters={filter} Paginator={InfiniteScroll} />
-
-                  <Channel channel={channel}>
+</Box>
+                  <Channel >
                     <Box
                       width="50vw"
                       height="80vh"
-                      borderWidth="1"
-                      borderColor="red"
+                  
                     >
                       <Window>
                         <ChannelHireHeader />
@@ -281,7 +286,7 @@ const { channel, watchers } = useChannelStateContext();
             />
           </Center>
         )}
-  
+  </Box>
       </Flex>
     </>
   );

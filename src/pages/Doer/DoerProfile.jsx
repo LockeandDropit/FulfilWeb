@@ -93,20 +93,23 @@ const DoerProfile = () => {
   // const profilePictureURL = useSelector(selectUserProfilePicture);
 
   const [profilePicture, setProfilePicture] = useState(null);
+  const [hasUploadedProfilePicture, setHasUploadedProfilePicture] = useState(false)
 
-  useEffect(() => {
-    if (user) {
-      getProfilePicture();
-    } else {
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user && hasUploadedProfilePicture === true) {
+  //     getProfilePicture();
+  //   } else {
+  //   }
+  // }, [user, hasUploadedProfilePicture]);
 
   const getProfilePicture = async () => {
     const storage = getStorage();
     const reference = ref(storage, "users/" + user.uid + "/profilePicture.jpg");
-    await getDownloadURL(reference).then((response) => {
-      setProfilePicture(response);
-    });
+  
+      await getDownloadURL(reference).then((response) => {
+        setProfilePicture(response);
+      });
+    
   };
 
   //redux store
@@ -628,6 +631,21 @@ const DoerProfile = () => {
     await uploadBytes(pictureRef, bytes).then((snapshot) => {
       console.log(snapshot);
     });
+
+    setTimeout(() => {
+      updateDoc(doc(db, "users", user.uid), {
+        hasUploadedProfilePicture: hasUploadedProfilePicture,
+      })
+        .then(() => {
+          //all good
+          console.log("data submitted");
+          setHasUploadedProfilePicture(hasUploadedProfilePicture);
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+    })
   
 
 

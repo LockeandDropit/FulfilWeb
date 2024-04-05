@@ -240,6 +240,8 @@ const NeederMessageList = () => {
     }
   };
 
+  const options = { limit: 11 }
+
   return (
     <>
       <NeederHeader />
@@ -248,8 +250,8 @@ const NeederMessageList = () => {
         Messages
       </Heading> */}
 
-      <Flex direction="row">
-        <Box marginBottom="22px" marginTop="4">
+      <Flex direction="row" >
+        <Box marginBottom="22px" marginTop="4" >
           <NeederDashboard />
         </Box>
         <Box height="90vh">
@@ -262,7 +264,7 @@ const NeederMessageList = () => {
                 </Heading>
                 <Flex marginTop="4">
                   <Chat client={chatClient}>
-                    <Box height="1600px">
+                    <Box height="800px" >
                       <ChannelList
                         filters={filter}
                         Paginator={InfiniteScroll}
@@ -272,8 +274,7 @@ const NeederMessageList = () => {
                       <Box
                         width="50vw"
                         height="80vh"
-                        borderWidth="1"
-                        borderColor="red"
+                  
                       >
                         <Window>
                           <NeederChannelHireHeader />
@@ -290,23 +291,25 @@ const NeederMessageList = () => {
               <>
                 <Flex direction="column">
                   <Box marginLeft="24px">
-                    <Heading width="500px" marginBottom="16px" marginTop="16px">
+                    <Heading width="500px"  marginBottom="16px" marginTop="16px">
                       Messages
                     </Heading>
                     <Flex>
+                  
                       <Chat client={chatClient}>
-                        <Box height="1600px">
+                        <Box height="800px">
                           <ChannelList
+                       
                             filters={filter}
                             Paginator={InfiniteScroll}
+                            options={options}
                           />
                         </Box>
                         <Channel>
                           <Box
                             width="50vw"
                             height="80vh"
-                            borderWidth="1"
-                            borderColor="red"
+                         
                           >
                             <Window>
                               {/* <ChannelHeader /> */}
@@ -318,6 +321,7 @@ const NeederMessageList = () => {
                           <Thread />
                         </Channel>
                       </Chat>
+                    
                     </Flex>
                   </Box>
                 </Flex>

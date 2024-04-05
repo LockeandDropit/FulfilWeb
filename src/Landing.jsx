@@ -45,6 +45,8 @@ const Landing = () => {
                   <Heading marginLeft="8px" color="#01A2E8" size="xl">
                     today.
                   </Heading>
+
+  <Text>           hh{process.env.REACT_APP_FAKE}</Text>       
                 </Flex>
                 {/* <Flex direction="row" alignContent="baseline" marginTop="16px" onClick={() => navigate("/NeederAccountCreation")}>
                   

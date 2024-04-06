@@ -83,7 +83,7 @@ import OnboardingDoerUserAgreement from "./pages/Register/Doer/OnboardingDoerUse
 import OnboardingDoerTaxAgreement from "./pages/Register/Doer/OnboardingDoerTaxAgreement";
 import OnboardingDoerIDVerify from "./pages/Register/Doer/OnboardingDoerIDVerify";
 import StripeSetUp from "./pages/Register/Doer/StripeSetUp";
-
+import Landing from "./Landing";
 
 
 
@@ -97,6 +97,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/Landing",
+    element: <Landing />,
   },
   {
     path: "/Login",

@@ -302,7 +302,7 @@ const NeederMessageList = () => {
                        
                             filters={filter}
                             Paginator={InfiniteScroll}
-                            options={options}
+                         
                           />
                         </Box>
                         <Channel>

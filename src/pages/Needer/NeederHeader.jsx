@@ -27,7 +27,6 @@ import {
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { StreamChat } from "stream-chat";
 
-
 const NeederHeader = () => {
   const navigate = useNavigate();
   //validate & set current user
@@ -95,15 +94,13 @@ const NeederHeader = () => {
     );
 
     // console.log(reference.service)
-    if (!reference.service ) {
+    if (!reference.service) {
     } else {
       await getDownloadURL(reference).then((response) => {
         setProfilePicture(response);
       });
     }
   };
-
-
 
   return (
     <div className="header">
@@ -115,17 +112,18 @@ const NeederHeader = () => {
       </div>
 
       <Flex position="absolute" right="6">
-     
         <Button
-          colorScheme="blue"
-          marginTop="8px"
+          backgroundColor="#01A2E8"
+          color="white"
+          _hover={{ bg: "#018ecb", textColor: "white" }}
+          marginTop="16px"
           marginRight="24px"
           height="36px"
           onClick={() => navigate("/AddJobStart")}
         >
           Post A Job
         </Button>
-        <Heading size="md" marginTop="12px" marginRight="12px">
+        <Heading size="md" marginTop="20px" marginRight="12px">
           Hello, {userFirstName}
         </Heading>
 
@@ -134,6 +132,7 @@ const NeederHeader = () => {
             <Avatar
               bg="#01A2E8"
               marginRight="16px"
+              marginTop="8px"
               src={profilePicture ? profilePicture : <Avatar />}
             />
           </MenuButton>

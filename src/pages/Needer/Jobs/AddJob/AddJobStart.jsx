@@ -204,30 +204,30 @@ const AddJobStart = () => {
     //check for null values https://stackoverflow.com/questions/6003884/how-do-i-check-for-null-values-in-javascript user578895
 
     if (!jobTitleValid || isOneTime === null) {
-      console.log("1")
+      console.log("1");
       alert("Please fill out all fields");
-      console.log("1")
+      console.log("1");
     } else {
       if (isOneTime === true && isFlatRate === true && !flatRateValid) {
         alert("Please fill out all fields");
-        console.log("2")
+        console.log("2");
       } else {
         if (
           (isOneTime === true && isHourly === true && !upperRateValid) ||
           !lowerRateValid
         ) {
-          console.log("3")
+          console.log("3");
           alert("Please fill out all fields");
         } else {
           if (isOneTime === false && isFlatRate === true && !flatRateValid) {
-            console.log("4")
+            console.log("4");
             alert("Please fill out all fields");
           } else {
             if (
               (isOneTime === false && isHourly !== null && !upperRateValid) ||
               !lowerRateValid
             ) {
-              console.log("5")
+              console.log("5");
               alert("Please fill out all fields");
             } else {
             }
@@ -240,9 +240,9 @@ const AddJobStart = () => {
 
   const checkAddress = () => {
     if (!streetAddress || !locationLat) {
-      console.log(streetAddress, locationLat)
+      console.log(streetAddress, locationLat);
       alert("Please fill out all fields");
-      console.log("6")
+      console.log("6");
     } else {
       submitJob();
     }
@@ -632,6 +632,7 @@ const AddJobStart = () => {
   }, [firstAddress]);
 
   useEffect(() => {
+    console.log("raw address", rawAddress);
     if (rawAddress) {
       geocodeByAddress(rawAddress.value.description)
         .then((results) => getLatLng(results[0]))
@@ -690,13 +691,11 @@ const AddJobStart = () => {
               <GooglePlacesAutocomplete
                 apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
                 fetchDetails={true}
-                selectProps={
-                  ({ rawAddress, onChange: setRawAddress })
-                 
-                }
-                onLoadFailed={(error) =>
-                  alert("There was an error, please try again later.", error)
-                }
+                selectProps={{
+                  rawAddress,
+                  onChange: setRawAddress,
+                  placeholder: "Type address here",
+                }}
               />
             </Box>
             <FormControl>

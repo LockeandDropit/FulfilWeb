@@ -54,7 +54,7 @@ import AddJobStart from "./pages/Needer/Jobs/AddJob/AddJobStart";
 import AddJobInfo from "./pages/Needer/Jobs/AddJob/AddJobInfo";
 import NeederApplicants from "./pages/Needer/Jobs/NeederApplicants";
 import ApplicantProfile from "./pages/Needer/Jobs/Applicants/ApplicantProfile";
-
+import NeederEmailRegister from "./pages/Register/Needer/NeederEmailRegister";
 
 //Stream Chat
 import {
@@ -311,6 +311,10 @@ const router = createBrowserRouter([
   {
     path: "/NeederPaymentComplete/success",
     element: <NeederPaymentComplete />,
+  },
+  {
+    path: "/NeederEmailRegister",
+    element: <NeederEmailRegister />,
   },
 
 ]);

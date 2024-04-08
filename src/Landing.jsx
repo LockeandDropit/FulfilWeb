@@ -54,7 +54,7 @@ console.log("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
                   <Heading size="sm" marginLeft="4px" color="#01A2E8">Get started</Heading>
                   <ArrowForwardIcon marginTop="2px"/>
                 </Flex> */}
-                <Button backgroundColor="#01A2E8" color="white" marginTop="16px" onClick={() => navigate("/NeederAccountCreation")}>Get Started <ArrowForwardIcon marginTop="2px" marginLeft="4px" boxSize={6}/></Button>
+                <Button backgroundColor="#01A2E8" color="white" _hover={{ bg: "#018ecb", textColor: "white" }} marginTop="16px" onClick={() => navigate("/NeederEmailRegister")}>Get Started <ArrowForwardIcon marginTop="2px" marginLeft="4px" boxSize={6}/></Button>
               </Flex>
               </Center>
           </Container>

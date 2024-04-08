@@ -23,7 +23,7 @@ const Header = () => {
       <div className="headerRight">
         <Button backgroundColor="white" onClick={() => navigate(`/Login`)}>Post A Job</Button>
         <Button backgroundColor="white">Categories</Button>
-        <Button backgroundColor="white" onClick={() => navigate(`/DoerAccountCreation`)}>Become A Doer</Button>
+        <Button backgroundColor="white" onClick={() => navigate(`/DoerEmailRegister`)}>Become A Doer</Button>
       
        
        

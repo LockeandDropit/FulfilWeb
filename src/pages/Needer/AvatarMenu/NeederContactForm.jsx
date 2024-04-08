@@ -86,7 +86,7 @@ const NeederContactForm = () => {
   const [userEmail, setUserEmail] = useState(null);
  const [issue, setIssue] = useState(null)
  const [issueID, setIssueID] = useState(null)
-
+ const [issueSubmitted, setIssueSubmitted] = useState(false)
 
   useEffect(() => {
     if (hasRun === false) {
@@ -122,7 +122,8 @@ const NeederContactForm = () => {
   })
   .then(() => {
 
-    alert("Issue submitted, we will contact you within 2 business days");
+    setIssueSubmitted(true)
+
 
     })
     .catch((error) => {
@@ -159,22 +160,34 @@ const NeederContactForm = () => {
             padding="8"
             //   overflowY="scroll"
           >
-            <Center flexDirection="column">
+              {issueSubmitted ? ( <Center flexDirection="column">
       
               
            
              
            
-                <Heading size="lg" marginTop="16px" marginRight="50px">
-                Contact Us
-                </Heading>
-                <Text width="400px" marginTop="16px">Have a concern, question, or complaint? Don't hesitate to reach out and we'll respond as quickly as possible.</Text>
-
-                <Textarea width="560px" height="360" borderWidth="1px" borderColor="black" marginTop="16px" onChange={(e) => setIssue(e.target.value)}></Textarea>
-                <Button colorScheme="blue" marginTop="8" width="240px" onClick={() => submitIssue()}>Submit</Button>
-               
+      <Heading size="lg" marginTop="16px" >
+      Thank you for your feedback!
+      </Heading>
+      <Text width="500px" marginTop="16px">We appreciate your feedback. We will respond within 2 business days.</Text>
+     
+ 
+    </Center>) : ( <Center flexDirection="column">
+      
+              
            
-              </Center>
+             
+           
+      <Heading size="lg" marginTop="16px" marginRight="50px">
+      Contact Us
+      </Heading>
+      <Text width="400px" marginTop="16px">Have a concern, question, or complaint? Don't hesitate to reach out and we'll respond as quickly as possible.</Text>
+
+      <Textarea width="560px" height="360" borderWidth="1px" borderColor="black" marginTop="16px" onChange={(e) => setIssue(e.target.value)}></Textarea>
+      <Button colorScheme="blue" marginTop="8" width="240px" onClick={() => submitIssue()}>Submit</Button>
+     
+ 
+    </Center>)}
               </Box>
       </Flex>
     </>

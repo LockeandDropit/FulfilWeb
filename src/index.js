@@ -25,7 +25,7 @@ import DoerInProgressList from "./pages/Doer/JobLists/DoerInProgressList";
 import DoerSavedList from "./pages/Doer/JobLists/DoerSavedList";
 import DoerInReviewList from "./pages/Doer/JobLists/DoerInReviewList";
 import DoerCompletedList from "./pages/Doer/JobLists/DoerCompletedList";
-
+import DoerEmailRegister from "./pages/Register/Doer/DoerEmailRegister";
 
 //Needer Components
 import NeederPaymentComplete from "./pages/Needer/Jobs/NeederPaymentComplete";
@@ -55,6 +55,8 @@ import AddJobInfo from "./pages/Needer/Jobs/AddJob/AddJobInfo";
 import NeederApplicants from "./pages/Needer/Jobs/NeederApplicants";
 import ApplicantProfile from "./pages/Needer/Jobs/Applicants/ApplicantProfile";
 import NeederEmailRegister from "./pages/Register/Needer/NeederEmailRegister";
+import EditPostedJob from "./pages/Needer/Jobs/EditPostedJob";
+import EditJobInfo from "./pages/Needer/Jobs/EditJobInfo";
 
 //Stream Chat
 import {
@@ -85,6 +87,10 @@ import OnboardingDoerIDVerify from "./pages/Register/Doer/OnboardingDoerIDVerify
 import StripeSetUp from "./pages/Register/Doer/StripeSetUp";
 import Landing from "./Landing";
 
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "./firebaseConfig"
+import { useNavigate } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
 
 
 
@@ -316,8 +322,22 @@ const router = createBrowserRouter([
     path: "/NeederEmailRegister",
     element: <NeederEmailRegister />,
   },
-
+  {
+    path: "/DoerEmailRegister",
+    element: <DoerEmailRegister />,
+  },
+  {
+    path: "/EditPostedJob",
+    element: <EditPostedJob />,
+  },
+  {
+    path: "/EditJobInfo",
+    element: <EditJobInfo />,
+  },
 ]);
+
+
+
 
 const client = StreamChat.getInstance(process.env.STREAM_CHAT_API_KEY);
 

@@ -23,7 +23,16 @@ import {
   AccordionIcon,
   Avatar,
 } from "@chakra-ui/react";
-
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -62,27 +71,35 @@ const NeederPostedJobCard = () => {
   }, [user]);
 
   const viewApplicants = (x) => {
-    navigate("/NeederApplicants", {state: {jobID: x.jobID, jobTitle: x.jobTitle, isHourly: x.isHourly}})
-  }
+    navigate("/NeederApplicants", {
+      state: { jobID: x.jobID, jobTitle: x.jobTitle, isHourly: x.isHourly },
+    });
+  };
 
   //unicode sizing https://stackoverflow.com/questions/23750346/how-to-resize-unicode-characters-via-cssZoe is on Strike & Raptor
+  const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState(null);
+
+  const handleEdit = (x) => {
+navigate("/EditPostedJob", { state: { jobID: x.jobID, jobTitle: x.jobTitle, isHourly: x.isHourly }})
+  };
+
+
   return (
     <div>
       {!postedJobs ? (
         <Flex direction="column">
-            <Text>No posted jobs</Text>
-            <Button
-         colorScheme="blue"
-         marginTop="16px"
-         marginRight="24px"
-         height="36px"
-         width="240px"
-         onClick={() => navigate("/AddJobStart")}
-       >
-         Post A Job
-       </Button>
+          <Text>No posted jobs</Text>
+          <Button
+            colorScheme="blue"
+            marginTop="16px"
+            marginRight="24px"
+            height="36px"
+            width="240px"
+            onClick={() => navigate("/AddJobStart")}
+          >
+            Post A Job
+          </Button>
         </Flex>
-      
       ) : (
         postedJobs?.map((postedJobs) => (
           <div>
@@ -110,15 +127,16 @@ const NeederPostedJobCard = () => {
                     marginLeft="16px"
                   >
                     <Heading fontSize="24">{postedJobs.jobTitle}</Heading>
+                   
                     {/* <Flex
                       direction="column"
                       position="absolute"
                       right="8"
                       alignItems="center"
-                      marginTop="36"
+                      marginTop="4"
                     >
-                      <ChatIcon boxSize={6} color="#01A2E8"></ChatIcon>
-                      <Text>Messages</Text>
+                   
+                     <Button colorScheme="red" height="24px">Delete</Button>
                     </Flex> */}
                   </Flex>
 
@@ -131,8 +149,11 @@ const NeederPostedJobCard = () => {
                     marginTop="4"
                     marginLeft="16px"
                   >
-                      <Avatar src='https://bit.ly/broken-link' bg="#01A2E8" size="lg" />
-
+                    <Avatar
+                      src="https://bit.ly/broken-link"
+                      bg="#01A2E8"
+                      size="lg"
+                    />
 
                     <Box marginTop="2">
                       <Heading size="sm"> {postedJobs.employerName}</Heading>
@@ -144,12 +165,13 @@ const NeederPostedJobCard = () => {
                           /hour
                         </Text>
                       ) : (
-                        <Text size="sm">Total Offer ${postedJobs.flatRate}</Text>
+                        <Text size="sm">
+                          Total Offer ${postedJobs.flatRate}
+                        </Text>
                       )}
                     </Box>
                   </Flex>
 
-               
                   <Flex direction="column" marginLeft="16px">
                     <Heading size="sm" marginTop="2">
                       Description
@@ -212,19 +234,31 @@ const NeederPostedJobCard = () => {
                         ) : (
                           <Text marginBottom="48px">Nothing listed</Text>
                         )}
-
+                        <Box position="absolute" right="10" bottom="8"></Box>
                         <Button
-                          colorScheme="blue"
-                          textColor="white"
+                          backgroundColor="#01A2E8"
+                          color="white"
+                          _hover={{ bg: "#018ecb", textColor: "white" }}
                           width="180px"
                           height="40px"
-                          position="absolute"
-                          right="10"
-                          bottom="8"
-                          alignItems="center"           
+                          alignItems="center"
                           onClick={() => viewApplicants(postedJobs)}
                         >
                           View Applicants
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          marginLeft="16px"
+                          width="180px"
+                          height="40px"
+                          _hover={{
+                            backgroundColor: "#e2e2e2",
+                            textColor: "black",
+                          }}
+                          alignItems="center"
+                          onClick={() => handleEdit(postedJobs)}
+                        >
+                          Edit Post
                         </Button>
                       </AccordionPanel>
                     </AccordionItem>
@@ -232,6 +266,8 @@ const NeederPostedJobCard = () => {
                 </CardBody>
               </Stack>
             </Card>
+            
+           
           </div>
         ))
       )}

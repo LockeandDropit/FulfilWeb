@@ -13,6 +13,7 @@ import {
   FormLabel,
   FormErrorMessage,
   FormHelperText,
+  Select
 } from "@chakra-ui/react";
 import { Center, Flex } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
@@ -124,50 +125,119 @@ const MapScreen = () => {
     setOpenInfoWindowMarkerID(x);
   };
 
+
+  
+
+  //category search
+
+  const [searchJobCategory, setSearchJobCategory] = useState(null)
+
+  useEffect(() => {
+    if (searchJobCategory && searchJobCategory !== null) {
+      searchCategory(searchJobCategory)
+    } else {
+
+    }
+  }, [searchJobCategory])
+
+
+  const searchCategory = (value) => {
+    console.log(value);
+    const q = query(collection(db, "Map Jobs"));
+
+    if (value === "all") {
+      const q = query(collection(db, "Map Jobs"));
+
+      onSnapshot(q, (snapshot) => {
+        let results = [];
+        snapshot.docs.forEach((doc) => {
+          results.push({ ...doc.data(), id: doc.id });
+        });
+
+        setPostedJobs(results);
+      });
+    } else {
+      onSnapshot(q, (snapshot) => {
+        let results = [];
+        let secondResults = [];
+
+        snapshot.docs.forEach((doc) => {
+          //review what thiss does
+          results.push({ ...doc.data(), id: doc.id });
+        });
+
+        results.map((results) => {
+          if (results.category == value) {
+            secondResults.push(results);
+            console.log("match", results);
+          } else {
+         
+          }
+        });
+
+        if (secondResults.length === 0) {
+          alert("sorry! No jobs currently available in that category");
+        } else {
+          setPostedJobs(secondResults);
+        }
+      });
+    }
+  };
+
+
   return (
     <div>
-      <Header />
+      
 
       <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
         <div style={{ height: "100vh" }}>
           <Map
             defaultCenter={{ lat: defaultLat, lng: defaultLong }}
-            defaultZoom={12}
+            defaultZoom={11}
             gestureHandling={"greedy"}
             disableDefaultUI={true}
             //move to env
             mapId="6cc03a62d60ca935"
           >
             <Center marginTop="8px">
-              <Card
-                align="center"
-                border="1px"
-                borderColor="gray.400"
-                borderWidth="1.5px"
-                //   width="24%"
-                boxShadow="lg"
-                flexDirection="row"
-              >
-                <CardBody>
-                  <FormControl>
-                    <Input
-                      type="Zip Code"
-                      value={input}
-                      onChange={handleInputChange}
-                      width="360px"
-                      placeholder="Enter your zip code"
-                    />
-                    {/* {!isError ? (
-                null
-              ) : (
-                <FormErrorMessage>Please enter valid zip code</FormErrorMessage>
-              )} */}
-                  </FormControl>
-                </CardBody>
-                <Button colorScheme="blue" width="240px" marginRight={5}>
-                  Search
-                </Button>
-              </Card>
+            <Card
+                  align="center"
+                  border="1px"
+                  borderColor="gray.400"
+                  borderWidth="1.5px"
+                  width="auto"
+                  boxShadow="lg"
+                  flexDirection="row"
+                >
+                
+                
+                  <Select placeholder="Looking for something specific?" width="360px"  onChange={(e) => setSearchJobCategory(e.target.value)}>
+                  <option value="all">Clear Selection</option>
+                  <option >--------------------------------</option>
+                  <option value="asphalt">Asphalt</option>
+                <option value="carpentry">Carpentry</option>
+                <option value="concrete">Concrete</option>
+                <option value="drywall">Drywall</option>
+                <option value="electrical work">Electrical Work</option>
+                <option value="general handyman">General Handyman</option>
+                <option value="gutter cleaning">Gutter Cleaning</option>
+                <option value="hvac">HVAC</option>
+                <option value="landscaping">Landscaping</option>
+                <option value="painting">Painting</option>
+                <option value="plumbing">Plumbing</option>
+                <option value="pressure washing">Pressure Washing</option>
+                <option value="roofing">Roofing</option>
+                <option value="siding">Siding</option>
+                <option value="snow removal">Snow Removal</option>
+                <option value="window installation">Window Installation</option>
+                <option value="window washing">Window Washing</option>
+                <option value="yard work">Yard Work</option>
+              
+                  </Select>
+                  {/* <Button colorScheme="blue" width="240px">
+                    Search
+                  </Button> */}
+                </Card>
             </Center>
 
             {allJobs !== null &&

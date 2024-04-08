@@ -44,6 +44,7 @@ import NeederDashboard from "./NeederDashboard";
 import { Select } from "@chakra-ui/react";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 
+
 const NeederMapScreen = () => {
   const [user, setUser] = useState(null);
   const [postedJobs, setPostedJobs] = useState([]);
@@ -240,6 +241,8 @@ const NeederMapScreen = () => {
   const viewApplicants = (x) => {
     navigate("/NeederApplicants", {state: {jobID: x.jobID, jobTitle: x.jobTitle, isHourly: x.isHourly}})
   }
+
+
   return (
     <div>
       <NeederHeader />

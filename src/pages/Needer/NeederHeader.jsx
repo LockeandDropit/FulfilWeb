@@ -23,6 +23,8 @@ import {
   MenuOptionGroup,
   MenuDivider,
   Button,
+  Center,
+  Spinner
 } from "@chakra-ui/react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { StreamChat } from "stream-chat";
@@ -38,11 +40,16 @@ const NeederHeader = () => {
 
   const [loggingOut, setLoggingOut] = useState(false);
 
+
   const auth = getAuth();
   const handleLogOut = async () => {
+    setLoggingOut(true);
     await chatClient.disconnectUser();
     await signOut(auth)
-      .then(navigate("/")) // undefined
+    .then(
+      setTimeout(() => {
+        navigate("/");
+      }, 2000)) // undefined
       .catch((e) => console.log(e));
   };
 
@@ -151,7 +158,23 @@ const NeederHeader = () => {
             <MenuItem onClick={() => navigate("/NeederContactForm")}>
               Contact Us
             </MenuItem>
-            <MenuItem onClick={() => handleLogOut()}>Log Out</MenuItem>
+            {loggingOut ? (
+              <Center>
+                <Spinner />
+              </Center>
+            ) : (
+              <Center>
+                <Button
+                  width="160px"
+                  colorScheme="red"
+                  height="32px"
+                  marginTop="8px"
+                  onClick={() => handleLogOut()}
+                >
+                  Log Out
+                </Button>
+              </Center>
+            )}
           </MenuList>
         </Menu>
       </Flex>

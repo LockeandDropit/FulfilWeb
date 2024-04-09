@@ -134,9 +134,9 @@ const NeederInReviewCard = () => {
     }
   };
 
-  const apiKey = "gheexx2834gr";
 
-  const chatClient = new StreamChat(apiKey);
+
+  const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
 
   // const client = StreamChat.getInstance(STREAM_CHAT_API_KEY);
   const [selectedChannel, setSelectedChannel] = useState(null);
@@ -400,7 +400,9 @@ const NeederInReviewCard = () => {
   const fetchClientSecret = useCallback(() => {
     // Create a Checkout Session
     console.log("job info", jobInfo);
-    return fetch("https://fulfil-api.onrender.com/create-checkout-web-embedded", {
+
+      return fetch("https://fulfil-api.onrender.com/create-checkout-web-embedded", {
+
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -409,8 +411,8 @@ const NeederInReviewCard = () => {
       body: JSON.stringify(jobInfo),
     })
       .then((res) => res.json())
-      .then((data) => data.clientSecret);
-    // .then((data) => console.log("all session data",data))
+      .then((data) => data.clientSecret)
+    .then((data) => console.log("all session data",data))
 
     //pass data or data.clientSecret?
     // const { client_secret } = await response.json()

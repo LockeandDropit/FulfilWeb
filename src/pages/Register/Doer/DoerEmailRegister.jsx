@@ -17,7 +17,7 @@ import {
   InputGroup,
   InputRightAddon,
 } from "@chakra-ui/react";
-import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
+import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
 import {
   FormControl,
   FormLabel,
@@ -83,7 +83,7 @@ const DoerEmailRegister = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [emailValidationBegun, setEmailValidationBegun] = useState(false);
 
-  const validate = (email) => {
+  const validate = () => {
     setEmailValidationBegun(true);
     const isValid = emailRegex.test(email);
     if (!isValid) {
@@ -92,22 +92,33 @@ const DoerEmailRegister = () => {
       setValidationMessage();
       setEmail(email);
     }
+    setPasswordValidationBegun(true);
+    const isValidPassword = passwordRegex.test(password);
+    if (!isValidPassword) {
+      setPasswordValidationMessage("Passwords must be 6 characters or longer");
+    } else {
+      setPasswordValidationMessage();
+    }
+    if (isValid && isValidPassword) {
+      onSignUp();
+    }
   };
 
   const [passwordValidationMessage, setPasswordValidationMessage] = useState();
 
   //credit https://www.sitepoint.com/using-regular-expressions-to-check-string-length/
-  const passwordRegex = /^[a-zA-Z]{6,20}$/;
+
+  //credit Vivek S. & xanatos https://stackoverflow.com/questions/5058416/regular-expressions-how-to-accept-any-symbol
+  const passwordRegex = /[^\>]*/;
   const [passwordValidationBegun, setPasswordValidationBegun] = useState(false);
 
-  const validatePassword = (password) => {
+  const validatePassword = () => {
     setPasswordValidationBegun(true);
     const isValid = passwordRegex.test(password);
     if (!isValid) {
       setPasswordValidationMessage("Passwords must be 6 characters or longer");
     } else {
       setPasswordValidationMessage();
-      setPassword(password);
     }
   };
 
@@ -121,8 +132,6 @@ const DoerEmailRegister = () => {
     }
   };
 
-
-
   return (
     <>
       <Header />
@@ -132,7 +141,7 @@ const DoerEmailRegister = () => {
             <Flex direction="column" marginLeft="120px">
               <Center>
                 <Heading type="blackAlpha" size="lg" marginBottom="16px">
-               Create an account
+                  Create an account
                 </Heading>
               </Center>
               {/* <Flex direction="row" alignContent="baseline" marginTop="16px" onClick={() => navigate("/NeederAccountCreation")}>
@@ -148,7 +157,7 @@ const DoerEmailRegister = () => {
                   borderWidth=".25px"
                   type="email"
                   value={email}
-                  onChange={(e) => validate(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   width="360px"
                 />
                 {emailValidationBegun === true ? (
@@ -164,7 +173,7 @@ const DoerEmailRegister = () => {
                     borderWidth=".5px"
                     type={visibleToggle}
                     value={password}
-                    onChange={(e) => validatePassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)}
                     width="360px"
                   />
                   <InputRightElement>
@@ -180,28 +189,21 @@ const DoerEmailRegister = () => {
                 color="white"
                 _hover={{ bg: "#018ecb", textColor: "white" }}
                 marginTop="32px"
-                onClick={() => onSignUp()}
+                onClick={() => validate()}
               >
-               Sign up{" "}
+                Sign up{" "}
                 <ArrowForwardIcon
                   marginTop="2px"
                   marginLeft="4px"
                   boxSize={6}
                 />
               </Button>
-
-              
             </Flex>
           </Center>
         </Box>
         <Center>
           <Box w="66vw" h="90vh" padding="16" alignContent="center">
-            <Box
-            
-              w="66vw"
-              h="88vh"
-              marginLeft="80px"
-            >
+            <Box w="66vw" h="88vh" marginLeft="80px">
               <MapScreen />
             </Box>
           </Box>

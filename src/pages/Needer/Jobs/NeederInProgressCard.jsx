@@ -10,9 +10,18 @@ import {
   Text,
   Flex,
 } from "@chakra-ui/react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
-import { query, collection, onSnapshot, getDoc, doc } from "firebase/firestore";
+import { query, collection, onSnapshot, getDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
 
 import { useEffect, useState } from "react";
 import {
@@ -24,6 +33,7 @@ import {
   Button,
   Box,
   Avatar,
+  useDisclosure
 } from "@chakra-ui/react";
 
 import { ChatIcon, ArrowForwardIcon } from "@chakra-ui/icons";
@@ -53,12 +63,14 @@ const NeederInProgressCard = () => {
   useEffect(() => {
     if (user != null) {
       // should this be done on log ina nd stored in redux store so it's cheaper?
-      const q = query(collection(db, "users", user.uid, "Jobs In Progress"));
+      const q = query(
+        collection(db, "employers", user.uid, "Jobs In Progress")
+      );
 
       onSnapshot(q, (snapshot) => {
         let results = [];
+
         snapshot.docs.forEach((doc) => {
-          //review what thiss does
           results.push({ ...doc.data(), id: doc.id });
         });
 
@@ -92,19 +104,17 @@ const NeederInProgressCard = () => {
     // }
   };
 
-
-
   const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
 
-    const userInfo = {
+  const userInfo = {
     id: userID,
     // name: userName,
     // image: `https://getstream.io/random_png/?id=${userId}&name=${userName}`,
   };
 
-  const [userConnected, setUserConnected] = useState(false)
+  const [userConnected, setUserConnected] = useState(false);
 
-  const filter = { type: 'messaging', members: { $in: [userID] } };
+  const filter = { type: "messaging", members: { $in: [userID] } };
 
   // useEffect(() => {
   //   if (userID && chatClient && userConnected === false) {
@@ -115,19 +125,16 @@ const NeederInProgressCard = () => {
   //   }
   // }, [userID, chatClient]);
 
-
   // const client = StreamChat.getInstance(STREAM_CHAT_API_KEY);
   const [selectedChannel, setSelectedChannel] = useState(null);
-//props passed https://stackoverflow.com/questions/64566405/react-router-dom-v6-usenavigate-passing-value-to-another-component
-const navigateToChannel = (x) => {
-navigate("/NeederMessageList", {state: {selectedChannel: x.channelID}})
-console.log(x.channelID)
-}
+  //props passed https://stackoverflow.com/questions/64566405/react-router-dom-v6-usenavigate-passing-value-to-another-component
+  const navigateToChannel = (x) => {
+    navigate("/NeederMessageList", { state: { selectedChannel: x.channelID } });
+    console.log(x.channelID);
+  };
 
   const getChannels = async (x) => {
-    const channelSort = await chatClient.queryChannels(filter, {
-
-    })
+    const channelSort = await chatClient.queryChannels(filter, {});
 
     setTimeout(() => {
       channelSort.map((channelSort) => {
@@ -142,10 +149,7 @@ console.log(x.channelID)
           console.log("no luck", channelSort.cid);
         }
       });
-    }, 1000)
-      
-   
-    
+    }, 1000);
   };
   const navigate = useNavigate();
 
@@ -158,24 +162,84 @@ console.log(x.channelID)
     }
   }, [selectedChannel]);
 
+  //modal control
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const handleCancel = (jobTitle) => {
+console.log("jobtitle",jobTitle)
+onOpen()
+  }
+
+  const handleDelete = (postedJobs) => {
+
+
+    setDoc(doc(db, "Canceled Jobs", postedJobs.jobID), {
+      employerID: user.uid,
+      doerID: postedJobs.hiredApplicant,
+      jobTitle: postedJobs.jobTitle,
+     
+  })
+  .then(() => {
+
+
+
+    })
+    .catch((error) => {
+      // no bueno
+      console.log(error);
+    });
+
+    deleteDoc(doc(db, "Map Jobs", user.uid, "Posted Jobs", postedJobs.jobTitle), {
+
+    })
+      .then(() => {
+        //all good
+      
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+
+      deleteDoc(doc(db, "employers", user.uid, "Jobs In Progress", postedJobs.jobTitle), {
+
+      })
+        .then(() => {
+          //all good
+          onOpen()
+     
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
+        
+  }
+
+
+  const handleCloseModal = () => {
+    onClose()
+  }
+
   return (
     <div>
       {!postedJobs ? (
         <Flex direction="column">
-        <Text marginLeft="6px" marginTop="4">
-          No jobs in progress
-        </Text>
-         <Button
-         colorScheme="blue"
-         marginTop="16px"
-         marginRight="24px"
-         height="36px"
-         width="240px"
-         onClick={() => navigate("/AddJobStart")}
-       >
-         Post A Job
-       </Button>
-       </Flex>
+          <Text marginLeft="6px" marginTop="4">
+            No jobs in progress
+          </Text>
+          <Button
+            colorScheme="blue"
+            marginTop="16px"
+            marginRight="24px"
+            height="36px"
+            width="240px"
+            onClick={() => navigate("/AddJobStart")}
+          >
+            Post A Job
+          </Button>
+        </Flex>
       ) : (
         postedJobs?.map((postedJobs) => (
           <div>
@@ -195,19 +259,18 @@ console.log(x.channelID)
             >
               <Stack>
                 <CardBody>
-                  <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap"
-                  marginLeft="16px">
+                  <Flex
+                    flex="1"
+                    gap="4"
+                    alignItems="center"
+                    flexWrap="wrap"
+                    marginLeft="16px"
+                  >
                     <Heading fontSize="24">{postedJobs.jobTitle}</Heading>
-                    {/* <Flex
-                      direction="column"
-                      position="absolute"
-                      right="8"
-                      alignItems="center"
-                      marginTop="36"
-                    >
-                      <ChatIcon boxSize={6} color="#01A2E8"></ChatIcon>
-                      <Text>Messages</Text>
-                    </Flex> */}
+                    <Box position="absolute" right="0" marginTop="8px">
+                      <Button height="36px" marginRight="8px" backgroundColor="white" textColor="black" _hover={{ bg: "#DFDFDF", textColor: "black" }}>See More</Button>
+                      {/* <Button height="36px" width="120px" backgroundColor="#01A2E8" color="white" _hover={{ bg: "#018ecb", textColor: "white" }} onClick={() => navigateToChannel(postedJobs)}>Messages</Button> */}
+                    </Box>
                   </Flex>
 
                   {/* <Text size="sm">Total Pay ${postedJobs.confirmedRate}</Text> */}
@@ -219,8 +282,11 @@ console.log(x.channelID)
                     marginTop="4"
                     marginLeft="16px"
                   >
-                      <Avatar src='https://bit.ly/broken-link' bg="#01A2E8" size="lg" />
-
+                    <Avatar
+                      src="https://bit.ly/broken-link"
+                      bg="#01A2E8"
+                      size="lg"
+                    />
 
                     <Box marginTop="2">
                       <Heading size="sm"> {postedJobs.employerName}</Heading>
@@ -230,6 +296,9 @@ console.log(x.channelID)
                       </Text>
                     </Box>
                   </Flex>
+                  {/* <Box>
+                  <Button marginLeft="16px" marginTop="16px" height="36px" width="160px" backgroundColor="#01A2E8" color="white" _hover={{ bg: "#018ecb", textColor: "white" }} onClick={() => navigateToChannel(postedJobs)}>See Messages</Button>
+                  </Box> */}
 
                   {/* <Button
                     colorScheme="white"
@@ -242,20 +311,32 @@ console.log(x.channelID)
                   >
                     Go To Messages
                   </Button> */}
-    <Flex direction="column" marginLeft="16px">
-                  <Heading size="sm" marginTop="2">
-                    Description
-                  </Heading>
-                  <Text>{postedJobs.description}</Text>
+                  <Flex direction="column" marginLeft="16px" marginBottom="60px">
+                    <Heading size="sm" marginTop="2">
+                      Description
+                    </Heading>
+                    <Text>{postedJobs.description}</Text>
+                    
                   </Flex>
-                  <Accordion allowMultiple>
-                    <AccordionItem  >
-                     <Flex direction="row-reverse" width="890px">
-                        <AccordionButton width="120px" position="flex-start" bottom="8px">
+                  <Box bottom="2" >
+                    
+                  <Button  height="36px" width="160px" backgroundColor="#01A2E8" color="white" _hover={{ bg: "#018ecb", textColor: "white" }} onClick={() => navigateToChannel(postedJobs)}>See Messages</Button>
+                  <Button height="36px"  marginLeft="8px" backgroundColor="white" textColor="#d8504d" _hover={{ bg: "#f1807e", textColor: "white" }} onClick={() => handleDelete(postedJobs)}>Cancel Job</Button>
+                  </Box>
+
+                  
+                  {/* <Accordion allowMultiple>
+                    <AccordionItem>
+                      <Flex direction="row-reverse" width="890px">
+                        <AccordionButton
+                          width="120px"
+                          position="flex-start"
+                          bottom="8px"
+                        >
                           <Box>See More</Box>
                           <AccordionIcon />
                         </AccordionButton>
-                        </Flex>
+                      </Flex>
                       <AccordionPanel pb={4}>
                         <Heading size="sm" marginTop="2">
                           Requirements
@@ -301,19 +382,7 @@ console.log(x.channelID)
                           <Text marginBottom="48px">Nothing listed</Text>
                         )}
 
-                        {/* <Button
-                    colorScheme="white"
-                    textColor="#01A2E8"
-                    outlineColor="#01A2E8"
-                    width="180px"
-                    height="32px"
-                    position="absolute"
-                    right="10"
-                    bottom="8"
-                    alignItems="center"
-                  >
-                   Messages <ArrowForwardIcon marginLeft="4" />
-                  </Button> */}
+                      
                         <Button
                           colorScheme="blue"
                           textColor="white"
@@ -331,11 +400,27 @@ console.log(x.channelID)
                         </Button>
                       </AccordionPanel>
                     </AccordionItem>
-                  </Accordion>
-              
+                  </Accordion> */}
                 </CardBody>
               </Stack>
             </Card>
+            <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            This job has been canceled
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={() => handleCloseModal()}>
+              Great!
+            </Button>
+           
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
           </div>
         ))
       )}

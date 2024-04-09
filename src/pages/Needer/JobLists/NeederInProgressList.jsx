@@ -106,7 +106,7 @@ useEffect(() => {
         <NeederDashboard />
 
         <Box
-          width="60vw"
+          width="50vw"
           // alignContent="center"
           // justifyContent="center"
           // display="flex"
@@ -120,7 +120,7 @@ useEffect(() => {
           rounded="md"
           padding="4"
           overflowY="scroll"
-          marginLeft="48"
+          marginLeft="56"
           marginRight="16"
         >
           <Heading size="lg" marginLeft="6px">In Progress</Heading>

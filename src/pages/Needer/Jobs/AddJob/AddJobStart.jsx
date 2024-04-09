@@ -9,6 +9,7 @@ import {
   Container,
   Textarea,
   Select,
+  Spinner
 } from "@chakra-ui/react";
 import {
   FormControl,
@@ -648,6 +649,13 @@ const AddJobStart = () => {
     }
   }, [rawAddress]);
 
+  //laoding control
+
+  const [loading, setLoading] = useState(true);
+  setTimeout(() => {
+    setLoading(false)
+  }, 1000);
+
   return (
     <>
       <NeederHeader />
@@ -674,7 +682,16 @@ const AddJobStart = () => {
           marginRight="16"
           //   overflowY="scroll"
         >
-          <Flex direction="column">
+          {loading ? ( <Center marginTop="500px">
+           <Spinner
+                      thickness="4px"
+                      speed="0.65s"
+                      emptyColor="gray.200"
+                      color="#01A2E8"
+                      size="lg"
+                    
+                    />
+        </Center>) : (  <Flex direction="column">
             <Heading size="lg">Add A New Job</Heading>
             <FormControl isRequired>
               <FormLabel marginTop="8">Job Title</FormLabel>
@@ -832,7 +849,8 @@ const AddJobStart = () => {
             >
               Next{" "}
             </Button>
-          </Flex>
+          </Flex>)}
+        
         </Box>
       </Flex>
     </>

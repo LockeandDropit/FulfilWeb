@@ -21,8 +21,8 @@ const Header = () => {
       </div>
 
       <div className="headerRight">
-        <Button backgroundColor="white" onClick={() => navigate(`/Login`)}>Post A Job</Button>
-        <Button backgroundColor="white">Categories</Button>
+        <Button backgroundColor="white" onClick={() => navigate("/NeederEmailRegister")}>Post A Job</Button>
+        {/* <Button backgroundColor="white">Categories</Button> */}
         <Button backgroundColor="white" onClick={() => navigate(`/DoerEmailRegister`)}>Become A Doer</Button>
       
        

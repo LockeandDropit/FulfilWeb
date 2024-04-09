@@ -83,7 +83,7 @@ const NeederEmailRegister = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [emailValidationBegun, setEmailValidationBegun] = useState(false);
 
-  const validate = (email) => {
+  const validate = () => {
     setEmailValidationBegun(true);
     const isValid = emailRegex.test(email);
     if (!isValid) {
@@ -92,22 +92,42 @@ const NeederEmailRegister = () => {
       setValidationMessage();
       setEmail(email);
     }
+    setPasswordValidationBegun(true);
+    const isValidPassword = passwordRegex.test(password);
+    if (!isValidPassword) {
+      setPasswordValidationMessage("Password Invalid. Must be 6 characters or longer");
+    } else {
+      setPasswordValidationMessage();
+      // setPassword(password);
+      console.log("password valid")
+    }
+
+
+    if (isValid && isValidPassword) {
+      onSignUp()
+    }
   };
 
   const [passwordValidationMessage, setPasswordValidationMessage] = useState();
 
   //credit https://www.sitepoint.com/using-regular-expressions-to-check-string-length/
-  const passwordRegex = /^[a-zA-Z]{6,20}$/;
+  //credit alex gittemeier https://stackoverflow.com/questions/17439917/regex-to-accept-alphanumeric-and-some-special-character-in-javascript
+  // const passwordRegex = /^[A-Za-z0-9_@./#&+-]{6,20}$/;
+  
+  
+  //credit Vivek S. & xanatos https://stackoverflow.com/questions/5058416/regular-expressions-how-to-accept-any-symbol
+  const passwordRegex = /[^\>]*/;
   const [passwordValidationBegun, setPasswordValidationBegun] = useState(false);
 
-  const validatePassword = (password) => {
+  const validatePassword = () => {
     setPasswordValidationBegun(true);
     const isValid = passwordRegex.test(password);
     if (!isValid) {
-      setPasswordValidationMessage("Passwords must be 6 characters or longer");
+      setPasswordValidationMessage("Password Invalid. Must be 6 characters or longer");
     } else {
       setPasswordValidationMessage();
-      setPassword(password);
+      // setPassword(password);
+      console.log("password valid")
     }
   };
 
@@ -148,7 +168,7 @@ const NeederEmailRegister = () => {
                   borderWidth=".25px"
                   type="email"
                   value={email}
-                  onChange={(e) => validate(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   width="360px"
                 />
                 {emailValidationBegun === true ? (
@@ -164,7 +184,7 @@ const NeederEmailRegister = () => {
                     borderWidth=".5px"
                     type={visibleToggle}
                     value={password}
-                    onChange={(e) => validatePassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)}
                     width="360px"
                   />
                   <InputRightElement>
@@ -180,7 +200,7 @@ const NeederEmailRegister = () => {
                 color="white"
                 _hover={{ bg: "#018ecb", textColor: "white" }}
                 marginTop="32px"
-                onClick={() => onSignUp()}
+                onClick={() => validate()}
               >
                Sign up{" "}
                 <ArrowForwardIcon

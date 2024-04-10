@@ -411,8 +411,8 @@ const NeederInReviewCard = () => {
       body: JSON.stringify(jobInfo),
     })
       .then((res) => res.json())
-      .then((data) => data.clientSecret)
-    .then((data) => console.log("all session data",data))
+      .then((data) => data)
+
 
     //pass data or data.clientSecret?
     // const { client_secret } = await response.json()

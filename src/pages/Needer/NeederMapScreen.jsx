@@ -25,6 +25,9 @@ import {
   Divider,
   Stack,
   CloseButton,
+  Badge,
+  Avatar,
+  Image
 } from "@chakra-ui/react";
 import {
   doc,
@@ -43,6 +46,9 @@ import { useNavigate } from "react-router-dom";
 import NeederDashboard from "./NeederDashboard";
 import { Select } from "@chakra-ui/react";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import star_corner from "../../images/star_corner.png";
+import star_filled from "../../images/star_filled.png";
+
 
 
 const NeederMapScreen = () => {
@@ -151,12 +157,117 @@ const NeederMapScreen = () => {
 
   //opening one window at a time help from https://github.com/Developer-Nijat/React-Google-Map-Markers/blob/main/src/App.jsx & https://www.youtube.com/watch?v=Uq-0tA0f_X8 & Vadim Gremyachev https://stackoverflow.com/questions/50903246/react-google-maps-multiple-info-windows-opening-up
 
+  const [applicant, setApplicant] = useState(null);
+  const [rating, setRating] = useState(null);
+  const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+
   const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState(null);
 
   const handleToggleOpen = (x) => {
-    console.log("handle toggle open",x);
-    setOpenInfoWindowMarkerID(x);
+    console.log("handle toggle open", x);
+    setOpenInfoWindowMarkerID(x.jobID);
+
+    if (x.hasNewApplicant === true) {
+      updateDoc(doc(db, "employers", user.uid, "Posted Jobs", x.jobTitle), {
+        hasNewApplicant: false,
+      })
+        .then(() => {
+          //user info submitted to Job applicant file
+        })
+        .catch((error) => {
+          //uh oh
+          console.log(error);
+        });
+    }
+    const q = query(
+      collection(
+        db,
+        "employers",
+        user.uid,
+        "Posted Jobs",
+        x.jobTitle,
+        "Applicants"
+      )
+    );
+
+    onSnapshot(q, (snapshot) => {
+      let results = [];
+      let finalResults = [];
+      snapshot.docs.forEach((doc) => {
+        if (doc.id.length > 25) {
+          results.push(doc.id);
+          console.log("here?", doc.id);
+        } else {
+        }
+      });
+
+      results.forEach((results) => {
+        const secondQuery = doc(db, "users", results);
+
+        getDoc(secondQuery).then((snapshot) => {
+          // if empty https://www.samanthaming.com/tidbits/94-how-to-check-if-object-is-empty/
+          // if (Object.keys(snapshot.data()).length !== 0) {
+          //   finalResults.push({ ...snapshot.data() });
+          // } else {
+          //   console.log("ehh");
+          // }
+
+          if (!snapshot.data()) {
+            console.log("nothing");
+            // console.log(snapshot.data())
+          } else {
+            finalResults.push({ ...snapshot.data() });
+          }
+          // finalResults.push({ ...snapshot.data() });
+
+          //this is so dirty but why is this the only way I could get it to render???
+
+          //ATTN: THIS IS ONLY ALLOWING ONE APPLICANT TO SHOW UP.
+          //CHANGE [finalResults[0]] back to finalResults to access all
+          //this is because all message instances are being merged under the jobIDs in StremChat instead of making new ones. Need to fix that.
+          
+          //working code
+          // setTimeout(() => {
+          //   setApplicant([finalResults[0]]);
+          //   console.log("this is your applicant(s)", finalResults);
+          // }, 50);
+          setTimeout(() => {
+            setApplicant([finalResults]);
+            console.log("this is your applicant(s)", finalResults);
+          }, 50);
+
+          const ratingsQuery = query(
+            collection(db, "users", finalResults[0].streamChatID, "Ratings")
+          );
+        
+          onSnapshot(ratingsQuery, (snapshot) => {
+            let ratingResults = [];
+            snapshot.docs.forEach((doc) => {
+              //review what this does
+              if (isNaN(doc.data().rating)) {
+                console.log("not a number");
+              } else {
+                ratingResults.push(doc.data().rating);
+              }
+            });
+            //cited elsewhere
+            if (!ratingResults || !ratingResults.length) {
+              //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+              setRating(0);
+            } else {
+              setRating(
+                ratingResults.reduce((a, b) => a + b) / ratingResults.length
+              );
+            }
+          });
+        });
+      });
+    });
+
+
   };
+
+  console.log(rating)
 
   const [userID, setUserID] = useState();
   const [requirements, setRequirements] = useState(null);
@@ -200,8 +311,6 @@ const NeederMapScreen = () => {
 
   //get data
 
- 
-
   const getData = async () => {
     const docRef = doc(
       db,
@@ -235,13 +344,11 @@ const NeederMapScreen = () => {
     });
   };
 
-  
-
-
   const viewApplicants = (x) => {
-    navigate("/NeederApplicants", {state: {jobID: x.jobID, jobTitle: x.jobTitle, isHourly: x.isHourly}})
-  }
-
+    navigate("/NeederApplicants", {
+      state: { jobID: x.jobID, jobTitle: x.jobTitle, isHourly: x.isHourly },
+    });
+  };
 
   return (
     <div>
@@ -250,7 +357,7 @@ const NeederMapScreen = () => {
         <NeederDashboard />
 
         <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-          <div style={{ height: "90vh", width: "93vw"  }}>
+          <div style={{ height: "90vh", width: "93vw" }}>
             <Map
               defaultCenter={{ lat: defaultLat, lng: defaultLong }}
               defaultZoom={12}
@@ -259,7 +366,6 @@ const NeederMapScreen = () => {
               //move to env
               mapId="6cc03a62d60ca935"
             >
-             
               {allJobs !== null &&
                 allJobs.map((allJobs) => (
                   //credit https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN
@@ -274,26 +380,55 @@ const NeederMapScreen = () => {
                           ? allJobs.locationLng
                           : -93.26177106829272,
                       }}
-                      onClick={() => handleToggleOpen(allJobs.jobID)}
+                      // onClick={() => handleToggleOpen(allJobs.jobID)}
+                      onClick={() => handleToggleOpen(allJobs)}
                     >
-                      <div>
-                        <Button
-                          colorScheme="blue"
-                          height="24px"
-                          marginRight={5}
-                        >
-                          {allJobs.isVolunteer ? (
-                            <Text>Volunteer!</Text>
-                          ) : allJobs.isFlatRate ? (
-                            <Text>${allJobs.flatRate}</Text>
-                          ) : (
-                            <Text>
-                              ${allJobs.lowerRate} - ${allJobs.upperRate}/hr
-                            </Text>
-                          )}
-                        </Button>
-                      </div>
-                      /
+                      {allJobs.hasNewApplicant ? (
+                        <div>
+                          <Button
+                            colorScheme="blue"
+                            height="24px"
+                            marginRight={5}
+                          >
+                            {allJobs.isVolunteer ? (
+                              <Text>Volunteer!</Text>
+                            ) : allJobs.isFlatRate ? (
+                              <Text>${allJobs.flatRate}</Text>
+                            ) : (
+                              <Text>
+                                ${allJobs.lowerRate} - ${allJobs.upperRate}/hr
+                              </Text>
+                            )}
+                            <Badge
+                              backgroundColor="#df4b4b"
+                              textColor="white"
+                              marginBottom="16px"
+                              position="absolute"
+                              right="-4"
+                            >
+                              New
+                            </Badge>
+                          </Button>
+                        </div>
+                      ) : (
+                        <div>
+                          <Button
+                            colorScheme="blue"
+                            height="24px"
+                            marginRight={5}
+                          >
+                            {allJobs.isVolunteer ? (
+                              <Text>Volunteer!</Text>
+                            ) : allJobs.isFlatRate ? (
+                              <Text>${allJobs.flatRate}</Text>
+                            ) : (
+                              <Text>
+                                ${allJobs.lowerRate} - ${allJobs.upperRate}/hr
+                              </Text>
+                            )}
+                          </Button>
+                        </div>
+                      )}
                     </AdvancedMarker>
                     {openInfoWindowMarkerID === allJobs.jobID ? (
                       <Flex direction="row-reverse">
@@ -381,28 +516,88 @@ const NeederMapScreen = () => {
                               <Text>Nothing listed</Text>
                             )}
                             <Divider />
-                            <CardFooter flexDirection="column" marginTop="16px">
-                              <Button
-                                backgroundColor="#01A2E8"
-                                textColor="white"
-                                width="320px"
-                                marginTop="8px"
-                                onClick={() => viewApplicants(allJobs)}
+
+                            {applicant ? (
+                              applicant.map((applicant) => (
+                                <>
+                                  <Heading
+                                    size="md"
+                                    marginTop="16px"
+                                    marginBottom="16px"
+                                  >
+                                    Applicants 
+                                  </Heading>
+                                  <Card padding="2" >
+                                   <Flex>
+                                    <Avatar
+                                      src="https://bit.ly/broken-link"
+                                      bg="#01A2E8"
+                                      size="md"
+                                    />
+                                    <Flex direction="column" marginLeft="4px">
+                                      <Heading size="md">
+                                        {" "}
+                                        {applicant.firstName}{" "}
+                                        {applicant.lastName}
+                                      </Heading>
+                                      <Flex>
+                {maxRating.map((item, key) => {
+                  return (
+                    <Box activeopacity={0.7} key={item} marginTop="4px">
+                      <Image
+                        boxSize="18px"
+                        src={item <= rating ? star_filled : star_corner}
+                      ></Image>
+                    </Box>
+                  );
+                })}
+              </Flex>
+                                    </Flex>
+                                    </Flex>
+                                    <Flex direction="column">
+                                      {" "}
+                                      <Heading size="sm" marginTop="2px" marginBottom="2px">About</Heading>
+                                      <Text noOfLines={[1,2]} marginBottom="24px">{applicant.bio}</Text>
+                                      <Button
+                                        backgroundColor="white"
+                                        position="absolute"
+                                        right="0"
+                                        bottom="0"
+                                        height="32px"
+                                      >
+                                        See more
+                                      </Button>
+                                    </Flex>
+                                  </Card>{" "}
+                                </>
+                              ))
+                            ) : (
+                              <CardFooter
+                                flexDirection="column"
+                                marginTop="16px"
                               >
-                              View Applicants
-                              </Button>{" "}
-                              <Button
-                                colorScheme="white"
-                                textColor="#01A2E8"
-                                borderColor="#01A2E8"
-                                borderWidth="1px"
-                                width="320px"
-                                marginTop="8px"
-                                // onClick={() => saveJob()}
-                              >
-                            Edit
-                              </Button>
-                            </CardFooter>
+                                <Button
+                                  backgroundColor="#01A2E8"
+                                  textColor="white"
+                                  width="320px"
+                                  marginTop="8px"
+                                  onClick={() => viewApplicants(allJobs)}
+                                >
+                                  View Applicants
+                                </Button>{" "}
+                                <Button
+                                  colorScheme="white"
+                                  textColor="#01A2E8"
+                                  borderColor="#01A2E8"
+                                  borderWidth="1px"
+                                  width="320px"
+                                  marginTop="8px"
+                                  // onClick={() => saveJob()}
+                                >
+                                  Edit
+                                </Button>
+                              </CardFooter>
+                            )}
                           </CardBody>
                         </Card>
                       </Flex>

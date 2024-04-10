@@ -18,10 +18,18 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-} from '@chakra-ui/react'
+} from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
-import { query, collection, onSnapshot, getDoc, doc, deleteDoc, setDoc } from "firebase/firestore";
+import {
+  query,
+  collection,
+  onSnapshot,
+  getDoc,
+  doc,
+  deleteDoc,
+  setDoc,
+} from "firebase/firestore";
 
 import { useEffect, useState } from "react";
 import {
@@ -33,7 +41,7 @@ import {
   Button,
   Box,
   Avatar,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 
 import { ChatIcon, ArrowForwardIcon } from "@chakra-ui/icons";
@@ -163,64 +171,54 @@ const NeederInProgressCard = () => {
   }, [selectedChannel]);
 
   //modal control
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleCancel = (jobTitle) => {
-console.log("jobtitle",jobTitle)
-onOpen()
-  }
+    console.log("jobtitle", jobTitle);
+    onOpen();
+  };
 
   const handleDelete = (postedJobs) => {
-
-
     setDoc(doc(db, "Canceled Jobs", postedJobs.jobID), {
       employerID: user.uid,
       doerID: postedJobs.hiredApplicant,
       jobTitle: postedJobs.jobTitle,
-     
-  })
-  .then(() => {
-
-
-
     })
-    .catch((error) => {
-      // no bueno
-      console.log(error);
-    });
+      .then(() => {})
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
 
-    deleteDoc(doc(db, "Map Jobs", user.uid, "Posted Jobs", postedJobs.jobTitle), {
-
-    })
+    deleteDoc(
+      doc(db, "Map Jobs", user.uid, "Posted Jobs", postedJobs.jobTitle),
+      {}
+    )
       .then(() => {
         //all good
-      
       })
       .catch((error) => {
         // no bueno
         console.log(error);
       });
 
-      deleteDoc(doc(db, "employers", user.uid, "Jobs In Progress", postedJobs.jobTitle), {
-
+    deleteDoc(
+      doc(db, "employers", user.uid, "Jobs In Progress", postedJobs.jobTitle),
+      {}
+    )
+      .then(() => {
+        //all good
+        onOpen();
       })
-        .then(() => {
-          //all good
-          onOpen()
-     
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-
-        
-  }
-
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+  };
 
   const handleCloseModal = () => {
-    onClose()
-  }
+    onClose();
+  };
 
   return (
     <div>
@@ -268,7 +266,15 @@ onOpen()
                   >
                     <Heading fontSize="24">{postedJobs.jobTitle}</Heading>
                     <Box position="absolute" right="0" marginTop="8px">
-                      <Button height="36px" marginRight="8px" backgroundColor="white" textColor="black" _hover={{ bg: "#DFDFDF", textColor: "black" }}>See More</Button>
+                      <Button
+                        height="36px"
+                        marginRight="8px"
+                        backgroundColor="white"
+                        textColor="black"
+                        _hover={{ bg: "#DFDFDF", textColor: "black" }}
+                      >
+                        See More
+                      </Button>
                       {/* <Button height="36px" width="120px" backgroundColor="#01A2E8" color="white" _hover={{ bg: "#018ecb", textColor: "white" }} onClick={() => navigateToChannel(postedJobs)}>Messages</Button> */}
                     </Box>
                   </Flex>
@@ -311,20 +317,44 @@ onOpen()
                   >
                     Go To Messages
                   </Button> */}
-                  <Flex direction="column" marginLeft="16px" marginBottom="60px">
+                  <Flex
+                    direction="column"
+                    marginLeft="16px"
+                    marginBottom="60px"
+                  >
                     <Heading size="sm" marginTop="2">
                       Description
                     </Heading>
                     <Text>{postedJobs.description}</Text>
-                    
                   </Flex>
                   <Box bottom="2" >
                     
                   <Button  height="36px" width="160px" backgroundColor="#01A2E8" color="white" _hover={{ bg: "#018ecb", textColor: "white" }} onClick={() => navigateToChannel(postedJobs)}>See Messages</Button>
                   <Button height="36px"  marginLeft="8px" backgroundColor="white" textColor="#d8504d" _hover={{ bg: "#f1807e", textColor: "white" }} onClick={() => handleDelete(postedJobs)}>Cancel Job</Button>
                   </Box>
+                  <Box bottom="2" position="absolute" right="2" marginBottom="8px">
+                    <Button
+                      height="36px"
+                      marginLeft="8px"
+                      backgroundColor="white"
+                      textColor="#d8504d"
+                      _hover={{ bg: "#f1807e", textColor: "white" }}
+                      onClick={() => handleDelete(postedJobs)}
+                    >
+                      Cancel Job
+                    </Button>
+                    <Button
+                      height="36px"
+                      width="160px"
+                      backgroundColor="#01A2E8"
+                      color="white"
+                      _hover={{ bg: "#018ecb", textColor: "white" }}
+                      onClick={() => navigateToChannel(postedJobs)}
+                    >
+                      See Messages
+                    </Button>
+                  </Box>
 
-                  
                   {/* <Accordion allowMultiple>
                     <AccordionItem>
                       <Flex direction="row-reverse" width="890px">
@@ -405,22 +435,23 @@ onOpen()
               </Stack>
             </Card>
             <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Success!</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            This job has been canceled
-          </ModalBody>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Success!</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>This job has been canceled</ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={() => handleCloseModal()}>
-              Great!
-            </Button>
-           
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+                <ModalFooter>
+                  <Button
+                    colorScheme="blue"
+                    mr={3}
+                    onClick={() => handleCloseModal()}
+                  >
+                    Great!
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
           </div>
         ))
       )}

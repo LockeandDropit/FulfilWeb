@@ -656,6 +656,8 @@ const AddJobStart = () => {
     setLoading(false)
   }, 1000);
 
+  //help loading map async codmitu https://github.com/Tintef/react-google-places-autocomplete/issues/342
+
   return (
     <>
       <NeederHeader />
@@ -682,16 +684,7 @@ const AddJobStart = () => {
           marginRight="16"
           //   overflowY="scroll"
         >
-          {loading ? ( <Center marginTop="500px">
-           <Spinner
-                      thickness="4px"
-                      speed="0.65s"
-                      emptyColor="gray.200"
-                      color="#01A2E8"
-                      size="lg"
-                    
-                    />
-        </Center>) : (  <Flex direction="column">
+           <Flex direction="column">
             <Heading size="lg">Add A New Job</Heading>
             <FormControl isRequired>
               <FormLabel marginTop="8">Job Title</FormLabel>
@@ -708,6 +701,7 @@ const AddJobStart = () => {
               <GooglePlacesAutocomplete
                 apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
                 fetchDetails={true}
+               
                 selectProps={{
                   rawAddress,
                   onChange: setRawAddress,
@@ -849,7 +843,7 @@ const AddJobStart = () => {
             >
               Next{" "}
             </Button>
-          </Flex>)}
+          </Flex>
         
         </Box>
       </Flex>

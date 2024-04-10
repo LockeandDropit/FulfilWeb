@@ -27,7 +27,15 @@ import {
   CloseButton,
   Badge,
   Avatar,
-  Image
+  Image,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure
 } from "@chakra-ui/react";
 import {
   doc,
@@ -48,6 +56,9 @@ import { Select } from "@chakra-ui/react";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import star_corner from "../../images/star_corner.png";
 import star_filled from "../../images/star_filled.png";
+import {CloseIcon} from '@chakra-ui/icons'
+import EmbeddedPayments from "../../components/EmbeddedPayments";
+
 
 
 
@@ -87,6 +98,56 @@ const NeederMapScreen = () => {
           // setPostedJobs(0);
         } else {
           setPostedJobs(results);
+        }
+      });
+    } else {
+      console.log("oops!");
+    }
+  }, [user]);
+
+  const [jobsInProgressMap, setJobsInProgressMap] = useState([])
+
+  useEffect(() => {
+    if (user != null) {
+      // should this be done on log ina nd stored in redux store so it's cheaper?
+      const q = query(collection(db, "employers", user.uid, "Jobs In Progress"));
+
+      onSnapshot(q, (snapshot) => {
+        let results = [];
+        snapshot.docs.forEach((doc) => {
+          //review what thiss does
+          results.push({ ...doc.data(), id: doc.id });
+        });
+        if (!results || !results.length) {
+          //this was crashing everything??
+          // setPostedJobs(0);
+        } else {
+          setJobsInProgressMap(results);
+        }
+      });
+    } else {
+      console.log("oops!");
+    }
+  }, [user]);
+
+  const [jobsInReviewMap, setJobsInReviewMap] = useState([])
+
+  useEffect(() => {
+    if (user != null) {
+      // should this be done on log ina nd stored in redux store so it's cheaper?
+      const q = query(collection(db, "employers", user.uid, "In Review"));
+
+      onSnapshot(q, (snapshot) => {
+        let results = [];
+        snapshot.docs.forEach((doc) => {
+          //review what thiss does
+          results.push({ ...doc.data(), id: doc.id });
+        });
+        if (!results || !results.length) {
+          //this was crashing everything??
+          // setPostedJobs(0);
+        } else {
+          setJobsInReviewMap(results);
         }
       });
     } else {
@@ -160,6 +221,7 @@ const NeederMapScreen = () => {
   const [applicant, setApplicant] = useState(null);
   const [rating, setRating] = useState(null);
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+  const [numberOfRatings, setNumberOfRatings] = useState(null)
 
   const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState(null);
 
@@ -216,7 +278,10 @@ const NeederMapScreen = () => {
             console.log("nothing");
             // console.log(snapshot.data())
           } else {
-            finalResults.push({ ...snapshot.data() });
+            finalResults.push({
+              ...snapshot.data(),
+              id: snapshot.data().streamChatID,
+            });
           }
           // finalResults.push({ ...snapshot.data() });
 
@@ -225,21 +290,21 @@ const NeederMapScreen = () => {
           //ATTN: THIS IS ONLY ALLOWING ONE APPLICANT TO SHOW UP.
           //CHANGE [finalResults[0]] back to finalResults to access all
           //this is because all message instances are being merged under the jobIDs in StremChat instead of making new ones. Need to fix that.
-          
+
           //working code
           // setTimeout(() => {
           //   setApplicant([finalResults[0]]);
           //   console.log("this is your applicant(s)", finalResults);
           // }, 50);
           setTimeout(() => {
-            setApplicant([finalResults]);
+            setApplicant(finalResults);
             console.log("this is your applicant(s)", finalResults);
           }, 50);
 
           const ratingsQuery = query(
             collection(db, "users", finalResults[0].streamChatID, "Ratings")
           );
-        
+
           onSnapshot(ratingsQuery, (snapshot) => {
             let ratingResults = [];
             snapshot.docs.forEach((doc) => {
@@ -258,16 +323,183 @@ const NeederMapScreen = () => {
               setRating(
                 ratingResults.reduce((a, b) => a + b) / ratingResults.length
               );
+              setNumberOfRatings(ratingResults.length)
             }
           });
         });
       });
     });
+  };
 
+
+  const [hiredApplicant, setHiredApplicant] = useState(null)
+  const handleToggleInProgressOpen = (x) => {
+    console.log("handle toggle open", x);
+    setOpenInfoWindowMarkerID(x.jobID);
+
+    // if (x.hasNewApplicant === true) {
+    //   updateDoc(doc(db, "employers", user.uid, "Jobs In Progress", x.jobTitle), {
+    //     hasNewApplicant: false,
+    //   })
+    //     .then(() => {
+    //       //user info submitted to Job applicant file
+    //     })
+    //     .catch((error) => {
+    //       //uh oh
+    //       console.log(error);
+    //     });
+    // }
+    const secondQuery = doc(db, "users", x.hiredApplicant);
+    let finalResults = [];
+    getDoc(secondQuery).then((snapshot) => {
+      // if empty https://www.samanthaming.com/tidbits/94-how-to-check-if-object-is-empty/
+      // if (Object.keys(snapshot.data()).length !== 0) {
+      //   finalResults.push({ ...snapshot.data() });
+      // } else {
+      //   console.log("ehh");
+      // }
+
+      if (!snapshot.data()) {
+        console.log("nothing");
+        // console.log(snapshot.data())
+      } else {
+        finalResults.push({
+          ...snapshot.data(),
+          id: snapshot.data().hiredApplicant,
+        });
+      }
+      // finalResults.push({ ...snapshot.data() });
+
+      //this is so dirty but why is this the only way I could get it to render???
+
+      //ATTN: THIS IS ONLY ALLOWING ONE APPLICANT TO SHOW UP.
+      //CHANGE [finalResults[0]] back to finalResults to access all
+      //this is because all message instances are being merged under the jobIDs in StremChat instead of making new ones. Need to fix that.
+
+      //working code
+      // setTimeout(() => {
+      //   setApplicant([finalResults[0]]);
+      //   console.log("this is your applicant(s)", finalResults);
+      // }, 50);
+      setTimeout(() => {
+        setHiredApplicant(finalResults[0]);
+        console.log("this is your applicant(s)", finalResults[0]);
+      }, 50);
+
+      const ratingsQuery = query(
+        collection(db, "users", finalResults[0].streamChatID, "Ratings")
+      );
+
+      onSnapshot(ratingsQuery, (snapshot) => {
+        let ratingResults = [];
+        snapshot.docs.forEach((doc) => {
+          //review what this does
+          if (isNaN(doc.data().rating)) {
+            console.log("not a number");
+          } else {
+            ratingResults.push(doc.data().rating);
+          }
+        });
+        //cited elsewhere
+        if (!ratingResults || !ratingResults.length) {
+          //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+          setRating(0);
+        } else {
+          setRating(
+            ratingResults.reduce((a, b) => a + b) / ratingResults.length
+          );
+          setNumberOfRatings(ratingResults.length)
+        }
+      });
+    });
 
   };
 
-  console.log(rating)
+
+
+  const handleToggleInReviewOpen = (x) => {
+    console.log("handle toggle open", x);
+    setOpenInfoWindowMarkerID(x.jobID);
+
+    // if (x.hasNewApplicant === true) {
+    //   updateDoc(doc(db, "employers", user.uid, "Jobs In Progress", x.jobTitle), {
+    //     hasNewApplicant: false,
+    //   })
+    //     .then(() => {
+    //       //user info submitted to Job applicant file
+    //     })
+    //     .catch((error) => {
+    //       //uh oh
+    //       console.log(error);
+    //     });
+    // }
+    const secondQuery = doc(db, "users", x.hiredApplicant);
+    let finalResults = [];
+    getDoc(secondQuery).then((snapshot) => {
+      // if empty https://www.samanthaming.com/tidbits/94-how-to-check-if-object-is-empty/
+      // if (Object.keys(snapshot.data()).length !== 0) {
+      //   finalResults.push({ ...snapshot.data() });
+      // } else {
+      //   console.log("ehh");
+      // }
+
+      if (!snapshot.data()) {
+        console.log("nothing");
+        // console.log(snapshot.data())
+      } else {
+        finalResults.push({
+          ...snapshot.data(),
+          id: snapshot.data().hiredApplicant,
+        });
+      }
+      // finalResults.push({ ...snapshot.data() });
+
+      //this is so dirty but why is this the only way I could get it to render???
+
+      //ATTN: THIS IS ONLY ALLOWING ONE APPLICANT TO SHOW UP.
+      //CHANGE [finalResults[0]] back to finalResults to access all
+      //this is because all message instances are being merged under the jobIDs in StremChat instead of making new ones. Need to fix that.
+
+      //working code
+      // setTimeout(() => {
+      //   setApplicant([finalResults[0]]);
+      //   console.log("this is your applicant(s)", finalResults);
+      // }, 50);
+      setTimeout(() => {
+        setHiredApplicant(finalResults[0]);
+        console.log("this is your applicant(s)", finalResults[0]);
+      }, 50);
+
+      const ratingsQuery = query(
+        collection(db, "users", finalResults[0].streamChatID, "Ratings")
+      );
+
+      onSnapshot(ratingsQuery, (snapshot) => {
+        let ratingResults = [];
+        snapshot.docs.forEach((doc) => {
+          //review what this does
+          if (isNaN(doc.data().rating)) {
+            console.log("not a number");
+          } else {
+            ratingResults.push(doc.data().rating);
+          }
+        });
+        //cited elsewhere
+        if (!ratingResults || !ratingResults.length) {
+          //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+          setRating(0);
+        } else {
+          setRating(
+            ratingResults.reduce((a, b) => a + b) / ratingResults.length
+          );
+          setNumberOfRatings(ratingResults.length)
+        }
+      });
+    });
+
+  };
+
+  console.log(rating);
 
   const [userID, setUserID] = useState();
   const [requirements, setRequirements] = useState(null);
@@ -350,6 +582,38 @@ const NeederMapScreen = () => {
     });
   };
 
+  const navigateToChannel = (x) => {
+    // navigate("/NeederMessageList", { state: { selectedChannel: x.channelID } });
+    console.log("mesage channel",x);
+  };
+
+  const navigateApplicantProfile = (applicant, allJobs) => {
+
+    console.log("accepting",applicant, allJobs)
+    navigate("/ApplicantProfile", {
+      state: {
+        applicant: applicant,
+        jobTitle: allJobs.jobTitle,
+        jobID: allJobs.jobID,
+        isHourly: allJobs.isHourly,
+      },
+    });
+  };
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const [paymentsVisible, setPaymentsVisible] = useState(false)
+const [selectedJobForPayment, setSelectedJobForPayment] = useState(null)
+
+  const handlePaymentsVisible = (x) => {
+console.log("handle payments",x)
+setPaymentsVisible(true)
+setSelectedJobForPayment(x)
+  }
+
+
+  //payment verification and data movement initially taken from EmbeddedPayments component
+ 
   return (
     <div>
       <NeederHeader />
@@ -516,59 +780,106 @@ const NeederMapScreen = () => {
                               <Text>Nothing listed</Text>
                             )}
                             <Divider />
-
+                            <Heading
+                              size="md"
+                              marginTop="24px"
+                              marginBottom="16px"
+                            >
+                              Applicants
+                            </Heading>
                             {applicant ? (
                               applicant.map((applicant) => (
                                 <>
-                                  <Heading
-                                    size="md"
-                                    marginTop="16px"
-                                    marginBottom="16px"
-                                  >
-                                    Applicants 
-                                  </Heading>
-                                  <Card padding="2" >
-                                   <Flex>
+                                <Card padding="3"  
+                               marginTop="4px"
+                              
+                                boxShadow="md" key={applicant.id}>
+                                  <Flex>
                                     <Avatar
                                       src="https://bit.ly/broken-link"
                                       bg="#01A2E8"
                                       size="md"
                                     />
+                                    {/* <Box position="absolute" right="0" onClick={() => onOpen()}><CloseButton color='red.500'/></Box> */}
                                     <Flex direction="column" marginLeft="4px">
                                       <Heading size="md">
                                         {" "}
                                         {applicant.firstName}{" "}
                                         {applicant.lastName}
                                       </Heading>
+                                      {numberOfRatings ? (
                                       <Flex>
-                {maxRating.map((item, key) => {
-                  return (
-                    <Box activeopacity={0.7} key={item} marginTop="4px">
-                      <Image
-                        boxSize="18px"
-                        src={item <= rating ? star_filled : star_corner}
-                      ></Image>
-                    </Box>
-                  );
-                })}
-              </Flex>
+                                        {maxRating.map((item, key) => {
+                                          return (
+                                            <Box
+                                              activeopacity={0.7}
+                                              key={item}
+                                              marginTop="5px"
+                                            >
+                                              <Image
+                                                boxSize="16px"
+                                                src={
+                                                  item <= rating
+                                                    ? star_filled
+                                                    : star_corner
+                                                }
+                                              ></Image>
+                                            </Box>
+                                          );
+                                        })}
+                                         <Text marginLeft="4px">({numberOfRatings} reviews)</Text>
+                                      </Flex>) : (<Text  marginTop="4px">No reviews yet!</Text>)}
                                     </Flex>
-                                    </Flex>
-                                    <Flex direction="column">
-                                      {" "}
-                                      <Heading size="sm" marginTop="2px" marginBottom="2px">About</Heading>
-                                      <Text noOfLines={[1,2]} marginBottom="24px">{applicant.bio}</Text>
-                                      <Button
-                                        backgroundColor="white"
-                                        position="absolute"
-                                        right="0"
-                                        bottom="0"
-                                        height="32px"
-                                      >
-                                        See more
+                                  </Flex>
+                                  <Flex direction="column">
+                                    {" "}
+                                    <Heading
+                                      size="sm"
+                                      marginTop="2px"
+                                      marginBottom="2px"
+                                    >
+                                      About
+                                    </Heading>
+                                    <Text
+                                      noOfLines={[1, 2]}
+                                      marginBottom="24px"
+                                    >
+                                      {applicant.bio}
+                                    </Text>
+                                    <Button
+                                      backgroundColor="white"
+                                      _hover={{ bg: "#01A2E8", textColor: "white" }}
+                                      position="absolute"
+                                      right="0"
+                                      bottom="0"
+                                      height="32px"
+                                      onClick={() => navigateApplicantProfile(applicant, allJobs)}
+                                    >
+                                      See more
+                                    </Button>
+                                  </Flex>
+                                </Card>
+                                  <Modal
+                                  isCentered
+                                  onClose={onClose}
+                                  isOpen={isOpen}
+                                  motionPreset='slideInBottom'
+                                >
+                                  <ModalOverlay />
+                                  <ModalContent>
+                                    <ModalHeader>{allJobs.jobTitle}</ModalHeader>
+                                    <ModalCloseButton />
+                                    <ModalBody>
+                                      <Text>{applicant.firstName}</Text>
+                                    </ModalBody>
+                                    <ModalFooter>
+                                      <Button colorScheme='blue' mr={3} onClick={onClose}>
+                                        Close
                                       </Button>
-                                    </Flex>
-                                  </Card>{" "}
+                                      <Button variant='ghost'>Secondary Action</Button>
+                                    </ModalFooter>
+                                  </ModalContent>
+                                </Modal>
                                 </>
                               ))
                             ) : (
@@ -604,6 +915,584 @@ const NeederMapScreen = () => {
                     ) : null}
                   </>
                 ))}
+
+
+
+
+
+
+
+{jobsInProgressMap !== null &&
+                jobsInProgressMap.map((jobsInProgressMap) => (
+                  //credit https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN
+                  <>
+                    <AdvancedMarker
+                      key={jobsInProgressMap.jobID}
+                      position={{
+                        lat: jobsInProgressMap.locationLat
+                          ? jobsInProgressMap.locationLat
+                          : 44.96797106363888,
+                        lng: jobsInProgressMap.locationLng
+                          ? jobsInProgressMap.locationLng
+                          : -93.26177106829272,
+                      }}
+                      // onClick={() => handleToggleOpen(allJobs.jobID)}
+                      onClick={() => handleToggleInProgressOpen(jobsInProgressMap)}
+                    >
+                      {jobsInProgressMap.hasNewApplicant ? (
+                        <div>
+                          <Button
+                            colorScheme="green"
+                            height="24px"
+                            marginRight={5}
+                          >
+                            {jobsInProgressMap.isVolunteer ? (
+                              <Text>Volunteer!</Text>
+                            ) : jobsInProgressMap.isFlatRate ? (
+                              <Text>${jobsInProgressMap.flatRate}</Text>
+                            ) : (
+                              <Text>
+                                ${jobsInProgressMap.lowerRate} - ${jobsInProgressMap.upperRate}/hr
+                              </Text>
+                            )}
+                            <Badge
+                              backgroundColor="#df4b4b"
+                              textColor="white"
+                              marginBottom="16px"
+                              position="absolute"
+                              right="-4"
+                            >
+                              New
+                            </Badge>
+                          </Button>
+                        </div>
+                      ) : (
+                        <div>
+                          <Button
+                            colorScheme="green"
+                            height="24px"
+                            marginRight={5}
+                          >
+                            {/* {jobsInProgressMap.isVolunteer ? (
+                              <Text>Volunteer!</Text>
+                            ) : jobsInProgressMap.isHourly ? (
+                              <Text>${jobsInProgressMap.confirmedRate}/hr</Text>
+                            ) : (
+                              <Text>
+                               ${jobsInProgressMap.confirmedRate}
+                              </Text>
+                            )} */}
+                            <Text>In Progress</Text>
+                          </Button>
+                        </div>
+                      )}
+                    </AdvancedMarker>
+                    {openInfoWindowMarkerID === jobsInProgressMap.jobID ? (
+                      hiredApplicant ? (<Flex direction="row-reverse">
+                      <Card
+                        // align="flex-end"
+                        border="1px"
+                        borderColor="gray.400"
+                        borderWidth="1.5px"
+                        width="400px"
+                        boxShadow="lg"
+                        height="90vh"
+                        flexDirection="row"
+                      >
+                        <CloseButton
+                          position="absolute"
+                          right="2"
+                          size="lg"
+                          onClick={() => setOpenInfoWindowMarkerID(null)}
+                        >
+                          X
+                        </CloseButton>
+                        <CardBody>
+                          <Flex direction="row" alignContent="center">
+                            {" "}
+                            <Heading fontSize="24" marginTop="16px">
+                              {jobsInProgressMap.jobTitle}
+                            </Heading>
+                            {/* <CloseButton position="absolute" right="2" size="lg" onClick={() => setOpenInfoWindowMarkerID(!openInfoWindowMarkerID)}>X</CloseButton> */}
+                          </Flex>
+
+                          <Heading size="sm" marginTop="2">
+                            {jobsInProgressMap.city}, MN
+                          </Heading>
+                          {jobsInProgressMap.isHourly ? (
+                            <Heading size="sm">
+                              ${jobsInProgressMap.confirmedRate}/hr
+                            </Heading>
+                          ) : (
+                            <Heading size="sm">${jobsInProgressMap.confirmedRate}</Heading>
+                          )}
+
+                          <Heading size="sm" marginTop="2">
+                            Description
+                          </Heading>
+                          <Text>{jobsInProgressMap.description}</Text>
+                          <Heading size="sm" marginTop="2">
+                            Requirements
+                          </Heading>
+                          {jobsInProgressMap.requirements ? (
+                            <Flex direction="row">
+                              {" "}
+                              <Text fontSize="14">{"\u25CF"} </Text>
+                              <Text marginLeft="1">
+                                {jobsInProgressMap.requirements}{" "}
+                              </Text>{" "}
+                            </Flex>
+                          ) : (
+                            <Text>No requirements listed</Text>
+                          )}
+
+                          {jobsInProgressMap.requirements2 ? (
+                            <Flex direction="row">
+                              {" "}
+                              <Text fontSize="14">{"\u25CF"} </Text>
+                              <Text marginLeft="1">
+                                {jobsInProgressMap.requirements2}{" "}
+                              </Text>{" "}
+                            </Flex>
+                          ) : null}
+                          {jobsInProgressMap.requirements3 ? (
+                            <Flex direction="row">
+                              {" "}
+                              <Text fontSize="14">{"\u25CF"} </Text>
+                              <Text marginLeft="1">
+                                {jobsInProgressMap.requirements3}{" "}
+                              </Text>{" "}
+                            </Flex>
+                          ) : null}
+                          <Heading size="sm" marginTop="2">
+                            Additional Notes
+                          </Heading>
+                          {jobsInProgressMap.niceToHave ? (
+                            <Text>{jobsInProgressMap.niceToHave}</Text>
+                          ) : (
+                            <Text>Nothing listed</Text>
+                          )}
+                          <Divider />
+                          <Heading
+                            size="md"
+                            marginTop="24px"
+                            marginBottom="16px"
+                          >
+                            You've Hired:
+                          </Heading>
+                         
+                           
+                              <>
+                              <Card padding="3"  
+                             marginTop="4px"
+                            
+                              boxShadow="md" key={hiredApplicant.id}>
+                                <Flex>
+                                  <Avatar
+                                    src="https://bit.ly/broken-link"
+                                    bg="#01A2E8"
+                                    size="md"
+                                  />
+                                  {/* <Box position="absolute" right="0" onClick={() => onOpen()}><CloseButton color='red.500'/></Box> */}
+                                  <Flex direction="column" marginLeft="4px">
+                                    <Heading size="md">
+                                      {" "}
+                                      {hiredApplicant.firstName}{" "}
+                                      {hiredApplicant.lastName}
+                                    </Heading>
+                                    {numberOfRatings ? (
+                                    <Flex>
+                                      {maxRating.map((item, key) => {
+                                        return (
+                                          <Box
+                                            activeopacity={0.7}
+                                            key={item}
+                                            marginTop="5px"
+                                          >
+                                            <Image
+                                              boxSize="16px"
+                                              src={
+                                                item <= rating
+                                                  ? star_filled
+                                                  : star_corner
+                                              }
+                                            ></Image>
+                                          </Box>
+                                        );
+                                      })}
+                                       <Text marginLeft="4px">({numberOfRatings} reviews)</Text>
+                                    </Flex>) : (<Text  marginTop="4px">No reviews yet!</Text>)}
+                                  </Flex>
+                                </Flex>
+                                <Flex direction="column">
+                                  {" "}
+                                  <Heading
+                                    size="sm"
+                                    marginTop="2px"
+                                    marginBottom="2px"
+                                  >
+                                    About
+                                  </Heading>
+                                  <Text
+                                    noOfLines={[1, 2]}
+                                    marginBottom="24px"
+                                  >
+                                    {hiredApplicant.bio}
+                                  </Text>
+                                  {/* <Button
+                                    backgroundColor="white"
+                                    _hover={{ bg: "#01A2E8", textColor: "white" }}
+                                    position="absolute"
+                                    right="0"
+                                    bottom="0"
+                                    height="32px"
+                                    onClick={() => navigateApplicantProfile(hiredApplicant, jobsInProgressMap)}
+                                  >
+                                    See more
+                                  </Button> */}
+                                </Flex>
+                              </Card>
+                                <Modal
+                                isCentered
+                                onClose={onClose}
+                                isOpen={isOpen}
+                                motionPreset='slideInBottom'
+                              >
+                                <ModalOverlay />
+                                <ModalContent>
+                                  <ModalHeader>{allJobs.jobTitle}</ModalHeader>
+                                  <ModalCloseButton />
+                                  <ModalBody>
+                                    <Text>{hiredApplicant.firstName}</Text>
+                                  </ModalBody>
+                                  <ModalFooter>
+                                    <Button colorScheme='blue' mr={3} onClick={onClose}>
+                                      Close
+                                    </Button>
+                                    <Button variant='ghost'>Secondary Action</Button>
+                                  </ModalFooter>
+                                </ModalContent>
+                              </Modal>
+                              </>
+                           
+                          
+                            <CardFooter
+                              flexDirection="column"
+                              marginTop="16px"
+                            >
+                              <Button
+                                backgroundColor="#01A2E8"
+                                _hover={{ bg: "#018ecb", textColor: "white" }}
+                                textColor="white"
+                                width="320px"
+                                marginTop="8px"
+                                onClick={() => navigateToChannel(jobsInProgressMap)}
+                              >
+                                See Messages
+                              </Button>{" "}
+                              <Button
+                                colorScheme="white"
+                                textColor="red"
+                                
+                                borderWidth="1px"
+                                width="320px"
+                                marginTop="8px"
+                                // onClick={() => saveJob()}
+                              >
+                                Cancel Job
+                              </Button>
+                            </CardFooter>
+                          
+                        </CardBody>
+                      </Card>
+                    </Flex>) : <Text>No applicant here goes spinner</Text>
+                      
+                    ) : null}
+                  </>
+                ))}
+
+
+
+
+
+
+
+
+
+                {jobsInReviewMap !== null &&
+                jobsInReviewMap.map((jobsInReviewMap) => (
+                  //credit https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN
+                  <>
+                    <AdvancedMarker
+                      key={jobsInReviewMap.jobID}
+                      position={{
+                        lat: jobsInReviewMap.locationLat
+                          ? jobsInReviewMap.locationLat
+                          : 44.96797106363888,
+                        lng: jobsInReviewMap.locationLng
+                          ? jobsInReviewMap.locationLng
+                          : -93.26177106829272,
+                      }}
+                      // onClick={() => handleToggleOpen(allJobs.jobID)}
+                      onClick={() => handleToggleInReviewOpen(jobsInReviewMap)}
+                    >
+                 
+                        <div>
+                          <Button
+                            colorScheme="green"
+                            height="24px"
+                            marginRight={5}
+                          >
+                            {/* {jobsInProgressMap.isVolunteer ? (
+                              <Text>Volunteer!</Text>
+                            ) : jobsInProgressMap.isHourly ? (
+                              <Text>${jobsInProgressMap.confirmedRate}/hr</Text>
+                            ) : (
+                              <Text>
+                               ${jobsInProgressMap.confirmedRate}
+                              </Text>
+                            )} */}
+                            <Text>Ready To Pay</Text>
+                            <Badge
+                              backgroundColor="#df4b4b"
+                              textColor="white"
+                              marginBottom="16px"
+                              position="absolute"
+                              right="-4"
+                            >
+                              Pay
+                            </Badge>
+                          </Button>
+                        </div>
+                      
+                    </AdvancedMarker>
+                    {openInfoWindowMarkerID === jobsInReviewMap.jobID ? (
+                      hiredApplicant ? (<Flex direction="row-reverse">
+                      <Card
+                        // align="flex-end"
+                        border="1px"
+                        borderColor="gray.400"
+                        borderWidth="1.5px"
+                        width="400px"
+                        boxShadow="lg"
+                        height="90vh"
+                        flexDirection="row"
+                      >
+                        <CloseButton
+                          position="absolute"
+                          right="2"
+                          size="lg"
+                          onClick={() => setOpenInfoWindowMarkerID(null)}
+                        >
+                          X
+                        </CloseButton>
+                        <CardBody>
+                          <Flex direction="row" alignContent="center">
+                            {" "}
+                            <Heading fontSize="24" marginTop="16px">
+                              {jobsInReviewMap.jobTitle}
+                            </Heading>
+                            {/* <CloseButton position="absolute" right="2" size="lg" onClick={() => setOpenInfoWindowMarkerID(!openInfoWindowMarkerID)}>X</CloseButton> */}
+                          </Flex>
+
+                          <Heading size="sm" marginTop="2">
+                            {jobsInReviewMap.city}, MN
+                          </Heading>
+                          {jobsInReviewMap.isHourly ? (
+                            <Heading size="sm">
+                              ${jobsInReviewMap.confirmedRate}/hr
+                            </Heading>
+                          ) : (
+                            <Heading size="sm">${jobsInReviewMap.confirmedRate}</Heading>
+                          )}
+
+                          <Heading size="sm" marginTop="2">
+                            Description
+                          </Heading>
+                          <Text>{jobsInReviewMap.description}</Text>
+                          <Heading size="sm" marginTop="2">
+                            Requirements
+                          </Heading>
+                          {jobsInReviewMap.requirements ? (
+                            <Flex direction="row">
+                              {" "}
+                              <Text fontSize="14">{"\u25CF"} </Text>
+                              <Text marginLeft="1">
+                                {jobsInReviewMap.requirements}{" "}
+                              </Text>{" "}
+                            </Flex>
+                          ) : (
+                            <Text>No requirements listed</Text>
+                          )}
+
+                          {jobsInReviewMap.requirements2 ? (
+                            <Flex direction="row">
+                              {" "}
+                              <Text fontSize="14">{"\u25CF"} </Text>
+                              <Text marginLeft="1">
+                                {jobsInReviewMap.requirements2}{" "}
+                              </Text>{" "}
+                            </Flex>
+                          ) : null}
+                          {jobsInReviewMap.requirements3 ? (
+                            <Flex direction="row">
+                              {" "}
+                              <Text fontSize="14">{"\u25CF"} </Text>
+                              <Text marginLeft="1">
+                                {jobsInReviewMap.requirements3}{" "}
+                              </Text>{" "}
+                            </Flex>
+                          ) : null}
+                          <Heading size="sm" marginTop="2">
+                            Additional Notes
+                          </Heading>
+                          {jobsInReviewMap.niceToHave ? (
+                            <Text>{jobsInReviewMap.niceToHave}</Text>
+                          ) : (
+                            <Text>Nothing listed</Text>
+                          )}
+                          <Divider />
+                          <Heading
+                            size="md"
+                            marginTop="24px"
+                            marginBottom="16px"
+                          >
+                            You've Hired:
+                          </Heading>
+                         
+                           
+                              <>
+                              <Card padding="3"  
+                             marginTop="4px"
+                            
+                              boxShadow="md" key={hiredApplicant.id}>
+                                <Flex>
+                                  <Avatar
+                                    src="https://bit.ly/broken-link"
+                                    bg="#01A2E8"
+                                    size="md"
+                                  />
+                                  {/* <Box position="absolute" right="0" onClick={() => onOpen()}><CloseButton color='red.500'/></Box> */}
+                                  <Flex direction="column" marginLeft="4px">
+                                    <Heading size="md">
+                                      {" "}
+                                      {hiredApplicant.firstName}{" "}
+                                      {hiredApplicant.lastName}
+                                    </Heading>
+                                    {numberOfRatings ? (
+                                    <Flex>
+                                      {maxRating.map((item, key) => {
+                                        return (
+                                          <Box
+                                            activeopacity={0.7}
+                                            key={item}
+                                            marginTop="5px"
+                                          >
+                                            <Image
+                                              boxSize="16px"
+                                              src={
+                                                item <= rating
+                                                  ? star_filled
+                                                  : star_corner
+                                              }
+                                            ></Image>
+                                          </Box>
+                                        );
+                                      })}
+                                       <Text marginLeft="4px">({numberOfRatings} reviews)</Text>
+                                    </Flex>) : (<Text  marginTop="4px">No reviews yet!</Text>)}
+                                  </Flex>
+                                </Flex>
+                                <Flex direction="column">
+                                  {" "}
+                                  <Heading
+                                    size="sm"
+                                    marginTop="2px"
+                                    marginBottom="2px"
+                                  >
+                                    About
+                                  </Heading>
+                                  <Text
+                                    noOfLines={[1, 2]}
+                                    marginBottom="24px"
+                                  >
+                                    {hiredApplicant.bio}
+                                  </Text>
+                                  {/* <Button
+                                    backgroundColor="white"
+                                    _hover={{ bg: "#01A2E8", textColor: "white" }}
+                                    position="absolute"
+                                    right="0"
+                                    bottom="0"
+                                    height="32px"
+                                    onClick={() => navigateApplicantProfile(hiredApplicant, jobsInProgressMap)}
+                                  >
+                                    See more
+                                  </Button> */}
+                                </Flex>
+                              </Card>
+                                <Modal
+                                isCentered
+                                onClose={onClose}
+                                isOpen={isOpen}
+                                motionPreset='slideInBottom'
+                              >
+                                <ModalOverlay />
+                                <ModalContent>
+                                  <ModalHeader>{allJobs.jobTitle}</ModalHeader>
+                                  <ModalCloseButton />
+                                  <ModalBody>
+                                    <Text>{hiredApplicant.firstName}</Text>
+                                  </ModalBody>
+                                  <ModalFooter>
+                                    <Button colorScheme='blue' mr={3} onClick={onClose}>
+                                      Close
+                                    </Button>
+                                    <Button variant='ghost'>Secondary Action</Button>
+                                  </ModalFooter>
+                                </ModalContent>
+                              </Modal>
+                              </>
+                           
+                          
+                            <CardFooter
+                              flexDirection="column"
+                              marginTop="16px"
+                            >
+                              <Button
+                                backgroundColor="#01A2E8"
+                                textColor="white"
+                                _hover={{ bg: "#018ecb", textColor: "white" }}
+                                width="320px"
+                                marginTop="8px"
+                                onClick={() => handlePaymentsVisible(jobsInReviewMap)}
+                              >
+                                Pay now
+                              </Button>{" "}
+                              <Button
+                                backgroundColor="white"
+                                textColor="#01A2E8"
+                                width="320px"
+                                marginTop="8px"
+                                onClick={() => navigateToChannel(jobsInReviewMap)}
+                              >
+                                See Messages
+                              </Button>{" "}
+                              
+                            </CardFooter>
+                          
+                        </CardBody>
+                      </Card>
+                    </Flex>) : <Text>No applicant here goes spinner</Text>
+                      
+                    ) : null}
+
+                    
+                    
+
+                  </>
+                ))}
+                {selectedJobForPayment ? (<EmbeddedPayments props={selectedJobForPayment}/>) : (null)}
             </Map>
           </div>
         </APIProvider>

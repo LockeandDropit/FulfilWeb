@@ -14,7 +14,7 @@ import {
   Avatar,
   Center,
   Image,
-  CloseButton
+  CloseButton,
 } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { loadStripe } from "@stripe/stripe-js";
@@ -22,7 +22,7 @@ import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
-import { auth, db } from "../../../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import {
   query,
   collection,
@@ -35,7 +35,7 @@ import {
 } from "firebase/firestore";
 
 import { useEffect, useState, useCallback } from "react";
-import EmbeddedPayments from "../../../components/EmbeddedPayments";
+
 import {
   Accordion,
   AccordionItem,
@@ -47,7 +47,7 @@ import {
   AlertTitle,
   AlertDescription,
 } from "@chakra-ui/react";
-import { useToast } from '@chakra-ui/react'
+import { useToast } from "@chakra-ui/react";
 
 import { ChatIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import { StreamChat } from "stream-chat";
@@ -65,14 +65,16 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 
-import star_corner from "../../../images/star_corner.png";
-import star_filled from "../../../images/star_filled.png";
+import star_corner from "../images/star_corner.png";
+import star_filled from "../images/star_filled.png";
 
-const stripePromise = loadStripe(
-process.env.REACT_APP_STRIPE_PUBLIC_KEY
-);
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-const NeederInReviewCard = () => {
+const EmbeddedPayments = (props) => {
+  console.log("props from embedded", props);
+  const [propsHasSet, setPropsHasSet] = useState(false);
+
+
   const [postedJobs, setPostedJobs] = useState(null);
 
   //validate & set current user
@@ -92,84 +94,13 @@ const NeederInReviewCard = () => {
   }, [hasRun]);
 
   useEffect(() => {
-    if (user != null) {
-      // should this be done on log ina nd stored in redux store so it's cheaper?
-      const q = query(collection(db, "employers", user.uid, "In Review"));
-
-      onSnapshot(q, (snapshot) => {
-        let results = [];
-        snapshot.docs.forEach((doc) => {
-          //review what thiss does
-          results.push({ ...doc.data(), id: doc.id });
-        });
-
-        if (!results || !results.length) {
-          setPostedJobs(0);
-        } else {
-          setPostedJobs(results);
-        }
-      });
+    if (user) {
+        handleModalOpen(props)
     } else {
-      console.log("oops!");
+
     }
-  }, [user]);
-
-  //unicode sizing https://stackoverflow.com/questions/23750346/how-to-resize-unicode-characters-via-cssZoe is on Strike & Raptor
-
-  //attemtp to query needer and doer's caht channel using jobTitle as filter
-
-  const [channelID, setChannelID] = useState(null);
-
-  const getChannelID = (x) => {
-    console.log("this is whats being passed", x);
-    if (user != null) {
-      const docRef = doc(db, "employers", user.uid, "In Review", x);
-      getDoc(docRef).then((snapshot) => {
-        console.log(snapshot.data().channelID);
-
-        setChannelID(snapshot.data().channelID);
-      });
-    } else {
-      console.log("oops!");
-    }
-  };
-
-
-
-  const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
-
-  // const client = StreamChat.getInstance(STREAM_CHAT_API_KEY);
-  const [selectedChannel, setSelectedChannel] = useState(null);
-
-  const filter = { type: "messaging", members: { $in: [userID] } };
-
-  const getChannels = async () => {
-    const channelSort = await chatClient.queryChannels(filter, {});
-
-    channelSort.map((channelSort) => {
-      // console.log("list of channels user is in", channelSort.data.name, channelSort.cid)
-      if (channelSort.cid == channelID) {
-        setSelectedChannel(channelSort);
-        console.log("channel found", channelSort.cid);
-        console.log("channel from FB", channelID);
-        //or just navigate from here to selected channel??
-        //pass whole channel object to navigate
-      } else {
-        console.log("no luck", channelSort.cid);
-      }
-    });
-    console.log("channel from FB", channelID);
-  };
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (selectedChannel !== null) {
-      console.log("selected channel", selectedChannel);
-      // navigate("TrialSelectedChat", { props: selectedChannel, isFirstInterview: false });
-    } else {
-      console.log("nope");
-    }
-  }, [selectedChannel]);
+    
+  },[user])
 
   //all the new code
 
@@ -194,32 +125,16 @@ const NeederInReviewCard = () => {
   const [jobTitle, setJobTitle] = useState(null);
   const [jobID, setJobID] = useState(null);
 
-  //unmute when ready, set useEffects to functyions that are set.
-
-  // useEffect(() => {
-  //   if (user != null) {
-  //     const docRef = doc(db, "All Jobs", jobID);
-
-  //     getDoc(docRef).then((snapshot) => {
-  //       console.log(snapshot.data());
-  //       // setIsVolunteer(snapshot.data().isVolunteer);
-  //       // setIsHourly(snapshot.data().isHourly)
-  //       setIsFlatRate(snapshot.data().isFlatRate);
-  //     });
-  //   } else {
-  //     console.log("oops!");
-  //   }
-  // }, [user]);
-
   const [hiredApplicantID, setHiredApplicantID] = useState(null);
 
-  const getSelectedData = (postedJobs) => {
+  const getSelectedData = (props) => {
+    console.log("getselecteddata", props.props.jobTitle)
     const docRef = doc(
       db,
       "employers",
       user.uid,
       "In Review",
-      postedJobs.jobTitle
+      props.props.jobTitle
     );
 
     getDoc(docRef)
@@ -254,7 +169,7 @@ const NeederInReviewCard = () => {
       })
       .then(() => {
         setTimeout(() => {
-          getStripeID(postedJobs);
+          getStripeID(props);
         }, 1000);
       });
   };
@@ -283,9 +198,10 @@ const NeederInReviewCard = () => {
     }
   }, [confirmedRate, confirmHours]);
 
-  const handleModalOpen = (postedJobs) => {
-    getSelectedData(postedJobs);
-    retrieveConfirmedPaymentAmount(postedJobs);
+  const handleModalOpen = (props) => {
+    console.log("embedded modal open", props);
+    getSelectedData(props);
+    retrieveConfirmedPaymentAmount(props);
     // pushToJobInfo(postedJobs);
     onOpen();
     setTimeout(() => {
@@ -296,9 +212,9 @@ const NeederInReviewCard = () => {
   //get all info for payments
   const [hiredApplicantStripeID, setHiredApplicantStripeID] = useState(null);
 
-  const getStripeID = (postedJobs) => {
-    console.log(postedJobs);
-    const docRef = doc(db, "users", postedJobs.hiredApplicant);
+  const getStripeID = (props) => {
+    
+    const docRef = doc(db, "users", props.props.hiredApplicant);
 
     getDoc(docRef).then((snapshot) => {
       console.log(
@@ -311,15 +227,15 @@ const NeederInReviewCard = () => {
 
   const [confirmedPrice, setConfirmedPrice] = useState(null);
 
-  const retrieveConfirmedPaymentAmount = (postedJobs) => {
-    console.log("postedJobs from retreive", postedJobs);
-    if (postedJobs.isHourly == true) {
+  const retrieveConfirmedPaymentAmount = (props) => {
+  
+    if (props.props.isHourly == true) {
       const docRef = doc(
         db,
         "employers",
         user.uid,
         "In Review",
-        postedJobs.jobTitle
+        props.props.jobTitle
       );
 
       getDoc(docRef).then((snapshot) => {
@@ -339,7 +255,7 @@ const NeederInReviewCard = () => {
         "employers",
         user.uid,
         "In Review",
-        postedJobs.jobTitle
+        props.props.jobTitle
       );
 
       getDoc(docRef).then((snapshot) => {
@@ -361,6 +277,7 @@ const NeederInReviewCard = () => {
     onClosePayment();
     // paymentForm();
     // fetchClientSecret();
+    onOpenStripe()
     setStripeOpen(true);
   };
 
@@ -401,19 +318,22 @@ const NeederInReviewCard = () => {
     // Create a Checkout Session
     console.log("job info", jobInfo);
 
-      return fetch("https://fulfil-api.onrender.com/create-checkout-web-embedded", {
-      
-
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(jobInfo),
-    })
+    return fetch(
+      "https://fulfil-api.onrender.com/create-checkout-web-embedded",
+     
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jobInfo),
+      }
+    )
       .then((res) => res.json())
+    //   .then((data) => console.log(data))
       .then((data) => data.clientSecret)
- 
+      
 
     //pass data or data.clientSecret?
     // const { client_secret } = await response.json()
@@ -484,9 +404,10 @@ const NeederInReviewCard = () => {
     }
   });
 
-  useEffect(() => {
-    onOpenStripe();
-  });
+  //reactivate this
+//   useEffect(() => {
+//     onOpenStripe();
+//   });
 
   const handleReviewOpen = (postedJobs) => {
     onOpenPayment();
@@ -506,7 +427,7 @@ const NeederInReviewCard = () => {
     }
   }, [confirmedPrice]);
 
-  const [isReady, setIsReady] = useState(false) 
+  const [isReady, setIsReady] = useState(false);
 
   const getJobDataAgain = (data) => {
     const docRef = doc(
@@ -544,25 +465,20 @@ const NeederInReviewCard = () => {
         setRequirements3(snapshot.data().requirements3);
         setIsOneTime(snapshot.data().isOneTime);
         setIsVolunteer(snapshot.data().IsVolunteer);
-
-       
       })
       .then(() => {
         setTimeout(() => {
-         setIsReady(true)
-        }, 2000)
-      })
-      
+          setIsReady(true);
+        }, 2000);
+      });
   };
-
 
   useEffect(() => {
     if (isReady === true) {
-      moveAllData()
+      moveAllData();
     } else {
-
     }
-  }, [isReady])
+  }, [isReady]);
 
   useEffect(() => {
     const queryString = window.location.search;
@@ -573,7 +489,9 @@ const NeederInReviewCard = () => {
 
     if (sessionId) {
       setHasRun(false);
-      fetch(`https://fulfil-api.onrender.com/session-status?session_id=${sessionId}`)
+      fetch(
+        `https://fulfil-api.onrender.com/session-status?session_id=${sessionId}`
+      )
         .then((res) => res.json())
         .then((data) => {
           setStatus(data.status);
@@ -588,13 +506,11 @@ const NeederInReviewCard = () => {
             setTimeout(() => {
               //add loading logic here
               // checkData();
-              // moveAllData()
-
-          
+            //   moveAllData()
             }, 2000);
           } else {
             alert(
-              "There was an error processing your paymetn. Please try again later."
+              "There was an error processing your payment. Please try again later."
             );
           }
         });
@@ -742,17 +658,16 @@ const NeederInReviewCard = () => {
     setDoc(doc(db, "users", hiredApplicantID, "Past Jobs", jobTitle), {
       employerID: userID ? userID : null,
       jobTitle: jobTitle ? jobTitle : null,
-      jobID: jobID ? jobID :null,
+      jobID: jobID ? jobID : null,
       confirmedRate: confirmedRate ? confirmedRate : null,
       paymentComplete: paymentComplete ? paymentComplete : null,
       dateCompleted: dateCompleted ? dateCompleted : null,
       confirmHours: confirmHours ? confirmHours : null,
-      
       totalPay: confirmedPriceUI ? confirmedPriceUI : null,
       isHourly: isHourly ? isHourly : null,
       paymentId: paymentId ? paymentId : null,
       description: description ? description : null,
-      city: city ? city  : null,
+      city: city ? city : null,
       lowerRate: lowerRate ? lowerRate : null,
       upperRate: upperRate ? upperRate : null,
       isVolunteer: isVolunteer ? isVolunteer : false,
@@ -779,17 +694,16 @@ const NeederInReviewCard = () => {
     setDoc(doc(db, "employers", userID, "Past Jobs", jobTitle), {
       employerID: userID ? userID : null,
       jobTitle: jobTitle ? jobTitle : null,
-      jobID: jobID ? jobID :null,
+      jobID: jobID ? jobID : null,
       confirmedRate: confirmedRate ? confirmedRate : null,
       paymentComplete: paymentComplete ? paymentComplete : null,
       dateCompleted: dateCompleted ? dateCompleted : null,
       confirmHours: confirmHours ? confirmHours : null,
-      
       totalPay: confirmedPriceUI ? confirmedPriceUI : null,
       isHourly: isHourly ? isHourly : null,
       paymentId: paymentId ? paymentId : null,
       description: description ? description : null,
-      city: city ? city  : null,
+      city: city ? city : null,
       lowerRate: lowerRate ? lowerRate : null,
       upperRate: upperRate ? upperRate : null,
       isVolunteer: isVolunteer ? isVolunteer : false,
@@ -814,20 +728,24 @@ const NeederInReviewCard = () => {
       });
 
     setIsLoading(false);
-    setPaymentAlertShow(true)
+    setPaymentAlertShow(true);
   };
 
   const [ratingLoading, setRatingLoading] = useState(true);
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [paymentAlertShow, setPaymentAlertShow] = useState(false)
+  const [paymentAlertShow, setPaymentAlertShow] = useState(false);
 
   const {
     isOpen: isVisible,
     onClose: onCloseAlert,
-    onOpen : onOpenAlert,
-  } = useDisclosure()
+    onOpen: onOpenAlert,
+  } = useDisclosure();
+
+  //new code
+
+  
 
   if (isLoading === true) {
     return (
@@ -845,301 +763,148 @@ const NeederInReviewCard = () => {
     );
   }
   return (
-    <div> 
-      {paymentAlertShow && ( <Alert status='success'>
-    <AlertIcon />
-    Payment completed!
-    <CloseButton
-        alignSelf='flex-start'
-        position='absolute'
-        right={-1}
-        top={-1}
-        onClick={() => setPaymentAlertShow(false)}
-      />
-  </Alert>)}
-     
-      {!postedJobs ? (
+    <div>
+      {paymentAlertShow && (
+        <Alert status="success">
+          <AlertIcon />
+          Payment completed!
+          <CloseButton
+            alignSelf="flex-start"
+            position="absolute"
+            right={-1}
+            top={-1}
+            onClick={() => setPaymentAlertShow(false)}
+          />
+        </Alert>
+      )}
+      
+
+      {!props ? (
         <Text>No jobs in review</Text>
       ) : (
-        postedJobs?.map((postedJobs) => (
-          <div>
-            
-  
-            <Card
-              direction={{ base: "column", sm: "row" }}
-              overflow="hidden"
-              variant="outline"
-              width="auto"
-              borderWidth="1px"
-              borderColor="#E3E3E3"
-              // borderLeftWidth="4px"
-              // borderRightWidth="4px"
-              height="auto"
-              marginTop="16px"
-              boxShadow="md"
-              rounded="lg"
-            >
-              <Stack>
-                <CardBody>
-                  <Flex
-                    flex="1"
-                    gap="4"
-                    alignItems="center"
-                    flexWrap="wrap"
-                    marginLeft="16px"
-                  >
-                    <Heading fontSize="24">{postedJobs.jobTitle}</Heading>
-                    {/* <Flex
-                    direction="column"
-                    position="absolute"
-                    right="8"
-                    alignItems="center"
-                    marginTop="36"
-                  >
-                    <ChatIcon boxSize={6} color="#01A2E8"></ChatIcon>
-                    <Text>Messages</Text>
-                  </Flex> */}
-                  </Flex>
-
-                  {/* <Text size="sm">Total Pay ${postedJobs.confirmedRate}</Text> */}
-                  <Flex
-                    flex="1"
-                    gap="4"
-                    alignItems="center"
-                    flexWrap="wrap"
-                    marginTop="4"
-                    marginLeft="16px"
-                  >
-                     <Avatar src='https://bit.ly/broken-link' bg="#01A2E8" size="lg" />
-
-
-                    <Box marginTop="2">
-                      <Heading size="sm"> {postedJobs.employerName}</Heading>
-                      <Text> {postedJobs.city}, MN</Text>
-                      {postedJobs.isHourly ? (
-                        <Text size="sm">
-                          {postedJobs.confirmHours} hours at $
-                          {postedJobs.confirmedRate}/hour
-                        </Text>
-                      ) : (
-                        <Text size="sm">
-                          Total Pay ${postedJobs.confirmedRate}
-                        </Text>
-                      )}
-                    </Box>
-                  </Flex>
-
-                  {/* <Button
-                  colorScheme="white"
-                  textColor="#01A2E8"
-                  outlineColor="#01A2E8"
-                  width="240px"
-                  marginRight="240"
-                  position="absolute"
-                  right="0"
-                >
-                  Go To Messages
-                </Button> */}
-                  <Flex direction="column" marginLeft="16px">
-                    <Heading size="sm" marginTop="2">
-                      Description
-                    </Heading>
-                    <Text>{postedJobs.description}</Text>
-                  </Flex>
-                  <Accordion allowMultiple>
-                    <AccordionItem>
-                      <Flex direction="row-reverse" width="890px">
-                        <AccordionButton
-                          width="120px"
-                          position="flex-start"
-                          bottom="8px"
-                        >
-                          <Box>See More</Box>
-                          <AccordionIcon />
-                        </AccordionButton>
+        <div>
+          <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Rate This User</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <>
+                  {ratingLoading ? (
+                    <Spinner />
+                  ) : (
+                    <>
+                      <Flex>
+                        {maxRating.map((item, key) => {
+                          return (
+                            <Button
+                              activeopacity={0.7}
+                              key={item}
+                              marginTop="8px"
+                              onClick={() => setDefaultRating(item)}
+                            >
+                              <Image
+                                boxSize="24px"
+                                src={
+                                  item <= defaultRating
+                                    ? star_filled
+                                    : star_corner
+                                }
+                              ></Image>
+                            </Button>
+                          );
+                        })}
                       </Flex>
-                      <AccordionPanel pb={4}>
-                        <Heading size="sm" marginTop="2">
-                          Requirements
+                    </>
+                  )}
+                </>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme="blue" onClick={() => handleReviewOpen()}>
+                  Submit
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+          <Modal
+            isOpen={isOpenPayment}
+            onClose={onClosePayment}
+            size="xl"
+            alignContent="center"
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Confirm Payment Details</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Flex direction="column">
+                  {isHourly ? (
+                    <>
+                      <Flex direction="row" marginTop="8px">
+                        <Heading size="sm">Hourly Rate</Heading>
+
+                        <Heading size="sm" position="absolute" right="40">
+                          ${confirmedRate}/hour
                         </Heading>
-                        {postedJobs.requirements ? (
-                          <Flex direction="row">
-                            {" "}
-                            <Text fontSize="14">{"\u25CF"} </Text>
-                            <Text marginLeft="1">
-                              {postedJobs.requirements}{" "}
-                            </Text>{" "}
-                          </Flex>
-                        ) : (
-                          <Text>No requirements listed</Text>
-                        )}
-
-                        {postedJobs.requirements2 ? (
-                          <Flex direction="row">
-                            {" "}
-                            <Text fontSize="14">{"\u25CF"} </Text>
-                            <Text marginLeft="1">
-                              {postedJobs.requirements2}{" "}
-                            </Text>{" "}
-                          </Flex>
-                        ) : null}
-                        {postedJobs.requirements3 ? (
-                          <Flex direction="row">
-                            {" "}
-                            <Text fontSize="14">{"\u25CF"} </Text>
-                            <Text marginLeft="1">
-                              {postedJobs.requirements3}{" "}
-                            </Text>{" "}
-                          </Flex>
-                        ) : null}
-                        <Heading size="sm" marginTop="2">
-                          Additional Notes
+                      </Flex>
+                      <Flex direction="row" marginTop="8px">
+                        <Heading size="sm">Hours Worked</Heading>
+                        <Heading size="sm" position="absolute" right="40">
+                          {confirmHours} hours
                         </Heading>
-                        {postedJobs.niceToHave ? (
-                          <Text marginBottom="48px">
-                            {postedJobs.niceToHave}
-                          </Text>
-                        ) : (
-                          <Text marginBottom="48px">Nothing listed</Text>
-                        )}
-                        <Center>
-                          <Button
-                            colorScheme="blue"
-                            width="240px"
-                            height="40px"
-                            onClick={() => handleModalOpen(postedJobs)}
-                          >
-                            Mark Complete & Pay
-                          </Button>
-                        </Center>
-                      </AccordionPanel>
-                    </AccordionItem>
-                  </Accordion>
-                </CardBody>
-              </Stack>
-            </Card>
-            <Modal isOpen={isOpen} onClose={onClose} size="xl">
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>Rate This User</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <>
-                    {ratingLoading ? (
-                      <Spinner />
-                    ) : (
-                      <>
-                        <Flex>
-                          {maxRating.map((item, key) => {
-                            return (
-                              <Button
-                                activeopacity={0.7}
-                                key={item}
-                                marginTop="8px"
-                                onClick={() => setDefaultRating(item)}
-                              >
-                                <Image
-                                  boxSize="24px"
-                                  src={
-                                    item <= defaultRating
-                                      ? star_filled
-                                      : star_corner
-                                  }
-                                ></Image>
-                              </Button>
-                            );
-                          })}
-                        </Flex>
-                      </>
-                    )}
-                  </>
-                </ModalBody>
-
-                <ModalFooter>
-                  <Button colorScheme="blue" onClick={() => handleReviewOpen()}>
-                    Submit
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-            <Modal
-              isOpen={isOpenPayment}
-              onClose={onClosePayment}
-              size="xl"
-              alignContent="center"
-            >
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>Confirm Payment Details</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <Flex direction="column">
-                    {isHourly ? (
-                      <>
-                        <Flex direction="row" marginTop="8px">
-                          <Heading size="sm">Hourly Rate</Heading>
-
-                          <Heading size="sm" position="absolute" right="40">
-                            ${confirmedRate}/hour
-                          </Heading>
-                        </Flex>
-                        <Flex direction="row" marginTop="8px">
-                          <Heading size="sm">Hours Worked</Heading>
-                          <Heading size="sm" position="absolute" right="40">
-                            {confirmHours} hours
-                          </Heading>
-                        </Flex>
-                        <Flex direction="row" marginTop="16px">
-                          <Heading size="sm">Payment Total</Heading>
-                          <Heading size="sm" position="absolute" right="40">
-                            ${totalPay}
-                          </Heading>
-                        </Flex>
-                      </>
-                    ) : (
+                      </Flex>
                       <Flex direction="row" marginTop="16px">
                         <Heading size="sm">Payment Total</Heading>
                         <Heading size="sm" position="absolute" right="40">
-                          ${confirmedRate}
+                          ${totalPay}
                         </Heading>
                       </Flex>
-                    )}
-                  </Flex>
-                </ModalBody>
+                    </>
+                  ) : (
+                    <Flex direction="row" marginTop="16px">
+                      <Heading size="sm">Payment Total</Heading>
+                      <Heading size="sm" position="absolute" right="40">
+                        ${confirmedRate}
+                      </Heading>
+                    </Flex>
+                  )}
+                </Flex>
+              </ModalBody>
 
-                <ModalFooter>
-                  <Button
-                    colorScheme="blue"
-                    onClick={() => sendPaymentInfo(postedJobs)}
-                  >
-                    Go to payment
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-          </div>
-        ))
-      )}
-
-      {stripeOpen && (
-        <Modal
+              <ModalFooter>
+                <Button
+                  colorScheme="blue"
+                  onClick={() => sendPaymentInfo()}
+                >
+                  Go to payment
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+          {stripeOpen && (
+          <Modal
           isOpen={isOpenStripe}
           onClose={() => setStripeOpen(false)}
           size="xl"
-          alignContent="center"
+       
         >
           <ModalOverlay />
           <ModalContent>
             <ModalCloseButton />
 
-            <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
-              <EmbeddedCheckout />
-            </EmbeddedCheckoutProvider>
-          </ModalContent>
+        <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
+          <EmbeddedCheckout />
+        </EmbeddedCheckoutProvider>
+        </ModalContent>
         </Modal>
+  )}
+        </div>
       )}
+
+     
     </div>
   );
 };
 
-export default NeederInReviewCard;
+export default EmbeddedPayments;

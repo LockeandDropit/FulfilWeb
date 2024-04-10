@@ -656,6 +656,9 @@ const AddJobStart = () => {
     setLoading(false)
   }, 1000);
 
+
+
+
   //help loading map async codmitu https://github.com/Tintef/react-google-places-autocomplete/issues/342
 
   return (
@@ -684,6 +687,7 @@ const AddJobStart = () => {
           marginRight="16"
           //   overflowY="scroll"
         >
+          
            <Flex direction="column">
             <Heading size="lg">Add A New Job</Heading>
             <FormControl isRequired>

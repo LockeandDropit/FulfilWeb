@@ -756,14 +756,15 @@ const ApplicantProfile = () => {
 
               <Box></Box>
 
-              <Heading size="lg" marginTop="16px" marginRight="595px">
-                Qualifications
-              </Heading>
+             
               {!userSkills ? (
-                <Text>No experience to show</Text>
+              null
               ) : (
                 userSkills.map((userSkills) => (
                   <>
+                   <Heading size="lg" marginTop="16px" marginRight="595px">
+                Qualifications
+              </Heading>
                     <Card
                       direction={{ base: "column", sm: "row" }}
                       overflow="hidden"

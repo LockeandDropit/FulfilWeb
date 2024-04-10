@@ -194,20 +194,26 @@ const InProgressCard = () => {
   const [isHourly, setIsHourly] = useState(null);
   const [confirmHours, setConfirmHours] = useState(null);
   const [category, setCategory] = useState(null);
+  const [locationLat, setLocationLat] = useState(null);
+  const [locationLng, setLocationLng] = useState(null);
 
   //get data
   const getSelectedData = (postedJobs) => {
-    console.log(postedJobs)
+   
+    setChannelID(postedJobs.channelID)
     setConfirmedRate(postedJobs.confirmedRate);
     setLowerRate(postedJobs.lowerRate);
     setUpperRate(postedJobs.upperRate);
     setDescription(postedJobs.description);
     setCity(postedJobs.city);
     setIsHourly(postedJobs.isHourly);
+    setLocationLat(postedJobs.locationLat);
+    setLocationLng(postedJobs.locationLng);
     // setEmployerID(snapshot.data().employerID);
     setZipCode(postedJobs.zipCode);
     setCategory(postedJobs.category);
     setState(postedJobs.state);
+
     setBusinessName(postedJobs.businessName);
     setStreetAddress(postedJobs.streetAddress);
     setRequirements(postedJobs.requirements);
@@ -229,8 +235,7 @@ const InProgressCard = () => {
   //else if hourly: confirm hours worked and submit to employer, move all other data
 
   const handleModalOpen = (postedJobs) => {
-
-    getSelectedData(postedJobs)
+    getSelectedData(postedJobs);
     onOpen();
   };
 
@@ -265,15 +270,17 @@ const InProgressCard = () => {
   const checkLength = (postedJobs) => {
     const rateValid = minLengthRegEx.test(confirmHours);
 
-    if (!rateValid || typeof confirmHours === "undefined" || !confirmHours || confirmHours === "0") {
+    if (
+      !rateValid ||
+      typeof confirmHours === "undefined" ||
+      !confirmHours ||
+      confirmHours === "0"
+    ) {
       alert("Please enter valid rate");
     } else {
       addHoursWorkedNavigate(postedJobs);
-    
     }
   };
-
-
 
   const addHoursWorkedNavigate = (postedJobs) => {
     //push to respective In Review dbs, user and employer
@@ -297,7 +304,7 @@ const InProgressCard = () => {
       city: city,
       lowerRate: lowerRate,
       upperRate: upperRate,
-
+channelID : channelID,
       isOneTime: isOneTime,
       streetAddress: streetAddress,
       state: state,
@@ -306,8 +313,8 @@ const InProgressCard = () => {
       requirements2: requirements2,
       requirements3: requirements3,
       niceToHave: niceToHave,
-      // locationLat: locationLat,
-      // locationLng: locationLng,
+      locationLat: locationLat,
+      locationLng: locationLng,
       hiredApplicant: user.uid,
       jobCompleteApplicant: true,
       jobCompleteEmployer: false,
@@ -335,11 +342,10 @@ const InProgressCard = () => {
         jobID: postedJobs[0].jobID,
         isHourly: isHourly,
         description: description,
-
         city: city,
+        channelID : channelID,
         lowerRate: lowerRate,
         upperRate: upperRate,
-
         isOneTime: isOneTime,
         streetAddress: streetAddress,
         state: state,
@@ -348,8 +354,8 @@ const InProgressCard = () => {
         requirements2: requirements2,
         requirements3: requirements3,
         niceToHave: niceToHave,
-        // locationLat: locationLat,
-        // locationLng: locationLng,
+        locationLat: locationLat,
+        locationLng: locationLng,
         hiredApplicant: user.uid,
         jobCompleteApplicant: true,
         jobCompleteEmployer: false,
@@ -386,7 +392,6 @@ const InProgressCard = () => {
       .then(() => {
         //all good
         console.log("removed from users saved Jobs");
-      
       })
       .catch((error) => {
         // no bueno
@@ -397,7 +402,7 @@ const InProgressCard = () => {
     setDoc(
       doc(
         db,
-        "employers",  
+        "employers",
         postedJobs[0].employerID,
         "Ratings",
         postedJobs[0].jobTitle
@@ -415,35 +420,30 @@ const InProgressCard = () => {
         console.log(error);
       });
 
-      setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
-        ratingComplete: false
-      })
-        .then(() => {
-        
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-    
+    setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
+      ratingComplete: false,
+    })
+      .then(() => {})
+      .catch((error) => {
+        console.log(error);
+      });
 
     setTimeout(() => {
       // setIsLoading(false)
       alert(
         "Job complete! Payment pending verification from employer. Paymenty can take 3-5 business days to transfer."
       );
-      onCloseHourly()
-      navigate("/DoerInProgressList")
+      onCloseHourly();
+      navigate("/DoerInProgressList");
     }, 2500);
   };
 
   const addRating = (postedJobs) => {
-
-    console.log(postedJobs[0])
+    console.log(postedJobs[0]);
     if (isHourly === true) {
       //modal opened then hours worked confirmed, sent to addHoursWorkedNavigate()
-      onClose()
-      onOpenHourly()
+      onClose();
+      onOpenHourly();
     } else {
       //move to under Review.. should this be for both users? Most likely
 
@@ -458,7 +458,9 @@ const InProgressCard = () => {
         isHourly: isHourly,
         jobID: postedJobs[0].jobID,
         description: description,
-
+        locationLat: locationLat,
+        locationLng: locationLng,
+        channelID : channelID,
         city: city,
         lowerRate: lowerRate,
         upperRate: upperRate,
@@ -497,7 +499,9 @@ const InProgressCard = () => {
           isHourly: isHourly,
           jobID: postedJobs[0].jobID,
           description: description,
-
+          locationLat: locationLat,
+          locationLng: locationLng,
+          channelID : channelID,
           city: city,
           lowerRate: lowerRate,
           upperRate: upperRate,
@@ -548,7 +552,6 @@ const InProgressCard = () => {
         .then(() => {
           //all good
           console.log("removed from users saved Jobs");
-         
         })
         .catch((error) => {
           // no bueno
@@ -556,7 +559,6 @@ const InProgressCard = () => {
         });
 
       //submit data
-
 
       setDoc(
         doc(
@@ -579,25 +581,21 @@ const InProgressCard = () => {
           console.log(error);
         });
 
-        setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
-          ratingComplete: false
-        })
-          .then(() => {
-          
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-
-      
+      setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
+        ratingComplete: false,
+      })
+        .then(() => {})
+        .catch((error) => {
+          console.log(error);
+        });
 
       setTimeout(() => {
         // setIsLoading(false)
         alert(
           "Job complete! Payment pending verification from employer. Paymenty can take 3-5 business days to transfer."
         );
-        onClose()
-     navigate("/DoerInProgressList")
+        onClose();
+        navigate("/DoerInProgressList");
       }, 2500);
     }
   };
@@ -605,8 +603,8 @@ const InProgressCard = () => {
   const addWithNoRating = (postedJobs) => {
     if (isHourly === true) {
       //modal opened then hours worked confirmed, sent to addHoursWorkedNavigate()
-      onClose()
-      onOpenHourly()
+      onClose();
+      onOpenHourly();
     } else {
       //move to under Review.. should this be for both users? Most likely
 
@@ -621,8 +619,10 @@ const InProgressCard = () => {
         isHourly: isHourly,
         jobID: postedJobs[0].jobID,
         description: description,
-
+        locationLat: locationLat,
+        locationLng: locationLng,
         city: city,
+        channelID : channelID,
         lowerRate: lowerRate,
         upperRate: upperRate,
         isVolunteer: isVolunteer,
@@ -660,7 +660,9 @@ const InProgressCard = () => {
           isHourly: isHourly,
           jobID: postedJobs[0].jobID,
           description: description,
-
+          locationLat: locationLat,
+          locationLng: locationLng,
+          channelID : channelID,
           city: city,
           lowerRate: lowerRate,
           upperRate: upperRate,
@@ -673,8 +675,7 @@ const InProgressCard = () => {
           requirements2: requirements2,
           requirements3: requirements3,
           niceToHave: niceToHave,
-          // locationLat: locationLat,
-          // locationLng: locationLng,
+    
           hiredApplicant: user.uid,
           jobCompleteApplicant: true,
           jobCompleteEmployer: false,
@@ -711,50 +712,40 @@ const InProgressCard = () => {
         .then(() => {
           //all good
           console.log("removed from users saved Jobs");
-          
         })
         .catch((error) => {
           // no bueno
           console.log(error);
         });
 
-
-        setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
-          ratingComplete: false
-        })
-          .then(() => {
-          
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-
-      
+      setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
+        ratingComplete: false,
+      })
+        .then(() => {})
+        .catch((error) => {
+          console.log(error);
+        });
 
       setTimeout(() => {
         // setIsLoading(false)
         alert(
           "Job complete! Payment pending verification from employer. Paymenty can take 3-5 business days to transfer."
         );
-        onClose()
-       navigate("/DoerInProgressList")
+        onClose();
+        navigate("/DoerInProgressList");
       }, 2500);
     }
   };
 
-
   const handleCloseAndOpen = (postedJobs) => {
-
-   if (isHourly === true) {
-    onClose()
-    onOpenHourly()
-   } else {
-    onClose()
-   addWithNoRating(postedJobs)
-   }
-    
-
-  }
+    if (isHourly === true) {
+      onClose();
+      onOpenHourly();
+    } else {
+      onClose();
+      addWithNoRating(postedJobs);
+    }
+  };
   return (
     <div>
       {!postedJobs ? (
@@ -809,8 +800,11 @@ const InProgressCard = () => {
                     marginTop="4"
                     marginLeft="16px"
                   >
-                      <Avatar src='https://bit.ly/broken-link' bg="#01A2E8" size="lg" />
-
+                    <Avatar
+                      src="https://bit.ly/broken-link"
+                      bg="#01A2E8"
+                      size="lg"
+                    />
 
                     <Box marginTop="2">
                       <Heading size="sm"> {postedJobs.employerName}</Heading>
@@ -933,7 +927,6 @@ const InProgressCard = () => {
                             width="240px"
                             height="40px"
                             onClick={() => handleModalOpen(postedJobs)}
-                            
                           >
                             Mark Complete
                           </Button>
@@ -976,13 +969,14 @@ const InProgressCard = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={() => handleCloseAndOpen(postedJobs)}>
+            <Button
+              variant="ghost"
+              mr={3}
+              onClick={() => handleCloseAndOpen(postedJobs)}
+            >
               Skip
             </Button>
-            <Button
-              colorScheme="blue"
-              onClick={() => addRating(postedJobs)}
-            >
+            <Button colorScheme="blue" onClick={() => addRating(postedJobs)}>
               Submit
             </Button>
           </ModalFooter>
@@ -1020,10 +1014,7 @@ const InProgressCard = () => {
             {/* <Button variant="ghost" mr={3} onClick={onCloseHourly}>
               Skip
             </Button> */}
-            <Button
-              colorScheme="blue"
-              onClick={() => checkLength(postedJobs)}
-            >
+            <Button colorScheme="blue" onClick={() => checkLength(postedJobs)}>
               Submit
             </Button>
           </ModalFooter>

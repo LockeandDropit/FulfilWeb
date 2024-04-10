@@ -58,6 +58,7 @@ import NeederEmailRegister from "./pages/Register/Needer/NeederEmailRegister";
 import EditPostedJob from "./pages/Needer/Jobs/EditPostedJob";
 import EditJobInfo from "./pages/Needer/Jobs/EditJobInfo";
 
+
 //Stream Chat
 import {
   Chat,
@@ -315,7 +316,7 @@ const router = createBrowserRouter([
     element: <StripeSetUp />,
   },
   {
-    path: "/NeederPaymentComplete/success",
+    path: "/NeederPaymentComplete",
     element: <NeederPaymentComplete />,
   },
   {

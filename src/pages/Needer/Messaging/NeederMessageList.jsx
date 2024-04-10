@@ -259,7 +259,7 @@ const NeederMessageList = () => {
           chatClient ? (
             selectedChannel ? (
               <>
-                <Heading width="500px" marginLeft="320px" marginBottom="16px">
+                <Heading width="500px" marginBottom="16px">
                   Messages
                 </Heading>
                 <Flex marginTop="4">

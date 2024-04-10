@@ -440,6 +440,7 @@ const NeederChannelHireHeader = () => {
                   >
                     <Text>{jobTitle}</Text>
                   </Button>
+                  <Text>(Note: This applicant will mark the job complete when done, which will then enable you to pay them)</Text>
                 </Box>
               </Flex>
             </Center>

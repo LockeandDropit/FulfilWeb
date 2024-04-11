@@ -47,6 +47,7 @@ import {
   onSnapshot,
   setDoc,
   updateDoc,
+  deleteDoc
 } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { auth } from "../../firebaseConfig";
@@ -148,6 +149,7 @@ const NeederMapScreen = () => {
           // setPostedJobs(0);
         } else {
           setJobsInReviewMap(results);
+          console.log("in review",results)
         }
       });
     } else {
@@ -583,8 +585,8 @@ const NeederMapScreen = () => {
   };
 
   const navigateToChannel = (x) => {
-    // navigate("/NeederMessageList", { state: { selectedChannel: x.channelID } });
-    console.log("mesage channel",x);
+    navigate("/NeederMessageList", { state: { selectedChannel: x.channelID } });
+    // console.log("mesage channel",x);
   };
 
   const navigateApplicantProfile = (applicant, allJobs) => {
@@ -610,6 +612,48 @@ console.log("handle payments",x)
 setPaymentsVisible(true)
 setSelectedJobForPayment(x)
   }
+
+
+  //handle canceling job
+  const handleDelete = (x) => {
+
+    console.log("cancel this one", x)
+    setDoc(doc(db, "Canceled Jobs", x.jobID), {
+      employerID: user.uid,
+      doerID: x.hiredApplicant,
+      jobTitle: x.jobTitle,
+    })
+      .then(() => {})
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+
+    deleteDoc(
+      doc(db, "Map Jobs", user.uid, "Posted Jobs",x.jobTitle),
+      {}
+    )
+      .then(() => {
+        //all good
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+
+    deleteDoc(
+      doc(db, "employers", user.uid, "Jobs In Progress", x.jobTitle),
+      {}
+    )
+      .then(() => {
+        //all good
+onOpen()
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+  };
 
 
   //payment verification and data movement initially taken from EmbeddedPayments component
@@ -859,27 +903,7 @@ setSelectedJobForPayment(x)
                                     </Button>
                                   </Flex>
                                 </Card>
-                                  <Modal
-                                  isCentered
-                                  onClose={onClose}
-                                  isOpen={isOpen}
-                                  motionPreset='slideInBottom'
-                                >
-                                  <ModalOverlay />
-                                  <ModalContent>
-                                    <ModalHeader>{allJobs.jobTitle}</ModalHeader>
-                                    <ModalCloseButton />
-                                    <ModalBody>
-                                      <Text>{applicant.firstName}</Text>
-                                    </ModalBody>
-                                    <ModalFooter>
-                                      <Button colorScheme='blue' mr={3} onClick={onClose}>
-                                        Close
-                                      </Button>
-                                      <Button variant='ghost'>Secondary Action</Button>
-                                    </ModalFooter>
-                                  </ModalContent>
-                                </Modal>
+                               
                                 </>
                               ))
                             ) : (
@@ -1152,27 +1176,27 @@ setSelectedJobForPayment(x)
                                   </Button> */}
                                 </Flex>
                               </Card>
-                                <Modal
-                                isCentered
-                                onClose={onClose}
-                                isOpen={isOpen}
-                                motionPreset='slideInBottom'
-                              >
-                                <ModalOverlay />
-                                <ModalContent>
-                                  <ModalHeader>{allJobs.jobTitle}</ModalHeader>
-                                  <ModalCloseButton />
-                                  <ModalBody>
-                                    <Text>{hiredApplicant.firstName}</Text>
-                                  </ModalBody>
-                                  <ModalFooter>
-                                    <Button colorScheme='blue' mr={3} onClick={onClose}>
-                                      Close
-                                    </Button>
-                                    <Button variant='ghost'>Secondary Action</Button>
-                                  </ModalFooter>
-                                </ModalContent>
-                              </Modal>
+                              <Modal
+                                  isCentered
+                                  onClose={onClose}
+                                  isOpen={isOpen}
+                                  motionPreset='slideInBottom'
+                                >
+                                  <ModalOverlay />
+                                  <ModalContent>
+                                    <ModalHeader>Success!</ModalHeader>
+                                    <ModalCloseButton />
+                                    <ModalBody>
+                                      <Text>This job was cancelled.</Text>
+                                    </ModalBody>
+                                    <ModalFooter>
+                                      <Button colorScheme='blue' mr={3} onClick={onClose}>
+                                        Continue
+                                      </Button>
+                                  
+                                    </ModalFooter>
+                                  </ModalContent>
+                                </Modal>
                               </>
                            
                           
@@ -1197,7 +1221,7 @@ setSelectedJobForPayment(x)
                                 borderWidth="1px"
                                 width="320px"
                                 marginTop="8px"
-                                // onClick={() => saveJob()}
+                                onClick={() => handleDelete(jobsInProgressMap)}
                               >
                                 Cancel Job
                               </Button>

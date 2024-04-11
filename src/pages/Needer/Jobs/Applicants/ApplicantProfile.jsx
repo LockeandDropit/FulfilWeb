@@ -580,6 +580,21 @@ const ApplicantProfile = () => {
     console.log(startWatching);
 
     setTimeout(() => {
+
+      updateDoc(doc(db, "users", applicant.streamChatID, "Applied", jobTitle), {
+        hasUnreadMessage: true,
+        interviewStarted: true,
+        channelID: channel.cid
+      })
+        .then(() => {
+
+          console.log("new message updated in Applied")
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
       navigate("/NeederMessageList", {
         state: {
           selectedChannel: channel.cid,

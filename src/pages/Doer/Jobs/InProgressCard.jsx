@@ -196,10 +196,17 @@ const InProgressCard = () => {
   const [category, setCategory] = useState(null);
   const [locationLat, setLocationLat] = useState(null);
   const [locationLng, setLocationLng] = useState(null);
+  const [jobTitle, setJobTitle] = useState(null)
+  const [employerID, setEmployerID] = useState(null)
+  const [jobID, setJobID] = useState(null)
+
 
   //get data
   const getSelectedData = (postedJobs) => {
-   
+   console.log("is this the one Im clicking on?",postedJobs)
+   setJobTitle(postedJobs.jobTitle)
+   setEmployerID(postedJobs.employerID)
+   setJobID(postedJobs.jobID)
     setChannelID(postedJobs.channelID)
     setConfirmedRate(postedJobs.confirmedRate);
     setLowerRate(postedJobs.lowerRate);
@@ -282,24 +289,24 @@ const InProgressCard = () => {
     }
   };
 
-  const addHoursWorkedNavigate = (postedJobs) => {
+  const addHoursWorkedNavigate = () => {
     //push to respective In Review dbs, user and employer
 
     // setIsLoading(true)
 
     //set hasbeenRated to false so employer can check if they have been rated yet
 
-    setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
+    setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
       ratingComplete: false,
     });
 
-    setDoc(doc(db, "users", user.uid, "In Review", postedJobs[0].jobTitle), {
+    setDoc(doc(db, "users", user.uid, "In Review", jobTitle), {
       confirmedRate: confirmedRate,
       confirmHours: confirmHours,
-      employerID: postedJobs[0].employerID,
+      employerID: employerID,
       isHourly: isHourly,
-      jobTitle: postedJobs[0].jobTitle,
-      jobID: postedJobs[0].jobID,
+      jobTitle: jobTitle,
+      jobID: jobID,
       description: description,
       city: city,
       lowerRate: lowerRate,
@@ -330,16 +337,16 @@ channelID : channelID,
       doc(
         db,
         "employers",
-        postedJobs[0].employerID,
+        employerID,
         "In Review",
-        postedJobs[0].jobTitle
+        jobTitle
       ),
       {
         confirmedRate: confirmedRate,
         confirmHours: confirmHours,
-        employerID: postedJobs[0].employerID,
-        jobTitle: postedJobs[0].jobTitle,
-        jobID: postedJobs[0].jobID,
+        employerID: employerID,
+        jobTitle: jobTitle,
+        jobID: jobID,
         isHourly: isHourly,
         description: description,
         city: city,
@@ -369,7 +376,7 @@ channelID : channelID,
       });
 
     deleteDoc(
-      doc(db, "users", user.uid, "Jobs In Progress", postedJobs[0].jobTitle)
+      doc(db, "users", user.uid, "Jobs In Progress", jobTitle)
     )
       .then(() => {
         //all good
@@ -384,9 +391,9 @@ channelID : channelID,
       doc(
         db,
         "employers",
-        postedJobs[0].employerID,
+        employerID,
         "Jobs In Progress",
-        postedJobs[0].jobTitle
+        jobTitle
       )
     )
       .then(() => {
@@ -403,9 +410,9 @@ channelID : channelID,
       doc(
         db,
         "employers",
-        postedJobs[0].employerID,
+        employerID,
         "Ratings",
-        postedJobs[0].jobTitle
+       jobTitle
       ),
       {
         rating: defaultRating,
@@ -420,7 +427,7 @@ channelID : channelID,
         console.log(error);
       });
 
-    setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
+    setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
       ratingComplete: false,
     })
       .then(() => {})
@@ -438,8 +445,8 @@ channelID : channelID,
     }, 2500);
   };
 
-  const addRating = (postedJobs) => {
-    console.log(postedJobs[0]);
+  const addRating = () => {
+   
     if (isHourly === true) {
       //modal opened then hours worked confirmed, sent to addHoursWorkedNavigate()
       onClose();
@@ -451,12 +458,12 @@ channelID : channelID,
 
       //submitted if flat rate
 
-      setDoc(doc(db, "users", user.uid, "In Review", postedJobs[0].jobTitle), {
+      setDoc(doc(db, "users", user.uid, "In Review", jobTitle), {
         confirmedRate: confirmedRate,
-        employerID: postedJobs[0].employerID,
-        jobTitle: postedJobs[0].jobTitle,
+        employerID: employerID,
+        jobTitle: jobTitle,
         isHourly: isHourly,
-        jobID: postedJobs[0].jobID,
+        jobID: jobID,
         description: description,
         locationLat: locationLat,
         locationLng: locationLng,
@@ -488,16 +495,16 @@ channelID : channelID,
         doc(
           db,
           "employers",
-          postedJobs[0].employerID,
+         employerID,
           "In Review",
-          postedJobs[0].jobTitle
+          jobTitle
         ),
         {
           confirmedRate: confirmedRate,
-          employerID: postedJobs[0].employerID,
-          jobTitle: postedJobs[0].jobTitle,
+          employerID: employerID,
+          jobTitle: jobTitle,
           isHourly: isHourly,
-          jobID: postedJobs[0].jobID,
+          jobID: jobID,
           description: description,
           locationLat: locationLat,
           locationLng: locationLng,
@@ -529,7 +536,7 @@ channelID : channelID,
         });
 
       deleteDoc(
-        doc(db, "users", user.uid, "Jobs In Progress", postedJobs[0].jobTitle)
+        doc(db, "users", user.uid, "Jobs In Progress", jobTitle)
       )
         .then(() => {
           //all good
@@ -544,9 +551,9 @@ channelID : channelID,
         doc(
           db,
           "employers",
-          postedJobs[0].employerID,
+        employerID,
           "Jobs In Progress",
-          postedJobs[0].jobTitle
+          jobTitle
         )
       )
         .then(() => {
@@ -564,9 +571,9 @@ channelID : channelID,
         doc(
           db,
           "employers",
-          postedJobs[0].employerID,
+          employerID,
           "Ratings",
-          postedJobs[0].jobTitle
+          jobTitle
         ),
         {
           rating: defaultRating,
@@ -581,7 +588,7 @@ channelID : channelID,
           console.log(error);
         });
 
-      setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
+      setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
         ratingComplete: false,
       })
         .then(() => {})
@@ -600,7 +607,7 @@ channelID : channelID,
     }
   };
 
-  const addWithNoRating = (postedJobs) => {
+  const addWithNoRating = () => {
     if (isHourly === true) {
       //modal opened then hours worked confirmed, sent to addHoursWorkedNavigate()
       onClose();
@@ -612,12 +619,12 @@ channelID : channelID,
 
       //submitted if flat rate
 
-      setDoc(doc(db, "users", user.uid, "In Review", postedJobs[0].jobTitle), {
+      setDoc(doc(db, "users", user.uid, "In Review", jobTitle), {
         confirmedRate: confirmedRate,
-        employerID: postedJobs[0].employerID,
-        jobTitle: postedJobs[0].jobTitle,
+        employerID: employerID,
+        jobTitle: jobTitle,
         isHourly: isHourly,
-        jobID: postedJobs[0].jobID,
+        jobID: jobID,
         description: description,
         locationLat: locationLat,
         locationLng: locationLng,
@@ -649,16 +656,16 @@ channelID : channelID,
         doc(
           db,
           "employers",
-          postedJobs[0].employerID,
+          employerID,
           "In Review",
-          postedJobs[0].jobTitle
+          jobTitle
         ),
         {
           confirmedRate: confirmedRate,
-          employerID: postedJobs[0].employerID,
-          jobTitle: postedJobs[0].jobTitle,
+          employerID: employerID,
+          jobTitle: jobTitle,
           isHourly: isHourly,
-          jobID: postedJobs[0].jobID,
+          jobID: jobID,
           description: description,
           locationLat: locationLat,
           locationLng: locationLng,
@@ -976,7 +983,9 @@ channelID : channelID,
             >
               Skip
             </Button>
-            <Button colorScheme="blue" onClick={() => addRating(postedJobs)}>
+            <Button colorScheme="blue" 
+            onClick={() => addRating(postedJobs)}>
+       
               Submit
             </Button>
           </ModalFooter>

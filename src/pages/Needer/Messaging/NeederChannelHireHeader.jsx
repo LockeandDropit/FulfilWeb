@@ -31,6 +31,7 @@ import {
   addDoc,
   setDoc,
   deleteDoc,
+  snapshotEqual,
 } from "firebase/firestore";
 import { ChannelFilters, ChannelOptions, ChannelSort, User } from "stream-chat";
 import {
@@ -64,8 +65,6 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
-
-
 
 const NeederChannelHireHeader = () => {
   const navigate = useNavigate();
@@ -233,7 +232,105 @@ const NeederChannelHireHeader = () => {
 
   console.log(channel.data.name, userID, applicantID);
 
-  console.log("ss", jobID);
+  const [channelUsers, setChannelUsers] = useState(null);
+  const [parsedUsers, setParsedUsers] = useState(null);
+
+  useEffect(() => {
+    setChannelUsers(channel.state.read);
+  }, [channel]);
+
+//separating object with things I could not access Nenad Vracar https://stackoverflow.com/questions/45035514/split-object-into-two-properties
+
+  useEffect(() => {
+    if (channelUsers) {
+      var result = Object.keys(channelUsers).map((e) => ({
+        user: e,
+        body: channelUsers[e],
+      }));
+
+      setParsedUsers(result);
+    }
+  }, [channelUsers]);
+
+
+  //checking validity of docs help from DoesData https://stackoverflow.com/questions/47308159/whats-the-best-way-to-check-if-a-firestore-record-exists-if-its-path-is-known
+
+  useEffect(() => {
+    if (parsedUsers) {
+      // console.log(parsedUsers)
+      parsedUsers.forEach((parsedUser) => {
+        if (parsedUser.user === userID) {
+        } else if (parsedUser.user === applicantID) {
+          if (parsedUser.body.unread_messages > 0) {
+            var appliedDocRef = doc(db, "users", applicantID, "Applied", jobTitle);
+            var inProgressDocRef = doc(
+              db,
+              "users",
+              applicantID,
+              "In Progress",
+              jobTitle
+            );
+            var inReviewDocRef = doc(
+              db,
+              "users",
+              applicantID,
+              "In Review",
+              jobTitle
+            );
+
+            getDoc(appliedDocRef).then((snapshot) => {
+              if (!snapshot.data()) {
+              } else {
+                updateDoc(doc(appliedDocRef), {
+                  hasUnreadMessage: true,
+                })
+                  .then(() => {
+
+                    console.log("new message updated in Applied")
+                  })
+                  .catch((error) => {
+                    // no bueno
+                    console.log(error);
+                  });
+              }
+            });
+
+            getDoc(inProgressDocRef).then((snapshot) => {
+              if (!snapshot.data()) {
+              } else {
+                updateDoc(doc(inProgressDocRef), {
+                  hasUnreadMessage: true,
+                })
+                  .then(() => {
+                    console.log("new message updated in Progress")
+                  })
+                  .catch((error) => {
+                    // no bueno
+                    console.log(error);
+                  });
+              }
+            });
+
+            getDoc(inReviewDocRef).then((snapshot) => {
+              if (!snapshot.data()) {
+              } else {
+                updateDoc(doc(inReviewDocRef), {
+                  hasUnreadMessage: true,
+                })
+                  .then(() => {
+                    console.log("new message updated in Review")
+                  })
+                  .catch((error) => {
+                    // no bueno
+                    console.log(error);
+                  });
+              }
+            });
+          }
+        }
+      });
+    }
+  }, [parsedUsers]);
 
   console.log("This is selected channel", channel);
 
@@ -435,12 +532,13 @@ const NeederChannelHireHeader = () => {
               <Flex direction="column">
                 <Box textAlign="center" marginTop="16px" marginBottom="8px">
                   <Text>You've hired this applicant for </Text>
-                  <Button
-                   variant="ghost"
-                  >
+                  <Button variant="ghost">
                     <Text>{jobTitle}</Text>
                   </Button>
-                  <Text>(Note: This applicant will mark the job complete when done, which will then enable you to pay them)</Text>
+                  <Text>
+                    (Note: This applicant will mark the job complete when done,
+                    which will then enable you to pay them)
+                  </Text>
                 </Box>
               </Flex>
             </Center>
@@ -544,7 +642,9 @@ const NeederChannelHireHeader = () => {
             <Button variant="ghost" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button colorScheme="blue" onClick={() => checkLength()}>Send Offer</Button>
+            <Button colorScheme="blue" onClick={() => checkLength()}>
+              Send Offer
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

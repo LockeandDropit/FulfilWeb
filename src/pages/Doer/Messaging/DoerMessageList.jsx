@@ -33,13 +33,13 @@ import {
   SearchBar,
   Thread,
   Window,
-ChannelListMessengerProps,
+  ChannelListMessengerProps,
   InfiniteScroll,
   ChannelListMessenger,
   useChannelStateContext,
   useChatContext,
   useChannelListContext,
-  ChannelListContext
+  ChannelListContext,
 } from "stream-chat-react";
 import { StreamChat } from "stream-chat";
 import { Spinner } from "@chakra-ui/react";
@@ -75,11 +75,11 @@ const DoerMessageList = () => {
     // image: `https://getstream.io/random_png/?id=${userId}&name=${userName}`,
   };
 
-
-
   const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
 
   const [clientIsSet, setClientIsSet] = useState(false);
+
+// //my way
 
   useEffect(() => {
     if (userID && chatClient) {
@@ -90,6 +90,20 @@ const DoerMessageList = () => {
     }
   }, [userID, chatClient, clientIsSet]);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const [doneLoading, setDoneLoading] = useState(false);
 
   setTimeout(() => {
@@ -99,8 +113,6 @@ const DoerMessageList = () => {
   const navigate = useNavigate();
   const [selectedChannel, setSelectedChannel] = useState(null);
 
-
-
   const location = useLocation();
 
   const [passedChannel, setPasseChannel] = useState(null);
@@ -108,7 +120,7 @@ const DoerMessageList = () => {
   useEffect(() => {
     if (location.state === null) {
       console.log("no channel passed");
-      setSelectedChannel(null)
+      setSelectedChannel(null);
     } else {
       if (!chatClient) {
         console.log("waiting on chatClient");
@@ -119,12 +131,9 @@ const DoerMessageList = () => {
     }
   }, [chatClient]);
 
-  
-
   //testing why...
 
-  const [endRun, setEndRun] = useState(false)
-
+  const [endRun, setEndRun] = useState(false);
 
   const loadTest = async (passedChannel) => {
     if (clientIsSet) {
@@ -137,10 +146,10 @@ const DoerMessageList = () => {
         if (channelSort.cid === passedChannel) {
           setSelectedChannel(channelSort);
           // setActiveChannel(channelSort)
-     
+
           //or just navigate from here to selected channel??
           //pass whole channel object to navigate
-          setEndRun(true)
+          setEndRun(true);
         } else {
           console.log("no luck", channelSort.cid);
         }
@@ -160,31 +169,27 @@ const DoerMessageList = () => {
 
   useEffect(() => {
     //debuggin
-console.log("debug", selectedChannel)
-  }, [selectedChannel])
+    console.log("debug", selectedChannel);
+  }, [selectedChannel]);
 
+  //testing stuff
 
+  const [locallySelectedChannel, setLocallySelectedChannel] = useState(null);
 
-  //testing stuff 
-  
-const [locallySelectedChannel, setLocallySelectedChannel] = useState(null)
+  // const { setActiveChannel, channel: activeChannel } = useChatContext()
 
+  const { channel, watchers } = useChannelStateContext();
 
-// const { setActiveChannel, channel: activeChannel } = useChatContext()
-
-const { channel, watchers } = useChannelStateContext();
-
-// const { channels, setChannels } = useChannelListContext();
+  // const { channels, setChannels } = useChannelListContext();
 
   const testChannels = (channel) => {
-  console.log("channel from context", channel)
-  }
+    console.log("channel from context", channel);
+  };
 
 
 
 
 
-  
   
 
   return (
@@ -200,93 +205,101 @@ const { channel, watchers } = useChannelStateContext();
           <DoerDashboard />
         </Box>
         <Box height="90vh">
-        {doneLoading ? (
-          chatClient ? (
-            selectedChannel ? (
-              <>
-                <Flex direction="column">
-                <Box marginLeft="24px" >
-              <Heading width="500px"  marginTop="8px" marginBottom="16px">
-              Messages
-            </Heading>
-              <Flex marginTop="4">
-                <Chat client={chatClient}>
-                <Box height="800px" >
-                  <ChannelList filters={filter} Paginator={InfiniteScroll} onSelect={() => console.log("click")} />
-</Box>
-                  <Channel channel={selectedChannel}>
-                    <Box
-                      width="50vw"
-                      height="80vh"
-                    
-                    >
-                      <Window>
-                        <ChannelHireHeader />
-                        <MessageList />
-                        <MessageInput />
-                      </Window>
+          {doneLoading ? (
+            chatClient ? (
+              selectedChannel ? (
+                <>
+                  <Flex direction="column">
+                    <Box marginLeft="24px">
+                      <Heading
+                        width="500px"
+                        marginTop="8px"
+                        marginBottom="16px"
+                      >
+                        Messages
+                      </Heading>
+                      <Flex marginTop="4">
+                        <Chat client={chatClient}>
+                          <Box height="800px">
+                            <ChannelList
+                              filters={filter}
+                              Paginator={InfiniteScroll}
+                              onSelect={() => console.log("click")}
+                            />
+                          </Box>
+                          <Channel channel={selectedChannel}>
+                            <Box width="50vw" height="80vh">
+                              <Window>
+                                <ChannelHireHeader />
+                                <MessageList />
+                                <MessageInput />
+                              </Window>
+                            </Box>
+                            <Thread />
+                          </Channel>
+                        </Chat>
+                      </Flex>
                     </Box>
-                    <Thread />
-                  </Channel>
-                </Chat>
-              </Flex>
-              </Box>
-              </Flex>
-              </>
+                  </Flex>
+                </>
+              ) : (
+                <>
+                  <Flex direction="column">
+                    <Box marginLeft="24px">
+                      <Heading
+                        width="500px"
+                        marginBottom="16px"
+                        marginRight="320px"
+                        marginTop="16px"
+                      >
+                        Messages
+                      </Heading>
+                      <Flex>
+                        <Chat client={chatClient}>
+                          <Box height="800px">
+                            <ChannelList
+                              filters={filter}
+                              Paginator={InfiniteScroll}
+                            />
+                          </Box>
+                          <Channel>
+                            <Box width="50vw" height="80vh">
+                              <Window on>
+                                <ChannelHireHeader />
+
+                                <MessageList />
+
+                                <MessageInput />
+                              </Window>
+                            </Box>
+                            <Thread />
+                          </Channel>
+                        </Chat>
+                      </Flex>
+                    </Box>
+                  </Flex>
+                </>
+              )
             ) : (
-              <>
-              <Flex direction="column">
-                <Box marginLeft="24px" >
-              <Heading width="500px"  marginBottom="16px" marginRight="320px" marginTop="16px">
-              Messages
-            </Heading>
-              <Flex>
-                <Chat client={chatClient}>
-                <Box height="800px">
-                  <ChannelList filters={filter} Paginator={InfiniteScroll} />
-</Box>
-                  <Channel >
-                    <Box
-                      width="50vw"
-                      height="80vh"
-                  
-                    >
-                      <Window>
-                        <ChannelHireHeader />
-                      
-                        
-                        <MessageList />
-                        <MessageInput />
-                      </Window>
-                    </Box>
-                    <Thread />
-                  </Channel>
-                </Chat>
-              </Flex>
-              </Box>
-              </Flex>
-              </>
+              <Text>
+                An error occured with our messaging server. Please try again
+                later. If the issue persists, please contact us.
+              </Text>
             )
           ) : (
-            <Text>
-              An error occured with our messaging server. Please try again
-              later. If the issue persists, please contact us.
-            </Text>
-          )
-        ) : (
-          <Center>
-            {" "}
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="xl"
-              marginTop="240px"
-            />
-          </Center>
-        )}
-  </Box>
+            <Center>
+              {" "}
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+                marginTop="240px"
+              />
+            </Center>
+          )}
+        </Box>
       </Flex>
     </>
   );

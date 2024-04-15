@@ -17,7 +17,7 @@ import {
   InputGroup,
   InputRightAddon,
 } from "@chakra-ui/react";
-import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
+import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
 import {
   FormControl,
   FormLabel,
@@ -37,6 +37,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import LandingNeederMapScreen from "../../../components/LandingNeederMapScreen.jsx";
 
 const NeederEmailRegister = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -95,16 +96,17 @@ const NeederEmailRegister = () => {
     setPasswordValidationBegun(true);
     const isValidPassword = passwordRegex.test(password);
     if (!isValidPassword) {
-      setPasswordValidationMessage("Password Invalid. Must be 6 characters or longer");
+      setPasswordValidationMessage(
+        "Password Invalid. Must be 6 characters or longer"
+      );
     } else {
       setPasswordValidationMessage();
       // setPassword(password);
-      console.log("password valid")
+      console.log("password valid");
     }
 
-
     if (isValid && isValidPassword) {
-      onSignUp()
+      onSignUp();
     }
   };
 
@@ -113,8 +115,7 @@ const NeederEmailRegister = () => {
   //credit https://www.sitepoint.com/using-regular-expressions-to-check-string-length/
   //credit alex gittemeier https://stackoverflow.com/questions/17439917/regex-to-accept-alphanumeric-and-some-special-character-in-javascript
   // const passwordRegex = /^[A-Za-z0-9_@./#&+-]{6,20}$/;
-  
-  
+
   //credit Vivek S. & xanatos https://stackoverflow.com/questions/5058416/regular-expressions-how-to-accept-any-symbol
   const passwordRegex = /[^\>]*/;
   const [passwordValidationBegun, setPasswordValidationBegun] = useState(false);
@@ -123,11 +124,13 @@ const NeederEmailRegister = () => {
     setPasswordValidationBegun(true);
     const isValid = passwordRegex.test(password);
     if (!isValid) {
-      setPasswordValidationMessage("Password Invalid. Must be 6 characters or longer");
+      setPasswordValidationMessage(
+        "Password Invalid. Must be 6 characters or longer"
+      );
     } else {
       setPasswordValidationMessage();
       // setPassword(password);
-      console.log("password valid")
+      console.log("password valid");
     }
   };
 
@@ -141,12 +144,82 @@ const NeederEmailRegister = () => {
     }
   };
 
-
-
+  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
       <Header />
-      <Flex>
+
+      <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
+        <Flex p={8} flex={1} align={"center"} justify={"center"}>
+          <Stack spacing={4} w={"full"} maxW={"md"}>
+            <Center>
+              <Heading fontSize={"2xl"}>Create an account</Heading>
+             
+            </Center>
+            <Center>
+            <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
+            Get access to contractors by posting the work you need done. Browse through contractors to find the right fit.
+          </Text>
+          </Center>
+            <FormControl>
+              <FormLabel>Email</FormLabel>
+              <Input
+                borderColor="grey"
+                borderWidth=".25px"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {emailValidationBegun === true ? (
+                <Text color="red">{validationMessage}</Text>
+              ) : null}
+            </FormControl>
+            <FormControl marginTop="8px">
+              <FormLabel>Password</FormLabel>
+
+              <InputGroup>
+                <Input
+                  borderColor="grey"
+                  borderWidth=".5px"
+                  type={visibleToggle}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <InputRightElement>
+                  <ViewIcon onClick={() => handlePasswordVisible()} />
+                </InputRightElement>
+              </InputGroup>
+              {passwordValidationBegun === true ? (
+                <Text color="red">{passwordValidationMessage}</Text>
+              ) : null}
+            </FormControl>
+            <Stack spacing={6}>
+              <Stack
+                direction={{ base: "column", sm: "row" }}
+                align={"start"}
+                justify={"space-between"}
+              ></Stack>
+              <Button   bg="#01A2E8"
+                color={'white'}
+                _hover={{
+                  bg: 'blue.500',
+                }}
+                // onClick={() => validate()}
+                >
+                Sign up
+              </Button>
+            </Stack>
+          </Stack>
+        </Flex>
+        <Flex flex={1}>
+        <Box w="60vw" h="70vh" padding="2" alignContent="center">
+            <Box w="60vw" h="70vh" >
+              <LandingNeederMapScreen />
+            </Box>
+          </Box>
+        </Flex>
+      </Stack>
+      {/* <Flex>
         <Box w="33vw" h="90vh" alignContent="center">
           <Center>
             <Flex direction="column" marginLeft="120px">
@@ -155,12 +228,7 @@ const NeederEmailRegister = () => {
                Create an account
                 </Heading>
               </Center>
-              {/* <Flex direction="row" alignContent="baseline" marginTop="16px" onClick={() => navigate("/NeederAccountCreation")}>
-                  
-                  <Heading size="sm" >Find the professional thats right for you. </Heading>
-                  <Heading size="sm" marginLeft="4px" color="#01A2E8">Get started</Heading>
-                  <ArrowForwardIcon marginTop="2px"/>
-                </Flex> */}{" "}
+             
               <FormControl>
                 <FormLabel>Email</FormLabel>
                 <Input
@@ -224,18 +292,7 @@ const NeederEmailRegister = () => {
             ></Box>
           </Box>
         </Center>
-      </Flex>
-
-      {/* <Center>
-
-      <Box width="320px">
-        <InputGroup size="lg" width="320px">
-          <Input placeholder="mysite" />
-          <Button   backgroundColor="#01A2E8" color="white"  onClick={() => navigate(`/MapScreen`)}>Search</Button>
-        </InputGroup>
-      </Box>
-      </Center> */}
-      {/* <Categories /> */}
+      </Flex> */}
     </>
   );
 };

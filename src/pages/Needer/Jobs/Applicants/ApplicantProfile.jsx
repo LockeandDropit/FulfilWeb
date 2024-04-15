@@ -24,6 +24,7 @@ import {
   CardFooter,
   Divider,
   Stack,
+  Spinner
 } from "@chakra-ui/react";
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -565,6 +566,7 @@ const ApplicantProfile = () => {
   };
 
   const testNewChannel = async () => {
+    setIsLoading(true)
     client.connectUser(userInfo, client.devToken(userID));
     
     const channel = client.channel("messaging", jobID, {
@@ -595,16 +597,31 @@ const ApplicantProfile = () => {
           console.log(error);
         });
 
+        updateDoc(doc(db, "employers", userID, "Posted Jobs", jobTitle, "Applicants", applicant.streamChatID,), {
+       
+          channelID: channel.cid
+        })
+          .then(() => {
+  
+            console.log("new message updated in Applied")
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+          
       navigate("/NeederMessageList", {
         state: {
           selectedChannel: channel.cid,
         
         },
       });
+
+      setIsLoading(false)
     }, 1000);
   };
 
-  console.log("you are here");
+ const [isLoading, setIsLoading] = useState(false)
 
   return (
     <>
@@ -809,32 +826,42 @@ const ApplicantProfile = () => {
                 ))
               )}
               <Flex>
-                <Button
-                  color="red"
-                  backgroundColor="white"
-                  width="240px"
-                  marginTop="60px"
-                  // position="absolute"
-                  bottom="2"
-                  // right="500"
-                  // left="300"
-                  onClick={() => deleteApplicant()}
-                >
-                  Delete
-                </Button>
-                <Button
-                  colorScheme="blue"
-                  width="240px"
-                  marginTop="60px"
-                  // position="absolute"
-                  bottom="2"
-                  marginLeft="60px"
-                  // right="500"
-                  // left="300"
-                  onClick={() => createInterviewChat()}
-                >
-                  Interview
-                </Button>
+              
+                {isLoading ? ( <Spinner
+                      thickness="4px"
+                      speed="0.65s"
+                      emptyColor="gray.200"
+                      color="#01A2E8"
+                      size="lg"
+                      marginTop="56px"
+                    
+                    />) : (  <> <Button
+                      color="red"
+                      backgroundColor="white"
+                      width="240px"
+                      marginTop="60px"
+                      // position="absolute"
+                      bottom="2"
+                      // right="500"
+                      // left="300"
+                      onClick={() => deleteApplicant()}
+                    >
+                      Delete
+                    </Button>   <Button
+                      colorScheme="blue"
+                      width="240px"
+                      marginTop="60px"
+                      // position="absolute"
+                      bottom="2"
+                      marginLeft="60px"
+                      // right="500"
+                      // left="300"
+                      onClick={() => createInterviewChat()}
+                    >
+                      Interview
+                    </Button></>)
+                    }
+            
               </Flex>
             </Center>
           </Box>

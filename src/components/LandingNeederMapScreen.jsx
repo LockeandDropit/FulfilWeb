@@ -6,26 +6,25 @@ import {
   AdvancedMarker,
   InfoWindow,
 } from "@vis.gl/react-google-maps";
-import Header from "../components/Header";
+import Header from "./Header";
 import { Input, Button, Text, Box } from "@chakra-ui/react";
 import {
   FormControl,
   FormLabel,
   FormErrorMessage,
   FormHelperText,
-  Select
+  Select,
 } from "@chakra-ui/react";
 import { Center, Flex } from "@chakra-ui/react";
-import { Heading,
-  Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    useDisclosure, } from "@chakra-ui/react";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Stack, } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Divider,
+  Stack,
+} from "@chakra-ui/react";
 import {
   doc,
   getDoc,
@@ -39,9 +38,7 @@ import { db } from "../firebaseConfig";
 import { auth } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 
-import NoCategoryMatchModal from "../components/NoCategoryMatchModal"
-
-const MapScreen = () => {
+const LandingNeederMapScreen = () => {
   const [user, setUser] = useState(null);
   const [postedJobs, setPostedJobs] = useState([]);
   const navigate = useNavigate();
@@ -55,13 +52,11 @@ const MapScreen = () => {
       let results = [];
       snapshot.docs.forEach((doc) => {
         if (doc.id === "0a9fb80c-8dc5-4ec0-9316-7335f7fc0058") {
-        //ignore, this is for display on landingNeederMap only
-        } else {
-        //review what thiss does
-        results.push({ ...doc.data(), id: doc.id });
+          results.push({ ...doc.data(), id: doc.id });
         }
       });
       console.log(results);
+
       setPostedJobs(results);
     });
     // } else {
@@ -139,21 +134,16 @@ const MapScreen = () => {
     setOpenInfoWindowMarkerID(x);
   };
 
-
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
   //category search
 
-  const [searchJobCategory, setSearchJobCategory] = useState(null)
+  const [searchJobCategory, setSearchJobCategory] = useState(null);
 
   useEffect(() => {
     if (searchJobCategory && searchJobCategory !== null) {
-      searchCategory(searchJobCategory)
+      searchCategory(searchJobCategory);
     } else {
-
     }
-  }, [searchJobCategory])
-
+  }, [searchJobCategory]);
 
   const searchCategory = (value) => {
     console.log(value);
@@ -185,16 +175,11 @@ const MapScreen = () => {
             secondResults.push(results);
             console.log("match", results);
           } else {
-            // return(<NoCategoryMatchModal props={true}/>)
-            console.log("no match1")
-          
           }
         });
 
         if (secondResults.length === 0) {
-         onOpen()
-          
-          
+          alert("sorry! No jobs currently available in that category");
         } else {
           setPostedJobs(secondResults);
         }
@@ -202,74 +187,31 @@ const MapScreen = () => {
     }
   };
 
-
   return (
     <div>
-      
-
       <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-        <div style={{ height: "90vh" }}>
+        <div style={{ height: "100vh" }}>
           <Map
-            defaultCenter={{ lat: defaultLat, lng: defaultLong }}
-            defaultZoom={11}
+            defaultCenter={{ lat: 44.89929301068098, lng: -93.3413753387615}}
+            defaultZoom={12}
             gestureHandling={"greedy"}
             disableDefaultUI={true}
             //move to env
             mapId="6cc03a62d60ca935"
           >
-            <Center marginTop="8px">
-            <Card
-                  align="center"
-                  border="1px"
-                  borderColor="gray.400"
-                  borderWidth="1.5px"
-                  width="auto"
-                  boxShadow="lg"
-                  flexDirection="row"
-                >
-                
-                
-                  <Select placeholder="Looking for something specific?" width="360px"  onChange={(e) => setSearchJobCategory(e.target.value)}>
-                  <option value="all">Clear Selection</option>
-                  <option >--------------------------------</option>
-                  <option value="asphalt">Asphalt</option>
-                <option value="carpentry">Carpentry</option>
-                <option value="concrete">Concrete</option>
-                <option value="drywall">Drywall</option>
-                <option value="electrical work">Electrical Work</option>
-                <option value="general handyman">General Handyman</option>
-                <option value="gutter cleaning">Gutter Cleaning</option>
-                <option value="hvac">HVAC</option>
-                <option value="landscaping">Landscaping</option>
-                <option value="painting">Painting</option>
-                <option value="plumbing">Plumbing</option>
-                <option value="pressure washing">Pressure Washing</option>
-                <option value="roofing">Roofing</option>
-                <option value="siding">Siding</option>
-                <option value="snow removal">Snow Removal</option>
-                <option value="window installation">Window Installation</option>
-                <option value="window washing">Window Washing</option>
-                <option value="yard work">Yard Work</option>
-              
-                  </Select>
-                  {/* <Button colorScheme="blue" width="240px">
-                    Search
-                  </Button> */}
-                </Card>
-            </Center>
-
             {allJobs !== null &&
               allJobs.map((allJobs) => (
                 //credit https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN
+
                 <AdvancedMarker
                   key={allJobs.jobID}
                   position={{
                     lat: allJobs.locationLat
                       ? allJobs.locationLat
-                      : 44.96797106363888,
+                      : 44.89929301068098,
                     lng: allJobs.locationLng
                       ? allJobs.locationLng
-                      : -93.26177106829272,
+                      : -93.3413753387615,
                   }}
                   onClick={() => handleToggleOpen(allJobs.jobID)}
                 >
@@ -290,7 +232,7 @@ const MapScreen = () => {
                       {allJobs.isVolunteer ? (
                         <Text>Volunteer!</Text>
                       ) : allJobs.isFlatRate ? (
-                        <Text>${allJobs.flatRate}</Text>
+                        <Text>Your Job Here!</Text>
                       ) : (
                         <Text>
                           ${allJobs.lowerRate} - ${allJobs.upperRate}/hr
@@ -311,7 +253,9 @@ const MapScreen = () => {
                           : -93.26177106829272,
                       }}
                     >
-                    <Card >
+
+                      
+                      <Card >
                         <CardBody>
                           <Stack>
                             <Heading size="md">{allJobs.jobTitle}</Heading>
@@ -323,29 +267,20 @@ const MapScreen = () => {
                           </Stack>
                         </CardBody>
 
-                        <Box marginTop="4px" spacing={6}>
+                        <Box marginTop="4px">
                           <Center>
-                        <Button
-                              bg="white"
-                              color={'#01A2E8'}
-                             marginRight="32px"
-                              width="180px"
-                              // onClick={() => navigate(`/NeederEmailRegister`)}
-                            >
-                             Save
-                            </Button>
                             <Button
                               bg="#01A2E8"
                               color={'white'}
                               _hover={{
                                 bg: 'blue.500',
                               }}
-                              width="180px"
-                              // onClick={() => navigate(`/NeederEmailRegister`)}
+                              width="240px"
+                              onClick={() => navigate(`/NeederEmailRegister`)}
                             >
-                              Apply
+                              Post My Job
                             </Button>
-                            </Center>
+                          </Center>
                         </Box>
                       </Card>
                     </InfoWindow>
@@ -369,24 +304,6 @@ const MapScreen = () => {
               </Card>) : null} */}
                 </AdvancedMarker>
               ))}
-
-<Modal isOpen={isOpen} onClose={onClose}>
-    <ModalOverlay />
-    <ModalContent>
-    <ModalHeader>Oops!</ModalHeader>
-      <ModalCloseButton />
-      <ModalBody>
-       <Text> Sorry! There are no jobs currently available in that category</Text>
-      </ModalBody>
-
-      <ModalFooter>
-        <Button colorScheme='blue' mr={3} onClick={onClose}>
-          Close
-        </Button>
-      
-      </ModalFooter>
-    </ModalContent>
-  </Modal>
           </Map>
         </div>
       </APIProvider>
@@ -394,4 +311,4 @@ const MapScreen = () => {
   );
 };
 
-export default MapScreen;
+export default LandingNeederMapScreen;

@@ -78,6 +78,8 @@ import ImageUploading from "react-images-uploading";
 import star_corner from "../../images/star_corner.png";
 import star_filled from "../../images/star_filled.png";
 
+import { useChatContext } from "stream-chat-react";
+
 const DoerProfile = () => {
   const [rating, setRating] = useState(null); //make dynamic, pull from Backend
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
@@ -89,28 +91,38 @@ const DoerProfile = () => {
 
   const [user, setUser] = useState();
 
+
+
+
   // this gets the profile picture
   // const profilePictureURL = useSelector(selectUserProfilePicture);
 
   const [profilePicture, setProfilePicture] = useState(null);
   const [hasUploadedProfilePicture, setHasUploadedProfilePicture] = useState(false)
 
-  // useEffect(() => {
-  //   if (user && hasUploadedProfilePicture === true) {
-  //     getProfilePicture();
-  //   } else {
-  //   }
-  // }, [user, hasUploadedProfilePicture]);
 
-  const getProfilePicture = async () => {
-    const storage = getStorage();
-    const reference = ref(storage, "users/" + user.uid + "/profilePicture.jpg");
+
+  const { client } = useChatContext()
+
+  useEffect(() => {
+    if (client) {
+      console.log("is the user in the client?", client)
+    } else {
+    }
+  }, [client]);
+
+  // const getProfilePicture = async () => {
+  //   const storage = getStorage();
+  //   const reference = ref(storage, "users/" + user.uid + "/profilePicture.jpg");
   
-      await getDownloadURL(reference).then((response) => {
-        setProfilePicture(response);
-      });
+     
+
     
-  };
+    
+  // };
+
+
+
 
   //redux store
   // const firstName = useSelector(selectUserFirstName);
@@ -153,10 +165,12 @@ const DoerProfile = () => {
 
       getDoc(docRef).then((snapshot) => {
         console.log(snapshot.data());
+        setProfilePicture(snapshot.data().profilePictureResponse)
         setUserFirstName(snapshot.data().firstName);
         setUserLastName(snapshot.data().lastName);
         // setUserBio(snapshot.data().bio);
         setUserState(snapshot.data().state);
+        
 
         setUserCity(snapshot.data().city);
       });
@@ -381,11 +395,11 @@ const DoerProfile = () => {
     onCloseBio();
   };
 
-  const [experienceTitle, setExperienceTitle1] = useState(" ");
+  const [experienceTitle, setExperienceTitle1] = useState(null);
   const [experienceDescription, setExperienceDescription] = useState(null);
   const [experienceYears, setExperienceYears] = useState(null);
 
-  const [addExperienceTitle, setAddExperienceTitle] = useState(" ");
+  const [addExperienceTitle, setAddExperienceTitle] = useState(null);
   const [addExperienceDescription, setAddExperienceDescription] =
     useState(null);
   const [addExperienceYears, setAddExperienceYears] = useState(null);
@@ -632,9 +646,26 @@ const DoerProfile = () => {
       console.log(snapshot);
     });
 
+    await getDownloadURL(pictureRef).then((response) => {
+      updateDoc(doc(db, "users", user.uid), {
+        profilePictureResponse: response
+        
+      })
+        .then(() => {
+          //all good
+     
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+      
+    });
+
     setTimeout(() => {
       updateDoc(doc(db, "users", user.uid), {
         hasUploadedProfilePicture: hasUploadedProfilePicture,
+        
       })
         .then(() => {
           //all good

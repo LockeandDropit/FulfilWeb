@@ -57,7 +57,7 @@ const DoerDashboard = () => {
              My Jobs (Make Accordion)
             </Button> */}
           <Accordion allowMultiple>
-            <AccordionItem>
+            {/* <AccordionItem>
               <AccordionButton
                 height="80px"
                 width="320px"
@@ -145,7 +145,7 @@ const DoerDashboard = () => {
                   </Button>
                 </Flex>
               </AccordionPanel>
-            </AccordionItem>
+            </AccordionItem> */}
           </Accordion>
           <Button
             fontSize="20px"
@@ -160,7 +160,7 @@ const DoerDashboard = () => {
             }}
           
           >
-            Explore
+            My Jobs
           </Button>
           <Button
             fontSize="20px"

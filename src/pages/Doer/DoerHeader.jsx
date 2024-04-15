@@ -98,15 +98,27 @@ const DoerHeader = () => {
   }, [user]);
 
   const getProfilePicture = async () => {
-    const storage = getStorage();
-    const reference = ref(storage, "users/" + user.uid + "/profilePicture.jpg");
-    if (!reference.service) {
-    } else {
-      await getDownloadURL(reference).then((response) => {
-        setProfilePicture(response);
-      });
-    }
+    getDoc(doc(db, "users", user.uid)).then((snapshot) => {
+      if (!snapshot.data().profilePictureResponse) {
+
+      } else {
+        setProfilePicture(snapshot.data().profilePictureResponse)
+      }
+    })
   };
+
+  //old
+
+  // const getProfilePicture = async () => {
+  //   const storage = getStorage();
+  //   const reference = ref(storage, "users/" + user.uid + "/profilePicture.jpg");
+  //   if (!reference.service) {
+  //   } else {
+  //     await getDownloadURL(reference).then((response) => {
+  //       setProfilePicture(response);
+  //     });
+  //   }
+  // };
 
   const logInStripe = async () => {
     const response = await fetch(

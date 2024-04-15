@@ -21,6 +21,7 @@ import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import { Center } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { StreamChat } from "stream-chat";
 
 const Login = () => {
   const [input, setInput] = useState("");
@@ -109,10 +110,17 @@ const Login = () => {
       (response) => {
         // setLoggingIn(true);
 
+        //stream chat log in
+        const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
+
+      
         // Signed in
         // setCurrentUser(response.user.uid)
         setIsSignedIn(true);
         const currentUser = response.user.uid;
+
+        chatClient.connectUser({id: response.user.uid}, chatClient.devToken(response.user.uid));
+        console.log("userConnected!", chatClient._user.id);
         // const docRefUsers = doc(db, "users", response.user.uid);
         // const docRefEmployers = doc(db, "employers", response.user.uid);
         console.log("current user", currentUser);
@@ -128,7 +136,7 @@ const Login = () => {
                 ? "/DoerMapScreen"
                 : "/NeederMapScreen"
             )
-        
+       
           )
           .catch(console.log("issue"));
       }

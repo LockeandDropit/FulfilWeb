@@ -57,7 +57,7 @@ const NeederDashboard = () => {
              My Jobs (Make Accordion)
             </Button> */}
           <Accordion allowMultiple>
-            <AccordionItem>
+            {/* <AccordionItem>
               <AccordionButton
                 height="80px"
                 width="320px"
@@ -145,7 +145,7 @@ const NeederDashboard = () => {
                   </Button>
                 </Flex>
               </AccordionPanel>
-            </AccordionItem>
+            </AccordionItem> */}
           </Accordion>
           <Button
             fontSize="20px"
@@ -163,7 +163,7 @@ const NeederDashboard = () => {
               navigate("/NeederMapScreen");
             }}
           >
-            Explore
+            My Jobs
           </Button>
           <Button
             fontSize="20px"

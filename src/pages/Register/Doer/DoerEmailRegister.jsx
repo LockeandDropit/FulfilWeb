@@ -132,10 +132,11 @@ const DoerEmailRegister = () => {
     }
   };
 
+ //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
       <Header />
-      <Flex>
+      {/* <Flex>
         <Box w="33vw" h="90vh" alignContent="center">
           <Center>
             <Flex direction="column" marginLeft="120px">
@@ -144,12 +145,7 @@ const DoerEmailRegister = () => {
                   Create an account
                 </Heading>
               </Center>
-              {/* <Flex direction="row" alignContent="baseline" marginTop="16px" onClick={() => navigate("/NeederAccountCreation")}>
-                  
-                  <Heading size="sm" >Find the professional thats right for you. </Heading>
-                  <Heading size="sm" marginLeft="4px" color="#01A2E8">Get started</Heading>
-                  <ArrowForwardIcon marginTop="2px"/>
-                </Flex> */}{" "}
+             
               <FormControl>
                 <FormLabel>Email</FormLabel>
                 <Input
@@ -208,18 +204,82 @@ const DoerEmailRegister = () => {
             </Box>
           </Box>
         </Center>
-      </Flex>
+      </Flex> */}
 
-      {/* <Center>
+      <Stack minH={"100vh"} direction={{ base: "column", md: "row" }} marginLeft={16}>
+        <Flex p={8} flex={1} align={"center"} justify={"center"}>
+          <Stack spacing={4} w={"full"} maxW={"md"} >
+            <Center>
+              <Heading fontSize={"2xl"}>Create an account</Heading>
+            </Center>
+            <Center>
+            <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
+            Get access to available work in your area. Find jobs that fit your speciality.
+          </Text>
+          </Center>
 
-      <Box width="320px">
-        <InputGroup size="lg" width="320px">
-          <Input placeholder="mysite" />
-          <Button   backgroundColor="#01A2E8" color="white"  onClick={() => navigate(`/MapScreen`)}>Search</Button>
-        </InputGroup>
-      </Box>
-      </Center> */}
-      {/* <Categories /> */}
+            <FormControl>
+              <FormLabel>Email</FormLabel>
+              <Input
+                borderColor="grey"
+                borderWidth=".25px"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {emailValidationBegun === true ? (
+                <Text color="red">{validationMessage}</Text>
+              ) : null}
+            </FormControl>
+            <FormControl marginTop="8px">
+              <FormLabel>Password</FormLabel>
+
+              <InputGroup>
+                <Input
+                  borderColor="grey"
+                  borderWidth=".5px"
+                  type={visibleToggle}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <InputRightElement>
+                  <ViewIcon onClick={() => handlePasswordVisible()} />
+                </InputRightElement>
+              </InputGroup>
+              {passwordValidationBegun === true ? (
+                <Text color="red">{passwordValidationMessage}</Text>
+              ) : null}
+            </FormControl>
+            <Stack spacing={6}>
+              <Stack
+                direction={{ base: "column", sm: "row" }}
+                align={"start"}
+                justify={"space-between"}
+              ></Stack>
+              <Button   bg="#01A2E8"
+                color={'white'}
+                _hover={{
+                  bg: 'blue.500',
+                }}
+                onClick={() => validate()}>
+                Sign up
+              </Button>
+            </Stack>
+          </Stack>
+        </Flex>
+        <Flex flex={2}>
+        <Box w="60vw" h="70vh" padding="8" alignContent="center">
+            <Box w="60vw" h="70vh" >
+              <MapScreen />
+            </Box>
+          </Box>
+          {/* <Image
+            alt={"Login Image"}
+            objectFit={"cover"}
+            src={"/LadderWoman.jpg"}
+          /> */}
+        </Flex>
+      </Stack>
     </>
   );
 };

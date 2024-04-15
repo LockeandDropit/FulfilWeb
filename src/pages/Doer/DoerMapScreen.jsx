@@ -36,6 +36,9 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  Badge,
+  Image,
+  Spinner,
 } from "@chakra-ui/react";
 import {
   doc,
@@ -47,6 +50,7 @@ import {
   onSnapshot,
   setDoc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { auth } from "../../firebaseConfig";
@@ -54,6 +58,10 @@ import { useNavigate } from "react-router-dom";
 import DoerDashboard from "./DoerDashboard";
 import { Select } from "@chakra-ui/react";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import star_corner from "../../images/star_corner.png";
+import star_filled from "../../images/star_filled.png";
+import NoCategoryMatchModal from "../../components/NoCategoryMatchModal";
+import { useChatContext } from "stream-chat-react";
 
 const DoerMapScreen = () => {
   const [user, setUser] = useState(null);
@@ -110,9 +118,89 @@ const DoerMapScreen = () => {
     }
   }, [user]);
 
+  const [jobsInProgress, setJobsInProgress] = useState([]);
+
+  useEffect(() => {
+    if (user != null) {
+      // should this be done on log ina nd stored in redux store so it's cheaper?
+      const q = query(collection(db, "users", user.uid, "Jobs In Progress"));
+
+      onSnapshot(q, (snapshot) => {
+        let results = [];
+        snapshot.docs.forEach((doc) => {
+          //review what thiss does
+          console.log(doc.data());
+          results.push({ ...doc.data(), id: doc.id });
+        });
+        if (!results || !results.length) {
+          //this was crashing everything??
+          // setPostedJobs(0);
+        } else {
+          setJobsInProgress(results);
+          console.log("jobs in progress", results);
+        }
+      });
+    } else {
+      console.log("oops!");
+    }
+  }, [user]);
+
+  const [jobsInReview, setJobsInReview] = useState([]);
+
+  useEffect(() => {
+    if (user != null) {
+      // should this be done on log ina nd stored in redux store so it's cheaper?
+      const q = query(collection(db, "users", user.uid, "In Review"));
+
+      onSnapshot(q, (snapshot) => {
+        let results = [];
+        snapshot.docs.forEach((doc) => {
+          //review what thiss does
+          console.log(doc.data());
+          results.push({ ...doc.data(), id: doc.id });
+        });
+        if (!results || !results.length) {
+          //this was crashing everything??
+          // setPostedJobs(0);
+        } else {
+          setJobsInReview(results);
+          console.log("jobs in review", results);
+        }
+      });
+    } else {
+      console.log("oops!");
+    }
+  }, [user]);
+
   const [allJobs, setAllJobs] = useState([]);
 
 
+  const [completedJobsMap, setCompletedJobsMap] = useState([]);
+
+  useEffect(() => {
+    if (user != null) {
+      // should this be done on log ina nd stored in redux store so it's cheaper?
+      const q = query(collection(db, "users", user.uid, "Past Jobs Map"));
+
+      onSnapshot(q, (snapshot) => {
+        let results = [];
+        snapshot.docs.forEach((doc) => {
+          //review what thiss does
+          console.log(doc.data());
+          results.push({ ...doc.data(), id: doc.id });
+        });
+        if (!results || !results.length) {
+          //this was crashing everything??
+          // setPostedJobs(0);
+        } else {
+          setCompletedJobsMap(results);
+          console.log("completed jobs", results);
+        }
+      });
+    } else {
+      console.log("oops!");
+    }
+  }, [user]);
 
 
 
@@ -203,19 +291,11 @@ const DoerMapScreen = () => {
             console.log("match", postedJob.jobID);
 
             //credit user1438038 & Niet the Dark Absol https://stackoverflow.com/questions/15287865/remove-array-element-based-on-object-property
-           
-           
-            // for (var i = postedJobs.length - 1; i >= 0; --i) {
-            //   if (postedJobs[i].jobID == postedJob.jobID) {
-            //     postedJobs.splice(i, 1);
-            //     console.log("did it")
-            //   }
-            // }
 
             for (var i = allJobs.length - 1; i >= 0; --i) {
               if (allJobs[i].jobID == postedJob.jobID) {
                 allJobs.splice(i, 1);
-                console.log("did it all")
+                console.log("did it all");
               }
             }
           } else {
@@ -231,8 +311,6 @@ const DoerMapScreen = () => {
   }, [appliedJobs, postedJobs, allJobs]);
 
   //passing props credit Cory House & Treycos https://stackoverflow.com/questions/42173786/react-router-pass-data-when-navigating-programmatically
-
- 
 
   const [userID, setUserID] = useState();
   const [requirements, setRequirements] = useState(null);
@@ -263,6 +341,7 @@ const DoerMapScreen = () => {
   const [isOneTime, setIsOneTime] = useState(null);
   const [lowerCaseJobTitle, setLowerCaseJobTitle] = useState(null);
   const [isFlatRate, setIsFlatRate] = useState(null);
+  const [confirmHours, setConfirmHours] = useState(null);
 
   useEffect(() => {
     if (user != null) {
@@ -279,6 +358,21 @@ const DoerMapScreen = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const {
+    isOpen: isOpenMarkComplete,
+    onOpen: onOpenMarkComplete,
+    onClose: onCloseMarkComplete,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenHourly,
+    onOpen: onOpenHourly,
+    onClose: onCloseHourly,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenSuccess,
+    onOpen: onOpenSuccess,
+    onClose: onCloseSuccess,
+  } = useDisclosure();
   //apply logic
   const applyAndNavigate = () => {
     if (isOnboarded === true) {
@@ -414,6 +508,47 @@ const DoerMapScreen = () => {
     });
   };
 
+  const handleToggleInProgressOpen = (x) => {
+    console.log("handle toggle open", x);
+    setOpenInfoWindowMarkerID(x.jobID);
+  };
+  const handleToggleInReviewOpen = (x) => {
+    console.log("handle toggle open", x);
+    setOpenInfoWindowMarkerID(x.jobID);
+  };
+
+  const getDataInProgress = async (openInfoWindowMarkerID) => {
+    const docRef = doc(db, "user", openInfoWindowMarkerID);
+
+    await getDoc(docRef).then((snapshot) => {
+      console.log("this is the selected job", snapshot.data());
+      setFlatRate(snapshot.data().flatRate);
+      setJobTitle(snapshot.data().jobTitle);
+      setLowerRate(snapshot.data().lowerRate);
+      setUpperRate(snapshot.data().upperRate);
+      setCity(snapshot.data().city);
+      setIsOneTime(snapshot.data().isOneTime);
+      setLowerCaseJobTitle(snapshot.data().lowerCaseJobTitle);
+      setEmployerID(snapshot.data().employerID);
+      setEmployerFirstName(snapshot.data().firstName);
+      setZipCode(snapshot.data().zipCode);
+      setDescription(snapshot.data().description);
+      setIsHourly(snapshot.data().isHourly);
+      setIsFlatRate(snapshot.data().isFlatRate);
+      setLocationLat(snapshot.data().locationLat);
+      setLocationLng(snapshot.data().locationLng);
+      setCategory(snapshot.data().category);
+      setState(snapshot.data().state);
+      setBusinessName(snapshot.data().businessName);
+      setStreetAddress(snapshot.data().streetAddress);
+      setRequirements(snapshot.data().requirements);
+      setBusinessName(snapshot.data().businessName);
+      setNiceToHave(snapshot.data().niceToHave);
+      setRequirements2(snapshot.data().requirements2);
+      setRequirements3(snapshot.data().requirements3);
+    });
+  };
+
   const saveJob = () => {
     setDoc(doc(db, "users", user.uid, "Saved Jobs", openInfoWindowMarkerID), {
       requirements: requirements ? requirements : null,
@@ -503,13 +638,610 @@ const DoerMapScreen = () => {
         });
 
         if (secondResults.length === 0) {
-          alert("sorry! No jobs currently available in that category");
+          <NoCategoryMatchModal props={true}/>
         } else {
           setPostedJobs(secondResults);
         }
       });
     }
   };
+
+  //chat channel navigation
+  const navigateToChannel = (x) => {
+    navigate("/DoerMessageList", { state: { selectedChannel: x.channelID } });
+    // console.log("mesage channel",x);
+  };
+
+  //remove newHireNotification
+  const handleInProgressNavigate = (x) => {
+    console.log(x.jobTitle, x.firstHiredNotification);
+
+    if (x.firstHiredNotification === true) {
+      updateDoc(doc(db, "users", user.uid, "Jobs In Progress", x.jobTitle), {
+        firstHiredNotification: false,
+      })
+        .then(() => {
+          navigateToChannel(x);
+        })
+        .catch(() => {});
+    } else {
+      navigateToChannel(x);
+    }
+    
+  };
+
+  //logic for marking job complete
+  const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+  const [defaultRating, setDefaultRating] = useState(0);
+
+  const handleCompleteModalOpen = (jobsInProgress) => {
+    getSelectedData(jobsInProgress);
+    onOpenMarkComplete();
+  };
+
+  const [jobID, setJobID] = useState(null);
+  const [channelID, setChannelID] = useState(null);
+  const [confirmedRate, setConfirmedRate] = useState(null);
+  const [isVolunteer, setIsVolunteer] = useState(null);
+
+  const getSelectedData = (jobsInProgress) => {
+    console.log("mark complete job data", jobsInProgress);
+    setJobTitle(jobsInProgress.jobTitle);
+    setEmployerID(jobsInProgress.employerID);
+    setJobID(jobsInProgress.jobID);
+    setChannelID(jobsInProgress.channelID);
+    setConfirmedRate(jobsInProgress.confirmedRate);
+    setLowerRate(jobsInProgress.lowerRate);
+    setUpperRate(jobsInProgress.upperRate);
+    setDescription(jobsInProgress.description);
+    setCity(jobsInProgress.city);
+    setIsHourly(jobsInProgress.isHourly);
+    setLocationLat(jobsInProgress.locationLat);
+    setLocationLng(jobsInProgress.locationLng);
+    // setEmployerID(snapshot.data().employerID);
+    setZipCode(jobsInProgress.zipCode);
+    setCategory(jobsInProgress.category);
+    setState(jobsInProgress.state);
+
+    setBusinessName(jobsInProgress.businessName);
+    setStreetAddress(jobsInProgress.streetAddress);
+    setRequirements(jobsInProgress.requirements);
+    setNiceToHave(jobsInProgress.niceToHave);
+    setRequirements2(jobsInProgress.requirements2);
+    setRequirements3(jobsInProgress.requirements3);
+    setIsOneTime(jobsInProgress.isOneTime);
+  };
+
+  const addRating = () => {
+    if (isHourly === true) {
+      //modal opened then hours worked confirmed, sent to addHoursWorkedNavigate()
+      onClose();
+      onOpenHourly();
+    } else {
+      //move to under Review.. should this be for both users? Most likely
+
+      setIsLoading(true)
+
+      //submitted if flat rate
+
+      setDoc(doc(db, "users", user.uid, "In Review", jobTitle), {
+        confirmedRate: confirmedRate,
+        employerID: employerID,
+        jobTitle: jobTitle,
+        isHourly: isHourly,
+        jobID: jobID,
+        description: description,
+        locationLat: locationLat,
+        locationLng: locationLng,
+        channelID: channelID,
+        city: city,
+        lowerRate: lowerRate,
+        upperRate: upperRate,
+        isVolunteer: isVolunteer,
+        isOneTime: isOneTime,
+        streetAddress: streetAddress,
+        state: state,
+        zipCode: zipCode,
+        requirements: requirements,
+        requirements2: requirements2,
+        requirements3: requirements3,
+        niceToHave: niceToHave,
+        hiredApplicant: user.uid,
+        jobCompleteApplicant: true,
+        jobCompleteEmployer: false,
+      })
+        .then(() => {
+          console.log("moved to review for USER");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      setDoc(doc(db, "employers", employerID, "In Review", jobTitle), {
+        confirmedRate: confirmedRate,
+        employerID: employerID,
+        jobTitle: jobTitle,
+        isHourly: isHourly,
+        jobID: jobID,
+        description: description,
+        locationLat: locationLat,
+        locationLng: locationLng,
+        channelID: channelID,
+        city: city,
+        lowerRate: lowerRate,
+        upperRate: upperRate,
+        isVolunteer: isVolunteer,
+        isOneTime: isOneTime,
+        streetAddress: streetAddress,
+        state: state,
+        zipCode: zipCode,
+        requirements: requirements,
+        requirements2: requirements2,
+        requirements3: requirements3,
+        niceToHave: niceToHave,
+        // locationLat: locationLat,
+        // locationLng: locationLng,
+        hiredApplicant: user.uid,
+        jobCompleteApplicant: true,
+        jobCompleteEmployer: false,
+      })
+        .then(() => {
+          console.log("moved to review for USER");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      deleteDoc(doc(db, "users", user.uid, "Jobs In Progress", jobTitle))
+        .then(() => {
+          //all good
+          console.log("removed from users saved Jobs");
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
+      deleteDoc(doc(db, "employers", employerID, "Jobs In Progress", jobTitle))
+        .then(() => {
+          //all good
+          console.log("removed from users saved Jobs");
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
+      //submit data
+
+      setDoc(doc(db, "employers", employerID, "Ratings", jobTitle), {
+        rating: defaultRating,
+      })
+        .then(() => {
+          //all good
+          console.log("data submitted");
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
+      setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
+        ratingComplete: false,
+      })
+        .then(() => {})
+        .catch((error) => {
+          console.log(error);
+        });
+
+      setTimeout(() => {
+        setIsLoading(false)
+       
+        onClose();
+        onOpenSuccess()
+        navigate("/DoerMapScreen");
+      }, 2500);
+    }
+  };
+
+  const addHoursWorkedNavigate = () => {
+    //push to respective In Review dbs, user and employer
+
+    setIsLoading(true)
+
+    //set hasbeenRated to false so employer can check if they have been rated yet
+
+    setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
+      ratingComplete: false,
+    });
+
+    setDoc(doc(db, "users", user.uid, "In Review", jobTitle), {
+      confirmedRate: confirmedRate,
+      confirmHours: confirmHours,
+      employerID: employerID,
+      isHourly: isHourly,
+      jobTitle: jobTitle,
+      jobID: jobID,
+      description: description,
+      city: city,
+      lowerRate: lowerRate,
+      upperRate: upperRate,
+      channelID: channelID,
+      isOneTime: isOneTime,
+      streetAddress: streetAddress,
+      state: state,
+      zipCode: zipCode,
+      requirements: requirements,
+      requirements2: requirements2,
+      requirements3: requirements3,
+      niceToHave: niceToHave,
+      locationLat: locationLat,
+      locationLng: locationLng,
+      hiredApplicant: user.uid,
+      jobCompleteApplicant: true,
+      jobCompleteEmployer: false,
+    })
+      .then(() => {
+        console.log("moved to review for USER");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setDoc(doc(db, "employers", employerID, "In Review", jobTitle), {
+      confirmedRate: confirmedRate,
+      confirmHours: confirmHours,
+      employerID: employerID,
+      jobTitle: jobTitle,
+      jobID: jobID,
+      isHourly: isHourly,
+      description: description,
+      city: city,
+      channelID: channelID,
+      lowerRate: lowerRate,
+      upperRate: upperRate,
+      isOneTime: isOneTime,
+      streetAddress: streetAddress,
+      state: state,
+      zipCode: zipCode,
+      requirements: requirements,
+      requirements2: requirements2,
+      requirements3: requirements3,
+      niceToHave: niceToHave,
+      locationLat: locationLat,
+      locationLng: locationLng,
+      hiredApplicant: user.uid,
+      jobCompleteApplicant: true,
+      jobCompleteEmployer: false,
+    })
+      .then(() => {
+        console.log("moved to review for USER");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    deleteDoc(doc(db, "users", user.uid, "Jobs In Progress", jobTitle))
+      .then(() => {
+        //all good
+        console.log("removed from users saved Jobs");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+
+    deleteDoc(doc(db, "employers", employerID, "Jobs In Progress", jobTitle))
+      .then(() => {
+        //all good
+        console.log("removed from users saved Jobs");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+
+    //submit data
+    setDoc(doc(db, "employers", employerID, "Ratings", jobTitle), {
+      rating: defaultRating,
+    })
+      .then(() => {
+        //all good
+        console.log("data submitted");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+
+    setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
+      ratingComplete: false,
+    })
+      .then(() => {})
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setTimeout(() => {
+      setIsLoading(false)
+      
+      onCloseHourly();
+      onOpenSuccess()
+      navigate("/DoerMapScreen");
+    }, 2500);
+  };
+
+  const addWithNoRating = () => {
+    if (isHourly === true) {
+      //modal opened then hours worked confirmed, sent to addHoursWorkedNavigate()
+      onClose();
+      onOpenHourly();
+    } else {
+      //move to under Review.. should this be for both users? Most likely
+
+      setIsLoading(true);
+
+      //submitted if flat rate
+
+      setDoc(doc(db, "users", user.uid, "In Review", jobTitle), {
+        confirmedRate: confirmedRate,
+        employerID: employerID,
+        jobTitle: jobTitle,
+        isHourly: isHourly,
+        jobID: jobID,
+        description: description,
+        locationLat: locationLat,
+        locationLng: locationLng,
+        city: city,
+        channelID: channelID,
+        lowerRate: lowerRate,
+        upperRate: upperRate,
+        isVolunteer: isVolunteer,
+        isOneTime: isOneTime,
+        streetAddress: streetAddress,
+        state: state,
+        zipCode: zipCode,
+        requirements: requirements,
+        requirements2: requirements2,
+        requirements3: requirements3,
+        niceToHave: niceToHave,
+        hiredApplicant: user.uid,
+        jobCompleteApplicant: true,
+        jobCompleteEmployer: false,
+      })
+        .then(() => {
+          console.log("moved to review for USER");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      setDoc(doc(db, "employers", employerID, "In Review", jobTitle), {
+        confirmedRate: confirmedRate,
+        employerID: employerID,
+        jobTitle: jobTitle,
+        isHourly: isHourly,
+        jobID: jobID,
+        description: description,
+        locationLat: locationLat,
+        locationLng: locationLng,
+        channelID: channelID,
+        city: city,
+        lowerRate: lowerRate,
+        upperRate: upperRate,
+        isVolunteer: isVolunteer,
+        isOneTime: isOneTime,
+        streetAddress: streetAddress,
+        state: state,
+        zipCode: zipCode,
+        requirements: requirements,
+        requirements2: requirements2,
+        requirements3: requirements3,
+        niceToHave: niceToHave,
+
+        hiredApplicant: user.uid,
+        jobCompleteApplicant: true,
+        jobCompleteEmployer: false,
+      })
+        .then(() => {
+          console.log("moved to review for USER");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      deleteDoc(
+        doc(db, "users", user.uid, "Jobs In Progress", postedJobs[0].jobTitle)
+      )
+        .then(() => {
+          //all good
+          console.log("removed from users saved Jobs");
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
+      deleteDoc(
+        doc(
+          db,
+          "employers",
+          postedJobs[0].employerID,
+          "Jobs In Progress",
+          postedJobs[0].jobTitle
+        )
+      )
+        .then(() => {
+          //all good
+          console.log("removed from users saved Jobs");
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
+      setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
+        ratingComplete: false,
+      })
+        .then(() => {
+          setIsLoading(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      setTimeout(() => {
+        setIsLoading(false);
+        
+        onClose();
+        onOpenSuccess()
+        navigate("/DoerMapScreen");
+      }, 2500);
+    }
+  };
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const numberOnlyRegexMinimumCharacterInput = /^[0-9\b]{1,3}$/;
+
+  const [confirmHoursValidationMessage, setConfirmHoursValidationMessage] =
+    useState();
+
+  const [confirmHoursValidationBegun, setConfirmHoursValidationBegun] =
+    useState(false);
+
+  const confirmHoursValidate = (confirmHours) => {
+    setConfirmHoursValidationBegun(true);
+    const isValid = numberOnlyRegexMinimumCharacterInput.test(confirmHours);
+    if (!isValid) {
+      setConfirmHoursValidationMessage("Please enter valid hours");
+      console.log(confirmHoursValidationMessage);
+      setConfirmHours(confirmHours);
+    } else {
+      setConfirmHoursValidationMessage();
+      setConfirmHours(confirmHours);
+    }
+  };
+
+  const minLengthRegEx = /^.{1,}$/;
+
+  const checkLength = (jobsInProgress) => {
+    const rateValid = minLengthRegEx.test(confirmHours);
+
+    if (
+      !rateValid ||
+      typeof confirmHours === "undefined" ||
+      !confirmHours ||
+      confirmHours === "0"
+    ) {
+      alert("Please enter valid rate");
+    } else {
+      addHoursWorkedNavigate(jobsInProgress);
+    }
+  };
+
+  const handleCloseAndOpen = (jobsInProgress) => {
+    if (isHourly === true) {
+      onCloseMarkComplete();
+      onOpenHourly();
+    } else {
+      onCloseMarkComplete();
+      addWithNoRating(jobsInProgress);
+    }
+  };
+
+  const handleBothModalClose = () => {
+    onCloseHourly()
+    onCloseMarkComplete()
+    onCloseSuccess()
+  }
+
+
+
+//handle stripe log in
+
+
+const [sessionUrl, setSessionUrl] = useState(null);
+
+const [stripeID, setStripeID] = useState(null);
+
+useEffect(() => {
+  if (user != null) {
+    const docRef = doc(db, "users", user.uid);
+
+    getDoc(docRef).then((snapshot) => {
+      // console.log(snapshot.data());
+      setStripeID({ stripeID: snapshot.data().stripeID });
+    });
+  } else {
+    console.log("oops!");
+  }
+}, [user]);
+
+const logInStripe = async () => {
+  const response = await fetch(
+    //this one is the live one
+    // "https://fulfil-api.onrender.com/create-checkout-web",
+
+    //this is test
+    "https://fulfil-api.onrender.com/stripe-log-in",
+
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(stripeID),
+    }
+  );
+
+  const { loginLink } = await response.json();
+
+  console.log("client data", loginLink);
+
+  setTimeout(() => {
+    if (loginLink) {
+      setSessionUrl(loginLink);
+    }
+  }, 1000);
+};
+
+useEffect(() => {
+  if (sessionUrl !== null) {
+    setTimeout(() => {
+      // setPaymentsLoading(false)
+      // window.location.replace(sessionUrl);
+      // help from gun https://stackoverflow.com/questions/45046030/maintaining-href-open-in-new-tab-with-an-onclick-handler-in-react
+      window.open(sessionUrl, "_blank");
+    }, 1000);
+  } else {
+  }
+});
+
+
+const handleSeePayment = (x) => {
+
+  if (x.firstViewNotification === true) {
+    updateDoc(doc(db, "users", user.uid, "Past Jobs Map", x.jobTitle), {
+      firstViewNotification: false,
+    }).then(() => {
+      logInStripe()
+    })
+  } else {
+    logInStripe()
+  }
+
+}
+
+const handleRemoveFromMap = (x) => {
+
+
+    deleteDoc(doc(db, "users", user.uid, "Past Jobs Map", x.jobTitle), {
+    })
+  
+
+}
 
   return (
     <div>
@@ -632,7 +1364,7 @@ const DoerMapScreen = () => {
                               <Flex direction="row" alignContent="center">
                                 {" "}
                                 <Heading fontSize="24" marginTop="16px">
-                                  {allJobs.jobTitle} (all Jobs Card)
+                                  {allJobs.jobTitle}
                                 </Heading>
                               </Flex>
 
@@ -701,6 +1433,7 @@ const DoerMapScreen = () => {
                                 <Button
                                   backgroundColor="#01A2E8"
                                   textColor="white"
+                                  _hover={{ bg: "#018ecb", textColor: "white" }}
                                   width="320px"
                                   marginTop="8px"
                                   onClick={() => applyAndNavigate()}
@@ -760,22 +1493,50 @@ const DoerMapScreen = () => {
                         onClick={() => handleToggleAppliedOpen(appliedJobs)}
                       >
                         <div>
-                          <Button
-                            colorScheme="blue"
-                            height="24px"
-                            marginRight={5}
-                          >
-                            {appliedJobs.isVolunteer ? (
-                              <Text>Volunteer!</Text>
-                            ) : appliedJobs.isFlatRate ? (
-                              <Text>${appliedJobs.flatRate}</Text>
-                            ) : (
-                              <Text>
-                                ${appliedJobs.lowerRate} - $
-                                {appliedJobs.upperRate}/hr
-                              </Text>
-                            )}
-                          </Button>
+                          {appliedJobs.hasUnreadMessage ? (
+                            <Button
+                              colorScheme="blue"
+                              height="24px"
+                              marginRight={5}
+                            >
+                              {appliedJobs.isVolunteer ? (
+                                <Text>Volunteer!</Text>
+                              ) : appliedJobs.isFlatRate ? (
+                                <Text>${appliedJobs.flatRate}</Text>
+                              ) : (
+                                <Text>
+                                  ${appliedJobs.lowerRate} - $
+                                  {appliedJobs.upperRate}/hr
+                                </Text>
+                              )}
+                              <Badge
+                                backgroundColor="#df4b4b"
+                                textColor="white"
+                                top="-2"
+                                position="absolute"
+                                right="-4"
+                              >
+                                New
+                              </Badge>
+                            </Button>
+                          ) : (
+                            <Button
+                              colorScheme="blue"
+                              height="24px"
+                              marginRight={5}
+                            >
+                              {appliedJobs.isVolunteer ? (
+                                <Text>Volunteer!</Text>
+                              ) : appliedJobs.isFlatRate ? (
+                                <Text>${appliedJobs.flatRate}</Text>
+                              ) : (
+                                <Text>
+                                  ${appliedJobs.lowerRate} - $
+                                  {appliedJobs.upperRate}/hr
+                                </Text>
+                              )}
+                            </Button>
+                          )}
                         </div>
                         /
                       </AdvancedMarker>
@@ -871,16 +1632,86 @@ const DoerMapScreen = () => {
                               <CardFooter
                                 flexDirection="column"
                                 marginTop="16px"
+                                alignContent="center"
+                                justifyContent="center"
+                                textAlign="center"
                               >
-                                <Button
-                                  backgroundColor="#01A2E8"
-                                  textColor="white"
-                                  width="320px"
-                                  marginTop="8px"
-                                  // onClick={() => applyAndNavigate()}
-                                >
-                                  already applied
-                                </Button>{" "}
+                                {appliedJobs.interviewStarted ? (
+                                  <>
+                                    <Heading
+                                      alignContent="center"
+                                      justifyContent="center"
+                                      textAlign="center"
+                                      size="md"
+                                    >
+                                      {" "}
+                                      Interview Started
+                                    </Heading>
+
+                                    {appliedJobs.hasUnreadMessage ? (
+                                      <Button
+                                        marginTop="16px"
+                                        backgroundColor="#01A2E8"
+                                        color="white"
+                                        _hover={{
+                                          bg: "#018ecb",
+                                          textColor: "white",
+                                        }}
+                                        onClick={() =>
+                                          navigateToChannel(appliedJobs)
+                                        }
+                                      >
+                                        See Messages
+                                        <Badge
+                                          backgroundColor="#df4b4b"
+                                          textColor="white"
+                                          top="-2"
+                                          position="absolute"
+                                          right="8"
+                                        >
+                                          New
+                                        </Badge>
+                                      </Button>
+                                    ) : (
+                                      <Button
+                                        marginTop="16px"
+                                        backgroundColor="#01A2E8"
+                                        color="white"
+                                        _hover={{
+                                          bg: "#018ecb",
+                                          textColor: "white",
+                                        }}
+                                        onClick={() =>
+                                          navigateToChannel(appliedJobs)
+                                        }
+                                      >
+                                        See Messages
+                                      </Button>
+                                    )}
+                                  </>
+                                ) : (
+                                  <>
+                                    <Heading
+                                      alignContent="center"
+                                      justifyContent="center"
+                                      textAlign="center"
+                                      size="md"
+                                    >
+                                      {" "}
+                                      Application pending
+                                    </Heading>
+                                    <Text
+                                      alignContent="center"
+                                      justifyContent="center"
+                                      textAlign="center"
+                                      marginTop="16px"
+                                    >
+                                      Message notifications will appear here if
+                                      the person who posted this job contacts
+                                      you.
+                                    </Text>
+                                  </>
+                                )}
                               </CardFooter>
                             </CardBody>
                           </Card>
@@ -888,6 +1719,809 @@ const DoerMapScreen = () => {
                       ) : null}
                     </>
                   ))}
+
+                {jobsInProgress !== null &&
+                  jobsInProgress.map((jobsInProgress) => (
+                    //credit https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN
+                    <>
+                      <AdvancedMarker
+                        key={jobsInProgress.jobID}
+                        position={{
+                          lat: jobsInProgress.locationLat
+                            ? jobsInProgress.locationLat
+                            : 44.96797106363888,
+                          lng: jobsInProgress.locationLng
+                            ? jobsInProgress.locationLng
+                            : -93.26177106829272,
+                        }}
+                        onClick={() =>
+                          handleToggleInProgressOpen(jobsInProgress)
+                        }
+                      >
+                        <div>
+                          {jobsInProgress.hasUnreadMessage ||
+                          jobsInProgress.firstHiredNotification ? (
+                            <Button
+                              colorScheme="green"
+                              height="24px"
+                              marginRight={5}
+                            >
+                              <Text>In Progress</Text>
+
+                              <Badge
+                                backgroundColor="#df4b4b"
+                                textColor="white"
+                                top="-2"
+                                position="absolute"
+                                right="-4"
+                              >
+                                New
+                              </Badge>
+                            </Button>
+                          ) : (
+                            <Button
+                              colorScheme="green"
+                              height="24px"
+                              marginRight={5}
+                            >
+                              <Text>In Progress</Text>
+                            </Button>
+                          )}
+                        </div>
+                        /
+                      </AdvancedMarker>
+                      {openInfoWindowMarkerID === jobsInProgress.jobID ? (
+                        <Flex direction="row-reverse">
+                          <Card
+                            // align="flex-end"
+                            border="1px"
+                            borderColor="gray.400"
+                            borderWidth="1.5px"
+                            width="400px"
+                            boxShadow="lg"
+                            height="90vh"
+                            flexDirection="row"
+                          >
+                            <CloseButton
+                              position="absolute"
+                              right="2"
+                              size="lg"
+                              onClick={() => setOpenInfoWindowMarkerID(null)}
+                            >
+                              X
+                            </CloseButton>
+                            <CardBody>
+                              <Flex direction="row" alignContent="center">
+                                {" "}
+                                <Heading fontSize="24" marginTop="16px">
+                                  {jobsInProgress.jobTitle}
+                                </Heading>
+                              </Flex>
+
+                              <Heading size="sm" marginTop="2">
+                                {jobsInProgress.city}, MN
+                              </Heading>
+                              {jobsInProgress.isHourly ? (
+                                <Heading size="sm">
+                                  ${jobsInProgress.confirmedRate}/hr
+                                  
+                                </Heading>
+                              ) : (
+                                <Heading size="sm">
+                                  ${jobsInProgress.confirmedRate}
+                                </Heading>
+                              )}
+
+                              <Heading size="sm" marginTop="2">
+                                Description
+                              </Heading>
+                              <Text>{jobsInProgress.description}</Text>
+                              <Heading size="sm" marginTop="2">
+                                Requirements
+                              </Heading>
+                              {jobsInProgress.requirements ? (
+                                <Flex direction="row">
+                                  {" "}
+                                  <Text fontSize="14">{"\u25CF"} </Text>
+                                  <Text marginLeft="1">
+                                    {jobsInProgress.requirements}{" "}
+                                  </Text>{" "}
+                                </Flex>
+                              ) : (
+                                <Text>No requirements listed</Text>
+                              )}
+
+                              {jobsInProgress.requirements2 ? (
+                                <Flex direction="row">
+                                  {" "}
+                                  <Text fontSize="14">{"\u25CF"} </Text>
+                                  <Text marginLeft="1">
+                                    {jobsInProgress.requirements2}{" "}
+                                  </Text>{" "}
+                                </Flex>
+                              ) : null}
+                              {jobsInProgress.requirements3 ? (
+                                <Flex direction="row">
+                                  {" "}
+                                  <Text fontSize="14">{"\u25CF"} </Text>
+                                  <Text marginLeft="1">
+                                    {jobsInProgress.requirements3}{" "}
+                                  </Text>{" "}
+                                </Flex>
+                              ) : null}
+                              <Heading size="sm" marginTop="2">
+                                Additional Notes
+                              </Heading>
+                              {jobsInProgress.niceToHave ? (
+                                <Text>{jobsInProgress.niceToHave}</Text>
+                              ) : (
+                                <Text>Nothing listed</Text>
+                              )}
+                              <Divider />
+                              <CardFooter
+                                flexDirection="column"
+                                marginTop="16px"
+                                alignContent="center"
+                                justifyContent="center"
+                                textAlign="center"
+                              >
+                                <>
+                                  <Heading
+                                    alignContent="center"
+                                    justifyContent="center"
+                                    textAlign="center"
+                                    size="md"
+                                  >
+                                    You've been hired for this position!
+                                  </Heading>
+
+                                  {jobsInProgress.hasUnreadMessage ? (
+                                    <Button
+                                      marginTop="24px"
+                                      backgroundColor="white"
+                                      color="#01A2E8"
+                                      _hover={{
+                                        bg: "#01A2E8",
+                                        textColor: "white",
+                                      }}
+                                      onClick={() =>
+                                        handleInProgressNavigate(jobsInProgress)
+                                      }
+                                    >
+                                      See Messages
+                                      <Badge
+                                        backgroundColor="#df4b4b"
+                                        textColor="white"
+                                        top="-2"
+                                        position="absolute"
+                                        right="8"
+                                      >
+                                        New
+                                      </Badge>
+                                    </Button>
+                                  ) : (
+                                    <Button
+                                      marginTop="24px"
+                                      backgroundColor="white"
+                                      color="#01A2E8"
+                                      _hover={{
+                                        bg: "#01A2E8",
+                                        textColor: "white",
+                                      }}
+                                      onClick={() =>
+                                        handleInProgressNavigate(jobsInProgress)
+                                      }
+                                    >
+                                      See Messages
+                                    </Button>
+                                  )}
+                                </>
+
+                                <Button
+                                  marginTop="24px"
+                                  backgroundColor="#01A2E8"
+                                  color="white"
+                                  _hover={{
+                                    bg: "#018ecb",
+                                    textColor: "white",
+                                  }}
+                                  onClick={() =>
+                                    handleCompleteModalOpen(jobsInProgress)
+                                  }
+                                >
+                                  Mark Complete
+                                </Button>
+                              </CardFooter>
+                            </CardBody>
+                          </Card>
+                        </Flex>
+                      ) : null}
+                    </>
+                  ))}
+
+{jobsInReview !== null &&
+                  jobsInReview.map((jobsInReview) => (
+                    //credit https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN
+                    <>
+                      <AdvancedMarker
+                        key={jobsInReview.jobID}
+                        position={{
+                          lat: jobsInReview.locationLat
+                            ? jobsInReview.locationLat
+                            : 44.96797106363888,
+                          lng: jobsInReview.locationLng
+                            ? jobsInReview.locationLng
+                            : -93.26177106829272,
+                        }}
+                        onClick={() =>
+                          handleToggleInReviewOpen(jobsInReview)
+                        }
+                      >
+                        <div>
+                          {jobsInReview.hasUnreadMessage ||
+                          jobsInReview.firstHiredNotification ? (
+                            <Button
+                              colorScheme="green"
+                              height="24px"
+                              marginRight={5}
+                            >
+                              <Text>Awaiting Payment</Text>
+
+                              <Badge
+                                backgroundColor="#df4b4b"
+                                textColor="white"
+                                top="-2"
+                                position="absolute"
+                                right="-4"
+                              >
+                                New
+                              </Badge>
+                            </Button>
+                          ) : (
+                            <Button
+                              colorScheme="green"
+                              height="24px"
+                              marginRight={5}
+                            >
+                              <Text>Awaiting Payment</Text>
+                            </Button>
+                          )}
+                        </div>
+                        /
+                      </AdvancedMarker>
+                      {openInfoWindowMarkerID === jobsInReview.jobID ? (
+                        <Flex direction="row-reverse">
+                          <Card
+                            // align="flex-end"
+                            border="1px"
+                            borderColor="gray.400"
+                            borderWidth="1.5px"
+                            width="400px"
+                            boxShadow="lg"
+                            height="90vh"
+                            flexDirection="row"
+                          >
+                            <CloseButton
+                              position="absolute"
+                              right="2"
+                              size="lg"
+                              onClick={() => setOpenInfoWindowMarkerID(null)}
+                            >
+                              X
+                            </CloseButton>
+                            <CardBody>
+                              <Flex direction="row" alignContent="center">
+                                {" "}
+                                <Heading fontSize="24" marginTop="16px">
+                                  {jobsInReview.jobTitle}
+                                </Heading>
+                              </Flex>
+
+                              <Heading size="sm" marginTop="2">
+                                {jobsInReview.city}, MNs
+                              </Heading>
+                              {jobsInReview.isHourly ? (
+                                <Heading size="sm">
+                                  {jobsInReview.confirmHours} hours worked at ${jobsInReview.confirmedRate}/hour 
+                                </Heading>
+                              ) : (
+                                <Heading size="sm">
+                                  ${jobsInReview.confirmedRate}
+                                </Heading>
+                              )}
+
+                              <Heading size="sm" marginTop="2">
+                                Description
+                              </Heading>
+                              <Text>{jobsInReview.description}</Text>
+                              <Heading size="sm" marginTop="2">
+                                Requirements
+                              </Heading>
+                              {jobsInReview.requirements ? (
+                                <Flex direction="row">
+                                  {" "}
+                                  <Text fontSize="14">{"\u25CF"} </Text>
+                                  <Text marginLeft="1">
+                                    {jobsInReview.requirements}{" "}
+                                  </Text>{" "}
+                                </Flex>
+                              ) : (
+                                <Text>No requirements listed</Text>
+                              )}
+
+                              {jobsInReview.requirements2 ? (
+                                <Flex direction="row">
+                                  {" "}
+                                  <Text fontSize="14">{"\u25CF"} </Text>
+                                  <Text marginLeft="1">
+                                    {jobsInReview.requirements2}{" "}
+                                  </Text>{" "}
+                                </Flex>
+                              ) : null}
+                              {jobsInReview.requirements3 ? (
+                                <Flex direction="row">
+                                  {" "}
+                                  <Text fontSize="14">{"\u25CF"} </Text>
+                                  <Text marginLeft="1">
+                                    {jobsInReview.requirements3}{" "}
+                                  </Text>{" "}
+                                </Flex>
+                              ) : null}
+                              <Heading size="sm" marginTop="2">
+                                Additional Notes
+                              </Heading>
+                              {jobsInReview.niceToHave ? (
+                                <Text>{jobsInReview.niceToHave}</Text>
+                              ) : (
+                                <Text>Nothing listed</Text>
+                              )}
+                              <Divider />
+                              <CardFooter
+                                flexDirection="column"
+                                marginTop="16px"
+                                alignContent="center"
+                                justifyContent="center"
+                                textAlign="center"
+                              >
+                                <>
+                                  <Heading
+                                    alignContent="center"
+                                    justifyContent="center"
+                                    textAlign="center"
+                                    size="md"
+                                  >
+                                    You've completed this job
+                                  </Heading>
+                                  <Text
+                                    alignContent="center"
+                                    justifyContent="center"
+                                    textAlign="center"
+                                    size="md"
+                                    marginTop="8px"
+                                  >
+                                    Payment pending confirmation
+                                  </Text>
+
+                                  {jobsInReview.hasUnreadMessage ? (
+                                    <Button
+                                      marginTop="24px"
+                                      backgroundColor="white"
+                                      color="#01A2E8"
+                                      _hover={{
+                                        bg: "#01A2E8",
+                                        textColor: "white",
+                                      }}
+                                      onClick={() =>
+                                        navigateToChannel(jobsInReview)
+                                      }
+                                    >
+                                      See Messages
+                                      <Badge
+                                        backgroundColor="#df4b4b"
+                                        textColor="white"
+                                        top="-2"
+                                        position="absolute"
+                                        right="8"
+                                      >
+                                        New
+                                      </Badge>
+                                    </Button>
+                                  ) : (
+                                    <Button
+                                      marginTop="24px"
+                                      backgroundColor="white"
+                                      color="#01A2E8"
+                                      _hover={{
+                                        bg: "#01A2E8",
+                                        textColor: "white",
+                                      }}
+                                      onClick={() =>
+                                        navigateToChannel(jobsInReview)
+                                      }
+                                    >
+                                      See Messages
+                                    </Button>
+                                  )}
+                                </>
+
+                               
+                              </CardFooter>
+                            </CardBody>
+                          </Card>
+                        </Flex>
+                      ) : null}
+                    </>
+                  ))}
+
+{completedJobsMap !== null &&
+                  completedJobsMap.map((completedJobsMap) => (
+                    //credit https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN
+                    <>
+                      <AdvancedMarker
+                        key={completedJobsMap.jobID}
+                        position={{
+                          lat: completedJobsMap.locationLat
+                            ? completedJobsMap.locationLat
+                            : 44.96797106363888,
+                          lng: completedJobsMap.locationLng
+                            ? completedJobsMap.locationLng
+                            : -93.26177106829272,
+                        }}
+                        onClick={() =>
+                          handleToggleInReviewOpen(completedJobsMap)
+                        }
+                      >
+                        <div>
+                          {completedJobsMap.hasUnreadMessage ||
+                          completedJobsMap.firstViewNotification ? (
+                            <Button
+                            backgroundColor="white"
+                            textColor="#018ecb"
+                            // borderWidth="1px"
+                            borderBottomWidth="1px"
+                            borderTopWidth="1px"
+                            borderRightWidth="1px"
+                            borderLeftWidth="1px"
+                            borderColor="#018ecb"
+                            _hover={{ bg: "#018ecb", textColor: "white" }}
+                              height="24px"
+                              marginRight={5}
+                            >
+                              <Text>Paid</Text>
+
+                              <Badge
+                                backgroundColor="#df4b4b"
+                                textColor="white"
+                                top="-2"
+                                position="absolute"
+                                right="-4"
+                              >
+                                New
+                              </Badge>
+                            </Button>
+                          ) : (
+                            <Button
+                            backgroundColor="white"
+                            textColor="#018ecb"
+                            // borderWidth="1px"
+                            borderBottomWidth="1px"
+                            borderTopWidth="1px"
+                            borderRightWidth="1px"
+                            borderLeftWidth="1px"
+                            borderColor="#018ecb"
+                            _hover={{ bg: "#018ecb", textColor: "white" }}
+                              height="24px"
+                              marginRight={5}
+                            >
+                              <Text>Paid</Text>
+                            </Button>
+                          )}
+                        </div>
+                        /
+                      </AdvancedMarker>
+                      {openInfoWindowMarkerID === completedJobsMap.jobID ? (
+                        <Flex direction="row-reverse">
+                          <Card
+                            // align="flex-end"
+                            border="1px"
+                            borderColor="gray.400"
+                            borderWidth="1.5px"
+                            width="400px"
+                            boxShadow="lg"
+                            height="90vh"
+                            flexDirection="row"
+                          >
+                            <CloseButton
+                              position="absolute"
+                              right="2"
+                              size="lg"
+                              onClick={() => setOpenInfoWindowMarkerID(null)}
+                            >
+                              X
+                            </CloseButton>
+                            <CardBody>
+                              <Flex direction="row" alignContent="center">
+                                {" "}
+                                <Heading fontSize="24" marginTop="16px">
+                                  {completedJobsMap.jobTitle}
+                                </Heading>
+                              </Flex>
+
+                              <Heading size="sm" marginTop="2">
+                                {completedJobsMap.city}, MNs
+                              </Heading>
+                              {completedJobsMap.isHourly ? (
+                                <Heading size="sm">
+                                  {completedJobsMap.confirmHours} hours worked at ${completedJobsMap.confirmedRate}/hour 
+                                </Heading>
+                              ) : (
+                                <Heading size="sm">
+                                  ${completedJobsMap.confirmedRate}
+                                </Heading>
+                              )}
+
+                              <Heading size="sm" marginTop="2">
+                                Description
+                              </Heading>
+                              <Text>{completedJobsMap.description}</Text>
+                              <Heading size="sm" marginTop="2">
+                                Requirements
+                              </Heading>
+                              {completedJobsMap.requirements ? (
+                                <Flex direction="row">
+                                  {" "}
+                                  <Text fontSize="14">{"\u25CF"} </Text>
+                                  <Text marginLeft="1">
+                                    {completedJobsMap.requirements}{" "}
+                                  </Text>{" "}
+                                </Flex>
+                              ) : (
+                                <Text>No requirements listed</Text>
+                              )}
+
+                              {completedJobsMap.requirements2 ? (
+                                <Flex direction="row">
+                                  {" "}
+                                  <Text fontSize="14">{"\u25CF"} </Text>
+                                  <Text marginLeft="1">
+                                    {completedJobsMap.requirements2}{" "}
+                                  </Text>{" "}
+                                </Flex>
+                              ) : null}
+                              {completedJobsMap.requirements3 ? (
+                                <Flex direction="row">
+                                  {" "}
+                                  <Text fontSize="14">{"\u25CF"} </Text>
+                                  <Text marginLeft="1">
+                                    {completedJobsMap.requirements3}{" "}
+                                  </Text>{" "}
+                                </Flex>
+                              ) : null}
+                              <Heading size="sm" marginTop="2">
+                                Additional Notes
+                              </Heading>
+                              {completedJobsMap.niceToHave ? (
+                                <Text>{completedJobsMap.niceToHave}</Text>
+                              ) : (
+                                <Text>Nothing listed</Text>
+                              )}
+                              <Divider />
+                              <CardFooter
+                                flexDirection="column"
+                                marginTop="16px"
+                                alignContent="center"
+                                justifyContent="center"
+                                textAlign="center"
+                              >
+                                <>
+                                  <Heading
+                                    alignContent="center"
+                                    justifyContent="center"
+                                    textAlign="center"
+                                    size="md"
+                                  >
+                                    Payment complete!
+                                  </Heading>
+                                  <Text
+                                    alignContent="center"
+                                    justifyContent="center"
+                                    textAlign="center"
+                                    size="md"
+                                    marginTop="8px"
+                                  >
+                                    
+                                  </Text>
+
+                                  <Button
+                                      marginTop="24px"
+                                      backgroundColor="#01A2E8"
+                                      color="white"
+                                      _hover={{
+                                        bg: "#018ecb",
+                                        textColor: "white",
+                                      }}
+                                      onClick={() =>
+                                        // navigateToChannel(completedJobsMap)
+                                        //go to stripe account, add li
+
+                                        handleSeePayment(completedJobsMap)
+                                      }
+                                    >
+                                      See Payment
+                                    </Button>
+                                    <Button
+                                      marginTop="24px"
+                                      backgroundColor="white"
+                                      textColor="#df4b4b"
+                                     
+                                      onClick={() =>
+                                        // navigateToChannel(completedJobsMap)
+                                        //go to stripe account, add li
+
+                                        handleRemoveFromMap(completedJobsMap)
+                                      }
+                                    >
+                                     Remove
+                                    </Button>
+                                  
+                                </>
+
+                               
+                              </CardFooter>
+                            </CardBody>
+                          </Card>
+                        </Flex>
+                      ) : null}
+                    </>
+                  ))}
+                <Modal
+                  isOpen={isOpenMarkComplete}
+                  onClose={onCloseMarkComplete}
+                  size="xl"
+                >
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Rate This User (optional)</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      {isLoading ? (
+                        <Center>
+                          {" "}
+                          <Spinner
+                            thickness="4px"
+                            speed="0.65s"
+                            emptyColor="gray.200"
+                            color="blue.500"
+                            size="xl"
+                            marginTop="240px"
+                          />
+                        </Center>
+                      ) : (
+                        <>
+                          <Flex>
+                            {maxRating.map((item, key) => {
+                              return (
+                                <Button
+                                  activeopacity={0.7}
+                                  key={item}
+                                  marginTop="8px"
+                                  onClick={() => setDefaultRating(item)}
+                                >
+                                  <Image
+                                    boxSize="24px"
+                                    src={
+                                      item <= defaultRating
+                                        ? star_filled
+                                        : star_corner
+                                    }
+                                  ></Image>
+                                </Button>
+                              );
+                            })}
+                          </Flex>
+                        </>
+                      )}
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <Button
+                        variant="ghost"
+                        mr={3}
+                        onClick={() => handleCloseAndOpen(jobsInProgress)}
+                      >
+                        Skip
+                      </Button>
+                      <Button
+                        colorScheme="blue"
+                        onClick={() => addRating(jobsInProgress)}
+                      >
+                        Submit
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
+                <Modal isOpen={isOpenHourly} onClose={onCloseHourly} size="xl">
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Hours worked</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      {isLoading ? (
+                        <Center>
+                          {" "}
+                          <Spinner
+                            thickness="4px"
+                            speed="0.65s"
+                            emptyColor="gray.200"
+                            color="blue.500"
+                            size="xl"
+                            marginTop="36px"
+                          />
+                        </Center>
+                      ) : (
+                        <>
+                          {" "}
+                          <FormLabel marginTop="8" width>
+                            How many hours did you work?
+                          </FormLabel>
+                          <Flex>
+                            <Input
+                              width="240px"
+                              placeholder="Enter hours worked here"
+                              onChange={(e) =>
+                                confirmHoursValidate(e.target.value)
+                              }
+                            />{" "}
+                            <Heading size="sm" marginTop="8px" marginLeft="8px">
+                              {" "}
+                              Hours
+                            </Heading>
+                          </Flex>
+                          {confirmHoursValidationBegun === true ? (
+                            <Text color="red">
+                              {confirmHoursValidationMessage}
+                            </Text>
+                          ) : null}
+                          <Text>{confirmHours}</Text>
+                        </>
+                      )}
+                    </ModalBody>
+
+                    <ModalFooter>
+                      {/* <Button variant="ghost" mr={3} onClick={onCloseHourly}>
+              Skip
+            </Button> */}
+                      <Button
+                        colorScheme="blue"
+                        onClick={() => checkLength(jobsInProgress)}
+                      >
+                        Submit
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
+                <Modal isOpen={isOpenSuccess} onClose={onCloseSuccess} size="xl">
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Success!</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                     
+                       <Text>This job has been completed and the person who posted this job has been notified.</Text>
+                       <Text>Payment will be sent when they confirm the job has been completed.</Text>
+                    </ModalBody>
+
+                    <ModalFooter>
+                      
+                      <Button
+                        colorScheme="blue"
+                        onClick={() => handleBothModalClose()}
+                      >
+                        Continue
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
               </Map>
             </div>
           </APIProvider>

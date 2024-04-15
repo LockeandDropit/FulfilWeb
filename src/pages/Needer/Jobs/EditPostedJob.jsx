@@ -559,7 +559,7 @@ const EditPostedJob = () => {
 
 
   const handleDelete = () => {
-    deleteDoc(doc(db, "Map Jobs", user.uid, "Posted Jobs", jobTitle), {
+    deleteDoc(doc(db, "Map Jobs", jobID), {
 
     })
       .then(() => {
@@ -583,6 +583,19 @@ const EditPostedJob = () => {
           // no bueno
           console.log(error);
         });
+
+        deleteDoc(doc(db, "employers", user.uid, "Posted Jobs", jobTitle), {
+
+        })
+          .then(() => {
+            //all good
+            alert("Success, job has been deleted")
+            navigate("/NeederPostedList")
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
   }
 
   return (

@@ -91,6 +91,12 @@ const EditJobInfo = () => {
   const [jobID, setJobID] = useState(null)
   const [firstName, setFirstName] = useState(null)
 
+  const {
+    isOpen: isOpenSuccess,
+    onOpen: onOpenSuccess,
+    onClose: onCloseSuccess,
+  } = useDisclosure();
+
   useEffect(() => {
     if (location.state === null) {
       
@@ -205,7 +211,8 @@ const EditJobInfo = () => {
       .then(() => {
         //all good
         console.log("data submitted global");
-        alert("Success! New Job Posted!");
+       /// modal here
+       onOpenSuccess()
       })
       .catch((error) => {
         // no bueno
@@ -313,6 +320,8 @@ const EditJobInfo = () => {
       addDescription()
     }
    };
+
+
 
    
 
@@ -431,6 +440,23 @@ const EditJobInfo = () => {
         </Box>
         
       </Flex>
+
+      <Modal isOpen={isOpenSuccess} onClose={onCloseSuccess}>
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Success!</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      <Text>This post has been updated.</Text>
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <Button colorScheme="blue" mr={3} onClick={onCloseSuccess}>
+                        Continue
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
       
     </>
   );

@@ -656,6 +656,7 @@ const AddJobStart = () => {
     setLoading(false)
   }, 1000);
 
+ 
 
 
 
@@ -705,11 +706,15 @@ const AddJobStart = () => {
               <GooglePlacesAutocomplete
                 apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
                 fetchDetails={true}
-               
+                // minLengthAutocomplete={3}
+                
                 selectProps={{
-                  rawAddress,
+                rawAddress,
+          
                   onChange: setRawAddress,
                   placeholder: "Type address here",
+                  blurInputOnSelect: true,
+                
                 }}
               />
             </Box>

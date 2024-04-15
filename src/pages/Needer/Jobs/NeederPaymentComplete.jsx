@@ -119,6 +119,8 @@ const NeederPaymentComplete = () => {
     const [paymentComplete, setPaymentComplete] = useState(null);
     const [paymentId, setPaymentId] = useState(null);
     const [hiredApplicantID, setHiredApplicantID] = useState(null);
+const [locationLat, setLocationLat] = useState(null)
+const [locationLng, setLocationLng] = useState(null)
 
 
     const [status, setStatus] = useState(null);
@@ -152,6 +154,8 @@ const NeederPaymentComplete = () => {
           console.log("getdatAgain", snapshot.data());
           setHiredApplicantID(snapshot.data().hiredApplicant);
           setJobTitle(snapshot.data().jobTitle);
+          setLocationLat(snapshot.data().locationLat)
+          setLocationLng(snapshot.data().locationLng)
           setJobID(snapshot.data().jobID);
           setIsHourly(snapshot.data().isHourly);
           setConfirmHours(snapshot.data().confirmHours);
@@ -316,6 +320,8 @@ const NeederPaymentComplete = () => {
         employerID: userID ? userID : null,
         jobTitle: jobTitle ? jobTitle : null,
         jobID: jobID ? jobID : null,
+        locationLat: locationLat ? locationLat : null,
+        locationLng: locationLng ? locationLng : null,
         confirmedRate: confirmedRate ? confirmedRate : null,
         paymentComplete: paymentComplete ? paymentComplete : null,
         dateCompleted: dateCompleted ? dateCompleted : null,
@@ -325,6 +331,7 @@ const NeederPaymentComplete = () => {
         paymentId: paymentId ? paymentId : null,
         description: description ? description : null,
         city: city ? city : null,
+        firstViewNotification: true,
         lowerRate: lowerRate ? lowerRate : null,
         upperRate: upperRate ? upperRate : null,
         isVolunteer: isVolunteer ? isVolunteer : false,
@@ -340,6 +347,7 @@ const NeederPaymentComplete = () => {
         jobCompleteApplicant: true,
         jobCompleteEmployer: false,
         paymentCompletedAndPending: true,
+
       })
         .then(() => {
           console.log("moved to completed for user");
@@ -347,6 +355,46 @@ const NeederPaymentComplete = () => {
         .catch((error) => {
           console.log(error);
         });
+
+        setDoc(doc(db, "users", hiredApplicantID, "Past Jobs Map", jobTitle), {
+          employerID: userID ? userID : null,
+          jobTitle: jobTitle ? jobTitle : null,
+          jobID: jobID ? jobID : null,
+          locationLat: locationLat ? locationLat : null,
+          locationLng: locationLng ? locationLng : null,
+          confirmedRate: confirmedRate ? confirmedRate : null,
+          paymentComplete: paymentComplete ? paymentComplete : null,
+          dateCompleted: dateCompleted ? dateCompleted : null,
+          confirmHours: confirmHours ? confirmHours : null,
+          totalPay: confirmedPriceUI ? confirmedPriceUI : null,
+          isHourly: isHourly ? isHourly : null,
+          paymentId: paymentId ? paymentId : null,
+          description: description ? description : null,
+          city: city ? city : null,
+          firstViewNotification: true,
+          lowerRate: lowerRate ? lowerRate : null,
+          upperRate: upperRate ? upperRate : null,
+          isVolunteer: isVolunteer ? isVolunteer : false,
+          isOneTime: isOneTime ? isOneTime : null,
+          streetAddress: streetAddress ? streetAddress : null,
+          state: state ? state : null,
+          zipCode: zipCode ? zipCode : null,
+          requirements: requirements ? requirements : null,
+          requirements2: requirements2 ? requirements2 : null,
+          requirements3: requirements3 ? requirements3 : null,
+          niceToHave: niceToHave ? niceToHave : null,
+          hiredApplicant: hiredApplicantID ? hiredApplicantID : null,
+          jobCompleteApplicant: true,
+          jobCompleteEmployer: false,
+          paymentCompletedAndPending: true,
+  
+        })
+          .then(() => {
+            console.log("moved to completed for user");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
   
       setDoc(doc(db, "employers", userID, "Past Jobs", jobTitle), {
         employerID: userID ? userID : null,
@@ -359,6 +407,7 @@ const NeederPaymentComplete = () => {
         totalPay: confirmedPriceUI ? confirmedPriceUI : null,
         isHourly: isHourly ? isHourly : null,
         paymentId: paymentId ? paymentId : null,
+        firstViewNotification: true,
         description: description ? description : null,
         city: city ? city : null,
         lowerRate: lowerRate ? lowerRate : null,
@@ -373,6 +422,8 @@ const NeederPaymentComplete = () => {
         requirements3: requirements3 ? requirements3 : null,
         niceToHave: niceToHave ? niceToHave : null,
         hiredApplicant: hiredApplicantID ? hiredApplicantID : null,
+        locationLat: locationLat ? locationLat : null,
+        locationLng: locationLng ? locationLng : null,
         jobCompleteApplicant: true,
         jobCompleteEmployer: false,
         paymentCompletedAndPending: true,
@@ -407,6 +458,7 @@ const NeederPaymentComplete = () => {
         <Box paddingTop="4" paddingRight="72" height="90vh">
           <NeederDashboard />
           <Center>
+          <Box height="33vh" width="33vw" marginLeft="330px" alignContent="center" textAlign="center">
             <Spinner
               thickness="4px"
               speed="0.65s"
@@ -414,6 +466,7 @@ const NeederPaymentComplete = () => {
               color="blue.500"
               size="xl"
             />
+            </Box>
           </Center>
         </Box>
       </>

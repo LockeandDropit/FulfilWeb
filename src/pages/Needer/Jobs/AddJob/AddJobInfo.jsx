@@ -15,6 +15,14 @@ import {
   FormLabel,
   FormErrorMessage,
   FormHelperText,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure
 } from "@chakra-ui/react";
 import { Center, Flex } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
@@ -53,16 +61,7 @@ import {
   CloseIcon,
   EditIcon,
 } from "@chakra-ui/react";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-} from "@chakra-ui/react";
+
 import {
   Alert,
   AlertIcon,
@@ -180,7 +179,7 @@ const AddJobInfo = () => {
       .then(() => {
         //all good
         console.log("data submitted global");
-        alert("Success! New Job Posted!");
+        onOpen()
       })
       .catch((error) => {
         // no bueno
@@ -190,7 +189,7 @@ const AddJobInfo = () => {
     //Cant get PostedJobs to not have modal pop up immediately??  
     // navigation.navigate("PostedJobs", {props: modalVisible});
 
-    navigate("/NeederMapScreen")
+   
   };
 
   const addJobMap = () => {
@@ -290,6 +289,9 @@ const AddJobInfo = () => {
    };
 
    
+
+   //modal control
+   const { isOpen, onOpen, onClose } = useDisclosure()
 
 
   return (
@@ -404,6 +406,24 @@ const AddJobInfo = () => {
         </Box>
         
       </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Your job has been posted.</Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={() => navigate("/NeederMapScreen")}>
+              Close
+            </Button>
+          
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       
     </>
   );

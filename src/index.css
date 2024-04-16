@@ -11,7 +11,7 @@ code {
 
 display: flex;
 flex-direction: row;
-padding: 10px;
+padding: 8px;
 height: auto;
 border-bottom-width: 2px;
 /* border-width: 5px; */
@@ -29,6 +29,7 @@ border-bottom-width: 2px;
 /* border-width: 5px;
 border-color: black; */
 /* margin-bottom: 10px; */
+
 }
 
 .headerRight {

@@ -25,11 +25,13 @@ const LandingPageMap = () => {
     
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }} padding={2}>
        <Flex flex={1}>
-       <Box w="60vw" h="70vh" padding="2" alignContent="center">
-            <Box w="60vw" h="70vh" >
+        <Center>
+       <Box w="50vw" h="70vh" padding="16" alignContent="center" justifyContent="center">
+            <Box w="50vw" h="70vh" >
               <LandingNeederMapScreen />
             </Box>
           </Box>
+          </Center>
       </Flex>
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
         <Stack spacing={6} w={'full'} maxW={'lg'}>
@@ -41,14 +43,14 @@ const LandingPageMap = () => {
               // position={'relative'}
             
               >
-              Have your posted work seen by motivated contractors
+              Have your task seen by motivated contractors
             </Text>
          
            </Center>
           </Heading>
           </Center>
           <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-          The jobs you post will be on visible to contractors who are available in your area
+          The jobs you post will be on visible to contractors who are available in your area.
           </Text>
           <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
           <Button backgroundColor="#01A2E8" color="white" _hover={{ bg: "#018ecb", textColor: "white" }}  onClick={() => navigate("/NeederEmailRegister")}>Post My Job</Button>

@@ -702,6 +702,7 @@ const [isLoading, setIsLoading] = useState(false)
               disableDefaultUI={true}
               //move to env
               mapId="6cc03a62d60ca935"
+              onClick={() => setOpenInfoWindowMarkerID(null)}
             >
               {allJobs !== null &&
                 allJobs.map((allJobs) => (

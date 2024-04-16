@@ -317,7 +317,15 @@ const MapScreen = () => {
                             <Heading size="md">{allJobs.jobTitle}</Heading>
                             <Flex>
                             
-                              <Heading size="sm">Budget: $200</Heading>
+                              {/* <Heading size="sm">Budget: {allJobs.}</Heading> */}
+                              {allJobs.isVolunteer ? (
+                              <Text>Volunteer!</Text>
+                            ) : allJobs.isFlatRate ? (
+                              <Heading size="sm">Budget: ${allJobs.flatRate}</Heading>
+                            ) : (
+                            
+                              <Heading size="sm">${allJobs.lowerRate} - ${allJobs.upperRate}/hr</Heading>
+                            )}
                             </Flex>
                             <Text fontSize="md">{allJobs.description}</Text>
                           </Stack>

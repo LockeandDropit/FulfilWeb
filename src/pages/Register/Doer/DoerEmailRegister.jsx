@@ -209,9 +209,12 @@ const DoerEmailRegister = () => {
       <Stack minH={"100vh"} direction={{ base: "column", md: "row" }} marginLeft={16}>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
           <Stack spacing={4} w={"full"} maxW={"md"} >
-            <Center>
-              <Heading fontSize={"2xl"}>Create an account</Heading>
+            <Center flexDirection="column">
+              <Heading fontSize={"3xl"}>Create an account</Heading>
+             
+              <Heading fontSize={"2xl"}>Find Work Today</Heading>
             </Center>
+           
             <Center>
             <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
             Get access to available work in your area. Find jobs that fit your speciality.

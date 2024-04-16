@@ -90,7 +90,12 @@ const DoerMapScreen = () => {
       let results = [];
       snapshot.docs.forEach((doc) => {
         //review what thiss does
-        results.push({ ...doc.data(), id: doc.id });
+        if (doc.id === "0a9fb80c-8dc5-4ec0-9316-7335f7fc0058") {
+         //ignore this job is for Needer map screen
+        } else {
+          results.push({ ...doc.data(), id: doc.id });
+        }
+       
       });
       console.log(results);
       setPostedJobs(results);
@@ -638,7 +643,7 @@ const DoerMapScreen = () => {
         });
 
         if (secondResults.length === 0) {
-          <NoCategoryMatchModal props={true}/>
+       alert("No jobs posted in that category")
         } else {
           setPostedJobs(secondResults);
         }
@@ -1217,7 +1222,7 @@ useEffect(() => {
     }, 1000);
   } else {
   }
-});
+}, []);
 
 
 const handleSeePayment = (x) => {
@@ -1258,6 +1263,7 @@ const handleRemoveFromMap = (x) => {
                 disableDefaultUI={true}
                 //move to env
                 mapId="6cc03a62d60ca935"
+                onClick={() => setOpenInfoWindowMarkerID(null)}
               >
                 <Center marginTop="8px">
                   <Card

@@ -39,7 +39,7 @@ import { db } from "../firebaseConfig";
 import { auth } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 
-const LandingNeederMapScreen = () => {
+const NeederRegisterMapScreen = () => {
   const [user, setUser] = useState(null);
   const [postedJobs, setPostedJobs] = useState([]);
   const navigate = useNavigate();
@@ -191,7 +191,7 @@ const LandingNeederMapScreen = () => {
   return (
     <div>
       <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-        <div style={{ height: "70vh" }}>
+        <div style={{ height: "100vh" }}>
           <Map
             defaultCenter={{ lat: 44.89929301068098, lng: -93.3413753387615}}
             defaultZoom={12}
@@ -314,4 +314,4 @@ const LandingNeederMapScreen = () => {
   );
 };
 
-export default LandingNeederMapScreen;
+export default NeederRegisterMapScreen;

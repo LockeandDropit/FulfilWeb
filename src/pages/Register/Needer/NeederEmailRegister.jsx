@@ -37,7 +37,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import LandingNeederMapScreen from "../../../components/LandingNeederMapScreen.jsx";
+import NeederRegisterMapScreen from "../../../components/NeederRegisterMapScreen.jsx";
 
 const NeederEmailRegister = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -152,8 +152,9 @@ const NeederEmailRegister = () => {
       <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
           <Stack spacing={4} w={"full"} maxW={"md"}>
-            <Center>
-              <Heading fontSize={"2xl"}>Create an account</Heading>
+            <Center flexDirection="column">
+              <Heading fontSize={"3xl"}>Join Fulfil</Heading>
+              {/* <Heading fontSize={"2xl"}>post your work</Heading> */}
              
             </Center>
             <Center>
@@ -204,7 +205,7 @@ const NeederEmailRegister = () => {
                 _hover={{
                   bg: 'blue.500',
                 }}
-                // onClick={() => validate()}
+                onClick={() => validate()}
                 >
                 Sign up
               </Button>
@@ -214,7 +215,7 @@ const NeederEmailRegister = () => {
         <Flex flex={1}>
         <Box w="60vw" h="70vh" padding="2" alignContent="center">
             <Box w="60vw" h="70vh" >
-              <LandingNeederMapScreen />
+              <NeederRegisterMapScreen />
             </Box>
           </Box>
         </Flex>

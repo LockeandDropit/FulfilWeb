@@ -19,11 +19,13 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure
+  useDisclosure,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import React from "react";
 import { useState, useEffect } from "react";
-
+import { ViewIcon } from "@chakra-ui/icons";
 import {
   getAuth,
   setPersistence,
@@ -41,6 +43,7 @@ import { StreamChat } from "stream-chat";
 const Header = () => {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isOpenWrongInfo, onOpen: onOpenWrongInfo, onClose: onCloseWrongInfo } = useDisclosure()
 
   const [input, setInput] = useState("");
 
@@ -100,13 +103,63 @@ const Header = () => {
       // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
-      alert(errorMessage)
+      setPasswordValidationMessage(
+        "Oops! Wrong email or password"
+      );
     });
   })
  
 
   // template credit simple log in card https://chakra-templates.vercel.app/forms/authentication
 
+  };
+
+  const [visibleToggle, setVisibleToggle] = useState("password");
+
+  const handlePasswordVisible = () => {
+    if (visibleToggle === "password") {
+      setVisibleToggle("email");
+    } else if (visibleToggle === "email") {
+      setVisibleToggle("password");
+    }
+  };
+  
+  const [passwordValidationMessage, setPasswordValidationMessage] = useState();
+
+  //credit https://www.sitepoint.com/using-regular-expressions-to-check-string-length/
+  //credit alex gittemeier https://stackoverflow.com/questions/17439917/regex-to-accept-alphanumeric-and-some-special-character-in-javascript
+  // const passwordRegex = /^[A-Za-z0-9_@./#&+-]{6,20}$/;
+
+  //credit Vivek S. & xanatos https://stackoverflow.com/questions/5058416/regular-expressions-how-to-accept-any-symbol
+  const passwordRegex = /[^\>]*/;
+  const [passwordValidationBegun, setPasswordValidationBegun] = useState(false);
+
+  const [validationMessage, setValidationMessage] = useState();
+  // credit https://github.com/chelseafarley/text-input-validation-tutorial-react-native/blob/main/App.js
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const [emailValidationBegun, setEmailValidationBegun] = useState(false);
+
+  const validate = () => {
+    setEmailValidationBegun(true);
+    const isValid = emailRegex.test(email);
+    if (!isValid) {
+      setValidationMessage("Please enter a valid email");
+    } else {
+      setValidationMessage();
+      setEmail(email);
+    }
+    setPasswordValidationBegun(true);
+    const isValidPassword = passwordRegex.test(password);
+    if (!isValidPassword) {
+      
+    } else {
+      setPasswordValidationMessage();
+  
+    }
+
+    if (isValid && isValidPassword) {
+      logIn();
+    }
   };
   return (
     <>
@@ -154,31 +207,24 @@ const Header = () => {
                 onChange={handleInputChange}
              
               />
-              {!isError ? (
-                <FormHelperText>
-                  Enter the email you'd like to receive the newsletter on.
-                </FormHelperText>
-              ) : (
-                <FormErrorMessage>Email is required.</FormErrorMessage>
-              )}
+              {emailValidationBegun === true ? (
+                <Text color="red">{validationMessage}</Text>
+              ) : null}
             </FormControl>
             <FormControl >
               <FormLabel>Password</FormLabel>
+              <InputGroup>
               <Input
-                type="email"
-                borderColor="grey"
-                borderWidth=".5px"
-                value={password}
-                onChange={handlePasswordInputChange}
-            
-              />
-              {!isError ? (
-                <FormHelperText>
-                  Enter the email you'd like to receive the newsletter on.
-                </FormHelperText>
-              ) : (
-                <FormErrorMessage>Email is required.</FormErrorMessage>
-              )}
+                  borderColor="grey"
+                  borderWidth=".5px"
+                  type={visibleToggle}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <InputRightElement>
+                  <ViewIcon onClick={() => handlePasswordVisible()} />
+                </InputRightElement>
+                </InputGroup>
             </FormControl>
             <Stack spacing={10}>
               <Stack
@@ -193,9 +239,12 @@ const Header = () => {
                 color={'white'}
                 _hover={{
                   bg: 'blue.500',
-                }}     onClick={() => logIn()}>
+                }}     onClick={() => validate()}>
                 Sign in
               </Button>
+              {passwordValidationBegun === true ? (
+                <Text color="red" textAlign="center">{passwordValidationMessage}</Text>
+              ) : null}
               <Text align="center" marginTop="2" color={'gray.500'}>or</Text>
               <Button backgroundColor="white" textColor="#01A2E8"  onClick={() => navigate("/NeederEmailRegister")}>Register</Button>
               </Stack>

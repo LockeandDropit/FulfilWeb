@@ -364,6 +364,11 @@ const DoerMapScreen = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const {
+    isOpen: isOpenNoResults,
+    onOpen: onOpenNoResults,
+    onClose: onCloseNoResults,
+  } = useDisclosure();
+  const {
     isOpen: isOpenMarkComplete,
     onOpen: onOpenMarkComplete,
     onClose: onCloseMarkComplete,
@@ -643,7 +648,7 @@ const DoerMapScreen = () => {
         });
 
         if (secondResults.length === 0) {
-       alert("No jobs posted in that category")
+       onOpenNoResults()
         } else {
           setPostedJobs(secondResults);
         }
@@ -1218,7 +1223,9 @@ useEffect(() => {
       // setPaymentsLoading(false)
       // window.location.replace(sessionUrl);
       // help from gun https://stackoverflow.com/questions/45046030/maintaining-href-open-in-new-tab-with-an-onclick-handler-in-react
-      window.open(sessionUrl, "_blank");
+      window.open(sessionUrl, "_blank").then(() => {
+        setSessionUrl(null)
+      })
     }, 1000);
   } else {
   }
@@ -2522,6 +2529,28 @@ const handleRemoveFromMap = (x) => {
                       <Button
                         colorScheme="blue"
                         onClick={() => handleBothModalClose()}
+                      >
+                        Continue
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
+                <Modal isOpen={isOpenNoResults} onClose={onCloseNoResults} size="xl">
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>No Results</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                     
+                       <Text>There are currently no jobs posted in this category.</Text>
+                       <Text>Try a different category or try again later</Text>
+                    </ModalBody>
+
+                    <ModalFooter>
+                      
+                      <Button
+                        colorScheme="blue"
+                        onClick={() => onCloseNoResults()}
                       >
                         Continue
                       </Button>

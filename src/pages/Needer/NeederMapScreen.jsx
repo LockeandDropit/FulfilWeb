@@ -222,8 +222,9 @@ const NeederMapScreen = () => {
   const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState(null);
 
   const handleToggleOpen = (x) => {
-    console.log("handle toggle open", x);
+    setApplicant(null)
     setOpenInfoWindowMarkerID(x.jobID);
+
 setIsLoading(true)
     if (x.hasNewApplicant === true) {
       updateDoc(doc(db, "employers", user.uid, "Posted Jobs", x.jobTitle), {
@@ -687,6 +688,11 @@ setIsLoading(true)
 const [isLoading, setIsLoading] = useState(false)
   //payment verification and data movement initially taken from EmbeddedPayments component
 
+const handleCloseInfoWindow = () => {
+  setOpenInfoWindowMarkerID(null)
+  setApplicant(null)
+}
+
   return (
     <div>
       <NeederHeader />
@@ -702,7 +708,7 @@ const [isLoading, setIsLoading] = useState(false)
               disableDefaultUI={true}
               //move to env
               mapId="6cc03a62d60ca935"
-              onClick={() => setOpenInfoWindowMarkerID(null)}
+              onClick={() => handleCloseInfoWindow()}
             >
               {allJobs !== null &&
                 allJobs.map((allJobs) => (
@@ -892,7 +898,7 @@ const [isLoading, setIsLoading] = useState(false)
                                     >
                                       <Flex>
                                         <Avatar
-                                          src="https://bit.ly/broken-link"
+                                          src={applicant.profilePictureResponse}
                                           bg="#01A2E8"
                                           size="md"
                                         />
@@ -906,7 +912,7 @@ const [isLoading, setIsLoading] = useState(false)
                                             {applicant.firstName}{" "}
                                             {applicant.lastName}
                                           </Heading>
-                                          {numberOfRatings ? (
+                                          {applicant.numberOfRatings ? (
                                             <Flex>
                                               {maxRating.map((item, key) => {
                                                 return (
@@ -918,7 +924,7 @@ const [isLoading, setIsLoading] = useState(false)
                                                     <Image
                                                       boxSize="16px"
                                                       src={
-                                                        item <= rating
+                                                        item <= applicant.rating
                                                           ? star_filled
                                                           : star_corner
                                                       }
@@ -927,7 +933,7 @@ const [isLoading, setIsLoading] = useState(false)
                                                 );
                                               })}
                                               <Text marginLeft="4px">
-                                                ({numberOfRatings} reviews)
+                                                ({applicant.numberOfRatings} reviews)
                                               </Text>
                                             </Flex>
                                           ) : (
@@ -1024,7 +1030,7 @@ const [isLoading, setIsLoading] = useState(false)
                                             {applicant.firstName}{" "}
                                             {applicant.lastName}
                                           </Heading>
-                                          {numberOfRatings ? (
+                                          {applicant.numberOfRatings ? (
                                             <Flex>
                                               {maxRating.map((item, key) => {
                                                 return (
@@ -1036,7 +1042,7 @@ const [isLoading, setIsLoading] = useState(false)
                                                     <Image
                                                       boxSize="16px"
                                                       src={
-                                                        item <= rating
+                                                        item <= applicant.rating
                                                           ? star_filled
                                                           : star_corner
                                                       }
@@ -1045,7 +1051,7 @@ const [isLoading, setIsLoading] = useState(false)
                                                 );
                                               })}
                                               <Text marginLeft="4px">
-                                                ({numberOfRatings} reviews)
+                                                ({applicant.numberOfRatings} reviews)
                                               </Text>
                                             </Flex>
                                           ) : (
@@ -1092,8 +1098,23 @@ const [isLoading, setIsLoading] = useState(false)
                                       </Flex>
                                     </Card>
                                   )}
+                                    <Button
+                                position="absolute"
+                                bottom="8"
+                                  colorScheme="white"
+                                  textColor="red"
+                                  borderWidth="1px"
+                                  width="320px"
+                                  marginTop="8px"
+                                  onClick={() =>
+                                    handleDelete(allJobs)
+                                  }
+                                >
+                                  Cancel Job
+                                </Button>
                                 </>
                               ))
+                              
                             ) : (
                               <CardFooter
                                 flexDirection="column"
@@ -1107,6 +1128,21 @@ const [isLoading, setIsLoading] = useState(false)
                                 >
                                   No applicants yet
                                 </Text>
+
+                                <Button
+                                position="absolute"
+                                bottom="8"
+                                  colorScheme="white"
+                                  textColor="red"
+                                  borderWidth="1px"
+                                  width="320px"
+                                  marginTop="8px"
+                                  onClick={() =>
+                                    handleDelete(allJobs)
+                                  }
+                                >
+                                  Cancel Job
+                                </Button>
                               </CardFooter>
                             )}
                           </CardBody>
@@ -1290,7 +1326,7 @@ const [isLoading, setIsLoading] = useState(false)
                                 >
                                   <Flex>
                                     <Avatar
-                                      src="https://bit.ly/broken-link"
+                                      src={hiredApplicant.profilePictureResponse}
                                       bg="#01A2E8"
                                       size="md"
                                     />
@@ -1301,7 +1337,7 @@ const [isLoading, setIsLoading] = useState(false)
                                         {hiredApplicant.firstName}{" "}
                                         {hiredApplicant.lastName}
                                       </Heading>
-                                      {numberOfRatings ? (
+                                      {hiredApplicant.numberOfRatings ? (
                                         <Flex>
                                           {maxRating.map((item, key) => {
                                             return (
@@ -1313,7 +1349,7 @@ const [isLoading, setIsLoading] = useState(false)
                                                 <Image
                                                   boxSize="16px"
                                                   src={
-                                                    item <= rating
+                                                    item <= hiredApplicant.rating
                                                       ? star_filled
                                                       : star_corner
                                                   }
@@ -1322,7 +1358,7 @@ const [isLoading, setIsLoading] = useState(false)
                                             );
                                           })}
                                           <Text marginLeft="4px">
-                                            ({numberOfRatings} reviews)
+                                            ({hiredApplicant.numberOfRatings} reviews)
                                           </Text>
                                         </Flex>
                                       ) : (
@@ -1576,7 +1612,7 @@ const [isLoading, setIsLoading] = useState(false)
                                 >
                                   <Flex>
                                     <Avatar
-                                      src="https://bit.ly/broken-link"
+                                      src={hiredApplicant.profilePictureResponse}
                                       bg="#01A2E8"
                                       size="md"
                                     />
@@ -1587,7 +1623,7 @@ const [isLoading, setIsLoading] = useState(false)
                                         {hiredApplicant.firstName}{" "}
                                         {hiredApplicant.lastName}
                                       </Heading>
-                                      {numberOfRatings ? (
+                                      {hiredApplicant.numberOfRatings ? (
                                         <Flex>
                                           {maxRating.map((item, key) => {
                                             return (
@@ -1599,7 +1635,7 @@ const [isLoading, setIsLoading] = useState(false)
                                                 <Image
                                                   boxSize="16px"
                                                   src={
-                                                    item <= rating
+                                                    item <= hiredApplicant.rating
                                                       ? star_filled
                                                       : star_corner
                                                   }
@@ -1608,7 +1644,7 @@ const [isLoading, setIsLoading] = useState(false)
                                             );
                                           })}
                                           <Text marginLeft="4px">
-                                            ({numberOfRatings} reviews)
+                                            ({hiredApplicant.numberOfRatings} reviews)
                                           </Text>
                                         </Flex>
                                       ) : (

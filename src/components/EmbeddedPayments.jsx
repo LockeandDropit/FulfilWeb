@@ -74,7 +74,6 @@ const EmbeddedPayments = (props) => {
   console.log("props from embedded", props);
   const [propsHasSet, setPropsHasSet] = useState(false);
 
-
   const [postedJobs, setPostedJobs] = useState(null);
 
   //validate & set current user
@@ -95,12 +94,10 @@ const EmbeddedPayments = (props) => {
 
   useEffect(() => {
     if (user) {
-        handleModalOpen(props)
+      handleModalOpen(props);
     } else {
-
     }
-    
-  },[user])
+  }, [user]);
 
   //all the new code
 
@@ -128,7 +125,7 @@ const EmbeddedPayments = (props) => {
   const [hiredApplicantID, setHiredApplicantID] = useState(null);
 
   const getSelectedData = (props) => {
-    console.log("getselecteddata", props.props.jobTitle)
+    console.log("getselecteddata", props.props.jobTitle);
     const docRef = doc(
       db,
       "employers",
@@ -213,7 +210,6 @@ const EmbeddedPayments = (props) => {
   const [hiredApplicantStripeID, setHiredApplicantStripeID] = useState(null);
 
   const getStripeID = (props) => {
-    
     const docRef = doc(db, "users", props.props.hiredApplicant);
 
     getDoc(docRef).then((snapshot) => {
@@ -228,7 +224,6 @@ const EmbeddedPayments = (props) => {
   const [confirmedPrice, setConfirmedPrice] = useState(null);
 
   const retrieveConfirmedPaymentAmount = (props) => {
-  
     if (props.props.isHourly == true) {
       const docRef = doc(
         db,
@@ -277,7 +272,7 @@ const EmbeddedPayments = (props) => {
     onClosePayment();
     // paymentForm();
     // fetchClientSecret();
-    onOpenStripe()
+    onOpenStripe();
     setStripeOpen(true);
   };
 
@@ -318,22 +313,23 @@ const EmbeddedPayments = (props) => {
     // Create a Checkout Session
     console.log("job info", jobInfo);
 
-    return fetch(
-      "https://fulfil-api.onrender.com/create-checkout-web-embedded",
-     
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(jobInfo),
-      }
-    )
-      .then((res) => res.json())
-    //   .then((data) => console.log(data))
-      .then((data) => data.clientSecret)
-      
+    return (
+      fetch(
+        "https://fulfil-api.onrender.com/create-checkout-web-embedded",
+
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(jobInfo),
+        }
+      )
+        .then((res) => res.json())
+        //   .then((data) => console.log(data))
+        .then((data) => data.clientSecret)
+    );
 
     //pass data or data.clientSecret?
     // const { client_secret } = await response.json()
@@ -405,14 +401,69 @@ const EmbeddedPayments = (props) => {
   });
 
   //reactivate this
-//   useEffect(() => {
-//     onOpenStripe();
-//   });
+  //   useEffect(() => {
+  //     onOpenStripe();
+  //   });
 
   const handleReviewOpen = (postedJobs) => {
+    setDoc(doc(db, "users", hiredApplicantID, "Ratings", jobTitle), {
+      rating: defaultRating,
+    }).then(() => {
+      setTimeout(() => {
+        averageAndTotalRating();
+      }, 300);
+    });
+
     onOpenPayment();
     pushToJobInfo(postedJobs);
   };
+
+  //total rating calulation and submission to doer profile
+
+  const [rating, setRating] = useState(null);
+  const [numberOfRatings, setNumberOfRatings] = useState(null);
+
+  const averageAndTotalRating = () => {
+    const ratingsQuery = query(
+      collection(db, "users", hiredApplicantID, "Ratings")
+    );
+
+    onSnapshot(ratingsQuery, (snapshot) => {
+      let ratingResults = [];
+      snapshot.docs.forEach((doc) => {
+        //review what this does
+        if (isNaN(doc.data().rating)) {
+          console.log("not a number");
+        } else {
+          ratingResults.push(doc.data().rating);
+        }
+      });
+      //cited elsewhere
+      if (!ratingResults || !ratingResults.length) {
+        //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+        setRating(0);
+      } else {
+        setRating(ratingResults.reduce((a, b) => a + b) / ratingResults.length);
+        setNumberOfRatings(ratingResults.length);
+      }
+
+      //   setTimeout(() => {
+      // updateDoc(doc(db, "users", hiredApplicantID), {
+      //   Rating: rating,
+      //   numberOfRatings: numberOfRatings
+      // })
+      //   }, 3000)
+    });
+  };
+
+  useEffect(() => {
+    if (rating && numberOfRatings) {
+      updateDoc(doc(db, "users", hiredApplicantID), {
+        rating: rating,
+        numberOfRatings: numberOfRatings,
+      });
+    }
+  }, [rating, numberOfRatings]);
 
   const [status, setStatus] = useState(null);
   const [customerEmail, setCustomerEmail] = useState("");
@@ -506,7 +557,7 @@ const EmbeddedPayments = (props) => {
             setTimeout(() => {
               //add loading logic here
               // checkData();
-            //   moveAllData()
+              //   moveAllData()
             }, 2000);
           } else {
             alert(
@@ -745,8 +796,6 @@ const EmbeddedPayments = (props) => {
 
   //new code
 
-  
-
   if (isLoading === true) {
     return (
       <>
@@ -777,7 +826,6 @@ const EmbeddedPayments = (props) => {
           />
         </Alert>
       )}
-      
 
       {!props ? (
         <Text>No jobs in review</Text>
@@ -873,36 +921,33 @@ const EmbeddedPayments = (props) => {
               </ModalBody>
 
               <ModalFooter>
-                <Button
-                  colorScheme="blue"
-                  onClick={() => sendPaymentInfo()}
-                >
+                <Button colorScheme="blue" onClick={() => sendPaymentInfo()}>
                   Go to payment
                 </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
           {stripeOpen && (
-          <Modal
-          isOpen={isOpenStripe}
-          onClose={() => setStripeOpen(false)}
-          size="xl"
-       
-        >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalCloseButton />
+            <Modal
+              isOpen={isOpenStripe}
+              onClose={() => setStripeOpen(false)}
+              size="xl"
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalCloseButton />
 
-        <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
-          <EmbeddedCheckout />
-        </EmbeddedCheckoutProvider>
-        </ModalContent>
-        </Modal>
-  )}
+                <EmbeddedCheckoutProvider
+                  stripe={stripePromise}
+                  options={options}
+                >
+                  <EmbeddedCheckout />
+                </EmbeddedCheckoutProvider>
+              </ModalContent>
+            </Modal>
+          )}
         </div>
       )}
-
-     
     </div>
   );
 };

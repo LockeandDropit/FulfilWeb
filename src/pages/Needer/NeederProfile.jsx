@@ -82,30 +82,31 @@ const NeederProfile = () => {
   // const profilePictureURL = useSelector(selectUserProfilePicture);
 
   const [profilePicture, setProfilePicture] = useState(null);
+  const [hasUploadedProfilePicture, setHasUploadedProfilePicture] = useState(false)
 
-  useEffect(() => {
-    if (user) {
-      getProfilePicture();
-    } else {
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     getProfilePicture();
+  //   } else {
+  //   }
+  // }, [user]);
 
-  const getProfilePicture = async () => {
-    const storage = getStorage();
-    const reference = ref(
-      storage,
-      "employers/" + user.uid + "/profilePicture.jpg"
-    );
+  // const getProfilePicture = async () => {
+  //   const storage = getStorage();
+  //   const reference = ref(
+  //     storage,
+  //     "employers/" + user.uid + "/profilePicture.jpg"
+  //   );
 
-    console.log(reference)
-    if (!reference.service) {
+  //   console.log(reference)
+  //   if (!reference.service) {
     
-    } else {
-      await getDownloadURL(reference).then((response) => {
-        setProfilePicture(response);
-      });
-    }
-  };
+  //   } else {
+  //     await getDownloadURL(reference).then((response) => {
+  //       setProfilePicture(response);
+  //     });
+  //   }
+  // };
 
   const [userFirstName, setUserFirstName] = useState();
   const [userLastName, setUserLastName] = useState();
@@ -136,6 +137,7 @@ const NeederProfile = () => {
 
       getDoc(docRef).then((snapshot) => {
         console.log(snapshot.data());
+        setProfilePicture(snapshot.data().profilePictureResponse)
         setUserFirstName(snapshot.data().firstName);
         setUserLastName(snapshot.data().lastName);
         // setUserBio(snapshot.data().bio);
@@ -314,6 +316,38 @@ const NeederProfile = () => {
     await uploadBytes(pictureRef, bytes).then((snapshot) => {
       console.log(snapshot);
     });
+
+    await getDownloadURL(pictureRef).then((response) => {
+      updateDoc(doc(db, "employers", user.uid), {
+        profilePictureResponse: response
+        
+      })
+        .then(() => {
+          //all good
+     
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+      
+    });
+
+    setTimeout(() => {
+      updateDoc(doc(db, "employers", user.uid), {
+        hasUploadedProfilePicture: hasUploadedProfilePicture,
+        
+      })
+        .then(() => {
+          //all good
+          console.log("data submitted");
+          setHasUploadedProfilePicture(hasUploadedProfilePicture);
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+    })
 
     onCloseAvatar()
   };

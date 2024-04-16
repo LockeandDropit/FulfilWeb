@@ -256,8 +256,11 @@ const DoerProfile = () => {
       onSnapshot(q, (snapshot) => {
         let ratingResults = [];
         snapshot.docs.forEach((doc) => {
-          //review what this does
-          ratingResults.push(doc.data().rating);
+          if (isNaN(doc.data().rating)) {
+            console.log("not a number");
+          } else {
+            ratingResults.push(doc.data().rating);
+          }
         });
         //cited elsewhere
         if (!ratingResults || !ratingResults.length) {

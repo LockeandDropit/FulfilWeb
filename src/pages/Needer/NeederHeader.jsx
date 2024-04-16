@@ -94,19 +94,13 @@ const NeederHeader = () => {
   }, [user]);
 
   const getProfilePicture = async () => {
-    const storage = getStorage();
-    const reference = ref(
-      storage,
-      "employers/" + user.uid + "/profilePicture.jpg"
-    );
+    getDoc(doc(db, "employers", user.uid)).then((snapshot) => {
+      if (!snapshot.data().profilePictureResponse) {
 
-    // console.log(reference.service)
-    if (!reference.service) {
-    } else {
-      await getDownloadURL(reference).then((response) => {
-        setProfilePicture(response);
-      });
-    }
+      } else {
+        setProfilePicture(snapshot.data().profilePictureResponse)
+      }
+    })
   };
 
   return (

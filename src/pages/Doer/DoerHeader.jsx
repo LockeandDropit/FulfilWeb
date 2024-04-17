@@ -59,7 +59,7 @@ const DoerHeader = () => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
-        console.log(currentUser.uid);
+    
       });
       setHasRun(true);
     } else {
@@ -79,7 +79,7 @@ const DoerHeader = () => {
         setStripeID({ stripeID: snapshot.data().stripeID });
       });
     } else {
-      console.log("oops!");
+      
     }
   }, [user]);
 
@@ -140,7 +140,7 @@ const DoerHeader = () => {
 
     const { loginLink } = await response.json();
 
-    console.log("client data", loginLink);
+    
 
     setTimeout(() => {
       if (loginLink) {
@@ -160,6 +160,21 @@ const DoerHeader = () => {
     } else {
     }
   });
+
+
+  const initializeSubscription = () => {
+    fetch("https://fulfil-api.onrender.com/create-subscription-session", {
+      method: "POST"
+    })
+      .then(res => res.json())
+      .then(({ url }) => {
+        // window.location = url
+        window.open(url, "_blank")
+      })
+      .catch(e => {
+        console.error(e.error)
+      })
+  }
 
   return (
     <div className="header">
@@ -181,6 +196,16 @@ const DoerHeader = () => {
             />
           </MenuButton>
           <MenuList>
+          {/* <Button
+                  width="160px"
+                  backgroundColor="#01A2E8"
+                  textColor="white"
+                  height="32px"
+                  marginTop="8px"
+                  onClick={() => initializeSubscription()}
+                >
+                  Access Premium
+                </Button> */}
             <MenuItem type="primary" onClick={() => logInStripe()}>
               Access Stripe Account
             </MenuItem>

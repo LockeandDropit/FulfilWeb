@@ -44,7 +44,7 @@ const InReviewCard = () => {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
         setUserID(currentUser.uid);
-        console.log(currentUser.uid);
+   
       });
       setHasRun(true);
     } else {
@@ -70,7 +70,7 @@ const InReviewCard = () => {
         }
       });
     } else {
-      console.log("oops!");
+      
     }
   }, [user]);
 
@@ -82,17 +82,17 @@ const InReviewCard = () => {
   const [channelID, setChannelID] = useState(null)
   
  const getChannelID = (x) => {
-  console.log("this is whats being passed",x)
+ 
     if (user != null) {
     const docRef = doc(db, "users", user.uid, "In Review", x);
     getDoc(docRef).then((snapshot) => {
-      console.log(snapshot.data().channelID);
+      
     
       setChannelID(snapshot.data().channelID)
     });
     
     } else {
-      console.log("oops!");
+      
     }
   }
 
@@ -115,17 +115,16 @@ const InReviewCard = () => {
     // console.log("list of channels user is in", channelSort.data.name, channelSort.cid)
     if (channelSort.cid == channelID) {
       setSelectedChannel(channelSort)
-      console.log("channel found", channelSort.cid)
-      console.log("channel from FB", channelID)
+   
       //or just navigate from here to selected channel??
       //pass whole channel object to navigate
     } else {
-      console.log("no luck", channelSort.cid)
+   
     
     }
 
 })
-console.log("channel from FB", channelID)
+
   
   };
   const navigate = useNavigate();
@@ -133,10 +132,10 @@ console.log("channel from FB", channelID)
   useEffect(() => {
     if (selectedChannel !== null) {
      
-      console.log("selected channel", selectedChannel)
+     
       // navigate("TrialSelectedChat", { props: selectedChannel, isFirstInterview: false });
     } else {
-      console.log("nope");
+    
     }
   }, [selectedChannel]);
   return (

@@ -132,10 +132,19 @@ const DoerEmailRegister = () => {
     }
   };
 
+  const [openModal, setOpenModal] = useState(null)
+
+  const handleOpenModal = () => {
+    setOpenModal(true)
+    setTimeout(() => {
+      setOpenModal(false)
+    }, 200)
+  }
+
  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
-      <Header />
+      <Header props={openModal}/>
       {/* <Flex>
         <Box w="33vw" h="90vh" alignContent="center">
           <Center>
@@ -267,6 +276,7 @@ const DoerEmailRegister = () => {
                 onClick={() => validate()}>
                 Sign up
               </Button>
+              <Button backgroundColor="white" onClick={() => handleOpenModal()}>Already have an account?&nbsp;<Text>Log In</Text></Button>
             </Stack>
           </Stack>
         </Flex>

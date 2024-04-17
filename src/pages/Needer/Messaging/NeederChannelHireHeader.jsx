@@ -64,6 +64,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+
 } from "@chakra-ui/react";
 
 const NeederChannelHireHeader = () => {
@@ -764,9 +765,36 @@ const newMessageFromNeeder = () => {
   });
 }
 
+const [isLoading, setIsLoading] = useState(true)
+
+  setTimeout(() => {
+setIsLoading(false)
+  }, 500)
+
   return (
     <>
-      {isHired ? (
+      {isLoading ? ( <Card
+          boxShadow="sm"
+          rounded="md"
+          borderColor="#e4e4e4"
+          borderWidth="1px"
+          marginLeft="4px"
+          marginRight="4px"
+          height="120px"
+        >
+          <Box alignContent="center" justifyContent="center" alignItems="center">
+            <Center>
+            <Spinner
+                      thickness="4px"
+                      speed="0.65s"
+                      emptyColor="gray.200"
+                      color="#01A2E8"
+                      size="lg"
+                      marginTop="32px"
+                    />
+            </Center>
+          </Box>
+        </Card>) : isHired ? (
         <Card
           boxShadow="sm"
           rounded="md"

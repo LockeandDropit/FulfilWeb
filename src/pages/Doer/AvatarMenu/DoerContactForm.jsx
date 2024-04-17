@@ -94,7 +94,7 @@ const DoerContactForm = () => {
         setUser(currentUser);
         setUserID(currentUser.uid);
         setUserEmail(currentUser.email);
-        console.log(currentUser.uid);
+       
       });
       setHasRun(true);
     } else {
@@ -128,7 +128,7 @@ const DoerContactForm = () => {
     })
     .catch((error) => {
       // no bueno
-      console.log(error);
+      
     });
 
   

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import DoerHeader from "./DoerHeader";
 import {
   Drawer,
@@ -10,7 +10,15 @@ import {
   DrawerCloseButton,
   Button,
   Divider,
+  Heading,
+  Stack,
+  useColorModeValue,
+  List,
+  ListIcon,
+  ListItem,
+  VStack,
 } from "@chakra-ui/react";
+import { CheckIcon } from "@chakra-ui/icons";
 import { Container, Text, Flex, Box, Center } from "@chakra-ui/react";
 import { useClickable } from "@chakra-ui/clickable";
 import { chakra } from "@chakra-ui/react";
@@ -21,13 +29,100 @@ import {
   AccordionPanel,
   AccordionIcon,
 } from "@chakra-ui/react";
-
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { auth, db } from "../../firebaseConfig";
+import {
+  doc,
+  getDoc,
+  query,
+  collection,
+  onSnapshot,
+  updateDoc,
+  addDoc,
+  setDoc,
+} from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const DoerDashboard = () => {
-  const isOpen = true;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [user, setUser] = useState();
+  const [hasRun, setHasRun] = useState(false);
+
+  useEffect(() => {
+    if (hasRun === false) {
+      onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+      });
+      setHasRun(true);
+    } else {
+    }
+  });
 
   const navigate = useNavigate();
+
+  const [subscriptionID, setSubscriptionID] = useState(null);
+
+  const initializeSubscription = () => {
+    fetch("http://localhost:80/create-subscription-session", {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then(({ session }) => {
+        setSubscriptionID(session.id);
+        window.open(session.url, "_blank");
+      })
+      // .then(({ url }) => {
+      //   // window.location = url
+      //   window.open(url, "_blank")
+      // })
+      .catch((e) => {
+        console.error(e.error);
+      });
+  };
+
+  useEffect(() => {
+    if (subscriptionID) {
+      updateDoc(doc(db, "users", user.uid), {
+        subscriptionID: subscriptionID,
+      })
+        .then(() => {
+          //all good
+        })
+        .catch((error) => {
+          // no bueno
+        });
+    }
+  }, [subscriptionID]);
+
+  const [isPremium, setIsPremium] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+      const docRef = doc(db, "users", user.uid);
+      getDoc(docRef).then((snapshot) => {
+        console.log(snapshot.data().isPremium);
+        setIsPremium(snapshot.doc().isPremium)
+      })
+        .then(() => {
+          //all good
+          //setLoading false for rendering bottom premium section
+        })
+        .catch((error) => {
+          // no bueno
+        });
+    }
+  }, [user]);
 
   return (
     <>
@@ -155,12 +250,10 @@ const DoerDashboard = () => {
             backgroundColor="white"
             _hover={{ bg: "#01A2E8", textColor: "white" }}
             _active={{ backgroundColor: "#01A2E8", textColor: "white" }}
-           
-          //  colorScheme="white"
+            //  colorScheme="white"
             onClick={() => {
               navigate("/DoerMapScreen");
             }}
-          
           >
             My Jobs
           </Button>
@@ -201,8 +294,107 @@ const DoerDashboard = () => {
           >
             Profile
           </Button>
+          {isPremium ? (<Text>premium</Text>) : (null)}
+          <Box position="absolute" bottom="16">
+             <Heading size="sm">Want to make more money?</Heading>
+            <Button
+              background="#01A2E8"
+              textColor="white"
+              _hover={{ bg: "#018ecb", textColor: "white" }}
+              ml={3}
+              mt={3}
+              onClick={() => onOpen()}
+            >
+              Upgrade to Premium
+            </Button> 
+           
+          </Box>
         </Center>
       </Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <Center py={6}>
+            <Box
+              maxW={"330px"}
+              w={"full"}
+              bg={useColorModeValue("white", "gray.800")}
+              rounded={"md"}
+              overflow={"hidden"}
+            >
+              <VStack spacing={1} textAlign="center">
+                <Heading as="h1" fontSize="4xl">
+                  Upgrade to premium
+                </Heading>
+                <Text fontSize="lg" color={"gray.500"}>
+                  Get the frist 2 months for $1/month. Then continue at
+                  $79/month.
+                </Text>
+
+                <Text fontSize="md" color={"gray.500"}>
+                  Cancel at anytime.
+                </Text>
+              </VStack>
+              <Stack
+                textAlign={"center"}
+                p={5}
+                color={useColorModeValue("gray.800", "white")}
+                align={"center"}
+              >
+                <Text
+                  fontSize={"md"}
+                  fontWeight={500}
+                  textColor="#01A2E8"
+                  p={2}
+                  px={3}
+                  rounded={"full"}
+                >
+                  Premium Subscription
+                </Text>
+                <Stack direction={"row"} align={"center"} justify={"center"}>
+                  <Text fontSize={"3xl"}>$</Text>
+                  <Text fontSize={"6xl"} fontWeight={800}>
+                    1
+                  </Text>
+                  <Text color={"gray.500"}>/month</Text>
+                </Stack>
+              </Stack>
+
+              <Box px={1} py={6}>
+                <List spacing={3}>
+                  <ListItem>
+                    <ListIcon as={CheckIcon} color="#01A2E8" />
+                    Save 7% on all transaction fees
+                  </ListItem>
+                  <ListItem>
+                    <ListIcon as={CheckIcon} color="#01A2E8" />
+                    Get noticed by customers as a Premium Contractor
+                  </ListItem>
+
+                  <ListItem>
+                    <ListIcon as={CheckIcon} color="#01A2E8" />
+                    Be seen by customers who are looking for contractors in your
+                    category
+                  </ListItem>
+                </List>
+
+                <Button
+                  mt={10}
+                  w={"full"}
+                  bg="#01A2E8"
+                  color={"white"}
+                  rounded={"xl"}
+                  boxShadow={"0 5px 20px 0px rgb(72 187 120 / 43%)"}
+                  _hover={{ bg: "#018ecb", textColor: "white" }}
+                  onClick={() => initializeSubscription()}
+                >
+                  Start your trial
+                </Button>
+              </Box>
+            </Box>
+          </Center>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

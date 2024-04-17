@@ -40,7 +40,7 @@ const DoerSavedList = () => {
   onAuthStateChanged(auth, (currentUser) => {
     // setUser(currentUser);
     setUserIDStreamChat(currentUser.uid);
-    console.log(currentUser.uid);
+    
   });
 
 

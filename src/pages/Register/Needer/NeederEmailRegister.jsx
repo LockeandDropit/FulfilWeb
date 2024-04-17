@@ -144,10 +144,19 @@ const NeederEmailRegister = () => {
     }
   };
 
+  const [openModal, setOpenModal] = useState(null)
+
+  const handleOpenModal = () => {
+    setOpenModal(true)
+    setTimeout(() => {
+      setOpenModal(false)
+    }, 200)
+  }
+
   //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
-      <Header />
+      <Header props={openModal}/>
 
       <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
@@ -209,6 +218,7 @@ const NeederEmailRegister = () => {
                 >
                 Sign up
               </Button>
+              <Button backgroundColor="white" onClick={() => handleOpenModal()}>Already have an account?&nbsp;<Text>Log In</Text></Button>
             </Stack>
           </Stack>
         </Flex>

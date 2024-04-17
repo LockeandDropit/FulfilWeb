@@ -106,7 +106,7 @@ const DoerProfile = () => {
 
   useEffect(() => {
     if (client) {
-      console.log("is the user in the client?", client)
+      
     } else {
     }
   }, [client]);
@@ -152,7 +152,7 @@ const DoerProfile = () => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
-        console.log(currentUser.uid);
+       
       });
       setHasRun(true);
     } else {
@@ -164,7 +164,7 @@ const DoerProfile = () => {
       const docRef = doc(db, "users", user.uid);
 
       getDoc(docRef).then((snapshot) => {
-        console.log(snapshot.data());
+       
         setProfilePicture(snapshot.data().profilePictureResponse)
         setUserFirstName(snapshot.data().firstName);
         setUserLastName(snapshot.data().lastName);
@@ -175,7 +175,7 @@ const DoerProfile = () => {
         setUserCity(snapshot.data().city);
       });
     } else {
-      console.log("oops!");
+   
     }
   }, [user]);
 
@@ -187,7 +187,7 @@ const DoerProfile = () => {
         setUserBio(snapshot.data().bio);
       });
     } else {
-      console.log("oops!");
+
     }
   }, [user]);
 
@@ -210,7 +210,7 @@ const DoerProfile = () => {
           //review what this does
           skills.push({ ...doc.data(), id: doc.id });
         });
-        console.log(skills);
+     
         setUserSkills(skills);
 
         if (!skills || !skills.length) {
@@ -229,7 +229,7 @@ const DoerProfile = () => {
           //review what this does
           experience.push({ ...doc.data(), id: doc.id });
         });
-        console.log(experience);
+       
         // setUserExperience(experience);
         if (!experience || !experience.length) {
           //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
@@ -241,7 +241,7 @@ const DoerProfile = () => {
         }
       });
     } else {
-      console.log("oops!");
+   
     }
   }, [user]);
 
@@ -257,7 +257,7 @@ const DoerProfile = () => {
         let ratingResults = [];
         snapshot.docs.forEach((doc) => {
           if (isNaN(doc.data().rating)) {
-            console.log("not a number");
+          
           } else {
             ratingResults.push(doc.data().rating);
           }
@@ -274,7 +274,7 @@ const DoerProfile = () => {
         }
       });
     } else {
-      console.log("oops!");
+   
     }
   }, [user]);
 
@@ -387,12 +387,12 @@ const DoerProfile = () => {
     })
       .then(() => {
         //all good
-        console.log("data submitted");
+      
         setUserBio(updatedBio);
       })
       .catch((error) => {
         // no bueno
-        console.log(error);
+       
       });
 
     onCloseBio();
@@ -410,12 +410,8 @@ const DoerProfile = () => {
   const updateUserExperience = (userExperience) => {
     //submit data and update bio
 
-    console.log(
-      "here buddy",
-      userExperience.Description,
-      userExperience.Title,
-      userExperience.Years
-    );
+    
+   
 
     updateDoc(
       doc(db, "users", user.uid, "User Profile Experience", userExperience.id),
@@ -431,11 +427,11 @@ const DoerProfile = () => {
     )
       .then(() => {
         //all good
-        console.log("data submitted");
+       
       })
       .catch((error) => {
         // no bueno
-        console.log(error);
+        
       });
 
     setExperienceTitle1(null);
@@ -459,11 +455,11 @@ const DoerProfile = () => {
       )
         .then(() => {
           //all good
-          console.log("data submitted");
+        
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+         
         });
       onCloseAddExperience();
     } else if (userExperienceLength === 1) {
@@ -477,11 +473,11 @@ const DoerProfile = () => {
       )
         .then(() => {
           //all good
-          console.log("data submitted");
+         
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+         
         });
       onCloseAddExperience();
     } else if (userExperienceLength === 2) {
@@ -495,11 +491,11 @@ const DoerProfile = () => {
       )
         .then(() => {
           //all good
-          console.log("data submitted");
+        
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+         
         });
       onCloseAddExperience();
     } else {
@@ -527,18 +523,18 @@ const DoerProfile = () => {
   const updateUserQualification = (props) => {
     //submit data and update bio
 
-    console.log("here", props);
+   
     updateDoc(doc(db, "users", user.uid, "User Profile Skills", props.id), {
       Title: skillTitle1 ? skillTitle1 : props.Title,
       Description: skillDescription ? skillDescription : props.Description,
     })
       .then(() => {
         //all good
-        console.log("data submitted");
+        
       })
       .catch((error) => {
         // no bueno
-        console.log(error);
+        
       });
 
     setSkillTitle1(null);
@@ -555,11 +551,11 @@ const DoerProfile = () => {
       })
         .then(() => {
           //all good
-          console.log("data submitted");
+        
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+        
         });
       onCloseAddQualification();
     } else if (userSkillsLength === 1) {
@@ -569,11 +565,11 @@ const DoerProfile = () => {
       })
         .then(() => {
           //all good
-          console.log("data submitted");
+       
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+         
         });
       onCloseAddQualification();
     } else if (userSkillsLength === 2) {
@@ -583,11 +579,11 @@ const DoerProfile = () => {
       })
         .then(() => {
           //all good
-          console.log("data submitted");
+         
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+       
         });
       onCloseAddQualification();
     } else {
@@ -626,7 +622,7 @@ const DoerProfile = () => {
   const maxNumber = 1;
   const onChange = (imageList, addUpdateIndex) => {
     // data for submit
-    console.log("new pp",imageList[0].data_url);
+   
     setImages(imageList);
     setProfilePicture(imageList[0].data_url)
   };
@@ -638,7 +634,7 @@ const DoerProfile = () => {
       storage,
       "users/" + user.uid + "/profilePicture.jpg"
     );
-      console.log("images", images)
+    
     // setImage(result.assets[0].uri);
     // dispatch(selectUserProfilePicture(result.assets[0].uri))
 
@@ -646,7 +642,7 @@ const DoerProfile = () => {
     const bytes = await img.blob();
 
     await uploadBytes(pictureRef, bytes).then((snapshot) => {
-      console.log(snapshot);
+    
     });
 
     await getDownloadURL(pictureRef).then((response) => {
@@ -660,7 +656,7 @@ const DoerProfile = () => {
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+        
         });
       
     });
@@ -671,13 +667,12 @@ const DoerProfile = () => {
         
       })
         .then(() => {
-          //all good
-          console.log("data submitted");
+         
           setHasUploadedProfilePicture(hasUploadedProfilePicture);
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+     
         });
     })
   

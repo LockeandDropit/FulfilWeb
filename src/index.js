@@ -87,6 +87,10 @@ import OnboardingDoerTaxAgreement from "./pages/Register/Doer/OnboardingDoerTaxA
 import OnboardingDoerIDVerify from "./pages/Register/Doer/OnboardingDoerIDVerify";
 import StripeSetUp from "./pages/Register/Doer/StripeSetUp";
 import Landing from "./Landing";
+import SelectedCategory from "./components/SelectedCategory";
+import DoerSubscriptionComplete from "./pages/Doer/DoerSubscriptionComplete";
+
+
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebaseConfig"
@@ -328,12 +332,20 @@ const router = createBrowserRouter([
     element: <DoerEmailRegister />,
   },
   {
+    path: "/DoerSubscriptionComplete",
+    element: <DoerSubscriptionComplete />,
+  },
+  {
     path: "/EditPostedJob",
     element: <EditPostedJob />,
   },
   {
     path: "/EditJobInfo",
     element: <EditJobInfo />,
+  },
+  {
+    path: "/SelectedCategory",
+    element: <SelectedCategory />,
   },
 ]);
 

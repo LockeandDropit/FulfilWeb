@@ -60,7 +60,7 @@ const CompletedJobCard = () => {
         }
       });
     } else {
-      console.log("oops!");
+  
     }
   }, [user]);
   const [seeMore, setSeeMore] = useState(true);

@@ -11,6 +11,7 @@ import {
   Thread,
   useCreateChatClient,
   StreamChat,
+  useChatContext,
 } from "stream-chat-react";
 import "stream-chat-react/dist/css/v2/index.css";
 import { onAuthStateChanged } from "firebase/auth";
@@ -40,6 +41,8 @@ function App() {
     } else {
     }
   }, []);
+
+
 
   useEffect(() => {
     if (user) {

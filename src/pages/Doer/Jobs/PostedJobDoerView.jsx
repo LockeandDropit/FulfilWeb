@@ -24,7 +24,7 @@ const {state} = useLocation()
 
 const { jobID } = state
 
-console.log("here it is",jobID)
+
     // const jobID = props.route.params.props;
 
 
@@ -61,7 +61,7 @@ console.log("here it is",jobID)
           const docRef = doc(db, "Map Jobs", jobID);
     
           getDoc(docRef).then((snapshot) => {
-            console.log(snapshot.data());
+          
             setFlatRate(snapshot.data().flatRate)
             setJobTitle(snapshot.data().jobTitle);
             setLowerRate(snapshot.data().lowerRate);
@@ -83,7 +83,7 @@ console.log("here it is",jobID)
             setRequirements3(snapshot.data().requirements3);
           });
        
-          console.log("oops!");
+          
       
       }, []);
 

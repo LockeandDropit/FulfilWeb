@@ -20,7 +20,18 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../../firebaseConfig";
+import {
+  doc,
+  getDoc,
+  query,
+  collection,
+  onSnapshot,
+  updateDoc,
+  addDoc,
+  setDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import { auth, db } from "../../../firebaseConfig";
 import { ChannelFilters, ChannelOptions, ChannelSort, User } from "stream-chat";
 import {
   Channel,
@@ -67,12 +78,32 @@ const DoerMessageList = () => {
     }
   }, []);
 
+
+  const [profilePicture, setProfilePicture] = useState(null)
+  const [userName, setUserName] = useState(null)
+
+
+  useEffect(() => {
+    if (user) {
+      getDoc(doc(db, "users", user.uid)).then(
+        (snapshot) => {
+          if (!snapshot.data().profilePictureResponse) {
+            setUserName(snapshot.data().firstName)
+          } else {
+            setProfilePicture(snapshot.data().profilePictureResponse)
+            setUserName(snapshot.data().firstName)
+        }
+   
+      })
+    }
+  }, [user])
+
   const filter = { members: { $in: [userID] } };
 
   const userInfo = {
     id: userID,
-    // name: userName,
-    // image: `https://getstream.io/random_png/?id=${userId}&name=${userName}`,
+    name: userName,
+    image: profilePicture,
   };
 
   const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
@@ -82,13 +113,13 @@ const DoerMessageList = () => {
 // //my way
 
   useEffect(() => {
-    if (userID && chatClient) {
+    if (userID && userName && chatClient) {
       chatClient.connectUser(userInfo, chatClient.devToken(userID));
       console.log("userConnected!", chatClient._user.id);
       setClientIsSet(true);
     } else {
     }
-  }, [userID, chatClient, clientIsSet]);
+  }, [userID, chatClient, clientIsSet, userName]);
 
 
 
@@ -221,11 +252,11 @@ const DoerMessageList = () => {
                       <Flex marginTop="4">
                         <Chat client={chatClient}>
                           <Box height="800px">
-                            <ChannelList
+                            {/* <ChannelList
                               filters={filter}
                               Paginator={InfiniteScroll}
                               onSelect={() => console.log("click")}
-                            />
+                            /> */}
                           </Box>
                           <Channel channel={selectedChannel}>
                             <Box width="50vw" height="80vh">

@@ -73,11 +73,16 @@ const DoerMapScreen = () => {
   const [selectedLat, setSelectedLat] = useState(null)
   const [selectedLng, setSelectedLng] = useState(null)
 
+
+
+
+ 
+
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
-        console.log(currentUser.uid);
+     
       });
       setHasRun(true);
     } else {
@@ -100,7 +105,7 @@ const DoerMapScreen = () => {
         }
        
       });
-      console.log(results);
+    
       setPostedJobs(results);
     });
     // } else {
@@ -120,7 +125,7 @@ const DoerMapScreen = () => {
           //review what thiss does
           results.push({ ...doc.data(), id: doc.id });
         });
-        console.log(results);
+       
         setAppliedJobs(results);
       });
     }
@@ -137,7 +142,7 @@ const DoerMapScreen = () => {
         let results = [];
         snapshot.docs.forEach((doc) => {
           //review what thiss does
-          console.log(doc.data());
+         
           results.push({ ...doc.data(), id: doc.id });
         });
         if (!results || !results.length) {
@@ -145,11 +150,11 @@ const DoerMapScreen = () => {
           // setPostedJobs(0);
         } else {
           setJobsInProgress(results);
-          console.log("jobs in progress", results);
+        
         }
       });
     } else {
-      console.log("oops!");
+     
     }
   }, [user]);
 
@@ -164,7 +169,7 @@ const DoerMapScreen = () => {
         let results = [];
         snapshot.docs.forEach((doc) => {
           //review what thiss does
-          console.log(doc.data());
+         
           results.push({ ...doc.data(), id: doc.id });
         });
         if (!results || !results.length) {
@@ -172,11 +177,11 @@ const DoerMapScreen = () => {
           // setPostedJobs(0);
         } else {
           setJobsInReview(results);
-          console.log("jobs in review", results);
+         
         }
       });
     } else {
-      console.log("oops!");
+      
     }
   }, [user]);
 
@@ -194,7 +199,7 @@ const DoerMapScreen = () => {
         let results = [];
         snapshot.docs.forEach((doc) => {
           //review what thiss does
-          console.log(doc.data());
+          
           results.push({ ...doc.data(), id: doc.id });
         });
         if (!results || !results.length) {
@@ -202,11 +207,11 @@ const DoerMapScreen = () => {
           // setPostedJobs(0);
         } else {
           setCompletedJobsMap(results);
-          console.log("completed jobs", results);
+         
         }
       });
     } else {
-      console.log("oops!");
+      
     }
   }, [user]);
 
@@ -233,7 +238,7 @@ const DoerMapScreen = () => {
           locationLng: lng - offset * 0.0001,
         });
 
-        console.log("second encounter hash", finalfiltered);
+        
       } else {
         // If it hasn't been encountered before, mark it as seen in the hash table with an offset of 1
         hash[latLng] = 1;
@@ -248,7 +253,7 @@ const DoerMapScreen = () => {
 
   useEffect(() => {
     if (!postedJobs.length || !postedJobs) {
-      console.log("nothing");
+    
     } else {
       filteredLocations(postedJobs);
     }
@@ -256,7 +261,7 @@ const DoerMapScreen = () => {
 
   useEffect(() => {
     allJobs.map((allJobs) => {
-      console.log("location lat", allJobs.locationLat);
+    
     });
   }, [allJobs]);
 
@@ -276,19 +281,19 @@ const DoerMapScreen = () => {
   const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState(null);
 
   const handleToggleOpen = (x) => {
-    console.log(x);
+  
     setOpenInfoWindowMarkerID(x);
     getData(x);
   };
 
   const handleToggleAppliedOpen = (x) => {
-    console.log("handle toggle open Applied", x.jobID);
+    
     setOpenInfoWindowMarkerID(x.jobID);
     getData(x.jobID);
   };
 
   useEffect(() => {
-    console.log("window id", openInfoWindowMarkerID);
+ 
   }, [openInfoWindowMarkerID]);
 
   useEffect(() => {
@@ -296,18 +301,18 @@ const DoerMapScreen = () => {
       appliedJobs.forEach((appliedJob) => {
         postedJobs.forEach((postedJob) => {
           if (appliedJob.jobID === postedJob.jobID) {
-            console.log("match", postedJob.jobID);
+            
 
             //credit user1438038 & Niet the Dark Absol https://stackoverflow.com/questions/15287865/remove-array-element-based-on-object-property
 
             for (var i = allJobs.length - 1; i >= 0; --i) {
               if (allJobs[i].jobID == postedJob.jobID) {
                 allJobs.splice(i, 1);
-                console.log("did it all");
+               
               }
             }
           } else {
-            console.log("no luck");
+         
           }
         });
       });
@@ -356,11 +361,11 @@ const DoerMapScreen = () => {
       const docRef = doc(db, "users", user.uid);
 
       getDoc(docRef).then((snapshot) => {
-        console.log(snapshot.data());
+      
         setIsOnboarded(snapshot.data().isOnboarded);
       });
     } else {
-      console.log("oops!");
+    
     }
   }, [user]);
 
@@ -397,7 +402,7 @@ const DoerMapScreen = () => {
         })
         .catch((error) => {
           //uh oh
-          console.log(error);
+         
         });
 
       setDoc(
@@ -418,12 +423,12 @@ const DoerMapScreen = () => {
         .then(() => {
           //user info submitted to Job applicant file
 
-          console.log("Application submitted");
+        
           // navigation.navigate("BottomUserTab");
         })
         .catch((error) => {
           //uh oh
-          console.log(error);
+       
         });
 
       setDoc(doc(db, "users", user.uid, "Applied", jobTitle), {
@@ -461,7 +466,7 @@ const DoerMapScreen = () => {
         })
         .catch((error) => {
           //uh oh
-          console.log(error);
+          
         });
     } else {
       alert("Please finish onboarding before applying");
@@ -493,7 +498,7 @@ const DoerMapScreen = () => {
     const docRef = doc(db, "Map Jobs", openInfoWindowMarkerID);
 
     await getDoc(docRef).then((snapshot) => {
-      console.log("this is the selected job", snapshot.data());
+   
       setFlatRate(snapshot.data().flatRate);
       setJobTitle(snapshot.data().jobTitle);
       setLowerRate(snapshot.data().lowerRate);
@@ -522,11 +527,11 @@ const DoerMapScreen = () => {
   };
 
   const handleToggleInProgressOpen = (x) => {
-    console.log("handle toggle open", x);
+  
     setOpenInfoWindowMarkerID(x.jobID);
   };
   const handleToggleInReviewOpen = (x) => {
-    console.log("handle toggle open", x);
+   
     setOpenInfoWindowMarkerID(x.jobID);
   };
 
@@ -534,7 +539,7 @@ const DoerMapScreen = () => {
     const docRef = doc(db, "user", openInfoWindowMarkerID);
 
     await getDoc(docRef).then((snapshot) => {
-      console.log("this is the selected job", snapshot.data());
+     
       setFlatRate(snapshot.data().flatRate);
       setJobTitle(snapshot.data().jobTitle);
       setLowerRate(snapshot.data().lowerRate);
@@ -594,13 +599,13 @@ const DoerMapScreen = () => {
     })
       .then(() => {
         //all good
-        console.log("submitted to users saved Jobs");
+       
         // navigation.navigate("BottomUserTab");
         alert("Job Saved");
       })
       .catch((error) => {
         // no bueno
-        console.log(error);
+    
       });
 
     //submit data
@@ -618,7 +623,7 @@ const DoerMapScreen = () => {
   }, [searchJobCategory]);
 
   const searchCategory = (value) => {
-    console.log(value);
+   
     const q = query(collection(db, "Map Jobs"));
 
     if (value === "all") {
@@ -645,7 +650,7 @@ const DoerMapScreen = () => {
         results.map((results) => {
           if (results.category == value) {
             secondResults.push(results);
-            console.log("match", results);
+            
           } else {
           }
         });
@@ -667,7 +672,7 @@ const DoerMapScreen = () => {
 
   //remove newHireNotification
   const handleInProgressNavigate = (x) => {
-    console.log(x.jobTitle, x.firstHiredNotification);
+   
 
     if (x.firstHiredNotification === true) {
       updateDoc(doc(db, "users", user.uid, "Jobs In Progress", x.jobTitle), {
@@ -698,7 +703,7 @@ const DoerMapScreen = () => {
   const [isVolunteer, setIsVolunteer] = useState(null);
 
   const getSelectedData = (jobsInProgress) => {
-    console.log("mark complete job data", jobsInProgress);
+    
     setJobTitle(jobsInProgress.jobTitle);
     setEmployerID(jobsInProgress.employerID);
     setJobID(jobsInProgress.jobID);
@@ -764,10 +769,10 @@ const DoerMapScreen = () => {
         jobCompleteEmployer: false,
       })
         .then(() => {
-          console.log("moved to review for USER");
+         
         })
         .catch((error) => {
-          console.log(error);
+       
         });
 
       setDoc(doc(db, "employers", employerID, "In Review", jobTitle), {
@@ -799,30 +804,30 @@ const DoerMapScreen = () => {
         jobCompleteEmployer: false,
       })
         .then(() => {
-          console.log("moved to review for USER");
+         
         })
         .catch((error) => {
-          console.log(error);
+         
         });
 
       deleteDoc(doc(db, "users", user.uid, "Jobs In Progress", jobTitle))
         .then(() => {
           //all good
-          console.log("removed from users saved Jobs");
+          
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+      
         });
 
       deleteDoc(doc(db, "employers", employerID, "Jobs In Progress", jobTitle))
         .then(() => {
           //all good
-          console.log("removed from users saved Jobs");
+         
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+       
         });
 
       //submit data
@@ -832,11 +837,11 @@ const DoerMapScreen = () => {
       })
         .then(() => {
           //all good
-          console.log("data submitted");
+        
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+         
         });
 
       setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
@@ -844,7 +849,7 @@ const DoerMapScreen = () => {
       })
         .then(() => {})
         .catch((error) => {
-          console.log(error);
+        
         });
 
       setTimeout(() => {
@@ -895,10 +900,10 @@ const DoerMapScreen = () => {
       jobCompleteEmployer: false,
     })
       .then(() => {
-        console.log("moved to review for USER");
+      
       })
       .catch((error) => {
-        console.log(error);
+       
       });
 
     setDoc(doc(db, "employers", employerID, "In Review", jobTitle), {
@@ -928,30 +933,30 @@ const DoerMapScreen = () => {
       jobCompleteEmployer: false,
     })
       .then(() => {
-        console.log("moved to review for USER");
+   
       })
       .catch((error) => {
-        console.log(error);
+    
       });
 
     deleteDoc(doc(db, "users", user.uid, "Jobs In Progress", jobTitle))
       .then(() => {
         //all good
-        console.log("removed from users saved Jobs");
+      
       })
       .catch((error) => {
         // no bueno
-        console.log(error);
+      
       });
 
     deleteDoc(doc(db, "employers", employerID, "Jobs In Progress", jobTitle))
       .then(() => {
         //all good
-        console.log("removed from users saved Jobs");
+       
       })
       .catch((error) => {
         // no bueno
-        console.log(error);
+       
       });
 
     //submit data
@@ -960,11 +965,11 @@ const DoerMapScreen = () => {
     })
       .then(() => {
         //all good
-        console.log("data submitted");
+      
       })
       .catch((error) => {
         // no bueno
-        console.log(error);
+     
       });
 
     setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
@@ -972,7 +977,7 @@ const DoerMapScreen = () => {
     })
       .then(() => {})
       .catch((error) => {
-        console.log(error);
+     
       });
 
     setTimeout(() => {
@@ -1023,10 +1028,10 @@ const DoerMapScreen = () => {
         jobCompleteEmployer: false,
       })
         .then(() => {
-          console.log("moved to review for USER");
+         
         })
         .catch((error) => {
-          console.log(error);
+          
         });
 
       setDoc(doc(db, "employers", employerID, "In Review", jobTitle), {
@@ -1057,10 +1062,10 @@ const DoerMapScreen = () => {
         jobCompleteEmployer: false,
       })
         .then(() => {
-          console.log("moved to review for USER");
+          
         })
         .catch((error) => {
-          console.log(error);
+         
         });
 
       deleteDoc(
@@ -1068,11 +1073,11 @@ const DoerMapScreen = () => {
       )
         .then(() => {
           //all good
-          console.log("removed from users saved Jobs");
+       
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+       
         });
 
       deleteDoc(
@@ -1086,11 +1091,10 @@ const DoerMapScreen = () => {
       )
         .then(() => {
           //all good
-          console.log("removed from users saved Jobs");
+        
         })
         .catch((error) => {
-          // no bueno
-          console.log(error);
+         
         });
 
       setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
@@ -1100,7 +1104,7 @@ const DoerMapScreen = () => {
           setIsLoading(true);
         })
         .catch((error) => {
-          console.log(error);
+         
         });
 
       setTimeout(() => {
@@ -1128,7 +1132,7 @@ const DoerMapScreen = () => {
     const isValid = numberOnlyRegexMinimumCharacterInput.test(confirmHours);
     if (!isValid) {
       setConfirmHoursValidationMessage("Please enter valid hours");
-      console.log(confirmHoursValidationMessage);
+    
       setConfirmHours(confirmHours);
     } else {
       setConfirmHoursValidationMessage();
@@ -1187,7 +1191,7 @@ useEffect(() => {
       setStripeID({ stripeID: snapshot.data().stripeID });
     });
   } else {
-    console.log("oops!");
+
   }
 }, [user]);
 
@@ -1211,7 +1215,7 @@ const logInStripe = async () => {
 
   const { loginLink } = await response.json();
 
-  console.log("client data", loginLink);
+ 
 
   setTimeout(() => {
     if (loginLink) {

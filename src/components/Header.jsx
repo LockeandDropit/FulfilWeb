@@ -40,10 +40,16 @@ import fulfil180 from "../images/fulfil180.jpg";
 import { useNavigate } from "react-router-dom";
 import { StreamChat } from "stream-chat";
 
-const Header = () => {
+const Header = (props) => {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isOpen: isOpenWrongInfo, onOpen: onOpenWrongInfo, onClose: onCloseWrongInfo } = useDisclosure()
+
+  useEffect(() => {
+    if (props.props === true) {
+      onOpen()
+    }
+  }, [props])
 
   const [input, setInput] = useState("");
 
@@ -59,6 +65,7 @@ const Header = () => {
 
 
   const logIn = () => {
+
     const auth = getAuth();
     setPersistence(auth, browserLocalPersistence)
     .then(() => {
@@ -78,10 +85,10 @@ const Header = () => {
         const currentUser = response.user.uid;
 
         chatClient.connectUser({id: response.user.uid}, chatClient.devToken(response.user.uid));
-        console.log("userConnected!", chatClient._user.id);
+   
         // const docRefUsers = doc(db, "users", response.user.uid);
         // const docRefEmployers = doc(db, "employers", response.user.uid);
-        console.log("current user", currentUser);
+      
         // Thanks Jake :)
         Promise.all([
           getDoc(doc(db, "users", response.user.uid)),
@@ -96,7 +103,7 @@ const Header = () => {
             )
        
           )
-          .catch(console.log("issue"));
+          .catch();
       }
     )
     .catch((error) => {
@@ -161,6 +168,11 @@ const Header = () => {
       logIn();
     }
   };
+
+
+  const handleClose = () => {
+    onClose() 
+  }
   return (
     <>
     <div className="header">
@@ -169,9 +181,9 @@ const Header = () => {
       </div>
 
       <div className="headerRight">
-        <Button backgroundColor="white" onClick={() => navigate("/NeederEmailRegister")}>Post A Job</Button>
+        <Button backgroundColor="white" onClick={() => navigate("/NeederEmailRegister")}>Post a Job</Button>
         {/* <Button backgroundColor="white">Categories</Button> */}
-        <Button backgroundColor="white" onClick={() => navigate(`/DoerEmailRegister`)} marginRight="8px">Become A Doer</Button>
+        <Button backgroundColor="white" onClick={() => navigate(`/DoerEmailRegister`)} marginRight="8px">Become a Doer</Button>
       
        
        
@@ -179,7 +191,7 @@ const Header = () => {
       </div>
     </div>
 
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={() => handleClose()}>
         <ModalOverlay />
         <ModalContent>
         <Flex
@@ -246,7 +258,7 @@ const Header = () => {
                 <Text color="red" textAlign="center">{passwordValidationMessage}</Text>
               ) : null}
               <Text align="center" marginTop="2" color={'gray.500'}>or</Text>
-              <Button backgroundColor="white" textColor="#01A2E8"  onClick={() => navigate("/NeederEmailRegister")}>Register</Button>
+              <Button backgroundColor="white" textColor="#01A2E8"  onClick={() => onClose()}>Register</Button>
               </Stack>
             </Stack>
           </Stack>

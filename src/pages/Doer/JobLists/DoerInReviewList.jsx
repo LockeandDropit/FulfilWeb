@@ -41,7 +41,7 @@ const DoerInReviewList = () => {
   onAuthStateChanged(auth, (currentUser) => {
     // setUser(currentUser);
     setUserIDStreamChat(currentUser.uid);
-    console.log(currentUser.uid);
+   
   });
 
   //log into stream chat
@@ -73,7 +73,7 @@ const chatClient = new StreamChat(apiKey);
 useEffect(() => {
   if (userIDStreamChat && chatClient) {
     chatClient.connectUser(user, chatClient.devToken(userIDStreamChat));
-    console.log("userConnected!", chatClient._user.id)
+    
   } else {
 
   }

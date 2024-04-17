@@ -20,7 +20,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../../firebaseConfig";
+import { auth, db } from "../../../firebaseConfig";
 import { ChannelFilters, ChannelOptions, ChannelSort, User } from "stream-chat";
 import {
   Channel,
@@ -36,6 +36,17 @@ import {
   useChatContext,
   InfiniteScroll,
 } from "stream-chat-react";
+import {
+  doc,
+  getDoc,
+  query,
+  collection,
+  onSnapshot,
+  updateDoc,
+  addDoc,
+  setDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { StreamChat } from "stream-chat";
 import { Spinner } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -72,12 +83,32 @@ const NeederMessageList = () => {
     }
   }, []);
 
+
+
+  const [profilePicture, setProfilePicture] = useState(null)
+  const [userName, setUserName] = useState(null)
+
+  useEffect(() => {
+    if (user) {
+      getDoc(doc(db, "employers", user.uid)).then(
+        (snapshot) => {
+          if (!snapshot.data().profilePictureResponse) {
+            setUserName(snapshot.data().firstName)
+          } else {
+            setProfilePicture(snapshot.data().profilePictureResponse)
+            setUserName(snapshot.data().firstName)
+        }
+   
+      })
+    }
+  }, [user])
+
   const filter = { members: { $in: [userID] } };
 
   const userInfo = {
     id: userID,
-    // name: userName,
-    // image: `https://getstream.io/random_png/?id=${userId}&name=${userName}`,
+    name: userName,
+    image: profilePicture,
   };
 
 
@@ -88,14 +119,14 @@ const NeederMessageList = () => {
   const [clientIsSet, setClientIsSet] = useState(false);
 
   useEffect(() => {
-    if (userID && chatClient) {
+    if (userID && userName && chatClient) {
       chatClient.connectUser(userInfo, chatClient.devToken(userID));
       console.log("userConnected!", chatClient._user.id);
       console.log("what it should look like",chatClient)
       setClientIsSet(true);
     } else {
     }
-  }, [userID, chatClient, clientIsSet]);
+  }, [userID, chatClient, clientIsSet, userName]);
 
   const [doneLoading, setDoneLoading] = useState(false);
 
@@ -265,16 +296,22 @@ const NeederMessageList = () => {
                 <Flex marginTop="4">
                   <Chat client={chatClient}>
                     <Box height="800px" >
-                      <ChannelList
+                      {/* <ChannelList
                         filters={filter}
                         Paginator={InfiniteScroll}
-                      />
+                      /> */}
                     </Box>
+                   <Box   alignContent="center"
+                      justifyContent="center"
+                      alignItems="center"
+                      alignSelf="center"
+                      textAlign="center"
+                      marginLeft="240px">
                     <Channel channel={selectedChannel}>
                       <Box
                         width="50vw"
                         height="80vh"
-                  
+                    
                       >
                         <Window>
                           <NeederChannelHireHeader />
@@ -284,6 +321,7 @@ const NeederMessageList = () => {
                       </Box>
                       <Thread />
                     </Channel>
+                    </Box>
                   </Chat>
                 </Flex>
               </>

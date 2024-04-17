@@ -84,7 +84,7 @@ const DoerPaymentHistory = () => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
-        console.log(currentUser.uid);
+       
       });
       setHasRun(true);
     } else {
@@ -113,7 +113,7 @@ const DoerPaymentHistory = () => {
         }
       });
     } else {
-      console.log("oops!");
+     
     }
   }, [user]);
 

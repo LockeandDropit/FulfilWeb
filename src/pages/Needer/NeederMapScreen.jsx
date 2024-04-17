@@ -676,6 +676,8 @@ setIsLoading(true)
         console.log(error);
       });
 
+
+      
     deleteDoc(doc(db, "Map Jobs", user.uid, "Posted Jobs", x.jobTitle), {})
       .then(() => {
         //all good

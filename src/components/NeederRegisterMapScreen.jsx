@@ -56,7 +56,7 @@ const NeederRegisterMapScreen = () => {
           results.push({ ...doc.data(), id: doc.id });
         }
       });
-      console.log(results);
+   
 
       setPostedJobs(results);
     });
@@ -88,7 +88,7 @@ const NeederRegisterMapScreen = () => {
           locationLng: lng - offset * 0.0001,
         });
 
-        console.log("second encounter hash", finalfiltered);
+       
       } else {
         // If it hasn't been encountered before, mark it as seen in the hash table with an offset of 1
         hash[latLng] = 1;
@@ -103,7 +103,7 @@ const NeederRegisterMapScreen = () => {
 
   useEffect(() => {
     if (!postedJobs.length || !postedJobs) {
-      console.log("nothing");
+    
     } else {
       filteredLocations(postedJobs);
     }
@@ -111,7 +111,7 @@ const NeederRegisterMapScreen = () => {
 
   useEffect(() => {
     allJobs.map((allJobs) => {
-      console.log("location lat", allJobs.locationLat);
+     
     });
   }, [allJobs]);
 
@@ -131,7 +131,7 @@ const NeederRegisterMapScreen = () => {
   const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState(null);
 
   const handleToggleOpen = (x) => {
-    console.log(x);
+   
     setOpenInfoWindowMarkerID(x);
   };
 
@@ -147,7 +147,7 @@ const NeederRegisterMapScreen = () => {
   }, [searchJobCategory]);
 
   const searchCategory = (value) => {
-    console.log(value);
+   
     const q = query(collection(db, "Map Jobs"));
 
     if (value === "all") {
@@ -174,7 +174,7 @@ const NeederRegisterMapScreen = () => {
         results.map((results) => {
           if (results.category == value) {
             secondResults.push(results);
-            console.log("match", results);
+          
           } else {
           }
         });

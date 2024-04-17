@@ -103,12 +103,12 @@ const DoerIDVerify = () => {
         const docRef = doc(db, "users", user.uid);
 
         getDoc(docRef).then((snapshot) => {
-          console.log(snapshot.data().IDBackUploaded);
+       
           setIDFrontUploaded(snapshot.data().IDFrontUploaded);
           setIDBackUploaded(snapshot.data().IDBackUploaded);
         });
       } else {
-        console.log("sospsjs!");
+      
       }
     }, 50);
   }, [user]);
@@ -129,7 +129,7 @@ const DoerIDVerify = () => {
   const maxNumber = 1;
   const onChange = (imageList, addUpdateIndex) => {
     // data for submit
-    console.log("new pp", imageList[0].data_url);
+  
     setImages(imageList[0].data_url);
     // setProfilePicture(imageList[0].data_url)
   };
@@ -137,7 +137,7 @@ const DoerIDVerify = () => {
   const uploadToFirebaseFront = async () => {
     const storage = getStorage();
     const pictureRef = ref(storage, "users/" + user.uid + "/photoIDFront.jpg");
-    console.log("images", images);
+  
     // setImage(result.assets[0].uri);
     // dispatch(selectUserProfilePicture(result.assets[0].uri))
 
@@ -145,7 +145,7 @@ const DoerIDVerify = () => {
     const bytes = await img.blob();
 
     await uploadBytes(pictureRef, bytes).then((snapshot) => {
-      console.log(snapshot);
+   
     });
 
     updateDoc(doc(db, "users", user.uid), {
@@ -162,7 +162,7 @@ const DoerIDVerify = () => {
 
   const onChangeBack = (imageList, addUpdateIndex) => {
     // data for submit
-    console.log("new pp", imageList[0].data_url);
+  
     setImagesBack(imageList[0].data_url);
     // setProfilePicture(imageList[0].data_url)
   };
@@ -170,7 +170,7 @@ const DoerIDVerify = () => {
   const uploadToFirebaseBack = async () => {
     const storage = getStorage();
     const pictureRef = ref(storage, "users/" + user.uid + "/photoIDBack.jpg");
-    console.log("images back", imagesBack);
+    
     // setImage(result.assets[0].uri);
     // dispatch(selectUserProfilePicture(result.assets[0].uri))
 
@@ -178,7 +178,7 @@ const DoerIDVerify = () => {
     const bytes = await img.blob();
 
     await uploadBytes(pictureRef, bytes).then((snapshot) => {
-      console.log(snapshot);
+     
     });
 
     updateDoc(doc(db, "users", user.uid), {

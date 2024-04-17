@@ -86,7 +86,7 @@ const DoerUserAgreement = () => {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
 
-        console.log(currentUser.uid);
+       
       });
       setHasRun(true);
     } else {

@@ -95,7 +95,7 @@ const DoerAccountManager = () => {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
         setUserEmail(currentUser.email);
-        console.log(currentUser.uid);
+       
       });
       setHasRun(true);
       setLoading(false);
@@ -141,7 +141,7 @@ const DoerAccountManager = () => {
         setUserFirstName(snapshot.data().firstName);
       });
     } else {
-      console.log("oops!");
+   
     }
   }, [user]);
 
@@ -186,7 +186,7 @@ const DoerAccountManager = () => {
         const docRef = doc(db, "users", user.uid);
 
         getDoc(docRef).then((snapshot) => {
-          console.log(snapshot.data());
+        
           setPrivacyAgreement(snapshot.data().PrivacyPolicyAgree);
           setIDVerified(snapshot.data().IDVerified);
           setTaxAgreementConfirmed(snapshot.data().TaxAgreementConfirmed);
@@ -196,7 +196,7 @@ const DoerAccountManager = () => {
           }
         });
       } else {
-        console.log("sospsjs!");
+       
       }
     }, 50);
   }, [user]);
@@ -226,7 +226,7 @@ const DoerAccountManager = () => {
       if (stripeIDFromFB) {
         setStripeID({ stripeID: stripeIDFromFB });
         setGetIDHasRun(true);
-        console.log(stripeID)
+        
       }
     } else {
     }
@@ -259,7 +259,7 @@ const DoerAccountManager = () => {
     );
     const { chargesEnabled, payoutsEnabled } = await response.json();
 
-    console.log(chargesEnabled, payoutsEnabled);
+  
 
     if (chargesEnabled === true && payoutsEnabled === true) {
       setStripeActive(true);
@@ -269,11 +269,11 @@ const DoerAccountManager = () => {
       })
         .then(() => {
           //all good
-          console.log("all stripe info updated and active");
+   
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+    
         });
     } else {
       // alert(
@@ -310,8 +310,7 @@ const DoerAccountManager = () => {
 
     const { accountLink, error, accountID } = await response.json();
 
-    console.log(JSON.stringify(accountLink));
-    console.log("this is ID", accountID);
+   
 
     // setOnboardURL(accountLink.url);
     setStripeID({ stripeID: accountID });
@@ -349,11 +348,11 @@ const DoerAccountManager = () => {
       })
         .then(() => {
           //all good
-          console.log("ID submitted");
+        
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+         
         });
     }
   }, [stripeID, user]);

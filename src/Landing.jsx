@@ -38,7 +38,7 @@ const Landing = () => {
 
       <Hero />
       <LandingPageMap />
-
+      <Categories />
 
    
     </>

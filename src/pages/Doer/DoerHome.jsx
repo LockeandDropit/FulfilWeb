@@ -39,7 +39,7 @@ const DoerHome = () => {
   onAuthStateChanged(auth, (currentUser) => {
     // setUser(currentUser);
     setUserIDStreamChat(currentUser.uid);
-    console.log(currentUser.uid);
+   
   });
 
   //log into stream chat

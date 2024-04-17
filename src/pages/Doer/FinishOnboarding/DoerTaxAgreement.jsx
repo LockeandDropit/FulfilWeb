@@ -90,7 +90,7 @@ const DoerTaxAgreement = () => {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
         setUserEmail(currentUser.email);
-        console.log(currentUser.uid);
+       
       });
       setHasRun(true);
       setLoading(false);

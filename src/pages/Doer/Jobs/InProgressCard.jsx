@@ -68,7 +68,7 @@ const InProgressCard = () => {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
         setUserID(currentUser.uid);
-        console.log(currentUser.uid);
+        
       });
       setHasRun(true);
     } else {
@@ -94,7 +94,7 @@ const InProgressCard = () => {
         }
       });
     } else {
-      console.log("oops!");
+      
     }
   }, [user]);
 
@@ -103,7 +103,7 @@ const InProgressCard = () => {
   const [channelID, setChannelID] = useState(null);
 
   const getChannelID = (x) => {
-    console.log("this is whats being passed", x.channelID);
+  
     // if (user != null) {
     // const docRef = doc(db, "users", user.uid, "In Progress", x.jobTitle);
     // getDoc(docRef).then((snapshot) => {
@@ -143,7 +143,7 @@ const InProgressCard = () => {
   //props passed https://stackoverflow.com/questions/64566405/react-router-dom-v6-usenavigate-passing-value-to-another-component
   const navigateToChannel = (x) => {
     navigate("/DoerMessageList", { state: { selectedChannel: x.channelID } });
-    console.log(x.channelID);
+   
   };
 
   const getChannels = async (x) => {
@@ -154,12 +154,11 @@ const InProgressCard = () => {
         // console.log("list of channels user is in", channelSort.data.name, channelSort.cid)
         if (channelSort.cid == x.channelID) {
           setSelectedChannel(channelSort);
-          console.log("channel found", channelSort.cid);
-          console.log("channel from FB", x.channelID);
+        
           //or just navigate from here to selected channel??
           //pass whole channel object to navigate
         } else {
-          console.log("no luck", channelSort.cid);
+         
         }
       });
     }, 1000);
@@ -168,10 +167,10 @@ const InProgressCard = () => {
 
   useEffect(() => {
     if (selectedChannel !== null) {
-      console.log("selected channel", selectedChannel);
+   
       // navigate("TrialSelectedChat", { props: selectedChannel, isFirstInterview: false });
     } else {
-      console.log("nope");
+     
     }
   }, [selectedChannel]);
 
@@ -203,7 +202,7 @@ const InProgressCard = () => {
 
   //get data
   const getSelectedData = (postedJobs) => {
-   console.log("is this the one Im clicking on?",postedJobs)
+  
    setJobTitle(postedJobs.jobTitle)
    setEmployerID(postedJobs.employerID)
    setJobID(postedJobs.jobID)
@@ -264,7 +263,7 @@ const InProgressCard = () => {
     const isValid = numberOnlyRegexMinimumCharacterInput.test(confirmHours);
     if (!isValid) {
       setConfirmHoursValidationMessage("Please enter valid hours");
-      console.log(confirmHoursValidationMessage);
+     
       setConfirmHours(confirmHours);
     } else {
       setConfirmHoursValidationMessage();
@@ -327,10 +326,10 @@ channelID : channelID,
       jobCompleteEmployer: false,
     })
       .then(() => {
-        console.log("moved to review for USER");
+        
       })
       .catch((error) => {
-        console.log(error);
+        
       });
 
     setDoc(
@@ -369,10 +368,10 @@ channelID : channelID,
       }
     )
       .then(() => {
-        console.log("moved to review for USER");
+     
       })
       .catch((error) => {
-        console.log(error);
+       
       });
 
     deleteDoc(
@@ -380,11 +379,11 @@ channelID : channelID,
     )
       .then(() => {
         //all good
-        console.log("removed from users saved Jobs");
+      
       })
       .catch((error) => {
         // no bueno
-        console.log(error);
+       
       });
 
     deleteDoc(
@@ -398,11 +397,11 @@ channelID : channelID,
     )
       .then(() => {
         //all good
-        console.log("removed from users saved Jobs");
+       
       })
       .catch((error) => {
         // no bueno
-        console.log(error);
+      
       });
 
     //submit data
@@ -420,11 +419,11 @@ channelID : channelID,
     )
       .then(() => {
         //all good
-        console.log("data submitted");
+      
       })
       .catch((error) => {
         // no bueno
-        console.log(error);
+       
       });
 
     setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
@@ -432,7 +431,7 @@ channelID : channelID,
     })
       .then(() => {})
       .catch((error) => {
-        console.log(error);
+      
       });
 
     setTimeout(() => {
@@ -485,10 +484,10 @@ channelID : channelID,
         jobCompleteEmployer: false,
       })
         .then(() => {
-          console.log("moved to review for USER");
+        
         })
         .catch((error) => {
-          console.log(error);
+          
         });
 
       setDoc(
@@ -529,10 +528,10 @@ channelID : channelID,
         }
       )
         .then(() => {
-          console.log("moved to review for USER");
+     
         })
         .catch((error) => {
-          console.log(error);
+      
         });
 
       deleteDoc(
@@ -540,11 +539,11 @@ channelID : channelID,
       )
         .then(() => {
           //all good
-          console.log("removed from users saved Jobs");
+          
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+   
         });
 
       deleteDoc(
@@ -558,11 +557,11 @@ channelID : channelID,
       )
         .then(() => {
           //all good
-          console.log("removed from users saved Jobs");
+          
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+        
         });
 
       //submit data
@@ -581,11 +580,11 @@ channelID : channelID,
       )
         .then(() => {
           //all good
-          console.log("data submitted");
+        
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+          
         });
 
       setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
@@ -593,7 +592,7 @@ channelID : channelID,
       })
         .then(() => {})
         .catch((error) => {
-          console.log(error);
+         
         });
 
       setTimeout(() => {
@@ -646,10 +645,10 @@ channelID : channelID,
         jobCompleteEmployer: false,
       })
         .then(() => {
-          console.log("moved to review for USER");
+     
         })
         .catch((error) => {
-          console.log(error);
+         
         });
 
       setDoc(
@@ -689,10 +688,10 @@ channelID : channelID,
         }
       )
         .then(() => {
-          console.log("moved to review for USER");
+     
         })
         .catch((error) => {
-          console.log(error);
+      
         });
 
       deleteDoc(
@@ -700,11 +699,11 @@ channelID : channelID,
       )
         .then(() => {
           //all good
-          console.log("removed from users saved Jobs");
+       
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+         
         });
 
       deleteDoc(
@@ -718,11 +717,11 @@ channelID : channelID,
       )
         .then(() => {
           //all good
-          console.log("removed from users saved Jobs");
+        
         })
         .catch((error) => {
           // no bueno
-          console.log(error);
+         
         });
 
       setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
@@ -730,7 +729,7 @@ channelID : channelID,
       })
         .then(() => {})
         .catch((error) => {
-          console.log(error);
+        
         });
 
       setTimeout(() => {

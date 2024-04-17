@@ -71,7 +71,7 @@ import star_filled from "../images/star_filled.png";
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const EmbeddedPayments = (props) => {
-  console.log("props from embedded", props);
+
   const [propsHasSet, setPropsHasSet] = useState(false);
 
   const [postedJobs, setPostedJobs] = useState(null);
@@ -85,7 +85,7 @@ const EmbeddedPayments = (props) => {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
         setUserID(currentUser.uid);
-        console.log(currentUser.uid);
+   
       });
       setHasRun(true);
     } else {
@@ -125,7 +125,7 @@ const EmbeddedPayments = (props) => {
   const [hiredApplicantID, setHiredApplicantID] = useState(null);
 
   const getSelectedData = (props) => {
-    console.log("getselecteddata", props.props.jobTitle);
+  
     const docRef = doc(
       db,
       "employers",
@@ -136,7 +136,7 @@ const EmbeddedPayments = (props) => {
 
     getDoc(docRef)
       .then((snapshot) => {
-        console.log("get selected data fx", snapshot.data());
+  
         setHiredApplicantID(snapshot.data().hiredApplicant);
         setJobTitle(snapshot.data().jobTitle);
         setJobID(snapshot.data().jobID);
@@ -196,7 +196,7 @@ const EmbeddedPayments = (props) => {
   }, [confirmedRate, confirmHours]);
 
   const handleModalOpen = (props) => {
-    console.log("embedded modal open", props);
+
     getSelectedData(props);
     retrieveConfirmedPaymentAmount(props);
     // pushToJobInfo(postedJobs);
@@ -213,10 +213,7 @@ const EmbeddedPayments = (props) => {
     const docRef = doc(db, "users", props.props.hiredApplicant);
 
     getDoc(docRef).then((snapshot) => {
-      console.log(
-        "hired applicant stripe ID from FB",
-        snapshot.data().stripeID
-      );
+      
       setHiredApplicantStripeID(snapshot.data().stripeID);
     });
   };
@@ -259,10 +256,10 @@ const EmbeddedPayments = (props) => {
       });
     }
 
-    console.log("confirmedPrice", confirmedPrice);
+  
   };
 
-  console.log("confirmedPrice", confirmedPrice);
+  
 
   const [stripeOpen, setStripeOpen] = useState(false);
 
@@ -311,7 +308,7 @@ const EmbeddedPayments = (props) => {
 
   const fetchClientSecret = useCallback(() => {
     // Create a Checkout Session
-    console.log("job info", jobInfo);
+  
 
     return (
       fetch(
@@ -341,8 +338,7 @@ const EmbeddedPayments = (props) => {
   const options = { fetchClientSecret };
 
   const paymentForm = async () => {
-    console.log("job info", jobInfo);
-    console.log("jobTitle", jobInfo[5]);
+   
 
     const response = await fetch(
       //this one is the live one
@@ -363,7 +359,7 @@ const EmbeddedPayments = (props) => {
 
     const { session } = await response.json();
 
-    console.log("session", session);
+
 
     if (!session) {
       alert(
@@ -371,7 +367,7 @@ const EmbeddedPayments = (props) => {
       );
     } else {
       if (session.payment_status === "succeeded") {
-        console.log("you got it bubba");
+   
       }
     }
 
@@ -433,7 +429,7 @@ const EmbeddedPayments = (props) => {
       snapshot.docs.forEach((doc) => {
         //review what this does
         if (isNaN(doc.data().rating)) {
-          console.log("not a number");
+        
         } else {
           ratingResults.push(doc.data().rating);
         }
@@ -491,7 +487,7 @@ const EmbeddedPayments = (props) => {
 
     getDoc(docRef)
       .then((snapshot) => {
-        console.log("getdatAgain", snapshot.data());
+       
         setHiredApplicantID(snapshot.data().hiredApplicant);
         setJobTitle(snapshot.data().jobTitle);
         setJobID(snapshot.data().jobID);
@@ -536,7 +532,7 @@ const EmbeddedPayments = (props) => {
     const urlParams = new URLSearchParams(queryString);
     const sessionId = urlParams.get("session_id");
 
-    console.log("client return", queryString, urlParams, sessionId);
+  
 
     if (sessionId) {
       setHasRun(false);
@@ -550,7 +546,7 @@ const EmbeddedPayments = (props) => {
           setJobTitle(data.jobTitle);
           setUserID(data.userID);
           setConfirmedPriceUI(data.confirmedPrice * 0.1);
-          console.log("data final retuirn", data);
+        
           if (data.status === "complete" && data.jobTitle) {
             setIsLoading(true);
             getJobDataAgain(data);
@@ -631,76 +627,27 @@ const EmbeddedPayments = (props) => {
 
   const moveAllData = () => {
     //this was all taken from ReviewWorker (in case something doesnt work and it needs to be moved back)
-    console.log(
-      "employerID",
-      userID,
-      "jobTitle",
-      jobTitle,
-      "jobID",
-      jobID,
-      " confirmedRate",
-      confirmedRate,
-      "confirmHours",
-      confirmHours,
-      " totalPay",
-      confirmedPriceUI,
-      " isHourly",
-      isHourly,
-      " confirmedRate",
-      confirmedRate,
-      " businessName",
-      businessName,
-      " description",
-      description,
-      " city",
-      city,
-      " lowerRate",
-      lowerRate,
-      "upperRate",
-      upperRate,
-      " isVolunteer",
-      isVolunteer,
-      " isOneTime",
-      isOneTime,
-      " streetAddress",
-      streetAddress,
-      "state",
-      state,
-      "zipCode",
-      zipCode,
-      "requirements ",
-      requirements,
-      "requirements2",
-      requirements2,
-      "requirements3",
-      requirements3,
-      "niceToHave",
-      niceToHave,
-      // locationLat: locationLat,
-      // locationLng: locationLng,
-      "hiredApplicant",
-      hiredApplicantID
-    );
+ 
 
     //delete from In Review
     deleteDoc(doc(db, "employers", userID, "In Review", jobTitle))
       .then(() => {
         //all good
-        console.log("removed from users saved Jobs");
+   
       })
       .catch((error) => {
         // no bueno
-        console.log(error);
+
       });
 
     deleteDoc(doc(db, "users", hiredApplicantID, "In Review", jobTitle))
       .then(() => {
         //all good
-        console.log("removed from users db");
+
       })
       .catch((error) => {
         // no bueno
-        console.log(error);
+    
       });
 
     // //  //add to Jobs Completed
@@ -736,10 +683,10 @@ const EmbeddedPayments = (props) => {
       paymentCompletedAndPending: true,
     })
       .then(() => {
-        console.log("moved to completed for user");
+      
       })
       .catch((error) => {
-        console.log(error);
+       
       });
 
     setDoc(doc(db, "employers", userID, "Past Jobs", jobTitle), {
@@ -772,10 +719,10 @@ const EmbeddedPayments = (props) => {
       paymentCompletedAndPending: true,
     })
       .then(() => {
-        console.log("moved to completed for Employer");
+     
       })
       .catch((error) => {
-        console.log(error);
+  
       });
 
     setIsLoading(false);

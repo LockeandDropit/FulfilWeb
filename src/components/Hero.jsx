@@ -8,6 +8,8 @@ import {
   Stack,
   Text,
   useBreakpointValue,
+  Center,
+  Box
 } from '@chakra-ui/react'
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +18,7 @@ const Hero = () => {
     const navigate = useNavigate();
 
     //credit template hero split screen with image https://chakra-templates.vercel.app/page-sections/hero
-
+//credit image Nate Johnson https://unsplash.com/photos/a-group-of-men-standing-around-a-white-sheet-of-paper-DowtEyavqsY
   return (
 
     
@@ -57,19 +59,25 @@ const Hero = () => {
               onClick={() => navigate("/NeederEmailRegister")}>
              Get Started
             </Button> */}
-            <Button backgroundColor="#01A2E8" color="white" _hover={{ bg: "#018ecb", textColor: "white" }}  onClick={() => navigate("/NeederEmailRegister")}>Get Started </Button>
+            <Button backgroundColor="#01A2E8" color="white" _hover={{ bg: "#018ecb", textColor: "white" }}  onClick={() => navigate("/NeederEmailRegister")}>Get Started</Button>
             {/* <Button rounded={'full'}>How It Works</Button> */}
           </Stack>
         </Stack>
       </Flex>
       <Flex flex={1}>
+        <Box marginLeft="96px">
         <Image
+        alignContent="center"
+        justifyContent="center"
+        height="90vh"
           alt={'Login Image'}
           objectFit={'cover'}
           src={
-            'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+            "https://images.unsplash.com/photo-1632862378069-4ad0348cea4f?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           }
         />
+        </Box>
+        
       </Flex>
     </Stack>
   )

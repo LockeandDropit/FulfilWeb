@@ -67,6 +67,8 @@ const NeederMapScreen = () => {
   const navigate = useNavigate();
 
   const [hasRun, setHasRun] = useState(false);
+  const [selectedLat, setSelectedLat] = useState(null)
+  const [selectedLng, setSelectedLng] = useState(null)
 
   useEffect(() => {
     if (hasRun === false) {
@@ -224,7 +226,10 @@ const NeederMapScreen = () => {
   const handleToggleOpen = (x) => {
     setApplicant(null)
     setOpenInfoWindowMarkerID(x.jobID);
-
+console.log("handle passed location", x.locationLat, x.locationLng )
+    //center map on spot selected
+    setSelectedLat(x.locationLat)
+    setSelectedLng(x.locationLng)
 setIsLoading(true)
     if (x.hasNewApplicant === true) {
       updateDoc(doc(db, "employers", user.uid, "Posted Jobs", x.jobTitle), {
@@ -367,8 +372,21 @@ setIsLoading(true)
 
     setTimeout(() => {
       setIsLoading(false)
+      
     }, 1000)
+  
   };
+
+
+
+  useEffect(() => {
+    if (selectedLat) {
+      setTimeout(() => {
+        setSelectedLat(null)
+        setSelectedLng(null)
+      }, 100)
+    }
+  }, [selectedLat])
 
   const [hiredApplicant, setHiredApplicant] = useState(null);
   const handleToggleInProgressOpen = (x) => {
@@ -702,7 +720,9 @@ const handleCloseInfoWindow = () => {
         <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
           <div style={{ height: "90vh", width: "93vw" }}>
             <Map
-              defaultCenter={{ lat: defaultLat, lng: defaultLong }}
+           
+            //   defaultCenter={{ lat: defaultLat, lng: defaultLong }}
+              defaultCenter={{ lat: selectedLat ? selectedLat : defaultLat, lng: selectedLng ? selectedLng : defaultLong }}
               defaultZoom={12}
               gestureHandling={"greedy"}
               disableDefaultUI={true}

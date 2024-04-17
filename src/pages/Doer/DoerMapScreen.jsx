@@ -70,6 +70,9 @@ const DoerMapScreen = () => {
 
   const [hasRun, setHasRun] = useState(false);
 
+  const [selectedLat, setSelectedLat] = useState(null)
+  const [selectedLng, setSelectedLng] = useState(null)
+
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
@@ -1213,6 +1216,7 @@ const logInStripe = async () => {
   setTimeout(() => {
     if (loginLink) {
       setSessionUrl(loginLink);
+      setLoadingPayment(false)
     }
   }, 1000);
 };
@@ -1231,14 +1235,16 @@ useEffect(() => {
   }
 }, []);
 
+const [loadingPayment, setLoadingPayment] = useState(false)
 
 const handleSeePayment = (x) => {
-
+  setLoadingPayment(true)
   if (x.firstViewNotification === true) {
     updateDoc(doc(db, "users", user.uid, "Past Jobs Map", x.jobTitle), {
       firstViewNotification: false,
     }).then(() => {
       logInStripe()
+
     })
   } else {
     logInStripe()
@@ -1264,7 +1270,8 @@ const handleRemoveFromMap = (x) => {
           <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
             <div style={{ height: "90vh", width: "93vw" }}>
               <Map
-                defaultCenter={{ lat: defaultLat, lng: defaultLong }}
+                // center={{ lat: selectedLat ? selectedLat : defaultLat, lng: selectedLng ? selectedLng : defaultLong }}
+                defaultCenter={{ lat: selectedLat ? selectedLat : defaultLat, lng: selectedLng ? selectedLng : defaultLong }}
                 defaultZoom={12}
                 gestureHandling={"greedy"}
                 disableDefaultUI={true}
@@ -2344,7 +2351,19 @@ const handleRemoveFromMap = (x) => {
                                   >
                                     
                                   </Text>
-
+                                  {loadingPayment ? (
+                        <Center>
+                          {" "}
+                          <Spinner
+                            thickness="4px"
+                            speed="0.65s"
+                            emptyColor="gray.200"
+                            color="blue.500"
+                            size="xl"
+                            marginTop="24px"
+                          />
+                        </Center>
+                      ) : (
                                   <Button
                                       marginTop="24px"
                                       backgroundColor="#01A2E8"
@@ -2362,6 +2381,7 @@ const handleRemoveFromMap = (x) => {
                                     >
                                       See Payment
                                     </Button>
+                      )}
                                     <Button
                                       marginTop="24px"
                                       backgroundColor="white"
@@ -2406,7 +2426,7 @@ const handleRemoveFromMap = (x) => {
                             emptyColor="gray.200"
                             color="blue.500"
                             size="xl"
-                            marginTop="240px"
+                            marginTop="24px"
                           />
                         </Center>
                       ) : (

@@ -154,6 +154,8 @@ const DoerDashboard = () => {
             width="320px"
             backgroundColor="white"
             _hover={{ bg: "#01A2E8", textColor: "white" }}
+            _active={{ backgroundColor: "#01A2E8", textColor: "white" }}
+           
           //  colorScheme="white"
             onClick={() => {
               navigate("/DoerMapScreen");

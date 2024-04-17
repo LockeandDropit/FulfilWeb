@@ -9,7 +9,7 @@ import {
   Container,
   Textarea,
   Select,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import {
   FormControl,
@@ -588,6 +588,9 @@ const AddJobStart = () => {
     console.log(streetAddress);
   }, [streetName, streetName]);
 
+  const [addressIncorrect, setAddressIncorrect] = useState(false)
+  let addressIncorrectMessage = "Please enter a more specific address"
+
   useEffect(() => {
     if (firstAddress !== null) {
       let results = [];
@@ -595,37 +598,37 @@ const AddJobStart = () => {
       //evaluate if type == street address, city, state, etc
       // if true, push to corresponding state
       // firstAddress.forEach((firstAddress) => {
-      if (firstAddress) {
+      if (firstAddress[0]) {
         console.log(firstAddress);
         setStreetNumber(firstAddress[0].long_name);
         // setStreetNumber(firstAddress[0].long_name);
         // console.log("first one", firstAddress[0].long_name);
       } else {
-        console.log("nooooooo");
+        setAddressIncorrect(true)
       }
-      if (firstAddress) {
+      if (firstAddress[1]) {
         setStreetName(firstAddress[1].long_name);
         // console.log(firstAddress[1].long_name);
       } else {
-        console.log("nooooooo");
+        setAddressIncorrect(true)
       }
-      if (firstAddress) {
+      if (firstAddress[2]) {
         setCity(firstAddress[2].long_name);
         // console.log(firstAddress[2].long_name);
       } else {
-        console.log("nooooooo");
+        setAddressIncorrect(true)
       }
-      if (firstAddress) {
+      if (firstAddress[4]) {
         setState(firstAddress[4].long_name);
         // console.log(firstAddress[4].long_name);
       } else {
-        console.log("nooooooo");
+        setAddressIncorrect(true)
       }
-      if (firstAddress) {
+      if (firstAddress[6]) {
         setZipCode(firstAddress[6].long_name);
-        // console.log(firstAddress[6].long_name);
+       setAddressIncorrect(false)
       } else {
-        console.log("nooooooo");
+        setAddressIncorrect(true)
       }
       // });
     } else {
@@ -653,12 +656,8 @@ const AddJobStart = () => {
 
   const [loading, setLoading] = useState(true);
   setTimeout(() => {
-    setLoading(false)
+    setLoading(false);
   }, 1000);
-
- 
-
-
 
   //help loading map async codmitu https://github.com/Tintef/react-google-places-autocomplete/issues/342
 
@@ -688,8 +687,7 @@ const AddJobStart = () => {
           marginRight="16"
           //   overflowY="scroll"
         >
-          
-           <Flex direction="column">
+          <Flex direction="column">
             <Heading size="lg">Add A New Job</Heading>
             <FormControl isRequired>
               <FormLabel marginTop="8">Job Title</FormLabel>
@@ -707,17 +705,23 @@ const AddJobStart = () => {
                 apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
                 fetchDetails={true}
                 // minLengthAutocomplete={3}
-                
+                autocompletionRequest={{
+                  
+                    types: ["address"],
+                  
+                }}
                 selectProps={{
-                rawAddress,
-          
+                  rawAddress,
+
                   onChange: setRawAddress,
                   placeholder: "Type address here",
-                  blurInputOnSelect: true,
-                
+                 
                 }}
               />
             </Box>
+            {addressIncorrect === true ? (
+                <Text color="red">{addressIncorrectMessage}</Text>
+              ) : null}
             <FormControl>
               <FormLabel marginTop="8">
                 What category of work is this? (optional)
@@ -853,7 +857,6 @@ const AddJobStart = () => {
               Next{" "}
             </Button>
           </Flex>
-        
         </Box>
       </Flex>
     </>

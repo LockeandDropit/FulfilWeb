@@ -115,7 +115,7 @@ const DoerSubscriptionComplete = () => {
 
   useEffect(() => {
  
-
+//credit and help from https://github.com/pagecow/stripe-subscribe-payments
     if (sessionID) {
       setHasRun(false);
       fetch(
@@ -206,15 +206,15 @@ const DoerSubscriptionComplete = () => {
               textAlign="center"
             >
               <Heading size="md">You're subscribed!</Heading>
-              <Text marginTop="8px">Thank you for being a premium member.</Text>
+              <Text marginTop="8px">You can now display which categories you specialize in on your profile.</Text>
               <Button
                 backgroundColor="#01A2E8"
                 marginTop="8px"
                 color="white"
                 _hover={{ bg: "#018ecb", textColor: "white" }}
-                onClick={() => navigate("/DoerMapScreen")}
+                onClick={() => navigate("/DoerProfile")}
               >
-                Continue
+                Go to my profile 
               </Button>
             </Box>
           </Center>

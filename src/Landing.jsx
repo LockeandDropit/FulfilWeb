@@ -17,14 +17,15 @@ import {
   InputGroup,
   InputRightAddon,
 } from "@chakra-ui/react";
-import { ArrowForwardIcon } from '@chakra-ui/icons'
-import Planning from "./images/Planning.jpg"
-import ManWorking from "./images/ManWorking.jpg"
-import house from "./images/house.jpg"
-import rotar from "./images/rotar.jpg"
+import { ArrowForwardIcon } from "@chakra-ui/icons";
+import Planning from "./images/Planning.jpg";
+import ManWorking from "./images/ManWorking.jpg";
+import house from "./images/house.jpg";
+import rotar from "./images/rotar.jpg";
 
-import  Hero  from "./components/Hero.jsx";
+import Hero from "./components/Hero.jsx";
 import LandingPageMap from "./components/LandingPageMap.jsx";
+import Footer from "./components/Footer.jsx";
 
 const Landing = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -39,8 +40,7 @@ const Landing = () => {
       <Hero />
       <LandingPageMap />
       <Categories />
-
-   
+      <Footer />
     </>
   );
 };

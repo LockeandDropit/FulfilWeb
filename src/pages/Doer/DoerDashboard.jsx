@@ -17,6 +17,7 @@ import {
   ListIcon,
   ListItem,
   VStack,
+  Skeleton
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 import { Container, Text, Flex, Box, Center } from "@chakra-ui/react";
@@ -54,26 +55,58 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const DoerDashboard = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+ 
 
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   const [hasRun, setHasRun] = useState(false);
 
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
+        console.log(currentUser.uid)
       });
       setHasRun(true);
     } else {
     }
-  });
+  },[]);
+
+  const [isLoading, setIsLoading] = useState(true)
+  const [isPremium, setIsPremium] = useState(null)
+
+  const [test, setTest] = useState("test")
+
+  useEffect(() => {
+    if (user) {
+      const docRef = doc(db, "users", user.uid);
+      getDoc(docRef).then((snapshot) => {
+     console.log(snapshot.data())
+        setIsPremium(snapshot.data().isPremium)
+      })
+        .then(() => {
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 500)
+        
+        })
+        .catch((error) => {
+          // no buen
+          console.log(error)
+        });
+    }
+  }, [user]);
+
+
+  useEffect(() => {
+    console.log(isLoading, isPremium)
+  }, [isLoading, isPremium])
 
   const navigate = useNavigate();
 
   const [subscriptionID, setSubscriptionID] = useState(null);
 
   const initializeSubscription = () => {
+    //credit and help from https://github.com/pagecow/stripe-subscribe-payments
     fetch("http://localhost:80/create-subscription-session", {
       method: "POST",
     })
@@ -105,25 +138,8 @@ const DoerDashboard = () => {
     }
   }, [subscriptionID]);
 
-  const [isPremium, setIsPremium] = useState(false)
-
-  useEffect(() => {
-    if (user) {
-      const docRef = doc(db, "users", user.uid);
-      getDoc(docRef).then((snapshot) => {
-        console.log(snapshot.data().isPremium);
-        setIsPremium(snapshot.doc().isPremium)
-      })
-        .then(() => {
-          //all good
-          //setLoading false for rendering bottom premium section
-        })
-        .catch((error) => {
-          // no bueno
-        });
-    }
-  }, [user]);
-
+ 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <Box
@@ -294,8 +310,29 @@ const DoerDashboard = () => {
           >
             Profile
           </Button>
-          {isPremium ? (<Text>premium</Text>) : (null)}
-          <Box position="absolute" bottom="16">
+
+          
+          {isLoading ? ( 
+          <Skeleton position="absolute" bottom="16" width="240px">
+          <div>contents wrapped</div>
+  <div>won't be visible</div>
+  <div>contents wrapped</div>
+  
+     
+          </Skeleton>) : isPremium ? (<Box position="absolute" bottom="16">
+             <Heading size="sm">You're a premium member!</Heading>
+            <Button
+              background="#01A2E8"
+              textColor="white"
+              _hover={{ bg: "#018ecb", textColor: "white" }}
+              ml={3}
+              mt={3}
+              // onClick={() => onOpen()}
+            >
+              Manage my Account
+            </Button> 
+           
+          </Box>) : ( <Box position="absolute" bottom="16">
              <Heading size="sm">Want to make more money?</Heading>
             <Button
               background="#01A2E8"
@@ -308,7 +345,9 @@ const DoerDashboard = () => {
               Upgrade to Premium
             </Button> 
            
-          </Box>
+          </Box>)}
+          
+         
         </Center>
       </Box>
       <Modal isOpen={isOpen} onClose={onClose}>

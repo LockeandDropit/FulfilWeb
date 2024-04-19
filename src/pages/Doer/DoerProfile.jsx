@@ -9,7 +9,7 @@ import {
   Box,
   Container,
   Textarea,
-  Image
+  Image,
 } from "@chakra-ui/react";
 import {
   FormControl,
@@ -26,7 +26,7 @@ import {
   CardFooter,
   Divider,
   Stack,
-  Select
+  Select,
 } from "@chakra-ui/react";
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -41,7 +41,7 @@ import {
   addDoc,
   deleteDoc,
   setDoc,
-  col
+  col,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -79,7 +79,7 @@ import {
   AlertDescription,
   CloseButton,
 } from "@chakra-ui/react";
-import { StarIcon } from '@chakra-ui/icons'
+import { StarIcon } from "@chakra-ui/icons";
 import ImageUploading from "react-images-uploading";
 
 import star_corner from "../../images/star_corner.png";
@@ -98,22 +98,17 @@ const DoerProfile = () => {
 
   const [user, setUser] = useState();
 
-
-
-
   // this gets the profile picture
   // const profilePictureURL = useSelector(selectUserProfilePicture);
 
   const [profilePicture, setProfilePicture] = useState(null);
-  const [hasUploadedProfilePicture, setHasUploadedProfilePicture] = useState(false)
+  const [hasUploadedProfilePicture, setHasUploadedProfilePicture] =
+    useState(false);
 
-
-
-  const { client } = useChatContext()
+  const { client } = useChatContext();
 
   useEffect(() => {
     if (client) {
-      
     } else {
     }
   }, [client]);
@@ -121,15 +116,8 @@ const DoerProfile = () => {
   // const getProfilePicture = async () => {
   //   const storage = getStorage();
   //   const reference = ref(storage, "users/" + user.uid + "/profilePicture.jpg");
-  
-     
 
-    
-    
   // };
-
-
-
 
   //redux store
   // const firstName = useSelector(selectUserFirstName);
@@ -154,15 +142,13 @@ const DoerProfile = () => {
   const [] = useState();
   const [hasRun, setHasRun] = useState(false);
   const [updatedBio, setUpdatedBio] = useState(null);
-  const [isPremium, setIsPremium] = useState(null)
-  const [userInfo, setUserInfo] = useState(null)
-
+  const [isPremium, setIsPremium] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
-       
       });
       setHasRun(true);
     } else {
@@ -174,33 +160,30 @@ const DoerProfile = () => {
       const docRef = doc(db, "users", user.uid);
 
       getDoc(docRef).then((snapshot) => {
-        setUserInfo(snapshot.data())
-       setIsPremium(snapshot.data().isPremium)
-        setProfilePicture(snapshot.data().profilePictureResponse)
+        setUserInfo(snapshot.data());
+        setIsPremium(snapshot.data().isPremium);
+        setProfilePicture(snapshot.data().profilePictureResponse);
         setUserFirstName(snapshot.data().firstName);
         setUserLastName(snapshot.data().lastName);
         // setUserBio(snapshot.data().bio);
         setUserState(snapshot.data().state);
-        
 
         setUserCity(snapshot.data().city);
 
         if (snapshot.data().premiumCategoryOne) {
-          setPremiumCategoryOne(snapshot.data().premiumCategoryOne)
-          setInitialPremiumCategoryOne(snapshot.data().premiumCategoryOne)
+          setPremiumCategoryOne(snapshot.data().premiumCategoryOne);
+          setInitialPremiumCategoryOne(snapshot.data().premiumCategoryOne);
         }
         if (snapshot.data().premiumCategoryTwo) {
-          setPremiumCategoryTwo(snapshot.data().premiumCategoryTwo)
-          setInitialPremiumCategoryTwo(snapshot.data().premiumCategoryTwo)
+          setPremiumCategoryTwo(snapshot.data().premiumCategoryTwo);
+          setInitialPremiumCategoryTwo(snapshot.data().premiumCategoryTwo);
         }
         if (snapshot.data().premiumCategoryThree) {
-          setPremiumCategoryThree(snapshot.data().premiumCategoryThree)
-          setInitialPremiumCategoryThree(snapshot.data().premiumCategoryThree)
+          setPremiumCategoryThree(snapshot.data().premiumCategoryThree);
+          setInitialPremiumCategoryThree(snapshot.data().premiumCategoryThree);
         }
-
       });
     } else {
-   
     }
   }, [user]);
 
@@ -212,7 +195,6 @@ const DoerProfile = () => {
         setUserBio(snapshot.data().bio);
       });
     } else {
-
     }
   }, [user]);
 
@@ -235,7 +217,7 @@ const DoerProfile = () => {
           //review what this does
           skills.push({ ...doc.data(), id: doc.id });
         });
-     
+
         setUserSkills(skills);
 
         if (!skills || !skills.length) {
@@ -254,7 +236,7 @@ const DoerProfile = () => {
           //review what this does
           experience.push({ ...doc.data(), id: doc.id });
         });
-       
+
         // setUserExperience(experience);
         if (!experience || !experience.length) {
           //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
@@ -266,13 +248,12 @@ const DoerProfile = () => {
         }
       });
     } else {
-   
     }
   }, [user]);
 
   //pulls cumulative reviews
-  const [numberOfRatings, setNumberOfRatings] = useState(null)
-  
+  const [numberOfRatings, setNumberOfRatings] = useState(null);
+
   useEffect(() => {
     if (user != null) {
       // should this be done on log ina nd stored in redux store so it's cheaper?
@@ -282,7 +263,6 @@ const DoerProfile = () => {
         let ratingResults = [];
         snapshot.docs.forEach((doc) => {
           if (isNaN(doc.data().rating)) {
-          
           } else {
             ratingResults.push(doc.data().rating);
           }
@@ -295,11 +275,10 @@ const DoerProfile = () => {
           setRating(
             ratingResults.reduce((a, b) => a + b) / ratingResults.length
           );
-          setNumberOfRatings(ratingResults.length)
+          setNumberOfRatings(ratingResults.length);
         }
       });
     } else {
-   
     }
   }, [user]);
 
@@ -417,148 +396,134 @@ const DoerProfile = () => {
     })
       .then(() => {
         //all good
-      
+
         setUserBio(updatedBio);
       })
       .catch((error) => {
         // no bueno
-       
       });
 
     onCloseBio();
   };
 
+  const [premiumCategoryOne, setPremiumCategoryOne] = useState(null);
+  const [premiumCategoryTwo, setPremiumCategoryTwo] = useState(null);
+  const [premiumCategoryThree, setPremiumCategoryThree] = useState(null);
 
-const [premiumCategoryOne, setPremiumCategoryOne] = useState(null)
-const [premiumCategoryTwo, setPremiumCategoryTwo] = useState(null)
-const [premiumCategoryThree, setPremiumCategoryThree] = useState(null)
+  //this state is held to track changes between old and new categories to delete old ones in the database.
 
-//this state is held to track changes between old and new categories to delete old ones in the database.
+  const [initialPremiumCategoryOne, setInitialPremiumCategoryOne] =
+    useState(null);
+  const [initialPremiumCategoryTwo, setInitialPremiumCategoryTwo] =
+    useState(null);
+  const [initialPremiumCategoryThree, setInitialPremiumCategoryThree] =
+    useState(null);
 
-const [initialPremiumCategoryOne, setInitialPremiumCategoryOne] = useState(null)
-const [initialPremiumCategoryTwo, setInitialPremiumCategoryTwo] = useState(null)
-const [initialPremiumCategoryThree, setInitialPremiumCategoryThree] = useState(null)
+  const [isUploaded, setIsUploaded] = useState(false);
 
-const [isUploaded, setIsUploaded] = useState(false)
+  const handleAllFBCategoryChange = () => {
+    handlePremiumCategoryUpload();
+    handleGlobalCategoryUpload();
 
-const handleAllFBCategoryChange = () => {
-  handlePremiumCategoryUpload()
-  handleGlobalCategoryUpload()
+    handleGlobalCategoryRemoval();
+  };
 
-  handleGlobalCategoryRemoval()
-}
+  const handlePremiumCategoryUpload = () => {
+    console.log(premiumCategoryOne, premiumCategoryTwo, premiumCategoryThree);
 
-const handlePremiumCategoryUpload = () => {
-
-console.log(premiumCategoryOne, premiumCategoryTwo, premiumCategoryThree)
-
-  updateDoc(doc(db, "users", user.uid), {
-    premiumCategoryOne: premiumCategoryOne ? premiumCategoryOne : null,
-    premiumCategoryTwo: premiumCategoryTwo ? premiumCategoryTwo : null,
-    premiumCategoryThree: premiumCategoryThree ? premiumCategoryThree : null
-  })
-    .then(() => {
-      //all good
-   
-      setIsUploaded(true)
-      setPremiumCategoryOne(premiumCategoryOne)
-      setPremiumCategoryTwo(premiumCategoryTwo)
-      setPremiumCategoryThree(premiumCategoryOne)
-      
-  
-    })
-    .catch((error) => {
-      // no bueno
-     
-    });
-}
-
-
-//need to add user id to selected category, tier one
-
-
-const handleGlobalCategoryUpload = () => {
-
-  if (premiumCategoryOne) {
-    setDoc(doc(db, "categories", premiumCategoryOne, "Tier 1", user.uid), {
-   placeholder: "placeholder"
+    updateDoc(doc(db, "users", user.uid), {
+      premiumCategoryOne: premiumCategoryOne ? premiumCategoryOne : null,
+      premiumCategoryTwo: premiumCategoryTwo ? premiumCategoryTwo : null,
+      premiumCategoryThree: premiumCategoryThree ? premiumCategoryThree : null,
     })
       .then(() => {
         //all good
-        setIsUploaded(true)
-  
+
+        setIsUploaded(true);
+        setPremiumCategoryOne(premiumCategoryOne);
+        setPremiumCategoryTwo(premiumCategoryTwo);
+        setPremiumCategoryThree(premiumCategoryOne);
       })
       .catch((error) => {
         // no bueno
-       
       });
-  } 
-  
-  if (premiumCategoryTwo) {
-    setDoc(doc(db, "categories", premiumCategoryTwo, "Tier 1", user.uid), {
-   placeholder: "placeholder"
-    })
-      .then(() => {
-        //all good
-        setIsUploaded(true)
-  
+  };
+
+  //need to add user id to selected category, tier one
+
+  const handleGlobalCategoryUpload = () => {
+    if (premiumCategoryOne) {
+      setDoc(doc(db, "categories", premiumCategoryOne, "Tier 1", user.uid), {
+        placeholder: "placeholder",
       })
-      .catch((error) => {
-        // no bueno
-       
-      });
-  }
-  
-  if (premiumCategoryThree) {
-    setDoc(doc(db, "categories", premiumCategoryThree, "Tier 1", user.uid), {
-   placeholder: "placeholder"
-    })
-      .then(() => {
-        //all good
-        setIsUploaded(true)
-  
+        .then(() => {
+          //all good
+          setIsUploaded(true);
+        })
+        .catch((error) => {
+          // no bueno
+        });
+    }
+
+    if (premiumCategoryTwo) {
+      setDoc(doc(db, "categories", premiumCategoryTwo, "Tier 1", user.uid), {
+        placeholder: "placeholder",
       })
-      .catch((error) => {
-        // no bueno
-       
+        .then(() => {
+          //all good
+          setIsUploaded(true);
+        })
+        .catch((error) => {
+          // no bueno
+        });
+    }
+
+    if (premiumCategoryThree) {
+      setDoc(doc(db, "categories", premiumCategoryThree, "Tier 1", user.uid), {
+        placeholder: "placeholder",
+      })
+        .then(() => {
+          //all good
+          setIsUploaded(true);
+        })
+        .catch((error) => {
+          // no bueno
+        });
+    }
+  };
+
+  const handleGlobalCategoryRemoval = () => {
+    // [x] on page load set premium categories already being used by the user.
+    // [] check to see if the initial values are different than the new values
+
+    let initialValues = [
+      initialPremiumCategoryOne,
+      initialPremiumCategoryTwo,
+      initialPremiumCategoryThree,
+    ];
+    let newValues = [
+      premiumCategoryOne,
+      premiumCategoryTwo,
+      premiumCategoryThree,
+    ];
+
+    //credit zcoop98 & Luis Sieira https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
+    let difference = initialValues.filter((x) => !newValues.includes(x));
+
+    //if so, delete onl value in fb
+    if (difference) {
+      difference.forEach((category) => {
+        deleteDoc(doc(db, "categories", category, "Tier 1", user.uid));
       });
-  }  
-}
+    }
+  };
+  //need to remove from unselected or changed category, if applicable
+  //
 
-
-const handleGlobalCategoryRemoval = () => {
-  // [x] on page load set premium categories already being used by the user.
-  // [] check to see if the initial values are different than the new values
-
-  let initialValues = [initialPremiumCategoryOne, initialPremiumCategoryTwo, initialPremiumCategoryThree]
-  let newValues = [premiumCategoryOne, premiumCategoryTwo, premiumCategoryThree]
-  
-
-  //credit zcoop98 & Luis Sieira https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
-  let difference = initialValues.filter(x => !newValues.includes(x));
-
- 
-  //if so, delete onl value in fb
-if (difference) {
-  difference.forEach((category) => {
-    deleteDoc(doc(db, "categories", category, "Tier 1", user.uid))
-  })
-}
-
-
-
-
-}
-//need to remove from unselected or changed category, if applicable
-//
-
-
-const handleCloseCategories = () => {
-  onCloseCategories()
-  setIsUploaded(false)
-}
-
-
+  const handleCloseCategories = () => {
+    onCloseCategories();
+    setIsUploaded(false);
+  };
 
   const [experienceTitle, setExperienceTitle1] = useState(null);
   const [experienceDescription, setExperienceDescription] = useState(null);
@@ -571,9 +536,6 @@ const handleCloseCategories = () => {
 
   const updateUserExperience = (userExperience) => {
     //submit data and update bio
-
-    
-   
 
     updateDoc(
       doc(db, "users", user.uid, "User Profile Experience", userExperience.id),
@@ -589,11 +551,9 @@ const handleCloseCategories = () => {
     )
       .then(() => {
         //all good
-       
       })
       .catch((error) => {
         // no bueno
-        
       });
 
     setExperienceTitle1(null);
@@ -617,11 +577,9 @@ const handleCloseCategories = () => {
       )
         .then(() => {
           //all good
-        
         })
         .catch((error) => {
           // no bueno
-         
         });
       onCloseAddExperience();
     } else if (userExperienceLength === 1) {
@@ -635,11 +593,9 @@ const handleCloseCategories = () => {
       )
         .then(() => {
           //all good
-         
         })
         .catch((error) => {
           // no bueno
-         
         });
       onCloseAddExperience();
     } else if (userExperienceLength === 2) {
@@ -653,11 +609,9 @@ const handleCloseCategories = () => {
       )
         .then(() => {
           //all good
-        
         })
         .catch((error) => {
           // no bueno
-         
         });
       onCloseAddExperience();
     } else {
@@ -685,18 +639,15 @@ const handleCloseCategories = () => {
   const updateUserQualification = (props) => {
     //submit data and update bio
 
-   
     updateDoc(doc(db, "users", user.uid, "User Profile Skills", props.id), {
       Title: skillTitle1 ? skillTitle1 : props.Title,
       Description: skillDescription ? skillDescription : props.Description,
     })
       .then(() => {
         //all good
-        
       })
       .catch((error) => {
         // no bueno
-        
       });
 
     setSkillTitle1(null);
@@ -713,11 +664,9 @@ const handleCloseCategories = () => {
       })
         .then(() => {
           //all good
-        
         })
         .catch((error) => {
           // no bueno
-        
         });
       onCloseAddQualification();
     } else if (userSkillsLength === 1) {
@@ -727,11 +676,9 @@ const handleCloseCategories = () => {
       })
         .then(() => {
           //all good
-       
         })
         .catch((error) => {
           // no bueno
-         
         });
       onCloseAddQualification();
     } else if (userSkillsLength === 2) {
@@ -741,11 +688,9 @@ const handleCloseCategories = () => {
       })
         .then(() => {
           //all good
-         
         })
         .catch((error) => {
           // no bueno
-       
         });
       onCloseAddQualification();
     } else {
@@ -784,11 +729,10 @@ const handleCloseCategories = () => {
   const maxNumber = 1;
   const onChange = (imageList, addUpdateIndex) => {
     // data for submit
-   
-    setImages(imageList);
-    setProfilePicture(imageList[0].data_url)
-  };
 
+    setImages(imageList);
+    setProfilePicture(imageList[0].data_url);
+  };
 
   const uploadToFirebase = async () => {
     const storage = getStorage();
@@ -796,53 +740,41 @@ const handleCloseCategories = () => {
       storage,
       "users/" + user.uid + "/profilePicture.jpg"
     );
-    
+
     // setImage(result.assets[0].uri);
     // dispatch(selectUserProfilePicture(result.assets[0].uri))
 
     const img = await fetch(images[0].data_url);
     const bytes = await img.blob();
 
-    await uploadBytes(pictureRef, bytes).then((snapshot) => {
-    
-    });
+    await uploadBytes(pictureRef, bytes).then((snapshot) => {});
 
     await getDownloadURL(pictureRef).then((response) => {
       updateDoc(doc(db, "users", user.uid), {
-        profilePictureResponse: response
-        
+        profilePictureResponse: response,
       })
         .then(() => {
           //all good
-     
         })
         .catch((error) => {
           // no bueno
-        
         });
-      
     });
 
     setTimeout(() => {
       updateDoc(doc(db, "users", user.uid), {
         hasUploadedProfilePicture: hasUploadedProfilePicture,
-        
       })
         .then(() => {
-         
           setHasUploadedProfilePicture(hasUploadedProfilePicture);
         })
         .catch((error) => {
           // no bueno
-     
         });
-    })
-  
+    });
 
-
-
-    onCloseAvatar()
-  }
+    onCloseAvatar();
+  };
 
   return (
     <>
@@ -878,10 +810,32 @@ const handleCloseCategories = () => {
                   onClick={onOpenAvatar}
                 />
               )} */}
-               <Avatar bg="#01A2E8" size="2xl"   onClick={onOpenAvatar} src={profilePicture ? profilePicture : (images ? images : <Avatar  onClick={onOpenAvatar} />)}/>
-              <Modal isOpen={isOpenAvatar} onClose={onCloseAvatar} size="xl" height="420px">
+              <Avatar
+                bg="#01A2E8"
+                size="2xl"
+                onClick={onOpenAvatar}
+                src={
+                  profilePicture ? (
+                    profilePicture
+                  ) : images ? (
+                    images
+                  ) : (
+                    <Avatar onClick={onOpenAvatar} />
+                  )
+                }
+              />
+              <Modal
+                isOpen={isOpenAvatar}
+                onClose={onCloseAvatar}
+                size="xl"
+                height="420px"
+              >
                 <ModalOverlay />
-                <ModalContent alignContent="center" alignItems="center" height="420px">
+                <ModalContent
+                  alignContent="center"
+                  alignItems="center"
+                  height="420px"
+                >
                   <ModalCloseButton />
                   <ModalHeader>About Me</ModalHeader>
 
@@ -890,7 +844,19 @@ const handleCloseCategories = () => {
                   ) : !images ? (
                     <Avatar bg="#01A2E8" size="2xl" src={profilePicture} />
                   ) :  <Avatar bg="#01A2E8" size="2xl" src={images} />} */}
-                   <Avatar bg="#01A2E8" size="2xl"  src={profilePicture ? profilePicture : (images ? images : <Avatar  />)}/>
+                  <Avatar
+                    bg="#01A2E8"
+                    size="2xl"
+                    src={
+                      profilePicture ? (
+                        profilePicture
+                      ) : images ? (
+                        images
+                      ) : (
+                        <Avatar />
+                      )
+                    }
+                  />
 
                   <ImageUploading
                     multiple
@@ -910,10 +876,14 @@ const handleCloseCategories = () => {
                     }) => (
                       // write your building UI
                       <div className="upload__image-wrapper">
-                         <Button variant="ghost"  marginTop="16px"  onClick={() => onImageUpdate()}
-                          {...dragProps}>
-                    Update Profile Picture
-                  </Button>
+                        <Button
+                          variant="ghost"
+                          marginTop="16px"
+                          onClick={() => onImageUpdate()}
+                          {...dragProps}
+                        >
+                          Update Profile Picture
+                        </Button>
                         &nbsp;
                         {/* <button onClick={onImageRemoveAll}>
                           Remove all images
@@ -941,10 +911,21 @@ const handleCloseCategories = () => {
                   </Button> */}
 
                   <ModalFooter marginTop="80px">
-                    <Button variant="ghost" mr={3} onClick={onCloseAvatar} width="160px">
+                    <Button
+                      variant="ghost"
+                      mr={3}
+                      onClick={onCloseAvatar}
+                      width="160px"
+                    >
                       Close
                     </Button>
-                    <Button width="160px" colorScheme="blue" onClick={() => uploadToFirebase()}>Save</Button>
+                    <Button
+                      width="160px"
+                      colorScheme="blue"
+                      onClick={() => uploadToFirebase()}
+                    >
+                      Save
+                    </Button>
                   </ModalFooter>
                 </ModalContent>
               </Modal>
@@ -957,24 +938,29 @@ const handleCloseCategories = () => {
                 {" "}
                 {userCity}, {userState}
               </Heading>
-           
-              {numberOfRatings ? ( <Flex>
-                {maxRating.map((item, key) => {
-                  return (
-                    <Box activeopacity={0.7} key={item} marginTop="8px">
-                      <Image
-                       boxSize='24px'
-                        src={item <= rating ? star_filled : star_corner}
-                        
-                      ></Image>
-                    
-                    </Box>
-                  );
-                })}
 
-                
-                  <Text marginTop="8px" marginLeft="4px">({numberOfRatings} reviews)</Text>
-                </Flex>) : ( <Text marginTop="8px" marginLeft="4px">No reviews yet</Text>)}
+              {numberOfRatings ? (
+                <Flex>
+                  {maxRating.map((item, key) => {
+                    return (
+                      <Box activeopacity={0.7} key={item} marginTop="8px">
+                        <Image
+                          boxSize="24px"
+                          src={item <= rating ? star_filled : star_corner}
+                        ></Image>
+                      </Box>
+                    );
+                  })}
+
+                  <Text marginTop="8px" marginLeft="4px">
+                    ({numberOfRatings} reviews)
+                  </Text>
+                </Flex>
+              ) : (
+                <Text marginTop="8px" marginLeft="4px">
+                  No reviews yet
+                </Text>
+              )}
               <Flex>
                 <Heading size="lg" marginTop="16px" marginRight="545px">
                   About Me
@@ -1077,233 +1063,324 @@ const handleCloseCategories = () => {
               </Modal>
 
               {isPremium ? (
-              <><Flex>
-                <Heading size="lg" marginTop="16px" marginRight="545px">
-                  Specialties
-                </Heading>
-                <Button
-                  onClick={onOpenCategories}
-                  // position="absolute"
-                  // right="0"
-                  marginTop="8px"
-                  marginRight="42px"
-                  backgroundColor="white"
-                  textColor="#01A2E8"
-                >
-                  Edit
-                </Button>
-              </Flex>
-               <Card
-               direction={{ base: "column", sm: "row" }}
-               overflow="hidden"
+                <>
+                  <Flex>
+                    <Heading size="lg" marginTop="16px" marginRight="545px">
+                      Specialties
+                    </Heading>
+                    <Button
+                      onClick={onOpenCategories}
+                      // position="absolute"
+                      // right="0"
+                      marginTop="8px"
+                      marginRight="42px"
+                      backgroundColor="white"
+                      textColor="#01A2E8"
+                    >
+                      Edit
+                    </Button>
+                  </Flex>
+                  <Card
+                    direction={{ base: "column", sm: "row" }}
+                    overflow="hidden"
+                    width="800px"
+                    height="auto"
+                  >
+                    <Stack>
+                      <CardBody>
+                        <List spacing={3}>
+                          {!userInfo.premiumCategoryOne &&
+                          !userInfo.premiumCategoryTwo &&
+                          !userInfo.premiumCategoryThree ? (
+                            <Button
+                              background="#01A2E8"
+                              textColor="white"
+                              height="36px"
+                              _hover={{ bg: "#018ecb", textColor: "white" }}
+                              ml={3}
+                              mt={3}
+                              onClick={onOpenCategories}
+                            >
+                              Add Specialty
+                            </Button>
+                          ) : (
+                            <>
+                              {userInfo.premiumCategoryOne ? (
+                                <>
+                                  <ListItem>
+                                    {" "}
+                                    <ListIcon as={StarIcon} color="#01A2E8" />
+                                    {userInfo.premiumCategoryOne}
+                                  </ListItem>
 
-               width="800px"
-             
-               height="auto"
-         
-             >
-               <Stack>
-                 <CardBody>
-                 <List spacing={3}>
-                 {!userInfo.premiumCategoryOne && !userInfo.premiumCategoryTwo && !userInfo.premiumCategoryThree ? (
+                                  {userInfo.premiumCategoryTwo ? null : (
+                                    <Button
+                                      background="#01A2E8"
+                                      textColor="white"
+                                      height="36px"
+                                      _hover={{
+                                        bg: "#018ecb",
+                                        textColor: "white",
+                                      }}
+                                      ml={3}
+                                      mt={3}
+                                      onClick={onOpenCategories}
+                                    >
+                                      Add Specialty
+                                    </Button>
+                                  )}
+                                </>
+                              ) : null}
 
- <Button
- background="#01A2E8"
- textColor="white"
- height="36px"
- _hover={{ bg: "#018ecb", textColor: "white" }}
- ml={3}
- mt={3}
-    onClick={onOpenCategories}
->
-Add Specialty
-</Button> 
-                 ) : (
-                  <>
-                  {userInfo.premiumCategoryOne ? (<><ListItem> <ListIcon as={StarIcon} color="#01A2E8" />
-                  {userInfo.premiumCategoryOne}
-                </ListItem>
-                
-                {userInfo.premiumCategoryTwo ? (null) : (<Button
- background="#01A2E8"
- textColor="white"
- height="36px"
- _hover={{ bg: "#018ecb", textColor: "white" }}
- ml={3}
- mt={3}
-    onClick={onOpenCategories}
->
-Add Specialty
-</Button> )}</>) : null}
-                 
-                {userInfo.premiumCategoryTwo ? (<><ListItem> <ListIcon as={StarIcon} color="#01A2E8" />
-                  {userInfo.premiumCategoryTwo}
-                </ListItem> {userInfo.premiumCategoryThree ? (null) : (<Button
- background="#01A2E8"
- textColor="white"
- height="36px"
- _hover={{ bg: "#018ecb", textColor: "white" }}
- ml={3}
- mt={3}
-    onClick={onOpenCategories}
->
-Add Specialty
-</Button> )}</>) : null}
-                {userInfo.premiumCategoryThree ? (<ListItem> <ListIcon as={StarIcon} color="#01A2E8" />
-                  {userInfo.premiumCategoryThree}
-                </ListItem>) : null}
+                              {userInfo.premiumCategoryTwo ? (
+                                <>
+                                  <ListItem>
+                                    {" "}
+                                    <ListIcon as={StarIcon} color="#01A2E8" />
+                                    {userInfo.premiumCategoryTwo}
+                                  </ListItem>{" "}
+                                  {userInfo.premiumCategoryThree ? null : (
+                                    <Button
+                                      background="#01A2E8"
+                                      textColor="white"
+                                      height="36px"
+                                      _hover={{
+                                        bg: "#018ecb",
+                                        textColor: "white",
+                                      }}
+                                      ml={3}
+                                      mt={3}
+                                      onClick={onOpenCategories}
+                                    >
+                                      Add Specialty
+                                    </Button>
+                                  )}
+                                </>
+                              ) : null}
+                              {userInfo.premiumCategoryThree ? (
+                                <ListItem>
+                                  {" "}
+                                  <ListIcon as={StarIcon} color="#01A2E8" />
+                                  {userInfo.premiumCategoryThree}
+                                </ListItem>
+                              ) : null}
+                            </>
+                          )}
+                        </List>
+                      </CardBody>
+                    </Stack>
+                  </Card>
                 </>
-                 )}
+              ) : null}
 
-    
-
-</List>
-                 </CardBody>
-               </Stack>
-             </Card>
-            </>
-                      
-            
-            
-            
-            
-            ) : (null)}
-
-
-<Modal isOpen={isOpenCategories} onClose={onCloseCategories} size="xl">
+              <Modal
+                isOpen={isOpenCategories}
+                onClose={onCloseCategories}
+                size="xl"
+              >
                 <ModalOverlay />
                 <ModalContent>
                   <ModalHeader fontSize="16px">Edit Specialties</ModalHeader>
                   <ModalCloseButton />
-                
-                  {isUploaded ? (<><Box padding={8}><Heading size="md">Success!</Heading>
-                  <Text>Your choices have been updated successfully! It may take a few minutes before it shows on your profile.</Text></Box> </>) : 
-                  isPremium ? (
-                    <>
-                  <Flex direction="row" marginLeft="24px" alignContent="center" alignItems="center">
-                    <Heading size="sm">Category 1:</Heading>
-                    <Select
-                      placeholder={userInfo.premiumCategoryOne ? userInfo.premiumCategoryOne : "Choose a category"}
 
-                      width="240px"
-                      height="36px"
-                      marginLeft="4px"
-                      onChange={(e) => setPremiumCategoryOne(e.target.value)}
-                    >
-                    <option value="null">Clear Selection</option>
-                      <option>--------------------------------</option>
-                      <option value="Asphalt">Asphalt</option>
-                      <option value="Carpentry">Carpentry</option>
-                      <option value="Concrete">Concrete</option>
-                      <option value="Drywall">Drywall</option>
-                      <option value="Electrical Work">Electrical Work</option>
-                      <option value="General Handyman">General Handyman</option>
-                      <option value="Gutter Cleaning">Gutter Cleaning</option>
-                      <option value="Hvac">HVAC</option>
-                      <option value="Landscaping">Landscaping</option>
-                      <option value="Painting">Painting</option>
-                      <option value="Plumbing">Plumbing</option>
-                      <option value="Pressure Washing">Pressure Washing</option>
-                      <option value="Roofing">Roofing</option>
-                      <option value="Siding">Siding</option>
-                      <option value="Snow Removal">Snow Removal</option>
-                      <option value="Window Installation">
-                        Window Installation
-                      </option>
-                      <option value="Window Washing">Window Washing</option>
-                      <option value="Yard Work">Yard Work</option>
-                    </Select>
-                  </Flex>
-                  <Flex direction="row" marginLeft="24px" alignContent="center" alignItems="center" marginTop="8px">
-                    <Heading size="sm">Category 2:</Heading>
-                    <Select
-                      placeholder={userInfo.premiumCategoryTwo ? userInfo.premiumCategoryTwo : "Choose a category"}
-                      width="240px"
-                      height="36px"
-                      marginLeft="4px"
-                      onChange={(e) => setPremiumCategoryTwo(e.target.value)}
-                    >
-                      <option value="null">Clear Selection</option>
-                      <option>--------------------------------</option>
-                      <option value="Asphalt">Asphalt</option>
-                      <option value="Carpentry">Carpentry</option>
-                      <option value="Concrete">Concrete</option>
-                      <option value="Drywall">Drywall</option>
-                      <option value="Electrical Work">Electrical Work</option>
-                      <option value="General Handyman">General Handyman</option>
-                      <option value="Gutter Cleaning">Gutter Cleaning</option>
-                      <option value="Hvac">HVAC</option>
-                      <option value="Landscaping">Landscaping</option>
-                      <option value="Painting">Painting</option>
-                      <option value="Plumbing">Plumbing</option>
-                      <option value="Pressure Washing">Pressure Washing</option>
-                      <option value="Roofing">Roofing</option>
-                      <option value="Siding">Siding</option>
-                      <option value="Snow Removal">Snow Removal</option>
-                      <option value="Window Installation">
-                        Window Installation
-                      </option>
-                      <option value="Window Washing">Window Washing</option>
-                      <option value="Yard Work">Yard Work</option>
-                    </Select>
-                  </Flex>
-                  <Flex direction="row" marginLeft="24px" alignContent="center" alignItems="center" marginTop="8px">
-                    <Heading size="sm">Category 3:</Heading>
-                    <Select
-                      placeholder={userInfo.premiumCategoryThree ? userInfo.premiumCategoryThree : "Choose a category"}
-                      width="240px"
-                      height="36px"
-                      marginLeft="4px"
-                      onChange={(e) => setPremiumCategoryThree(e.target.value)}
-                    >
-                      <option value="null">Clear Selection</option>
-                      <option>--------------------------------</option>
-                      <option value="Asphalt">Asphalt</option>
-                      <option value="Carpentry">Carpentry</option>
-                      <option value="Concrete">Concrete</option>
-                      <option value="Drywall">Drywall</option>
-                      <option value="Electrical Work">Electrical Work</option>
-                      <option value="General Handyman">General Handyman</option>
-                      <option value="Gutter Cleaning">Gutter Cleaning</option>
-                      <option value="Hvac">HVAC</option>
-                      <option value="Landscaping">Landscaping</option>
-                      <option value="Painting">Painting</option>
-                      <option value="Plumbing">Plumbing</option>
-                      <option value="Pressure Washing">Pressure Washing</option>
-                      <option value="Roofing">Roofing</option>
-                      <option value="Siding">Siding</option>
-                      <option value="Snow Removal">Snow Removal</option>
-                      <option value="Window Installation">
-                        Window Installation
-                      </option>
-                      <option value="Window Washing">Window Washing</option>
-                      <option value="Yard Work">Yard Work</option>
-                    </Select>
-                  </Flex>
-                 
-                  </> ) : (null)}
-                  {isUploaded ? (<ModalFooter>
-                   
-    
-                   <Button
-                     colorScheme="blue"
-                     onClick={() => handleCloseCategories()}
-                   >
-                     Continue
-                   </Button>
-                 </ModalFooter>) : (<ModalFooter>
-                   
-                   <Button variant="ghost" mr={3} onClick={onCloseCategories}>
-                     Close
-                   </Button>
-                   <Button
-                     colorScheme="blue"
-                     onClick={() => handleAllFBCategoryChange()}
-                   >
-                     Save
-                   </Button>
-                 </ModalFooter>)}
-                 
+                  {isUploaded ? (
+                    <>
+                      <Box padding={8}>
+                        <Heading size="md">Success!</Heading>
+                        <Text>
+                          Your choices have been updated successfully! It may
+                          take a few minutes before it shows on your profile.
+                        </Text>
+                      </Box>{" "}
+                    </>
+                  ) : isPremium ? (
+                    <>
+                      <Flex
+                        direction="row"
+                        marginLeft="24px"
+                        alignContent="center"
+                        alignItems="center"
+                      >
+                        <Heading size="sm">Category 1:</Heading>
+                        <Select
+                          placeholder={
+                            userInfo.premiumCategoryOne
+                              ? userInfo.premiumCategoryOne
+                              : "Choose a category"
+                          }
+                          width="240px"
+                          height="36px"
+                          marginLeft="4px"
+                          onChange={(e) =>
+                            setPremiumCategoryOne(e.target.value)
+                          }
+                        >
+                          <option value="null">Clear Selection</option>
+                          <option>--------------------------------</option>
+                          <option value="Asphalt">Asphalt</option>
+                          <option value="Carpentry">Carpentry</option>
+                          <option value="Concrete">Concrete</option>
+                          <option value="Drywall">Drywall</option>
+                          <option value="Electrical Work">
+                            Electrical Work
+                          </option>
+                          <option value="General Handyman">
+                            General Handyman
+                          </option>
+                          <option value="Gutter Cleaning">
+                            Gutter Cleaning
+                          </option>
+                          <option value="Hvac">HVAC</option>
+                          <option value="Landscaping">Landscaping</option>
+                          <option value="Painting">Painting</option>
+                          <option value="Plumbing">Plumbing</option>
+                          <option value="Pressure Washing">
+                            Pressure Washing
+                          </option>
+                          <option value="Roofing">Roofing</option>
+                          <option value="Siding">Siding</option>
+                          <option value="Snow Removal">Snow Removal</option>
+                          <option value="Window Installation">
+                            Window Installation
+                          </option>
+                          <option value="Window Washing">Window Washing</option>
+                          <option value="Yard Work">Yard Work</option>
+                        </Select>
+                      </Flex>
+                      <Flex
+                        direction="row"
+                        marginLeft="24px"
+                        alignContent="center"
+                        alignItems="center"
+                        marginTop="8px"
+                      >
+                        <Heading size="sm">Category 2:</Heading>
+                        <Select
+                          placeholder={
+                            userInfo.premiumCategoryTwo
+                              ? userInfo.premiumCategoryTwo
+                              : "Choose a category"
+                          }
+                          width="240px"
+                          height="36px"
+                          marginLeft="4px"
+                          onChange={(e) =>
+                            setPremiumCategoryTwo(e.target.value)
+                          }
+                        >
+                          <option value="null">Clear Selection</option>
+                          <option>--------------------------------</option>
+                          <option value="Asphalt">Asphalt</option>
+                          <option value="Carpentry">Carpentry</option>
+                          <option value="Concrete">Concrete</option>
+                          <option value="Drywall">Drywall</option>
+                          <option value="Electrical Work">
+                            Electrical Work
+                          </option>
+                          <option value="General Handyman">
+                            General Handyman
+                          </option>
+                          <option value="Gutter Cleaning">
+                            Gutter Cleaning
+                          </option>
+                          <option value="Hvac">HVAC</option>
+                          <option value="Landscaping">Landscaping</option>
+                          <option value="Painting">Painting</option>
+                          <option value="Plumbing">Plumbing</option>
+                          <option value="Pressure Washing">
+                            Pressure Washing
+                          </option>
+                          <option value="Roofing">Roofing</option>
+                          <option value="Siding">Siding</option>
+                          <option value="Snow Removal">Snow Removal</option>
+                          <option value="Window Installation">
+                            Window Installation
+                          </option>
+                          <option value="Window Washing">Window Washing</option>
+                          <option value="Yard Work">Yard Work</option>
+                        </Select>
+                      </Flex>
+                      <Flex
+                        direction="row"
+                        marginLeft="24px"
+                        alignContent="center"
+                        alignItems="center"
+                        marginTop="8px"
+                      >
+                        <Heading size="sm">Category 3:</Heading>
+                        <Select
+                          placeholder={
+                            userInfo.premiumCategoryThree
+                              ? userInfo.premiumCategoryThree
+                              : "Choose a category"
+                          }
+                          width="240px"
+                          height="36px"
+                          marginLeft="4px"
+                          onChange={(e) =>
+                            setPremiumCategoryThree(e.target.value)
+                          }
+                        >
+                          <option value="null">Clear Selection</option>
+                          <option>--------------------------------</option>
+                          <option value="Asphalt">Asphalt</option>
+                          <option value="Carpentry">Carpentry</option>
+                          <option value="Concrete">Concrete</option>
+                          <option value="Drywall">Drywall</option>
+                          <option value="Electrical Work">
+                            Electrical Work
+                          </option>
+                          <option value="General Handyman">
+                            General Handyman
+                          </option>
+                          <option value="Gutter Cleaning">
+                            Gutter Cleaning
+                          </option>
+                          <option value="Hvac">HVAC</option>
+                          <option value="Landscaping">Landscaping</option>
+                          <option value="Painting">Painting</option>
+                          <option value="Plumbing">Plumbing</option>
+                          <option value="Pressure Washing">
+                            Pressure Washing
+                          </option>
+                          <option value="Roofing">Roofing</option>
+                          <option value="Siding">Siding</option>
+                          <option value="Snow Removal">Snow Removal</option>
+                          <option value="Window Installation">
+                            Window Installation
+                          </option>
+                          <option value="Window Washing">Window Washing</option>
+                          <option value="Yard Work">Yard Work</option>
+                        </Select>
+                      </Flex>
+                    </>
+                  ) : null}
+                  {isUploaded ? (
+                    <ModalFooter>
+                      <Button
+                        colorScheme="blue"
+                        onClick={() => handleCloseCategories()}
+                      >
+                        Continue
+                      </Button>
+                    </ModalFooter>
+                  ) : (
+                    <ModalFooter>
+                      <Button
+                        variant="ghost"
+                        mr={3}
+                        onClick={onCloseCategories}
+                      >
+                        Close
+                      </Button>
+                      <Button
+                        colorScheme="blue"
+                        onClick={() => handleAllFBCategoryChange()}
+                      >
+                        Save
+                      </Button>
+                    </ModalFooter>
+                  )}
                 </ModalContent>
               </Modal>
 

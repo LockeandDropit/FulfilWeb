@@ -24,7 +24,7 @@ import {
   MenuDivider,
   Button,
   Center,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { StreamChat } from "stream-chat";
@@ -40,16 +40,16 @@ const NeederHeader = () => {
 
   const [loggingOut, setLoggingOut] = useState(false);
 
-
   const auth = getAuth();
   const handleLogOut = async () => {
     setLoggingOut(true);
     await chatClient.disconnectUser();
     await signOut(auth)
-    .then(
-      setTimeout(() => {
-        navigate("/");
-      }, 2000)) // undefined
+      .then(
+        setTimeout(() => {
+          navigate("/");
+        }, 2000)
+      ) // undefined
       .catch((e) => console.log(e));
   };
 
@@ -96,23 +96,44 @@ const NeederHeader = () => {
   const getProfilePicture = async () => {
     getDoc(doc(db, "employers", user.uid)).then((snapshot) => {
       if (!snapshot.data().profilePictureResponse) {
-
       } else {
-        setProfilePicture(snapshot.data().profilePictureResponse)
+        setProfilePicture(snapshot.data().profilePictureResponse);
       }
-    })
+    });
   };
 
   return (
     <div className="header">
-      <div
-        className="headerLogo"
-        onClick={() => navigate(`/NeederMapScreen`)}
-      >
+      <div className="headerLogo" onClick={() => navigate(`/NeederMapScreen`)}>
         <img src={fulfil180} alt="Fulfil Logo"></img>
       </div>
 
       <Flex position="absolute" right="6">
+        <Menu>
+          <MenuButton
+            as={Button}
+            backgroundColor="white"
+            marginTop="16px"
+            marginRight="24px"
+          >
+            Find A Pro
+          </MenuButton>
+          <MenuList>
+            <MenuGroup title="Popular Categories">
+              <Flex direction="row"></Flex>
+              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Drywall"}})}>Drywall</MenuItem>
+              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "General Handyman"}})}>General Handyman</MenuItem>
+
+              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Landscaping"}})}>Landscaping</MenuItem>
+              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Painting"}})}>Painting</MenuItem>
+              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Plumbing"}})}>Plumbing</MenuItem>
+              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Roofing"}})}>Roofing</MenuItem>
+              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Yard Work"}})}>Yard Work</MenuItem>
+              <MenuItem >See All</MenuItem>
+            </MenuGroup>
+          </MenuList>
+        </Menu>
+
         <Button
           backgroundColor="#01A2E8"
           color="white"
@@ -124,9 +145,17 @@ const NeederHeader = () => {
         >
           Post A Job
         </Button>
-        <Heading size="md" marginTop="20px" marginRight="12px">
+        {/* <Button
+          backgroundColor="white"
+          marginTop="16px"
+          marginRight="24px"
+          onClick={() => navigate("/NeederEmailRegister")}
+        >
+          Find a Pro
+        </Button> */}
+        {/* <Heading size="md" marginTop="20px" marginRight="12px">
           Hello, {userFirstName}
-        </Heading>
+        </Heading> */}
 
         <Menu>
           <MenuButton>

@@ -18,13 +18,12 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
-
 const Categories = () => {
   const navigate = useNavigate();
 
-const handleNavigation = (x) => {
-navigate("SelectedCategory", {state: {category: x }})
-}
+  const handleNavigation = (x) => {
+    navigate("SelectedCategory", { state: { category: x } });
+  };
 
   return (
     <Box marginTop="64px" padding="0">
@@ -37,7 +36,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/DrivewayAsphalt.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -52,7 +51,7 @@ navigate("SelectedCategory", {state: {category: x }})
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Asphalt")}
+                  onClick={() => handleNavigation("Asphalt")}
                 >
                   See More
                 </Button>
@@ -62,7 +61,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/CarpentryTrim.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -70,14 +69,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-                Carpentry
+                  Carpentry
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Carpentry")}
+                  onClick={() => handleNavigation("Carpentry")}
                 >
                   See More
                 </Button>
@@ -87,7 +86,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/ConcreteAsphalt.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -95,25 +94,46 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-                Concrete
+                  Concrete
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Concrete")}
+                  onClick={() => handleNavigation("Concrete")}
                 >
                   See More
                 </Button>
               </Flex>
             </CardBody>
           </Card>
-          
+
+          <Card maxW="sm">
+            <CardBody>
+              <Image src="/landingImages/Drywall.jpg" borderRadius="lg" />
+
+              <Flex direction="row">
+                {" "}
+                <Heading size="md" marginTop="8px">
+                  Drywall
+                </Heading>{" "}
+                <Button
+                  variant="ghost"
+                  colorScheme="blue"
+                  position="absolute"
+                  right="4"
+                  onClick={() => handleNavigation("Drywall")}
+                >
+                  See More
+                </Button>
+              </Flex>
+            </CardBody>
+          </Card>
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/electrical.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -121,14 +141,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-               Drywall
+                  Electrical Work
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Drywall")}
+                  onClick={() => handleNavigation("Electrical Work")}
                 >
                   See More
                 </Button>
@@ -138,32 +158,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                alt="Green double couch with wooden legs"
-                borderRadius="lg"
-              />
-
-              <Flex direction="row">
-                {" "}
-                <Heading size="md" marginTop="8px">
-                Electrical Work
-                </Heading>{" "}
-                <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
-    onClick={() => handleNavigation("Electrical Work")}
-                >
-                  See More
-                </Button>
-              </Flex>
-            </CardBody>
-          </Card>
-          <Card maxW="sm">
-            <CardBody>
-              <Image
-                src="https://images.unsplash.com/photo-1711856714981-ff6c4d937a34?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8bWFuJTIwc2hvdmVsaW5nfGVufDB8MHwwfHx8Mg%3D%3D"
+                src="/landingImages/Handyman.jpg"
                 alt="Group cutting wood"
                 borderRadius="lg"
               />
@@ -171,14 +166,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-                General Handyman
+                  General Handyman
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("General Handyman")}
+                  onClick={() => handleNavigation("General Handyman")}
                 >
                   See More
                 </Button>
@@ -188,7 +183,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/GutterCleaning.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -196,14 +191,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-                Gutter Cleaning
+                  Gutter Cleaning
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Gutter Cleaning")}
+                  onClick={() => handleNavigation("Gutter Cleaning")}
                 >
                   See More
                 </Button>
@@ -213,7 +208,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/NewHVAC.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -221,14 +216,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-                HVAC
+                  HVAC
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("HVAC")}
+                  onClick={() => handleNavigation("HVAC")}
                 >
                   See More
                 </Button>
@@ -238,7 +233,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/NewLandscaping2.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -246,14 +241,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-                Landscaping
+                  Landscaping
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Landscaping")}
+                  onClick={() => handleNavigation("Landscaping")}
                 >
                   See More
                 </Button>
@@ -263,7 +258,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/Painting.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -271,14 +266,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-                Painting
+                  Painting
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Painting")}
+                  onClick={() => handleNavigation("Painting")}
                 >
                   See More
                 </Button>
@@ -288,7 +283,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/Plumbing.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -296,14 +291,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-                Plumbing
+                  Plumbing
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Plumbing")}
+                  onClick={() => handleNavigation("Plumbing")}
                 >
                   See More
                 </Button>
@@ -313,7 +308,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/PressureWashing.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -321,14 +316,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-              Pressure Washing
+                  Pressure Washing
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Pressure Washing")}
+                  onClick={() => handleNavigation("Pressure Washing")}
                 >
                   See More
                 </Button>
@@ -338,7 +333,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/RoofingSiding.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -346,14 +341,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-                Roofing
+                  Roofing
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Roofing")}
+                  onClick={() => handleNavigation("Roofing")}
                 >
                   See More
                 </Button>
@@ -363,7 +358,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/Shoveling.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -371,14 +366,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-                Snow Removal
+                  Snow Removal
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Snow Removal")}
+                  onClick={() => handleNavigation("Snow Removal")}
                 >
                   See More
                 </Button>
@@ -388,7 +383,8 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/WindowInstallation.jpg"
+     
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -396,14 +392,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-                Window Installation
+                  Window Installation
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Window Installation")}
+                  onClick={() => handleNavigation("Window Installation")}
                 >
                   See More
                 </Button>
@@ -413,7 +409,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src="/landingImages/NewYardWork.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
               />
@@ -421,14 +417,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-                Yard Work
+                  Yard Work
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Yard Work")}
+                  onClick={() => handleNavigation("Yard Work")}
                 >
                   See More
                 </Button>
@@ -438,7 +434,7 @@ navigate("SelectedCategory", {state: {category: x }})
           <Card maxW="sm">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1711856714981-ff6c4d937a34?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8bWFuJTIwc2hvdmVsaW5nfGVufDB8MHwwfHx8Mg%3D%3D"
+                src="/landingImages/Moving.jpg"
                 alt="Green double couch with wooden legs"
                 borderRadius="lg"
                 height="240px"
@@ -447,14 +443,14 @@ navigate("SelectedCategory", {state: {category: x }})
               <Flex direction="row">
                 {" "}
                 <Heading size="md" marginTop="8px">
-              See More
+                  See More
                 </Heading>{" "}
                 <Button
                   variant="ghost"
                   colorScheme="blue"
                   position="absolute"
                   right="4"
-    onClick={() => handleNavigation("Concrete")}
+                  onClick={() => handleNavigation("Concrete")}
                 >
                   See More
                 </Button>

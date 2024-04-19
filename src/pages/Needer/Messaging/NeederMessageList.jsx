@@ -83,25 +83,21 @@ const NeederMessageList = () => {
     }
   }, []);
 
-
-
-  const [profilePicture, setProfilePicture] = useState(null)
-  const [userName, setUserName] = useState(null)
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [userName, setUserName] = useState(null);
 
   useEffect(() => {
     if (user) {
-      getDoc(doc(db, "employers", user.uid)).then(
-        (snapshot) => {
-          if (!snapshot.data().profilePictureResponse) {
-            setUserName(snapshot.data().firstName)
-          } else {
-            setProfilePicture(snapshot.data().profilePictureResponse)
-            setUserName(snapshot.data().firstName)
+      getDoc(doc(db, "employers", user.uid)).then((snapshot) => {
+        if (!snapshot.data().profilePictureResponse) {
+          setUserName(snapshot.data().firstName);
+        } else {
+          setProfilePicture(snapshot.data().profilePictureResponse);
+          setUserName(snapshot.data().firstName);
         }
-   
-      })
+      });
     }
-  }, [user])
+  }, [user]);
 
   const filter = { members: { $in: [userID] } };
 
@@ -111,10 +107,7 @@ const NeederMessageList = () => {
     image: profilePicture,
   };
 
-
-
   const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
-
 
   const [clientIsSet, setClientIsSet] = useState(false);
 
@@ -122,7 +115,7 @@ const NeederMessageList = () => {
     if (userID && userName && chatClient) {
       chatClient.connectUser(userInfo, chatClient.devToken(userID));
       console.log("userConnected!", chatClient._user.id);
-      console.log("what it should look like",chatClient)
+      console.log("what it should look like", chatClient);
       setClientIsSet(true);
     } else {
     }
@@ -195,11 +188,10 @@ const NeederMessageList = () => {
     console.log("debug", selectedChannel);
   }, [selectedChannel]);
 
-
   //this handles the price setting and job offer
 
   const [isHourly, setIsHourly] = useState(null);
-  const [isFlatRate, setIsFlatRate] = useState(null)
+  const [isFlatRate, setIsFlatRate] = useState(null);
 
   useEffect(() => {
     //get rid of useEffect that calls this data from FB. Check if is hourly, then set isFlat rate based off of that. This will negate that weird crash???
@@ -271,7 +263,174 @@ const NeederMessageList = () => {
     }
   };
 
-  const options = { limit: 11 }
+  const options = { limit: 11 };
+
+  //get all user chat cid's and put them in filter. Check them against FB, if match, put that cid/stream channel object into the filter list of the associtated tab
+
+  //where is chat id?
+  // find chat id
+  //map over ids and put them in filter tabs on top.
+
+  //get channels and put them into proper channel list.. create a filter for that one with channel id
+
+  //holders for array of cids
+  const [acceptedCIDs, setAcceptedCIDs] = useState([]);
+  const [interviewCIDs, setInterviewCIDs] = useState(null);
+  const [interviewCIDsLength, setInterviewCIDsLength] = useState([]);
+  const [requestsCIDs, setRequestsCIDs] = useState([]);
+  const [completedCIDs, setCompletedCIDs] = useState([]);
+  //interviewCIDs come from "Posted Jobs", postedJobTitle, "Applicants" .channelID in FB
+
+  const [interviewJobData, setInterviewJobData] = useState([]);
+  const [interviewJobDataLength, setInterviewJobDataLength] = useState(null);
+
+  const getInterviewDocs = () => {
+    //set the name of each jobTitle in collection
+
+    const jobQuery = query(
+      collection(db, "employers", user.uid, "Posted Jobs")
+    );
+
+    onSnapshot(jobQuery, (snapshot) => {
+      let jobData = [];
+      snapshot.docs.forEach((doc) => {
+        //review what this does
+        // console.log("test",doc.data())
+        jobData.push({ jobTitle: doc.data().jobTitle, id: doc.data().jobID });
+      });
+
+      // setInterviewJobData(jobData);
+
+      if (!jobData || !jobData.length) {
+        //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+        setInterviewJobData(null);
+        setInterviewJobDataLength(0);
+      } else {
+        setInterviewJobData(jobData);
+        setInterviewJobDataLength(jobData.length);
+      }
+    });
+
+    // if (interviewJobData) {
+    //   interviewJobData.forEach((job) => {
+    //   const applicantQuery = query(
+    //     collection( db,
+    //       "employers",
+    //       user.uid,
+    //       "Posted Jobs",
+    //       job.jobTitle,
+    //       "Applicants")
+
+    //   );
+
+    //   onSnapshot(applicantQuery, (snapshot) => {
+    //     let applicantData = [];
+    //     snapshot.docs.forEach((doc) => {
+    //       //review what this does
+    //       console.log("test",doc.data())
+    //       applicantData.push({ data: doc.data()  });
+    //     });
+
+    //     // setInterviewJobData(jobData);
+
+    //     if (!applicantData || !applicantData.length) {
+    //       //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+    //       setInterviewJobData(null);
+    //       setInterviewJobDataLength(0);
+    //     } else {
+    //       setInterviewJobData(applicantData);
+    //       setInterviewJobDataLength(applicantData.length);
+    //     }
+    //   });
+    // })
+    // }
+
+    //for each job title (go over all documents and for each document doc.channelID and set those as the interviewCIDs)
+  };
+
+  useEffect(() => {
+    if (interviewJobData) {
+      interviewJobData.forEach((job) => {
+        const applicantQuery = query(
+          collection(
+            db,
+            "employers",
+            user.uid,
+            "Posted Jobs",
+            job.jobTitle,
+            "Applicants"
+          )
+        );
+
+        onSnapshot(applicantQuery, (snapshot) => {
+          let applicantData = [];
+          snapshot.docs.forEach((doc) => {
+            //review what this does
+            if (doc.data().channelID) {
+              applicantData.push({ data: doc.data().channelID, id: doc.data().applicantID });
+        console.log("is this breaking?",doc.data())
+            }
+          });
+
+          // setInterviewJobData(jobData);
+
+          if (!applicantData || !applicantData.length) {
+            //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+            setInterviewCIDs(null);
+            setInterviewCIDsLength(0);
+          } else {
+            setInterviewCIDs(applicantData);
+            setInterviewCIDsLength(applicantData.length);
+          }
+        });
+      });
+    }
+  }, [interviewJobData]);
+
+
+
+  useEffect(() => {
+   
+      console.log("interviewCIDs", interviewCIDs)
+    
+  }, [interviewCIDs])
+
+  const getInterviewCIDs = () => {
+    interviewJobData.forEach((job) => {
+      console.log("debug", job);
+      const docRef = doc(
+        db,
+        "employers",
+        user.uid,
+        "Posted Jobs",
+        job.jobTitle,
+        "Applicants"
+      );
+
+      let localCIDs = [];
+      getDoc(docRef).then((snapshot) => {
+        console.log("cids", snapshot.data().channelID);
+        localCIDs.push({ cid: snapshot.data().channelID });
+      });
+
+      if (!localCIDs || localCIDs.length) {
+        setInterviewCIDs(null);
+        setInterviewCIDsLength(0);
+      } else {
+        setInterviewCIDs(localCIDs);
+        setInterviewCIDsLength(localCIDs.length);
+      }
+    });
+  };
+
+
+
+  //Filters
+  const Acceptedfilter = { members: { $in: [userID] } };
+  const Interviewfilter = { members: { $in: [userID] } };
+  const Requestsfilter = { members: { $in: [userID] } };
+
+  const Completedfilter = { members: { $in: [userID] } };
 
   return (
     <>
@@ -281,76 +440,43 @@ const NeederMessageList = () => {
         Messages
       </Heading> */}
 
-      <Flex direction="row" >
-        <Box marginBottom="22px" marginTop="4" >
+      <Flex direction="row">
+        <Box marginBottom="22px" marginTop="4">
           <NeederDashboard />
         </Box>
         <Box height="90vh">
-        {doneLoading ? (
-          chatClient ? (
-            selectedChannel ? (
-              <>
-                <Heading width="500px" marginBottom="16px">
-                  Messages
-                </Heading>
-                <Flex marginTop="4">
-                  <Chat client={chatClient}>
-                    <Box height="800px" >
-                      {/* <ChannelList
+          {doneLoading ? (
+            chatClient ? (
+              selectedChannel ? (
+                <>
+                  <Heading width="500px" marginBottom="16px">
+                    Messages
+                  </Heading>
+
+                  <Flex marginTop="4">
+                    <Flex direction="row">
+                      <Button>Accepted Jobs</Button>
+                      <Button>Completed Jobs</Button>
+                      <Button>Requests</Button>
+                    </Flex>
+                    <Chat client={chatClient}>
+                      <Box height="800px">
+                        {/* <ChannelList
                         filters={filter}
                         Paginator={InfiniteScroll}
                       /> */}
-                    </Box>
-                   <Box   alignContent="center"
-                      justifyContent="center"
-                      alignItems="center"
-                      alignSelf="center"
-                      textAlign="center"
-                      marginLeft="240px">
-                    <Channel channel={selectedChannel}>
-                      <Box
-                        width="50vw"
-                        height="80vh"
-                    
-                      >
-                        <Window>
-                          <NeederChannelHireHeader />
-                          <MessageList />
-                          <MessageInput />
-                        </Window>
                       </Box>
-                      <Thread />
-                    </Channel>
-                    </Box>
-                  </Chat>
-                </Flex>
-              </>
-            ) : (
-              <>
-                <Flex direction="column">
-                  <Box marginLeft="24px">
-                    <Heading width="500px"  marginBottom="16px" marginTop="16px">
-                      Messages
-                    </Heading>
-                    <Flex>
-                  
-                      <Chat client={chatClient}>
-                        <Box height="800px">
-                          <ChannelList
-                       
-                            filters={filter}
-                            Paginator={InfiniteScroll}
-                         
-                          />
-                        </Box>
-                        <Channel>
-                          <Box
-                            width="50vw"
-                            height="80vh"
-                         
-                          >
+                      <Box
+                        alignContent="center"
+                        justifyContent="center"
+                        alignItems="center"
+                        alignSelf="center"
+                        textAlign="center"
+                        marginLeft="240px"
+                      >
+                        <Channel channel={selectedChannel}>
+                          <Box width="50vw" height="80vh">
                             <Window>
-                              {/* <ChannelHeader /> */}
                               <NeederChannelHireHeader />
                               <MessageList />
                               <MessageInput />
@@ -358,34 +484,74 @@ const NeederMessageList = () => {
                           </Box>
                           <Thread />
                         </Channel>
-                      </Chat>
-                    
-                    </Flex>
-                  </Box>
-                </Flex>
-              </>
+                      </Box>
+                    </Chat>
+                  </Flex>
+                </>
+              ) : (
+                <>
+                  <Flex direction="column">
+                    <Box marginLeft="24px">
+                      <Heading
+                        width="500px"
+                        marginBottom="16px"
+                        marginTop="16px"
+                      >
+                        Messages
+                      </Heading>
+                      <Flex direction="row">
+                        <Button>Accepted Jobs</Button>
+                        <Button onClick={() => getInterviewDocs()}>
+                          Interviewing
+                        </Button>
+                        <Button>Completed Jobs</Button>
+                        <Button>Requests</Button>
+                      </Flex>
+                      <Flex>
+                        <Chat client={chatClient}>
+                          <Box height="800px">
+                            <ChannelList
+                              filters={filter}
+                              Paginator={InfiniteScroll}
+                            />
+                          </Box>
+                          <Channel>
+                            <Box width="50vw" height="80vh">
+                              <Window>
+                                {/* <ChannelHeader /> */}
+                                <NeederChannelHireHeader />
+                                <MessageList />
+                                <MessageInput />
+                              </Window>
+                            </Box>
+                            <Thread />
+                          </Channel>
+                        </Chat>
+                      </Flex>
+                    </Box>
+                  </Flex>
+                </>
+              )
+            ) : (
+              <Text>
+                An error occured with our messaging server. Please try again
+                later. If the issue persists, please contact us.
+              </Text>
             )
           ) : (
-            <Text>
-              An error occured with our messaging server. Please try again
-              later. If the issue persists, please contact us.
-            </Text>
-          )
-        ) : (
-          <Center>
-            {" "}
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="xl"
-              marginTop="240px"
-            />
-          </Center>
-        )}
+            <Center>
+              {" "}
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+                marginTop="240px"
+              />
+            </Center>
+          )}
         </Box>
-       
       </Flex>
     </>
   );

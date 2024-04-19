@@ -89,7 +89,7 @@ import StripeSetUp from "./pages/Register/Doer/StripeSetUp";
 import Landing from "./Landing";
 import SelectedCategory from "./components/SelectedCategory";
 import DoerSubscriptionComplete from "./pages/Doer/DoerSubscriptionComplete";
-
+import NeederSelectedCategory from "./pages/Needer/NeederSelectedCategory";
 
 
 import { onAuthStateChanged } from "firebase/auth";
@@ -346,6 +346,10 @@ const router = createBrowserRouter([
   {
     path: "/SelectedCategory",
     element: <SelectedCategory />,
+  },
+  {
+    path: "/NeederSelectedCategory",
+    element: <NeederSelectedCategory />,
   },
 ]);
 

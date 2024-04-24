@@ -123,7 +123,7 @@ const ApplicantProfile = () => {
       setHasRun(true);
     } else {
     }
-  });
+  }, []);
 
   useEffect(() => {
     //get rid of useEffect that calls this data from FB. Check if is hourly, then set isFlat rate based off of that. This will negate that weird crash???

@@ -23,7 +23,9 @@ import {
   InputAddon,
   InputGroup,
   InputRightAddon,
+  Spinner,
 } from "@chakra-ui/react";
+import { StreamChat } from "stream-chat";
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
 import {
   FormControl,
@@ -49,6 +51,7 @@ import {
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { ViewIcon } from "@chakra-ui/icons";
 import { auth, db } from "../../firebaseConfig";
+import { v4 as uuidv4 } from "uuid";
 import {
   onAuthStateChanged,
   setPersistence,
@@ -76,9 +79,7 @@ import star_filled from "../../images/star_filled.png";
 const NeederSelectedCategory = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
   const navigate = useNavigate();
-  console.log(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum rhoncus ac arcu vitae tincidunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque augue neque, ullamcorper vitae aliquet vitae, rutrum et mi. Mauris a purus sapien. Etiam elit sapien, condimentum quis imperdiet in, auctor a neque. Donec tincidunt pulvinar neque, ac fermentum metus consectetur sed. Duis consectetur risus ut dui malesuada, ut dapibus sem dictum. Aenean velit risus, viverra non aliquet eget, ultrices id enim. Duis sodales semper velit, ac finibus tortor. Integer viverra tellus lacus, eu feugiat neque fermentum in. Curabitur efficitur vel est sed semper."
-  );
+ 
   //background image https://www.freecodecamp.org/news/react-background-image-tutorial-how-to-set-backgroundimage-with-inline-css-style/
   //image from Photo by Blue Bird https://www.pexels.com/photo/man-standing-beside-woman-on-a-stepladder-painting-the-wall-7217988/
 
@@ -97,7 +98,7 @@ const NeederSelectedCategory = () => {
   const [isEmployer1, setIsEmployer1] = useState(null);
   const [isEmployer2, setIsEmployer2] = useState(null);
 
-  console.log(email, password);
+
 
   const onSignUp = async () => {
     const authentication = getAuth();
@@ -175,6 +176,43 @@ const NeederSelectedCategory = () => {
     onOpen();
   };
 
+
+
+//set user 
+const [user, setUser] = useState(null);
+const [hasRun, setHasRun] = useState(false)
+useEffect(() => {
+  if (hasRun === false) {
+    onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setUserID(currentUser.uid);
+      console.log(currentUser.uid);
+    });
+    setHasRun(true);
+  } else {
+  }
+}, []);
+
+const [employerFirstName, setEmployerFirstName] = useState(null)
+const [employerLastName, setEmployerLastName] = useState(null)
+useEffect(() => {
+  if (user != null) {
+    const docRef = doc(db, "employers", user.uid);
+
+    getDoc(docRef).then((snapshot) => {
+      console.log(snapshot.data());
+      setEmployerFirstName(snapshot.data().firstName);
+      setEmployerLastName(snapshot.data().lastName);
+      //get profile picture here as well?
+    });
+  } else {
+    console.log("oops!");
+  }
+}, [user]);
+
+
+
+
   //handle selected category
 
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -224,7 +262,13 @@ const NeederSelectedCategory = () => {
         });
 
         setTimeout(() => {
-          setPremiumUsers(finalResults);
+          if (!finalResults || !finalResults.length) {
+            setPremiumUsers(null)
+          } else {
+            setPremiumUsers(finalResults);
+          }
+         
+         
         }, 200);
 
         // if (!results || !results.length) {
@@ -289,6 +333,213 @@ const NeederSelectedCategory = () => {
         setUserExperienceLength(experience.length);
       }
     });
+  };
+
+  const [jobID, setJobID] = useState(null);
+  const [jobIDSet, setJobIDSet] = useState(false)
+
+
+  useEffect(() => {
+    if (jobIDSet === false) {
+      setJobID(uuidv4());
+      setJobIDSet(true)
+    }
+    
+  }, [user])
+
+
+const getDoerID = (premiumUser) => {
+  console.log( premiumUser.streamChatID)
+}
+
+  const initiateRequest = (premiumUser) => {
+//bring in Doer ID via props.
+
+
+
+//get all info about job and set in various places
+setDoc(doc(db, "Messages", "intermediate", jobID, "Info"), {
+  jobTitle: "Request",
+  applicantFirstName: premiumUser.firstName,
+  applicantLastName: premiumUser.lastName,
+  applicantID: premiumUser.streamChatID,
+  employerFirstName: employerFirstName,
+  employerLastName: employerLastName,
+  employerID: user.uid,
+  isHired: false,
+  isHourly: false,
+  isFlatRate: false,
+  isVolunteer: false,
+  needsDeposit: false,
+  isRequest: true
+
+})
+  .then(() => {
+    console.log("new chat created global");
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+setDoc(doc(db, "Messages", jobID), {
+  jobTitle: "Request",
+  jobID: jobID,
+  applicantFirstName: premiumUser.firstName,
+  applicantLastName: premiumUser.lastName,
+  employerFirstName: employerFirstName,
+  employerLastName: employerLastName,
+  applicantID: premiumUser.streamChatID,
+  employerID: user.uid,
+  isHired: false,
+  isHourly: false,
+  isFlatRate: false,
+  confirmedRate: 0,
+  jobOffered: false,
+  applicationSent: false,
+  isVolunteer: false,
+  isRequest: true
+  // applicantAvatar: profilePictureURL,
+  // employerAvatar: employerProfilePictureURL,
+  // applicantInitials: here,
+  // employerInitials: here
+})
+  .then(() => {
+    console.log("new chat created global");
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+setDoc(doc(db, "employers", user.uid, "User Messages", jobID), {
+  placeholder: null,
+})
+  .then(() => {
+    console.log("new chat created employer");
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+setDoc(doc(db, "users", premiumUser.streamChatID, "User Messages", jobID), {
+  placeholder: null,
+})
+  .then(() => {
+    console.log("new chat created applicant");
+    // navigation.navigate("MessagesFinal", { props: jobID, firstInterview: true, applicantFirstName: userFirstName });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+  setDoc(doc(db, "users", premiumUser.streamChatID, "Requests", jobID), {
+    placeholder: null,
+    jobTitle: "Request",
+    jobID: jobID,
+    applicantFirstName: premiumUser.firstName,
+    applicantLastName: premiumUser.lastName,
+    employerFirstName: employerFirstName,
+    employerLastName: employerLastName,
+    applicantID: premiumUser.streamChatID,
+    employerID: user.uid,
+    hasUnreadMessages: false,
+    interviewStarted: true,
+    offerMade: false
+  })
+    .then(() => {
+      console.log("new chat created applicant");
+      // navigation.navigate("MessagesFinal", { props: jobID, firstInterview: true, applicantFirstName: userFirstName });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    setDoc(doc(db, "employers", user.uid, "Requests", jobID), {
+     
+      jobTitle: "Request",
+      jobID: jobID,
+      applicantFirstName: premiumUser.firstName,
+      applicantLastName: premiumUser.lastName,
+      employerFirstName: employerFirstName,
+      employerLastName: employerLastName,
+      applicantID: premiumUser.streamChatID,
+      employerID: user.uid,
+      hasUnreadMessage: false,
+      interviewStarted: true,
+      offerMade: false
+    })
+      .then(() => {
+        console.log("new chat created applicant");
+        // navigation.navigate("MessagesFinal", { props: jobID, firstInterview: true, applicantFirstName: userFirstName });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+//create chat channel with user and Doer ID.
+//navigate to chat channel.
+testNewChannel(premiumUser)
+  }
+
+  const [isLoading, setIsLoading] = useState(false)
+  const client = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
+  const userInfo = {
+    id: userID,
+    // name: userName,
+    // image: `https://getstream.io/random_png/?id=${userId}&name=${userName}`,
+  };
+
+  const testNewChannel = async (premiumUser) => {
+    setIsLoading(true)
+    client.connectUser(userInfo, client.devToken(userID));
+    
+    const channel = client.channel("messaging", jobID, {
+      members: [premiumUser.streamChatID, user.uid],
+      name: "Request",
+    });
+
+    await channel.create();
+    // setNewChannel(newChannel);
+
+    // trying to see if this will return access to "unread" message count
+    const startWatching = channel.watch();
+    console.log(startWatching);
+
+    setTimeout(() => {
+
+      updateDoc(doc(db, "users", premiumUser.streamChatID, "Requests", jobID), {
+        hasUnreadMessage: true,
+        interviewStarted: true,
+        channelID: channel.cid
+      })
+        .then(() => {
+
+          // console.log("new message updated in Applied")
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
+        updateDoc(doc(db, "employers", userID, "Requests", jobID), {
+       
+          channelID: channel.cid
+        })
+          .then(() => {
+  
+            console.log("new message updated in Applied")
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+          
+      navigate("/NeederMessageList", {
+        state: {
+          selectedChannel: channel.cid,
+        
+        },
+      });
+
+      setIsLoading(false)
+    }, 1000);
   };
 
   //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
@@ -450,19 +701,14 @@ const NeederSelectedCategory = () => {
                       <Button
                         flex={1}
                         fontSize={"sm"}
-                        rounded={"full"}
-                        bg={"blue.400"}
-                        color={"white"}
-                        boxShadow={
-                          "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)"
-                        }
-                        _hover={{
-                          bg: "blue.500",
-                        }}
-                        _focus={{
-                          bg: "blue.500",
-                        }}
-                        onClick={() => handleOpenModal()}
+                        // rounded={"full"}
+                        backgroundColor="#01A2E8"
+                        color="white"
+                        _hover={{ bg: "#018ecb", textColor: "white" }}
+                       
+                      
+                        
+                        onClick={() => handleOpenModal(premiumUser)}
                       >
                         Contact
                       </Button>
@@ -648,25 +894,55 @@ const NeederSelectedCategory = () => {
                       </ModalBody>
 
                       <ModalFooter>
-                        <Button variant="ghost" marginRight="8px">
-                          Close
-                        </Button>
-                        <Button
+                      
+                        {isLoading ? (<Spinner
+                      thickness="4px"
+                      speed="0.65s"
+                      emptyColor="gray.200"
+                      color="#01A2E8"
+                      size="lg"
+                      marginTop="24px"
+                    
+                    />) : (<>
+                      <Button variant="ghost" marginRight="8px">
+                      Close
+                    </Button>
+<Button
                           backgroundColor="#01A2E8"
                           color="white"
                           _hover={{ bg: "#018ecb", textColor: "white" }}
+                          onClick={() => initiateRequest(premiumUser)}
                         >
                           Contact
                         </Button>
+                        </>
+                    )}
+                        
                       </ModalFooter>
                     </ModalContent>
                   </Modal>
                 </>
               ))
             ) : (
-              <Text>No premium users</Text>
+              <>
+              <Text>Sorry! No {selectedCategory} pros in your area.</Text>
+              <Text>Try posting your project for contractors to see instead.</Text>
+              <Button
+          backgroundColor="#01A2E8"
+          color="white"
+          _hover={{ bg: "#018ecb", textColor: "white" }}
+          marginTop="16px"
+          marginRight="24px"
+          height="36px"
+          onClick={() => navigate("/AddJobStart")}
+        >
+          Post A Job
+        </Button>
+              </>
             )}
-            {/* </Center> */}
+          
+         
+           
           </Box>
         </Flex>
       </Stack>

@@ -82,8 +82,6 @@ const ChannelHireHeader = () => {
 
   const { channel, watchers } = useChannelStateContext();
 
-
-
   // console.log("here is the channel",channel)
 
   const navigate = useNavigate();
@@ -156,6 +154,10 @@ const ChannelHireHeader = () => {
     }
   }, [bothIDs]);
 
+  const [isRequest, setIsRequest] = useState(null);
+  const [requestOfferMade, setRequestOfferMade] = useState(null);
+  const [requestAccepted, setRequestAccepted] = useState(null);
+
   useEffect(() => {
     const collectionRef = collection(db, "Messages");
     const q = query(collectionRef);
@@ -172,6 +174,14 @@ const ChannelHireHeader = () => {
           doc._document.data.value.mapValue.fields.jobTitle.stringValue ===
             channel.data.name
         ) {
+          if (doc._document.data.value.mapValue.fields.isRequest &&  doc._document.data.value.mapValue.fields.requestOfferMade) {
+            setRequestOfferMade(
+              doc._document.data.value.mapValue.fields.requestOfferMade
+                .booleanValue
+            );
+            setIsRequest(true);
+            console.log("got em");
+          }
           console.log("checking 2 ", doc._document.data.value.mapValue.fields);
           setFinalBlock([
             ...finalBlock,
@@ -207,8 +217,44 @@ const ChannelHireHeader = () => {
   console.log("is hired", isHired);
 
   useEffect(() => {
-    if (
-      (userID != null && isHired === false) ||
+
+    if (isRequest && requestOfferMade && jobID) {
+      if (
+        (userID != null && isHired === false) ||
+        (undefined && employerID != null && jobTitle !== null) ||
+        undefined
+      ) {
+        console.log("here?");
+        const docRef = doc(db, "employers", employerID, "Requests", jobID);
+  
+        getDoc(docRef).then((snapshot) => {
+          console.log("current job request", snapshot.data());
+          setNiceToHave(snapshot.data().niceToHave);
+          setDescription(snapshot.data().description);
+          setJobTitle(snapshot.data().jobTitle)
+          setCategory(snapshot.data().category);
+          setCity(snapshot.data().city);
+          setLocationLat(snapshot.data().locationLat);
+          setLocationLng(snapshot.data().locationLng);
+          setLowerRate(snapshot.data().lowerRate);
+          setUpperRate(snapshot.data().upperRate);
+          setRequirements(snapshot.data().requirements);
+          setRequirements2(snapshot.data().requirements2);
+          setRequirements3(snapshot.data().requirements3);
+          setIsVolunteer(snapshot.data().isVolunteer);
+          setIsOneTime(snapshot.data().isOneTime);
+          setStreetAddress(snapshot.data().streetAddress);
+          setState(snapshot.data().state);
+          setZipCode(snapshot.data().zipCode);
+  
+          setEmployerFirstName(snapshot.data().firstName);
+        });
+      } else {
+        console.log("oops!a", userID, isHired, employerID, jobTitle);
+      }
+    }
+    else if (
+      (userID != null && isHired === false && !isRequest) ||
       (undefined && employerID != null && jobTitle !== null) ||
       undefined
     ) {
@@ -277,8 +323,8 @@ const ChannelHireHeader = () => {
       description: description,
       confirmedRate: confirmedRateInt,
       city: city,
-      lowerRate: lowerRate,
-      upperRate: upperRate,
+      lowerRate: lowerRate ? lowerRate : null,
+      upperRate: upperRate ? upperRate : null,
       isVolunteer: isVolunteer,
       isOneTime: isOneTime,
       streetAddress: streetAddress,
@@ -306,17 +352,15 @@ const ChannelHireHeader = () => {
 
     // applicant
 
-    deleteDoc(doc(db, "users", userID, "Appled", jobTitle), {
-
-    })
-    .then(() => {
-      //all good
-      console.log("data deleted user applied");
-    })
-    .catch((error) => {
-      // no bueno
-      console.log(error, "post in progress");
-    });
+    deleteDoc(doc(db, "users", userID, "Appled", jobTitle), {})
+      .then(() => {
+        //all good
+        console.log("data deleted user applied");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error, "post in progress");
+      });
 
     setDoc(doc(db, "users", userID, "Jobs In Progress", jobTitle), {
       firstHiredNotification: true,
@@ -330,8 +374,8 @@ const ChannelHireHeader = () => {
       description: description,
       city: city,
       confirmedRate: confirmedRateInt,
-      lowerRate: lowerRate,
-      upperRate: upperRate,
+      lowerRate: lowerRate ? lowerRate : null,
+      upperRate: upperRate ? upperRate : null,
       isVolunteer: isVolunteer,
       isOneTime: isOneTime,
       streetAddress: streetAddress,
@@ -380,11 +424,36 @@ const ChannelHireHeader = () => {
         console.log(error, "from delete posted employer");
       });
 
-      //delete from user Applied Jobs
-      deleteDoc(doc(db, "users", userID, "Applied", jobTitle))
+    //delete from user Applied Jobs
+    deleteDoc(doc(db, "users", userID, "Applied", jobTitle))
       .then(() => {
         //all good
         console.log("removed from employers Posted Jobs");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error, "from delete posted employer");
+      });
+  };
+
+  const deleteRequestEmployer = () => {
+    deleteDoc(doc(db, "employers", employerID, "Requests", jobID))
+      .then(() => {
+        //all good
+        console.log("removed from needer Requests");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error, "from delete posted employer");
+      });
+
+   
+
+    //delete from user Applied Jobs
+    deleteDoc(doc(db, "users", userID, "Requests", jobID))
+      .then(() => {
+        //all good
+        console.log("removed from users Requests");
       })
       .catch((error) => {
         // no bueno
@@ -400,6 +469,7 @@ const ChannelHireHeader = () => {
     })
       .then(() => {
         console.log("all good");
+        onOpenSuccess()
       })
       .catch((error) => {
         console.log(error);
@@ -411,6 +481,11 @@ const ChannelHireHeader = () => {
     onOpen: onOpenSuccess,
     onClose: onCloseSuccess,
   } = useDisclosure();
+  const {
+    isOpen: isOpenDetails,
+    onOpen: onOpenDetails,
+    onClose: onCloseDetails,
+  } = useDisclosure();
 
   const deleteFromMaps = () => {
     //needs to also delete from paid v Volunteer DB subsets.
@@ -419,7 +494,7 @@ const ChannelHireHeader = () => {
       .then(() => {
         //all good
         console.log("removed from employers Posted Jobs");
-       onOpenSuccess()
+        onOpenSuccess();
       })
       .catch((error) => {
         // no bueno
@@ -458,8 +533,14 @@ const ChannelHireHeader = () => {
     postInProgress();
 
     //delete from Posted under employer
-
-    deletePostedEmployer();
+if (isRequest) {
+  deleteRequestEmployer();
+} else {
+  deletePostedEmployer();
+  deleteFromMaps();
+  deleteFromJobs();
+}
+    
 
     //make notification in chat for both
 
@@ -467,11 +548,13 @@ const ChannelHireHeader = () => {
 
     //delete from global jobs/maps
 
-    deleteFromMaps();
+    
 
     //delete from paid v volunteer db
 
-    deleteFromJobs();
+    // deleteFromJobs();
+
+    
   };
 
   //chat notification control
@@ -548,7 +631,7 @@ const ChannelHireHeader = () => {
             getDoc(inProgressDocRef).then((snapshot) => {
               if (!snapshot.data()) {
               } else {
-                updateDoc((inProgressDocRef), {
+                updateDoc(inProgressDocRef, {
                   hasUnreadMessage: false,
                 })
                   .then(() => {
@@ -564,7 +647,7 @@ const ChannelHireHeader = () => {
             getDoc(inReviewDocRef).then((snapshot) => {
               if (!snapshot.data()) {
               } else {
-                updateDoc((inReviewDocRef), {
+                updateDoc(inReviewDocRef, {
                   hasUnreadMessage: false,
                 })
                   .then(() => {
@@ -576,254 +659,235 @@ const ChannelHireHeader = () => {
                   });
               }
             });
-          } 
+          }
         }
       });
     }
   }, [parsedUsers, userID]);
 
- 
-
-
-
-  const { client } = useChatContext()
-
+  const { client } = useChatContext();
 
   const doerMessagesRead = () => {
-     // var appliedDocRef = doc(
-            //   db,
-            //   "users",
-            //   userID,
-            //   "Applied",
-            //   jobTitle
-            // );
-            var inProgressDocRef = doc(
-              db,
-              "users",
-              userID,
-              "Jobs In Progress",
-              jobTitle
-            );
-            var inReviewDocRef = doc(
-              db,
-              "users",
-              userID,
-              "In Review",
-              jobTitle
-            );
+    // var appliedDocRef = doc(
+    //   db,
+    //   "users",
+    //   userID,
+    //   "Applied",
+    //   jobTitle
+    // );
+    var inProgressDocRef = doc(
+      db,
+      "users",
+      userID,
+      "Jobs In Progress",
+      jobTitle
+    );
+    var inReviewDocRef = doc(db, "users", userID, "In Review", jobTitle);
 
-            getDoc(doc(db, "users", userID, "Applied", jobTitle)).then(
-              (snapshot) => {
-                if (!snapshot.data()) {
-                } else {
-                  updateDoc(doc(db, "users", userID, "Applied", jobTitle), {
-                    hasUnreadMessage: false,
-                  })
-                    .then(() => {
-                      console.log("new message updated in Applied");
-                    })
-                    .catch((error) => {
-                      // no bueno
-                      console.log(error);
-                    });
-                }
-              }
-            );
+    getDoc(doc(db, "users", userID, "Applied", jobTitle)).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(doc(db, "users", userID, "Applied", jobTitle), {
+          hasUnreadMessage: false,
+        })
+          .then(() => {
+            console.log("new message updated in Applied");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+      }
+    });
 
-            getDoc(inProgressDocRef).then((snapshot) => {
-              if (!snapshot.data()) {
-              } else {
-                updateDoc((inProgressDocRef), {
-                  hasUnreadMessage: false,
-                })
-                  .then(() => {
-                    console.log("new message updated in Progress");
-                  })
-                  .catch((error) => {
-                    // no bueno
-                    console.log(error);
-                  });
-              }
-            });
+    getDoc(inProgressDocRef).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(inProgressDocRef, {
+          hasUnreadMessage: false,
+        })
+          .then(() => {
+            console.log("new message updated in Progress");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+      }
+    });
 
-            getDoc(inReviewDocRef).then((snapshot) => {
-              if (!snapshot.data()) {
-              } else {
-                updateDoc((inReviewDocRef), {
-                  hasUnreadMessage: false,
-                })
-                  .then(() => {
-                    console.log("new message updated in Review");
-                  })
-                  .catch((error) => {
-                    // no bueno
-                    console.log(error);
-                  });
-              }
-            });
-          } 
-        
-  
+    getDoc(inReviewDocRef).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(inReviewDocRef, {
+          hasUnreadMessage: false,
+        })
+          .then(() => {
+            console.log("new message updated in Review");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+      }
+    });
+  };
 
-
-
-
-
-  useEffect( () => {
-    if (client ) {
-      client.on(event => {
+  useEffect(() => {
+    if (client) {
+      client.on((event) => {
         // console.log("event", event)
         if (event.queriedChannels) {
-          console.log("working now queried")
+          console.log("working now queried");
           setTimeout(() => {
-            if ( userID && jobTitle && employerID) {
-    event.queriedChannels.channels[0].read.forEach((user) => {
-      console.log("unread messages",user.unread_messages)
-  if (user.user.id === userID && user.unread_messages === 0) {
-    console.log("working now")
-    doerMessagesRead()
-    // console.log("working niow")
-  } else {
-    console.log("test failed")
-  }
-  },50)}
-    })
-    // setChannelQueriedUsers(event.queriedChannels.channels[0].read)
-  
+            if (userID && jobTitle && employerID) {
+              event.queriedChannels.channels[0].read.forEach((user) => {
+                console.log("unread messages", user.unread_messages);
+                if (user.user.id === userID && user.unread_messages === 0) {
+                  console.log("working now");
+                  doerMessagesRead();
+                  // console.log("working niow")
+                } else {
+                  console.log("test failed");
+                }
+              }, 50);
+            }
+          });
+          // setChannelQueriedUsers(event.queriedChannels.channels[0].read)
         }
-        
+
         // console.log('channel.state', channel);
       });
     }
-  }, [client, userID, jobID, employerID])
+  }, [client, userID, jobID, employerID]);
 
-    //testing event listeners
-useEffect( () => {
-  if (client) {
-    client.on(event => {
-      if (event.message) {
-        setTimeout(() => {
-          if (userID && jobTitle && employerID) {
-        console.log("debug new message from logged in user", event.message.user.id, userID)
-if (event.message.user.id === userID) {
-  console.log("new message from logged in user")
-  newMessageFromDoer()
-}
-          }
-        }, 50)
+  //testing event listeners
+  useEffect(() => {
+    if (client) {
+      client.on((event) => {
+        if (event.message) {
+          setTimeout(() => {
+            if (userID && jobTitle && employerID) {
+              console.log(
+                "debug new message from logged in user",
+                event.message.user.id,
+                userID
+              );
+              if (event.message.user.id === userID) {
+                console.log("new message from logged in user");
+                newMessageFromDoer();
+              }
+            }
+          }, 50);
+        }
+
+        // console.log('channel.state', channel);
+      });
+    }
+  }, [client, userID, jobTitle, employerID]);
+
+  const newMessageFromDoer = () => {
+    var appliedDocRef = doc(
+      db,
+      "employers",
+      employerID,
+      "Posted Jobs",
+      jobTitle
+    );
+    var applicantDocRef = doc(
+      db,
+      "employers",
+      employerID,
+      "Posted Jobs",
+      jobTitle,
+      "Applicants",
+      userID
+    );
+    var inProgressDocRef = doc(
+      db,
+      "employers",
+      employerID,
+      "Jobs In Progress",
+      jobTitle
+    );
+    var inReviewDocRef = doc(
+      db,
+      "employers",
+      employerID,
+      "In Review",
+      jobTitle
+    );
+
+    getDoc(appliedDocRef).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(appliedDocRef, {
+          hasUnreadMessage: true,
+        })
+          .then(() => {
+            console.log("new message updated in Applied");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
       }
-      
-      // console.log('channel.state', channel);
     });
+
+    getDoc(applicantDocRef).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(applicantDocRef, {
+          hasUnreadMessage: true,
+          applicantID: userID,
+        })
+          .then(() => {
+            console.log("new message updated in Applied");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+      }
+    });
+
+    getDoc(inProgressDocRef).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(inProgressDocRef, {
+          hasUnreadMessage: true,
+        })
+          .then(() => {
+            console.log("new message updated in Progress");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+      }
+    });
+
+    getDoc(inReviewDocRef).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(inReviewDocRef, {
+          hasUnreadMessage: true,
+        })
+          .then(() => {
+            console.log("new message updated in Review");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+      }
+    });
+  };
+
+
+  const handleOpenDetails = () => {
+onOpenDetails()
   }
-}, [client, userID, jobTitle, employerID])
-
-
-
-
-const newMessageFromDoer = () => {
-
-  var appliedDocRef = doc(
-    db,
-    "employers",
-    employerID,
-    "Posted Jobs",
-    jobTitle,
-    
-  );
-  var applicantDocRef = doc(
-    db,
-    "employers",
-    employerID,
-    "Posted Jobs",
-    jobTitle,
-    "Applicants",
-    userID
-  );
-  var inProgressDocRef = doc(
-    db,
-    "employers",
-    employerID,
-    "Jobs In Progress",
-    jobTitle
-  );
-  var inReviewDocRef = doc(
-    db,
-    "employers",
-    employerID,
-    "In Review",
-    jobTitle
-  );
-
-  getDoc(appliedDocRef).then((snapshot) => {
-    if (!snapshot.data()) {
-    } else {
-      updateDoc((appliedDocRef), {
-        hasUnreadMessage: true,
-      })
-        .then(() => {
-          console.log("new message updated in Applied");
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-    }
-  });
-
-  getDoc(applicantDocRef).then((snapshot) => {
-    if (!snapshot.data()) {
-    } else {
-      updateDoc((applicantDocRef), {
-        hasUnreadMessage: true,
-        applicantID: userID
-      })
-        .then(() => {
-          console.log("new message updated in Applied");
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-    }
-  });
-
-  getDoc(inProgressDocRef).then((snapshot) => {
-    if (!snapshot.data()) {
-    } else {
-      updateDoc((inProgressDocRef), {
-        hasUnreadMessage: true,
-      })
-        .then(() => {
-          console.log("new message updated in Progress");
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-    }
-  });
-
-  getDoc(inReviewDocRef).then((snapshot) => {
-    if (!snapshot.data()) {
-    } else {
-      updateDoc((inReviewDocRef), {
-        hasUnreadMessage: true,
-      })
-        .then(() => {
-          console.log("new message updated in Review");
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-    }
-  });
-}
-
-
-
-
 
   return (
     <>
@@ -856,7 +920,82 @@ const newMessageFromDoer = () => {
             </Center>
           </Box>
         </Card>
-      ) : !jobOffered ? (
+      ) : isRequest && requestOfferMade === false ? (
+<Card
+          boxShadow="sm"
+          rounded="md"
+          borderColor="#e4e4e4"
+          borderWidth="1px"
+          marginLeft="4px"
+          marginRight="4px"
+        >
+          <Box>
+            <Center>
+              <Flex direction="column">
+                <Flex direction="row">
+                  <Box textAlign="center" marginTop="16px">
+                    <Text marginBottom="8px">{employerFirstName} has started a conversation with you</Text>
+                  </Box>
+                </Flex>
+              
+              </Flex>
+            </Center>
+          </Box>
+        </Card>
+      ) : requestOfferMade === true ? (
+        <Card
+                  boxShadow="sm"
+                  rounded="md"
+                  borderColor="#e4e4e4"
+                  borderWidth="1px"
+                  marginLeft="4px"
+                  marginRight="4px"
+                >
+                  <Box>
+                    <Center>
+                      <Flex direction="column">
+                        <Flex direction="row">
+                          <Box textAlign="center" marginTop="16px" flexDirection="row" justifyContent="center" alignContent="center" alignItems="center" justifyItems="center">
+                            <Text>{employerFirstName} has sent you an offer for<Button variant="ghost" marginBottom="4px" onClick={() => {
+                              handleOpenDetails()
+                            }}>
+                              <Text>{jobTitle}</Text>
+                            </Button></Text> 
+                           
+                         
+                          </Box>
+                        </Flex>
+                        <Center>
+                          <Flex direction="column">
+                        <Text>Pay Rate:</Text>
+                    {isHourly ? (
+                      <Text>${confirmedRate}/hr</Text>
+                    ) : isVolunteer ? (
+                      <Text> No Charge</Text>
+                    ) : (
+                      <Text> ${confirmedRate} total </Text>
+                    )}
+                    </Flex>
+                        </Center>
+                        <Center>
+                    <Box flexDirection="row" marginTop="16px" marginBottom="8px">
+                      <Button variant="ghost" width="160px">
+                        <Text>Decline</Text>
+                      </Button>
+                      <Button
+                        width="160px"
+                        colorScheme="blue"
+                        onClick={() => confirmJobAccept()}
+                      >
+                        <Text>Accept</Text>
+                      </Button>
+                    </Box>
+                  </Center>
+                      </Flex>
+                    </Center>
+                  </Box>
+                </Card>
+              ) : !jobOffered ? (
         <Card
           boxShadow="sm"
           rounded="md"
@@ -931,28 +1070,54 @@ const newMessageFromDoer = () => {
         </Box>
       )}
 
-<Modal isOpen={isOpenSuccess} onClose={onCloseSuccess} size="xl">
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Success!</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                     
-                       <Text>You've accepted this position.</Text>
-                       <Text></Text>
-                    </ModalBody>
+      <Modal isOpen={isOpenSuccess} onClose={onCloseSuccess} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>You've accepted this position.</Text>
+            <Text></Text>
+          </ModalBody>
 
-                    <ModalFooter>
-                      
-                      <Button
-                        colorScheme="blue"
-                        onClick={() => onCloseSuccess()}
-                      >
-                        Continue
-                      </Button>
-                    </ModalFooter>
-                  </ModalContent>
-                </Modal>
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={() => onCloseSuccess()}>
+              Continue
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      
+      <Modal isOpen={isOpenDetails} onClose={onCloseDetails} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Offer Details</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+          <FormLabel>Job Title</FormLabel>
+            <Text marginBottom="4px">{jobTitle}</Text>
+            <FormLabel>Description</FormLabel>
+            <Text marginBottom="4px">{description}</Text>
+            <FormLabel>
+                Location
+              </FormLabel>
+              <Text marginBottom="4px">{streetAddress}, {city}, {state}</Text>
+              {category ? ( <><FormLabel>Category</FormLabel>
+              <Text marginBottom="4px">{category}</Text></>) : (null)}
+             
+              <FormLabel>Frequency</FormLabel>
+              <Text marginBottom="4px">One-time</Text>
+              <FormLabel>Pay Rate</FormLabel>
+              {isHourly ? (<Text marginBottom="4px">${confirmedRate}/hour</Text>) : (<Text marginBottom="4px">${confirmedRate} total</Text>)}
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={() => onCloseDetails()}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

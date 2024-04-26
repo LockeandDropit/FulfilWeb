@@ -54,7 +54,7 @@ import { Spinner } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import "stream-chat-react/dist/css/v2/index.css";
 import { useLocation } from "react-router-dom";
-
+import CreateOfferModal from "../NeederComponents/CreateOfferModal";
 import {
   Modal,
   ModalOverlay,
@@ -72,7 +72,7 @@ const NeederChannelHireHeader = () => {
   const location = useLocation();
   const [isHired, setIsHired] = useState();
 
-  const [jobID, setJobID] = useState();
+  const [jobID, setJobID] = useState(null);
   const [jobTitle, setJobTitle] = useState(null);
   const [employerFirstName, setEmployerFirstName] = useState();
   const [jobOffered, setJobOffered] = useState(null);
@@ -166,6 +166,9 @@ const NeederChannelHireHeader = () => {
   const [intermediateBlockReady, setIntermediateBlockReady] = useState(false);
   const [messageBlockReady, setMessageBlockReady] = useState(false);
   const [finalBlockReady, setFinalBlockReady] = useState(false);
+  const [isRequest, setIsRequest] = useState(null)
+  const [requestOfferMade, setRequestOfferMade] = useState(null)
+  const [requestAccepted, setRequestAccepted] = useState(null)
 
   const isFirstRender = useRef(true);
 
@@ -183,12 +186,20 @@ const NeederChannelHireHeader = () => {
           doc._document.data.value.mapValue.fields.employerID.stringValue ===
             userID &&
           doc._document.data.value.mapValue.fields.jobTitle.stringValue ===
-            channel.data.name
+            channel.data.name 
+            &&
+            doc._document.data.value.mapValue.fields.jobID.stringValue ===
+            channel.id
+           
         ) {
-          console.log(
-            doc._document.data.value.mapValue.fields.jobTitle.stringValue
-          );
 
+          if (doc._document.data.value.mapValue.fields.isRequest &&  doc._document.data.value.mapValue.fields.requestOfferMade) {
+            setRequestOfferMade(
+          doc._document.data.value.mapValue.fields.requestOfferMade.booleanValue
+          );
+          }
+         
+          // console.log("channel ID ", doc._document.data.value.mapValue.fields.channelID.stringValue, channel.cid)
           console.log("checking 2 ", doc._document.data.value.mapValue.fields);
           setFinalBlock([
             ...finalBlock,
@@ -219,6 +230,7 @@ const NeederChannelHireHeader = () => {
           setIsVolunteer(
             doc._document.data.value.mapValue.fields.isVolunteer.booleanValue
           );
+          
           setJobID(doc._document.data.value.mapValue.fields.jobID.stringValue);
           setEmployerFirstName(
             doc._document.data.value.mapValue.fields.employerFirstName
@@ -229,7 +241,7 @@ const NeederChannelHireHeader = () => {
         }
       });
     });
-  }, [channel, userID, applicantID]);
+  }, [channel, userID, applicantID, isRequest]);
 
   console.log(channel.data.name, userID, applicantID);
 
@@ -257,6 +269,11 @@ const NeederChannelHireHeader = () => {
     isOpen: isOpenSuccess,
     onOpen: onOpenSuccess,
     onClose: onCloseSuccess,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenOffer,
+    onOpen: onOpenOffer,
+    onClose: onCloseOffer,
   } = useDisclosure();
 
 
@@ -398,6 +415,30 @@ const NeederChannelHireHeader = () => {
     }
   }, [user]);
 
+  // check to see if its a Request 
+  useEffect(() => {
+    if (user != null && jobID) {
+      const docRef = doc(
+        db,
+        "employers",
+        user.uid,
+        "Requests",
+        jobID
+      );
+
+      getDoc(docRef).then((snapshot) => {
+        console.log("request", snapshot.data());
+        if (snapshot.data()) {
+         setIsRequest(true)
+         
+        } else {
+        }
+      });
+    } else {
+      console.log("oops!");
+    }
+  }, [user, jobID]);
+
   const sendOffer = () => {
     //// uhh this code will remove the "do you want to hire this person" card in Messages
     // it will give a pop-up that allows them to solidify the amouint being paid. DONE.
@@ -405,6 +446,7 @@ const NeederChannelHireHeader = () => {
     //cue push notification to user (TO DO)//
 
     const confirmedRateInt = parseInt(confirmedRate, 10);
+
 
     //this needs to be done from worker side?
 
@@ -468,6 +510,13 @@ const NeederChannelHireHeader = () => {
       setIsFlatRate(true);
     }
   }, [isHourly]);
+
+
+const [offerModalOpen, setOfferModalOpen] = useState(false)
+
+  const handleOfferOpen = () => {
+    setOfferModalOpen(true)
+  }
 
   const handleModalOpen = () => {
     if (isHourly === true) {
@@ -840,7 +889,86 @@ setIsLoading(false)
             </Flex>
           </Center>
         </Card>
-      ) : (
+      ) : isRequest && requestOfferMade === false ? (<Box>
+        <Card
+          boxShadow="sm"
+          rounded="md"
+          borderColor="#e4e4e4"
+          borderWidth="1px"
+          marginLeft="4px"
+          marginRight="4px"
+        >
+          <Box>
+            <Center>
+              <Flex direction="column">
+                <Box textAlign="center" marginTop="16px">
+                  <Text>Do you want to hire this person?</Text>
+                  
+                </Box>
+                <Button
+                  colorScheme="blue"
+                  marginTop="8px"
+                  marginBottom="8px"
+                  onClick={() => handleOfferOpen()}
+                >
+                  Make An Offer
+                </Button>
+                <Button variant="ghost" marginBottom="8px">
+                  No
+                </Button>
+              </Flex>
+            </Center>
+
+            {/* {isHourly ? (
+              <Text>${confirmedRate}/hr</Text>
+            ) : isVolunteer ? (
+              <Text> No Charge</Text>
+            ) : (
+              <Text> ${confirmedRate} total </Text>
+            )} */}
+          </Box>
+        </Card>
+      </Box>) : requestOfferMade === true ? (<Box>
+        <Card
+          boxShadow="sm"
+          rounded="md"
+          borderColor="#e4e4e4"
+          borderWidth="1px"
+          marginLeft="4px"
+          marginRight="4px"
+        >
+          <Box>
+            <Center>
+              <Flex direction="column">
+                <Box textAlign="center" marginTop="16px" marginBottom="16px">
+                  <Heading size="sm" marginBottom="8px">Offer Sent!</Heading>
+                  <Text>If the person you offered this job accepts your offer these messages</Text>
+                  <Text>will be moved to the "Accepted Jobs" messaging tab.</Text>
+                </Box>
+                {/* <Button
+                  colorScheme="blue"
+                  marginTop="8px"
+                  marginBottom="8px"
+                  onClick={() => handleOfferOpen()}
+                >
+                  Make An Offer
+                </Button>
+                <Button variant="ghost" marginBottom="8px">
+                  No
+                </Button> */}
+              </Flex>
+            </Center>
+
+            {/* {isHourly ? (
+              <Text>${confirmedRate}/hr</Text>
+            ) : isVolunteer ? (
+              <Text> No Charge</Text>
+            ) : (
+              <Text> ${confirmedRate} total </Text>
+            )} */}
+          </Box>
+        </Card>
+      </Box>) : (
         <Box>
           <Card
             boxShadow="sm"
@@ -987,6 +1115,32 @@ setIsLoading(false)
                     </ModalFooter>
                   </ModalContent>
                 </Modal>
+                <Modal isOpen={isOpenOffer} onClose={onCloseOffer} size="xl">
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Create An Offer</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                     
+                       <Text>Your offer has been sent.</Text>
+                       <Text>You will receive a notification if the applicant accepts.</Text>
+                    </ModalBody>
+
+                    <ModalFooter>
+                      
+                      <Button
+                        colorScheme="blue"
+                        onClick={() => onCloseOffer()}
+                      >
+                        Continue
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
+
+                {offerModalOpen === true ? (
+                  <CreateOfferModal props={{applicantID: applicantID, jobID: jobID, channel: channel}}/>
+                ) : (null)}
     </>
   );
 };

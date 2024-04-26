@@ -33,7 +33,7 @@ const Categories = () => {
 
       <Center>
         <SimpleGrid columns={[2, null, 3]} spacing="64px" marginTop="16">
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/DrivewayAsphalt.jpg"
@@ -58,7 +58,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/CarpentryTrim.jpg"
@@ -83,7 +83,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/ConcreteAsphalt.jpg"
@@ -109,7 +109,7 @@ const Categories = () => {
             </CardBody>
           </Card>
 
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image src="/landingImages/Drywall.jpg" borderRadius="lg" />
 
@@ -130,7 +130,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/electrical.jpg"
@@ -155,7 +155,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/Handyman.jpg"
@@ -180,7 +180,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/GutterCleaning.jpg"
@@ -205,7 +205,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/NewHVAC.jpg"
@@ -230,7 +230,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/NewLandscaping2.jpg"
@@ -255,7 +255,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/Painting.jpg"
@@ -280,7 +280,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/Plumbing.jpg"
@@ -305,7 +305,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/PressureWashing.jpg"
@@ -330,7 +330,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/RoofingSiding.jpg"
@@ -355,7 +355,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/Shoveling.jpg"
@@ -380,7 +380,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/WindowInstallation.jpg"
@@ -406,7 +406,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/NewYardWork.jpg"
@@ -431,7 +431,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm">
+          <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/Moving.jpg"

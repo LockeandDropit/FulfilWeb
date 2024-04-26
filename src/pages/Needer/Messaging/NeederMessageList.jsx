@@ -53,7 +53,7 @@ import { Spinner } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import "stream-chat-react/dist/css/v2/index.css";
 import { useLocation } from "react-router-dom";
-
+import CreateOfferModal from "../NeederComponents/CreateOfferModal";
 import NeederChannelHireHeader from "./NeederChannelHireHeader";
 import {
   Modal,
@@ -65,6 +65,7 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
+
 
 const NeederMessageList = () => {
   // const { chatClient } = useChatContext();
@@ -292,6 +293,7 @@ const NeederMessageList = () => {
   const [completedJobDataLength, setCompletedJobDataLength] = useState(null);
 
   const [requestData, setRequestData] = useState(null);
+  const [requestDataLength, setRequestDataLength] = useState(null);
 
   //accepted logic
 
@@ -308,12 +310,11 @@ const NeederMessageList = () => {
         //review what this does
         if (doc.data().channelID) {
           jobData.push(doc.data().channelID);
-        
         }
       });
 
       // setInterviewJobData(jobData);
-      
+
       if (!jobData || !jobData.length) {
         //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
         setAcceptedJobData(null);
@@ -347,46 +348,70 @@ const NeederMessageList = () => {
       setToggleRequestsTab(false);
     } else {
       setAcceptedCIDs(null);
+      setToggleAcceptedTab(true);
+      setToggleInterviewTab(false);
+      setToggleCompletedTab(false);
+      setToggleRequestsTab(false);
     }
   }, [acceptedJobData]);
 
   //completed logic (comes from "In Review" in FB)
 
-  const [completedNewMessagesLength, setCompletedNewMessageLength] = useState(null);
+  const [completedNewMessagesLength, setCompletedNewMessageLength] =
+    useState(null);
   const [requestNewMessagesLength, setRequestNewMessageLength] = useState(null);
-  const [acceptedNewMessagesLength, setAcceptedNewMessageLength] =  useState(null);
-  const [interviewNewMessagesLength, setInterviewNewMessageLength] = useState(null);
-  const [interviewMessageData, setInterviewMessageData] = useState(null)
+  const [acceptedNewMessagesLength, setAcceptedNewMessageLength] =
+    useState(null);
+  const [interviewNewMessagesLength, setInterviewNewMessageLength] =
+    useState(null);
+  const [interviewMessageData, setInterviewMessageData] = useState(null);
   const [newMessagesSet, setNewMessagesSet] = useState(false);
 
   //initial setting of number of new messages in each section
   useEffect(() => {
     if (newMessagesSet === false && user) {
+      // Interview section, needs ewextra qwuery which is in seperate useEfffect
+      const jobQuery = query(
+        collection(db, "employers", user.uid, "Posted Jobs")
+      );
 
-          // Interview section, needs ewextra qwuery which is in seperate useEfffect
-          const jobQuery = query(
-            collection(db, "employers", user.uid, "Posted Jobs")
-          );
-    
-          onSnapshot(jobQuery, (snapshot) => {
-            let jobData = [];
-            snapshot.docs.forEach((doc) => {
-              //review what this does
-              // console.log("test",doc.data())
-              jobData.push({ jobTitle: doc.data().jobTitle, id: doc.data().jobID });
-            });
-    
-            
-    
-                if (!jobData || !jobData.length) {
-                  //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
-                  // setInterviewNewMessageLength(null);
-                } else {
-                  setInterviewMessageData(jobData)
-                }
-              });
-          
-        
+      onSnapshot(jobQuery, (snapshot) => {
+        let jobData = [];
+        snapshot.docs.forEach((doc) => {
+          //review what this does
+          // console.log("test",doc.data())
+          jobData.push({ jobTitle: doc.data().jobTitle, id: doc.data().jobID });
+        });
+
+        if (!jobData || !jobData.length) {
+          //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+          // setInterviewNewMessageLength(null);
+        } else {
+          setInterviewMessageData(jobData);
+        }
+      });
+
+      const requestQuery = query(
+        collection(db, "employers", user.uid, "Requests")
+      );
+
+      onSnapshot(requestQuery, (snapshot) => {
+ 
+        let newMessages = [];
+        snapshot.docs.forEach((doc) => {
+          if (doc.data().hasUnreadMessage === true) {
+            newMessages.push(1);
+          }
+        });
+
+       
+
+        if (!newMessages || !newMessages.length) {
+          setRequestNewMessageLength(null)
+        } else {
+          setRequestNewMessageLength(newMessages.length);
+        }
+      });
 
       const reviewQuery = query(
         collection(db, "employers", user.uid, "In Review")
@@ -397,7 +422,6 @@ const NeederMessageList = () => {
         snapshot.docs.forEach((doc) => {
           if (doc.data().hasUnreadMessage === true) {
             newMessages.push(1);
-            
           }
         });
         if (!newMessages || !newMessages.length) {
@@ -417,7 +441,6 @@ const NeederMessageList = () => {
         snapshot.docs.forEach((doc) => {
           if (doc.data().hasUnreadMessage === true) {
             newMessages.push(1);
-           
           }
         });
         if (!newMessages || !newMessages.length) {
@@ -428,18 +451,14 @@ const NeederMessageList = () => {
         }
       });
 
-  
-
       setNewMessagesSet(true);
     }
   }, [user, newMessagesSet]);
 
+  //seperate useEffect for getting interview message data
 
-
-//seperate useEffect for getting interview message data
-
-useEffect(() => {
-    if (interviewMessageData ) {
+  useEffect(() => {
+    if (interviewMessageData) {
       interviewMessageData.forEach((job) => {
         const applicantQuery = query(
           collection(
@@ -455,11 +474,8 @@ useEffect(() => {
         onSnapshot(applicantQuery, (snapshot) => {
           let newMessages = [];
           snapshot.docs.forEach((doc) => {
-          
             if (doc.data().hasUnreadMessage === true) {
               newMessages.push(1);
-           
-            
             }
           });
 
@@ -468,14 +484,11 @@ useEffect(() => {
             // setInterviewNewMessageLength(null);
           } else {
             setInterviewNewMessageLength(newMessages.length);
-     
           }
         });
       });
     }
-}, [interviewMessageData, newMessagesSet])
-
-
+  }, [interviewMessageData, newMessagesSet]);
 
   const getCompletedDocs = () => {
     //set the name of each jobTitle in collection
@@ -489,11 +502,9 @@ useEffect(() => {
         //review what this does
         if (doc.data().channelID) {
           jobData.push(doc.data().channelID);
-       
         }
-        if (doc.data().hasNewMessage === true) {
+        if (doc.data().hasUnreadMessage === true) {
           newMessages.push(1);
-     
         }
       });
 
@@ -512,7 +523,6 @@ useEffect(() => {
 
   useEffect(() => {
     if (completedJobData) {
- 
       //credit Shadow Wizard Love Zelda https://stackoverflow.com/questions/5289403/convert-javascript-array-to-string
       setCompletedCIDs(completedJobData);
 
@@ -527,44 +537,68 @@ useEffect(() => {
 
   const getRequestDocs = () => {
     //set the name of each jobTitle in collection
-
-    const jobQuery = query(collection(db, "employers", user.uid, "In Review"));
+   
+    const jobQuery = query(collection(db, "employers", user.uid, "Requests"));
 
     onSnapshot(jobQuery, (snapshot) => {
       let jobData = [];
+      let newMessages = [];
       snapshot.docs.forEach((doc) => {
         //review what this does
         if (doc.data().channelID) {
           jobData.push(doc.data().channelID);
-       
+          console.log("requests", doc.data());
         }
+      
       });
 
       // setInterviewJobData(jobData);
 
       if (!jobData || !jobData.length) {
         //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
-        setCompletedJobData(null);
-        setCompletedJobDataLength(0);
+         console.log("no requests")
+         setRequestCIDs(null);
+         setToggleCompletedTab(false);
+         setToggleAcceptedTab(false);
+         setToggleInterviewTab(false);
+         setToggleRequestsTab(true);
       } else {
-        setCompletedJobData(jobData);
-        setCompletedJobDataLength(jobData.length);
+        setRequestData(jobData);
+        setRequestDataLength(jobData.length);
       }
     });
   };
 
   useEffect(() => {
+    if (requestData) {
+      //credit Shadow Wizard Love Zelda https://stackoverflow.com/questions/5289403/convert-javascript-array-to-string
+      setRequestCIDs(requestData);
+      console.log("final request data", requestData);
+
+      setToggleCompletedTab(false);
+      setToggleAcceptedTab(false);
+      setToggleInterviewTab(false);
+      setToggleRequestsTab(true);
+    } else {
+      setRequestCIDs(null);
+    }
+  }, [requestData]);
+
+  useEffect(() => {
     if (completedJobData) {
-      
       //credit Shadow Wizard Love Zelda https://stackoverflow.com/questions/5289403/convert-javascript-array-to-string
       setCompletedCIDs(completedJobData);
-
+    
       setToggleCompletedTab(true);
       setToggleAcceptedTab(false);
       setToggleInterviewTab(false);
       setToggleRequestsTab(false);
     } else {
       setCompletedCIDs(null);
+      setToggleCompletedTab(true);
+      setToggleAcceptedTab(false);
+      setToggleInterviewTab(false);
+      setToggleRequestsTab(false);
     }
   }, [completedJobData]);
 
@@ -581,7 +615,7 @@ useEffect(() => {
       let jobData = [];
       snapshot.docs.forEach((doc) => {
         //review what this does
-        // console.log("test",doc.data())
+        console.log("check 1")
         jobData.push({ jobTitle: doc.data().jobTitle, id: doc.data().jobID });
       });
 
@@ -600,10 +634,10 @@ useEffect(() => {
     //for each job title (go over all documents and for each document doc.channelID and set those as the interviewCIDs)
   };
 
-  const [dirtyInterviewCIDs, setDirtyInterviewCIDs] = useState(null);
-
+  const [dirtyInterviewCIDs, setDirtyInterviewCIDs] = useState([]);
+  const [dirtyInterviewRun, setDirtyInterviewRun] = useState(false);
   useEffect(() => {
-    if (interviewJobData) {
+    if (interviewJobData && dirtyInterviewRun === false) {
       interviewJobData.forEach((job) => {
         const applicantQuery = query(
           collection(
@@ -621,30 +655,20 @@ useEffect(() => {
           snapshot.docs.forEach((doc) => {
             //review what this does
             if (doc.data().channelID) {
-              applicantData.push({
+              dirtyInterviewCIDs.push({
                 channelID: doc.data().channelID,
-                // applicantID: doc.data().applicantID,
               });
             }
           });
-
-          if (!applicantData || !applicantData.length) {
-            //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
-            //keep blank, not set null or 0 here due to the nested ForEach. If last value read is null it will erase all other results. Handled in next function.
-          } else {
-            setDirtyInterviewCIDs(applicantData);
-          }
         });
       });
+      setDirtyInterviewRun(true);
     }
   }, [interviewJobData]);
 
   useEffect(() => {
-    
-
     //how to map over array of objects and push the value of each key value pair to a new array that only consists of the values
-    if (dirtyInterviewCIDs) {
-     
+    if (dirtyInterviewRun === true) {
       let readyInterviewCIDS = [];
       dirtyInterviewCIDs.forEach((cid) => {
         readyInterviewCIDS.push(cid.channelID);
@@ -652,14 +676,22 @@ useEffect(() => {
 
       //needed to join this array bc stream chat wouldnt accept array.
       //credit Shadow Wizard Love Zelda https://stackoverflow.com/questions/5289403/convert-javascript-array-to-string
-      setInterviewCIDs(readyInterviewCIDS);
+      
+      if (!readyInterviewCIDS || !readyInterviewCIDS.length) {
+        setInterviewCIDs(null);
+      } else {
+        setInterviewCIDs(readyInterviewCIDS);
+      }
+     
 
-      setToggleInterviewTab(false);
+      
+      setToggleAcceptedTab(false);
+      setToggleInterviewTab(true);
       setToggleCompletedTab(false);
-      setToggleAcceptedTab(true);
       setToggleRequestsTab(false);
+      setDirtyInterviewRun(false);
     }
-  }, [dirtyInterviewCIDs]);
+  }, [dirtyInterviewRun]);
 
   //Filters
   const acceptedFilter = {
@@ -671,7 +703,7 @@ useEffect(() => {
     members: { $in: [userID] },
   };
   const requestFilter = {
-    cid: { $in: requestCIDs },
+    cid: { $in: requestCIDs ? requestCIDs : null },
     members: { $in: [userID] },
   };
 
@@ -707,7 +739,6 @@ useEffect(() => {
                   </Heading>
 
                   <Flex marginTop="4">
-                    
                     <Chat client={chatClient}>
                       <Box height="800px">
                         {/* <ChannelList
@@ -724,7 +755,7 @@ useEffect(() => {
                         marginLeft="240px"
                       >
                         <Channel channel={selectedChannel}>
-                          <Box width="50vw" height="80vh">
+                          <Box width="50vw" height="75vh">
                             <Window>
                               <NeederChannelHireHeader />
                               <MessageList />
@@ -774,7 +805,7 @@ useEffect(() => {
                             marginLeft={1}
                             onClick={() => getInterviewDocs()}
                           >
-                            Interviewing 
+                            Interviewing
                             <Badge
                               variant="solid"
                               colorScheme="red"
@@ -791,11 +822,14 @@ useEffect(() => {
                             marginLeft={1}
                             onClick={() => getInterviewDocs()}
                           >
-                            Interviewing  
+                            Interviewing
                           </Button>
                         )}
                         {completedNewMessagesLength ? (
-                          <Button   marginLeft={1} onClick={() => getCompletedDocs()}>
+                          <Button
+                            marginLeft={1}
+                            onClick={() => getCompletedDocs()}
+                          >
                             Completed Jobs{" "}
                             <Badge
                               variant="solid"
@@ -809,12 +843,31 @@ useEffect(() => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button    marginLeft={1} onClick={() => getCompletedDocs()}>
+                          <Button
+                            marginLeft={1}
+                            onClick={() => getCompletedDocs()}
+                          >
                             Completed Jobs
                           </Button>
                         )}
 
-                        <Button marginLeft={1}>Requests</Button>
+{requestNewMessagesLength ? (
+                          <Button onClick={() => getRequestDocs()}>
+                            Requests
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {requestNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button onClick={() => getRequestDocs()}>Requests</Button>
+                        )}
                       </Flex>
                       <Flex>
                         <Chat client={chatClient}>
@@ -824,8 +877,9 @@ useEffect(() => {
                               Paginator={InfiniteScroll}
                             />
                           </Box>
-                          <Channel>
-                            <Box width="50vw" height="80vh">
+                          
+                          {acceptedCIDs === null ? ( <Box width="50vw" height="80vh"><Heading size="sm" marginTop="24px" marginLeft="8px">No messages here!</Heading></Box>) : (<Channel>
+                            <Box width="50vw" height="75vh">
                               <Window>
                                 {/* <ChannelHeader /> */}
                                 <NeederChannelHireHeader />
@@ -834,7 +888,7 @@ useEffect(() => {
                               </Window>
                             </Box>
                             <Thread />
-                          </Channel>
+                          </Channel>)}
                         </Chat>
                       </Flex>
                     </Box>
@@ -867,16 +921,37 @@ useEffect(() => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getAcceptedDocs()}>Accepted Jobs</Button>
+                          <Button onClick={() => getAcceptedDocs()}>
+                            Accepted Jobs
+                          </Button>
                         )}
-                        <Button
-                          onClick={() => getInterviewDocs()}
-                          backgroundColor="white"
-                          textColor="#01A2E8"
-                          marginLeft={1}
-                        >
-                          Interviewing
-                        </Button>
+                        
+                        {interviewNewMessagesLength ? (
+                          <Button
+                            marginLeft={1}
+                            backgroundColor="white" textColor="#01A2E8"
+                          >
+                            Interviewing
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {interviewNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button
+                            marginLeft={1}
+                            backgroundColor="white" textColor="#01A2E8"
+                           
+                          >
+                            Interviewing
+                          </Button>
+                        )}
                         {completedNewMessagesLength ? (
                           <Button onClick={() => getCompletedDocs()}>
                             Completed Jobs{" "}
@@ -896,7 +971,23 @@ useEffect(() => {
                             Completed Jobs
                           </Button>
                         )}
-                        <Button>Requests</Button>
+                          {requestNewMessagesLength ? (
+                          <Button onClick={() => getRequestDocs()}>
+                            Requests
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {requestNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button onClick={() => getRequestDocs()}>Requests</Button>
+                        )}
                       </Flex>
                       <Flex>
                         <Chat client={chatClient}>
@@ -906,8 +997,8 @@ useEffect(() => {
                               Paginator={InfiniteScroll}
                             />
                           </Box>
-                          <Channel>
-                            <Box width="50vw" height="80vh">
+                          {interviewCIDs === null ? ( <Box width="50vw" height="80vh"><Heading size="sm" marginTop="24px" marginLeft="8px">No messages here!</Heading></Box>) : (<Channel>
+                            <Box width="50vw" height="75vh">
                               <Window>
                                 {/* <ChannelHeader /> */}
                                 <NeederChannelHireHeader />
@@ -916,7 +1007,8 @@ useEffect(() => {
                               </Window>
                             </Box>
                             <Thread />
-                          </Channel>
+                          </Channel>)}
+                          
                         </Chat>
                       </Flex>
                     </Box>
@@ -949,11 +1041,36 @@ useEffect(() => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getAcceptedDocs()}>Accepted Jobs</Button>
+                          <Button onClick={() => getAcceptedDocs()}>
+                            Accepted Jobs
+                          </Button>
                         )}
-                        <Button onClick={() => getInterviewDocs()}>
-                          Interviewing
-                        </Button>
+                        
+                        {interviewNewMessagesLength ? (
+                          <Button
+                            marginLeft={1}
+                            onClick={() => getInterviewDocs()}
+                          >
+                            Interviewing
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {interviewNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button
+                            marginLeft={1}
+                            onClick={() => getInterviewDocs()}
+                          >
+                            Interviewing
+                          </Button>
+                        )}
                         {completedNewMessagesLength ? (
                           <Button onClick={() => getCompletedDocs()}>
                             Completed Jobs{" "}
@@ -973,20 +1090,36 @@ useEffect(() => {
                             Completed Jobs
                           </Button>
                         )}
-                        <Button backgroundColor="white" textColor="#01A2E8">
-                          Requests
-                        </Button>
+                        {requestNewMessagesLength ? (
+                          <Button backgroundColor="white" textColor="#01A2E8">
+                            Requests
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {requestNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button backgroundColor="white" textColor="#01A2E8">
+                            Requests
+                          </Button>
+                        )}
                       </Flex>
                       <Flex>
                         <Chat client={chatClient}>
                           <Box height="800px">
                             <ChannelList
-                              filters={Interviewfilter}
+                              filters={requestFilter}
                               Paginator={InfiniteScroll}
                             />
                           </Box>
-                          <Channel>
-                            <Box width="50vw" height="80vh">
+                          {requestCIDs === null ? ( <Box width="50vw" height="80vh"><Heading size="sm" marginTop="24px" marginLeft="8px">No messages here!</Heading></Box>) : (<Channel>
+                            <Box width="50vw" height="75vh">
                               <Window>
                                 {/* <ChannelHeader /> */}
                                 <NeederChannelHireHeader />
@@ -995,7 +1128,8 @@ useEffect(() => {
                               </Window>
                             </Box>
                             <Thread />
-                          </Channel>
+                          </Channel>)}
+                          
                         </Chat>
                       </Flex>
                     </Box>
@@ -1028,14 +1162,37 @@ useEffect(() => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getAcceptedDocs()}>Accepted Jobs</Button>
+                          <Button onClick={() => getAcceptedDocs()}>
+                            Accepted Jobs
+                          </Button>
                         )}
-                        <Button
-                          onClick={() => getInterviewDocs()}
-                          marginLeft={1}
-                        >
-                          Interviewing
-                        </Button>
+                         {interviewNewMessagesLength ? (
+                          <Button
+                            marginLeft={1}
+                          
+                            onClick={() => getInterviewDocs()}
+                          >
+                            Interviewing
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {interviewNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button
+                            marginLeft={1}
+                         
+                            onClick={() => getInterviewDocs()}
+                          >
+                            Interviewing
+                          </Button>
+                        )}
                         {completedNewMessagesLength ? (
                           <Button backgroundColor="white" textColor="#01A2E8">
                             Completed Jobs{" "}
@@ -1056,7 +1213,7 @@ useEffect(() => {
                           </Button>
                         )}
                         {requestNewMessagesLength ? (
-                          <Button >
+                        <Button onClick={() => getRequestDocs()}>
                             Requests
                             <Badge
                               variant="solid"
@@ -1070,9 +1227,7 @@ useEffect(() => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button >
-                            Requests
-                          </Button>
+                          <Button onClick={() => getRequestDocs()}>Requests</Button>
                         )}
                       </Flex>
                       <Flex>
@@ -1083,8 +1238,8 @@ useEffect(() => {
                               Paginator={InfiniteScroll}
                             />
                           </Box>
-                          <Channel>
-                            <Box width="50vw" height="80vh">
+                          {completedCIDs === null ? ( <Box width="50vw" height="80vh"><Heading size="sm" marginTop="24px" marginLeft="8px">No messages here!</Heading></Box>) : (<Channel>
+                            <Box width="50vw" height="75vh">
                               <Window>
                                 {/* <ChannelHeader /> */}
                                 <NeederChannelHireHeader />
@@ -1093,7 +1248,7 @@ useEffect(() => {
                               </Window>
                             </Box>
                             <Thread />
-                          </Channel>
+                          </Channel>)}
                         </Chat>
                       </Flex>
                     </Box>
@@ -1127,7 +1282,7 @@ useEffect(() => {
                             />
                           </Box>
                           <Channel>
-                            <Box width="50vw" height="80vh">
+                            <Box width="50vw" height="75vh">
                               <Window>
                                 {/* <ChannelHeader /> */}
                                 <NeederChannelHireHeader />

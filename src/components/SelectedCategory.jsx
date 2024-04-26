@@ -451,8 +451,10 @@ const SelectedCategory = () => {
                   </Center>
                 ))
               ) : (
-                <Text> No premium users</Text>
+                <Text>No premium users</Text>
               )}
+              {!premiumUsers.length ? (<Text>Sorry! No {selectedCategory} pros in your area.</Text>) : (null)}
+              
             </Center>
           </Box>
         </Flex>

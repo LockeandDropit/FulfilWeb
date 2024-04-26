@@ -397,7 +397,8 @@ setDoc(doc(db, "Messages", jobID), {
   jobOffered: false,
   applicationSent: false,
   isVolunteer: false,
-  isRequest: true
+  isRequest: true,
+  requestOfferMade: false
   // applicantAvatar: profilePictureURL,
   // employerAvatar: employerProfilePictureURL,
   // applicantInitials: here,
@@ -443,7 +444,9 @@ setDoc(doc(db, "users", premiumUser.streamChatID, "User Messages", jobID), {
     employerID: user.uid,
     hasUnreadMessages: false,
     interviewStarted: true,
-    offerMade: false
+    offerMade: false,
+    isRequest: true,
+    requestOfferMade: false
   })
     .then(() => {
       console.log("new chat created applicant");
@@ -464,7 +467,9 @@ setDoc(doc(db, "users", premiumUser.streamChatID, "User Messages", jobID), {
       employerID: user.uid,
       hasUnreadMessage: false,
       interviewStarted: true,
-      offerMade: false
+      offerMade: false,
+      isRequest: true,
+      requestOfferMade: false
     })
       .then(() => {
         console.log("new chat created applicant");
@@ -530,7 +535,22 @@ testNewChannel(premiumUser)
             // no bueno
             console.log(error);
           });
-          
+
+          updateDoc(doc(db, "Messages", jobID), {
+       
+            channelID: channel.cid
+          })
+            .then(() => {
+    
+              console.log("new message updated in Applied")
+            })
+            .catch((error) => {
+              // no bueno
+              console.log(error);
+            });
+          setTimeout(() => {
+
+          }, 1000)
       navigate("/NeederMessageList", {
         state: {
           selectedChannel: channel.cid,

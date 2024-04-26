@@ -18,6 +18,7 @@ import {
   CardFooter,
   Divider,
   Stack,
+  Badge
 } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
 import {
@@ -221,6 +222,440 @@ const DoerMessageList = () => {
 
 
 
+  //here lies the new code
+
+  //get channels and put them into proper channel list.. create a filter for that one with channel id
+
+  //holders for array of cids
+  const [acceptedCIDs, setAcceptedCIDs] = useState([]);
+  const [interviewCIDs, setInterviewCIDs] = useState([]);
+  const [interviewCIDsLength, setInterviewCIDsLength] = useState([]);
+  const [requestCIDs, setRequestCIDs] = useState([]);
+  const [completedCIDs, setCompletedCIDs] = useState([]);
+  //interviewCIDs come from "Posted Jobs", postedJobTitle, "Applicants" .channelID in FB
+
+  const [acceptedJobData, setAcceptedJobData] = useState(null);
+  const [acceptedJobDataLength, setAcceptedJobDataLength] = useState(null);
+
+  const [interviewJobData, setInterviewJobData] = useState(null);
+  const [interviewJobDataLength, setInterviewJobDataLength] = useState(null);
+
+  const [completedJobData, setCompletedJobData] = useState(null);
+  const [completedJobDataLength, setCompletedJobDataLength] = useState(null);
+
+  const [requestData, setRequestData] = useState(null);
+  const [requestDataLength, setRequestDataLength] = useState(null);
+
+  //accepted logic
+
+  const getAcceptedDocs = () => {
+    //set the name of each jobTitle in collection
+
+    const jobQuery = query(
+      collection(db, "users", user.uid, "Jobs In Progress")
+    );
+
+    onSnapshot(jobQuery, (snapshot) => {
+      let jobData = [];
+      snapshot.docs.forEach((doc) => {
+        //review what this does
+        if (doc.data().channelID) {
+          jobData.push(doc.data().channelID);
+          console.log("nice")
+        }
+      });
+
+      // setInterviewJobData(jobData);
+
+      if (!jobData || !jobData.length) {
+        //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+        setAcceptedJobData(null);
+        setAcceptedCIDs(null)
+        setToggleAcceptedTab(true);
+        setToggleInterviewTab(false);
+        setToggleCompletedTab(false);
+        setToggleRequestsTab(false);
+        console.log("nada")
+        setAcceptedJobDataLength(0);
+      } else {
+        setAcceptedJobData(jobData);
+        setAcceptedJobDataLength(jobData.length);
+      }
+    });
+  };
+
+  const [firstRender, setFirstRender] = useState(false);
+
+  //this si to initially get the accepted job cids, then on any re-renders it wont reset to the accepted jobs tab
+  useEffect(() => {
+    if (user && firstRender === false) {
+      getAcceptedDocs();
+      setFirstRender(true);
+    }
+  }, [firstRender, user]);
+
+  useEffect(() => {
+    if (acceptedJobData) {
+ 
+      console.log(acceptedJobData);
+      //credit Shadow Wizard Love Zelda https://stackoverflow.com/questions/5289403/convert-javascript-array-to-string
+      setAcceptedCIDs(acceptedJobData);
+      setToggleAcceptedTab(true);
+      setToggleInterviewTab(false);
+      setToggleCompletedTab(false);
+      setToggleRequestsTab(false);
+    } else {
+      setAcceptedCIDs(null);
+      setToggleAcceptedTab(true);
+      setToggleInterviewTab(false);
+      setToggleCompletedTab(false);
+      setToggleRequestsTab(false);
+    }
+  }, [acceptedJobData]);
+
+  //completed logic (comes from "In Review" in FB)
+
+  const [completedNewMessagesLength, setCompletedNewMessageLength] =
+    useState(null);
+  const [requestNewMessagesLength, setRequestNewMessageLength] = useState(null);
+  const [acceptedNewMessagesLength, setAcceptedNewMessageLength] =
+    useState(null);
+  const [interviewNewMessagesLength, setInterviewNewMessageLength] =
+    useState(null);
+  const [interviewMessageData, setInterviewMessageData] = useState(null);
+  const [newMessagesSet, setNewMessagesSet] = useState(false);
+
+  //initial setting of number of new messages in each section
+  useEffect(() => {
+    if (newMessagesSet === false && user) {
+      // Interview section, needs ewextra qwuery which is in seperate useEfffect
+      const jobQuery = query(
+        collection(db, "users", user.uid, "Applied")
+      );
+
+      onSnapshot(jobQuery, (snapshot) => {
+        let newMessages = [];
+        snapshot.docs.forEach((doc) => {
+          if (doc.data().hasUnreadMessage === true) {
+            newMessages.push(1);
+          }
+        });
+
+        if (!newMessages || !newMessages.length) {
+          //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+          // setInterviewNewMessageLength(null);
+        } else {
+          setInterviewNewMessageLength(newMessages.length);
+        }
+      });
+
+      const requestQuery = query(
+        collection(db, "users", user.uid, "Requests")
+      );
+
+      onSnapshot(requestQuery, (snapshot) => {
+ 
+        let newMessages = [];
+        snapshot.docs.forEach((doc) => {
+          if (doc.data().hasUnreadMessage === true) {
+            newMessages.push(1);
+          }
+        });
+
+       
+
+        if (!newMessages || !newMessages.length) {
+          setRequestNewMessageLength(null)
+        } else {
+          setRequestNewMessageLength(newMessages.length);
+        }
+      });
+
+      const reviewQuery = query(
+        collection(db, "users", user.uid, "In Review")
+      );
+
+      onSnapshot(reviewQuery, (snapshot) => {
+        let newMessages = [];
+        snapshot.docs.forEach((doc) => {
+          if (doc.data().hasUnreadMessage === true) {
+            newMessages.push(1);
+          }
+        });
+        if (!newMessages || !newMessages.length) {
+          //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+          setCompletedNewMessageLength(null);
+        } else {
+          setCompletedNewMessageLength(newMessages.length);
+        }
+      });
+
+      const acceptedQuery = query(
+        collection(db, "users", user.uid, "Jobs In Progress")
+      );
+
+      onSnapshot(acceptedQuery, (snapshot) => {
+        let newMessages = [];
+        snapshot.docs.forEach((doc) => {
+          if (doc.data().hasUnreadMessage === true) {
+            newMessages.push(1);
+          }
+        });
+        if (!newMessages || !newMessages.length) {
+          //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+          setAcceptedNewMessageLength(null);
+        } else {
+          setAcceptedNewMessageLength(newMessages.length);
+        }
+      });
+
+      setNewMessagesSet(true);
+    }
+  }, [user, newMessagesSet]);
+
+  //seperate useEffect for getting interview message data
+
+
+
+  const getCompletedDocs = () => {
+    //set the name of each jobTitle in collection
+
+    const jobQuery = query(collection(db, "users", user.uid, "In Review"));
+
+    onSnapshot(jobQuery, (snapshot) => {
+      let jobData = [];
+      let newMessages = [];
+      snapshot.docs.forEach((doc) => {
+        //review what this does
+        if (doc.data().channelID) {
+          jobData.push(doc.data().channelID);
+        }
+        if (doc.data().hasUnreadMessage === true) {
+          newMessages.push(1);
+        }
+      });
+
+      // setInterviewJobData(jobData);
+
+      if (!jobData || !jobData.length) {
+        //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+        setCompletedJobData(null);
+        setCompletedJobDataLength(0);
+      } else {
+        setCompletedJobData(jobData);
+        setCompletedJobDataLength(jobData.length);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (completedJobData) {
+      //credit Shadow Wizard Love Zelda https://stackoverflow.com/questions/5289403/convert-javascript-array-to-string
+      setCompletedCIDs(completedJobData);
+
+      setToggleCompletedTab(true);
+      setToggleAcceptedTab(false);
+      setToggleInterviewTab(false);
+      setToggleRequestsTab(false);
+    } else {
+      setCompletedCIDs(null);
+    }
+  }, [completedJobData]);
+
+  const getRequestDocs = () => {
+    //set the name of each jobTitle in collection
+   
+    const jobQuery = query(collection(db, "users", user.uid, "Requests"));
+
+    onSnapshot(jobQuery, (snapshot) => {
+      let jobData = [];
+      let newMessages = [];
+      snapshot.docs.forEach((doc) => {
+        //review what this does
+        if (doc.data().channelID) {
+          jobData.push(doc.data().channelID);
+          console.log("requests", doc.data());
+        }
+      
+      });
+
+      // setInterviewJobData(jobData);
+
+      if (!jobData || !jobData.length) {
+        //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+         console.log("no requests")
+         setRequestCIDs(null);
+         setToggleCompletedTab(false);
+         setToggleAcceptedTab(false);
+         setToggleInterviewTab(false);
+         setToggleRequestsTab(true);
+      } else {
+        setRequestData(jobData);
+        setRequestDataLength(jobData.length);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (requestData) {
+      //credit Shadow Wizard Love Zelda https://stackoverflow.com/questions/5289403/convert-javascript-array-to-string
+      setRequestCIDs(requestData);
+      console.log("final request data", requestData);
+
+      setToggleCompletedTab(false);
+      setToggleAcceptedTab(false);
+      setToggleInterviewTab(false);
+      setToggleRequestsTab(true);
+    } else {
+      setRequestCIDs(null);
+    }
+  }, [requestData]);
+
+  useEffect(() => {
+    if (completedJobData) {
+      //credit Shadow Wizard Love Zelda https://stackoverflow.com/questions/5289403/convert-javascript-array-to-string
+      setCompletedCIDs(completedJobData);
+    
+      setToggleCompletedTab(true);
+      setToggleAcceptedTab(false);
+      setToggleInterviewTab(false);
+      setToggleRequestsTab(false);
+    } else {
+      setCompletedCIDs(null);
+      setToggleCompletedTab(true);
+      setToggleAcceptedTab(false);
+      setToggleInterviewTab(false);
+      setToggleRequestsTab(false);
+    }
+  }, [completedJobData]);
+
+  //interview logic
+
+  const getInterviewDocs = () => {
+    //set the name of each jobTitle in collection
+
+    const jobQuery = query(
+      collection(db, "users", user.uid, "Applied")
+    );
+
+    onSnapshot(jobQuery, (snapshot) => {
+      let jobData = [];
+      snapshot.docs.forEach((doc) => {
+        //review what this does
+        if (doc.data().channelID) {
+          jobData.push(doc.data().channelID);
+          console.log("applied", doc.data());
+        }
+      });
+
+      // setInterviewJobData(jobData);
+
+      if (!jobData || !jobData.length) {
+        //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+        setInterviewCIDs(null);
+        setInterviewJobDataLength(0);
+        setToggleCompletedTab(false);
+        setToggleAcceptedTab(false);
+        setToggleInterviewTab(true);
+        setToggleRequestsTab(false);
+      } else {
+        setInterviewCIDs(jobData);
+        console.log("all interviews", jobData)
+        setInterviewJobDataLength(jobData.length);
+        setToggleCompletedTab(false);
+        setToggleAcceptedTab(false);
+        setToggleInterviewTab(true);
+        setToggleRequestsTab(false);
+      }
+    });
+
+    //for each job title (go over all documents and for each document doc.channelID and set those as the interviewCIDs)
+  };
+
+  const [dirtyInterviewCIDs, setDirtyInterviewCIDs] = useState([]);
+  const [dirtyInterviewRun, setDirtyInterviewRun] = useState(false);
+  useEffect(() => {
+    if (interviewJobData && dirtyInterviewRun === false) {
+      interviewJobData.forEach((job) => {
+        const applicantQuery = query(
+          collection(
+            db,
+            "employers",
+            user.uid,
+            "Posted Jobs",
+            job.jobTitle,
+            "Applicants"
+          )
+        );
+
+        onSnapshot(applicantQuery, (snapshot) => {
+          let applicantData = [];
+          snapshot.docs.forEach((doc) => {
+            //review what this does
+            if (doc.data().channelID) {
+              dirtyInterviewCIDs.push({
+                channelID: doc.data().channelID,
+              });
+            }
+          });
+        });
+      });
+      setDirtyInterviewRun(true);
+    }
+  }, [interviewJobData]);
+
+  useEffect(() => {
+    //how to map over array of objects and push the value of each key value pair to a new array that only consists of the values
+    if (dirtyInterviewRun === true) {
+      let readyInterviewCIDS = [];
+      dirtyInterviewCIDs.forEach((cid) => {
+        readyInterviewCIDS.push(cid.channelID);
+      });
+
+      //needed to join this array bc stream chat wouldnt accept array.
+      //credit Shadow Wizard Love Zelda https://stackoverflow.com/questions/5289403/convert-javascript-array-to-string
+      
+      if (!readyInterviewCIDS || !readyInterviewCIDS.length) {
+        setInterviewCIDs(null);
+      } else {
+        setInterviewCIDs(readyInterviewCIDS);
+      }
+     
+
+      
+      setToggleAcceptedTab(false);
+      setToggleInterviewTab(true);
+      setToggleCompletedTab(false);
+      setToggleRequestsTab(false);
+      setDirtyInterviewRun(false);
+    }
+  }, [dirtyInterviewRun]);
+
+  //Filters
+  const acceptedFilter = {
+    cid: { $in: acceptedCIDs },
+    members: { $in: [userID] },
+  };
+  const Interviewfilter = {
+    cid: { $in: interviewCIDs },
+    members: { $in: [userID] },
+  };
+  const requestFilter = {
+    cid: { $in: requestCIDs ? requestCIDs : null },
+    members: { $in: [userID] },
+  };
+
+  const completedFilter = {
+    cid: { $in: completedCIDs },
+    members: { $in: [userID] },
+  };
+
+  const [toggleAcceptedTab, setToggleAcceptedTab] = useState(false);
+  const [toggleInterviewTab, setToggleInterviewTab] = useState(false);
+  const [toggleRequestsTab, setToggleRequestsTab] = useState(false);
+  const [toggleCompletedTab, setToggleCompletedTab] = useState(false);
+
+
   
 
   return (
@@ -259,7 +694,7 @@ const DoerMessageList = () => {
                             /> */}
                           </Box>
                           <Channel channel={selectedChannel}>
-                            <Box width="50vw" height="80vh">
+                            <Box width="50vw" height="75vh">
                               <Window>
                                 <ChannelHireHeader />
                                 <MessageList />
@@ -273,7 +708,493 @@ const DoerMessageList = () => {
                     </Box>
                   </Flex>
                 </>
-              ) : (
+              ) : toggleAcceptedTab === true ? (
+                <>
+                  <Flex direction="column">
+                    <Box marginLeft="24px">
+                      <Heading
+                        width="500px"
+                        marginBottom="16px"
+                        marginTop="16px"
+                      >
+                        Messages
+                      </Heading>
+                      <Flex direction="row">
+                        {acceptedNewMessagesLength ? (
+                          <Button backgroundColor="white" textColor="#01A2E8">
+                            Accepted Jobs{" "}
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {acceptedNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button backgroundColor="white" textColor="#01A2E8">
+                            Accepted Jobs
+                          </Button>
+                        )}
+
+                        {interviewNewMessagesLength ? (
+                          <Button
+                            marginLeft={1}
+                            onClick={() => getInterviewDocs()}
+                          >
+                            Interviewing
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {interviewNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button
+                            marginLeft={1}
+                            onClick={() => getInterviewDocs()}
+                          >
+                            Interviewing
+                          </Button>
+                        )}
+                        {completedNewMessagesLength ? (
+                          <Button
+                            marginLeft={1}
+                            onClick={() => getCompletedDocs()}
+                          >
+                            Completed Jobs{" "}
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {completedNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button
+                            marginLeft={1}
+                            onClick={() => getCompletedDocs()}
+                          >
+                            Completed Jobs
+                          </Button>
+                        )}
+
+{requestNewMessagesLength ? (
+                          <Button onClick={() => getRequestDocs()}>
+                            Requests
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {requestNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button onClick={() => getRequestDocs()}>Requests</Button>
+                        )}
+                      </Flex>
+                      <Flex>
+                        <Chat client={chatClient}>
+                          <Box height="800px">
+                            <ChannelList
+                              filters={acceptedFilter}
+                              Paginator={InfiniteScroll}
+                            />
+                          </Box>
+                          
+                          {acceptedCIDs === null ? ( <Box width="50vw" height="80vh"><Heading size="sm" marginTop="24px" marginLeft="8px">No messages here!</Heading></Box>) : (<Channel>
+                            <Box width="50vw" height="75vh">
+                              <Window>
+                                {/* <ChannelHeader /> */}
+                                <ChannelHireHeader />
+                                <MessageList />
+                                <MessageInput />
+                              </Window>
+                            </Box>
+                            <Thread />
+                          </Channel>)}
+                        </Chat>
+                      </Flex>
+                    </Box>
+                  </Flex>
+                </>
+              ) : toggleInterviewTab ? (
+                <>
+                  <Flex direction="column">
+                    <Box marginLeft="24px">
+                      <Heading
+                        width="500px"
+                        marginBottom="16px"
+                        marginTop="16px"
+                      >
+                        Messages
+                      </Heading>
+                      <Flex direction="row">
+                        {acceptedNewMessagesLength ? (
+                          <Button onClick={() => getAcceptedDocs()}>
+                            Accepted Jobs{" "}
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {acceptedNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button onClick={() => getAcceptedDocs()}>
+                            Accepted Jobs
+                          </Button>
+                        )}
+                        
+                        {interviewNewMessagesLength ? (
+                          <Button
+                            marginLeft={1}
+                            backgroundColor="white" textColor="#01A2E8"
+                          >
+                            Interviewing
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {interviewNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button
+                            marginLeft={1}
+                            backgroundColor="white" textColor="#01A2E8"
+                           
+                          >
+                            Interviewing
+                          </Button>
+                        )}
+                        {completedNewMessagesLength ? (
+                          <Button onClick={() => getCompletedDocs()}>
+                            Completed Jobs{" "}
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {completedNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button onClick={() => getCompletedDocs()}>
+                            Completed Jobs
+                          </Button>
+                        )}
+                          {requestNewMessagesLength ? (
+                          <Button onClick={() => getRequestDocs()}>
+                            Requests
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {requestNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button onClick={() => getRequestDocs()}>Requests</Button>
+                        )}
+                      </Flex>
+                      <Flex>
+                        <Chat client={chatClient}>
+                          <Box height="800px">
+                            <ChannelList
+                              filters={Interviewfilter}
+                              Paginator={InfiniteScroll}
+                            />
+                          </Box>
+                          {interviewCIDs === null ? ( <Box width="50vw" height="80vh"><Heading size="sm" marginTop="24px" marginLeft="8px">No messages here!</Heading></Box>) : (<Channel>
+                            <Box width="50vw" height="75vh">
+                              <Window>
+                                {/* <ChannelHeader /> */}
+                                <ChannelHireHeader />
+                                <MessageList />
+                                <MessageInput />
+                              </Window>
+                            </Box>
+                            <Thread />
+                          </Channel>)}
+                          
+                        </Chat>
+                      </Flex>
+                    </Box>
+                  </Flex>
+                </>
+              ) : toggleRequestsTab ? (
+                <>
+                  <Flex direction="column">
+                    <Box marginLeft="24px">
+                      <Heading
+                        width="500px"
+                        marginBottom="16px"
+                        marginTop="16px"
+                      >
+                        Messages
+                      </Heading>
+                      <Flex direction="row">
+                        {acceptedNewMessagesLength ? (
+                          <Button onClick={() => getAcceptedDocs()}>
+                            Accepted Jobs{" "}
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {acceptedNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button onClick={() => getAcceptedDocs()}>
+                            Accepted Jobs
+                          </Button>
+                        )}
+                        
+                        {interviewNewMessagesLength ? (
+                          <Button
+                            marginLeft={1}
+                            onClick={() => getInterviewDocs()}
+                          >
+                            Interviewing
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {interviewNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button
+                            marginLeft={1}
+                            onClick={() => getInterviewDocs()}
+                          >
+                            Interviewing
+                          </Button>
+                        )}
+                        {completedNewMessagesLength ? (
+                          <Button onClick={() => getCompletedDocs()}>
+                            Completed Jobs{" "}
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {completedNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button onClick={() => getCompletedDocs()}>
+                            Completed Jobs
+                          </Button>
+                        )}
+                        {requestNewMessagesLength ? (
+                          <Button backgroundColor="white" textColor="#01A2E8">
+                            Requests
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {requestNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button backgroundColor="white" textColor="#01A2E8">
+                            Requests
+                          </Button>
+                        )}
+                      </Flex>
+                      <Flex>
+                        <Chat client={chatClient}>
+                          <Box height="800px">
+                            <ChannelList
+                              filters={requestFilter}
+                              Paginator={InfiniteScroll}
+                            />
+                          </Box>
+                          {requestCIDs === null ? ( <Box width="50vw" height="80vh"><Heading size="sm" marginTop="24px" marginLeft="8px">No messages here!</Heading></Box>) : (<Channel>
+                            <Box width="50vw" height="75vh">
+                              <Window>
+                                {/* <ChannelHeader /> */}
+                                <ChannelHireHeader />
+                                <MessageList />
+                                <MessageInput />
+                              </Window>
+                            </Box>
+                            <Thread />
+                          </Channel>)}
+                          
+                        </Chat>
+                      </Flex>
+                    </Box>
+                  </Flex>
+                </>
+              ) : toggleCompletedTab ? (
+                <>
+                  <Flex direction="column">
+                    <Box marginLeft="24px">
+                      <Heading
+                        width="500px"
+                        marginBottom="16px"
+                        marginTop="16px"
+                      >
+                        Messages
+                      </Heading>
+                      <Flex direction="row">
+                        {acceptedNewMessagesLength ? (
+                          <Button onClick={() => getAcceptedDocs()}>
+                            Accepted Jobs{" "}
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {acceptedNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button onClick={() => getAcceptedDocs()}>
+                            Accepted Jobs
+                          </Button>
+                        )}
+                         {interviewNewMessagesLength ? (
+                          <Button
+                            marginLeft={1}
+                          
+                            onClick={() => getInterviewDocs()}
+                          >
+                            Interviewing
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {interviewNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button
+                            marginLeft={1}
+                         
+                            onClick={() => getInterviewDocs()}
+                          >
+                            Interviewing
+                          </Button>
+                        )}
+                        {completedNewMessagesLength ? (
+                          <Button backgroundColor="white" textColor="#01A2E8">
+                            Completed Jobs{" "}
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {completedNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button backgroundColor="white" textColor="#01A2E8">
+                            Completed Jobs
+                          </Button>
+                        )}
+                        {requestNewMessagesLength ? (
+                        <Button onClick={() => getRequestDocs()}>
+                            Requests
+                            <Badge
+                              variant="solid"
+                              colorScheme="red"
+                              position="absolute"
+                              marginBottom={0}
+                              right="-1"
+                              borderRadius="10px"
+                            >
+                              {requestNewMessagesLength}
+                            </Badge>
+                          </Button>
+                        ) : (
+                          <Button onClick={() => getRequestDocs()}>Requests</Button>
+                        )}
+                      </Flex>
+                      <Flex>
+                        <Chat client={chatClient}>
+                          <Box height="800px">
+                            <ChannelList
+                              filters={completedFilter}
+                              Paginator={InfiniteScroll}
+                            />
+                          </Box>
+                          {completedCIDs === null ? ( <Box width="50vw" height="80vh"><Heading size="sm" marginTop="24px" marginLeft="8px">No messages here!</Heading></Box>) : (<Channel>
+                            <Box width="50vw" height="75vh">
+                              <Window>
+                                {/* <ChannelHeader /> */}
+                                <ChannelHireHeader />
+                                <MessageList />
+                                <MessageInput />
+                              </Window>
+                            </Box>
+                            <Thread />
+                          </Channel>)}
+                        </Chat>
+                      </Flex>
+                    </Box>
+                  </Flex>
+                </>
+              ): (
                 <>
                   <Flex direction="column">
                     <Box marginLeft="24px">
@@ -294,7 +1215,7 @@ const DoerMessageList = () => {
                             />
                           </Box>
                           <Channel>
-                            <Box width="50vw" height="80vh">
+                            <Box width="50vw" height="75vh">
                               <Window on>
                                 <ChannelHireHeader />
 

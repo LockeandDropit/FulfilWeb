@@ -51,6 +51,7 @@ import {
   CheckIcon,
   CloseIcon,
   EditIcon,
+  Progress,
 } from "@chakra-ui/react";
 import {
   Modal,
@@ -96,7 +97,7 @@ const OnboardingDoerIDVerify = () => {
     }
   }, []);
 
-  const [callTrigger, setCallTrigger] = useState(null)
+  const [callTrigger, setCallTrigger] = useState(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -156,8 +157,8 @@ const OnboardingDoerIDVerify = () => {
     setLoading(true);
     setTimeout(() => {
       onCloseFront();
-      setCallTrigger("reload please")
-      setLoading(false)
+      setCallTrigger("reload please");
+      setLoading(false);
     }, 1000);
   };
 
@@ -191,47 +192,58 @@ const OnboardingDoerIDVerify = () => {
     setLoading(true);
     setTimeout(() => {
       onCloseBack();
-      setCallTrigger("reload please")
-      setLoading(false)
+      setCallTrigger("reload please");
+      setLoading(false);
     }, 1000);
   };
 
   const handleSkip = () => {
     updateDoc(doc(db, "users", user.uid), {
       IDBackUploaded: false,
-      IDFrontUploaded: false
+      IDFrontUploaded: false,
     }).then(() => {
-     navigate("/StripeSetUp")
+      navigate("/StripeSetUp");
     });
-  }
+  };
 
   return (
     <>
       <Header />
 
- <Center>
-       
-
+      <Center>
         <Box
-          width="67vw"
+          width="33vw"
           // alignContent="center"
           // justifyContent="center"
           // display="flex"
           // alignItems="baseline"
-       
+
           borderColor="#E3E3E3"
-     
           height="auto"
           boxShadow="md"
           rounded="md"
           padding="8"
           //   overflowY="scroll"
         >
-          <Center flexDirection="column">
-            <Heading size="lg" marginTop="16px">
-              Upload Pictures of your State ID
+          <Flex flexDirection="column">
+            <Box marginBottom="16px" flexDirection="row" width="auto">
+              <Progress hasStripe value={50} />{" "}
+            </Box>
+
+            <Heading size="md" marginTop="16px" marginBottom="8px">
+              Lets get you verified
             </Heading>
+            <Text>
+              For the safety of all of our users, we verify your identity by
+              using an official state ID (Driver's Liscence, other government
+              issued ID). You'll need to upload these documents if you want to
+              apply for jobs in your area, but you can always do it later (it
+              can be found in your "My Account").
+            </Text>
             <Box width="30vw" marginTop="8">
+              <Heading size="sm" marginBottom="4px">
+                Upload your ID
+              </Heading>
               {IDFrontUploaded ? (
                 <Flex direction="row" marginTop="4">
                   <Text>Front of State ID</Text>{" "}
@@ -247,13 +259,16 @@ const OnboardingDoerIDVerify = () => {
                 <Flex direction="row" marginTop="4">
                   <Text>Front of State ID</Text>{" "}
                   <Button
-                    colorScheme="red"
+                    backgroundColor="white"
+                    borderWidth="1px"
+                    borderColor="#01A2E8"
+                    textColor="#01A2E8"
                     height="32px"
                     marginLeft="auto"
                     // variant="ghost"
                     onClick={() => onOpenFront()}
                   >
-                    update
+                    upload
                   </Button>
                 </Flex>
               )}
@@ -384,35 +399,38 @@ const OnboardingDoerIDVerify = () => {
                 <Flex direction="row" marginTop="4">
                   <Text>Back of State ID</Text>{" "}
                   <Button
-                    colorScheme="red"
+                    backgroundColor="white"
+                    borderWidth="1px"
+                    borderColor="#01A2E8"
+                    textColor="#01A2E8"
                     height="32px"
                     marginLeft="auto"
                     // variant="ghost"
                     onClick={() => onOpenBack()}
                   >
-                    update
+                    upload
                   </Button>
                 </Flex>
               )}
-              <Center marginTop="120px">
-                
+              <Center marginTop="120px" flexDirection="column">
                 <Button
                   // position="absolute"
-                  bottom="8"
-                  colorScheme="blue"
-                  onClick={() => handleSkip()}
-                >
-                 I'll do this later
-                </Button>
-                <Button
-                  // position="absolute"
-                  bottom="8"
-                  colorScheme="blue"
-                  marginLeft="32px"
-                  width="180px"
+
+                  backgroundColor="#01A2E8"
+                  _hover={{ bg: "#018ecb", textColor: "white" }}
+                  textColor="white"
+                  width="160px"
                   onClick={() => navigate("/StripeSetUp")}
                 >
                   Continue
+                </Button>
+                <Button
+                  // position="absolute"
+                  backgroundColor="white"
+                  textColor="#01A2E8"
+                  onClick={() => handleSkip()}
+                >
+                  I'll do this later
                 </Button>
               </Center>
               <Modal
@@ -525,7 +543,7 @@ const OnboardingDoerIDVerify = () => {
                 </ModalContent>
               </Modal>
             </Box>
-          </Center>
+          </Flex>
         </Box>
       </Center>
     </>

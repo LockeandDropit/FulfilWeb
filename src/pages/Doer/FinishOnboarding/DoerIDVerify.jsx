@@ -195,29 +195,29 @@ const DoerIDVerify = () => {
     <>
       <DoerHeader />
 
-      <Flex>
+      <Flex justifyContent="center">
+      <Box position="absolute" left="0">
         <DoerDashboard />
+        </Box>
 
         <Box
-          width="67vw"
+          width="34vw"
           // alignContent="center"
           // justifyContent="center"
           // display="flex"
           // alignItems="baseline"
-          borderWidth="2px"
-          borderColor="#E3E3E3"
-          borderLeftWidth="4px"
-          borderRightWidth="4px"
+         
           height="auto"
-          boxShadow="lg"
+          boxShadow=""
           rounded="lg"
           padding="8"
           //   overflowY="scroll"
         >
-          <Center flexDirection="column">
-            <Heading size="lg" marginTop="16px">
+        
+            <Heading size="md" marginTop="128px">
               ID Verification
             </Heading>
+            <Text>Pictures of your government issued ID are used to verify your identity for the safety and security of our users.</Text>
             <Box width="30vw" marginTop="8">
               {IDFrontUploaded ? (
                 <Flex direction="row" marginTop="4">
@@ -234,13 +234,16 @@ const DoerIDVerify = () => {
                 <Flex direction="row" marginTop="4">
                   <Text>Front of State ID</Text>{" "}
                   <Button
-                    colorScheme="red"
+                   backgroundColor="white"
+                   borderWidth="1px"
+                   borderColor="#01A2E8"
+                   textColor="#01A2E8"
                     height="32px"
                     marginLeft="auto"
                     // variant="ghost"
                     onClick={() => onOpenFront()}
                   >
-                    update
+                    upload
                   </Button>
                 </Flex>
               )}
@@ -370,20 +373,24 @@ const DoerIDVerify = () => {
                 <Flex direction="row" marginTop="4">
                   <Text>Back of State ID</Text>{" "}
                   <Button
-                    colorScheme="red"
+                    backgroundColor="white"
+                    borderWidth="1px"
+                    borderColor="#01A2E8"
+                    textColor="#01A2E8"
                     height="32px"
                     marginLeft="auto"
                     // variant="ghost"
                     onClick={() => onOpenBack()}
                   >
-                    update
+                    upload
                   </Button>
                 </Flex>
               )}
               <Center>
                 <Button
-                  position="absolute"
-                  bottom="8"
+                  
+                  marginTop="48px"
+                 
                   colorScheme="blue"
                   onClick={() => navigate("/DoerAccountManager")}
                 >
@@ -500,7 +507,7 @@ const DoerIDVerify = () => {
                 </ModalContent>
               </Modal>
             </Box>
-          </Center>
+          
         </Box>
       </Flex>
     </>

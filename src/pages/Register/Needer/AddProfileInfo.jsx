@@ -260,9 +260,9 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                 <Box marginTop="32px">
 
                 <Flex direction="row"> <Checkbox   isChecked={termsOfService} 
-          onChange={(e) => setTermsOfService(e.target.checked)}></Checkbox> <Text marginTop="8px" marginLeft="4px"> I have read and agree to the </Text><Button color="#01A2E8" onClick={() => onOpenTOS()}>Terms and Conditions</Button></Flex>
+          onChange={(e) => setTermsOfService(e.target.checked)}></Checkbox> <Text marginTop="8px" marginLeft="4px"> I have read and agree to the </Text><Button backgroundColor="white" textColor="#01A2E8" _hover={{backgroundColor: "white", textColor: "#01A2E8"}} onClick={() => onOpenTOS()}>Terms and Conditions</Button></Flex>
                 <Flex direction="row"> <Checkbox isChecked={privacyPolicy}
-          onChange={(e) => setPrivacyPolicy(e.target.checked)}></Checkbox> <Text marginLeft="4px" marginTop="8px"> I have read and agree to the </Text><Button color="#01A2E8" onClick={() => onOpen()}>Privacy Policy</Button></Flex>
+          onChange={(e) => setPrivacyPolicy(e.target.checked)}></Checkbox> <Text marginLeft="4px" marginTop="8px"> I have read and agree to the </Text><Button backgroundColor="white" textColor="#01A2E8" _hover={{backgroundColor: "white", textColor: "#01A2E8"}}  onClick={() => onOpen()}>Privacy Policy</Button></Flex>
                 <Flex direction="row"> <Checkbox isChecked={ageAgreement}
           onChange={(e) => setAgeAgreement(e.target.checked)}></Checkbox> <Text marginLeft="4px"> I am over 18 years of age</Text></Flex>
                 </Box>
@@ -290,7 +290,7 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                 <ModalContent>
                   <ModalHeader fontSize="16px">Privacy Policy</ModalHeader>
                   <ModalCloseButton />
-              <ModalBody>
+              <ModalBody overflowY="scroll">
               <Text marginTop="8">
             Last Updated: [07/28/23] FULFIL INC. PRIVACY POLICY This policy
             explains our information practices, defines your privacy options and

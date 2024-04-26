@@ -18,60 +18,22 @@ import {
 } from "@chakra-ui/react";
 import { Center, Flex } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Divider,
-  Stack,
-} from "@chakra-ui/react";
+
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
 import {
   doc,
   getDoc,
-  query,
-  collection,
-  onSnapshot,
+
   updateDoc,
-  addDoc,
+
   setDoc,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import {
-  Editable,
-  EditableInput,
-  EditableTextarea,
-  EditablePreview,
-  useEditableControls,
-  ButtonGroup,
-  IconButton,
-  CheckIcon,
-  CloseIcon,
-  EditIcon,
-} from "@chakra-ui/react";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-} from "@chakra-ui/react";
-import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  CloseButton,
-} from "@chakra-ui/react";
 
-import ImageUploading from "react-images-uploading";
+
 
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "@chakra-ui/react";
@@ -131,6 +93,9 @@ const DoerAccountManager = () => {
   };
 
   const [userFirstName, setUserFirstName] = useState("User");
+  const [lastName, setLastName] = useState(null)
+  const [city, setCity] = useState(null)
+  const [state, setState] = useState(null)
 
   useEffect(() => {
     if (user != null) {
@@ -139,6 +104,10 @@ const DoerAccountManager = () => {
       getDoc(docRef).then((snapshot) => {
         // console.log(snapshot.data());
         setUserFirstName(snapshot.data().firstName);
+        setLastName(snapshot.data().lastName);
+        setCity(snapshot.data().city)
+        setState(snapshot.data().state)
+
       });
     } else {
    
@@ -189,7 +158,7 @@ const DoerAccountManager = () => {
         
           setPrivacyAgreement(snapshot.data().PrivacyPolicyAgree);
           setIDVerified(snapshot.data().IDVerified);
-          setTaxAgreementConfirmed(snapshot.data().TaxAgreementConfirmed);
+          setTaxAgreementConfirmed(snapshot.data().taxAgreementConfirmed);
           setPaymentsActive(snapshot.data().stripeActive);
           if (snapshot.data().stripeID) {
             setStripeIDFromFB(snapshot.data().stripeID);
@@ -360,52 +329,56 @@ const DoerAccountManager = () => {
   return (
     <>
       <DoerHeader />
-
-      <Flex>
+<Box width="100vw" height="85vh" alignItems="center" justifyContent="center">
+      <Flex justifyContent="center">
+        <Box position="absolute" left="0">
         <DoerDashboard />
+        </Box>
         {!loading ? (
+          <Box justifyContent="center" marginTop="64px">
+          <Center >
           <Box
-            width="67vw"
+         
+            width="34vw"
             // alignContent="center"
             // justifyContent="center"
             // display="flex"
             // alignItems="baseline"
-            borderWidth="2px"
-            borderColor="#E3E3E3"
-            borderLeftWidth="4px"
-            borderRightWidth="4px"
+           
+           
             height="auto"
-            boxShadow="lg"
+            boxShadow=""
             rounded="lg"
-            padding="8"
+            padding="10"
             //   overflowY="scroll"
           >
-            <Center flexDirection="column">
-              <Heading size="lg" marginTop="16px">
+    
+              <Heading size="md" marginTop="16px">
                 My Account
               </Heading>
-              <Avatar
-                bg="#01A2E8"
-                size="2xl"
-                marginTop="16"
-                src={profilePicture}
-              />
-            </Center>
-            <Center flexDirection="column">
-              <Heading size="md" marginTop="16px">
+              
+           
+           
+              <Heading size="sm" marginTop="16px">
                 Name
               </Heading>
-              <Text>{userFirstName}</Text>
-              <Heading size="md" marginTop="4px">
+              <Text>{userFirstName}{" "}{lastName}</Text>
+              <Heading size="sm" marginTop="4px">
+                Location
+              </Heading>
+              <Text>{city},{" "}{state}</Text>
+              <Heading size="sm" marginTop="4px">
                 E-mail
               </Heading>
               <Text>{userEmail}</Text>
-              <Heading size="md" marginTop="16px">
+           
+         
+           
+          
+              <Box  marginTop="16" marginBottom="64px" flexDirection="column" >
+              <Heading size="sm" marginTop="16px">
                 Onboarding
               </Heading>
-            </Center>
-            <Center flexDirection="column" marginTop="8px">
-              <Box width="50vw" marginTop="4" marginBottom="64px">
                 {privacyAgreement ? (
                   <Flex direction="row" marginTop="4">
                     <Text>Privacy Agreement</Text>{" "}
@@ -421,7 +394,10 @@ const DoerAccountManager = () => {
                   <Flex direction="row" marginTop="4">
                     <Text>Privacy Policy Agreement</Text>{" "}
                     <Button
-                      colorScheme="red"
+                     backgroundColor="white"
+                     borderWidth="1px"
+                     borderColor="#01A2E8"
+                     textColor="#01A2E8"
                       height="32px"
                       marginLeft="auto"
                       // variant="ghost"
@@ -446,7 +422,10 @@ const DoerAccountManager = () => {
                   <Flex direction="row" marginTop="4">
                     <Text>ID Verified</Text>{" "}
                     <Button
-                      colorScheme="red"
+                     backgroundColor="white"
+                     borderWidth="1px"
+                     borderColor="#01A2E8"
+                     textColor="#01A2E8"
                       height="32px"
                       marginLeft="auto"
                       onClick={() => navigate("/DoerIDVerify")}
@@ -507,7 +486,10 @@ const DoerAccountManager = () => {
                   <Flex direction="row" marginTop="4">
                     <Text>Payments Status</Text>{" "}
                     <Button
-                      colorScheme="blue"
+                     backgroundColor="white"
+                     borderWidth="1px"
+                     borderColor="#01A2E8"
+                     textColor="#01A2E8"
                       height="32px"
                       marginLeft="auto"
                       onClick={() => initializeOnboarding()}
@@ -517,11 +499,12 @@ const DoerAccountManager = () => {
                   </Flex>
                 )}
               </Box>
-            </Center>
+            
 
             <Center>
               <Button
                 colorScheme="red"
+                variant="ghost"
                 position="absolute"
                 bottom="8"
                 onClick={() => handleLogOut()}
@@ -529,6 +512,8 @@ const DoerAccountManager = () => {
                 Delete Account
               </Button>
             </Center>
+          </Box>
+          </Center>
           </Box>
         ) : (
           <Center>
@@ -544,6 +529,7 @@ const DoerAccountManager = () => {
           </Center>
         )}
       </Flex>
+      </Box>
     </>
   );
 };

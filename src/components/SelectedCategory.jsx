@@ -217,7 +217,12 @@ const SelectedCategory = () => {
         });
 
         setTimeout(() => {
-          setPremiumUsers(finalResults);
+          if (!finalResults || !finalResults.length){
+            setPremiumUsers(null)
+          } else {
+            setPremiumUsers(finalResults);
+          }
+          
         }, 200);
 
         // if (!results || !results.length) {
@@ -451,9 +456,9 @@ const SelectedCategory = () => {
                   </Center>
                 ))
               ) : (
-                <Text>No premium users</Text>
+                <Text>Sorry! No {selectedCategory} pros in your area.</Text>
               )}
-              {!premiumUsers.length ? (<Text>Sorry! No {selectedCategory} pros in your area.</Text>) : (null)}
+          
               
             </Center>
           </Box>

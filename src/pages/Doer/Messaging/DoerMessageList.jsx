@@ -441,6 +441,11 @@ const DoerMessageList = () => {
         //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
         setCompletedJobData(null);
         setCompletedJobDataLength(0);
+        setCompletedCIDs(null)
+        setToggleAcceptedTab(false);
+        setToggleInterviewTab(false);
+        setToggleCompletedTab(true);
+        setToggleRequestsTab(false);
       } else {
         setCompletedJobData(jobData);
         setCompletedJobDataLength(jobData.length);

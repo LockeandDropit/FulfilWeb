@@ -780,11 +780,13 @@ const DoerProfile = () => {
     <>
       <DoerHeader />
 
-      <Flex>
-        <DoerDashboard />
+      <Flex justifyContent="center">
+        <Box position="absolute" left="0">
+          <DoerDashboard />
+        </Box>
         {user ? (
           <Box
-            width="67vw"
+            width="38vw"
             // alignContent="center"
             // justifyContent="center"
             // display="flex"
@@ -794,25 +796,15 @@ const DoerProfile = () => {
             // borderLeftWidth="4px"
             // borderRightWidth="4px"
             height="auto"
-            boxShadow="ms"
+            boxShadow=""
             rounded="lg"
             padding="8"
             //   overflowY="scroll"
           >
-            <Center flexDirection="column">
-              {/* {!profilePicture ? (
-                <Avatar bg="#01A2E8" size="2xl" onClick={onOpenAvatar} />
-              ) : (
-                <Avatar
-                  bg="#01A2E8"
-                  size="2xl"
-                  src={profilePicture}
-                  onClick={onOpenAvatar}
-                />
-              )} */}
+            <Flex direction="column">
               <Avatar
                 bg="#01A2E8"
-                size="2xl"
+                size="xl"
                 onClick={onOpenAvatar}
                 src={
                   profilePicture ? (
@@ -846,7 +838,7 @@ const DoerProfile = () => {
                   ) :  <Avatar bg="#01A2E8" size="2xl" src={images} />} */}
                   <Avatar
                     bg="#01A2E8"
-                    size="2xl"
+                    size="xl"
                     src={
                       profilePicture ? (
                         profilePicture
@@ -930,11 +922,11 @@ const DoerProfile = () => {
                 </ModalContent>
               </Modal>
 
-              <Heading size="lg">
+              <Heading size="md" marginTop="4px">
                 {" "}
                 {userFirstName} {userLastName}
               </Heading>
-              <Heading size="md">
+              <Heading size="sm" marginTop="4px" >
                 {" "}
                 {userCity}, {userState}
               </Heading>
@@ -957,97 +949,49 @@ const DoerProfile = () => {
                   </Text>
                 </Flex>
               ) : (
-                <Text marginTop="8px" marginLeft="4px">
-                  No reviews yet
-                </Text>
+                <Text marginTop="4px">No reviews yet</Text>
               )}
               <Flex>
-                <Heading size="lg" marginTop="16px" marginRight="545px">
+                <Heading size="md" marginTop="16px">
                   About Me
                 </Heading>
                 <Button
                   onClick={onOpenBio}
-                  // position="absolute"
-                  // right="0"
                   marginTop="8px"
-                  marginRight="42px"
+                  // marginRight="42px"
+                  marginLeft="auto"
                   backgroundColor="white"
                   textColor="#01A2E8"
                 >
                   Edit
                 </Button>
               </Flex>
-              <Card
-                direction={{ base: "column", sm: "row" }}
-                overflow="hidden"
-                // variant="outline"
-                width="800px"
-                // borderWidth="2px"
-                // borderLeftWidth="4px"
-                // borderRightWidth="4px"
-                // borderColor="#E3E3E3"
-                // boxShadow="lg"
-                // rounded="lg"
-                height="auto"
-                // marginTop="32px"
-                // padding="6"
-              >
-                <Stack>
-                  <CardBody>
-                    <Editable
-                      textAlign="flex-start"
-                      // value={userBio ? userBio : " "}
-                      fontSize="md"
-                      height="auto"
-                      width="auto"
-                      isPreviewFocusable={false}
-                      //help from my man RubenSmn. Docs aren't clear the Editable component was the one that needed the onSubmit prop https://stackoverflow.com/questions/75431868/chakra-editable-component-does-not-submit-when-input-blurs
-                      // onSubmit={() => handleSubmit()}
-                    >
-                      {/* <Flex direction="row">
-                        <Heading size="md">Bio</Heading>
-                        <Button
-                          onClick={onOpenBio}
-                          position="absolute"
-                          right="0"
-                          top="3"
-                          marginRight="42px"
-                          backgroundColor="white"
-                          textColor="#01A2E8"
-                        >
-                          Edit
-                        </Button>
-                      </Flex> */}
-                      {/* <EditablePreview /> */}
-                      {/* Here is the custom input */}
-                      <Text
-                        aria-multiline="true"
-                        textAlign="flex-start"
-                        height="auto"
-                        width="700px"
-                        marginBottom="32px"
-                      >
-                        {userBio}
-                      </Text>
-                      {/* <EditableControls />{" "} */}
 
-                      {/* <EditableControls /> */}
-                    </Editable>
-                  </CardBody>
-                </Stack>
-              </Card>
+              <Text
+                aria-multiline="true"
+                textAlign="flex-start"
+                height="auto"
+                width="700px"
+                marginBottom="32px"
+                placeholder="asdas"
+              >
+                {userBio ? userBio : "Tell us a little bit about yourself"}
+              </Text>
+
               <Modal isOpen={isOpenBio} onClose={onCloseBio} size="xl">
                 <ModalOverlay />
                 <ModalContent>
                   <ModalHeader fontSize="16px">Edit Bio</ModalHeader>
                   <ModalCloseButton />
                   <ModalHeader>About Me</ModalHeader>
-                  <Textarea
-                    defaultValue={userBio}
-                    height="240px"
-                    onChange={(e) => setUpdatedBio(e.target.value)}
-                  ></Textarea>
-
+                  <ModalBody>
+                    <Textarea
+                      defaultValue={userBio}
+                      placeholder="Tell us a little about yourself"
+                      height="240px"
+                      onChange={(e) => setUpdatedBio(e.target.value)}
+                    ></Textarea>
+                  </ModalBody>
                   <ModalFooter>
                     <Button variant="ghost" mr={3} onClick={onCloseBio}>
                       Close
@@ -1384,7 +1328,7 @@ const DoerProfile = () => {
                 </ModalContent>
               </Modal>
 
-              <Heading size="lg" marginTop="16px" marginRight="640px">
+              <Heading size="md" marginTop="16px">
                 Experience
               </Heading>
               {!userExperience ? (
@@ -1392,47 +1336,29 @@ const DoerProfile = () => {
               ) : (
                 userExperience.map((userExperience) => (
                   <>
-                    <Card
-                      direction={{ base: "column", sm: "row" }}
-                      overflow="hidden"
-                      variant="outline"
-                      width="800px"
-                      // borderWidth="2px"
-                      // borderLeftWidth="4px"
-                      // borderRightWidth="4px"
-                      borderColor="#E3E3E3"
-                      height="auto"
-                      marginTop="24px"
-                      key={userExperience.id}
-                    >
-                      <Stack>
-                        <CardBody>
-                          <Box>
-                            {/* lets just open up a modal to edit this I feel like that would be easier */}
+                    <Box key={userExperience.id}>
+                      {/* lets just open up a modal to edit this I feel like that would be easier */}
 
-                            <Heading size="md">{userExperience.Title}</Heading>
+                      <Flex alignItems="center">
+                        <Heading size="sm">{userExperience.Title}</Heading>
+                        <Button
+                          onClick={() =>
+                            handleOpenEditExperienceModal(userExperience.id)
+                          }
+                          marginLeft="auto"
+                          backgroundColor="white"
+                          textColor="#01A2E8"
+                        >
+                          Edit
+                        </Button>
+                      </Flex>
 
-                            <Text>{userExperience.Years} Years</Text>
-                            <Text>{userExperience.Description}</Text>
-                            <Box></Box>
-                            <Button
-                              onClick={() =>
-                                handleOpenEditExperienceModal(userExperience.id)
-                              }
-                              // onClick={() => userExperienceModal(userExperience)}
-                              position="absolute"
-                              right="0"
-                              top="3"
-                              marginRight="42px"
-                              backgroundColor="white"
-                              textColor="#01A2E8"
-                            >
-                              Edit
-                            </Button>
-                          </Box>
-                        </CardBody>
-                      </Stack>
-                    </Card>
+                      <Flex>
+                        <Text>Duration: {userExperience.Years}</Text>
+                      </Flex>
+
+                      <Text>{userExperience.Description}</Text>
+                    </Box>
 
                     {openModalID === userExperience.id ? (
                       <Modal
@@ -1495,21 +1421,31 @@ const DoerProfile = () => {
                 <ModalContent>
                   <ModalHeader fontSize="16px">Add Experience</ModalHeader>
                   <ModalCloseButton />
-                  <ModalHeader>Experience Title</ModalHeader>
-                  <Textarea
-                    onChange={(e) => setAddExperienceTitle(e.target.value)}
-                  ></Textarea>
-                  <ModalHeader>Experience Length</ModalHeader>
-                  <Textarea
-                    onChange={(e) => setAddExperienceYears(e.target.value)}
-                  ></Textarea>
-                  <ModalHeader>Experience Description</ModalHeader>
-                  <Textarea
-                    onChange={(e) =>
-                      setAddExperienceDescription(e.target.value)
-                    }
-                  ></Textarea>
-
+                  <ModalBody>
+                    <Heading size="md" marginBottom="4px">
+                      Title
+                    </Heading>
+                    <Input
+                      placeholder="ex: Snow removal"
+                      onChange={(e) => setAddExperienceTitle(e.target.value)}
+                    ></Input>
+                    <Heading size="md" marginBottom="4px" marginTop="8px">
+                      Length of Experience
+                    </Heading>
+                    <Input
+                      placeholder="ex: 2 years"
+                      onChange={(e) => setAddExperienceYears(e.target.value)}
+                    ></Input>
+                    <Heading size="md" marginBottom="4px" marginTop="8px">
+                      Description
+                    </Heading>
+                    <Textarea
+                      placeholder="ex: I operated a plow truck for 2 years in the metro area over the past few winters."
+                      onChange={(e) =>
+                        setAddExperienceDescription(e.target.value)
+                      }
+                    ></Textarea>
+                  </ModalBody>
                   <ModalFooter>
                     <Button colorScheme="ghost" mr={3} onClick={onClose}>
                       Close
@@ -1532,51 +1468,30 @@ const DoerProfile = () => {
               </Button>
               <Box></Box>
 
-              <Heading size="lg" marginTop="16px" marginRight="595px">
+              <Heading size="md" marginTop="16px">
                 Qualifications
               </Heading>
               {!userSkills ? (
-                <Text>No experience to show</Text>
+                <Text>No qualifications to show</Text>
               ) : (
                 userSkills.map((userSkills) => (
                   <>
-                    <Card
-                      direction={{ base: "column", sm: "row" }}
-                      overflow="hidden"
-                      variant="outline"
-                      width="800px"
-                      borderWidth="2px"
-                      borderLeftWidth="4px"
-                      borderRightWidth="4px"
-                      borderColor="#E3E3E3"
-                      height="auto"
-                      marginTop="24px"
-                      key={userSkills.id}
-                    >
-                      <Stack>
-                        <CardBody>
-                          <Box>
-                            <Heading size="md">{userSkills.Title}</Heading>
-
-                            <Text> {userSkills.Description}</Text>
-                            <Button
-                              onClick={() =>
-                                handleOpenEditQualificaionModal(userSkills.id)
-                              }
-                              position="absolute"
-                              right="0"
-                              top="3"
-                              marginRight="42px"
-                              backgroundColor="white"
-                              textColor="#01A2E8"
-                            >
-                              Edit
-                            </Button>
-                            <Box></Box>
-                          </Box>
-                        </CardBody>
-                      </Stack>
-                    </Card>
+                    <Box key={userSkills.id}>
+                      <Flex alignItems="center">
+                        <Heading size="sm">{userSkills.Title}</Heading>
+                        <Button
+                          onClick={() =>
+                            handleOpenEditQualificaionModal(userSkills.id)
+                          }
+                          marginLeft="auto"
+                          backgroundColor="white"
+                          textColor="#01A2E8"
+                        >
+                          Edit
+                        </Button>
+                      </Flex>
+                      <Text> {userSkills.Description}</Text>
+                    </Box>
 
                     {openEditQualificationModalID === userSkills.id ? (
                       <Modal isOpen={isOpen2} onClose={onClose2} size="xl">
@@ -1629,17 +1544,22 @@ const DoerProfile = () => {
                 <ModalContent>
                   <ModalHeader fontSize="16px">Add Qualification</ModalHeader>
                   <ModalCloseButton />
-                  <ModalHeader>Title</ModalHeader>
-                  <Textarea
-                    onChange={(e) => setSkillTitle1(e.target.value)}
-                  ></Textarea>
+                  <ModalBody>
+                    <Heading size="md" marginBottom="4px">
+                      Title
+                    </Heading>
+                    <Input
+                      onChange={(e) => setSkillTitle1(e.target.value)}
+                    ></Input>
 
-                  <ModalHeader>Description</ModalHeader>
-                  <Textarea
-                    height="120px"
-                    onChange={(e) => setSkillDescription(e.target.value)}
-                  ></Textarea>
-
+                    <Heading size="md" marginBottom="4px" marginTop="8px">
+                      Description
+                    </Heading>
+                    <Textarea
+                      height="120px"
+                      onChange={(e) => setSkillDescription(e.target.value)}
+                    ></Textarea>
+                  </ModalBody>
                   <ModalFooter>
                     <Button variant="ghost" mr={3} onClick={onClose2}>
                       Close
@@ -1660,7 +1580,7 @@ const DoerProfile = () => {
               >
                 Add More
               </Button>
-            </Center>
+            </Flex>
           </Box>
         ) : null}
       </Flex>

@@ -10,6 +10,7 @@ import {
   Textarea,
   Image,
   Spinner,
+  Progress
 } from "@chakra-ui/react";
 import {
   FormControl,
@@ -87,7 +88,7 @@ import ImageUploading from "react-images-uploading";
 
 import { useNavigate } from "react-router-dom";
 
-import newStripe from "../../../images/newStripe.png"
+import smallStripe from "../../../images/smallStripe.png";
 
 const StripeSetUp = () => {
   const [input, setInput] = useState("");
@@ -109,11 +110,7 @@ const StripeSetUp = () => {
   const [updatedBio, setUpdatedBio] = useState(null);
   const [user, setUser] = useState(null);
 
-
-  console.log(email, password)
-
-
-
+  console.log(email, password);
 
   //Stripe onboarding
 
@@ -123,9 +120,8 @@ const StripeSetUp = () => {
   const [paymentsLoading, setPaymentsLoading] = useState(false);
   const [stripeID, setStripeID] = useState(null);
 
+  const [sessionURL, setSessionURL] = useState(null);
 
-  const [sessionURL, setSessionURL] = useState(null)
- 
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
@@ -164,7 +160,7 @@ const StripeSetUp = () => {
     setStripeID({ stripeID: accountID });
     setStripeIDToFireBase(accountID);
 
-    setSessionURL(accountLink.url)
+    setSessionURL(accountLink.url);
 
     //help from https://codefrontend.com/reactjs-redirect-to-url/#navigating-to-an-external-page-in-react
     // setTimeout(() => {
@@ -179,7 +175,7 @@ const StripeSetUp = () => {
     if (sessionURL) {
       window.location.replace(sessionURL);
     }
-  }, [sessionURL])
+  }, [sessionURL]);
 
   useEffect(() => {
     if (stripeIDToFireBase !== null && user !== null) {
@@ -201,56 +197,68 @@ const StripeSetUp = () => {
     <>
       <Header />
 
-      <Center color="white" marginTop="64px">
-        <Card
-          align="center"
-          border="2px"
-          borderColor="gray.400"
-          borderWidth="1.5px"
-          width="33%"
-          height="80vh"
-          boxShadow="lg"
+      <Center  >
+    
+        <Box
+        
+          borderColor="#E3E3E3"
+          height="auto"
+          boxShadow="md"
+          rounded="md"
+          padding="8"
+          width="33vw"
+          // height="80vh"
         >
-          <CardHeader marginTop="30px">
-            <Heading size="lg">Set Up Payments With</Heading>
-          </CardHeader>
-          <CardBody >
-            <Image
-            src={newStripe}
-            >
-
-            </Image>
-            <Box width="25vw" alignContent="center" textAlign="center">
-              <Center>
-           <Heading size="md">We use Stripe, a third-party payment processor, to handle all payment transactions to ensure the safety and security of all of our users.</Heading>
-           </Center>
-           </Box>
-          </CardBody>
-          <CardFooter flexDirection="column">
+          
+          
+          <Progress hasStripe value={75} /> 
+            <Flex direction="column" marginTop="24px">
+              
+              <Heading size="md">Lets make sure you get paid</Heading>
+        
+           
+            {/* <Image src={smallStripe}></Image> */}
+            <Box width="25vw" marginTop="16px">
+         
+                <Text>
+                  We use Stripe, a third-party payment processor, to handle all
+                  payment transactions to ensure the safety and security of all
+                  of our users. If you choose to skip this step now you can complete it later by accessing your "My Account".
+                </Text>
+           
+            </Box>
+            <Center flexDirection="column">
+          <Box marginLeft="112px" marginTop="16px">
             {paymentsLoading ? (
               <Spinner
-                      thickness="4px"
-                      speed="0.65s"
-                      emptyColor="gray.200"
-                      color="blue"
-                      size="lg"
-                      marginLeft="auto"
-                      marginRight="28"
-                    />
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="#018ecb"
+                size="lg"
+                marginLeft="auto"
+                marginRight="28"
+                marginBottom="8px"
+              />
             ) : (
-<Button
-              colorScheme="blue"
-              marginBottom="24px"
-              width="240px"
-              // onClick={() => logIn()}
-              onClick={() => initializeOnboarding()}
-            >
-              Begin Onboarding
-            </Button>
+              <Button
+              backgroundColor="#01A2E8"
+                 marginTop="24px"
+                  textColor="white"
+                marginBottom="8px"
+                _hover={{ bg: "#018ecb", textColor: "white" }}
+                width="240px"
+                // onClick={() => logIn()}
+                onClick={() => initializeOnboarding()}
+              >
+                Begin Onboarding
+              </Button>
             )}
-            
+
             <Button
-              variant="ghost"
+              backgroundColor="white"
+                 
+              textColor="#01A2E8"
               marginBottom="24px"
               width="240px"
               // onClick={() => logIn()}
@@ -258,9 +266,14 @@ const StripeSetUp = () => {
             >
               I'll do this later
             </Button>
-          </CardFooter>
-        </Card>
+            
+          </Box>
+          </Center>
+          </Flex>
+        </Box>
+        
       </Center>
+      
     </>
   );
 };

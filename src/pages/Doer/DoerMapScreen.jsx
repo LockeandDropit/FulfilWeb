@@ -377,6 +377,13 @@ const DoerMapScreen = () => {
     onClose: onCloseNoResults,
   } = useDisclosure();
   const {
+    isOpen:   isOpenNotOnboarded,
+    onOpen:   onOpenNotOnboarded,
+    onClose:  onCloseNotOnboarded,
+  } = useDisclosure();
+
+
+  const {
     isOpen: isOpenMarkComplete,
     onOpen: onOpenMarkComplete,
     onClose: onCloseMarkComplete,
@@ -391,6 +398,15 @@ const DoerMapScreen = () => {
     onOpen: onOpenSuccess,
     onClose: onCloseSuccess,
   } = useDisclosure();
+
+
+const handleNotOboarded = () => {
+  onCloseNotOnboarded()
+  navigate("/DoerAccountManager")
+}
+
+
+
   //apply logic
   const applyAndNavigate = () => {
     if (isOnboarded === true) {
@@ -469,7 +485,7 @@ const DoerMapScreen = () => {
           
         });
     } else {
-      alert("Please finish onboarding before applying");
+     onOpenNotOnboarded()
     }
   };
 
@@ -2577,6 +2593,28 @@ const handleRemoveFromMap = (x) => {
                         onClick={() => onCloseNoResults()}
                       >
                         Continue
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
+                <Modal isOpen={isOpenNotOnboarded} onClose={onCloseNotOnboarded} size="xl">
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Oops!</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                     
+                       <Text>Looks like your account isn't fully set up!</Text>
+                       <Text>Finish the onbaording process before applying.</Text>
+                    </ModalBody>
+
+                    <ModalFooter>
+                      
+                      <Button
+                        colorScheme="blue"
+                        onClick={() => handleNotOboarded()}
+                      >
+                        Finish Onboarding
                       </Button>
                     </ModalFooter>
                   </ModalContent>

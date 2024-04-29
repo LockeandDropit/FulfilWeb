@@ -41,10 +41,25 @@ import { useNavigate } from "react-router-dom";
 
 import NoCategoryMatchModal from "../components/NoCategoryMatchModal"
 
-const MapScreen = () => {
+const MapScreen = (props) => {
   const [user, setUser] = useState(null);
   const [postedJobs, setPostedJobs] = useState([]);
   const navigate = useNavigate();
+
+
+
+  const closeInfoWindow = props.props
+
+  useEffect(() => {
+console.log(closeInfoWindow)
+    if (closeInfoWindow === true) {
+      setOpenInfoWindowMarkerID(null)
+    } 
+
+
+  }, [closeInfoWindow])
+
+
 
   //Pulls in Posted Job info from DB.. initial rendering
   useEffect(() => {
@@ -202,6 +217,11 @@ const MapScreen = () => {
     }
   };
 
+  const handleCloseInfoWindow = () => {
+    setOpenInfoWindowMarkerID(null)
+    
+  }
+
 
   return (
     <div>
@@ -216,6 +236,7 @@ const MapScreen = () => {
             disableDefaultUI={true}
             //move to env
             mapId="6cc03a62d60ca935"
+            onClick={() => handleCloseInfoWindow()}
           >
             <Center marginTop="8px">
             <Card
@@ -274,17 +295,7 @@ const MapScreen = () => {
                   onClick={() => handleToggleOpen(allJobs.jobID)}
                 >
                   <div
-                  // style={{
-
-                  //   backgroundColor: "#01A2E8",
-                  //   padding: 5,
-                  //   width: 80,
-                  //   borderRadius: 12,
-                  //   alignContent: "center",
-                  //   alignText: "center",
-                  //   justifyContent: "center"
-                  //   // borderWidth: "10px"
-                  // }}
+                  
                   >
                     <Button colorScheme="blue" height="24px" marginRight={5}>
                       {allJobs.isVolunteer ? (
@@ -310,6 +321,8 @@ const MapScreen = () => {
                           ? allJobs.locationLng
                           : -93.26177106829272,
                       }}
+
+                      onCloseClick={() => setOpenInfoWindowMarkerID(null)}
                     >
                     <Card >
                         <CardBody>
@@ -338,7 +351,7 @@ const MapScreen = () => {
                               color={'#01A2E8'}
                              marginRight="32px"
                               width="180px"
-                              // onClick={() => navigate(`/NeederEmailRegister`)}
+                            
                             >
                              Save
                             </Button>
@@ -349,7 +362,7 @@ const MapScreen = () => {
                                 bg: 'blue.500',
                               }}
                               width="180px"
-                              // onClick={() => navigate(`/NeederEmailRegister`)}
+                         
                             >
                               Apply
                             </Button>
@@ -358,23 +371,7 @@ const MapScreen = () => {
                       </Card>
                     </InfoWindow>
                   ) : null}
-                  {/* {openInfoWindowMarkerID === allJobs.id ? ( <Card
-                align="center"
-                border="1px"
-                borderColor="gray.400"
-                borderWidth="1.5px"
-                //   width="24%"
-                boxShadow="lg"
-                flexDirection="row"
-              >
-                <CardBody
-                height="400">
-                  
-                </CardBody>
-                <Button colorScheme="blue" width="240px" marginRight={5}>
-                  Search
-                </Button>
-              </Card>) : null} */}
+                
                 </AdvancedMarker>
               ))}
 

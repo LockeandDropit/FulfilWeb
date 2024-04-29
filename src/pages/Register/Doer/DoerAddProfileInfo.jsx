@@ -172,7 +172,7 @@ const DoerAddProfileInfo = () => {
     const cityValid = minLengthRegEx.test(city);
     const stateValid = minLengthRegEx.test(state);
 
-    if (!firstName || !lastName || !city || !state || privacyPolicy !== true || ageAgreement !== true || termsOfService !== true) {
+    if (!firstName || !lastName || !city || !state || privacyPolicy !== true || ageAgreement !== true || termsOfService !== true || taxAgreementConfirmed !== true) {
       onOpenIncomplete()
     } else {
       updateUserProfileFirestore();
@@ -264,13 +264,13 @@ const DoerAddProfileInfo = () => {
                 <Box marginTop="32px">
 
 <Flex direction="row"> <Checkbox isChecked={termsOfService} 
-onChange={(e) => setTermsOfService(e.target.checked)}><Text  marginLeft="2px"> I have read and agree to the </Text></Checkbox> <Button backgroundColor="white" textColor="#01A2E8" _hover={{backgroundColor: "white", textColor: "#01A2E8"}} onClick={() => onOpenTOS()}>Terms and Conditions</Button></Flex>
+onChange={(e) => setTermsOfService(e.target.checked)}><Text  marginLeft="2px"> I have read and agree to the </Text></Checkbox> <Button backgroundColor="white" textColor="#01A2E8" height={6} _hover={{backgroundColor: "white", textColor: "#01A2E8"}} onClick={() => onOpenTOS()}>Terms and Conditions</Button></Flex>
 <Flex direction="row"> <Checkbox isChecked={privacyPolicy}
 onChange={(e) => setPrivacyPolicy(e.target.checked)}> <Text marginLeft="2px"> I have read and agree to the </Text></Checkbox><Button backgroundColor="white" textColor="#01A2E8" _hover={{backgroundColor: "white", textColor: "#01A2E8"}} onClick={() => onOpen()}>Privacy Policy</Button></Flex>
 <Flex direction="row" marginBottom="8px"> <Checkbox isChecked={ageAgreement}
 onChange={(e) => setAgeAgreement(e.target.checked)}> <Text marginLeft="4px"> I am over 18 years of age</Text> </Checkbox></Flex>
 <Flex direction="row" > <Checkbox isChecked={taxAgreementConfirmed}
-onChange={(e) => setTaxAgreementConfirmed(e.target.checked)}><Text marginLeft="4px">  By continuing I agree and understand that I am a 1099 contractor and
+onChange={(e) => setTaxAgreementConfirmed(e.target.checked)}><Text marginLeft="4px">  By continuing I agree and understand that I am an independent contractor and
 not an employee of Fulfil.</Text></Checkbox> </Flex>
 </Box>
                 <Button

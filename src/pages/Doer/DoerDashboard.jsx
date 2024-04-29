@@ -107,7 +107,7 @@ const DoerDashboard = () => {
 
   const initializeSubscription = () => {
     //credit and help from https://github.com/pagecow/stripe-subscribe-payments
-    fetch("http://localhost:80/create-subscription-session", {
+    fetch("https://fulfil-api.onrender.com/create-subscription-session", {
       method: "POST",
     })
       .then((res) => res.json())

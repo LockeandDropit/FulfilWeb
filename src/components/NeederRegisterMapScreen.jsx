@@ -39,7 +39,7 @@ import { db } from "../firebaseConfig";
 import { auth } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 
-const NeederRegisterMapScreen = () => {
+const NeederRegisterMapScreen = (props) => {
   const [user, setUser] = useState(null);
   const [postedJobs, setPostedJobs] = useState([]);
   const navigate = useNavigate();
@@ -64,6 +64,18 @@ const NeederRegisterMapScreen = () => {
     //   console.log("oops!");
     // }
   }, []);
+
+  
+  const closeInfoWindow = props.props
+
+  useEffect(() => {
+console.log(closeInfoWindow)
+    if (closeInfoWindow === true) {
+      setOpenInfoWindowMarkerID(null)
+    } 
+
+
+  }, [closeInfoWindow])
 
   const [allJobs, setAllJobs] = useState([]);
 

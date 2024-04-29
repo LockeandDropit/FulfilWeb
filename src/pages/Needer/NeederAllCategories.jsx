@@ -1,38 +1,118 @@
-import React from "react";
-import {
-  SimpleGrid,
-  Box,
-  Text,
-  Header,
-  Center,
-  Heading,
-  Card,
-  CardBody,
-  Image,
-  Stack,
-  Divider,
-  Flex,
-  CardFooter,
-  Button,
-  ButtonGroup,
-} from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+//make this another split screen
 
-const Categories = () => {
+//left side is text about finding the right professional.
+//followed by copy to sign up or sign in.
+
+//right side is scrollview of featured contractors in that category.
+
+import React, { useState, useEffect } from "react";
+
+import NeederHeader from "./NeederHeader";
+
+import { useNavigate } from "react-router-dom";
+import { Input, Button, Text, Box, Container, Image } from "@chakra-ui/react";
+import { Center, Flex } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Divider,
+  Stack,
+  InputAddon,
+  InputGroup,
+  InputRightAddon,
+  Spinner,
+} from "@chakra-ui/react";
+import { StreamChat } from "stream-chat";
+import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
+  InputRightElement,
+  Avatar,
+  Link,
+  Badge,
+  useColorModeValue,
+  Tag,
+  TagLabel,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  SimpleGrid
+} from "@chakra-ui/react";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { ViewIcon } from "@chakra-ui/icons";
+import { auth, db } from "../../firebaseConfig";
+import { v4 as uuidv4 } from "uuid";
+import {
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence,
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import NeederDashboard from "./NeederDashboard";
+import { useLocation } from "react-router-dom";
+import {
+  doc,
+  getDoc,
+  query,
+  collection,
+  onSnapshot,
+  updateDoc,
+  addDoc,
+  setDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import star_corner from "../../images/star_corner.png";
+import star_filled from "../../images/star_filled.png";
+
+const NeederAllCategories = () => {
+  // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
   const navigate = useNavigate();
+ 
 
   const handleNavigation = (x) => {
-    navigate("/SelectedCategory", { state: { category: x } });
+    navigate("/NeederSelectedCategory", { state: { category: x } });
   };
 
-  return (
-    <Box marginTop="64px" padding="0">
-      <Center>
-        <Heading>Categories</Heading>
-      </Center>
+  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
 
-      <Center>
-        <SimpleGrid columns={[2, null, 3]} spacing="64px" marginTop="16">
+  //Card Social User PRofile Sample Template credit https://chakra-templates.vercel.app/components/cards
+  return (
+    <>
+      <NeederHeader />
+
+<Flex justifyContent="center">
+      <Stack
+        minH={"100vh"}
+        direction={{ base: "column", md: "row" }}
+        marginTop="16px"
+      >
+        <Box position="absolute" left="0">
+        <NeederDashboard />
+        </Box>
+        <Flex flex={2}>
+          <Box w="60vw" h="90vh" padding="8">
+            {/* <Center> */}
+            <Heading size="md">
+              All Categories
+            </Heading>
+       
+          
+            <Center>
+        <SimpleGrid columns={[2, null, 3]} spacing="64px" marginTop="8">
+          
           <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
@@ -485,8 +565,14 @@ const Categories = () => {
           </Card>
         </SimpleGrid>
       </Center>
-    </Box>
+           
+          </Box>
+        </Flex>
+        
+      </Stack>
+      </Flex>
+    </>
   );
 };
 
-export default Categories;
+export default NeederAllCategories;

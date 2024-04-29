@@ -119,7 +119,7 @@ const DoerSubscriptionComplete = () => {
     if (sessionID) {
       setHasRun(false);
       fetch(
-        "http://localhost:80/check-subscription-status", {
+        "https://fulfil-api.onrender.com/check-subscription-status", {
           method: "POST",
           headers: {
             Accept: "application/json",

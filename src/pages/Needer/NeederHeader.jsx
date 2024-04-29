@@ -121,6 +121,7 @@ const NeederHeader = () => {
           <MenuList>
             <MenuGroup title="Popular Categories">
               <Flex direction="row"></Flex>
+              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Cleaning"}})}>Cleaning</MenuItem>
               <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Drywall"}})}>Drywall</MenuItem>
               <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Electrical Work"}})}>Electrical Work</MenuItem>
               <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "General Handyman"}})}>General Handyman</MenuItem>
@@ -130,7 +131,7 @@ const NeederHeader = () => {
               <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Plumbing"}})}>Plumbing</MenuItem>
               <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Roofing"}})}>Roofing</MenuItem>
               <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Yard Work"}})}>Yard Work</MenuItem>
-              <MenuItem >See All</MenuItem>
+              <MenuItem onClick={() => navigate(`/NeederAllCategories`)}>See All</MenuItem>
             </MenuGroup>
           </MenuList>
         </Menu>

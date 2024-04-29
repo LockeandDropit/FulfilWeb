@@ -57,6 +57,10 @@ import ApplicantProfile from "./pages/Needer/Jobs/Applicants/ApplicantProfile";
 import NeederEmailRegister from "./pages/Register/Needer/NeederEmailRegister";
 import EditPostedJob from "./pages/Needer/Jobs/EditPostedJob";
 import EditJobInfo from "./pages/Needer/Jobs/EditJobInfo";
+import NeederAllCategories from "./pages/Needer/NeederAllCategories";
+
+
+
 
 
 //Stream Chat
@@ -350,6 +354,10 @@ const router = createBrowserRouter([
   {
     path: "/NeederSelectedCategory",
     element: <NeederSelectedCategory />,
+  },
+  {
+    path: "/NeederAllCategories",
+    element: <NeederAllCategories />,
   },
 ]);
 

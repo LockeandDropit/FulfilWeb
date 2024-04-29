@@ -141,6 +141,18 @@ const DoerEmailRegister = () => {
     }, 200)
   }
 
+
+  //this is here to circumnavigate the bug where if the info marker is open and the user tries to enter their email they are stopped after enetering one letter and redirected to the infomarker
+
+const [closeInfoWindow, setCloseInfoWindow] = useState(false)
+  
+const handleFocus = () => {
+   setCloseInfoWindow(true)
+   setTimeout(() => {
+setCloseInfoWindow(false)
+   }, 200)
+  };
+
  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
@@ -238,6 +250,7 @@ const DoerEmailRegister = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onFocus={handleFocus} 
               />
               {emailValidationBegun === true ? (
                 <Text color="red">{validationMessage}</Text>
@@ -253,6 +266,7 @@ const DoerEmailRegister = () => {
                   type={visibleToggle}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => handleFocus()} 
                 />
                 <InputRightElement>
                   <ViewIcon onClick={() => handlePasswordVisible()} />
@@ -283,7 +297,7 @@ const DoerEmailRegister = () => {
         <Flex flex={2}>
         <Box w="60vw" h="70vh" padding="8" alignContent="center">
             <Box w="60vw" h="70vh" >
-              <MapScreen />
+              <MapScreen props={closeInfoWindow}/>
             </Box>
           </Box>
           {/* <Image

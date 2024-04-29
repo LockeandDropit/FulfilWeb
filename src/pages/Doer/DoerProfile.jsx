@@ -958,7 +958,7 @@ const DoerProfile = () => {
                 <Button
                   onClick={onOpenBio}
                   marginTop="8px"
-                  // marginRight="42px"
+                 
                   marginLeft="auto"
                   backgroundColor="white"
                   textColor="#01A2E8"
@@ -1009,29 +1009,21 @@ const DoerProfile = () => {
               {isPremium ? (
                 <>
                   <Flex>
-                    <Heading size="lg" marginTop="16px" marginRight="545px">
+                    <Heading size="md" marginTop="8px" >
                       Specialties
                     </Heading>
                     <Button
                       onClick={onOpenCategories}
                       // position="absolute"
                       // right="0"
-                      marginTop="8px"
-                      marginRight="42px"
+                      marginLeft="auto"
                       backgroundColor="white"
                       textColor="#01A2E8"
                     >
                       Edit
                     </Button>
                   </Flex>
-                  <Card
-                    direction={{ base: "column", sm: "row" }}
-                    overflow="hidden"
-                    width="800px"
-                    height="auto"
-                  >
-                    <Stack>
-                      <CardBody>
+                 
                         <List spacing={3}>
                           {!userInfo.premiumCategoryOne &&
                           !userInfo.premiumCategoryTwo &&
@@ -1111,9 +1103,7 @@ const DoerProfile = () => {
                             </>
                           )}
                         </List>
-                      </CardBody>
-                    </Stack>
-                  </Card>
+                     
                 </>
               ) : null}
 
@@ -1163,6 +1153,7 @@ const DoerProfile = () => {
                           <option>--------------------------------</option>
                           <option value="Asphalt">Asphalt</option>
                           <option value="Carpentry">Carpentry</option>
+                          <option value="Cleaning">Cleaning</option>
                           <option value="Concrete">Concrete</option>
                           <option value="Drywall">Drywall</option>
                           <option value="Electrical Work">
@@ -1216,6 +1207,7 @@ const DoerProfile = () => {
                           <option>--------------------------------</option>
                           <option value="Asphalt">Asphalt</option>
                           <option value="Carpentry">Carpentry</option>
+                          <option value="Cleaning">Cleaning</option>
                           <option value="Concrete">Concrete</option>
                           <option value="Drywall">Drywall</option>
                           <option value="Electrical Work">
@@ -1269,6 +1261,7 @@ const DoerProfile = () => {
                           <option>--------------------------------</option>
                           <option value="Asphalt">Asphalt</option>
                           <option value="Carpentry">Carpentry</option>
+                          <option value="Cleaning">Cleaning</option>
                           <option value="Concrete">Concrete</option>
                           <option value="Drywall">Drywall</option>
                           <option value="Electrical Work">
@@ -1328,7 +1321,7 @@ const DoerProfile = () => {
                 </ModalContent>
               </Modal>
 
-              <Heading size="md" marginTop="16px">
+              <Heading size="md" marginTop="24px">
                 Experience
               </Heading>
               {!userExperience ? (

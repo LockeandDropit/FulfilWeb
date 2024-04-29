@@ -153,6 +153,17 @@ const NeederEmailRegister = () => {
     }, 200)
   }
 
+    //this is here to circumnavigate the bug where if the info marker is open and the user tries to enter their email they are stopped after enetering one letter and redirected to the infomarker
+    // help from https://www.dhiwise.com/post/how-to-use-the-onfocus-event-in-react-for-enhanced-user-interactions
+const [closeInfoWindow, setCloseInfoWindow] = useState(false)
+  
+const handleFocus = () => {
+   setCloseInfoWindow(true)
+   setTimeout(() => {
+setCloseInfoWindow(false)
+   }, 200)
+  };
+
   //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
@@ -179,6 +190,7 @@ const NeederEmailRegister = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onFocus={() => handleFocus()} 
               />
               {emailValidationBegun === true ? (
                 <Text color="red">{validationMessage}</Text>
@@ -194,6 +206,7 @@ const NeederEmailRegister = () => {
                   type={visibleToggle}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => handleFocus()} 
                 />
                 <InputRightElement>
                   <ViewIcon onClick={() => handlePasswordVisible()} />
@@ -225,7 +238,7 @@ const NeederEmailRegister = () => {
         <Flex flex={1}>
         <Box w="60vw" h="70vh" padding="2" alignContent="center">
             <Box w="60vw" h="70vh" >
-              <NeederRegisterMapScreen />
+              <NeederRegisterMapScreen props={closeInfoWindow}/>
             </Box>
           </Box>
         </Flex>

@@ -187,7 +187,7 @@ const DoerAccountManager = () => {
 
   const [stripeID, setStripeID] = useState(null);
   const [getIDHasRun, setGetIDHasRun] = useState(false);
-
+  const [stripeActive, setStripeActive] = useState(null);
  
 
   useEffect(() => {
@@ -202,14 +202,14 @@ const DoerAccountManager = () => {
   }, [stripeIDFromFB]);
 
   useEffect(() => {
-    if (stripeID && user !== null) {
+    if (stripeID && user !== null && stripeActive === false) {
       setTimeout(() => {
         verifyStripeStatus()
       }, 1500);
    
     } else {
     }
-  }, [stripeID]);
+  }, [stripeID, stripeActive]);
 
   const verifyStripeStatus = async () => {
     // const interval = setInterval( async () => {
@@ -255,7 +255,7 @@ const DoerAccountManager = () => {
 
   //Stripe onboarding
 
-  const [stripeActive, setStripeActive] = useState(false);
+
 
   const [onboardURL, setOnboardURL] = useState(null);
 

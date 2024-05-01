@@ -318,6 +318,12 @@ const NeederMessageList = () => {
       if (!jobData || !jobData.length) {
         //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
         setAcceptedJobData(null);
+        setAcceptedCIDs(null)
+        setToggleAcceptedTab(true);
+        setToggleInterviewTab(false);
+        setToggleCompletedTab(false);
+        setToggleRequestsTab(false);
+        console.log("nada")
         setAcceptedJobDataLength(0);
       } else {
         setAcceptedJobData(jobData);
@@ -514,6 +520,11 @@ const NeederMessageList = () => {
         //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
         setCompletedJobData(null);
         setCompletedJobDataLength(0);
+        setCompletedCIDs(null)
+        setToggleAcceptedTab(false);
+        setToggleInterviewTab(false);
+        setToggleCompletedTab(true);
+        setToggleRequestsTab(false);
       } else {
         setCompletedJobData(jobData);
         setCompletedJobDataLength(jobData.length);
@@ -623,8 +634,12 @@ const NeederMessageList = () => {
 
       if (!jobData || !jobData.length) {
         //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
-        setInterviewJobData(null);
+        setInterviewCIDs(null);
         setInterviewJobDataLength(0);
+        setToggleCompletedTab(false);
+        setToggleAcceptedTab(false);
+        setToggleInterviewTab(true);
+        setToggleRequestsTab(false);
       } else {
         setInterviewJobData(jobData);
         setInterviewJobDataLength(jobData.length);

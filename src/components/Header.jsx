@@ -22,7 +22,10 @@ import {
   useDisclosure,
   InputGroup,
   InputRightElement,
+  Center
 } from "@chakra-ui/react";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../firebaseConfig";
 import React from "react";
 import { useState, useEffect } from "react";
 import { ViewIcon } from "@chakra-ui/icons";
@@ -39,6 +42,8 @@ import { db } from "../firebaseConfig";
 import fulfil180 from "../images/fulfil180.jpg";
 import { useNavigate } from "react-router-dom";
 import { StreamChat } from "stream-chat";
+import { FcGoogle } from "react-icons/fc";
+
 
 const Header = (props) => {
   const navigate = useNavigate();
@@ -121,6 +126,57 @@ const Header = (props) => {
 
   };
 
+
+  const handleGoogleSignUp = async () => {
+    
+    const provider = await new GoogleAuthProvider();
+
+    return signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log("result", result);
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+
+        console.log("google user", user);
+
+        Promise.all([
+          getDoc(doc(db, "users", result.user.uid)),
+          getDoc(doc(db, "employers", result.user.uid)),
+        ])
+          .then((results) =>
+         
+            navigate(
+              results[0]._document === null && results[1]._document === null
+                ? "/AddProfileInfo"
+                : ( results[0]._document !== null &&
+                  results[0]._document.data.value.mapValue.fields.isEmployer)
+                ? "/DoerMapScreen"
+                : "/NeederMapScreen"
+            )
+          )
+          .catch();
+
+        //check if user is already in DB
+        //if so, navigate accordingly
+        //if not, navigate to new profile register
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log("hello", error);
+      });
+  };
+
   const [visibleToggle, setVisibleToggle] = useState("password");
 
   const handlePasswordVisible = () => {
@@ -173,6 +229,11 @@ const Header = (props) => {
   const handleClose = () => {
     onClose() 
   }
+
+  const handleModalClose = () => {
+    onClose()
+    navigate("/NeederEmailRegister")
+  }
   return (
     <>
     <div className="header">
@@ -199,21 +260,24 @@ const Header = (props) => {
       align={'center'}
       justify={'center'}
      >
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} >
+      <Stack spacing={6} mx={'auto'} maxW={'lg'} >
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Sign in to your account</Heading>
+          
+        <Heading fontSize={'4xl'} textColor="white">Sign in to your account</Heading>
+          <Heading fontSize={'3xl'}>Sign in to your account</Heading>
          
         </Stack>
         <Box
           rounded={'lg'}
       
-          p={8}>
-          <Stack spacing={4}>
+          p={4}>
+          <Stack spacing={2}>
           <FormControl>
               <FormLabel>Email</FormLabel>
               <Input
               borderColor="grey"
                borderWidth=".5px"
+         
                 type="email"
                 value={email}
                 onChange={handleInputChange}
@@ -238,14 +302,14 @@ const Header = (props) => {
                 </InputRightElement>
                 </InputGroup>
             </FormControl>
-            <Stack spacing={10}>
+            <Stack spacing={4} mt={6}>
               <Stack
                 direction={{ base: 'column', sm: 'row' }}
                 align={'start'}
                 justify={'space-between'}>
               
               </Stack>
-              <Stack spacing={0}>
+              <Stack spacing={1}>
               <Button
                  bg="#01A2E8"
                 color={'white'}
@@ -254,11 +318,32 @@ const Header = (props) => {
                 }}     onClick={() => validate()}>
                 Sign in
               </Button>
+              <Button
+              marginTop={2}
+                w={"full"}
+                variant={"outline"}
+                leftIcon={<FcGoogle />}
+                onClick={() => handleGoogleSignUp()}
+              >
+                <Center>
+                  <Text>Sign in with Google</Text>
+                </Center>
+              </Button>
+              <Stack spacing={0} mt={6}>
+              <Button backgroundColor="white" onClick={() => handleModalClose()}  position="relative" height="" _hover={{bg: "white"}}>
+                Don't have an account?&nbsp;<Text>Register</Text>
+              </Button>
+              <Button backgroundColor="white" onClick={() => navigate("/DoerEmailRegister")}  position="relative"  height="" _hover={{bg: "white"}} mt={1} >
+               Want to become a Doer?&nbsp;<Text textColor="#01A2E8">Click here</Text>
+              </Button>
+              </Stack>
               {passwordValidationBegun === true ? (
                 <Text color="red" textAlign="center">{passwordValidationMessage}</Text>
               ) : null}
-              <Text align="center" marginTop="2" color={'gray.500'}>or</Text>
-              <Button backgroundColor="white" textColor="#01A2E8"  onClick={() => onClose()}>Register</Button>
+              {/* <Text align="center" marginTop="2" color={'gray.500'}>or</Text> */}
+              
+          
+              
               </Stack>
             </Stack>
           </Stack>

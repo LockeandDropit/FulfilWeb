@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Input, Button, Text, Box, Container, Image } from "@chakra-ui/react";
 import { Center, Flex } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {
   Card,
   CardHeader,
@@ -37,13 +38,15 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import { auth } from "../../../firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
+import { FcGoogle } from "react-icons/fc";
 
 const DoerEmailRegister = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
   const navigate = useNavigate();
-  console.log(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum rhoncus ac arcu vitae tincidunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque augue neque, ullamcorper vitae aliquet vitae, rutrum et mi. Mauris a purus sapien. Etiam elit sapien, condimentum quis imperdiet in, auctor a neque. Donec tincidunt pulvinar neque, ac fermentum metus consectetur sed. Duis consectetur risus ut dui malesuada, ut dapibus sem dictum. Aenean velit risus, viverra non aliquet eget, ultrices id enim. Duis sodales semper velit, ac finibus tortor. Integer viverra tellus lacus, eu feugiat neque fermentum in. Curabitur efficitur vel est sed semper."
-  );
+ 
   //background image https://www.freecodecamp.org/news/react-background-image-tutorial-how-to-set-backgroundimage-with-inline-css-style/
   //image from Photo by Blue Bird https://www.pexels.com/photo/man-standing-beside-woman-on-a-stepladder-painting-the-wall-7217988/
 
@@ -75,6 +78,56 @@ const DoerEmailRegister = () => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage);
+      });
+  };
+
+
+  const handleGoogleSignUp = async () => {
+    const provider = await new GoogleAuthProvider();
+
+    return signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log("result", result);
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+
+        console.log("google user", user);
+
+        Promise.all([
+          getDoc(doc(db, "users", result.user.uid)),
+          getDoc(doc(db, "employers", result.user.uid)),
+        ])
+          .then((results) =>
+         
+            navigate(
+              results[0]._document === null && results[1]._document === null
+                ? "/DoerAddProfileInfo"
+                : ( results[0]._document !== null &&
+                  results[0]._document.data.value.mapValue.fields.isEmployer)
+                ? "/DoerMapScreen"
+                : "/NeederMapScreen"
+            )
+          )
+          .catch();
+
+        //check if user is already in DB
+        //if so, navigate accordingly
+        //if not, navigate to new profile register
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log("hello", error);
       });
   };
 
@@ -157,76 +210,7 @@ setCloseInfoWindow(false)
   return (
     <>
       <Header props={openModal}/>
-      {/* <Flex>
-        <Box w="33vw" h="90vh" alignContent="center">
-          <Center>
-            <Flex direction="column" marginLeft="120px">
-              <Center>
-                <Heading type="blackAlpha" size="lg" marginBottom="16px">
-                  Create an account
-                </Heading>
-              </Center>
-             
-              <FormControl>
-                <FormLabel>Email</FormLabel>
-                <Input
-                  borderColor="grey"
-                  borderWidth=".25px"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  width="360px"
-                />
-                {emailValidationBegun === true ? (
-                  <Text color="red">{validationMessage}</Text>
-                ) : null}
-              </FormControl>
-              <FormControl marginTop="8px">
-                <FormLabel>Password</FormLabel>
-
-                <InputGroup>
-                  <Input
-                    borderColor="grey"
-                    borderWidth=".5px"
-                    type={visibleToggle}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    width="360px"
-                  />
-                  <InputRightElement>
-                    <ViewIcon onClick={() => handlePasswordVisible()} />
-                  </InputRightElement>
-                </InputGroup>
-                {passwordValidationBegun === true ? (
-                  <Text color="red">{passwordValidationMessage}</Text>
-                ) : null}
-              </FormControl>
-              <Button
-                backgroundColor="#01A2E8"
-                color="white"
-                _hover={{ bg: "#018ecb", textColor: "white" }}
-                marginTop="32px"
-                onClick={() => validate()}
-              >
-                Sign up{" "}
-                <ArrowForwardIcon
-                  marginTop="2px"
-                  marginLeft="4px"
-                  boxSize={6}
-                />
-              </Button>
-            </Flex>
-          </Center>
-        </Box>
-        <Center>
-          <Box w="66vw" h="90vh" padding="16" alignContent="center">
-            <Box w="66vw" h="88vh" marginLeft="80px">
-              <MapScreen />
-            </Box>
-          </Box>
-        </Center>
-      </Flex> */}
-
+ 
       <Stack minH={"100vh"} direction={{ base: "column", md: "row" }} marginLeft={16}>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
           <Stack spacing={4} w={"full"} maxW={"md"} >
@@ -290,6 +274,16 @@ setCloseInfoWindow(false)
                 onClick={() => validate()}>
                 Sign up
               </Button>
+              <Button
+                w={"full"}
+                variant={"outline"}
+                leftIcon={<FcGoogle />}
+                onClick={() => handleGoogleSignUp()}
+              >
+                <Center>
+                  <Text>Sign up with Google</Text>
+                </Center>
+              </Button>
               <Button backgroundColor="white" onClick={() => handleOpenModal()}>Already have an account?&nbsp;<Text>Log In</Text></Button>
             </Stack>
           </Stack>
@@ -300,11 +294,7 @@ setCloseInfoWindow(false)
               <MapScreen props={closeInfoWindow}/>
             </Box>
           </Box>
-          {/* <Image
-            alt={"Login Image"}
-            objectFit={"cover"}
-            src={"/LadderWoman.jpg"}
-          /> */}
+          
         </Flex>
       </Stack>
     </>

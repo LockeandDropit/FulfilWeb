@@ -60,11 +60,27 @@ import star_corner from "../../images/star_corner.png";
 import star_filled from "../../images/star_filled.png";
 import { CloseIcon, EditIcon } from "@chakra-ui/icons";
 import EmbeddedPayments from "../../components/EmbeddedPayments";
+import { useLocation } from "react-router-dom";
+import NewVisitModal from "./NeederComponents/NewVisitModal";
 
 const NeederMapScreen = () => {
   const [user, setUser] = useState(null);
   const [postedJobs, setPostedJobs] = useState([]);
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  const [firstVisitModalVisible ,setFirstVisitModalVisible] = useState(false)
+
+  useEffect(() => {
+    if (location.state === null) {
+    } else {
+      console.log("first time? ", location.state);
+
+      setFirstVisitModalVisible(true)
+    }
+  }, [location]);
+  
 
   const [hasRun, setHasRun] = useState(false);
   const [selectedLat, setSelectedLat] = useState(null)
@@ -652,6 +668,7 @@ setIsLoading(true)
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isOpenCancelConfirm, onOpen: onOpenCancelConfirm, onClose: onCloseCancelConfirm } = useDisclosure();
 
   const [paymentsVisible, setPaymentsVisible] = useState(false);
   const [selectedJobForPayment, setSelectedJobForPayment] = useState(null);
@@ -663,11 +680,20 @@ setIsLoading(true)
   };
 
   //handle canceling job
+  const confirmCancelModal = (x) => {
+
+    console.log("confirm cancel this", x)
+    onOpenCancelConfirm()
+
+  }
+
+
   const handleDelete = (x) => {
     console.log("cancel this one", x);
     setDoc(doc(db, "Canceled Jobs", x.jobID), {
       employerID: user.uid,
-      doerID: x.hiredApplicant,
+
+      doerID: x.hiredApplicant ? x.hiredApplicant : null,
       jobTitle: x.jobTitle,
     })
       .then(() => {})
@@ -678,7 +704,7 @@ setIsLoading(true)
 
 
       
-    deleteDoc(doc(db, "Map Jobs", user.uid, "Posted Jobs", x.jobTitle), {})
+    deleteDoc(doc(db, "Map Jobs",  x.jobID), {})
       .then(() => {
         //all good
       })
@@ -686,6 +712,19 @@ setIsLoading(true)
         // no bueno
         console.log(error);
       });
+
+      deleteDoc(
+        doc(db, "employers", user.uid, "Posted Jobs", x.jobTitle),
+        {}
+      )
+        .then(() => {
+          //all good
+          onOpen();
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
 
     deleteDoc(
       doc(db, "employers", user.uid, "Jobs In Progress", x.jobTitle),
@@ -699,6 +738,8 @@ setIsLoading(true)
         // no bueno
         console.log(error);
       });
+
+      onCloseCancelConfirm()
   };
 
   const handleEdit = (x) => {
@@ -797,6 +838,7 @@ const handleCloseInfoWindow = () => {
                       )}
                     </AdvancedMarker>
                     {openInfoWindowMarkerID === allJobs.jobID ? (
+                      <>
                       <Flex direction="row-reverse">
                         <Card
                           // align="flex-end"
@@ -1129,7 +1171,8 @@ const handleCloseInfoWindow = () => {
                                   width="320px"
                                   marginTop="8px"
                                   onClick={() =>
-                                    handleDelete(allJobs)
+                                    // handleDelete(allJobs)
+                                    confirmCancelModal(allJobs)
                                   }
                                 >
                                   Cancel Job
@@ -1160,7 +1203,8 @@ const handleCloseInfoWindow = () => {
                                   width="320px"
                                   marginTop="8px"
                                   onClick={() =>
-                                    handleDelete(allJobs)
+                                    // handleDelete(allJobs)
+                                    confirmCancelModal(allJobs)
                                   }
                                 >
                                   Cancel Job
@@ -1170,6 +1214,32 @@ const handleCloseInfoWindow = () => {
                           </CardBody>
                         </Card>
                       </Flex>
+
+<Modal
+isCentered
+onClose={onCloseCancelConfirm}
+isOpen={isOpenCancelConfirm}
+motionPreset="slideInBottom"
+>
+<ModalOverlay />
+<ModalContent>
+  <ModalHeader></ModalHeader>
+  <ModalCloseButton />
+  <ModalBody>
+    <Text>Are you sure you want to cancel {allJobs.jobTitle}?</Text>
+  </ModalBody>
+  <ModalFooter>
+    <Button
+      colorScheme="blue"
+      mr={3}
+      onClick={() => handleDelete(allJobs)}
+    >
+      Continue
+    </Button>
+  </ModalFooter>
+</ModalContent>
+</Modal>
+</>
                     ) : null}
                   </>
                 ))}
@@ -1798,6 +1868,8 @@ const handleCloseInfoWindow = () => {
               {selectedJobForPayment ? (
                 <EmbeddedPayments props={selectedJobForPayment} />
               ) : null}
+
+              {firstVisitModalVisible ? (<NewVisitModal />) : null}
             </Map>
           </div>
         </APIProvider>

@@ -18,7 +18,16 @@ import {
 } from "@chakra-ui/react";
 import { Center, Flex } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
-
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
@@ -127,6 +136,15 @@ const DoerAccountManager = () => {
     process.env.REACT_APP_STREAM_CHAT_API_KEY
   );
 
+  
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isOpenLogOut, onOpen: onOpenLogOut, onClose: onCloseLogOut } = useDisclosure()
+
+  const handleConfirmDelete = () => {
+    onOpen()
+  }
+
+
   const handleLogOut = async () => {
     setLoading(true);
     postDeleteRequest();
@@ -134,9 +152,7 @@ const DoerAccountManager = () => {
     await client.disconnectUser();
 
     setTimeout(() => {
-      alert(
-        "Sorry to see you go! We need to double check a few things. You will receive a confirmation email in 2-3 days stating your account has been deleted. "
-      );
+     onOpenLogOut()
       navigate("/");
     }, 2000);
   };
@@ -294,21 +310,7 @@ const DoerAccountManager = () => {
     return { accountLink, error };
   };
 
-  // const [stripeIDFromFB, setStripeIDFromFB] = useState(null);
-  // useEffect(() => {
-  //   if (user !== null) {
-
-  //   const docRef = doc(db, "users", user.uid);
-
-  //   getDoc(docRef).then((snapshot) => {
-  //     console.log("this one works...",snapshot.data().stripeID)
-  //     setStripeID({"stripeID" : snapshot.data().stripeID});
-  //   });
-
-  // } else {
-  //   console.log("oh nooo")
-  // }
-  // }, [user]);
+ 
 
   useEffect(() => {
     if (stripeIDToFireBase !== null && user !== null) {
@@ -340,12 +342,6 @@ const DoerAccountManager = () => {
           <Box
          
             width="34vw"
-            // alignContent="center"
-            // justifyContent="center"
-            // display="flex"
-            // alignItems="baseline"
-           
-           
             height="auto"
             boxShadow=""
             rounded="lg"
@@ -354,7 +350,7 @@ const DoerAccountManager = () => {
           >
     
               <Heading size="md" marginTop="16px">
-                My Account
+                Account Settings
               </Heading>
               
            
@@ -530,6 +526,44 @@ const DoerAccountManager = () => {
         )}
       </Flex>
       </Box>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Are You Sure?</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+          <Text>Are you sure you want to delete your account?</Text>
+         <Text>Once deleted, this can not be undone.</Text>
+          </ModalBody>
+
+          <ModalFooter>
+          <Button variant='ghost' onClick={onClose}>Nevermind</Button>
+          <Button colorScheme='red' mr={3} onClick={() => handleLogOut()}>
+             Delete my Account
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isOpenLogOut} onClose={onCloseLogOut}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+           <Text> Sorry to see you go! </Text> 
+            <Text>We need to double check a few things. You will receive a confirmation email in 2-3 days stating your account has been deleted.</Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onCloseLogOut}>
+              Close
+            </Button>
+          
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

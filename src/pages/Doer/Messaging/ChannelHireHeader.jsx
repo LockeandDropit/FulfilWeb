@@ -174,7 +174,10 @@ const ChannelHireHeader = () => {
           doc._document.data.value.mapValue.fields.jobTitle.stringValue ===
             channel.data.name
         ) {
-          if (doc._document.data.value.mapValue.fields.isRequest &&  doc._document.data.value.mapValue.fields.requestOfferMade) {
+          if (
+            doc._document.data.value.mapValue.fields.isRequest &&
+            doc._document.data.value.mapValue.fields.requestOfferMade
+          ) {
             setRequestOfferMade(
               doc._document.data.value.mapValue.fields.requestOfferMade
                 .booleanValue
@@ -217,7 +220,6 @@ const ChannelHireHeader = () => {
   console.log("is hired", isHired);
 
   useEffect(() => {
-
     if (isRequest && requestOfferMade && jobID) {
       if (
         (userID != null && isHired === false) ||
@@ -226,12 +228,12 @@ const ChannelHireHeader = () => {
       ) {
         console.log("here?");
         const docRef = doc(db, "employers", employerID, "Requests", jobID);
-  
+
         getDoc(docRef).then((snapshot) => {
           console.log("current job request", snapshot.data());
           setNiceToHave(snapshot.data().niceToHave);
           setDescription(snapshot.data().description);
-          setJobTitle(snapshot.data().jobTitle)
+          setJobTitle(snapshot.data().jobTitle);
           setCategory(snapshot.data().category);
           setCity(snapshot.data().city);
           setLocationLat(snapshot.data().locationLat);
@@ -246,14 +248,13 @@ const ChannelHireHeader = () => {
           setStreetAddress(snapshot.data().streetAddress);
           setState(snapshot.data().state);
           setZipCode(snapshot.data().zipCode);
-  
+
           setEmployerFirstName(snapshot.data().firstName);
         });
       } else {
         console.log("oops!a", userID, isHired, employerID, jobTitle);
       }
-    }
-    else if (
+    } else if (
       (userID != null && isHired === false && !isRequest) ||
       (undefined && employerID != null && jobTitle !== null) ||
       undefined
@@ -447,8 +448,6 @@ const ChannelHireHeader = () => {
         console.log(error, "from delete posted employer");
       });
 
-   
-
     //delete from user Applied Jobs
     deleteDoc(doc(db, "users", userID, "Requests", jobID))
       .then(() => {
@@ -469,7 +468,7 @@ const ChannelHireHeader = () => {
     })
       .then(() => {
         console.log("all good");
-        onOpenSuccess()
+        onOpenSuccess();
       })
       .catch((error) => {
         console.log(error);
@@ -533,14 +532,13 @@ const ChannelHireHeader = () => {
     postInProgress();
 
     //delete from Posted under employer
-if (isRequest) {
-  deleteRequestEmployer();
-} else {
-  deletePostedEmployer();
-  deleteFromMaps();
-  deleteFromJobs();
-}
-    
+    if (isRequest) {
+      deleteRequestEmployer();
+    } else {
+      deletePostedEmployer();
+      deleteFromMaps();
+      deleteFromJobs();
+    }
 
     //make notification in chat for both
 
@@ -548,13 +546,9 @@ if (isRequest) {
 
     //delete from global jobs/maps
 
-    
-
     //delete from paid v volunteer db
 
     // deleteFromJobs();
-
-    
   };
 
   //chat notification control
@@ -884,10 +878,9 @@ if (isRequest) {
     });
   };
 
-
   const handleOpenDetails = () => {
-onOpenDetails()
-  }
+    onOpenDetails();
+  };
 
   return (
     <>
@@ -921,7 +914,7 @@ onOpenDetails()
           </Box>
         </Card>
       ) : isRequest && requestOfferMade === false ? (
-<Card
+        <Card
           boxShadow="sm"
           rounded="md"
           borderColor="#e4e4e4"
@@ -934,40 +927,63 @@ onOpenDetails()
               <Flex direction="column">
                 <Flex direction="row">
                   <Box textAlign="center" marginTop="16px">
-                    <Text marginBottom="8px">{employerFirstName} has started a conversation with you</Text>
+                    <Text marginBottom="8px">
+                      {employerFirstName} has started a conversation with you
+                    </Text>
                   </Box>
                 </Flex>
-              
               </Flex>
             </Center>
           </Box>
         </Card>
       ) : requestOfferMade === true ? (
         <Card
-                  boxShadow="sm"
-                  rounded="md"
-                  borderColor="#e4e4e4"
-                  borderWidth="1px"
-                  marginLeft="4px"
-                  marginRight="4px"
-                >
-                  <Box>
-                    <Center>
-                      <Flex direction="column">
-                        <Flex direction="row">
-                          <Box textAlign="center" marginTop="16px" flexDirection="row" justifyContent="center" alignContent="center" alignItems="center" justifyItems="center">
-                            <Text>{employerFirstName} has sent you an offer for<Button variant="ghost" marginBottom="4px" onClick={() => {
-                              handleOpenDetails()
-                            }}>
-                              <Text>{jobTitle}</Text>
-                            </Button></Text> 
-                           
-                         
-                          </Box>
-                        </Flex>
-                        <Center>
-                          <Flex direction="column">
-                        <Text>Pay Rate:</Text>
+          boxShadow="sm"
+          rounded="md"
+          borderColor="#e4e4e4"
+          borderWidth="1px"
+          marginLeft="4px"
+          marginRight="4px"
+        >
+          <Box>
+            <Center>
+              <Flex direction="column">
+                <Flex direction="row">
+                  <Box
+                    textAlign="center"
+                    marginTop="16px"
+                    flexDirection="row"
+                    justifyContent="center"
+                    alignContent="center"
+                    alignItems="center"
+                    justifyItems="center"
+                  >
+                    <Text>
+                      {employerFirstName} has sent you an offer for
+                      <Button
+                        backgroundColor="white"
+                        borderWidth="0.5px"
+                        
+                        borderColor="#01A2E8"
+                        textColor="#01A2E8"
+                        marginBottom="4px"
+                        height="24px"
+                        marginLeft="6px"
+                        _hover={{  backgroundColor: "#01A2E8", 
+                        
+                        textColor: "white"}}
+                        onClick={() => {
+                          handleOpenDetails();
+                        }}
+                      >
+                        <Text>{jobTitle}</Text>
+                      </Button>
+                    </Text>
+                  </Box>
+                </Flex>
+                <Center>
+                  <Flex direction="column">
+                    <Text>Pay Rate:</Text>
                     {isHourly ? (
                       <Text>${confirmedRate}/hr</Text>
                     ) : isVolunteer ? (
@@ -975,27 +991,27 @@ onOpenDetails()
                     ) : (
                       <Text> ${confirmedRate} total </Text>
                     )}
-                    </Flex>
-                        </Center>
-                        <Center>
-                    <Box flexDirection="row" marginTop="16px" marginBottom="8px">
-                      <Button variant="ghost" width="160px">
-                        <Text>Decline</Text>
-                      </Button>
-                      <Button
-                        width="160px"
-                        colorScheme="blue"
-                        onClick={() => confirmJobAccept()}
-                      >
-                        <Text>Accept</Text>
-                      </Button>
-                    </Box>
-                  </Center>
-                      </Flex>
-                    </Center>
+                  </Flex>
+                </Center>
+                <Center>
+                  <Box flexDirection="row" marginTop="16px" marginBottom="8px">
+                    <Button variant="ghost" width="160px">
+                      <Text>Decline</Text>
+                    </Button>
+                    <Button
+                      width="160px"
+                      colorScheme="blue"
+                      onClick={() => confirmJobAccept()}
+                    >
+                      <Text>Accept</Text>
+                    </Button>
                   </Box>
-                </Card>
-              ) : !jobOffered ? (
+                </Center>
+              </Flex>
+            </Center>
+          </Box>
+        </Card>
+      ) : !jobOffered ? (
         <Card
           boxShadow="sm"
           rounded="md"
@@ -1087,28 +1103,36 @@ onOpenDetails()
           </ModalFooter>
         </ModalContent>
       </Modal>
-      
+
       <Modal isOpen={isOpenDetails} onClose={onCloseDetails} size="xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Offer Details</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <FormLabel>Job Title</FormLabel>
+            <FormLabel>Job Title</FormLabel>
             <Text marginBottom="4px">{jobTitle}</Text>
             <FormLabel>Description</FormLabel>
             <Text marginBottom="4px">{description}</Text>
-            <FormLabel>
-                Location
-              </FormLabel>
-              <Text marginBottom="4px">{streetAddress}, {city}, {state}</Text>
-              {category ? ( <><FormLabel>Category</FormLabel>
-              <Text marginBottom="4px">{category}</Text></>) : (null)}
-             
-              <FormLabel>Frequency</FormLabel>
-              <Text marginBottom="4px">One-time</Text>
-              <FormLabel>Pay Rate</FormLabel>
-              {isHourly ? (<Text marginBottom="4px">${confirmedRate}/hour</Text>) : (<Text marginBottom="4px">${confirmedRate} total</Text>)}
+            <FormLabel>Location</FormLabel>
+            <Text marginBottom="4px">
+              {streetAddress}, {city}, {state}
+            </Text>
+            {category ? (
+              <>
+                <FormLabel>Category</FormLabel>
+                <Text marginBottom="4px">{category}</Text>
+              </>
+            ) : null}
+
+            <FormLabel>Frequency</FormLabel>
+            <Text marginBottom="4px">One-time</Text>
+            <FormLabel>Pay Rate</FormLabel>
+            {isHourly ? (
+              <Text marginBottom="4px">${confirmedRate}/hour</Text>
+            ) : (
+              <Text marginBottom="4px">${confirmedRate} total</Text>
+            )}
           </ModalBody>
 
           <ModalFooter>

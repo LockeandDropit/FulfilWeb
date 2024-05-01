@@ -88,6 +88,7 @@ const AddProfileInfo = () => {
   const [state, setState] = useState(null);
   const [test, setTest] = useState(null);
   const [isEmployer, setIsEmployer] = useState(true);
+  const [profilePicture, setProfilePicture] = useState(null)
 
   const [hasRun, setHasRun] = useState(false);
   useEffect(() => {
@@ -95,7 +96,15 @@ const AddProfileInfo = () => {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
         setUserID(currentUser.uid);
-        console.log(currentUser.uid);
+        console.log("current user",currentUser);
+
+        if (currentUser.reloadUserInfo.displayName) {
+          let nameArray = currentUser.reloadUserInfo.displayName.split(" ")
+          console.log("name array", currentUser.reloadUserInfo)
+          setFirstName(nameArray[0])
+          setLastName(nameArray[1])
+          setProfilePicture(currentUser.reloadUserInfo.photoUrl)
+        }
       });
       setHasRun(true);
     } else {
@@ -144,7 +153,8 @@ const AddProfileInfo = () => {
       stripeOnboarded: false,
       PrivacyPolicyAgree: privacyPolicy, 
       ageAgreement: ageAgreement,
-      termsOfService: termsOfService
+      termsOfService: termsOfService,
+      profilePictureResponse: profilePicture ? profilePicture : null
     });
     createNewChatUser()
       .then(() => {
@@ -157,7 +167,7 @@ const AddProfileInfo = () => {
         console.log(error);
       });
 
-  navigate("/AddJobStart");
+  navigate("/NeederMapScreen", { state: true});
   };
 
   // big ty man regex https://www.sitepoint.com/using-regular-expressions-to-check-string-length/
@@ -224,15 +234,18 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                   <Input
                     borderColor="black"
                     borderWidth=".5px"
-                    placeholder="First Name"
+                    placeholder={firstName ? firstName : "First Name"}
+                    defaultValue={firstName ? firstName : null}
                     width="640px"
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                   <FormLabel marginTop="8">Last Name</FormLabel>
                   <Input
-                    placeholder="Last Name"
+            
                     borderColor="black"
                     borderWidth=".5px"
+                    placeholder={lastName ? lastName : "Last Name"}
+                    defaultValue={lastName ? lastName : null}
                     width="640px"
                     onChange={(e) => setLastName(e.target.value)}
                   />

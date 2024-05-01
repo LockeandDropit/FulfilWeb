@@ -93,6 +93,16 @@ const AddJobStart = () => {
   const [state, setState] = useState(null);
   const [businessName, setBusinessName] = useState(null);
   const [firstName, setFirstName] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [requirements, setRequirements] = useState("");
+
+       //modal control
+       const { isOpen, onOpen, onClose } = useDisclosure()
+
+
+  const [requirements2, setRequirements2] = useState("");
+  const [requirements3, setRequirements3] = useState("");
+  const [niceToHave, setNiceToHave] = useState(null);
 
   const navigate = useNavigate();
 
@@ -196,7 +206,7 @@ const AddJobStart = () => {
 
   const checkLength = () => {
     //check to see if everything is entered
-
+    const descriptionValid = minLengthRegEx.test(description)
     const jobTitleValid = minLengthRegEx.test(jobTitle);
     const upperRateValid = numberOnlyRegexMinimumCharacterInput.test(upperRate);
     const lowerRateValid = numberOnlyRegexMinimumCharacterInput.test(lowerRate);
@@ -204,23 +214,23 @@ const AddJobStart = () => {
 
     //check for null values https://stackoverflow.com/questions/6003884/how-do-i-check-for-null-values-in-javascript user578895
 
-    if (!jobTitleValid || isOneTime === null) {
+    if (!jobTitleValid || isOneTime === null ) {
       console.log("1");
       alert("Please fill out all fields");
       console.log("1");
     } else {
-      if (isOneTime === true && isFlatRate === true && !flatRateValid) {
+      if (isOneTime === true && isFlatRate === true && !flatRateValid || !descriptionValid) {
         alert("Please fill out all fields");
         console.log("2");
       } else {
         if (
-          (isOneTime === true && isHourly === true && !upperRateValid) ||
+          (isOneTime === true && isHourly === true && !upperRateValid || !descriptionValid) ||
           !lowerRateValid
         ) {
           console.log("3");
           alert("Please fill out all fields");
         } else {
-          if (isOneTime === false && isFlatRate === true && !flatRateValid) {
+          if (isOneTime === false && isFlatRate === true && !flatRateValid || !descriptionValid) {
             console.log("4");
             alert("Please fill out all fields");
           } else {
@@ -276,7 +286,7 @@ const AddJobStart = () => {
 
   const [jobFrequency, setJobFrequency] = useState(null);
 
-  const [isOneTime, setIsOneTime] = useState(null);
+  const [isOneTime, setIsOneTime] = useState(true);
   const [locationLat, setLocationLat] = useState(null);
   const [locationLng, setLocationLng] = useState(null);
 
@@ -339,6 +349,11 @@ const AddJobStart = () => {
       zipCode: zipCode,
       locationLat: locationLat,
       locationLng: locationLng,
+      description: description,
+      requirements: requirements,
+      requirements2: requirements2,
+      requirements3: requirements3,
+      niceToHave: niceToHave,
     })
       .then(() => {
         addDoc(dbRef, placeholderApplicant);
@@ -374,6 +389,11 @@ const AddJobStart = () => {
       zipCode: zipCode,
       locationLat: locationLat,
       locationLng: locationLng,
+      description: description,
+      requirements: requirements,
+      requirements2: requirements2,
+      requirements3: requirements3,
+      niceToHave: niceToHave,
     })
       .then(() => {
         //all good
@@ -407,6 +427,11 @@ const AddJobStart = () => {
         zipCode: zipCode,
         locationLat: locationLat,
         locationLng: locationLng,
+        description: description,
+        requirements: requirements,
+        requirements2: requirements2,
+        requirements3: requirements3,
+        niceToHave: niceToHave,
       })
         .then(() => {
           //all good
@@ -439,6 +464,11 @@ const AddJobStart = () => {
         zipCode: zipCode,
         locationLat: locationLat,
         locationLng: locationLng,
+        description: description,
+        requirements: requirements,
+        requirements2: requirements2,
+        requirements3: requirements3,
+        niceToHave: niceToHave,
       })
         .then(() => {
           //all good
@@ -475,6 +505,11 @@ const AddJobStart = () => {
       zipCode: zipCode,
       locationLat: locationLat,
       locationLng: locationLng,
+      description: description,
+      requirements: requirements,
+      requirements2: requirements2,
+      requirements3: requirements3,
+      niceToHave: niceToHave,
     })
       .then(() => {
         //all good
@@ -509,6 +544,11 @@ const AddJobStart = () => {
       zipCode: zipCode,
       locationLat: locationLat,
       locationLng: locationLng,
+      description: description,
+      requirements: requirements,
+      requirements2: requirements2,
+      requirements3: requirements3,
+      niceToHave: niceToHave,
     })
       .then(() => {
         //all good
@@ -519,15 +559,20 @@ const AddJobStart = () => {
         console.log(error);
       });
 
-    navigate("/AddJobInfo", {
-      state: {
-        jobTitle: jobTitle,
-        isVolunteer: isVolunteer,
-        jobID: jobID,
-        firstName: firstName,
-      },
-    });
+
+    onOpen()
+
+    // navigate("/AddJobInfo", {
+    //   state: {
+    //     jobTitle: jobTitle,
+    //     isVolunteer: isVolunteer,
+    //     jobID: jobID,
+    //     firstName: firstName,
+    //   },
+    // });
   };
+
+
 
   const testButtonNavigate = () => {
     navigate("/AddJobInfo", {
@@ -665,13 +710,15 @@ const AddJobStart = () => {
     <>
       <NeederHeader />
 
-      <Flex>
-        <NeederDashboard />
-
+      <Flex justifyContent="center" >
+        <Box position="absolute" left="0">
+          <NeederDashboard />
+        </Box>
         <Box
-          width="67vw"
-          // alignContent="center"
-          // justifyContent="center"
+          width="36vw"
+          alignItems="center"
+          alignContent="center"
+          justifyContent="center"
           // display="flex"
           // alignItems="baseline"
 
@@ -693,14 +740,25 @@ const AddJobStart = () => {
               <FormLabel marginTop="8">Job Title</FormLabel>
               <Input
                 placeholder="Title goes here"
-                width="560px"
+                // width="560px"
                 onChange={(e) => setJobTitle(e.target.value)}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel marginTop="8">Job Description</FormLabel>
+              <Textarea
+          //  borderColor="black"
+              borderWidth=".5px"
+                placeholder="ex: I have a downed tree in my yard and would like someone to remove it."
+             
+                height="100px"
+                onChange={(e) => setDescription(e.target.value)}
               />
             </FormControl>
             <FormLabel marginTop="4">
               Where will this work be located?
             </FormLabel>
-            <Box width="560px">
+            <Box >
               <GooglePlacesAutocomplete
                 apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
                 fetchDetails={true}
@@ -728,7 +786,7 @@ const AddJobStart = () => {
               </FormLabel>
               <Select
                 placeholder="Select category"
-                width="560px"
+              
                 onChange={(e) => setJobCategory(e.target.value)}
               >
                 <option value="asphalt">Asphalt</option>
@@ -752,19 +810,19 @@ const AddJobStart = () => {
                 <option value={false}>Clear Selection</option>
               </Select>
             </FormControl>
-            <FormControl>
+            {/* <FormControl>
               <FormLabel marginTop="8">
                 What kind of a position is this?
               </FormLabel>
               <Select
                 placeholder="Select option"
-                width="560px"
+                // width="560px"
                 onChange={(e) => setJobFrequency(e.target.value)}
               >
                 <option value="Regular Need">Regular Need</option>
                 <option value="One Time">One Time</option>
               </Select>
-            </FormControl>
+            </FormControl> */}
 
             <FormLabel marginTop="8">
               Are you offering an hourly rate or a fixed amount (ex: $50 to mow
@@ -772,7 +830,7 @@ const AddJobStart = () => {
             </FormLabel>
             <Select
               placeholder="Select option"
-              width="560px"
+              // width="560px"
               onChange={(e) => setPayType(e.target.value)}
             >
               <option value="Hourly">Hourly</option>
@@ -848,17 +906,34 @@ const AddJobStart = () => {
             <Button
               colorScheme="blue"
               width="240px"
-              position="absolute"
-              bottom="2"
-              right="500"
+             marginTop="36px"
+             marginLeft="auto"
               onClick={() => checkLength()}
               // onClick={() => testButtonNavigate()}
             >
-              Next{" "}
+              Submit{" "}
             </Button>
           </Flex>
         </Box>
       </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Your job has been posted.</Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={() => navigate("/NeederMapScreen")}>
+              Close
+            </Button>
+          
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

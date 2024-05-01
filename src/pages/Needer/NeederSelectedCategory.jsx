@@ -707,7 +707,7 @@ testNewChannel(premiumUser)
                     </Stack>
 
                     <Stack mt={8} direction={"row"} spacing={4}>
-                      <Button
+                      {/* <Button
                         flex={1}
                         fontSize={"sm"}
                         rounded={"full"}
@@ -717,7 +717,7 @@ testNewChannel(premiumUser)
                         onClick={() => handleOpenModal(premiumUser)}
                       >
                         See profile
-                      </Button>
+                      </Button> */}
                       <Button
                         flex={1}
                         fontSize={"sm"}
@@ -730,7 +730,7 @@ testNewChannel(premiumUser)
                         
                         onClick={() => handleOpenModal(premiumUser)}
                       >
-                        Contact
+                        See Profile
                       </Button>
                     </Stack>
                   </Box>

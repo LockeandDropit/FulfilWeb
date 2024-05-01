@@ -89,6 +89,7 @@ const DoerAddProfileInfo = () => {
   const [state, setState] = useState(null);
   const [test, setTest] = useState(null);
   const [isEmployer, setIsEmployer] = useState(true);
+  const [profilePicture, setProfilePicture] = useState(null)
 
   const [hasRun, setHasRun] = useState(false);
   useEffect(() => {
@@ -97,6 +98,13 @@ const DoerAddProfileInfo = () => {
         setUser(currentUser);
         setUserID(currentUser.uid);
         console.log(currentUser.uid);
+        if (currentUser.reloadUserInfo.displayName) {
+          let nameArray = currentUser.reloadUserInfo.displayName.split(" ")
+          console.log("name array", currentUser.reloadUserInfo)
+          setFirstName(nameArray[0])
+          setLastName(nameArray[1])
+          setProfilePicture(currentUser.reloadUserInfo.photoUrl)
+        }
       });
       setHasRun(true);
     } else {
@@ -146,7 +154,8 @@ const DoerAddProfileInfo = () => {
       PrivacyPolicyAgree: privacyPolicy, 
       ageAgreement: ageAgreement,
       termsOfService: termsOfService,
-      taxAgreementConfirmed: taxAgreementConfirmed
+      taxAgreementConfirmed: taxAgreementConfirmed,
+      profilePictureResponse: profilePicture ? profilePicture : null
     });
     createNewChatUser()
       .then(() => {
@@ -228,13 +237,15 @@ const DoerAddProfileInfo = () => {
                   <Input
                     borderColor="black"
                     borderWidth=".5px"
-                    placeholder="First Name"
+                    placeholder={firstName ? firstName : "First Name"}
+                    defaultValue={firstName ? firstName : null}
                     width="640px"
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                   <FormLabel marginTop="8">Last Name</FormLabel>
                   <Input
-                    placeholder="Last Name"
+                         placeholder={lastName ? lastName : "Last Name"}
+                         defaultValue={lastName ? lastName : null}
                     borderColor="black"
                     borderWidth=".5px"
                     width="640px"

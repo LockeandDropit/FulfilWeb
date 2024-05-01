@@ -156,6 +156,7 @@ console.log(closeInfoWindow)
 
 
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isOpenSignIn, onOpen: onOpenSignIn, onClose: onCloseSignIn } = useDisclosure()
 
   //category search
 
@@ -351,7 +352,7 @@ console.log(closeInfoWindow)
                               color={'#01A2E8'}
                              marginRight="32px"
                               width="180px"
-                            
+                              onClick={() => onOpenSignIn()}
                             >
                              Save
                             </Button>
@@ -362,7 +363,7 @@ console.log(closeInfoWindow)
                                 bg: 'blue.500',
                               }}
                               width="180px"
-                         
+                         onClick={() => onOpenSignIn()}
                             >
                               Apply
                             </Button>
@@ -392,6 +393,23 @@ console.log(closeInfoWindow)
       </ModalFooter>
     </ModalContent>
   </Modal>
+  <Modal isOpen={isOpenSignIn} onClose={onCloseSignIn}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Sign In</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Create an account or sign in to apply!</Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onCloseSignIn}>
+              Close
+            </Button>
+           
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
           </Map>
         </div>
       </APIProvider>

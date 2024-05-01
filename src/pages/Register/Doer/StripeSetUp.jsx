@@ -228,7 +228,7 @@ const StripeSetUp = () => {
            
             </Box>
             <Center flexDirection="column">
-          <Box marginLeft="112px" marginTop="16px">
+          <Box marginLeft="140px" marginTop="16px">
             {paymentsLoading ? (
               <Spinner
                 thickness="4px"

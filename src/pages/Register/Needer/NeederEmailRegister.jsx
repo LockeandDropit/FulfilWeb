@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Input, Button, Text, Box, Container, Image } from "@chakra-ui/react";
 import { Center, Flex } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {
   Card,
   CardHeader,
@@ -17,7 +18,9 @@ import {
   InputGroup,
   InputRightAddon,
 } from "@chakra-ui/react";
+import { FcGoogle } from "react-icons/fc";
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
+import { auth } from "../../../firebaseConfig";
 import {
   FormControl,
   FormLabel,
@@ -38,13 +41,13 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import NeederRegisterMapScreen from "../../../components/NeederRegisterMapScreen.jsx";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
 
 const NeederEmailRegister = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
   const navigate = useNavigate();
-  console.log(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum rhoncus ac arcu vitae tincidunt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque augue neque, ullamcorper vitae aliquet vitae, rutrum et mi. Mauris a purus sapien. Etiam elit sapien, condimentum quis imperdiet in, auctor a neque. Donec tincidunt pulvinar neque, ac fermentum metus consectetur sed. Duis consectetur risus ut dui malesuada, ut dapibus sem dictum. Aenean velit risus, viverra non aliquet eget, ultrices id enim. Duis sodales semper velit, ac finibus tortor. Integer viverra tellus lacus, eu feugiat neque fermentum in. Curabitur efficitur vel est sed semper."
-  );
+  
   //background image https://www.freecodecamp.org/news/react-background-image-tutorial-how-to-set-backgroundimage-with-inline-css-style/
   //image from Photo by Blue Bird https://www.pexels.com/photo/man-standing-beside-woman-on-a-stepladder-painting-the-wall-7217988/
 
@@ -144,30 +147,83 @@ const NeederEmailRegister = () => {
     }
   };
 
-  const [openModal, setOpenModal] = useState(null)
+  const [openModal, setOpenModal] = useState(null);
 
   const handleOpenModal = () => {
-    setOpenModal(true)
+    setOpenModal(true);
     setTimeout(() => {
-      setOpenModal(false)
-    }, 200)
-  }
-
-    //this is here to circumnavigate the bug where if the info marker is open and the user tries to enter their email they are stopped after enetering one letter and redirected to the infomarker
-    // help from https://www.dhiwise.com/post/how-to-use-the-onfocus-event-in-react-for-enhanced-user-interactions
-const [closeInfoWindow, setCloseInfoWindow] = useState(false)
-  
-const handleFocus = () => {
-   setCloseInfoWindow(true)
-   setTimeout(() => {
-setCloseInfoWindow(false)
-   }, 200)
+      setOpenModal(false);
+    }, 200);
   };
 
+  //this is here to circumnavigate the bug where if the info marker is open and the user tries to enter their email they are stopped after enetering one letter and redirected to the infomarker
+  // help from https://www.dhiwise.com/post/how-to-use-the-onfocus-event-in-react-for-enhanced-user-interactions
+  const [closeInfoWindow, setCloseInfoWindow] = useState(false);
+
+  const handleFocus = () => {
+    setCloseInfoWindow(true);
+    setTimeout(() => {
+      setCloseInfoWindow(false);
+    }, 200);
+  };
+
+
+  //credit https://www.youtube.com/watch?v=-YA5kORugeI
+  const handleGoogleSignUp = async () => {
+    
+    const provider = await new GoogleAuthProvider();
+
+    return signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log("result", result);
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+
+        console.log("google user", user);
+
+        Promise.all([
+          getDoc(doc(db, "users", result.user.uid)),
+          getDoc(doc(db, "employers", result.user.uid)),
+        ])
+          .then((results) =>
+         
+            navigate(
+              results[0]._document === null && results[1]._document === null
+                ? "/AddProfileInfo"
+                : ( results[0]._document !== null &&
+                  results[0]._document.data.value.mapValue.fields.isEmployer)
+                ? "/DoerMapScreen"
+                : "/NeederMapScreen"
+            )
+          )
+          .catch();
+
+        //check if user is already in DB
+        //if so, navigate accordingly
+        //if not, navigate to new profile register
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log("hello", error);
+      });
+  };
+  //credit google sign up button https://chakra-templates.vercel.app/components/social-media-buttons
+  //credit google sign in https://www.youtube.com/watch?v=-YA5kORugeI
   //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
-      <Header props={openModal}/>
+      <Header props={openModal} />
 
       <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
@@ -175,13 +231,13 @@ setCloseInfoWindow(false)
             <Center flexDirection="column">
               <Heading fontSize={"3xl"}>Join Fulfil</Heading>
               {/* <Heading fontSize={"2xl"}>post your work</Heading> */}
-             
             </Center>
             <Center>
-            <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-            Get access to contractors by posting the work you need done. Browse through contractors to find the right fit.
-          </Text>
-          </Center>
+              <Text fontSize={{ base: "md", lg: "lg" }} color={"gray.500"}>
+                Get access to contractors by posting the work you need done.
+                Browse through contractors to find the right fit.
+              </Text>
+            </Center>
             <FormControl>
               <FormLabel>Email</FormLabel>
               <Input
@@ -190,13 +246,13 @@ setCloseInfoWindow(false)
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onFocus={() => handleFocus()} 
+                onFocus={() => handleFocus()}
               />
               {emailValidationBegun === true ? (
                 <Text color="red">{validationMessage}</Text>
               ) : null}
             </FormControl>
-            <FormControl marginTop="8px">
+            <FormControl marginTop="4px">
               <FormLabel>Password</FormLabel>
 
               <InputGroup>
@@ -206,7 +262,7 @@ setCloseInfoWindow(false)
                   type={visibleToggle}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => handleFocus()} 
+                  onFocus={() => handleFocus()}
                 />
                 <InputRightElement>
                   <ViewIcon onClick={() => handlePasswordVisible()} />
@@ -216,107 +272,47 @@ setCloseInfoWindow(false)
                 <Text color="red">{passwordValidationMessage}</Text>
               ) : null}
             </FormControl>
-            <Stack spacing={6}>
+            <Stack spacing={3}>
               <Stack
                 direction={{ base: "column", sm: "row" }}
                 align={"start"}
                 justify={"space-between"}
               ></Stack>
-              <Button   bg="#01A2E8"
-                color={'white'}
+              <Button
+                bg="#01A2E8"
+                color={"white"}
                 _hover={{
-                  bg: 'blue.500',
+                  bg: "blue.500",
                 }}
                 onClick={() => validate()}
-                >
+              >
                 Sign up
               </Button>
-              <Button backgroundColor="white" onClick={() => handleOpenModal()}>Already have an account?&nbsp;<Text>Log In</Text></Button>
+              <Button
+                w={"full"}
+                variant={"outline"}
+                leftIcon={<FcGoogle />}
+                onClick={() => handleGoogleSignUp()}
+              >
+                <Center>
+                  <Text>Sign up with Google</Text>
+                </Center>
+              </Button>
+              <Button backgroundColor="white" onClick={() => handleOpenModal()}>
+                Already have an account?&nbsp;<Text>Log In</Text>
+              </Button>
+             
             </Stack>
           </Stack>
         </Flex>
         <Flex flex={1}>
-        <Box w="60vw" h="70vh" padding="2" alignContent="center">
-            <Box w="60vw" h="70vh" >
-              <NeederRegisterMapScreen props={closeInfoWindow}/>
+          <Box w="60vw" h="70vh" padding="2" alignContent="center">
+            <Box w="60vw" h="70vh">
+              <NeederRegisterMapScreen props={closeInfoWindow} />
             </Box>
           </Box>
         </Flex>
       </Stack>
-      {/* <Flex>
-        <Box w="33vw" h="90vh" alignContent="center">
-          <Center>
-            <Flex direction="column" marginLeft="120px">
-              <Center>
-                <Heading type="blackAlpha" size="lg" marginBottom="16px">
-               Create an account
-                </Heading>
-              </Center>
-             
-              <FormControl>
-                <FormLabel>Email</FormLabel>
-                <Input
-                  borderColor="grey"
-                  borderWidth=".25px"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  width="360px"
-                />
-                {emailValidationBegun === true ? (
-                  <Text color="red">{validationMessage}</Text>
-                ) : null}
-              </FormControl>
-              <FormControl marginTop="8px">
-                <FormLabel>Password</FormLabel>
-
-                <InputGroup>
-                  <Input
-                    borderColor="grey"
-                    borderWidth=".5px"
-                    type={visibleToggle}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    width="360px"
-                  />
-                  <InputRightElement>
-                    <ViewIcon onClick={() => handlePasswordVisible()} />
-                  </InputRightElement>
-                </InputGroup>
-                {passwordValidationBegun === true ? (
-                  <Text color="red">{passwordValidationMessage}</Text>
-                ) : null}
-              </FormControl>
-              <Button
-                backgroundColor="#01A2E8"
-                color="white"
-                _hover={{ bg: "#018ecb", textColor: "white" }}
-                marginTop="32px"
-                onClick={() => validate()}
-              >
-               Sign up{" "}
-                <ArrowForwardIcon
-                  marginTop="2px"
-                  marginLeft="4px"
-                  boxSize={6}
-                />
-              </Button>
-
-              
-            </Flex>
-          </Center>
-        </Box>
-        <Center>
-          <Box w="66vw" h="90vh" padding="16" alignContent="center">
-            <Box
-              backgroundImage={`url(${LadderWomanMedium})`}
-              w="66vw"
-              h="88vh"
-              marginLeft="80px"
-            ></Box>
-          </Box>
-        </Center>
-      </Flex> */}
     </>
   );
 };

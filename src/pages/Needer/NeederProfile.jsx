@@ -363,39 +363,26 @@ const NeederProfile = () => {
     <>
       <NeederHeader />
 
-      <Flex>
-        <NeederDashboard />
+      <Flex justifyContent="center">
+        <Box position="absolute" left="0">
+          <NeederDashboard />
+        </Box>
         {user ? (
           <Box
-            width="67vw"
-            // alignContent="center"
-            // justifyContent="center"
-            // display="flex"
-            // alignItems="baseline"
-            // borderWidth="2px"
-            borderColor="#E3E3E3"
-            // borderLeftWidth="4px"
-            // borderRightWidth="4px"
+            width="38vw"
+          
+         
             height="auto"
-            boxShadow="md"
+            boxShadow=""
             rounded="lg"
             padding="8"
             //   overflowY="scroll"
           >
-            <Center flexDirection="column">
-              {/* {!profilePicture ? (
-                <Avatar bg="#01A2E8" size="2xl" onClick={onOpenAvatar} />
-              ) : (
-                <Avatar
-                  bg="#01A2E8"
-                  size="2xl"
-                  src={profilePicture}
-                  onClick={onOpenAvatar}
-                />
-              )} */}
+            <Flex direction="column">
+              
               <Avatar
                 bg="#01A2E8"
-                size="2xl"
+                size="xl"
                 src={
                   profilePicture ? profilePicture : images ? images : <Avatar />
                 }
@@ -432,22 +419,7 @@ const NeederProfile = () => {
                     Update Profile Picture
                   </Button>
                         &nbsp;
-                        {/* <button onClick={onImageRemoveAll}>
-                          Remove all images
-                        </button> */}
-                        {/* {imageList.map((image, index) => (
-                          <div key={index} className="image-item">
-                            <img src={image["data_url"]} alt="" width="0" />
-                            <div className="image-item__btn-wrapper">
-                              <button onClick={() => onImageUpdate(index)}>
-                                Update
-                              </button>
-                              <button onClick={() => onImageRemove(index)}>
-                                Remove
-                              </button>
-                            </div>
-                          </div>
-                        ))} */}
+                      
                       </div>
                     )}
                   </ImageUploading>
@@ -466,11 +438,11 @@ const NeederProfile = () => {
                 </ModalContent>
               </Modal>
 
-              <Heading size="lg">
+              <Heading size="md" marginTop="4px">
                 {" "}
                 {userFirstName} {userLastName}
               </Heading>
-              <Heading size="md">
+              <Heading size="sm" marginTop="4px" >
                 {" "}
                 {userCity}, {userState}
               </Heading>
@@ -491,19 +463,17 @@ const NeederProfile = () => {
 
                 
                   <Text marginTop="8px" marginLeft="4px">({numberOfRatings} reviews)</Text>
-                </Flex>) : ( <Text marginTop="8px" marginLeft="4px">No reviews yet</Text>)}
+                </Flex>) : ( <Text marginTop="4px">No reviews yet</Text>)}
 
              
               <Flex>
-                <Heading size="lg" marginTop="16px" marginRight="545px">
+                <Heading size="md" marginTop="16px" >
                   About Me
                 </Heading>
                 <Button
                   onClick={onOpen}
-                  // position="absolute"
-                  // right="0"
                   marginTop="8px"
-                  marginRight="42px"
+                  marginLeft="auto"
                   backgroundColor="white"
                   textColor="#01A2E8"
                 >
@@ -536,54 +506,12 @@ const NeederProfile = () => {
                 </ModalContent>
               </Modal>
 
-              <Card
-                direction={{ base: "column", sm: "row" }}
-                overflow="hidden"
-                // variant="outline"
-                width="800px"
-                // borderWidth="2px"
-                // borderLeftWidth="4px"
-                // borderRightWidth="4px"
-                // borderColor="#E3E3E3"
-                // boxShadow="lg"
-                // rounded="lg"
-                height="auto"
-                // marginTop="32px"
-                // padding="6"
-              >
-                <Stack>
-                  <CardBody>
-                    <Editable
-                      textAlign="flex-start"
-                      // value={userBio ? userBio : " "}
-                      fontSize="md"
-                      height="auto"
-                      width="auto"
-                      isPreviewFocusable={false}
-                      //help from my man RubenSmn. Docs aren't clear the Editable component was the one that needed the onSubmit prop https://stackoverflow.com/questions/75431868/chakra-editable-component-does-not-submit-when-input-blurs
-                      // onSubmit={() => handleSubmit()}
-                    >
-                      {/* <Flex direction="row">
-                        <Heading size="md">Bio</Heading>
-                        <Button
-                          onClick={onOpenBio}
-                          position="absolute"
-                          right="0"
-                          top="3"
-                          marginRight="42px"
-                          backgroundColor="white"
-                          textColor="#01A2E8"
-                        >
-                          Edit
-                        </Button>
-                      </Flex> */}
-                      {/* <EditablePreview /> */}
-                      {/* Here is the custom input */}
+              
                       <Text
                         aria-multiline="true"
                         textAlign="flex-start"
                         height="auto"
-                        width="700px"
+                        
                         marginBottom="32px"
                       >
                         {userBio ? userBio : <Text>Add your bio here</Text>}
@@ -591,11 +519,8 @@ const NeederProfile = () => {
                       {/* <EditableControls />{" "} */}
 
                       {/* <EditableControls /> */}
-                    </Editable>
-                  </CardBody>
-                </Stack>
-              </Card>
-            </Center>
+                   
+            </Flex>
             {/* <Heading size="lg" marginTop="16px" marginLeft="216px">
               Posted Jobs
             </Heading>

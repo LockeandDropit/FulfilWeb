@@ -37,6 +37,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
+import { FaGoogle } from "react-icons/fa";
 import { auth, db } from "../../../firebaseConfig";
 import {
   doc,
@@ -50,6 +51,7 @@ import {
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { ViewIcon } from "@chakra-ui/icons";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 import {
   Editable,
@@ -163,6 +165,14 @@ const NeederAccountCreation = () => {
       setVisibleToggle("password");
     }
   };
+
+
+
+  const handleGoogleSignUp = async () => {
+    const provider = await new GoogleAuthProvider()
+
+    return signInWithPopup(auth, provider)
+  }
 
   return (
     <>

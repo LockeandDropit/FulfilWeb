@@ -271,7 +271,7 @@ const DoerDashboard = () => {
               navigate("/DoerMapScreen");
             }}
           >
-            My Jobs
+           Explore
           </Button>
           <Button
             fontSize="20px"
@@ -367,7 +367,7 @@ const DoerDashboard = () => {
                 </Heading>
                 <Text fontSize="lg" color={"gray.500"}>
                   Get the frist 2 months for $1/month. Then continue at
-                  $79/month.
+                  $29/month.
                 </Text>
 
                 <Text fontSize="md" color={"gray.500"}>
@@ -403,7 +403,7 @@ const DoerDashboard = () => {
                 <List spacing={3}>
                   <ListItem>
                     <ListIcon as={CheckIcon} color="#01A2E8" />
-                    Save 7% on all transaction fees
+                    Save 50% on all transaction fees
                   </ListItem>
                   <ListItem>
                     <ListIcon as={CheckIcon} color="#01A2E8" />

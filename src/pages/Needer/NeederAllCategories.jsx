@@ -537,7 +537,7 @@ const NeederAllCategories = () => {
               </Flex>
             </CardBody>
           </Card>
-          <Card maxW="sm" boxShadow=''>
+          {/* <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
                 src="/landingImages/Moving.jpg"
@@ -562,7 +562,7 @@ const NeederAllCategories = () => {
                 </Button>
               </Flex>
             </CardBody>
-          </Card>
+          </Card> */}
         </SimpleGrid>
       </Center>
            

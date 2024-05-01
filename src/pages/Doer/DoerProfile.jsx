@@ -182,6 +182,14 @@ const DoerProfile = () => {
           setPremiumCategoryThree(snapshot.data().premiumCategoryThree);
           setInitialPremiumCategoryThree(snapshot.data().premiumCategoryThree);
         }
+        if (snapshot.data().premiumCategoryFour) {
+          setPremiumCategoryFour(snapshot.data().premiumCategoryFour);
+          setInitialPremiumCategoryFour(snapshot.data().premiumCategoryFour);
+        }
+        if (snapshot.data().premiumCategoryFive) {
+          setPremiumCategoryFive(snapshot.data().premiumCategoryFive);
+          setInitialPremiumCategoryFive(snapshot.data().premiumCategoryFive);
+        }
       });
     } else {
     }
@@ -409,6 +417,8 @@ const DoerProfile = () => {
   const [premiumCategoryOne, setPremiumCategoryOne] = useState(null);
   const [premiumCategoryTwo, setPremiumCategoryTwo] = useState(null);
   const [premiumCategoryThree, setPremiumCategoryThree] = useState(null);
+  const [premiumCategoryFour, setPremiumCategoryFour] = useState(null);
+  const [premiumCategoryFive, setPremiumCategoryFive] = useState(null);
 
   //this state is held to track changes between old and new categories to delete old ones in the database.
 
@@ -417,6 +427,10 @@ const DoerProfile = () => {
   const [initialPremiumCategoryTwo, setInitialPremiumCategoryTwo] =
     useState(null);
   const [initialPremiumCategoryThree, setInitialPremiumCategoryThree] =
+    useState(null);
+    const [initialPremiumCategoryFour, setInitialPremiumCategoryFour] =
+    useState(null);
+    const [initialPremiumCategoryFive, setInitialPremiumCategoryFive] =
     useState(null);
 
   const [isUploaded, setIsUploaded] = useState(false);
@@ -435,6 +449,8 @@ const DoerProfile = () => {
       premiumCategoryOne: premiumCategoryOne ? premiumCategoryOne : null,
       premiumCategoryTwo: premiumCategoryTwo ? premiumCategoryTwo : null,
       premiumCategoryThree: premiumCategoryThree ? premiumCategoryThree : null,
+      premiumCategoryFour: premiumCategoryFour ? premiumCategoryFour : null,
+      premiumCategoryFive: premiumCategoryFive ? premiumCategoryFive : null,
     })
       .then(() => {
         //all good
@@ -442,7 +458,10 @@ const DoerProfile = () => {
         setIsUploaded(true);
         setPremiumCategoryOne(premiumCategoryOne);
         setPremiumCategoryTwo(premiumCategoryTwo);
-        setPremiumCategoryThree(premiumCategoryOne);
+        // setPremiumCategoryThree(premiumCategoryOne);
+        setPremiumCategoryThree(premiumCategoryThree)
+        setPremiumCategoryFour(premiumCategoryFour)
+        setPremiumCategoryFive(premiumCategoryFive)
       })
       .catch((error) => {
         // no bueno
@@ -490,6 +509,30 @@ const DoerProfile = () => {
           // no bueno
         });
     }
+    if (premiumCategoryFour) {
+      setDoc(doc(db, "categories", premiumCategoryFour, "Tier 1", user.uid), {
+        placeholder: "placeholder",
+      })
+        .then(() => {
+          //all good
+          setIsUploaded(true);
+        })
+        .catch((error) => {
+          // no bueno
+        });
+    }
+    if (premiumCategoryFive) {
+      setDoc(doc(db, "categories", premiumCategoryFive, "Tier 1", user.uid), {
+        placeholder: "placeholder",
+      })
+        .then(() => {
+          //all good
+          setIsUploaded(true);
+        })
+        .catch((error) => {
+          // no bueno
+        });
+    }
   };
 
   const handleGlobalCategoryRemoval = () => {
@@ -500,11 +543,15 @@ const DoerProfile = () => {
       initialPremiumCategoryOne,
       initialPremiumCategoryTwo,
       initialPremiumCategoryThree,
+      initialPremiumCategoryFour,
+      initialPremiumCategoryFive
     ];
     let newValues = [
       premiumCategoryOne,
       premiumCategoryTwo,
       premiumCategoryThree,
+      premiumCategoryFour,
+      premiumCategoryFive
     ];
 
     //credit zcoop98 & Luis Sieira https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
@@ -787,11 +834,7 @@ const DoerProfile = () => {
         {user ? (
           <Box
             width="38vw"
-            // alignContent="center"
-            // justifyContent="center"
-            // display="flex"
-            // alignItems="baseline"
-            // borderWidth="2px"
+        
             borderColor="#E3E3E3"
             // borderLeftWidth="4px"
             // borderRightWidth="4px"
@@ -877,22 +920,7 @@ const DoerProfile = () => {
                           Update Profile Picture
                         </Button>
                         &nbsp;
-                        {/* <button onClick={onImageRemoveAll}>
-                          Remove all images
-                        </button> */}
-                        {/* {imageList.map((image, index) => (
-                          <div key={index} className="image-item">
-                            <img src={image["data_url"]} alt="" width="0" />
-                            <div className="image-item__btn-wrapper">
-                              <button onClick={() => onImageUpdate(index)}>
-                                Update
-                              </button>
-                              <button onClick={() => onImageRemove(index)}>
-                                Remove
-                              </button>
-                            </div>
-                          </div>
-                        ))} */}
+                       
                       </div>
                     )}
                   </ImageUploading>
@@ -958,7 +986,6 @@ const DoerProfile = () => {
                 <Button
                   onClick={onOpenBio}
                   marginTop="8px"
-                 
                   marginLeft="auto"
                   backgroundColor="white"
                   textColor="#01A2E8"
@@ -971,7 +998,7 @@ const DoerProfile = () => {
                 aria-multiline="true"
                 textAlign="flex-start"
                 height="auto"
-                width="700px"
+          
                 marginBottom="32px"
                 placeholder="asdas"
               >
@@ -1094,11 +1121,64 @@ const DoerProfile = () => {
                                 </>
                               ) : null}
                               {userInfo.premiumCategoryThree ? (
+                                <>
                                 <ListItem>
                                   {" "}
                                   <ListIcon as={StarIcon} color="#01A2E8" />
                                   {userInfo.premiumCategoryThree}
                                 </ListItem>
+                                 {userInfo.premiumCategoryFour ? null : (
+                                  <Button
+                                    background="#01A2E8"
+                                    textColor="white"
+                                    height="36px"
+                                    _hover={{
+                                      bg: "#018ecb",
+                                      textColor: "white",
+                                    }}
+                                    ml={3}
+                                    mt={3}
+                                    onClick={onOpenCategories}
+                                  >
+                                    Add Specialty
+                                  </Button>
+                                )}
+                                </>
+                              ) : null}
+                              {userInfo.premiumCategoryFour ? (
+                                <>
+                                <ListItem>
+                                  {" "}
+                                  <ListIcon as={StarIcon} color="#01A2E8" />
+                                  {userInfo.premiumCategoryFour}
+                                </ListItem>
+                                 {userInfo.premiumCategoryFive ? null : (
+                                  <Button
+                                    background="#01A2E8"
+                                    textColor="white"
+                                    height="36px"
+                                    _hover={{
+                                      bg: "#018ecb",
+                                      textColor: "white",
+                                    }}
+                                    ml={3}
+                                    mt={3}
+                                    onClick={onOpenCategories}
+                                  >
+                                    Add Specialty
+                                  </Button>
+                                )}
+                                </>
+                              ) : null}
+                               {userInfo.premiumCategoryFive ? (
+                                <>
+                                <ListItem>
+                                  {" "}
+                                  <ListIcon as={StarIcon} color="#01A2E8" />
+                                  {userInfo.premiumCategoryFive}
+                                </ListItem>
+                                
+                                </>
                               ) : null}
                             </>
                           )}
@@ -1165,7 +1245,7 @@ const DoerProfile = () => {
                           <option value="Gutter Cleaning">
                             Gutter Cleaning
                           </option>
-                          <option value="Hvac">HVAC</option>
+                          <option value="HVAC">HVAC</option>
                           <option value="Landscaping">Landscaping</option>
                           <option value="Painting">Painting</option>
                           <option value="Plumbing">Plumbing</option>
@@ -1219,7 +1299,7 @@ const DoerProfile = () => {
                           <option value="Gutter Cleaning">
                             Gutter Cleaning
                           </option>
-                          <option value="Hvac">HVAC</option>
+                          <option value="HVAC">HVAC</option>
                           <option value="Landscaping">Landscaping</option>
                           <option value="Painting">Painting</option>
                           <option value="Plumbing">Plumbing</option>
@@ -1273,7 +1353,115 @@ const DoerProfile = () => {
                           <option value="Gutter Cleaning">
                             Gutter Cleaning
                           </option>
-                          <option value="Hvac">HVAC</option>
+                          <option value="HVAC">HVAC</option>
+                          <option value="Landscaping">Landscaping</option>
+                          <option value="Painting">Painting</option>
+                          <option value="Plumbing">Plumbing</option>
+                          <option value="Pressure Washing">
+                            Pressure Washing
+                          </option>
+                          <option value="Roofing">Roofing</option>
+                          <option value="Siding">Siding</option>
+                          <option value="Snow Removal">Snow Removal</option>
+                          <option value="Window Installation">
+                            Window Installation
+                          </option>
+                          <option value="Window Washing">Window Washing</option>
+                          <option value="Yard Work">Yard Work</option>
+                        </Select>
+                      </Flex>
+                      <Flex
+                        direction="row"
+                        marginLeft="24px"
+                        alignContent="center"
+                        alignItems="center"
+                        marginTop="8px"
+                      >
+                        <Heading size="sm">Category 4:</Heading>
+                        <Select
+                          placeholder={
+                            userInfo.premiumCategoryFour
+                              ? userInfo.premiumCategoryFour
+                              : "Choose a category"
+                          }
+                          width="240px"
+                          height="36px"
+                          marginLeft="4px"
+                          onChange={(e) =>
+                            setPremiumCategoryFour(e.target.value)
+                          }
+                        >
+                          <option value="null">Clear Selection</option>
+                          <option>--------------------------------</option>
+                          <option value="Asphalt">Asphalt</option>
+                          <option value="Carpentry">Carpentry</option>
+                          <option value="Cleaning">Cleaning</option>
+                          <option value="Concrete">Concrete</option>
+                          <option value="Drywall">Drywall</option>
+                          <option value="Electrical Work">
+                            Electrical Work
+                          </option>
+                          <option value="General Handyman">
+                            General Handyman
+                          </option>
+                          <option value="Gutter Cleaning">
+                            Gutter Cleaning
+                          </option>
+                          <option value="HVAC">HVAC</option>
+                          <option value="Landscaping">Landscaping</option>
+                          <option value="Painting">Painting</option>
+                          <option value="Plumbing">Plumbing</option>
+                          <option value="Pressure Washing">
+                            Pressure Washing
+                          </option>
+                          <option value="Roofing">Roofing</option>
+                          <option value="Siding">Siding</option>
+                          <option value="Snow Removal">Snow Removal</option>
+                          <option value="Window Installation">
+                            Window Installation
+                          </option>
+                          <option value="Window Washing">Window Washing</option>
+                          <option value="Yard Work">Yard Work</option>
+                        </Select>
+                      </Flex>
+                      <Flex
+                        direction="row"
+                        marginLeft="24px"
+                        alignContent="center"
+                        alignItems="center"
+                        marginTop="8px"
+                      >
+                        <Heading size="sm">Category 5:</Heading>
+                        <Select
+                          placeholder={
+                            userInfo.premiumCategoryFive
+                              ? userInfo.premiumCategoryFive
+                              : "Choose a category"
+                          }
+                          width="240px"
+                          height="36px"
+                          marginLeft="4px"
+                          onChange={(e) =>
+                            setPremiumCategoryFive(e.target.value)
+                          }
+                        >
+                          <option value="null">Clear Selection</option>
+                          <option>--------------------------------</option>
+                          <option value="Asphalt">Asphalt</option>
+                          <option value="Carpentry">Carpentry</option>
+                          <option value="Cleaning">Cleaning</option>
+                          <option value="Concrete">Concrete</option>
+                          <option value="Drywall">Drywall</option>
+                          <option value="Electrical Work">
+                            Electrical Work
+                          </option>
+                          <option value="General Handyman">
+                            General Handyman
+                          </option>
+                          <option value="Gutter Cleaning">
+                            Gutter Cleaning
+                          </option>
+                          <option value="HVAC">HVAC</option>
                           <option value="Landscaping">Landscaping</option>
                           <option value="Painting">Painting</option>
                           <option value="Plumbing">Plumbing</option>

@@ -16,13 +16,14 @@ import { getStorage } from "firebase/storage";
 //help from https://www.youtube.com/watch?v=2yNyiW_41H8&t=1s
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDiKB58o0T9hq3Ii6qOp3lACZuYqTa5kEk",
+  apiKey: process.env.REACT_APP_FB_API_KEY,
   authDomain: "jobit-10e3b.firebaseapp.com",
+  // authDomain: "getfulfil.com",
   projectId: "jobit-10e3b",
   storageBucket: "jobit-10e3b.appspot.com",
-  messagingSenderId: "432362513133",
-  appId: "1:432362513133:web:306cda30898f192ed262e4",
-  measurementId: "G-ZV8L01ZQQV",
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 // Initialize Firebase

@@ -29,180 +29,117 @@ const NeederDashboard = () => {
 
   const navigate = useNavigate();
 
+  //partial credit to simple sidebar code (see box) https://chakra-templates.vercel.app/navigation/sidebar
   return (
     <>
       <Box
-        height="800px"
-        width="320px"
+        // height="800px"
+        height="auto"
+        // width="320px"
+        width="280px"
         borderRadius="6"
         boxShadow="sm"
         rounded="md"
         backgroundColor="white"
       >
-        {/* <Text fontSize="24px" as="b" marginTop="4" marginLeft="2">
-            Dashboard
-          </Text> */}
-        <Center flexDirection="column">
-          {/* <Button
-              fontSize="20px"
-              as="b"
-              marginTop="8"
-              width="320px"
-              _hover={{ bg: "#01A2E8", textColor: "white" }}
-              _active={{  bg: '#dddfe2',
-              // transform: 'scale(0.98)',
-              borderColor: "#01A2E8", }}
-              onClick={() => {navigate("/DoerHome")}}
-            >
-             My Jobs (Make Accordion)
-            </Button> */}
-          <Accordion allowMultiple>
-            {/* <AccordionItem>
-              <AccordionButton
-                height="80px"
-                width="320px"
-                backgroundColor="white"
-                _expanded={{ bg: "white", color: "black" }}
-              >
-                <Button
-                marginLeft="16px"
-                  fontSize="20px"
-                  as="b"
-                  backgroundColor="white"
-                  width="320px"
-                  _hover={{ bg: "#01A2E8", textColor: "white" }}
-                  // _active={{  bg: '#dddfe2',
-                  // transform: 'scale(0.98)',
-                  // borderColor: "#01A2E8", }}
-                >
-                  My Jobs
-                </Button>
-                <AccordionIcon />
-              </AccordionButton>
-
-              <AccordionPanel pb={4}>
-                <Flex direction="column">
-                  <Button
-                          backgroundColor="white"
-                    width="320px"
-                    _hover={{ bg: "#01A2E8", textColor: "white" }}
-                    _active={{
-                      bg: "#dddfe2",
-                      // transform: 'scale(0.98)',
-                      borderColor: "#01A2E8",
-                    }}
-                    onClick={() => {
-                      navigate("/NeederInProgressList");
-                    }}
-                  >
-                    In Progress
-                  </Button>
-                 
-                  <Button
-                    width="320px"
-                    backgroundColor="white"
-                    _hover={{ bg: "#01A2E8", textColor: "white" }}
-                    _active={{
-                      bg: "#dddfe2",
-                      // transform: 'scale(0.98)',
-                      borderColor: "#01A2E8",
-                    }}
-                    onClick={() => {
-                      navigate("/NeederInReviewList");
-                    }}
-                  >
-                    In Review
-                  </Button>
-                  <Button
-                    width="320px"
-                    backgroundColor="white"
-                    _hover={{ bg: "#01A2E8", textColor: "white" }}
-                    _active={{
-                      bg: "#dddfe2",
-                      // transform: 'scale(0.98)',
-                      borderColor: "#01A2E8",
-                    }}
-                    onClick={() => {
-                      navigate("/NeederPostedList");
-                    }}
-                  >
-                   Posted
-                  </Button>
-                  <Button
-                    width="320px"
-                    backgroundColor="white"
-                    _hover={{ bg: "#01A2E8", textColor: "white" }}
-                    _active={{
-                      bg: "#dddfe2",
-                      // transform: 'scale(0.98)',
-                      borderColor: "#01A2E8",
-                    }}
-                    onClick={() => {
-                      navigate("/NeederCompletedList");
-                    }}
-                  >
-                    Completed
-                  </Button>
-                </Flex>
-              </AccordionPanel>
-            </AccordionItem> */}
-          </Accordion>
-          <Button
-            fontSize="20px"
-            as="b"
-            // marginTop="4"
-            width="320px"
-            backgroundColor="white"
-            _hover={{ bg: "#01A2E8", textColor: "white" }}
-            _active={{
-              bg: "#dddfe2",
-              transform: "scale(0.98)",
-              borderColor: "#bec3c9",
-            }}
-            onClick={() => {
+        <Flex direction="column">
+        
+         
+     
+          <Box mt={3} fontWeight="600" href="#"  onClick={() => {
               navigate("/NeederMapScreen");
-            }}
-          >
-            My Jobs
-          </Button>
-          <Button
-            fontSize="20px"
-            as="b"
-            marginTop="4"
-            backgroundColor="white"
-            width="320px"
-            _hover={{ bg: "#01A2E8", textColor: "white" }}
-            _active={{
-              bg: "#dddfe2",
-              transform: "scale(0.98)",
-              borderColor: "#bec3c9",
-            }}
-            onClick={() => {
+            }}>
+            <Flex
+              align="center"
+              p="3"
+              mx="4"
+              borderRadius="md"
+              fontSize="18px"
+              height="42px"
+              _hover={{
+                bg: "#e3e3e3",
+               
+                height: "42px"
+              }}
+            >
+              My Jobs
+            </Flex>
+          </Box>
+          <Box fontWeight="600" href="#"   onClick={() => {
+              navigate(`/NeederAllCategories`);
+            }}>
+            <Flex
+              align="center"
+              p="3"
+              mx="4"
+              borderRadius="md"
+              fontSize="18px"
+              height="42px"
+             
+              _hover={{
+                bg: "#e3e3e3",
+                height: "42px"
+              }}
+            >
+              Find A Pro
+            </Flex>
+          </Box>
+          <Box fontWeight="600" href="#"   onClick={() => {
               navigate("/NeederMessageList");
-            }}
-          >
-            Messages
-          </Button>
-          <Button
-            //   colorScheme="black"
-            fontSize="20px"
-            as="b"
-            marginTop="4"
-            backgroundColor="white"
-            width="320px"
-            _hover={{ bg: "#01A2E8", textColor: "white" }}
-            _active={{
-              bg: "#dddfe2",
-              transform: "scale(0.98)",
-              borderColor: "#bec3c9",
-            }}
-            onClick={() => {
+            }}>
+            <Flex
+              align="center"
+              p="3"
+              mx="4"
+              borderRadius="md"
+              fontSize="18px"
+              height="42px"
+              _hover={{
+                bg: "#e3e3e3",
+                height: "42px"
+              }}
+            >
+              Messages
+            </Flex>
+          </Box>
+          <Box fontWeight="600" href="#"   onClick={() => {
               navigate("/NeederProfile");
-            }}
-          >
-            Profile
-          </Button>
-        </Center>
+            }}>
+            <Flex
+              align="center"
+              p="3"
+              mx="4"
+              borderRadius="md"
+              fontSize="18px"
+              height="42px"
+              _hover={{
+                bg: "#e3e3e3",
+                height: "42px"
+             
+              }}
+            >
+             My Profile
+            </Flex>
+          </Box>
+          <Center>
+            <Button
+              marginTop="16px"
+              marginBottom="24px"
+              fontSize="18px"
+              as="b"
+              width="200px"
+              backgroundColor="#01A2E8"
+              color="white"
+            
+              _hover={{ bg: "#018ecb", textColor: "white" }}
+              onClick={() => {
+                navigate("/AddJobStart");
+              }}
+            >
+              Post A Job
+            </Button>
+          </Center>
+        </Flex>
       </Box>
     </>
   );

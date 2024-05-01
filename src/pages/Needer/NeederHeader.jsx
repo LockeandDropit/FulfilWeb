@@ -170,7 +170,10 @@ const NeederHeader = () => {
           </MenuButton>
           <MenuList>
             <MenuItem onClick={() => navigate("/NeederAccountManager")}>
-              My Account
+             Account Settings
+            </MenuItem>
+            <MenuItem onClick={() => navigate("/NeederProfile")}>
+             My Profile
             </MenuItem>
             <MenuItem onClick={() => navigate("/NeederPaymentHistory")}>
               Payment History

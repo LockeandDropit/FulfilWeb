@@ -318,7 +318,7 @@ const Header = (props) => {
                 }}     onClick={() => validate()}>
                 Sign in
               </Button>
-              <Button
+              {/* <Button
               marginTop={2}
                 w={"full"}
                 variant={"outline"}
@@ -328,7 +328,7 @@ const Header = (props) => {
                 <Center>
                   <Text>Sign in with Google</Text>
                 </Center>
-              </Button>
+              </Button> */}
               <Stack spacing={0} mt={6}>
               <Button backgroundColor="white" onClick={() => handleModalClose()}  position="relative" height="" _hover={{bg: "white"}}>
                 Don't have an account?&nbsp;<Text>Register</Text>

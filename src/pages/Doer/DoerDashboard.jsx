@@ -143,174 +143,92 @@ const DoerDashboard = () => {
   return (
     <>
       <Box
-        height="800px"
-        width="320px"
+        height="90vh"
+        width="280px"
         borderRadius="6"
         boxShadow="sm"
         rounded="md"
         backgroundColor="white"
       >
-        {/* <Text fontSize="24px" as="b" marginTop="4" marginLeft="2">
-            Dashboard
-          </Text> */}
-        <Center flexDirection="column">
-          {/* <Button
-              fontSize="20px"
-              as="b"
-              marginTop="8"
-              width="320px"
-              _hover={{ bg: "#01A2E8", textColor: "white" }}
-              _active={{  bg: '#dddfe2',
-              // transform: 'scale(0.98)',
-              borderColor: "#01A2E8", }}
-              onClick={() => {navigate("/DoerHome")}}
+        
+        <Flex direction="column">
+       
+        <Box mt={3} fontWeight="600">
+            <Flex
+              align="center"
+              p="3"
+              mx="4"
+              borderRadius="md"
+              fontSize="18px"
+              height="42px"
+             
             >
-             My Jobs (Make Accordion)
-            </Button> */}
-          <Accordion allowMultiple>
-            {/* <AccordionItem>
-              <AccordionButton
-                height="80px"
-                width="320px"
-                backgroundColor="white"
-                _expanded={{ bg: "white", color: "black" }}
-              >
-                <Button
-                marginLeft="16px"
-                  fontSize="20px"
-                  as="b"
-                  backgroundColor="white"
-                  // marginTop="8"
-                  width="320px"
-                  _hover={{ bg: "#01A2E8", textColor: "white" }}
-                  // _active={{  bg: '#dddfe2',
-                  // transform: 'scale(0.98)',
-                  // borderColor: "#01A2E8", }}
-                >
-                  My Jobs
-                </Button>
-                <AccordionIcon />
-              </AccordionButton>
-
-              <AccordionPanel pb={4}>
-                <Flex direction="column">
-                  <Button
-                    width="320px"
-                    backgroundColor="white"
-                    _hover={{ bg: "#01A2E8", textColor: "white" }}
-                    _active={{
-                      bg: "#dddfe2",
-                      // transform: 'scale(0.98)',
-                      borderColor: "#01A2E8",
-                    }}
-                    onClick={() => {
-                      navigate("/DoerInProgressList");
-                    }}
-                  >
-                    In Progress
-                  </Button>
-                  <Button
-                    width="320px"
-                    backgroundColor="white"
-                    _hover={{ bg: "#01A2E8", textColor: "white" }}
-                    _active={{
-                      bg: "#dddfe2",
-                      // transform: 'scale(0.98)',
-                      borderColor: "#01A2E8",
-                    }}
-                    onClick={() => {
-                      navigate("/DoerSavedList");
-                    }}
-                  >
-                    Saved
-                  </Button>
-                  <Button
-                    width="320px"
-                    _hover={{ bg: "#01A2E8", textColor: "white" }}
-                    backgroundColor="white"
-                    _active={{
-                      bg: "#dddfe2",
-                      // transform: 'scale(0.98)',
-                      borderColor: "#01A2E8",
-                    }}
-                    onClick={() => {
-                      navigate("/DoerInReviewList");
-                    }}
-                  >
-                    In Review
-                  </Button>
-                  <Button
-                    width="320px"
-                    backgroundColor="white"
-                    _hover={{ bg: "#01A2E8", textColor: "white" }}
-                    _active={{
-                      bg: "#dddfe2",
-                      // transform: 'scale(0.98)',
-                      borderColor: "#01A2E8",
-                    }}
-                    onClick={() => {
-                      navigate("/DoerCompletedList");
-                    }}
-                  >
-                    Completed
-                  </Button>
-                </Flex>
-              </AccordionPanel>
-            </AccordionItem> */}
-          </Accordion>
-          <Button
-            fontSize="20px"
-            as="b"
-            // marginTop="4"
-            width="320px"
-            backgroundColor="white"
-            _hover={{ bg: "#01A2E8", textColor: "white" }}
-            _active={{ backgroundColor: "#01A2E8", textColor: "white" }}
-            //  colorScheme="white"
-            onClick={() => {
+            Dashboard
+            </Flex>
+          </Box>
+          <Center>
+          <Divider width="240px"/>
+          </Center>
+        <Box mt={3} fontWeight="600" href="#"  onClick={() => {
               navigate("/DoerMapScreen");
-            }}
-          >
-           Explore
-          </Button>
-          <Button
-            fontSize="20px"
-            as="b"
-            marginTop="4"
-            width="320px"
-            backgroundColor="white"
-            _hover={{ bg: "#01A2E8", textColor: "white" }}
-            _active={{
-              bg: "#dddfe2",
-              transform: "scale(0.98)",
-              borderColor: "#bec3c9",
-            }}
-            onClick={() => {
+            }}>
+            <Flex
+              align="center"
+              p="3"
+              mx="4"
+              borderRadius="md"
+              fontSize="18px"
+              height="42px"
+              _hover={{
+                bg: "#e3e3e3",
+               
+                height: "42px"
+              }}
+            >
+              Explore
+            </Flex>
+          </Box>
+       
+          <Box fontWeight="600" href="#"   onClick={() => {
               navigate("/DoerMessageList");
-            }}
-          >
-            Messages
-          </Button>
-          <Button
-            //   colorScheme="black"
-            fontSize="20px"
-            as="b"
-            marginTop="4"
-            width="320px"
-            backgroundColor="white"
-            _hover={{ bg: "#01A2E8", textColor: "white" }}
-            _active={{
-              bg: "#dddfe2",
-              transform: "scale(0.98)",
-              borderColor: "#bec3c9",
-            }}
-            onClick={() => {
+            }}>
+            <Flex
+              align="center"
+              p="3"
+              mx="4"
+              borderRadius="md"
+              fontSize="18px"
+              height="42px"
+              _hover={{
+                bg: "#e3e3e3",
+                height: "42px"
+              }}
+            >
+              Messages
+            </Flex>
+          </Box>
+          <Box fontWeight="600" href="#"   onClick={() => {
               navigate("/DoerProfile");
-            }}
-          >
-            Profile
-          </Button>
+            }}>
+            <Flex
+              align="center"
+              p="3"
+              mx="4"
+              borderRadius="md"
+              fontSize="18px"
+              height="42px"
+              _hover={{
+                bg: "#e3e3e3",
+                height: "42px"
+             
+              }}
+            >
+             My Profile
+            </Flex>
+          </Box>
+          </Flex>
 
+          <Center flexDirection="column">
           
           {isLoading ? ( 
           <Skeleton position="absolute" bottom="16" width="240px">
@@ -321,7 +239,7 @@ const DoerDashboard = () => {
      
           </Skeleton>) : isPremium ? (<Box position="absolute" bottom="16">
              <Heading size="sm">You're a premium member!</Heading>
-            <Button
+            {/* <Button
               background="#01A2E8"
               textColor="white"
               _hover={{ bg: "#018ecb", textColor: "white" }}
@@ -330,7 +248,7 @@ const DoerDashboard = () => {
               // onClick={() => onOpen()}
             >
               Manage my Account
-            </Button> 
+            </Button>  */}
            
           </Box>) : ( <Box position="absolute" bottom="16">
              <Heading size="sm">Want to make more money?</Heading>

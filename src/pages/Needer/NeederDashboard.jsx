@@ -34,7 +34,7 @@ const NeederDashboard = () => {
     <>
       <Box
         // height="800px"
-        height="auto"
+        height="90vh"
         // width="320px"
         width="280px"
         borderRadius="6"
@@ -44,8 +44,22 @@ const NeederDashboard = () => {
       >
         <Flex direction="column">
         
-         
-     
+        <Box  fontWeight="600">
+            <Flex
+              align="center"
+              p="3"
+              mx="4"
+              borderRadius="md"
+              fontSize="18px"
+              height="42px"
+             
+            >
+            Dashboard
+            </Flex>
+          </Box>
+          <Center>
+          <Divider width="240px"/>
+          </Center>
           <Box mt={3} fontWeight="600" href="#"  onClick={() => {
               navigate("/NeederMapScreen");
             }}>
@@ -127,7 +141,7 @@ const NeederDashboard = () => {
               marginBottom="24px"
               fontSize="18px"
               as="b"
-              width="200px"
+              width="220px"
               backgroundColor="#01A2E8"
               color="white"
             

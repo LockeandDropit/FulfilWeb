@@ -94,6 +94,7 @@ const NeederAllCategories = () => {
       <NeederHeader />
 
 <Flex justifyContent="center">
+
       <Stack
         minH={"100vh"}
         direction={{ base: "column", md: "row" }}
@@ -103,9 +104,10 @@ const NeederAllCategories = () => {
         <NeederDashboard />
         </Box>
         <Flex flex={2}>
-          <Box w="60vw" h="90vh" padding="8">
+        
+          <Box w="60vw" h="90vh" padding="4">
             {/* <Center> */}
-            <Heading size="md">
+            <Heading size="lg" marginLeft={6} >
               All Categories
             </Heading>
        

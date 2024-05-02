@@ -64,8 +64,8 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-
 } from "@chakra-ui/react";
+import EmbeddedPayments from "../../../components/EmbeddedPayments";
 
 const NeederChannelHireHeader = () => {
   const navigate = useNavigate();
@@ -166,9 +166,9 @@ const NeederChannelHireHeader = () => {
   const [intermediateBlockReady, setIntermediateBlockReady] = useState(false);
   const [messageBlockReady, setMessageBlockReady] = useState(false);
   const [finalBlockReady, setFinalBlockReady] = useState(false);
-  const [isRequest, setIsRequest] = useState(null)
-  const [requestOfferMade, setRequestOfferMade] = useState(null)
-  const [requestAccepted, setRequestAccepted] = useState(null)
+  const [isRequest, setIsRequest] = useState(null);
+  const [requestOfferMade, setRequestOfferMade] = useState(null);
+  const [requestAccepted, setRequestAccepted] = useState(null);
 
   const isFirstRender = useRef(true);
 
@@ -186,19 +186,20 @@ const NeederChannelHireHeader = () => {
           doc._document.data.value.mapValue.fields.employerID.stringValue ===
             userID &&
           doc._document.data.value.mapValue.fields.jobTitle.stringValue ===
-            channel.data.name 
-            &&
-            doc._document.data.value.mapValue.fields.jobID.stringValue ===
+            channel.data.name &&
+          doc._document.data.value.mapValue.fields.jobID.stringValue ===
             channel.id
-           
         ) {
-
-          if (doc._document.data.value.mapValue.fields.isRequest &&  doc._document.data.value.mapValue.fields.requestOfferMade) {
+          if (
+            doc._document.data.value.mapValue.fields.isRequest &&
+            doc._document.data.value.mapValue.fields.requestOfferMade
+          ) {
             setRequestOfferMade(
-          doc._document.data.value.mapValue.fields.requestOfferMade.booleanValue
-          );
+              doc._document.data.value.mapValue.fields.requestOfferMade
+                .booleanValue
+            );
           }
-         
+
           // console.log("channel ID ", doc._document.data.value.mapValue.fields.channelID.stringValue, channel.cid)
           console.log("checking 2 ", doc._document.data.value.mapValue.fields);
           setFinalBlock([
@@ -230,7 +231,7 @@ const NeederChannelHireHeader = () => {
           setIsVolunteer(
             doc._document.data.value.mapValue.fields.isVolunteer.booleanValue
           );
-          
+
           setJobID(doc._document.data.value.mapValue.fields.jobID.stringValue);
           setEmployerFirstName(
             doc._document.data.value.mapValue.fields.employerFirstName
@@ -243,6 +244,47 @@ const NeederChannelHireHeader = () => {
     });
   }, [channel, userID, applicantID, isRequest]);
 
+  const [jobCompleteEmployer, setJobCompleteEmployer] = useState(null)
+  const [jobCompleteApplicant, setJobCompleteApplicant] = useState(null)
+  const [selectedJobForPayment, setSelectedJobForPayment] = useState(null);
+
+  const getPaymentData = () => {
+    const q = query(collection(db, "employers", userID, "In Review"));
+   
+      onSnapshot(q, (snapshot) => {
+        // const docRef = doc(db, "employers", employerID, "In Review", jobTitle);
+        let results = [];
+        snapshot.docs.forEach((doc) => {
+          //review what thiss does
+          if (doc.data().jobID === jobID) {        
+         setSelectedJobForPayment(doc.data())
+            }           
+          }  
+        )
+      });
+  }
+
+  useEffect(() => {
+    if (userID && jobTitle ) {
+
+      const q = query(collection(db, "employers", userID, "In Review"));
+   
+      onSnapshot(q, (snapshot) => {
+        // const docRef = doc(db, "employers", employerID, "In Review", jobTitle);
+        let results = [];
+        snapshot.docs.forEach((doc) => {
+          //review what thiss does
+          if (doc.data().jobID === jobID) {
+            console.log("got it ", doc.data())
+              setJobCompleteEmployer(doc.data().jobCompleteEmployer)
+              setJobCompleteApplicant(doc.data().jobCompleteApplicant)
+         
+            }           
+          }  
+        )
+      });
+    }},[userID, jobTitle, isHired] )
+
   console.log(channel.data.name, userID, applicantID);
 
   const [channelUsers, setChannelUsers] = useState(null);
@@ -252,7 +294,7 @@ const NeederChannelHireHeader = () => {
     setChannelUsers(channel.state.read);
   }, [channel]);
 
-//separating object with things I could not access Nenad Vracar https://stackoverflow.com/questions/45035514/split-object-into-two-properties
+  //separating object with things I could not access Nenad Vracar https://stackoverflow.com/questions/45035514/split-object-into-two-properties
 
   useEffect(() => {
     if (channelUsers) {
@@ -276,12 +318,11 @@ const NeederChannelHireHeader = () => {
     onClose: onCloseOffer,
   } = useDisclosure();
 
-
   //checking validity of docs help from DoesData https://stackoverflow.com/questions/47308159/whats-the-best-way-to-check-if-a-firestore-record-exists-if-its-path-is-known
 
   useEffect(() => {
     if (parsedUsers && userID && applicantID && jobTitle) {
-     console.log(userID)
+      console.log(userID);
       parsedUsers.forEach((parsedUser) => {
         if (parsedUser.user === userID) {
           if (parsedUser.body.unread_messages === 0) {
@@ -311,7 +352,7 @@ const NeederChannelHireHeader = () => {
             getDoc(appliedDocRef).then((snapshot) => {
               if (!snapshot.data()) {
               } else {
-                updateDoc((appliedDocRef), {
+                updateDoc(appliedDocRef, {
                   hasUnreadMessage: false,
                 })
                   .then(() => {
@@ -327,7 +368,7 @@ const NeederChannelHireHeader = () => {
             getDoc(inProgressDocRef).then((snapshot) => {
               if (!snapshot.data()) {
               } else {
-                updateDoc((inProgressDocRef), {
+                updateDoc(inProgressDocRef, {
                   hasUnreadMessage: false,
                 })
                   .then(() => {
@@ -343,7 +384,7 @@ const NeederChannelHireHeader = () => {
             getDoc(inReviewDocRef).then((snapshot) => {
               if (!snapshot.data()) {
               } else {
-                updateDoc((inReviewDocRef), {
+                updateDoc(inReviewDocRef, {
                   hasUnreadMessage: false,
                 })
                   .then(() => {
@@ -415,22 +456,15 @@ const NeederChannelHireHeader = () => {
     }
   }, [user]);
 
-  // check to see if its a Request 
+  // check to see if its a Request
   useEffect(() => {
     if (user != null && jobID) {
-      const docRef = doc(
-        db,
-        "employers",
-        user.uid,
-        "Requests",
-        jobID
-      );
+      const docRef = doc(db, "employers", user.uid, "Requests", jobID);
 
       getDoc(docRef).then((snapshot) => {
         console.log("request", snapshot.data());
         if (snapshot.data()) {
-         setIsRequest(true)
-         
+          setIsRequest(true);
         } else {
         }
       });
@@ -446,7 +480,6 @@ const NeederChannelHireHeader = () => {
     //cue push notification to user (TO DO)//
 
     const confirmedRateInt = parseInt(confirmedRate, 10);
-
 
     //this needs to be done from worker side?
 
@@ -478,7 +511,7 @@ const NeederChannelHireHeader = () => {
           onCloseFlatRate();
         } else {
         }
-       onOpenSuccess()
+        onOpenSuccess();
       })
       .catch((error) => {
         console.log(error);
@@ -511,12 +544,11 @@ const NeederChannelHireHeader = () => {
     }
   }, [isHourly]);
 
-
-const [offerModalOpen, setOfferModalOpen] = useState(false)
+  const [offerModalOpen, setOfferModalOpen] = useState(false);
 
   const handleOfferOpen = () => {
-    setOfferModalOpen(true)
-  }
+    setOfferModalOpen(true);
+  };
 
   const handleModalOpen = () => {
     if (isHourly === true) {
@@ -578,251 +610,241 @@ const [offerModalOpen, setOfferModalOpen] = useState(false)
     }
   };
 
+  const { client } = useChatContext();
 
-  
-  const { client } = useChatContext()
+  //testing event listeners
+  useEffect(() => {
+    if (client) {
+      client.on((event) => {
+        if (event.message) {
+          setTimeout(() => {
+            if (userID && jobTitle && applicantID) {
+              console.log(
+                "debug new message from logged in user",
+                event.message.user.id,
+                userID
+              );
+              if (event.message.user.id === userID) {
+                console.log("new message from logged in user");
+                newMessageFromNeeder();
+              }
+            }
+          }, 50);
+        }
 
-    //testing event listeners
-useEffect( () => {
-  if (client) {
-    client.on(event => {
-      if (event.message) {
-        setTimeout(() => {
-          if (userID && jobTitle && applicantID) {
-        console.log("debug new message from logged in user", event.message.user.id, userID)
-if (event.message.user.id === userID) {
-  console.log("new message from logged in user")
-  newMessageFromNeeder()
-}
-          }
-        }, 50)
+        // console.log('channel.state', channel);
+      });
+    }
+  }, [client, userID, jobTitle, applicantID]);
+
+  useEffect(() => {
+    if (channel) {
+      channel.on((event) => {
+        // console.log('channel event', event);
+        // console.log('channel.state', channel.state);
+      });
+    }
+  }, [channel]);
+
+  const [channelQueriedUsers, setChannelQueriedUsers] = useState(null);
+
+  useEffect(() => {
+    if (client) {
+      client.on((event) => {
+        // console.log("event", event)
+        if (event.queriedChannels) {
+          console.log("working now queried");
+          setTimeout(() => {
+            if (userID && jobTitle && applicantID) {
+              event.queriedChannels.channels[0].read.forEach((user) => {
+                console.log("unread messages", user.unread_messages);
+                if (user.user.id === userID && user.unread_messages === 0) {
+                  console.log("working now");
+                  neederMessagesRead();
+                  // console.log("working niow")
+                } else {
+                  console.log("test failed");
+                }
+              }, 50);
+            }
+          });
+          // setChannelQueriedUsers(event.queriedChannels.channels[0].read)
+        }
+
+        // console.log('channel.state', channel);
+      });
+    }
+  }, [client, userID, jobID, applicantID]);
+
+  const neederMessagesRead = () => {
+    console.log(userID, jobTitle, applicantID);
+    var appliedDocRef = doc(
+      db,
+      "employers",
+      userID,
+      "Posted Jobs",
+      jobTitle,
+      "Applicants",
+      applicantID
+    );
+    var postedDocRef = doc(db, "employers", userID, "Posted Jobs", jobTitle);
+    var inProgressDocRef = doc(
+      db,
+      "employers",
+      userID,
+      "Jobs In Progress",
+      jobTitle
+    );
+    var inReviewDocRef = doc(db, "employers", userID, "In Review", jobTitle);
+
+    getDoc(appliedDocRef).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(appliedDocRef, {
+          hasUnreadMessage: false,
+        })
+          .then(() => {
+            console.log("new message updated in Applied");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
       }
-      
-      // console.log('channel.state', channel);
     });
-  }
-}, [client, userID, jobTitle, applicantID])
-
-
-useEffect(() => {
-if (channel) {
-  channel.on(event => {
-    // console.log('channel event', event);
-    // console.log('channel.state', channel.state);
-});
-}
-}, [channel])
-
-
-const [channelQueriedUsers, setChannelQueriedUsers] = useState(null)
-
-useEffect( () => {
-  if (client ) {
-    client.on(event => {
-      // console.log("event", event)
-      if (event.queriedChannels) {
-        console.log("working now queried")
-        setTimeout(() => {
-          if ( userID && jobTitle && applicantID) {
-  event.queriedChannels.channels[0].read.forEach((user) => {
-    console.log("unread messages",user.unread_messages)
-if (user.user.id === userID && user.unread_messages === 0) {
-  console.log("working now")
-  neederMessagesRead()
-  // console.log("working niow")
-} else {
-  console.log("test failed")
-}
-},50)}
-  })
-  // setChannelQueriedUsers(event.queriedChannels.channels[0].read)
-
+    getDoc(postedDocRef).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(postedDocRef, {
+          hasUnreadMessage: false,
+        })
+          .then(() => {
+            console.log("new message updated in Posted");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
       }
-      
-      // console.log('channel.state', channel);
     });
-  }
-}, [client, userID, jobID, applicantID])
 
-
-const neederMessagesRead = () => {
-  console.log(userID, jobTitle, applicantID)
-  var appliedDocRef = doc(
-    db,
-    "employers",
-    userID,
-    "Posted Jobs", 
-    jobTitle,
-    "Applicants",
-    applicantID
-  );
-  var postedDocRef = doc(
-    db,
-    "employers",
-    userID,
-    "Posted Jobs", 
-    jobTitle,
-    
-  );
-  var inProgressDocRef = doc(
-    db,
-    "employers",
-    userID,
-    "Jobs In Progress",
-    jobTitle
-  );
-  var inReviewDocRef = doc(
-    db,
-    "employers",
-    userID,
-    "In Review",
-    jobTitle
-  );
-
-  getDoc(appliedDocRef).then((snapshot) => {
-    if (!snapshot.data()) {
-    } else {
-      updateDoc((appliedDocRef), {
-        hasUnreadMessage: false,
-      })
-        .then(() => {
-          console.log("new message updated in Applied");
+    getDoc(inProgressDocRef).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(inProgressDocRef, {
+          hasUnreadMessage: false,
         })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-    }
-  });
-  getDoc(postedDocRef).then((snapshot) => {
-    if (!snapshot.data()) {
-    } else {
-      updateDoc((postedDocRef), {
-        hasUnreadMessage: false,
-      })
-        .then(() => {
-          console.log("new message updated in Posted");
+          .then(() => {
+            console.log("new message updated in Progress");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+      }
+    });
+
+    getDoc(inReviewDocRef).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(inReviewDocRef, {
+          hasUnreadMessage: false,
         })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-    }
-  });
+          .then(() => {
+            console.log("new message updated in Review");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+      }
+    });
+  };
 
-  getDoc(inProgressDocRef).then((snapshot) => {
-    if (!snapshot.data()) {
-    } else {
-      updateDoc((inProgressDocRef), {
-        hasUnreadMessage: false,
-      })
-        .then(() => {
-          console.log("new message updated in Progress");
+  const newMessageFromNeeder = () => {
+    console.log(userID, jobTitle, applicantID);
+
+    var appliedDocRefUnread = doc(
+      db,
+      "users",
+      applicantID,
+      "Applied",
+      jobTitle
+    );
+    var inProgressDocRefUnread = doc(
+      db,
+      "users",
+      applicantID,
+      "Jobs In Progress",
+      jobTitle
+    );
+    var inReviewDocRefUnread = doc(
+      db,
+      "users",
+      applicantID,
+      "In Review",
+      jobTitle
+    );
+
+    getDoc(appliedDocRefUnread).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(appliedDocRefUnread, {
+          hasUnreadMessage: true,
         })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-    }
-  });
+          .then(() => {
+            console.log("new message updated in Applied");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+      }
+    });
 
-  getDoc(inReviewDocRef).then((snapshot) => {
-    if (!snapshot.data()) {
-    } else {
-      updateDoc((inReviewDocRef), {
-        hasUnreadMessage: false,
-      })
-        .then(() => {
-          console.log("new message updated in Review");
+    getDoc(inProgressDocRefUnread).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(inProgressDocRefUnread, {
+          hasUnreadMessage: true,
         })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-    }
-  });
-}
+          .then(() => {
+            console.log("new message updated in Progress");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+      }
+    });
 
-
-const newMessageFromNeeder = () => {
-
-  console.log(userID, jobTitle, applicantID)
-
-  var appliedDocRefUnread = doc(db, "users", applicantID, "Applied", jobTitle);
-  var inProgressDocRefUnread = doc(
-    db,
-    "users",
-    applicantID,
-    "Jobs In Progress",
-    jobTitle
-  );
-  var inReviewDocRefUnread = doc(
-    db,
-    "users",
-    applicantID,
-    "In Review",
-    jobTitle
-  );
-
-  getDoc(appliedDocRefUnread).then((snapshot) => {
-    if (!snapshot.data()) {
-    } else {
-      updateDoc((appliedDocRefUnread), {
-        hasUnreadMessage: true,
-      })
-        .then(() => {
-
-          console.log("new message updated in Applied")
+    getDoc(inReviewDocRefUnread).then((snapshot) => {
+      if (!snapshot.data()) {
+      } else {
+        updateDoc(inReviewDocRefUnread, {
+          hasUnreadMessage: true,
         })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-    }
-  });
+          .then(() => {
+            console.log("new message updated in Review");
+          })
+          .catch((error) => {
+            // no bueno
+            console.log(error);
+          });
+      }
+    });
+  };
 
-  getDoc(inProgressDocRefUnread).then((snapshot) => {
-    if (!snapshot.data()) {
-    } else {
-      updateDoc((inProgressDocRefUnread), {
-        hasUnreadMessage: true,
-      })
-        .then(() => {
-          console.log("new message updated in Progress")
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-    }
-  });
-
-  getDoc(inReviewDocRefUnread).then((snapshot) => {
-    if (!snapshot.data()) {
-    } else {
-      updateDoc((inReviewDocRefUnread), {
-        hasUnreadMessage: true,
-      })
-        .then(() => {
-          console.log("new message updated in Review")
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-    }
-  });
-}
-
-const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   setTimeout(() => {
-setIsLoading(false)
-  }, 500)
+    setIsLoading(false);
+  }, 500);
 
   return (
     <>
-      {isLoading ? ( <Card
+      {isLoading ? (
+        <Card
           boxShadow="sm"
           rounded="md"
           borderColor="#e4e4e4"
@@ -831,19 +853,50 @@ setIsLoading(false)
           marginRight="4px"
           height="120px"
         >
-          <Box alignContent="center" justifyContent="center" alignItems="center">
+          <Box
+            alignContent="center"
+            justifyContent="center"
+            alignItems="center"
+          >
             <Center>
-            <Spinner
-                      thickness="4px"
-                      speed="0.65s"
-                      emptyColor="gray.200"
-                      color="#01A2E8"
-                      size="lg"
-                      marginTop="32px"
-                    />
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="#01A2E8"
+                size="lg"
+                marginTop="32px"
+              />
             </Center>
           </Box>
-        </Card>) : isHired ? (
+        </Card>
+      ) :  isHired && !jobCompleteApplicant  ? (
+        <Card
+        boxShadow="sm"
+        rounded="md"
+        borderColor="#e4e4e4"
+        borderWidth="1px"
+        marginLeft="4px"
+        marginRight="4px"
+      >
+        <Box>
+          <Center>
+            <Flex direction="column">
+              <Box textAlign="center" marginTop="16px" marginBottom="8px">
+                <Text>You've hired this applicant for </Text>
+                <Button variant="ghost">
+                  <Text>{jobTitle}</Text>
+                </Button>
+                <Text>
+                  (Note: This applicant will mark the job complete when done,
+                  which will then enable you to pay them)
+                </Text>
+              </Box>
+            </Flex>
+          </Center>
+        </Box>
+      </Card>
+      ) : isHired  && jobCompleteApplicant ? (
         <Card
           boxShadow="sm"
           rounded="md"
@@ -856,14 +909,9 @@ setIsLoading(false)
             <Center>
               <Flex direction="column">
                 <Box textAlign="center" marginTop="16px" marginBottom="8px">
-                  <Text>You've hired this applicant for </Text>
-                  <Button variant="ghost">
-                    <Text>{jobTitle}</Text>
-                  </Button>
-                  <Text>
-                    (Note: This applicant will mark the job complete when done,
-                    which will then enable you to pay them)
-                  </Text>
+                  <Text mb={4}>{jobTitle}has been completed by {applicantFirstName}</Text>
+                  <Button mb={4} backgroundColor="#01A2E8" textColor="white"  _hover={{ bg: "#018ecb", textColor: "white" }} onClick={() => getPaymentData()}>Pay Now</Button>
+                  
                 </Box>
               </Flex>
             </Center>
@@ -881,71 +929,90 @@ setIsLoading(false)
           <Center>
             <Flex direction="column">
               <Box textAlign="center" marginTop="16px">
-                <Text>Offer Pending for</Text>
-                <Button variant="ghost">
-                  <Text>{jobTitle}</Text>
+                <Flex direction="row" textAlign="center" alignContent="center" justifyContent="center" mb={2}>
+                  {" "}
+                  <Text mt={1}>Offer Pending for</Text>
+               
+                  <Button  backgroundColor="white" textColor="#01A2E8"  height="32px" mb={2}   _hover={{ bg: "#018ecb", textColor: "white" }}>
+                    <Text>{jobTitle}</Text>
+                  </Button>{" "}
+                </Flex>
+
+                <Text>Did they reject your offer?</Text>
+             
+                <Button  backgroundColor="#01A2E8" textColor="white"  _hover={{ bg: "#018ecb", textColor: "white" }} onClick={() => handleModalOpen()} >
+                  <Text>Make New Offer</Text>
                 </Button>
               </Box>
             </Flex>
           </Center>
         </Card>
-      ) : isRequest && requestOfferMade === false ? (<Box>
-        <Card
-          boxShadow="sm"
-          rounded="md"
-          borderColor="#e4e4e4"
-          borderWidth="1px"
-          marginLeft="4px"
-          marginRight="4px"
-        >
-          <Box>
-            <Center>
-              <Flex direction="column">
-                <Box textAlign="center" marginTop="16px">
-                  <Text>Do you want to hire this person?</Text>
-                  
-                </Box>
-                <Button
-                  colorScheme="blue"
-                  marginTop="8px"
-                  marginBottom="8px"
-                  onClick={() => handleOfferOpen()}
-                >
-                  Make An Offer
-                </Button>
-                <Button variant="ghost" marginBottom="8px">
-                  No
-                </Button>
-              </Flex>
-            </Center>
+      ) : isRequest && requestOfferMade === false ? (
+        <Box>
+          <Card
+            boxShadow="sm"
+            rounded="md"
+            borderColor="#e4e4e4"
+            borderWidth="1px"
+            marginLeft="4px"
+            marginRight="4px"
+          >
+            <Box>
+              <Center>
+                <Flex direction="column">
+                  <Box textAlign="center" marginTop="16px">
+                    <Text>Do you want to hire this person?</Text>
+                  </Box>
+                  <Button
+                    colorScheme="blue"
+                    marginTop="8px"
+                    marginBottom="8px"
+                    onClick={() => handleOfferOpen()}
+                  >
+                    Make An Offer
+                  </Button>
+                  <Button variant="ghost" marginBottom="8px">
+                    No
+                  </Button>
+                </Flex>
+              </Center>
 
-            {/* {isHourly ? (
+              {/* {isHourly ? (
               <Text>${confirmedRate}/hr</Text>
             ) : isVolunteer ? (
               <Text> No Charge</Text>
             ) : (
               <Text> ${confirmedRate} total </Text>
             )} */}
-          </Box>
-        </Card>
-      </Box>) : requestOfferMade === true ? (<Box>
-        <Card
-          boxShadow="sm"
-          rounded="md"
-          borderColor="#e4e4e4"
-          borderWidth="1px"
-          marginLeft="4px"
-          marginRight="4px"
-        >
-          <Box>
-            <Center>
-              <Flex direction="column">
-                <Box textAlign="center" marginTop="16px" marginBottom="16px">
-                  <Heading size="sm" marginBottom="8px">Offer Sent!</Heading>
-                  <Text>If the person you offered this job accepts your offer these messages</Text>
-                  <Text>will be moved to the "Accepted Jobs" messaging tab.</Text>
-                </Box>
-                {/* <Button
+            </Box>
+          </Card>
+        </Box>
+      ) : requestOfferMade === true ? (
+        <Box>
+          <Card
+            boxShadow="sm"
+            rounded="md"
+            borderColor="#e4e4e4"
+            borderWidth="1px"
+            marginLeft="4px"
+            marginRight="4px"
+          >
+            <Box>
+              <Center>
+                <Flex direction="column">
+                  <Box textAlign="center" marginTop="16px" marginBottom="16px">
+                    <Heading size="sm" marginBottom="8px">
+                      Offer Sent!
+                    </Heading>
+                    <Text>
+                      If the person you offered this job accepts your offer
+                      these messages
+                    </Text>
+                    <Text>
+                      will be moved to the "Accepted Jobs" messaging tab.
+                    </Text>
+                  </Box>
+                  {/* <Button
                   colorScheme="blue"
                   marginTop="8px"
                   marginBottom="8px"
@@ -956,19 +1023,20 @@ setIsLoading(false)
                 <Button variant="ghost" marginBottom="8px">
                   No
                 </Button> */}
-              </Flex>
-            </Center>
+                </Flex>
+              </Center>
 
-            {/* {isHourly ? (
+              {/* {isHourly ? (
               <Text>${confirmedRate}/hr</Text>
             ) : isVolunteer ? (
               <Text> No Charge</Text>
             ) : (
               <Text> ${confirmedRate} total </Text>
             )} */}
-          </Box>
-        </Card>
-      </Box>) : (
+            </Box>
+          </Card>
+        </Box>
+      ) : (
         <Box>
           <Card
             boxShadow="sm"
@@ -993,7 +1061,7 @@ setIsLoading(false)
                     marginBottom="8px"
                     onClick={() => handleModalOpen()}
                   >
-                    Yes
+                    Make An Offer
                   </Button>
                   <Button variant="ghost" marginBottom="8px">
                     No
@@ -1094,53 +1162,55 @@ setIsLoading(false)
         </ModalContent>
       </Modal>
       <Modal isOpen={isOpenSuccess} onClose={onCloseSuccess} size="xl">
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Success!</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                     
-                       <Text>Your offer has been sent.</Text>
-                       <Text>You will receive a notification if the applicant accepts.</Text>
-                    </ModalBody>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Your offer has been sent.</Text>
+            <Text>
+              You will receive a notification if the applicant accepts.
+            </Text>
+          </ModalBody>
 
-                    <ModalFooter>
-                      
-                      <Button
-                        colorScheme="blue"
-                        onClick={() => onCloseSuccess()}
-                      >
-                        Continue
-                      </Button>
-                    </ModalFooter>
-                  </ModalContent>
-                </Modal>
-                <Modal isOpen={isOpenOffer} onClose={onCloseOffer} size="xl">
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Create An Offer</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                     
-                       <Text>Your offer has been sent.</Text>
-                       <Text>You will receive a notification if the applicant accepts.</Text>
-                    </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={() => onCloseSuccess()}>
+              Continue
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isOpenOffer} onClose={onCloseOffer} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Create An Offer</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Your offer has been sent.</Text>
+            <Text>
+              You will receive a notification if the applicant accepts.
+            </Text>
+          </ModalBody>
 
-                    <ModalFooter>
-                      
-                      <Button
-                        colorScheme="blue"
-                        onClick={() => onCloseOffer()}
-                      >
-                        Continue
-                      </Button>
-                    </ModalFooter>
-                  </ModalContent>
-                </Modal>
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={() => onCloseOffer()}>
+              Continue
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
-                {offerModalOpen === true ? (
-                  <CreateOfferModal props={{applicantID: applicantID, jobID: jobID, channel: channel}}/>
-                ) : (null)}
+      {offerModalOpen === true ? (
+        <CreateOfferModal
+          props={{ applicantID: applicantID, jobID: jobID, channel: channel }}
+        />
+      ) : null}
+
+{selectedJobForPayment ? (
+                <EmbeddedPayments props={selectedJobForPayment} />
+              ) : null}
+
+              
     </>
   );
 };

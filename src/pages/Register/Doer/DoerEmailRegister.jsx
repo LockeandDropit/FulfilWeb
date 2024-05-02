@@ -274,7 +274,7 @@ setCloseInfoWindow(false)
                 onClick={() => validate()}>
                 Sign up
               </Button>
-              <Button
+              {/* <Button
                 w={"full"}
                 variant={"outline"}
                 leftIcon={<FcGoogle />}
@@ -283,7 +283,7 @@ setCloseInfoWindow(false)
                 <Center>
                   <Text>Sign up with Google</Text>
                 </Center>
-              </Button>
+              </Button> */}
               <Button backgroundColor="white" onClick={() => handleOpenModal()}>Already have an account?&nbsp;<Text>Log In</Text></Button>
             </Stack>
           </Stack>

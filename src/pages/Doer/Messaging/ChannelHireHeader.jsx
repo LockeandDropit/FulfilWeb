@@ -63,6 +63,7 @@ import { Spinner } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import "stream-chat-react/dist/css/v2/index.css";
 import { useLocation } from "react-router-dom";
+import MarkCompleteModal from "./MarkCompleteModal";
 
 const ChannelHireHeader = () => {
   const [user, setUser] = useState(null);
@@ -281,7 +282,6 @@ const ChannelHireHeader = () => {
         setStreetAddress(snapshot.data().streetAddress);
         setState(snapshot.data().state);
         setZipCode(snapshot.data().zipCode);
-
         setEmployerFirstName(snapshot.data().firstName);
       });
     } else {
@@ -289,6 +289,29 @@ const ChannelHireHeader = () => {
     }
   }, [userID, employerID, jobTitle, isHired]);
 
+  useEffect(() => {
+    if (userID && jobTitle && employerID) {
+
+      const q = query(collection(db, "employers", employerID, "In Review"));
+   
+      onSnapshot(q, (snapshot) => {
+        // const docRef = doc(db, "employers", employerID, "In Review", jobTitle);
+        let results = [];
+        snapshot.docs.forEach((doc) => {
+          //review what thiss does
+          if (doc.data().jobID === jobID) {
+            console.log("got it ", doc.data())
+              setJobCompleteEmployer(doc.data().jobCompleteEmployer)
+              setJobCompleteApplicant(doc.data().jobCompleteApplicant)
+            }           
+          }  
+        )
+      });
+    }},[userID, employerID, jobTitle, isHired] )
+ 
+
+  const [jobCompleteEmployer, setJobCompleteEmployer] = useState(null)
+  const [jobCompleteApplicant, setJobCompleteApplicant] = useState(null)
   const [category, setCategory] = useState(null);
   const [businessName, setBusinessName] = useState(null);
   const [description, setDescription] = useState(null);
@@ -882,9 +905,53 @@ const ChannelHireHeader = () => {
     onOpenDetails();
   };
 
+
+  const [readyMarkComplete, setReadyMarkComplete] = useState(false)
+
+  const handleOpenMarkComplete = () => {
+    setReadyMarkComplete(true)
+    // setTimeout(() => {
+    //   setReadyMarkComplete(false)
+    // }, 200)
+  }
+
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 500);
+
   return (
     <>
-      {isHired ? (
+      {isLoading ? (
+        <Card
+          boxShadow="sm"
+          rounded="md"
+          borderColor="#e4e4e4"
+          borderWidth="1px"
+          marginLeft="4px"
+          marginRight="4px"
+          height="120px"
+        >
+          <Box
+            alignContent="center"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Center>
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="#01A2E8"
+                size="lg"
+                marginTop="32px"
+              />
+            </Center>
+          </Box>
+        </Card>
+      ) : isHired && !jobCompleteApplicant  ? (
         <Card
           boxShadow="sm"
           rounded="md"
@@ -904,10 +971,9 @@ const ChannelHireHeader = () => {
                     </Button>
                   </Box>
                 </Flex>
-                <Center>
-                  <Text marginBottom="16px">
-                    Continue chatting here as needed
-                  </Text>
+                <Center flexDirection="column">
+                  <Text mb={2}>Did you finish this job?</Text>
+                  <Button mb={4} backgroundColor="#01A2E8" textColor="white"  _hover={{ bg: "#018ecb", textColor: "white" }} onClick={() => handleOpenMarkComplete()}>Mark Complete</Button>
                 </Center>
               </Flex>
             </Center>
@@ -995,9 +1061,9 @@ const ChannelHireHeader = () => {
                 </Center>
                 <Center>
                   <Box flexDirection="row" marginTop="16px" marginBottom="8px">
-                    <Button variant="ghost" width="160px">
+                    {/* <Button variant="ghost" width="160px">
                       <Text>Decline</Text>
-                    </Button>
+                    </Button> */}
                     <Button
                       width="160px"
                       colorScheme="blue"
@@ -1031,7 +1097,27 @@ const ChannelHireHeader = () => {
             </Flex>
           </Center>
         </Card>
-      ) : (
+      ) : jobCompleteApplicant ? (  <Card
+        boxShadow="sm"
+        rounded="md"
+        borderColor="#e4e4e4"
+        borderWidth="1px"
+        marginLeft="4px"
+        marginRight="4px"
+      >
+        <Center>
+          <Flex direction="column">
+            <Box textAlign="center" marginTop="16px">
+              <Text>You've completed </Text>
+              <Button variant="ghost">
+                <Text>{jobTitle}</Text>
+              </Button>
+              <Text>You're waiting on payment from {employerFirstName}</Text>
+             
+            </Box>
+          </Flex>
+        </Center>
+      </Card>) : (
         <Box>
           <Card
             boxShadow="sm"
@@ -1142,6 +1228,9 @@ const ChannelHireHeader = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+
+      {readyMarkComplete ? (<MarkCompleteModal props={{jobTitle: jobTitle, jobID: jobID}}/>) : (null)}
     </>
   );
 };

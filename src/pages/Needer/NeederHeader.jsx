@@ -1,5 +1,5 @@
 import React from "react";
-
+import TryMe from "../../images/TryMe.jpg"
 import fulfil180 from "../../images/fulfil180.jpg";
 import { useNavigate } from "react-router-dom";
 import {
@@ -25,6 +25,8 @@ import {
   Button,
   Center,
   Spinner,
+  Box,
+  Image
 } from "@chakra-ui/react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { StreamChat } from "stream-chat";
@@ -104,9 +106,9 @@ const NeederHeader = () => {
 
   return (
     <div className="header">
-      <div className="headerLogo" onClick={() => navigate(`/NeederMapScreen`)}>
-        <img src={fulfil180} alt="Fulfil Logo"></img>
-      </div>
+      <Box   mx="4">
+      <Image src={TryMe}></Image>
+      </Box>
 
       <Flex position="absolute" right="6">
         <Menu>

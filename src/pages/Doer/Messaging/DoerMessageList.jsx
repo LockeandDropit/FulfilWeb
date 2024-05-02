@@ -686,6 +686,7 @@ const DoerMessageList = () => {
                         width="500px"
                         marginTop="8px"
                         marginBottom="16px"
+                        size="lg"
                       >
                         Messages
                       </Heading>
@@ -720,7 +721,8 @@ const DoerMessageList = () => {
                       <Heading
                         width="500px"
                         marginBottom="16px"
-                        marginTop="16px"
+                        marginTop="24px"
+                        size="lg"
                       >
                         Messages
                       </Heading>
@@ -797,7 +799,7 @@ const DoerMessageList = () => {
                         )}
 
 {requestNewMessagesLength ? (
-                          <Button onClick={() => getRequestDocs()}>
+                          <Button onClick={() => getRequestDocs()}  marginLeft={1}>
                             Requests
                             <Badge
                               variant="solid"
@@ -811,7 +813,7 @@ const DoerMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getRequestDocs()}>Requests</Button>
+                          <Button onClick={() => getRequestDocs()}  marginLeft={1}>Requests</Button>
                         )}
                       </Flex>
                       <Flex>
@@ -846,7 +848,8 @@ const DoerMessageList = () => {
                       <Heading
                         width="500px"
                         marginBottom="16px"
-                        marginTop="16px"
+                        marginTop="24px"
+                        size="lg"
                       >
                         Messages
                       </Heading>
@@ -898,7 +901,7 @@ const DoerMessageList = () => {
                           </Button>
                         )}
                         {completedNewMessagesLength ? (
-                          <Button onClick={() => getCompletedDocs()}>
+                          <Button onClick={() => getCompletedDocs()}  marginLeft={1}>
                             Completed Jobs{" "}
                             <Badge
                               variant="solid"
@@ -912,12 +915,12 @@ const DoerMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getCompletedDocs()}>
+                          <Button onClick={() => getCompletedDocs()}  marginLeft={1}>
                             Completed Jobs
                           </Button>
                         )}
                           {requestNewMessagesLength ? (
-                          <Button onClick={() => getRequestDocs()}>
+                          <Button onClick={() => getRequestDocs()}  marginLeft={1}>
                             Requests
                             <Badge
                               variant="solid"
@@ -931,7 +934,7 @@ const DoerMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getRequestDocs()}>Requests</Button>
+                          <Button onClick={() => getRequestDocs()}  marginLeft={1}>Requests</Button>
                         )}
                       </Flex>
                       <Flex>
@@ -966,7 +969,8 @@ const DoerMessageList = () => {
                       <Heading
                         width="500px"
                         marginBottom="16px"
-                        marginTop="16px"
+                        marginTop="24px"
+                        size="lg"
                       >
                         Messages
                       </Heading>
@@ -1017,7 +1021,7 @@ const DoerMessageList = () => {
                           </Button>
                         )}
                         {completedNewMessagesLength ? (
-                          <Button onClick={() => getCompletedDocs()}>
+                          <Button onClick={() => getCompletedDocs()}  marginLeft={1}>
                             Completed Jobs{" "}
                             <Badge
                               variant="solid"
@@ -1031,12 +1035,12 @@ const DoerMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getCompletedDocs()}>
+                          <Button onClick={() => getCompletedDocs()}  marginLeft={1}>
                             Completed Jobs
                           </Button>
                         )}
                         {requestNewMessagesLength ? (
-                          <Button backgroundColor="white" textColor="#01A2E8">
+                          <Button backgroundColor="white" textColor="#01A2E8"  marginLeft={1}>
                             Requests
                             <Badge
                               variant="solid"
@@ -1050,7 +1054,7 @@ const DoerMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button backgroundColor="white" textColor="#01A2E8">
+                          <Button backgroundColor="white" textColor="#01A2E8"  marginLeft={1}>
                             Requests
                           </Button>
                         )}
@@ -1087,7 +1091,8 @@ const DoerMessageList = () => {
                       <Heading
                         width="500px"
                         marginBottom="16px"
-                        marginTop="16px"
+                        marginTop="24px"
+                        size="lg"
                       >
                         Messages
                       </Heading>
@@ -1139,7 +1144,7 @@ const DoerMessageList = () => {
                           </Button>
                         )}
                         {completedNewMessagesLength ? (
-                          <Button backgroundColor="white" textColor="#01A2E8">
+                          <Button backgroundColor="white" textColor="#01A2E8"  marginLeft={1}>
                             Completed Jobs{" "}
                             <Badge
                               variant="solid"
@@ -1153,12 +1158,12 @@ const DoerMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button backgroundColor="white" textColor="#01A2E8">
+                          <Button backgroundColor="white" textColor="#01A2E8"  marginLeft={1}>
                             Completed Jobs
                           </Button>
                         )}
                         {requestNewMessagesLength ? (
-                        <Button onClick={() => getRequestDocs()}>
+                        <Button onClick={() => getRequestDocs()}  marginLeft={1}>
                             Requests
                             <Badge
                               variant="solid"
@@ -1172,7 +1177,7 @@ const DoerMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getRequestDocs()}>Requests</Button>
+                          <Button onClick={() => getRequestDocs()}  marginLeft={1}>Requests</Button>
                         )}
                       </Flex>
                       <Flex>
@@ -1186,7 +1191,7 @@ const DoerMessageList = () => {
                           {completedCIDs === null ? ( <Box width="50vw" height="80vh"><Heading size="sm" marginTop="24px" marginLeft="8px">No messages here!</Heading></Box>) : (<Channel>
                             <Box width="50vw" height="75vh">
                               <Window>
-                                {/* <ChannelHeader /> */}
+                               
                                 <ChannelHireHeader />
                                 <MessageList />
                                 <MessageInput />
@@ -1207,7 +1212,8 @@ const DoerMessageList = () => {
                         width="500px"
                         marginBottom="16px"
                         marginRight="320px"
-                        marginTop="16px"
+                        marginTop="24px"
+                        size="lg"
                       >
                         Messages
                       </Heading>
@@ -1252,7 +1258,8 @@ const DoerMessageList = () => {
                 emptyColor="gray.200"
                 color="blue.500"
                 size="xl"
-                marginTop="240px"
+                marginTop="400px"
+                marginLeft="600px"
               />
             </Center>
           )}

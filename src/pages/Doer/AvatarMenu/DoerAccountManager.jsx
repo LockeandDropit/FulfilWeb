@@ -503,7 +503,7 @@ const DoerAccountManager = () => {
                 variant="ghost"
                 position="absolute"
                 bottom="8"
-                onClick={() => handleLogOut()}
+                onClick={() => handleConfirmDelete()}
               >
                 Delete Account
               </Button>

@@ -428,6 +428,8 @@ const NeederMessageList = () => {
         snapshot.docs.forEach((doc) => {
           if (doc.data().hasUnreadMessage === true) {
             newMessages.push(1);
+          } else if (doc.data().jobCompleteApplicant === true) {
+            newMessages.push(1)
           }
         });
         if (!newMessages || !newMessages.length) {
@@ -744,18 +746,18 @@ const NeederMessageList = () => {
         <Box marginBottom="22px" marginTop="4">
           <NeederDashboard />
         </Box>
-        <Box height="90vh">
+        <Box height="80vh">
           {doneLoading ? (
             chatClient ? (
               selectedChannel ? (
                 <>
-                  <Heading width="500px" marginBottom="16px">
+                  <Heading size="lg" width="500px" marginBottom="16px">
                     Messages
                   </Heading>
 
                   <Flex marginTop="4">
                     <Chat client={chatClient}>
-                      <Box height="800px">
+                      <Box height="75vh">
                         {/* <ChannelList
                         filters={filter}
                         Paginator={InfiniteScroll}
@@ -788,9 +790,10 @@ const NeederMessageList = () => {
                   <Flex direction="column">
                     <Box marginLeft="24px">
                       <Heading
+                      size="lg"
                         width="500px"
                         marginBottom="16px"
-                        marginTop="16px"
+                       marginTop="16px"
                       >
                         Messages
                       </Heading>
@@ -870,6 +873,7 @@ const NeederMessageList = () => {
                           <Button onClick={() => getRequestDocs()}>
                             Requests
                             <Badge
+                             marginLeft={1}
                               variant="solid"
                               colorScheme="red"
                               position="absolute"
@@ -881,12 +885,12 @@ const NeederMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getRequestDocs()}>Requests</Button>
+                          <Button onClick={() => getRequestDocs()}  marginLeft={1}>Requests</Button>
                         )}
                       </Flex>
                       <Flex>
                         <Chat client={chatClient}>
-                          <Box height="800px">
+                          <Box height="75vh">
                             <ChannelList
                               filters={acceptedFilter}
                               Paginator={InfiniteScroll}
@@ -914,9 +918,11 @@ const NeederMessageList = () => {
                   <Flex direction="column">
                     <Box marginLeft="24px">
                       <Heading
+                      size="lg"
                         width="500px"
                         marginBottom="16px"
                         marginTop="16px"
+                        
                       >
                         Messages
                       </Heading>
@@ -968,7 +974,7 @@ const NeederMessageList = () => {
                           </Button>
                         )}
                         {completedNewMessagesLength ? (
-                          <Button onClick={() => getCompletedDocs()}>
+                          <Button onClick={() => getCompletedDocs()}  marginLeft={1}>
                             Completed Jobs{" "}
                             <Badge
                               variant="solid"
@@ -982,12 +988,12 @@ const NeederMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getCompletedDocs()}>
+                          <Button onClick={() => getCompletedDocs()}  marginLeft={1}>
                             Completed Jobs
                           </Button>
                         )}
                           {requestNewMessagesLength ? (
-                          <Button onClick={() => getRequestDocs()}>
+                          <Button onClick={() => getRequestDocs()}  marginLeft={1}>
                             Requests
                             <Badge
                               variant="solid"
@@ -1001,12 +1007,12 @@ const NeederMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getRequestDocs()}>Requests</Button>
+                          <Button onClick={() => getRequestDocs()}  marginLeft={1}>Requests</Button>
                         )}
                       </Flex>
                       <Flex>
                         <Chat client={chatClient}>
-                          <Box height="800px">
+                          <Box height="75vh">
                             <ChannelList
                               filters={Interviewfilter}
                               Paginator={InfiniteScroll}
@@ -1034,6 +1040,7 @@ const NeederMessageList = () => {
                   <Flex direction="column">
                     <Box marginLeft="24px">
                       <Heading
+                      size="lg"
                         width="500px"
                         marginBottom="16px"
                         marginTop="16px"
@@ -1087,7 +1094,7 @@ const NeederMessageList = () => {
                           </Button>
                         )}
                         {completedNewMessagesLength ? (
-                          <Button onClick={() => getCompletedDocs()}>
+                          <Button onClick={() => getCompletedDocs()}  marginLeft={1}>
                             Completed Jobs{" "}
                             <Badge
                               variant="solid"
@@ -1101,12 +1108,12 @@ const NeederMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getCompletedDocs()}>
+                          <Button onClick={() => getCompletedDocs()}  marginLeft={1}>
                             Completed Jobs
                           </Button>
                         )}
                         {requestNewMessagesLength ? (
-                          <Button backgroundColor="white" textColor="#01A2E8">
+                          <Button backgroundColor="white" textColor="#01A2E8"  marginLeft={1}>
                             Requests
                             <Badge
                               variant="solid"
@@ -1120,14 +1127,14 @@ const NeederMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button backgroundColor="white" textColor="#01A2E8">
+                          <Button backgroundColor="white" textColor="#01A2E8"  marginLeft={1}>
                             Requests
                           </Button>
                         )}
                       </Flex>
                       <Flex>
                         <Chat client={chatClient}>
-                          <Box height="800px">
+                          <Box height="75vh">
                             <ChannelList
                               filters={requestFilter}
                               Paginator={InfiniteScroll}
@@ -1155,6 +1162,7 @@ const NeederMessageList = () => {
                   <Flex direction="column">
                     <Box marginLeft="24px">
                       <Heading
+                      size="lg"
                         width="500px"
                         marginBottom="16px"
                         marginTop="16px"
@@ -1209,7 +1217,7 @@ const NeederMessageList = () => {
                           </Button>
                         )}
                         {completedNewMessagesLength ? (
-                          <Button backgroundColor="white" textColor="#01A2E8">
+                          <Button backgroundColor="white" textColor="#01A2E8"  marginLeft={1}>
                             Completed Jobs{" "}
                             <Badge
                               variant="solid"
@@ -1223,12 +1231,12 @@ const NeederMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button backgroundColor="white" textColor="#01A2E8">
+                          <Button backgroundColor="white" textColor="#01A2E8"  marginLeft={1}>
                             Completed Jobs
                           </Button>
                         )}
                         {requestNewMessagesLength ? (
-                        <Button onClick={() => getRequestDocs()}>
+                        <Button onClick={() => getRequestDocs()}  marginLeft={1}>
                             Requests
                             <Badge
                               variant="solid"
@@ -1242,12 +1250,12 @@ const NeederMessageList = () => {
                             </Badge>
                           </Button>
                         ) : (
-                          <Button onClick={() => getRequestDocs()}>Requests</Button>
+                          <Button onClick={() => getRequestDocs()}  marginLeft={1}>Requests</Button>
                         )}
                       </Flex>
                       <Flex>
                         <Chat client={chatClient}>
-                          <Box height="800px">
+                          <Box height="75vh">
                             <ChannelList
                               filters={completedFilter}
                               Paginator={InfiniteScroll}
@@ -1290,7 +1298,7 @@ const NeederMessageList = () => {
                       </Flex>
                       <Flex>
                         <Chat client={chatClient}>
-                          <Box height="800px">
+                          <Box height="75vh">
                             <ChannelList
                               filters={requestFilter}
                               Paginator={InfiniteScroll}
@@ -1328,7 +1336,8 @@ const NeederMessageList = () => {
                 emptyColor="gray.200"
                 color="blue.500"
                 size="xl"
-                marginTop="240px"
+                marginTop="400px"
+                marginLeft="600px"
               />
             </Center>
           )}

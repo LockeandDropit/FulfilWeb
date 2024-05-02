@@ -1,6 +1,7 @@
 import React from "react";
 
 import fulfil180 from "../../images/fulfil180.jpg";
+import TryMe from "../../images/TryMe.jpg"
 import { useNavigate } from "react-router-dom";
 import {
   Avatar,
@@ -8,6 +9,8 @@ import {
   AvatarGroup,
   Flex,
   Heading,
+  Image,
+  Box
 } from "@chakra-ui/react";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { auth, logout, db } from "../../firebaseConfig";
@@ -178,11 +181,13 @@ const DoerHeader = () => {
 
   return (
     <div className="header">
-      <div className="headerLogo" onClick={() => navigate(`/DoerMapScreen`)}>
+      {/* <div className="headerLogo" onClick={() => navigate(`/DoerMapScreen`)}>
         <img src={fulfil180} alt="Fulfil Logo"></img>
-      </div>
-
-      <Flex position="absolute" right="6">
+      </div> */}
+      <Box   mx="4">
+      <Image src={TryMe}></Image>
+      </Box>
+      <Flex position="absolute" right="6" mt={2}>
         <Heading size="md" marginTop="12px" marginRight="12px">
           Hello, {userFirstName}
         </Heading>
@@ -211,7 +216,7 @@ const DoerHeader = () => {
             </MenuItem>
 
             <MenuItem onClick={() => navigate("/DoerAccountManager")}>
-              My Account
+              Account Settings
             </MenuItem>
             {/* <MenuItem onClick={() => navigate("/DoerPaymentHistory")}>Payment History</MenuItem> */}
 

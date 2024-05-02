@@ -615,7 +615,7 @@ const DoerProfile = () => {
   const addNewUserExperience = () => {
     if (userExperienceLength === 0 || null) {
       setDoc(
-        doc(db, "users", user.uid, "User Profile Experience", "Employer1"),
+        doc(db, "users", user.uid, "User Profile Experience", addExperienceTitle),
         {
           Title: addExperienceTitle,
           Description: addExperienceDescription,
@@ -631,7 +631,7 @@ const DoerProfile = () => {
       onCloseAddExperience();
     } else if (userExperienceLength === 1) {
       setDoc(
-        doc(db, "users", user.uid, "User Profile Experience", "Employer2"),
+        doc(db, "users", user.uid, "User Profile Experience", addExperienceTitle),
         {
           Title: addExperienceTitle,
           Description: addExperienceDescription,
@@ -647,7 +647,7 @@ const DoerProfile = () => {
       onCloseAddExperience();
     } else if (userExperienceLength === 2) {
       setDoc(
-        doc(db, "users", user.uid, "User Profile Experience", "Employer3"),
+        doc(db, "users", user.uid, "User Profile Experience", addExperienceTitle),
         {
           Title: addExperienceTitle,
           Description: addExperienceDescription,
@@ -670,6 +670,52 @@ const DoerProfile = () => {
     onCloseAddExperience();
   };
 
+
+
+
+
+
+  const handleDeleteExperience = (experienceTitle) => {
+    deleteDoc(
+      doc(db, "users", user.uid, "User Profile Experience", experienceTitle),
+      {
+        
+      }
+    )
+      .then(() => {
+        //all good
+      })
+      .catch((error) => {
+        // no bueno
+      });
+
+
+      onClose()
+      
+  }
+
+  const handleDeleteQualification = (qualificationTitle) => {
+    console.log(qualificationTitle)
+    deleteDoc(
+      doc(db, "users", user.uid, "User Profile Skills", qualificationTitle),
+      {
+        
+      }
+    )
+      .then(() => {
+        //all good
+      })
+      .catch((error) => {
+        // no bueno
+      });
+
+
+      onClose2()
+      
+  }
+
+
+
   const [skillTitle1, setSkillTitle1] = useState();
   const [skillDescription, setSkillDescription] = useState();
 
@@ -685,7 +731,7 @@ const DoerProfile = () => {
 
   const updateUserQualification = (props) => {
     //submit data and update bio
-
+console.log("props", props.Title)
     updateDoc(doc(db, "users", user.uid, "User Profile Skills", props.id), {
       Title: skillTitle1 ? skillTitle1 : props.Title,
       Description: skillDescription ? skillDescription : props.Description,
@@ -705,7 +751,7 @@ const DoerProfile = () => {
 
   const addNewUserQualification = () => {
     if (userSkillsLength === 0 || null) {
-      setDoc(doc(db, "users", user.uid, "User Profile Skills", "Skill 1"), {
+      setDoc(doc(db, "users", user.uid, "User Profile Skills", skillTitle1), {
         Title: skillTitle1,
         Description: skillDescription,
       })
@@ -717,7 +763,7 @@ const DoerProfile = () => {
         });
       onCloseAddQualification();
     } else if (userSkillsLength === 1) {
-      setDoc(doc(db, "users", user.uid, "User Profile Skills", "Skill 2"), {
+      setDoc(doc(db, "users", user.uid, "User Profile Skills", skillTitle1), {
         Title: skillTitle1,
         Description: skillDescription,
       })
@@ -729,7 +775,7 @@ const DoerProfile = () => {
         });
       onCloseAddQualification();
     } else if (userSkillsLength === 2) {
-      setDoc(doc(db, "users", user.uid, "User Profile Skills", "Skill 3"), {
+      setDoc(doc(db, "users", user.uid, "User Profile Skills", skillTitle1), {
         Title: skillTitle1,
         Description: skillDescription,
       })
@@ -764,6 +810,7 @@ const DoerProfile = () => {
   const [openModalID, setOpenModalID] = useState(null);
 
   const handleOpenEditExperienceModal = (x) => {
+    
     setOpenModalID(x);
     onOpen(x);
   };
@@ -1550,23 +1597,30 @@ const DoerProfile = () => {
                       >
                         <ModalOverlay />
                         <ModalContent>
-                          <ModalHeader fontSize="16px">
-                            Edit Experience
-                          </ModalHeader>
+                        <ModalBody>
+                        <Heading size="md" marginBottom="4px">
+                      Edit Experience
+                    </Heading>
                           <ModalCloseButton />
-                          <ModalHeader>Experience Title</ModalHeader>
-                          <Textarea
+                          <Heading size="md" marginBottom="6px" mt={4} ml={1}>
+                      Title
+                    </Heading>
+                          <Input
                             defaultValue={userExperience.Title}
                             onChange={(e) =>
                               setExperienceTitle1(e.target.value)
                             }
-                          ></Textarea>
-                          <ModalHeader>Experience Length</ModalHeader>
-                          <Textarea
+                          ></Input>
+                           <Heading size="md" marginBottom="6px" mt={4} ml={1}>
+                      Length
+                    </Heading>
+                          <Input
                             defaultValue={userExperience.Years}
                             onChange={(e) => setExperienceYears(e.target.value)}
-                          ></Textarea>
-                          <ModalHeader>Experience Description</ModalHeader>
+                          ></Input>
+                           <Heading size="md" marginBottom="6px" mt={4} ml={1}>
+                      Description
+                    </Heading>
                           <Textarea
                             defaultValue={userExperience.Description}
                             onChange={(e) =>
@@ -1575,11 +1629,14 @@ const DoerProfile = () => {
                           ></Textarea>
 
                           <ModalFooter>
-                            <Button variant="ghost" mr={3} onClick={onClose}>
-                              Close
+                            <Button variant="ghost" colorScheme="red" mr={3} onClick={() => handleDeleteExperience(userExperience.Title)}>
+                              Delete
                             </Button>
                             <Button
-                              colorScheme="blue"
+                                backgroundColor="#01A2E8"
+                                color="white"
+                                width="120px"
+                                _hover={{ bg: "#018ecb", textColor: "white" }}
                               onClick={() =>
                                 updateUserExperience(userExperience)
                               }
@@ -1587,6 +1644,7 @@ const DoerProfile = () => {
                               Save
                             </Button>
                           </ModalFooter>
+                          </ModalBody>
                         </ModalContent>
                       </Modal>
                     ) : null}
@@ -1698,8 +1756,8 @@ const DoerProfile = () => {
                           ></Textarea>
 
                           <ModalFooter>
-                            <Button variant="ghost" mr={3} onClick={onClose2}>
-                              Close
+                            <Button variant="ghost" colorScheme="red" mr={3} onClick={() => handleDeleteQualification(userSkills.Title)}>
+                              Delete
                             </Button>
                             <Button
                               colorScheme="blue"

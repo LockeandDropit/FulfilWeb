@@ -51,12 +51,6 @@
       "react-app/jest"
     ]
   },
-  "hosting": {
-    "rewrites": [ {
-      "source": "**",
-      "destination": "/index.html"
-     } ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",

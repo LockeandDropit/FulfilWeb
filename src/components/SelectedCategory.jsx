@@ -63,6 +63,7 @@ import {
 } from "firebase/firestore";
 import star_corner from "../images/star_corner.png";
 import star_filled from "../images/star_filled.png";
+import { useMediaQuery } from '@chakra-ui/react'
 
 const SelectedCategory = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -234,6 +235,8 @@ const SelectedCategory = () => {
     }
   }, [selectedCategory]);
 
+  const [isDesktop] = useMediaQuery('(min-width: 500px)')
+
   //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
 
   //Card Social User PRofile Sample Template credit https://chakra-templates.vercel.app/components/cards
@@ -244,7 +247,7 @@ const SelectedCategory = () => {
       <Stack
         minH={"100vh"}
         direction={{ base: "column", md: "row" }}
-        marginLeft={16}
+        marginLeft={{base: 0, lg: 16}}
       >
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
           <Stack spacing={4} w={"full"} maxW={"md"}>
@@ -456,7 +459,10 @@ const SelectedCategory = () => {
                   </Center>
                 ))
               ) : (
-                <Text>Sorry! No {selectedCategory} pros in your area.</Text>
+                isDesktop ? (<Text>Sorry! No {selectedCategory} pros in your area.</Text>) : (
+                  null
+              )
+               
               )}
           
               

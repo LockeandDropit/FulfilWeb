@@ -252,17 +252,29 @@ const SelectedCategory = () => {
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
           <Stack spacing={4} w={"full"} maxW={"md"}>
             <Center flexDirection="column">
-              <Heading fontSize={"3xl"}>Choose from top contractors who specialize in {selectedCategory}</Heading>
+
+              {isDesktop ? (<><Heading fontSize={"3xl"}>Choose from top contractors who specialize in {selectedCategory}</Heading>
+               <Center>
+               <Text fontSize={{ base: "md", lg: "lg" }} color={"gray.500"}>
+                 Get access to contractors in your area. 
+               </Text>
+             </Center></>) : ( premiumUsers ? ( <><Heading fontSize={"3xl"}>Choose from top contractors who specialize in {selectedCategory}</Heading>
+               <Center>
+               <Text fontSize={{ base: "md", lg: "lg" }} color={"gray.500"}>
+                 Get access to contractors in your area. 
+               </Text>
+             </Center></>) : ( <><Heading mt={10} ml={2}>Sorry! No {selectedCategory} contractors in your area.</Heading> 
+               
+               <Heading size={"lg"} mt={20}>Already have an Account? Sign in</Heading>
+           </>)
+               
+              )}
+              
 
               
             </Center>
 
-            <Center>
-              <Text fontSize={{ base: "md", lg: "lg" }} color={"gray.500"}>
-                Get access to available work in your area. Find jobs that fit
-                your speciality.
-              </Text>
-            </Center>
+           
 
             <FormControl>
               <FormLabel>Email</FormLabel>
@@ -319,7 +331,7 @@ const SelectedCategory = () => {
           </Stack>
         </Flex>
         <Flex flex={2}>
-          <Box w="60vw" h="70vh" padding="8" alignContent="center">
+          <Box w={{base: "100vw", lg: "60vw"}}  h="70vh" padding="8" alignContent="center">
             <Center>
               {premiumUsers ? (
                 premiumUsers.map((premiumUser) => (
@@ -339,7 +351,7 @@ const SelectedCategory = () => {
                         src={
                           premiumUser.profilePictureResponse
                         }
-                        mb={4}
+                        mb={{base: 10, lg: 4}}
                         pos={'relative'}
                         _after={{
                           content: '""',

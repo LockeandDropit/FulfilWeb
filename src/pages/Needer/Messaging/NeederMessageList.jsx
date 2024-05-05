@@ -116,15 +116,15 @@ const NeederMessageList = () => {
 
 
   //unmute to start working
-  // useEffect(() => {
-  //   if (userID && userName && chatClient) {
-  //     chatClient.connectUser(userInfo, chatClient.devToken(userID));
-  //     console.log("userConnected!", chatClient._user.id);
-  //     console.log("what it should look like", chatClient);
-  //     setClientIsSet(true);
-  //   } else {
-  //   }
-  // }, [userID, chatClient, clientIsSet, userName]);
+  useEffect(() => {
+    if (userID && userName && chatClient) {
+      chatClient.connectUser(userInfo, chatClient.devToken(userID));
+      console.log("userConnected!", chatClient._user.id);
+      console.log("what it should look like", chatClient);
+      setClientIsSet(true);
+    } else {
+    }
+  }, [userID, chatClient, clientIsSet, userName]);
 
   const [doneLoading, setDoneLoading] = useState(false);
 

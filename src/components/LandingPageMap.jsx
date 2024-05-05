@@ -26,8 +26,8 @@ const LandingPageMap = () => {
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }} padding={2}>
        <Flex flex={1}>
         <Center>
-       <Box w="50vw" h="70vh" padding="16" alignContent="center" justifyContent="center">
-            <Box w="50vw" h="70vh" >
+       <Box w={{base: "70vw", lg: "50vw"}} h={{base: "50vh", lg: "70vh"}} padding={{base: "3 ", lg: "16" }} alignContent="center" justifyContent="center">
+            <Box w={{base: "70vw", lg: "50vw"}} h={{base: "50vh", lg: "70vh"}}>
               <LandingNeederMapScreen />
             </Box>
           </Box>

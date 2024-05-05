@@ -229,7 +229,7 @@ console.log(closeInfoWindow)
       
 
       <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-        <div style={{ height: "90vh" }}>
+        <Box w={{base: "90vw", lg: "60vw"}} h={{base: "40vh", lg: "90vh"}} ml={{base: "16px" , lg: "0px"}}>
           <Map
             defaultCenter={{ lat: defaultLat, lng: defaultLong }}
             defaultZoom={11}
@@ -411,7 +411,7 @@ console.log(closeInfoWindow)
         </ModalContent>
       </Modal>
           </Map>
-        </div>
+        </Box>
       </APIProvider>
     </div>
   );

@@ -26,13 +26,13 @@ const Categories = () => {
   };
 
   return (
-    <Box marginTop="64px" padding="0">
+    <Box marginTop={{base: "", lg: "64px"}} padding="0">
       <Center>
         <Heading>Categories</Heading>
       </Center>
 
       <Center>
-        <SimpleGrid columns={[2, null, 3]} spacing="64px" marginTop="16">
+        <SimpleGrid columns={[2, null, 3]} spacing="64px" marginTop={{base: "4", lg: "16"}}>
           <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image
@@ -41,16 +41,18 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Asphalt
                 </Heading>{" "}
                 <Button
+                  w= {{base: "72px", lg: "auto"}}
+                  h= {{base: "12px", lg: "auto"}}
                   variant="ghost"
                   colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                 marginLeft= {{base: "", lg: "auto"}}
+              
                   onClick={() => handleNavigation("Asphalt")}
                 >
                   See More
@@ -66,16 +68,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Carpentry
                 </Heading>{" "}
                 <Button
+                  w= {{base: "72px", lg: "auto"}}
+                  h= {{base: "12px", lg: "auto"}}
                   variant="ghost"
                   colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                 marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Carpentry")}
                 >
                   See More
@@ -92,16 +95,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Cleaning
                 </Heading>{" "}
                 <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                 w= {{base: "72px", lg: "auto"}}
+                 h= {{base: "12px", lg: "auto"}}
+                 variant="ghost"
+                 colorScheme="blue"
+                marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Cleaning")}
                 >
                   See More
@@ -117,16 +121,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Concrete
                 </Heading>{" "}
                 <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                 w= {{base: "72px", lg: "auto"}}
+                 h= {{base: "12px", lg: "auto"}}
+                 variant="ghost"
+                 colorScheme="blue"
+                marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Concrete")}
                 >
                   See More
@@ -139,16 +144,17 @@ const Categories = () => {
             <CardBody>
               <Image src="/landingImages/Drywall.jpg" borderRadius="lg" />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Drywall
                 </Heading>{" "}
                 <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                 w= {{base: "72px", lg: "auto"}}
+                 h= {{base: "12px", lg: "auto"}}
+                 variant="ghost"
+                 colorScheme="blue"
+                marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Drywall")}
                 >
                   See More
@@ -164,16 +170,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Electrical Work
                 </Heading>{" "}
                 <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                 w= {{base: "72px", lg: "auto"}}
+                 h= {{base: "12px", lg: "auto"}}
+                 variant="ghost"
+                 colorScheme="blue"
+                marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Electrical Work")}
                 >
                   See More
@@ -189,16 +196,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   General Handyman
                 </Heading>{" "}
                 <Button
+                  w= {{base: "72px", lg: "auto"}}
+                  h= {{base: "12px", lg: "auto"}}
                   variant="ghost"
                   colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                 marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("General Handyman")}
                 >
                   See More
@@ -214,16 +222,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Gutter Cleaning
                 </Heading>{" "}
                 <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                   w= {{base: "72px", lg: "auto"}}
+                   h= {{base: "12px", lg: "auto"}}
+                   variant="ghost"
+                   colorScheme="blue"
+                  marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Gutter Cleaning")}
                 >
                   See More
@@ -239,16 +248,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   HVAC
                 </Heading>{" "}
                 <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                w= {{base: "72px", lg: "auto"}}
+                h= {{base: "12px", lg: "auto"}}
+                variant="ghost"
+                colorScheme="blue"
+               marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("HVAC")}
                 >
                   See More
@@ -264,16 +274,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Landscaping
                 </Heading>{" "}
                 <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                   w= {{base: "72px", lg: "auto"}}
+                   h= {{base: "12px", lg: "auto"}}
+                   variant="ghost"
+                   colorScheme="blue"
+                  marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Landscaping")}
                 >
                   See More
@@ -289,16 +300,18 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Painting
                 </Heading>{" "}
                 <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                   w= {{base: "72px", lg: "auto"}}
+                   h= {{base: "12px", lg: "auto"}}
+                   variant="ghost"
+                   colorScheme="blue"
+                  marginLeft= {{base: "", lg: "auto"}}
+                 
                   onClick={() => handleNavigation("Painting")}
                 >
                   See More
@@ -314,16 +327,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Plumbing
                 </Heading>{" "}
                 <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                 w= {{base: "72px", lg: "auto"}}
+                 h= {{base: "12px", lg: "auto"}}
+                 variant="ghost"
+                 colorScheme="blue"
+                marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Plumbing")}
                 >
                   See More
@@ -339,16 +353,18 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Pressure Washing
                 </Heading>{" "}
                 <Button
+
+                  w= {{base: "72px", lg: "auto"}}
+                  h= {{base: "12px", lg: "auto"}}
                   variant="ghost"
                   colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                 marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Pressure Washing")}
                 >
                   See More
@@ -364,16 +380,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Roofing
                 </Heading>{" "}
                 <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                   w= {{base: "72px", lg: "auto"}}
+                   h= {{base: "12px", lg: "auto"}}
+                   variant="ghost"
+                   colorScheme="blue"
+                  marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Roofing")}
                 >
                   See More
@@ -389,16 +406,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Snow Removal
                 </Heading>{" "}
                 <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                   w= {{base: "72px", lg: "auto"}}
+                   h= {{base: "12px", lg: "auto"}}
+                   variant="ghost"
+                   colorScheme="blue"
+                  marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Snow Removal")}
                 >
                   See More
@@ -415,16 +433,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Window Installation
                 </Heading>{" "}
                 <Button
+                  w= {{base: "72px", lg: "auto"}}
+                  h= {{base: "12px", lg: "auto"}}
                   variant="ghost"
                   colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                 marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Window Installation")}
                 >
                   See More
@@ -440,16 +459,17 @@ const Categories = () => {
                 borderRadius="lg"
               />
 
-              <Flex direction="row">
+              <Flex direction={{base: "column", lg: "row" }}>
                 {" "}
                 <Heading size="md" marginTop="8px">
                   Yard Work
                 </Heading>{" "}
                 <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
+                 w= {{base: "72px", lg: "auto"}}
+                 h= {{base: "12px", lg: "auto"}}
+                 variant="ghost"
+                 colorScheme="blue"
+                marginLeft= {{base: "", lg: "auto"}}
                   onClick={() => handleNavigation("Yard Work")}
                 >
                   See More
@@ -457,32 +477,7 @@ const Categories = () => {
               </Flex>
             </CardBody>
           </Card>
-          {/* <Card maxW="sm" boxShadow=''>
-            <CardBody>
-              <Image
-                src="/landingImages/Moving.jpg"
-                alt="Green double couch with wooden legs"
-                borderRadius="lg"
-                height="240px"
-              />
-
-              <Flex direction="row">
-                {" "}
-                <Heading size="md" marginTop="8px">
-                  See More
-                </Heading>{" "}
-                <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  position="absolute"
-                  right="4"
-                  onClick={() => handleNavigation("Concrete")}
-                >
-                  See More
-                </Button>
-              </Flex>
-            </CardBody>
-          </Card> */}
+         
         </SimpleGrid>
       </Center>
     </Box>

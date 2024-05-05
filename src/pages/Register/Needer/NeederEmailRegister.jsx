@@ -306,8 +306,8 @@ const NeederEmailRegister = () => {
           </Stack>
         </Flex>
         <Flex flex={1}>
-          <Box w="60vw" h="70vh" padding="2" alignContent="center">
-            <Box w="60vw" h="70vh">
+          <Box w={{base: "70vw", lg: "60vw"}} h={{base: "50vh", lg: "70vh"}} padding="2" alignContent="center">
+            <Box w={{base: "70vw" , lg: "60vw"}} h={{base: "50vh", lg: "70vh"}}>
               <NeederRegisterMapScreen props={closeInfoWindow} />
             </Box>
           </Box>

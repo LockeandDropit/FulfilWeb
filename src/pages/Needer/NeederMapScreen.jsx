@@ -761,7 +761,7 @@ const handleCloseInfoWindow = () => {
         <NeederDashboard />
 
         <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-          <div style={{ height: "90vh", width: "93vw" }}>
+          <Box  h={{base: "90vh", lg: "92vh"}} w={{base: "100vw", lg: "93vw"}}>
             <Map
            
             //   defaultCenter={{ lat: defaultLat, lng: defaultLong }}
@@ -1871,7 +1871,7 @@ motionPreset="slideInBottom"
 
               {firstVisitModalVisible ? (<NewVisitModal />) : null}
             </Map>
-          </div>
+          </Box>
         </APIProvider>
       </Flex>
     </div>

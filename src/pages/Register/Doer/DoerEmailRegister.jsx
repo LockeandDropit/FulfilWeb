@@ -211,7 +211,7 @@ setCloseInfoWindow(false)
     <>
       <Header props={openModal}/>
  
-      <Stack minH={"100vh"} direction={{ base: "column", md: "row" }} marginLeft={16}>
+      <Stack minH={"100vh"} direction={{ base: "column", md: "row" }} marginLeft={{base: 0, lg: 16}}>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
           <Stack spacing={4} w={"full"} maxW={"md"} >
             <Center flexDirection="column">
@@ -260,7 +260,7 @@ setCloseInfoWindow(false)
                 <Text color="red">{passwordValidationMessage}</Text>
               ) : null}
             </FormControl>
-            <Stack spacing={6}>
+            <Stack spacing={{base: 1, lg: 6}}>
               <Stack
                 direction={{ base: "column", sm: "row" }}
                 align={"start"}
@@ -274,7 +274,7 @@ setCloseInfoWindow(false)
                 onClick={() => validate()}>
                 Sign up
               </Button>
-              {/* <Button
+              <Button
                 w={"full"}
                 variant={"outline"}
                 leftIcon={<FcGoogle />}
@@ -283,17 +283,23 @@ setCloseInfoWindow(false)
                 <Center>
                   <Text>Sign up with Google</Text>
                 </Center>
-              </Button> */}
+              </Button>
               <Button backgroundColor="white" onClick={() => handleOpenModal()}>Already have an account?&nbsp;<Text>Log In</Text></Button>
             </Stack>
           </Stack>
         </Flex>
         <Flex flex={2}>
-        <Box w="60vw" h="70vh" padding="8" alignContent="center">
-            <Box w="60vw" h="70vh" >
+        <Box w={{base: "70vw", lg: "60vw"}} h={{base: "50vh", lg: "70vh"}} padding="2"  alignContent="center">
+            <Box w={{base: "70vw" , lg: "60vw"}} h={{base: "50vh", lg: "70vh"}} >
               <MapScreen props={closeInfoWindow}/>
             </Box>
           </Box>
+{/* 
+          <Box w="60vw" h="70vh" padding="8" alignContent="center">
+            <Box w="60vw" h="70vh" >
+              <MapScreen props={closeInfoWindow}/>
+            </Box>
+          </Box> */}
           
         </Flex>
       </Stack>

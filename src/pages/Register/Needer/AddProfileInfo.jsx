@@ -208,7 +208,7 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
       <Flex>
         <Center>
           <Box
-            width="60vw"
+            w={{base: "100vw", lg: "60vw"}}
             // alignContent="center"
             // justifyContent="center"
             // display="flex"
@@ -222,7 +222,8 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
             paddingLeft="8"
             paddingTop="8"
             paddingRight="8"
-            marginLeft="96"
+         
+            ml={{base: 0, lg: "96"}}
            
             //   overflowY="scroll"
           >
@@ -236,17 +237,18 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                     borderWidth=".5px"
                     placeholder={firstName ? firstName : "First Name"}
                     defaultValue={firstName ? firstName : null}
-                    width="640px"
+                    
+                    w={{base: "85vw", lg: "640px"}}
                     onChange={(e) => setFirstName(e.target.value)}
                   />
-                  <FormLabel marginTop="8">Last Name</FormLabel>
+                  <FormLabel marginTop="4">Last Name</FormLabel>
                   <Input
             
                     borderColor="black"
                     borderWidth=".5px"
                     placeholder={lastName ? lastName : "Last Name"}
                     defaultValue={lastName ? lastName : null}
-                    width="640px"
+                    w={{base: "85vw", lg: "640px"}}
                     onChange={(e) => setLastName(e.target.value)}
                   />
                 </FormControl>
@@ -256,7 +258,7 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                     placeholder="City"
                     borderColor="black"
                     borderWidth=".5px"
-                    width="640px"
+                    w={{base: "85vw", lg: "640px"}}
                     onChange={(e) => setCity(e.target.value)}
                   />
                 </FormControl>
@@ -266,14 +268,14 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                     placeholder="State"
                     borderColor="black"
                     borderWidth=".5px"
-                    width="640px"
+                    w={{base: "85vw", lg: "640px"}}
                     onChange={(e) => setState(e.target.value)}
                   />
                 </FormControl>
                 <Box marginTop="32px">
 
                 <Flex direction="row"> <Checkbox   isChecked={termsOfService} 
-          onChange={(e) => setTermsOfService(e.target.checked)}></Checkbox> <Text marginTop="8px" marginLeft="4px"> I have read and agree to the </Text><Button backgroundColor="white" textColor="#01A2E8" _hover={{backgroundColor: "white", textColor: "#01A2E8"}} onClick={() => onOpenTOS()}>Terms and Conditions</Button></Flex>
+          onChange={(e) => setTermsOfService(e.target.checked)}></Checkbox> <Text marginTop="8px" marginLeft="4px"> I have read and agree to the <Button backgroundColor="white" textColor="#01A2E8" _hover={{backgroundColor: "white", textColor: "#01A2E8"}} w={{base: "160px", lg: "auto"}} onClick={() => onOpenTOS()}>Terms and Conditions</Button></Text></Flex>
                 <Flex direction="row"> <Checkbox isChecked={privacyPolicy}
           onChange={(e) => setPrivacyPolicy(e.target.checked)}></Checkbox> <Text marginLeft="4px" marginTop="8px"> I have read and agree to the </Text><Button backgroundColor="white" textColor="#01A2E8" _hover={{backgroundColor: "white", textColor: "#01A2E8"}}  onClick={() => onOpen()}>Privacy Policy</Button></Flex>
                 <Flex direction="row"> <Checkbox isChecked={ageAgreement}
@@ -286,7 +288,8 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                   marginTop="48px"
                   // bottom="2"
                   // right="500"
-                  left="400px"
+              
+                  left={{base: "0", lg: "400px"}}
                   onClick={() => checkLength()}
                   // onClick={() => testButtonNavigate()}
                 >

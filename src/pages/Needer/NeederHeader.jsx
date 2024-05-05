@@ -1,5 +1,5 @@
 import React from "react";
-import TryMe from "../../images/TryMe.jpg"
+import TryMe from "../../images/TryMe.jpg";
 import fulfil180 from "../../images/fulfil180.jpg";
 import { useNavigate } from "react-router-dom";
 import {
@@ -26,19 +26,29 @@ import {
   Center,
   Spinner,
   Box,
-  Image
+  Image,
 } from "@chakra-ui/react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { StreamChat } from "stream-chat";
+import { useMediaQuery } from "@chakra-ui/react";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
 
 const NeederHeader = () => {
   const navigate = useNavigate();
   //validate & set current user
   const [user, setUser] = useState();
 
-  //hide this
-  const apiKey = "gheexx2834gr";
-  const chatClient = new StreamChat(apiKey);
+  const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
 
   const [loggingOut, setLoggingOut] = useState(false);
 
@@ -104,78 +114,188 @@ const NeederHeader = () => {
     });
   };
 
+  const [isDesktop] = useMediaQuery("(min-width: 500px)");
+
+  //drawer
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
-    <div className="header">
-      <Box   mx="4">
-      <Image src={TryMe}></Image>
-      </Box>
+    <Box
+      flexDirection="row"
+      display="flex"
+      alignContent="center"
+      alignItems="center"
+    >
+      {isDesktop ? (
+        <Box mx="4">
+          <Image src={TryMe}></Image>
+        </Box>
+      ) : (
+        <>
+          <HamburgerIcon onClick={() => onOpen()} ml={4} mt={4}/>{" "}
+          <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader>Dashboard</DrawerHeader>
 
-      <Flex position="absolute" right="6">
-        <Menu>
-          <MenuButton
-            as={Button}
-            backgroundColor="white"
-            marginTop="16px"
+              <DrawerBody>
+                <Box
+                  // height="800px"
+
+                  // width="320px"
+                  // width="280px"
+                  borderRadius="6"
+                  boxShadow="sm"
+                  rounded="md"
+                  backgroundColor="white"
+                >
+                  <Flex direction="column">
+                    <Box
+                      mt={3}
+                      fontWeight="600"
+                      href="#"
+                      onClick={() => {
+                        navigate("/NeederMapScreen");
+                      }}
+                    >
+                      <Flex
+                        align="center"
+                        p="3"
+                        mx="4"
+                        borderRadius="md"
+                        fontSize="18px"
+                        height="42px"
+                        _hover={{
+                          bg: "#e3e3e3",
+
+                          height: "42px",
+                        }}
+                      >
+                        My Jobs
+                      </Flex>
+                    </Box>
+                    <Box
+                      fontWeight="600"
+                      href="#"
+                      onClick={() => {
+                        navigate(`/NeederAllCategories`);
+                      }}
+                    >
+                      <Flex
+                        align="center"
+                        p="3"
+                        mx="4"
+                        borderRadius="md"
+                        fontSize="18px"
+                        height="42px"
+                        _hover={{
+                          bg: "#e3e3e3",
+                          height: "42px",
+                        }}
+                      >
+                        Find A Pro
+                      </Flex>
+                    </Box>
+                    <Box
+                      fontWeight="600"
+                      href="#"
+                      onClick={() => {
+                        navigate("/NeederMessageList");
+                      }}
+                    >
+                      <Flex
+                        align="center"
+                        p="3"
+                        mx="4"
+                        borderRadius="md"
+                        fontSize="18px"
+                        height="42px"
+                        _hover={{
+                          bg: "#e3e3e3",
+                          height: "42px",
+                        }}
+                      >
+                        Messages
+                      </Flex>
+                    </Box>
+                    <Box
+                      fontWeight="600"
+                      href="#"
+                      onClick={() => {
+                        navigate("/NeederProfile");
+                      }}
+                    >
+                      <Flex
+                        align="center"
+                        p="3"
+                        mx="4"
+                        borderRadius="md"
+                        fontSize="18px"
+                        height="42px"
+                        _hover={{
+                          bg: "#e3e3e3",
+                          height: "42px",
+                        }}
+                      >
+                        My Profile
+                      </Flex>
+                    </Box>
+                    <Center>
+                      <Button
+                        marginTop="16px"
+                        marginBottom="24px"
+                        fontSize="18px"
+                        as="b"
+                        width="220px"
+                        backgroundColor="#01A2E8"
+                        color="white"
+                        _hover={{ bg: "#018ecb", textColor: "white" }}
+                        onClick={() => {
+                          navigate("/AddJobStart");
+                        }}
+                      >
+                        Post A Job
+                      </Button>
+                    </Center>
+                  </Flex>
+                </Box>
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
+        </>
+      )}
+
+      <Box marginLeft="auto" alignContent="center" alignItems="center">
+        {isDesktop ? null : (
+          <Button
+            backgroundColor="#01A2E8"
+            color="white"
+            _hover={{ bg: "#018ecb", textColor: "white" }}
+            marginTop="24px"
             marginRight="24px"
+            height="36px"
+            onClick={() => navigate("/AddJobStart")}
           >
-            Find A Pro
-          </MenuButton>
-          <MenuList>
-            <MenuGroup title="Popular Categories">
-              <Flex direction="row"></Flex>
-              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Cleaning"}})}>Cleaning</MenuItem>
-              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Drywall"}})}>Drywall</MenuItem>
-              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Electrical Work"}})}>Electrical Work</MenuItem>
-              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "General Handyman"}})}>General Handyman</MenuItem>
-
-              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Landscaping"}})}>Landscaping</MenuItem>
-              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Painting"}})}>Painting</MenuItem>
-              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Plumbing"}})}>Plumbing</MenuItem>
-              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Roofing"}})}>Roofing</MenuItem>
-              <MenuItem onClick={() => navigate(`/NeederSelectedCategory`, {state: {category: "Yard Work"}})}>Yard Work</MenuItem>
-              <MenuItem onClick={() => navigate(`/NeederAllCategories`)}>See All</MenuItem>
-            </MenuGroup>
-          </MenuList>
-        </Menu>
-
-        <Button
-          backgroundColor="#01A2E8"
-          color="white"
-          _hover={{ bg: "#018ecb", textColor: "white" }}
-          marginTop="16px"
-          marginRight="24px"
-          height="36px"
-          onClick={() => navigate("/AddJobStart")}
-        >
-          Post A Job
-        </Button>
-        {/* <Button
-          backgroundColor="white"
-          marginTop="16px"
-          marginRight="24px"
-          onClick={() => navigate("/NeederEmailRegister")}
-        >
-          Find a Pro
-        </Button> */}
-        {/* <Heading size="md" marginTop="20px" marginRight="12px">
-          Hello, {userFirstName}
-        </Heading> */}
+            Post A Job
+          </Button>
+        )}
 
         <Menu>
           <MenuButton>
             <Avatar
               bg="#01A2E8"
-              marginRight="16px"
-              marginTop="8px"
+              mt={{ base: "1px", lg: 2 }}
+              mr={{ base: "16px", lg: "24px" }}
               src={profilePicture ? profilePicture : <Avatar />}
             />
           </MenuButton>
           <MenuList>
             <MenuItem onClick={() => navigate("/NeederAccountManager")}>
-             Account Settings
+              Account Settings
             </MenuItem>
             <MenuItem onClick={() => navigate("/NeederProfile")}>
-             My Profile
+              My Profile
             </MenuItem>
             <MenuItem onClick={() => navigate("/NeederPaymentHistory")}>
               Payment History
@@ -199,6 +319,7 @@ const NeederHeader = () => {
                   colorScheme="red"
                   height="32px"
                   marginTop="8px"
+              
                   onClick={() => handleLogOut()}
                 >
                   Log Out
@@ -207,8 +328,8 @@ const NeederHeader = () => {
             )}
           </MenuList>
         </Menu>
-      </Flex>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

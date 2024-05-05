@@ -602,26 +602,26 @@ const EditPostedJob = () => {
     <>
       <NeederHeader />
 
-      <Flex>
-        <NeederDashboard />
-
+      <Flex justifyContent="center" >
+        <Box position="absolute" left="0">
+          <NeederDashboard />
+        </Box>
         <Box
-          width="67vw"
-          // alignContent="center"
-          // justifyContent="center"
-          // display="flex"
-          // alignItems="baseline"
+         w={{base: "100vw", lg: "36vw"}}
+         alignItems="center"
+          alignContent="center"
+          justifyContent="center"
 
           borderColor="#E3E3E3"
-          height="auto"
+          height={{base: "100vh", lg: "auto"}}
           // boxShadow="md"
           rounded="lg"
           // padding="8"
           paddingLeft="8"
           paddingTop="8"
           paddingRight="8"
-          marginLeft="48"
-          marginRight="16"
+        
+      
           //   overflowY="scroll"
         >
           {isLoading ? (
@@ -644,7 +644,7 @@ const EditPostedJob = () => {
                 <Text>{jobTitle} </Text>
               </FormControl>
               <FormLabel marginTop="4">Location (can not be edited)</FormLabel>
-              <Box width="560px">
+              <Box >
                 <Text>
                   {streetAddress}, {city}, {state}
                 </Text>
@@ -655,7 +655,7 @@ const EditPostedJob = () => {
                 </FormLabel>
                 <Select
                   placeholder={jobCategory ? jobCategory : "choose a category"}
-                  width="560px"
+                 
                   onChange={(e) => setJobCategory(e.target.value)}
                 >
                   <option value="asphalt">Asphalt</option>
@@ -689,7 +689,7 @@ const EditPostedJob = () => {
                   placeholder={
                     jobFrequency === true ? "One Time" : "Regular Need"
                   }
-                  width="560px"
+                 
                   onChange={(e) => setJobFrequency(e.target.value)}
                 >
                   <option value="Regular Need">Regular Need</option>
@@ -703,7 +703,7 @@ const EditPostedJob = () => {
               </FormLabel>
               <Select
                 placeholder={payType === true ? "Hourly" : "Fixed Amount"}
-                width="560px"
+              
                 onChange={(e) => setPayType(e.target.value)}
               >
                 <option value="Hourly">Hourly</option>

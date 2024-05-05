@@ -23,16 +23,21 @@ import {
 } from "@chakra-ui/react";
 
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "@chakra-ui/react";
+
 
 const NeederDashboard = () => {
   const isOpen = true;
 
   const navigate = useNavigate();
 
+  const [isDesktop] = useMediaQuery("(min-width: 500px)");
+
   //partial credit to simple sidebar code (see box) https://chakra-templates.vercel.app/navigation/sidebar
   return (
     <>
-      <Box
+
+    {isDesktop ? (<Box
         // height="800px"
         height="90vh"
         // width="320px"
@@ -154,7 +159,8 @@ const NeederDashboard = () => {
             </Button>
           </Center>
         </Flex>
-      </Box>
+      </Box>) : (null)}
+      
     </>
   );
 };

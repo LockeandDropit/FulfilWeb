@@ -715,7 +715,8 @@ const AddJobStart = () => {
           <NeederDashboard />
         </Box>
         <Box
-          width="36vw"
+       
+          w={{base: "100vw", lg: "36vw"}}
           alignItems="center"
           alignContent="center"
           justifyContent="center"
@@ -723,15 +724,15 @@ const AddJobStart = () => {
           // alignItems="baseline"
 
           borderColor="#E3E3E3"
-          height="auto"
+          height={{base: "100vh", lg: "auto"}}
           // boxShadow="md"
           rounded="lg"
           // padding="8"
           paddingLeft="8"
           paddingTop="8"
           paddingRight="8"
-          marginLeft="48"
-          marginRight="16"
+          marginLeft={{base: " 0", lg: "0"}}
+         
           //   overflowY="scroll"
         >
           <Flex direction="column">
@@ -908,6 +909,7 @@ const AddJobStart = () => {
               width="240px"
              marginTop="36px"
              marginLeft="auto"
+             mb={{base: "36px", lg: "0"}}
               onClick={() => checkLength()}
               // onClick={() => testButtonNavigate()}
             >
@@ -927,7 +929,7 @@ const AddJobStart = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={() => navigate("/NeederMapScreen")}>
+            <Button colorScheme='blue' mr={3}  onClick={() => navigate("/NeederMapScreen")}>
               Close
             </Button>
           

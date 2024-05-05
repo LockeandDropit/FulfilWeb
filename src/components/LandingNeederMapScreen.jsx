@@ -191,7 +191,7 @@ const LandingNeederMapScreen = () => {
   return (
     <div>
       <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-        <div style={{ height: "70vh" }}>
+        <Box h={{base: "50vh", lg: "70vh"}} w={{base: "90vw", lg: "50vw"}}>
           <Map
             defaultCenter={{ lat: 44.89929301068098, lng: -93.3413753387615}}
             defaultZoom={12}
@@ -308,7 +308,7 @@ const LandingNeederMapScreen = () => {
                 </AdvancedMarker>
               ))}
           </Map>
-        </div>
+        </Box>
       </APIProvider>
     </div>
   );

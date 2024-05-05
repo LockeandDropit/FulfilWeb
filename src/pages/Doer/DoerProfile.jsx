@@ -1822,6 +1822,24 @@ console.log("props", props.Title)
             </Flex>
           </Box>
         ) : null}
+   
+            <Box
+              height={{ base: "auto", lg: 0 }}
+              width={{ base: "100vw" }}
+              backgroundColor="white"
+              borderTopWidth="1px"
+              borderTopColor="grey"
+              position="fixed"
+              bottom={0}
+            >
+              <Flex direction="row">
+                <Button width="auto">Accepted</Button>
+                <Button width="auto">Interviewing</Button>
+                <Button width="auto">Completed</Button>
+                <Button width="auto">Requests</Button>
+              </Flex>
+            </Box>
+          
       </Flex>
     </>
   );

@@ -369,7 +369,7 @@ const NeederProfile = () => {
         </Box>
         {user ? (
           <Box
-            width="38vw"
+            w={{base: "100vw", lg: "34vw"}}
           
          
             height="auto"
@@ -521,55 +521,11 @@ const NeederProfile = () => {
                       {/* <EditableControls /> */}
                    
             </Flex>
-            {/* <Heading size="lg" marginTop="16px" marginLeft="216px">
-              Posted Jobs
-            </Heading>
-            <Box
-              width="60vw"
-         
-
-              borderColor="#e4e4e4"
-              backgroundColor="white"
-              height="800px"
-              boxShadow="sm"
-              rounded="md"
-              padding="4"
-              overflowY="scroll"
-              marginLeft="48"
-              marginRight="16"
-            >
-      
-              <NeederPostedJobCard />
-        
-            </Box>
-            <Heading
-              size="lg"
-              marginTop="16px"
-              marginLeft="216px"
-              marginBottom="16px"
-            >
-              Past Jobs
-            </Heading>
-            <Box
-              width="60vw"
            
-
-              borderColor="#e4e4e4"
-              backgroundColor="white"
-              height="800px"
-              boxShadow="sm"
-              rounded="md"
-              padding="4"
-              overflowY="scroll"
-              marginLeft="48"
-              marginRight="16"
-            >
-             
-              <NeederCompletedJobCard />
-            
-            </Box> */}
           </Box>
         ) : null}
+
+
       </Flex>
     </>
   );

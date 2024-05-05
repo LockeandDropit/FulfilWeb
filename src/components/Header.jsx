@@ -43,6 +43,7 @@ import fulfil180 from "../images/fulfil180.jpg";
 import { useNavigate } from "react-router-dom";
 import { StreamChat } from "stream-chat";
 import { FcGoogle } from "react-icons/fc";
+import { useMediaQuery } from '@chakra-ui/react'
 
 
 const Header = (props) => {
@@ -234,25 +235,32 @@ const Header = (props) => {
     onClose()
     navigate("/NeederEmailRegister")
   }
+  const [isDesktop] = useMediaQuery('(min-width: 500px)')
+
   return (
     <>
-    <div className="header">
-      <div className="headerLogo" onClick={() => navigate(`/`)}>
-        <img marginTop="4px" src={fulfil180} alt="Fulfil Logo"></img>
-      </div>
-
-      <div className="headerRight">
-        <Button backgroundColor="white" onClick={() => navigate("/NeederEmailRegister")}>Post a Job</Button>
+    <Box flexDirection="row" display="flex" alignContent="center" alignItems="center" >
+      <Box onClick={() => navigate(`/`)}><img marginTop="4px" src={fulfil180} alt="Fulfil Logo"></img></Box>
+     
+    {isDesktop ? ( <Box marginLeft="auto">
+        <Button backgroundColor="white" onClick={() => navigate("/NeederEmailRegister")} fontSize={{base: "0px", md: "md"}}>Post a Job</Button>
         {/* <Button backgroundColor="white">Categories</Button> */}
-        <Button backgroundColor="white" onClick={() => navigate(`/DoerEmailRegister`)} marginRight="8px">Become a Doer</Button>
+        <Button backgroundColor="white" onClick={() => navigate(`/DoerEmailRegister`)} marginRight="8px" fontSize={{base: "0px", md: "md"}}>Become a Doer</Button>
       
        
        
-        <Button backgroundColor="#01A2E8" color="white"     _hover={{ bg: "#018ecb", textColor: "white" }} onClick={() => onOpen()} marginRight="4" width="160px">Log In</Button>
-      </div>
-    </div>
+        <Button backgroundColor="#01A2E8" color="white" _hover={{ bg: "#018ecb", textColor: "white" }} onClick={() => onOpen()} marginRight="4" width="160px">Log In</Button>
+        </Box>) : ( <Box marginLeft="auto">
+       
+      
+       
+       
+        <Button backgroundColor="#01A2E8" color="white" _hover={{ bg: "#018ecb", textColor: "white" }} onClick={() => onOpen()} marginRight="4" width="160px">Log In</Button>
+        </Box>)}
+    
+      </Box>
 
-    <Modal isOpen={isOpen} onClose={() => handleClose()}>
+    <Modal isOpen={isOpen} onClose={() => handleClose()} size={{base: "xs" , lg: "md"}}>
         <ModalOverlay />
         <ModalContent>
         <Flex
@@ -263,8 +271,8 @@ const Header = (props) => {
       <Stack spacing={6} mx={'auto'} maxW={'lg'} >
         <Stack align={'center'}>
           
-        <Heading fontSize={'4xl'} textColor="white">Sign in to your account</Heading>
-          <Heading fontSize={'3xl'}>Sign in to your account</Heading>
+        <Heading fontSize={{base: "xs" , lg: "4xl"}} textColor="white">Sign in to your account</Heading>
+          <Heading fontSize={{base: "2xl" , lg: "3xl"}}>Sign in to your account</Heading>
          
         </Stack>
         <Box

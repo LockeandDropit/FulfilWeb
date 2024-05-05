@@ -21,7 +21,9 @@ const Hero = () => {
 
     //credit template hero split screen with image https://chakra-templates.vercel.app/page-sections/hero
 //credit image Nate Johnson https://unsplash.com/photos/a-group-of-men-standing-around-a-white-sheet-of-paper-DowtEyavqsY
-  return (
+  
+
+return (
 
     
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }} padding={4}>
@@ -33,8 +35,8 @@ const Hero = () => {
               position={'relative'}
             
               >
-              {/* Need Work Done? */}
-              Modified
+              Need Work Done?
+             
             </Text>
             <br />{' '}
             <Text

@@ -62,6 +62,7 @@ import { CloseIcon, EditIcon } from "@chakra-ui/icons";
 import EmbeddedPayments from "../../components/EmbeddedPayments";
 import { useLocation } from "react-router-dom";
 import NewVisitModal from "./NeederComponents/NewVisitModal";
+import { useMediaQuery } from '@chakra-ui/react'
 
 const NeederMapScreen = () => {
   const [user, setUser] = useState(null);
@@ -754,6 +755,8 @@ const handleCloseInfoWindow = () => {
   setApplicant(null)
 }
 
+const [showList, setShowList] = useState(true)
+const [isDesktop] = useMediaQuery('(min-width: 500px)')
   return (
     <div>
       <NeederHeader />
@@ -766,7 +769,7 @@ const handleCloseInfoWindow = () => {
            
             //   defaultCenter={{ lat: defaultLat, lng: defaultLong }}
               defaultCenter={{ lat: selectedLat ? selectedLat : defaultLat, lng: selectedLng ? selectedLng : defaultLong }}
-              defaultZoom={12}
+              defaultZoom={(isDesktop ? 12 : 11)}
               gestureHandling={"greedy"}
               disableDefaultUI={true}
               //move to env

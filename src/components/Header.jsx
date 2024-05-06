@@ -150,7 +150,12 @@ const Header = (props) => {
           getDoc(doc(db, "employers", result.user.uid)),
         ])
           .then((results) =>
-         
+          //   results[0]._document === null && results[1]._document === null
+          // ? console.log("new")
+          // : ( results[0]._document !== null &&
+          //   results[0]._document.data.value.mapValue.fields.isEmployer)
+          // ? console.log("doer")
+          // : console.log("needer")
             navigate(
               results[0]._document === null && results[1]._document === null
                 ? "/AddProfileInfo"

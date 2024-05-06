@@ -27,6 +27,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [userID, setUserID] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hasCheckedUser, setHasCheckedUser] = useState(false)
 
   const [hasRun, setHasRun] = useState(false);
   useEffect(() => {
@@ -39,29 +40,34 @@ function App() {
 
       setHasRun(true);
     } else {
+      setHasRun(true);
     }
   }, []);
 
-
-
   useEffect(() => {
-    if (user) {
+    if (user ) {
       Promise.all([
         getDoc(doc(db, "users", user.uid)),
         getDoc(doc(db, "employers", user.uid)),
       ])
         .then((results) =>
           navigate(
-            results[0]._document !== null &&
-              results[0]._document.data.value.mapValue.fields.isEmployer
+            results[0]._document === null && results[1]._document === null
+              ? "/AddProfileInfo"
+              : results[0]._document !== null &&
+                results[0]._document.data.value.mapValue.fields.isEmployer
               ? "/DoerMapScreen"
               : "/NeederMapScreen"
           )
+          
         )
+  
         .catch(console.log("issue"));
     } else {
+     
       setTimeout(() => {
         setLoading(false);
+       
       }, 1000);
     }
   }, [user]);
@@ -70,14 +76,13 @@ function App() {
     <>
       {loading ? (
         <Center marginTop="500px">
-           <Spinner
-                      thickness="4px"
-                      speed="0.65s"
-                      emptyColor="gray.200"
-                      color="#01A2E8"
-                      size="lg"
-                    
-                    />
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="#01A2E8"
+            size="lg"
+          />
         </Center>
       ) : user ? null : (
         <Landing />

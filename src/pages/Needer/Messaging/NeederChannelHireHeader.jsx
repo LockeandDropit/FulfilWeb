@@ -67,10 +67,16 @@ import {
 } from "@chakra-ui/react";
 import EmbeddedPayments from "../../../components/EmbeddedPayments";
 
+import { ArrowBackIcon} from '@chakra-ui/icons'
+import { useMediaQuery } from "@chakra-ui/react";
+
+
 const NeederChannelHireHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isHired, setIsHired] = useState();
+
+  const [isDesktop] = useMediaQuery("(min-width: 500px)");
 
   const [jobID, setJobID] = useState(null);
   const [jobTitle, setJobTitle] = useState(null);
@@ -879,6 +885,7 @@ const NeederChannelHireHeader = () => {
         marginLeft="4px"
         marginRight="4px"
       >
+        {isDesktop ? (null) : (<ArrowBackIcon position="absolute" left={2} top={2} onClick={() => navigate("/NeederMessageList", {state: {showList : true}})}/>)}
         <Box>
           <Center>
             <Flex direction="column">

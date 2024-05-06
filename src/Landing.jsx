@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./components/Header.jsx";
 import HeroMd from "./images/HeroMd.jpg";
 import Categories from "./components/Categories.jsx";
@@ -22,6 +22,12 @@ import Planning from "./images/Planning.jpg";
 import ManWorking from "./images/ManWorking.jpg";
 import house from "./images/house.jpg";
 import rotar from "./images/rotar.jpg";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "./firebaseConfig";
+
+import { doc, getDoc } from "firebase/firestore";
+
+import { Spinner } from "@chakra-ui/react";
 
 import Hero from "./components/Hero.jsx";
 import LandingPageMap from "./components/LandingPageMap.jsx";

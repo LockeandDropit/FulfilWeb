@@ -114,7 +114,6 @@ const NeederMessageList = () => {
 
   const [clientIsSet, setClientIsSet] = useState(false);
 
-
   //unmute to start working
   useEffect(() => {
     if (userID && userName && chatClient) {
@@ -147,11 +146,25 @@ const NeederMessageList = () => {
       if (!chatClient) {
         console.log("waiting on chatClient");
       } else {
-        console.log("channel passed", location.state);
-        setPasseChannel(location.state.selectedChannel);
+        if (location.state.selectedChannel) {
+     
+          setPasseChannel(location.state.selectedChannel);
+        } else {
+        }
       }
     }
   }, [chatClient]);
+
+  useEffect(() => {
+  
+    if (location.state) {
+      console.log(location.state);
+      if (location.state.showList) {
+  
+        setShowList(location.state.showList);
+      }
+    }
+  }, [location]);
 
   //testing why...
 
@@ -161,7 +174,7 @@ const NeederMessageList = () => {
     if (clientIsSet) {
       chatClient.connectUser(userInfo, chatClient.devToken(userID));
       const channelSort = await chatClient.queryChannels(filter, {});
-      console.log("in loadTest", passedChannel);
+    
 
       channelSort.map((channelSort) => {
         // console.log("list of channels user is in", channelSort.data.name, channelSort.cid)
@@ -731,6 +744,8 @@ const NeederMessageList = () => {
   const [toggleRequestsTab, setToggleRequestsTab] = useState(false);
   const [toggleCompletedTab, setToggleCompletedTab] = useState(false);
 
+  const [showList, setShowList] = useState(true);
+
   return (
     <>
       <NeederHeader />
@@ -739,22 +754,23 @@ const NeederMessageList = () => {
         Messages
       </Heading> */}
 
-      <Flex direction="row" >
+      <Flex direction="row">
         <Box
           marginBottom={{ base: "", lg: "22px" }}
           marginTop={{ base: "0", lg: "4" }}
         >
           <NeederDashboard />
         </Box>
-        <Box
-          height={{ base: "90vh", lg: "80vh" }}
-        
-        >
+        <Box height={{ base: "90vh", lg: "80vh" }}>
           {doneLoading ? (
             chatClient ? (
               selectedChannel ? (
                 <>
-                  <Heading size="lg" width={{base: "auto", lg: "500px"}}  marginBottom="16px">
+                  <Heading
+                    size="lg"
+                    width={{ base: "auto", lg: "500px" }}
+                    marginBottom="16px"
+                  >
                     Messages
                   </Heading>
 
@@ -789,165 +805,215 @@ const NeederMessageList = () => {
                   </Flex>
                 </>
               ) : toggleAcceptedTab === true ? (
-                <>
-                  <Flex direction="column">
-                    <Box marginLeft="24px" >
-                      <Heading
-                        size="lg"
-                        width={{base: "120px", lg: "500px"}}
-                        marginBottom={{ base: 2, lg: "16px" }}
-                        marginTop="16px"
-                   
-                      >
-                        Messages
-                      </Heading>
-                      {isDesktop ? ( <Flex direction="row">
-                        {acceptedNewMessagesLength ? (
-                          <Button
-                            backgroundColor="white"
-                            textColor="#01A2E8"
-                            size={{ base: "sm", lg: "md" }}
-                          >
-                            Accepted Jobs{" "}
-                            <Badge
-                              variant="solid"
-                              colorScheme="red"
-                              position="absolute"
-                              marginBottom={0}
-                              right="-1"
-                              borderRadius="10px"
-                            >
-                              {acceptedNewMessagesLength}
-                            </Badge>
-                          </Button>
-                        ) : (
-                          <Button
-                            backgroundColor="white"
-                            textColor="#01A2E8"
-                            size={{ base: "sm", lg: "md" }}
-                          >
-                            Accepted Jobs
-                          </Button>
-                        )}
+                isDesktop ? (
+                  <>
+                    <Flex direction="column">
+                      <Box marginLeft="24px">
+                        <Heading
+                          size="lg"
+                          width={{ base: "120px", lg: "500px" }}
+                          marginBottom={{ base: 2, lg: "16px" }}
+                          marginTop="16px"
+                        >
+                          Messages
+                        </Heading>
+                        {isDesktop ? (
+                          <Flex direction="row">
+                            {acceptedNewMessagesLength ? (
+                              <Button
+                                backgroundColor="white"
+                                textColor="#01A2E8"
+                                size={{ base: "sm", lg: "md" }}
+                              >
+                                Accepted Jobs{" "}
+                                <Badge
+                                  variant="solid"
+                                  colorScheme="red"
+                                  position="absolute"
+                                  marginBottom={0}
+                                  right="-1"
+                                  borderRadius="10px"
+                                >
+                                  {acceptedNewMessagesLength}
+                                </Badge>
+                              </Button>
+                            ) : (
+                              <Button
+                                backgroundColor="white"
+                                textColor="#01A2E8"
+                                size={{ base: "sm", lg: "md" }}
+                              >
+                                Accepted Jobs
+                              </Button>
+                            )}
 
-                        {interviewNewMessagesLength ? (
-                          <Button
-                            marginLeft={1}
-                            onClick={() => getInterviewDocs()}
-                          >
-                            Interviewing
-                            <Badge
-                              variant="solid"
-                              colorScheme="red"
-                              position="absolute"
-                              marginBottom={0}
-                              right="-1"
-                              borderRadius="10px"
-                            >
-                              {interviewNewMessagesLength}
-                            </Badge>
-                          </Button>
-                        ) : (
-                          <Button
-                            marginLeft={1}
-                            onClick={() => getInterviewDocs()}
-                          >
-                            Interviewing
-                          </Button>
-                        )}
-                        {completedNewMessagesLength ? (
-                          <Button
-                            marginLeft={1}
-                            onClick={() => getCompletedDocs()}
-                          >
-                            Completed Jobs{" "}
-                            <Badge
-                              variant="solid"
-                              colorScheme="red"
-                              position="absolute"
-                              marginBottom={0}
-                              right="-1"
-                              borderRadius="10px"
-                            >
-                              {completedNewMessagesLength}
-                            </Badge>
-                          </Button>
-                        ) : (
-                          <Button
-                            marginLeft={1}
-                            onClick={() => getCompletedDocs()}
-                          >
-                            Completed Jobs
-                          </Button>
-                        )}
+                            {interviewNewMessagesLength ? (
+                              <Button
+                                marginLeft={1}
+                                onClick={() => getInterviewDocs()}
+                              >
+                                Interviewing
+                                <Badge
+                                  variant="solid"
+                                  colorScheme="red"
+                                  position="absolute"
+                                  marginBottom={0}
+                                  right="-1"
+                                  borderRadius="10px"
+                                >
+                                  {interviewNewMessagesLength}
+                                </Badge>
+                              </Button>
+                            ) : (
+                              <Button
+                                marginLeft={1}
+                                onClick={() => getInterviewDocs()}
+                              >
+                                Interviewing
+                              </Button>
+                            )}
+                            {completedNewMessagesLength ? (
+                              <Button
+                                marginLeft={1}
+                                onClick={() => getCompletedDocs()}
+                              >
+                                Completed Jobs{" "}
+                                <Badge
+                                  variant="solid"
+                                  colorScheme="red"
+                                  position="absolute"
+                                  marginBottom={0}
+                                  right="-1"
+                                  borderRadius="10px"
+                                >
+                                  {completedNewMessagesLength}
+                                </Badge>
+                              </Button>
+                            ) : (
+                              <Button
+                                marginLeft={1}
+                                onClick={() => getCompletedDocs()}
+                              >
+                                Completed Jobs
+                              </Button>
+                            )}
 
-                        {requestNewMessagesLength ? (
-                          <Button onClick={() => getRequestDocs()}>
-                            Requests
-                            <Badge
-                              marginLeft={1}
-                              variant="solid"
-                              colorScheme="red"
-                              position="absolute"
-                              marginBottom={0}
-                              right="-1"
-                              borderRadius="10px"
+                            {requestNewMessagesLength ? (
+                              <Button onClick={() => getRequestDocs()}>
+                                Requests
+                                <Badge
+                                  marginLeft={1}
+                                  variant="solid"
+                                  colorScheme="red"
+                                  position="absolute"
+                                  marginBottom={0}
+                                  right="-1"
+                                  borderRadius="10px"
+                                >
+                                  {requestNewMessagesLength}
+                                </Badge>
+                              </Button>
+                            ) : (
+                              <Button
+                                onClick={() => getRequestDocs()}
+                                marginLeft={1}
+                              >
+                                Requests
+                              </Button>
+                            )}
+                          </Flex>
+                        ) : null}
+
+                        <Flex direction={{ base: "column", lg: "row" }}>
+                          <Chat client={chatClient}>
+                            <Box
+                              height={{ base: "40vh", lg: "80vh" }}
+                              w={{ base: "85vw", lg: "auto" }}
                             >
-                              {requestNewMessagesLength}
-                            </Badge>
-                          </Button>
-                        ) : (
-                          <Button
-                            onClick={() => getRequestDocs()}
-                            marginLeft={1}
-                          >
-                            Requests
-                          </Button>
-                        )}
-                      </Flex>) : (null)}
-                     
-                      <Flex direction={{base: "column", lg: "row"}}>
-                        <Chat client={chatClient}>
-                          <Box height={{ base: "40vh", lg: "80vh" }} w={{base: "85vw", lg: "auto"}}>
+                              <ChannelList
+                                filters={acceptedFilter}
+                                Paginator={InfiniteScroll}
+                              />
+                            </Box>
+
+                            {acceptedCIDs === null ? (
+                              <Box
+                                width="50vw"
+                                h={{ base: "50vh", lg: "75vh" }}
+                              >
+                                <Heading
+                                  size="sm"
+                                  marginTop="24px"
+                                  marginLeft="8px"
+                                >
+                                  No messages here!
+                                </Heading>
+                              </Box>
+                            ) : (
+                              // <Channel >
+                              //   <Box
+                              //     width="50vw"
+                              //     height={{ base: "50vh", lg: "75vh" }}
+
+                              //   >
+                              //     <Window >
+                              //       <NeederChannelHireHeader />
+                              //       <MessageList />
+                              //       <MessageInput />
+                              //     </Window>
+                              //   </Box>
+                              //   <Thread />
+                              // </Channel>
+
+                              <Channel>
+                                <Box
+                                  width={{ base: "90vw", lg: "50vw" }}
+                                  height={{ base: "75vh", lg: "75vh" }}
+                                >
+                                  <Window>
+                                    <NeederChannelHireHeader />
+                                    <MessageList />
+                                    <MessageInput />
+                                  </Window>
+                                </Box>
+                                <Thread />
+                              </Channel>
+                            )}
+                          </Chat>
+                        </Flex>
+                      </Box>
+                    </Flex>
+                  </>
+                ) : (
+                  <Box>
+                    {" "}
+                    <Heading
+                      size="lg"
+                      width={{ base: "120px", lg: "500px" }}
+                      marginBottom={{ base: 2, lg: "16px" }}
+                      marginTop="16px"
+                    >
+                      Messages
+                    </Heading>{" "}
+                    <Flex direction={{ base: "column", lg: "row" }}>
+                      <Chat client={chatClient}>
+                        <Box
+                          height={{ base: "40vh", lg: "80vh" }}
+                          w={{ base: "auto", lg: "auto" }}
+                          onClick={() => setShowList(false)}
+                        >
+                          {showList ? (
                             <ChannelList
                               filters={acceptedFilter}
                               Paginator={InfiniteScroll}
                             />
-                          </Box>
-
-                          {acceptedCIDs === null ? (
-                            <Box width="50vw" h={{ base: "50vh", lg: "75vh" }} >
-                              <Heading
-                                size="sm"
-                                marginTop="24px"
-                                marginLeft="8px"
-                              >
-                                No messages here!
-                              </Heading>
-                            </Box>
                           ) : (
-                            // <Channel >
-                            //   <Box
-                            //     width="50vw"
-                            //     height={{ base: "50vh", lg: "75vh" }}
-                            
-                            //   >
-                            //     <Window >
-                            //       <NeederChannelHireHeader />
-                            //       <MessageList />
-                            //       <MessageInput />
-                            //     </Window>
-                            //   </Box>
-                            //   <Thread />
-                            // </Channel>
-
-                       <Channel >
+                            <Channel>
                               <Box
-                                width={{base: "90vw", lg: "50vw"}}
-                                height={{ base: "40vh", lg: "75vh" }}
-                            
+                                width={{ base: "100vw", lg: "50vw" }}
+                                height={{ base: "75vh", lg: "75vh" }}
                               >
-                                <Window >
+                                <Window>
                                   <NeederChannelHireHeader />
                                   <MessageList />
                                   <MessageInput />
@@ -956,20 +1022,18 @@ const NeederMessageList = () => {
                               <Thread />
                             </Channel>
                           )}
-                        </Chat>
-                      </Flex>
-                    
-                    </Box>
-             
-                  </Flex>
-                </>
+                        </Box>
+                      </Chat>
+                    </Flex>
+                  </Box>
+                )
               ) : toggleInterviewTab ? (
                 <>
                   <Flex direction="column">
                     <Box marginLeft="24px">
                       <Heading
                         size="lg"
-                        width={{base: "auto", lg: "500px"}}
+                        width={{ base: "auto", lg: "500px" }}
                         marginBottom="16px"
                         marginTop="16px"
                       >
@@ -1116,7 +1180,7 @@ const NeederMessageList = () => {
                     <Box marginLeft="24px">
                       <Heading
                         size="lg"
-                        width={{base: "auto", lg: "500px"}}
+                        width={{ base: "auto", lg: "500px" }}
                         marginBottom="16px"
                         marginTop="16px"
                       >
@@ -1263,7 +1327,7 @@ const NeederMessageList = () => {
                     <Box marginLeft="24px">
                       <Heading
                         size="lg"
-                        width={{base: "auto", lg: "500px"}}
+                        width={{ base: "auto", lg: "500px" }}
                         marginBottom="16px"
                         marginTop="16px"
                       >
@@ -1404,12 +1468,11 @@ const NeederMessageList = () => {
                   </Flex>
                 </>
               ) : (
-              
                 <>
                   <Flex direction="column">
                     <Box marginLeft="24px">
                       <Heading
-                        width={{base: "auto", lg: "500px"}}
+                        width={{ base: "auto", lg: "500px" }}
                         marginBottom="16px"
                         marginTop="16px"
                       >
@@ -1434,7 +1497,6 @@ const NeederMessageList = () => {
                           <Channel>
                             <Box width="50vw" height="75vh">
                               <Window>
-                           
                                 <NeederChannelHireHeader />
                                 <MessageList />
                                 <MessageInput />
@@ -1453,7 +1515,6 @@ const NeederMessageList = () => {
                 An error occured with our messaging server. Please try again
                 later. If the issue persists, please contact us.
               </Text>
-              
             )
           ) : (
             <Center>
@@ -1468,30 +1529,35 @@ const NeederMessageList = () => {
                 marginLeft="600px"
               />
             </Center>
-
           )}
-    
-          
-        
         </Box>
 
-        {isDesktop ? (null) : ( <Box
-              height={{ base: "80px", lg: "0" }}
-              width={{ base: "100vw" }}
-              backgroundColor="white"
-              borderTopWidth="1px"
-              borderTopColor="grey"
-              position="fixed"
-              bottom={0}
-            >
-              <Flex direction="row">
-                <Button width="auto" onClick={() => getAcceptedDocs()}>Accepted</Button>
-                <Button width="auto" onClick={() => getInterviewDocs()}>Interviewing</Button>
-                <Button width="auto" onClick={() => getCompletedDocs()}>Completed</Button>
-                <Button width="auto" onClick={() => getRequestDocs()}>Requests</Button>
-              </Flex>
-            </Box>)}
-       
+        {isDesktop ? null : (
+          <Box
+            height={{ base: "80px", lg: "0" }}
+            width={{ base: "100vw" }}
+            backgroundColor="white"
+            borderTopWidth="1px"
+            borderTopColor="grey"
+            position="fixed"
+            bottom={0}
+          >
+            <Flex direction="row">
+              <Button width="auto" onClick={() => getAcceptedDocs()}>
+                Accepted
+              </Button>
+              <Button width="auto" onClick={() => getInterviewDocs()}>
+                Interviewing
+              </Button>
+              <Button width="auto" onClick={() => getCompletedDocs()}>
+                Completed
+              </Button>
+              <Button width="auto" onClick={() => getRequestDocs()}>
+                Requests
+              </Button>
+            </Flex>
+          </Box>
+        )}
       </Flex>
     </>
   );

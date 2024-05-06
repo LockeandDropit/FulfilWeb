@@ -136,16 +136,54 @@ const AddProfileInfo = () => {
 
   //firestore help came from https://www.youtube.com/@NetNinja
 
+//this is to control sign in/onboarding with Google auth. When the user accesses the landing page the app.jsx checks if they have an account once theres a user. 
+// If a user started onboparding (this page only) withput submitting any data they would be perpetually redirected to this page with no option to do anything else, so this useEffect automatically creates their account
+  
+
+useEffect(() => {
+    if (user) {
+      setDoc(doc(db, "employers", user.uid), {
+        firstName: firstName ? firstName : null,
+        lastName: lastName ? lastName : null,
+        city: city ? city : null,
+        state: state ? state : null,
+        test: test ? test : null,
+        idStreamChat: user.uid,
+        isEmployer: true ,
+        email: user.email,
+        streamChatID: user.uid,
+        isOnboarded: false,
+        emailVerified: false,
+        stripeOnboarded: false,
+        PrivacyPolicyAgree: privacyPolicy, 
+        ageAgreement: ageAgreement,
+        termsOfService: termsOfService,
+        profilePictureResponse: profilePicture ? profilePicture : null
+      });
+      createNewChatUser()
+        .then(() => {
+          //all good
+  
+          console.log("data submitted, new chat profile created");
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+    }
+  }, [user])
+
+
   const updateUserProfileFirestore = () => {
     //submit data
     setDoc(doc(db, "employers", user.uid), {
-      firstName: firstName,
-      lastName: lastName,
-      city: city,
-      state: state,
-      test: test,
+      firstName: firstName ? firstName : null,
+      lastName: lastName ? lastName : null,
+      city: city ? city : null,
+      state: state ? state : null,
+      test: test ? test : null,
       idStreamChat: user.uid,
-      isEmployer: true,
+      isEmployer: true ,
       email: user.email,
       streamChatID: user.uid,
       isOnboarded: false,
@@ -153,7 +191,7 @@ const AddProfileInfo = () => {
       stripeOnboarded: false,
       PrivacyPolicyAgree: privacyPolicy, 
       ageAgreement: ageAgreement,
-      termsOfService: termsOfService,
+      termsOfService: termsOfService, 
       profilePictureResponse: profilePicture ? profilePicture : null
     });
     createNewChatUser()

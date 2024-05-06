@@ -18,7 +18,7 @@ import { getStorage } from "firebase/storage";
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API_KEY,
   // authDomain: "jobit-10e3b.firebaseapp.com",
-  authDomain: "auth.getfulfil.com",
+  authDomain: "getfulfil.com",
   projectId: "jobit-10e3b",
   storageBucket: "jobit-10e3b.appspot.com",
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,

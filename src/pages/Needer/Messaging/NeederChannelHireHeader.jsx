@@ -912,6 +912,7 @@ const NeederChannelHireHeader = () => {
           marginLeft="4px"
           marginRight="4px"
         >
+          {isDesktop ? (null) : (<ArrowBackIcon position="absolute" left={2} top={2} onClick={() => navigate("/NeederMessageList", {state: {showList : true}})}/>)}
           <Box>
             <Center>
               <Flex direction="column">
@@ -933,6 +934,7 @@ const NeederChannelHireHeader = () => {
           marginLeft="4px"
           marginRight="4px"
         >
+          {isDesktop ? (null) : (<ArrowBackIcon position="absolute" left={2} top={2} onClick={() => navigate("/NeederMessageList", {state: {showList : true}})}/>)}
           <Center>
             <Flex direction="column">
               <Box textAlign="center" marginTop="16px">
@@ -964,6 +966,7 @@ const NeederChannelHireHeader = () => {
             marginLeft="4px"
             marginRight="4px"
           >
+            {isDesktop ? (null) : (<ArrowBackIcon position="absolute" left={2} top={2} onClick={() => navigate("/NeederMessageList", {state: {showList : true}})}/>)}
             <Box>
               <Center>
                 <Flex direction="column">
@@ -1004,6 +1007,7 @@ const NeederChannelHireHeader = () => {
             marginLeft="4px"
             marginRight="4px"
           >
+            {isDesktop ? (null) : (<ArrowBackIcon position="absolute" left={2} top={2} onClick={() => navigate("/NeederMessageList", {state: {showList : true}})}/>)}
             <Box>
               <Center>
                 <Flex direction="column">
@@ -1053,6 +1057,7 @@ const NeederChannelHireHeader = () => {
             marginLeft="4px"
             marginRight="4px"
           >
+            {isDesktop ? (null) : (<ArrowBackIcon position="absolute" left={2} top={2} onClick={() => navigate("/NeederMessageList", {state: {showList : true}})}/>)}
             <Box>
               <Center>
                 <Flex direction="column">

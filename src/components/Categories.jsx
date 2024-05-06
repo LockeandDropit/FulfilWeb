@@ -32,7 +32,7 @@ const Categories = () => {
       </Center>
 
       <Center>
-        <SimpleGrid columns={[2, null, 3]} spacing="64px" marginTop={{base: "4", lg: "16"}}>
+        <SimpleGrid columns={[1, null, 3]} spacing="64px" marginTop={{base: "4", lg: "16"}}>
           <Card maxW="sm" boxShadow=''>
             <CardBody>
               <Image

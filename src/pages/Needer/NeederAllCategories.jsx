@@ -115,7 +115,7 @@ const NeederAllCategories = () => {
               </Heading>
 
               <Center>
-                <SimpleGrid columns={[2, null, 3]} spacing="64px" marginTop="8">
+                <SimpleGrid columns={[1, null, 3]} spacing="64px" marginTop="8">
                   <Card maxW="sm" boxShadow="">
                     <CardBody>
                       <Image

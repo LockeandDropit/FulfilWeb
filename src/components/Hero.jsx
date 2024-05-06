@@ -51,7 +51,7 @@ return (
             </Text>{' '}
           </Heading>
           <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-           Get connected with contractors in your area who specialize in what you need done. 1
+           Get connected with contractors in your area who specialize in what you need done.
           </Text>
           <Stack direction={{ base: 'column' }} spacing={2}>
            

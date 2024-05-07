@@ -34,9 +34,7 @@ import { auth, db } from "../../../firebaseConfig";
 import {
   doc,
   getDoc,
-
   updateDoc,
-
   setDoc,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -341,8 +339,8 @@ const DoerAccountManager = () => {
           <Center >
           <Box
          
-            width="34vw"
-            height="auto"
+         w={{base: "100vw", lg: "34vw"}}
+         height={{base: "100vh", lg: "auto"}}
             boxShadow=""
             rounded="lg"
             padding="10"
@@ -445,7 +443,10 @@ const DoerAccountManager = () => {
                   <Flex direction="row" marginTop="4">
                     <Text>Tax Agreement</Text>{" "}
                     <Button
-                      colorScheme="red"
+                      backgroundColor="white"
+                      borderWidth="1px"
+                      borderColor="#01A2E8"
+                      textColor="#01A2E8"
                       height="32px"
                       marginLeft="auto"
                       onClick={() => navigate("/DoerTaxAgreement")}

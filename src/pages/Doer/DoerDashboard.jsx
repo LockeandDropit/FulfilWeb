@@ -53,9 +53,12 @@ import {
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "@chakra-ui/react";
 
 const DoerDashboard = () => {
  
+
+  const [isDesktop] = useMediaQuery("(min-width: 500px)");
 
   const [user, setUser] = useState(null);
   const [hasRun, setHasRun] = useState(false);
@@ -142,7 +145,7 @@ const DoerDashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Box
+      {isDesktop ? (<Box
         height="90vh"
         width="280px"
         borderRadius="6"
@@ -267,7 +270,7 @@ const DoerDashboard = () => {
           
          
         </Center>
-      </Box>
+      </Box>) : (null)}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

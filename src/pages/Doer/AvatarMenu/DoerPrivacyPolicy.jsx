@@ -82,11 +82,12 @@ const DoerPrivacyPolicy = () => {
     <>
       <DoerHeader />
 
-      <Flex>
-        <DoerDashboard />
-      
+      <Flex justifyContent="center" >
+        <Box position="absolute" left="0">
+          <DoerDashboard />
+        </Box>
           <Box
-            width="67vw"
+             w={{base: "100vw", lg: "36vw"}}
             // alignContent="center"
             // justifyContent="center"
             // display="flex"

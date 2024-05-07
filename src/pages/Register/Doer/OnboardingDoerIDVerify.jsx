@@ -210,21 +210,27 @@ const OnboardingDoerIDVerify = () => {
     <>
       <Header />
 
-      <Center>
-        <Box
-          width="33vw"
-          // alignContent="center"
-          // justifyContent="center"
-          // display="flex"
-          // alignItems="baseline"
+      <Flex justifyContent="center">
+        <Center>
+          <Box
+               w={{base: "100vw", lg: "36vw"}}
+            // alignContent="center"
+            // justifyContent="center"
+            // display="flex"
+            // alignItems="baseline"
 
-          borderColor="#E3E3E3"
-          height="auto"
-          boxShadow="md"
-          rounded="md"
-          padding="8"
-          //   overflowY="scroll"
-        >
+            borderColor="#E3E3E3"
+            height="auto"
+            // boxShadow="md"
+            rounded="lg"
+            // padding="8"
+            paddingLeft="8"
+            paddingTop="8"
+            paddingRight="8"
+            ml={{base: 0, lg: "0"}}
+           
+            //   overflowY="scroll"
+          >
           <Flex flexDirection="column">
             <Box marginBottom="16px" flexDirection="row" width="auto">
               <Progress hasStripe value={50} />{" "}
@@ -240,7 +246,7 @@ const OnboardingDoerIDVerify = () => {
               apply for jobs in your area, but you can always do it later (it
               can be found in your "My Account").
             </Text>
-            <Box width="30vw" marginTop="8">
+            <Box w={{base: "85vw", lg: "30vw"}} marginTop={{base: "16", lg: "8"}}>
               <Heading size="sm" marginBottom="4px">
                 Upload your ID
               </Heading>
@@ -546,6 +552,7 @@ const OnboardingDoerIDVerify = () => {
           </Flex>
         </Box>
       </Center>
+      </Flex>
     </>
   );
 };

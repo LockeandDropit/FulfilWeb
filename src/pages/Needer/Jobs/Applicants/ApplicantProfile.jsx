@@ -24,7 +24,7 @@ import {
   CardFooter,
   Divider,
   Stack,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -134,6 +134,8 @@ const ApplicantProfile = () => {
     }
   }, [isHourly]);
 
+  const [numberOfRatings, setNumberOfRatings] = useState(null);
+
   useEffect(() => {
     if (applicant != null) {
       // should this be done on log ina nd stored in redux store so it's cheaper?
@@ -154,6 +156,7 @@ const ApplicantProfile = () => {
           setRating(
             ratingResults.reduce((a, b) => a + b) / ratingResults.length
           );
+          setNumberOfRatings(ratingResults.length);
         }
       });
     } else {
@@ -566,9 +569,9 @@ const ApplicantProfile = () => {
   };
 
   const testNewChannel = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     client.connectUser(userInfo, client.devToken(userID));
-    
+
     const channel = client.channel("messaging", jobID, {
       members: [applicant.streamChatID, user.uid],
       name: jobTitle,
@@ -582,260 +585,174 @@ const ApplicantProfile = () => {
     console.log(startWatching);
 
     setTimeout(() => {
-
       updateDoc(doc(db, "users", applicant.streamChatID, "Applied", jobTitle), {
         hasUnreadMessage: true,
         interviewStarted: true,
-        channelID: channel.cid
+        channelID: channel.cid,
       })
         .then(() => {
-
-          console.log("new message updated in Applied")
+          console.log("new message updated in Applied");
         })
         .catch((error) => {
           // no bueno
           console.log(error);
         });
 
-        updateDoc(doc(db, "employers", userID, "Posted Jobs", jobTitle, "Applicants", applicant.streamChatID,), {
-       
-          channelID: channel.cid
+      updateDoc(
+        doc(
+          db,
+          "employers",
+          userID,
+          "Posted Jobs",
+          jobTitle,
+          "Applicants",
+          applicant.streamChatID
+        ),
+        {
+          channelID: channel.cid,
+        }
+      )
+        .then(() => {
+          console.log("new message updated in Applied");
         })
-          .then(() => {
-  
-            console.log("new message updated in Applied")
-          })
-          .catch((error) => {
-            // no bueno
-            console.log(error);
-          });
-          
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+
       navigate("/NeederMessageList", {
         state: {
           selectedChannel: channel.cid,
-        
         },
       });
 
-      setIsLoading(false)
+      setIsLoading(false);
     }, 1000);
   };
 
- const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <>
       <NeederHeader />
 
-      <Flex>
-        <NeederDashboard />
+      <Flex justifyContent="center">
+        <Box position="absolute" left="0">
+          <NeederDashboard />
+        </Box>
         {applicant ? (
           <Box
-            width="67vw"
-            // alignContent="center"
-            // justifyContent="center"
-            // display="flex"
-            // alignItems="baseline"
-            // borderWidth="2px"
-            borderColor="#E3E3E3"
-            // borderLeftWidth="4px"
-            // borderRightWidth="4px"
+            w={{ base: "100vw", lg: "34vw" }}
             height="auto"
-            boxShadow="ms"
+            boxShadow=""
             rounded="lg"
             padding="8"
             //   overflowY="scroll"
           >
-            <Center flexDirection="column">
-              {/* {!profilePicture ? (
-                <Avatar bg="#01A2E8" size="2xl" onClick={onOpenAvatar} />
-              ) : (
-                <Avatar
-                  bg="#01A2E8"
-                  size="2xl"
-                  src={profilePicture}
-                  onClick={onOpenAvatar}
-                />
-              )} */}
-              <Avatar bg="#01A2E8" size="2xl" src={profilePicture} />
+            <Flex flexDirection="column">
+              <Avatar bg="#01A2E8" size="xl" src={profilePicture} />
 
-              <Heading size="lg">
+              <Heading size="md" marginTop="4px">
                 {" "}
-                {userFirstName} {userLastName}
+                {userFirstName}
               </Heading>
-              <Heading size="md">
+              <Heading size="sm" marginTop="4px">
                 {" "}
                 {userCity}, {userState}
               </Heading>
 
-              <Flex>
-                {maxRating.map((item, key) => {
-                  return (
-                    <Box activeopacity={0.7} key={item} marginTop="8px">
-                      <Image
-                        boxSize="24px"
-                        src={item <= rating ? star_filled : star_corner}
-                      ></Image>
-                    </Box>
-                  );
-                })}
-              </Flex>
+              {numberOfRatings ? (
+                <Flex>
+                  {maxRating.map((item, key) => {
+                    return (
+                      <Box activeopacity={0.7} key={item} marginTop="8px">
+                        <Image
+                          boxSize="24px"
+                          src={item <= rating ? star_filled : star_corner}
+                        ></Image>
+                      </Box>
+                    );
+                  })}
+
+                  <Text marginTop="8px" marginLeft="4px">
+                    ({numberOfRatings} reviews)
+                  </Text>
+                </Flex>
+              ) : (
+                <Text marginTop="4px">No reviews yet</Text>
+              )}
 
               {/* <Center flexDirection="column"> */}
               <Flex>
-                <Heading size="lg" marginTop="16px" marginRight="640px">
-                  About Me
+                <Heading size="md" marginTop="16px">
+                  About
                 </Heading>
               </Flex>
-              <Card
-                direction={{ base: "column", sm: "row" }}
-                overflow="hidden"
-                // variant="outline"
-                width="800px"
-                // borderWidth="2px"
-                // borderLeftWidth="4px"
-                // borderRightWidth="4px"
-                // borderColor="#E3E3E3"
-                // boxShadow="lg"
-                // rounded="lg"
+
+              <Text
+                aria-multiline="true"
+                textAlign="flex-start"
                 height="auto"
-                // marginTop="32px"
-                // padding="6"
+           
+                marginBottom={{base: "16px", lg: "32px"}}
               >
-                <Stack>
-                  <CardBody>
-                    <Editable
-                      textAlign="flex-start"
-                      // value={userBio ? userBio : " "}
-                      fontSize="md"
-                      height="auto"
-                      width="auto"
-                      isPreviewFocusable={false}
-                      //help from my man RubenSmn. Docs aren't clear the Editable component was the one that needed the onSubmit prop https://stackoverflow.com/questions/75431868/chakra-editable-component-does-not-submit-when-input-blurs
-                      // onSubmit={() => handleSubmit()}
-                    >
-                      {/* <Flex direction="row">
-                        <Heading size="md">Bio</Heading>
-                        <Button
-                          onClick={onOpenBio}
-                          position="absolute"
-                          right="0"
-                          top="3"
-                          marginRight="42px"
-                          backgroundColor="white"
-                          textColor="#01A2E8"
-                        >
-                          Edit
-                        </Button>
-                      </Flex> */}
-                      {/* <EditablePreview /> */}
-                      {/* Here is the custom input */}
-                      <Text
-                        aria-multiline="true"
-                        textAlign="flex-start"
-                        height="auto"
-                        width="700px"
-                        marginBottom="32px"
-                      >
-                        {userBio}
-                      </Text>
-                      {/* <EditableControls />{" "} */}
+                {userBio}
+              </Text>
 
-                      {/* <EditableControls /> */}
-                    </Editable>
-                  </CardBody>
-                </Stack>
-              </Card>
-
-              <Heading size="lg" marginTop="16px" marginRight="640px">
+              <Heading size="md" marginTop="24px">
                 Experience
               </Heading>
+
               {!userExperience ? (
                 <Text>No experience to show</Text>
               ) : (
                 userExperience.map((userExperience) => (
                   <>
-                    <Card
-                      direction={{ base: "column", sm: "row" }}
-                      overflow="hidden"
-                      variant="outline"
-                      width="800px"
-                      // borderWidth="2px"
-                      // borderLeftWidth="4px"
-                      // borderRightWidth="4px"
-                      borderColor="#E3E3E3"
-                      height="auto"
-                      marginTop="24px"
-                      key={userExperience.id}
-                    >
-                      <Stack>
-                        <CardBody>
-                          <Box>
-                            {/* lets just open up a modal to edit this I feel like that would be easier */}
+                    <Box key={userExperience.id} mt={2}>
+                      <Flex direction="column">
+                        <Heading size="md">{userExperience.Title}</Heading>
 
-                            <Heading size="md">{userExperience.Title}</Heading>
-
-                            <Text>{userExperience.Years} Years</Text>
-                            <Text>{userExperience.Description}</Text>
-                            <Box></Box>
-                          </Box>
-                        </CardBody>
-                      </Stack>
-                    </Card>
+                        <Flex>
+                          <Text>Duration: {userExperience.Years}</Text>
+                        </Flex>
+                        <Text>{userExperience.Description}</Text>
+                      </Flex>
+                    </Box>
                   </>
                 ))
               )}
 
               <Box></Box>
-
-             
-              {!userSkills ? (
-              null
-              ) : (
-                userSkills.map((userSkills) => (
-                  <>
-                   <Heading size="lg" marginTop="16px" marginRight="595px">
+              <Heading size="md" marginTop="16px">
                 Qualifications
               </Heading>
-                    <Card
-                      direction={{ base: "column", sm: "row" }}
-                      overflow="hidden"
-                      variant="outline"
-                      width="800px"
-                      borderWidth="2px"
-                      borderLeftWidth="4px"
-                      borderRightWidth="4px"
-                      borderColor="#E3E3E3"
-                      height="auto"
-                      marginTop="24px"
-                      key={userSkills.id}
-                    >
-                      <Stack>
-                        <CardBody>
-                          <Box>
-                            <Heading size="md">{userSkills.Title}</Heading>
+              {!userSkills
+                ? null
+                : userSkills.map((userSkills) => (
+                    <>
+                      <Box mt={2}>
+                        <Heading size="sm">{userSkills.Title}</Heading>
 
-                            <Text> {userSkills.Description}</Text>
+                        <Text> {userSkills.Description}</Text>
 
-                            <Box></Box>
-                          </Box>
-                        </CardBody>
-                      </Stack>
-                    </Card>
-                  </>
-                ))
-              )}
+                        <Box></Box>
+                      </Box>
+                    </>
+                  ))}
               <Flex>
-              
-                {isLoading ? ( <Spinner
-                      thickness="4px"
-                      speed="0.65s"
-                      emptyColor="gray.200"
-                      color="#01A2E8"
-                      size="lg"
-                      marginTop="56px"
-                    
-                    />) : (  <> <Button
+                {isLoading ? (
+                  <Spinner
+                    thickness="4px"
+                    speed="0.65s"
+                    emptyColor="gray.200"
+                    color="#01A2E8"
+                    size="lg"
+                    marginTop="56px"
+                  />
+                ) : (
+                  <>
+                    {" "}
+                    <Button
                       color="red"
                       backgroundColor="white"
                       width="240px"
@@ -847,7 +764,8 @@ const ApplicantProfile = () => {
                       onClick={() => deleteApplicant()}
                     >
                       Delete
-                    </Button>   <Button
+                    </Button>{" "}
+                    <Button
                       colorScheme="blue"
                       width="240px"
                       marginTop="60px"
@@ -859,11 +777,11 @@ const ApplicantProfile = () => {
                       onClick={() => createInterviewChat()}
                     >
                       Interview
-                    </Button></>)
-                    }
-            
+                    </Button>
+                  </>
+                )}
               </Flex>
-            </Center>
+            </Flex>
           </Box>
         ) : null}
       </Flex>

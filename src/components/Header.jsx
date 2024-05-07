@@ -268,6 +268,7 @@ const Header = (props) => {
     <Modal isOpen={isOpen} onClose={() => handleClose()} size={{base: "full" , lg: "md"}}>
         <ModalOverlay />
         <ModalContent>
+        <ModalCloseButton />
         <Flex
       minH={'60vh'}
       align={'center'}

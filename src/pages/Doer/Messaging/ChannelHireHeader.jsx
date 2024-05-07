@@ -64,6 +64,8 @@ import { useNavigate } from "react-router-dom";
 import "stream-chat-react/dist/css/v2/index.css";
 import { useLocation } from "react-router-dom";
 import MarkCompleteModal from "./MarkCompleteModal";
+import { ArrowBackIcon} from '@chakra-ui/icons'
+import { useMediaQuery } from "@chakra-ui/react";
 
 const ChannelHireHeader = () => {
   const [user, setUser] = useState(null);
@@ -80,6 +82,8 @@ const ChannelHireHeader = () => {
     } else {
     }
   }, []);
+
+  const [isDesktop] = useMediaQuery("(min-width: 500px)");
 
   const { channel, watchers } = useChannelStateContext();
 
@@ -960,6 +964,7 @@ const ChannelHireHeader = () => {
           marginLeft="4px"
           marginRight="4px"
         >
+          {isDesktop ? (null) : (<ArrowBackIcon position="absolute" left={2} top={2} onClick={() => navigate("/DoerMessageList", {state: {showList : true}})}/>)}
           <Box>
             <Center>
               <Flex direction="column">
@@ -988,6 +993,7 @@ const ChannelHireHeader = () => {
           marginLeft="4px"
           marginRight="4px"
         >
+          {isDesktop ? (null) : (<ArrowBackIcon position="absolute" left={2} top={2} onClick={() => navigate("/DoerMessageList", {state: {showList : true}})}/>)}
           <Box>
             <Center>
               <Flex direction="column">
@@ -1011,6 +1017,7 @@ const ChannelHireHeader = () => {
           marginLeft="4px"
           marginRight="4px"
         >
+          {isDesktop ? (null) : (<ArrowBackIcon position="absolute" left={2} top={2} onClick={() => navigate("/DoerMessageList", {state: {showList : true}})}/>)}
           <Box>
             <Center>
               <Flex direction="column">
@@ -1086,6 +1093,7 @@ const ChannelHireHeader = () => {
           marginLeft="4px"
           marginRight="4px"
         >
+          {isDesktop ? (null) : (<ArrowBackIcon position="absolute" left={2} top={2} onClick={() => navigate("/DoerMessageList", {state: {showList : true}})}/>)}
           <Center>
             <Flex direction="column">
               <Box textAlign="center" marginTop="16px">
@@ -1105,6 +1113,7 @@ const ChannelHireHeader = () => {
         marginLeft="4px"
         marginRight="4px"
       >
+        {isDesktop ? (null) : (<ArrowBackIcon position="absolute" left={2} top={2} onClick={() => navigate("/DoerMessageList", {state: {showList : true}})}/>)}
         <Center>
           <Flex direction="column">
             <Box textAlign="center" marginTop="16px">
@@ -1127,6 +1136,7 @@ const ChannelHireHeader = () => {
             marginLeft="4px"
             marginRight="4px"
           >
+            {isDesktop ? (null) : (<ArrowBackIcon position="absolute" left={2} top={2} onClick={() => navigate("/DoerMessageList", {state: {showList : true}})}/>)}
             <Box>
               <Center>
                 <Flex direction="column">

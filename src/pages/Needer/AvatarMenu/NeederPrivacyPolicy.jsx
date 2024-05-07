@@ -82,24 +82,21 @@ const NeederPrivacyPolicy = () => {
     <>
       <NeederHeader />
 
-      <Flex>
-        <NeederDashboard />
-      
+      <Flex justifyContent="center" >
+        <Box position="absolute" left="0">
+          <NeederDashboard />
+        </Box>
           <Box
-            width="67vw"
-            // alignContent="center"
-            // justifyContent="center"
-            // display="flex"
-            // alignItems="baseline"
-            borderWidth="2px"
-            borderColor="#E3E3E3"
-            borderLeftWidth="4px"
-            borderRightWidth="4px"
-            height="85vh"
-            boxShadow="lg"
+             w={{base: "100vw", lg: "36vw"}}
+             alignItems="center"
+             alignContent="center"
+             justifyContent="center"
+        
+            height="90vh"
+            boxShadow=""
             rounded="lg"
             padding="8"
-              overflowY="scroll"
+            overflowY="scroll"
           >
        
       

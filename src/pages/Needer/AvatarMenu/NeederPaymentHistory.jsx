@@ -123,32 +123,31 @@ const NeederPaymentHistory = () => {
     <>
       <NeederHeader />
 
-      <Flex>
-        <NeederDashboard />
-
+      <Flex justifyContent="center" >
+        <Box position="absolute" left="0">
+          <NeederDashboard />
+        </Box>
+     
+       
         <Box
-          width="67vw"
-          // alignContent="center"
-          // justifyContent="center"
-          // display="flex"
-          // alignItems="baseline"
-          borderWidth="2px"
-          borderColor="#E3E3E3"
-          borderLeftWidth="4px"
-          borderRightWidth="4px"
-          height="85vh"
-          boxShadow="lg"
+             w={{base: "100vw", lg: "36vw"}}
+             alignItems="center"
+             alignContent="center"
+             justifyContent="center"
+        
+             height={{base: "100vh", lg: "90vh"}}
+          boxShadow=""
           rounded="lg"
           padding="8"
           overflowY="scroll"
         >
-          <Center flexDirection="column">
-            <Heading size="lg" marginTop="16px" marginRight="545px">
+       
+            <Heading size="lg" marginTop="16px">
               Payment History
             </Heading>
 
             {!completedJobs ? (
-              <Text>No completed jobs</Text>
+              <Text>Nothing here yet!</Text>
             ) : (
               completedJobs?.map((completedJobs) => (
                 <div>
@@ -156,26 +155,23 @@ const NeederPaymentHistory = () => {
                     direction={{ base: "column", sm: "row" }}
                     overflow="hidden"
                     variant="outline"
-                    width="800px"
-                    borderWidth="2px"
-                    borderColor="#E3E3E3"
-                    borderLeftWidth="4px"
-                    borderRightWidth="4px"
-                    height="130px"
+                    width="auto"
+                   
+                    height="auto"
                     marginTop="16px"
-                    boxShadow="lg"
+                    boxShadow=""
                     rounded="lg"
                   >
                     <Stack>
                       <CardBody>
-                        <Heading fontSize="24">
+                        <Heading size={{base: "md" , lg: "md"}}>
                           {completedJobs.jobTitle}
                         </Heading>
                         <Heading
                           size="sm"
                           position="absolute"
                           right="10"
-                          top="6"
+                          top="5"
                         >
                           Total Pay ${completedJobs.confirmedRate}
                         </Heading>
@@ -237,7 +233,7 @@ const NeederPaymentHistory = () => {
                 </div>
               ))
             )}
-          </Center>
+        
         </Box>
       </Flex>
     </>

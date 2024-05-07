@@ -42,7 +42,7 @@ import { auth } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import { FcGoogle } from "react-icons/fc";
-import posthog from "posthog-js";
+
 
 import Plausible from 'plausible-tracker'
 
@@ -69,13 +69,11 @@ const DoerEmailRegister = () => {
 
   console.log(email, password);
 
-  const { trackEvent } = Plausible({
-    trackLocalhost: true,
-  })
+  const { trackEvent } = Plausible()
 
   const onSignUp = async () => {
     const authentication = getAuth();
-    posthog.capture('user_signed_up')
+    
     await createUserWithEmailAndPassword(authentication, email, password)
       .then(() => {
         trackEvent('Doer Register')
@@ -93,10 +91,11 @@ const DoerEmailRegister = () => {
   const handleGoogleSignUp = async () => {
     const provider = await new GoogleAuthProvider();
 
-    posthog.capture('user_signed_up_google')
+  
 
     return signInWithPopup(auth, provider)
       .then((result) => {
+        trackEvent('Doer Register')
         console.log("result", result);
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);

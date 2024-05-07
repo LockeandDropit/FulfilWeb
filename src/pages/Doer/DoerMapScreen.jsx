@@ -62,6 +62,7 @@ import star_corner from "../../images/star_corner.png";
 import star_filled from "../../images/star_filled.png";
 import NoCategoryMatchModal from "../../components/NoCategoryMatchModal";
 import { useChatContext } from "stream-chat-react";
+import { useMediaQuery } from '@chakra-ui/react'
 
 const DoerMapScreen = () => {
   const [user, setUser] = useState(null);
@@ -1280,7 +1281,7 @@ const handleRemoveFromMap = (x) => {
   
 
 }
-
+const [isDesktop] = useMediaQuery('(min-width: 500px)')
   return (
     <div>
       <DoerHeader />
@@ -1288,11 +1289,11 @@ const handleRemoveFromMap = (x) => {
         <DoerDashboard />
         {process.env.REACT_APP_GOOGLE_API_KEY ? (
           <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-            <div style={{ height: "90vh", width: "93vw" }}>
+             <Box  h={{base: "90vh", lg: "92vh"}} w={{base: "100vw", lg: "93vw"}}>
               <Map
                 // center={{ lat: selectedLat ? selectedLat : defaultLat, lng: selectedLng ? selectedLng : defaultLong }}
                 defaultCenter={{ lat: selectedLat ? selectedLat : defaultLat, lng: selectedLng ? selectedLng : defaultLong }}
-                defaultZoom={12}
+                defaultZoom={(isDesktop ? 12 : 11)}
                 gestureHandling={"greedy"}
                 disableDefaultUI={true}
                 //move to env
@@ -2620,7 +2621,7 @@ const handleRemoveFromMap = (x) => {
                   </ModalContent>
                 </Modal>
               </Map>
-            </div>
+            </Box>
           </APIProvider>
         ) : (
           <Text>loading...</Text>

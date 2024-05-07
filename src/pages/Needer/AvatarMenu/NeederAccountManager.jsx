@@ -288,8 +288,8 @@ setIsLoading(false)
              <Box justifyContent="center" marginTop="64px">
              <Center >
           <Box
-            width="34vw"
-            height="auto"
+            w={{base: "100vw", lg: "34vw"}}
+            height={{base: "100vh", lg: "auto"}}
             boxShadow=""
             rounded="lg"
             padding="8"

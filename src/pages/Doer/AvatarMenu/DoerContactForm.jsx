@@ -141,21 +141,19 @@ const DoerContactForm = () => {
     <>
       <DoerHeader />
 
-      <Flex>
-        <DoerDashboard />
+      <Flex justifyContent="center" >
+        <Box position="absolute" left="0">
+          <DoerDashboard />
+        </Box>
       
           <Box
-            width="67vw"
-            // alignContent="center"
-            // justifyContent="center"
-            // display="flex"
-            // alignItems="baseline"
-            borderWidth="2px"
-            borderColor="#E3E3E3"
-            borderLeftWidth="4px"
-            borderRightWidth="4px"
-            height="auto"
-            boxShadow="lg"
+          w={{base: "100vw", lg: "36vw"}}
+          alignItems="center"
+          alignContent="center"
+          justifyContent="center"
+           
+          height={{base: "100vh", lg: "auto"}}
+            boxShadow=""
             rounded="lg"
             padding="8"
             //   overflowY="scroll"
@@ -178,12 +176,13 @@ const DoerContactForm = () => {
            
              
            
-      <Heading size="lg" marginTop="16px" marginRight="50px">
+      <Heading size="lg" marginTop="16px" >
       Contact Us
       </Heading>
-      <Text width="400px" marginTop="16px">Have a concern, question, or complaint? Don't hesitate to reach out and we'll respond as quickly as possible.</Text>
+      <Text  w={{base: "90vw", lg: "36vw"}}  textAlign="center" marginTop="16px">Have a concern, question, or complaint?</Text>
+      <Text  w={{base: "90vw", lg: "36vw"}} textAlign="center"> Don't hesitate to reach out and we'll respond as quickly as possible.</Text>
 
-      <Textarea width="560px" height="360" borderWidth="1px" borderColor="black" marginTop="16px" onChange={(e) => setIssue(e.target.value)}></Textarea>
+      <Textarea w={{base: "90vw", lg: "36vw"}} height="360" borderWidth="1px" borderColor="black" marginTop="16px" onChange={(e) => setIssue(e.target.value)}></Textarea>
       <Button colorScheme="blue" marginTop="8" width="240px" onClick={() => submitIssue()}>Submit</Button>
      
  

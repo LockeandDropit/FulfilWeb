@@ -207,10 +207,10 @@ const DoerAddProfileInfo = () => {
     <>
       <Header />
 
-      <Flex>
+      <Flex justifyContent="center">
         <Center>
           <Box
-            width="60vw"
+               w={{base: "100vw", lg: "36vw"}}
             // alignContent="center"
             // justifyContent="center"
             // display="flex"
@@ -224,7 +224,7 @@ const DoerAddProfileInfo = () => {
             paddingLeft="8"
             paddingTop="8"
             paddingRight="8"
-            marginLeft="96"
+            ml={{base: 0, lg: "0"}}
            
             //   overflowY="scroll"
           >
@@ -239,7 +239,7 @@ const DoerAddProfileInfo = () => {
                     borderWidth=".5px"
                     placeholder={firstName ? firstName : "First Name"}
                     defaultValue={firstName ? firstName : null}
-                    width="640px"
+                    w={{base: "85vw", lg: "640px"}}
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                   <FormLabel marginTop="8">Last Name</FormLabel>
@@ -248,7 +248,7 @@ const DoerAddProfileInfo = () => {
                          defaultValue={lastName ? lastName : null}
                     borderColor="black"
                     borderWidth=".5px"
-                    width="640px"
+                    w={{base: "85vw", lg: "640px"}}
                     onChange={(e) => setLastName(e.target.value)}
                   />
                 </FormControl>
@@ -258,7 +258,7 @@ const DoerAddProfileInfo = () => {
                     placeholder="City"
                     borderColor="black"
                     borderWidth=".5px"
-                    width="640px"
+                    w={{base: "85vw", lg: "640px"}}
                     onChange={(e) => setCity(e.target.value)}
                   />
                 </FormControl>
@@ -268,16 +268,16 @@ const DoerAddProfileInfo = () => {
                     placeholder="State"
                     borderColor="black"
                     borderWidth=".5px"
-                    width="640px"
+                    w={{base: "85vw", lg: "640px"}}
                     onChange={(e) => setState(e.target.value)}
                   />
                 </FormControl>
                 <Box marginTop="32px">
 
 <Flex direction="row"> <Checkbox isChecked={termsOfService} 
-onChange={(e) => setTermsOfService(e.target.checked)}><Text  marginLeft="2px"> I have read and agree to the </Text></Checkbox> <Button backgroundColor="white" textColor="#01A2E8" height={6} _hover={{backgroundColor: "white", textColor: "#01A2E8"}} onClick={() => onOpenTOS()}>Terms and Conditions</Button></Flex>
+onChange={(e) => setTermsOfService(e.target.checked)}><Text marginTop="8px" marginLeft="4px"> I have read and agree to the  <Button backgroundColor="white" textColor="#01A2E8" height={6} _hover={{backgroundColor: "white", textColor: "#01A2E8"}}  w={{base: "120px", lg: "auto"}} ml={{base: 5, lg: "0"}} onClick={() => onOpenTOS()}>Terms and Conditions</Button> </Text></Checkbox></Flex>
 <Flex direction="row"> <Checkbox isChecked={privacyPolicy}
-onChange={(e) => setPrivacyPolicy(e.target.checked)}> <Text marginLeft="2px"> I have read and agree to the </Text></Checkbox><Button backgroundColor="white" textColor="#01A2E8" _hover={{backgroundColor: "white", textColor: "#01A2E8"}} onClick={() => onOpen()}>Privacy Policy</Button></Flex>
+onChange={(e) => setPrivacyPolicy(e.target.checked)}> <Text marginLeft="4px" marginTop="8px"> I have read and agree to the <Button backgroundColor="white" textColor="#01A2E8" _hover={{backgroundColor: "white", textColor: "#01A2E8"}} w={{base: "100px", lg: "auto"}} ml={{base: 0, lg: "0"}} onClick={() => onOpen()}>Privacy Policy</Button></Text></Checkbox></Flex>
 <Flex direction="row" marginBottom="8px"> <Checkbox isChecked={ageAgreement}
 onChange={(e) => setAgeAgreement(e.target.checked)}> <Text marginLeft="4px"> I am over 18 years of age</Text> </Checkbox></Flex>
 <Flex direction="row" > <Checkbox isChecked={taxAgreementConfirmed}
@@ -285,14 +285,13 @@ onChange={(e) => setTaxAgreementConfirmed(e.target.checked)}><Text marginLeft="4
 not an employee of Fulfil.</Text></Checkbox> </Flex>
 </Box>
                 <Button
-                  colorScheme="blue"
-                  width="240px"
-                  marginTop="48px"
-                  // bottom="2"
-                  // right="500"
-                  left="400px"
+                   colorScheme="blue"
+                   marginTop="48px"
+                   width={{base: "auto", lg: "120px"}}
+                   left={{base: "0", lg: "0"}}
+                   marginLeft={{base: "", lg: "auto"}}
                   onClick={() => checkLength()}
-                  // onClick={() => testButtonNavigate()}
+
                 >
                   Next{" "}
                 </Button>

@@ -197,28 +197,37 @@ const StripeSetUp = () => {
     <>
       <Header />
 
+      <Flex justifyContent="center">
       <Center  >
     
         <Box
         
-          borderColor="#E3E3E3"
-          height="auto"
-          boxShadow="md"
-          rounded="md"
-          padding="8"
-          width="33vw"
-          // height="80vh"
+        w={{base: "100vw", lg: "36vw"}}
+        // alignContent="center"
+        // justifyContent="center"
+        // display="flex"
+        // alignItems="baseline"
+
+        borderColor="#E3E3E3"
+        height={{base: "auto", lg: "auto"}}
+        // boxShadow="md"
+        rounded="lg"
+        // padding="8"
+        paddingLeft="8"
+        paddingTop="8"
+        paddingRight="8"
+        ml={{base: 0, lg: "0"}}
         >
           
           
           <Progress hasStripe value={75} /> 
-            <Flex direction="column" marginTop="24px">
-              
+            <Flex direction="column" marginTop={{base: "120px", lg: "24px"}}>
+            
               <Heading size="md">Lets make sure you get paid</Heading>
         
            
             {/* <Image src={smallStripe}></Image> */}
-            <Box width="25vw" marginTop="16px">
+            <Box width={{base: "80vw", lg: "25vw"}} marginTop="16px">
          
                 <Text>
                   We use Stripe, a third-party payment processor, to handle all
@@ -227,8 +236,9 @@ const StripeSetUp = () => {
                 </Text>
            
             </Box>
+           
             <Center flexDirection="column">
-          <Box marginLeft="140px" marginTop="16px">
+          <Box flexDirection="column" marginLeft={{base: "40px", lg: ""}} marginTop={{base: "32", lg: "16px"}}>
             {paymentsLoading ? (
               <Spinner
                 thickness="4px"
@@ -241,6 +251,7 @@ const StripeSetUp = () => {
                 marginBottom="8px"
               />
             ) : (
+        <Flex direction="column" mr={{base: 10, lg: 150}}>
               <Button
               backgroundColor="#01A2E8"
                  marginTop="24px"
@@ -253,19 +264,21 @@ const StripeSetUp = () => {
               >
                 Begin Onboarding
               </Button>
+               <Button
+               backgroundColor="white"
+                  
+               textColor="#01A2E8"
+               // marginBottom="24px"
+               // width="240px"
+               // onClick={() => logIn()}
+               onClick={() => navigate("/DoerMapScreen")}
+             >
+               I'll do this later
+             </Button>
+             </Flex>
             )}
 
-            <Button
-              backgroundColor="white"
-                 
-              textColor="#01A2E8"
-              marginBottom="24px"
-              width="240px"
-              // onClick={() => logIn()}
-              onClick={() => navigate("/DoerMapScreen")}
-            >
-              I'll do this later
-            </Button>
+           
             
           </Box>
           </Center>
@@ -273,7 +286,7 @@ const StripeSetUp = () => {
         </Box>
         
       </Center>
-      
+      </Flex>
     </>
   );
 };

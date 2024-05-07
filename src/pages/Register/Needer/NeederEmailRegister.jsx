@@ -43,6 +43,7 @@ import {
 import NeederRegisterMapScreen from "../../../components/NeederRegisterMapScreen.jsx";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
+import Plausible from 'plausible-tracker'
 
 const NeederEmailRegister = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -67,11 +68,14 @@ const NeederEmailRegister = () => {
 
   console.log(email, password);
 
+  const { trackEvent } = Plausible()
+
   const onSignUp = async () => {
     const authentication = getAuth();
 
     await createUserWithEmailAndPassword(authentication, email, password)
       .then(() => {
+        trackEvent('Needer Register')
         navigate("/AddProfileInfo");
       })
       .catch((error) => {
@@ -178,6 +182,7 @@ const NeederEmailRegister = () => {
 
     return signInWithPopup(auth, provider)
       .then((result) => {
+        trackEvent('Needer Register')
         console.log("result", result);
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);

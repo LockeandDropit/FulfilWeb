@@ -243,7 +243,7 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
     <>
       <Header />
 
-      <Flex>
+      <Flex justifyContent="center" >
         <Center>
           <Box
             w={{base: "100vw", lg: "60vw"}}
@@ -322,14 +322,9 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                
                 <Button
                   colorScheme="blue"
-                  width="240px"
                   marginTop="48px"
-                  // bottom="2"
-                  // right="500"
-              
                   left={{base: "0", lg: "400px"}}
                   onClick={() => checkLength()}
-                  // onClick={() => testButtonNavigate()}
                 >
                   Next{" "}
                 </Button>

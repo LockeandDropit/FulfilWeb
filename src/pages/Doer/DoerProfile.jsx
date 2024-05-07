@@ -880,7 +880,7 @@ console.log("props", props.Title)
         </Box>
         {user ? (
           <Box
-            width="38vw"
+          w={{base: "100vw", lg: "38vw"}}
         
             borderColor="#E3E3E3"
             // borderLeftWidth="4px"
@@ -1047,7 +1047,7 @@ console.log("props", props.Title)
                 height="auto"
           
                 marginBottom="32px"
-                placeholder="asdas"
+                placeholder=""
               >
                 {userBio ? userBio : "Tell us a little bit about yourself"}
               </Text>
@@ -1823,22 +1823,7 @@ console.log("props", props.Title)
           </Box>
         ) : null}
    
-            <Box
-              height={{ base: "auto", lg: 0 }}
-              width={{ base: "100vw" }}
-              backgroundColor="white"
-              borderTopWidth="1px"
-              borderTopColor="grey"
-              position="fixed"
-              bottom={0}
-            >
-              <Flex direction="row">
-                <Button width="auto">Accepted</Button>
-                <Button width="auto">Interviewing</Button>
-                <Button width="auto">Completed</Button>
-                <Button width="auto">Requests</Button>
-              </Flex>
-            </Box>
+            
           
       </Flex>
     </>

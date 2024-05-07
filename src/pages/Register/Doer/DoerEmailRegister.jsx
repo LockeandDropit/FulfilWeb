@@ -44,6 +44,8 @@ import { db } from "../../../firebaseConfig";
 import { FcGoogle } from "react-icons/fc";
 import posthog from "posthog-js";
 
+import Plausible from 'plausible-tracker'
+
 const DoerEmailRegister = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
   const navigate = useNavigate();
@@ -67,11 +69,16 @@ const DoerEmailRegister = () => {
 
   console.log(email, password);
 
+  const { trackEvent } = Plausible({
+    trackLocalhost: true,
+  })
+
   const onSignUp = async () => {
     const authentication = getAuth();
     posthog.capture('user_signed_up')
     await createUserWithEmailAndPassword(authentication, email, password)
       .then(() => {
+        trackEvent('Doer Register')
         navigate("/DoerAddProfileInfo");
       })
       .catch((error) => {

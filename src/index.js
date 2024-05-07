@@ -109,7 +109,7 @@ import PostHogPageviewTracker from "./PostHogPageViewTracker";
 posthog.init(process.env.REACT_APP_POSTHOG_API, { api_host: 'https://us.i.posthog.com' })
 
 
-// Initialize for Prod
+// Initialize for testing other things
 // if (!window.location.host.includes('127.0.0.1') && !window.location.host.includes('localhost')) {
 //   posthog.init('phc_DHDoYm85UugLraHmcoqPuxUEj78U02YiI21NBRyZaSE', { api_host: "https://us.i.posthog.com" })
 // }

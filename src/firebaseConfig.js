@@ -6,6 +6,8 @@ import {
   initializeFirestore,
   connectFirestoreEmulator,
 } from "firebase/firestore";
+import { getAnalytics } from "firebase/analytics"
+
 import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -32,6 +34,8 @@ const app = initializeApp(firebaseConfig);
 
 
 // Must be called before getFirestore() hhelp Odbol https://github.com/googleapis/nodejs-firestore/issues/1031
+
+export const analytics = getAnalytics(app)
 
 export const auth = getAuth(app);
 

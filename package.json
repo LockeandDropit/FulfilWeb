@@ -23,6 +23,7 @@
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "postcss-loader": "^8.1.1",
+    "posthog-js": "^1.131.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-email": "2.1.1",

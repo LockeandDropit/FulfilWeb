@@ -42,6 +42,7 @@ import { auth } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import { FcGoogle } from "react-icons/fc";
+import posthog from "posthog-js";
 
 const DoerEmailRegister = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -68,7 +69,7 @@ const DoerEmailRegister = () => {
 
   const onSignUp = async () => {
     const authentication = getAuth();
-
+    posthog.capture('user_signed_up')
     await createUserWithEmailAndPassword(authentication, email, password)
       .then(() => {
         navigate("/DoerAddProfileInfo");
@@ -84,6 +85,8 @@ const DoerEmailRegister = () => {
 
   const handleGoogleSignUp = async () => {
     const provider = await new GoogleAuthProvider();
+
+    posthog.capture('user_signed_up_google')
 
     return signInWithPopup(auth, provider)
       .then((result) => {

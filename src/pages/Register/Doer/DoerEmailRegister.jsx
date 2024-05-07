@@ -148,7 +148,7 @@ const DoerEmailRegister = () => {
     setPasswordValidationBegun(true);
     const isValidPassword = passwordRegex.test(password);
     if (!isValidPassword) {
-      setPasswordValidationMessage("Passwords must be 6 characters or longer");
+      setPasswordValidationMessage( "Password Invalid. Must be at least 6 characters, have 1 uppercase letter, 1 lowercase letter, and 1 number");
     } else {
       setPasswordValidationMessage();
     }
@@ -162,7 +162,9 @@ const DoerEmailRegister = () => {
   //credit https://www.sitepoint.com/using-regular-expressions-to-check-string-length/
 
   //credit Vivek S. & xanatos https://stackoverflow.com/questions/5058416/regular-expressions-how-to-accept-any-symbol
-  const passwordRegex = /[^\>]*/;
+  
+  // https://regexr.com/3bfsi
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/gm;
   const [passwordValidationBegun, setPasswordValidationBegun] = useState(false);
 
   const validatePassword = () => {

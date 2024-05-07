@@ -265,7 +265,7 @@ const Header = (props) => {
     
       </Box>
 
-    <Modal isOpen={isOpen} onClose={() => handleClose()} size={{base: "xs" , lg: "md"}}>
+    <Modal isOpen={isOpen} onClose={() => handleClose()} size={{base: "full" , lg: "md"}}>
         <ModalOverlay />
         <ModalContent>
         <Flex

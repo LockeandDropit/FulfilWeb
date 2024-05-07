@@ -100,7 +100,7 @@ const NeederEmailRegister = () => {
     const isValidPassword = passwordRegex.test(password);
     if (!isValidPassword) {
       setPasswordValidationMessage(
-        "Password Invalid. Must be 6 characters or longer"
+        "Password Invalid. Must be at least 6 characters, have 1 uppercase letter, 1 lowercase letter, and 1 number"
       );
     } else {
       setPasswordValidationMessage();
@@ -120,7 +120,10 @@ const NeederEmailRegister = () => {
   // const passwordRegex = /^[A-Za-z0-9_@./#&+-]{6,20}$/;
 
   //credit Vivek S. & xanatos https://stackoverflow.com/questions/5058416/regular-expressions-how-to-accept-any-symbol
-  const passwordRegex = /[^\>]*/;
+  
+  
+  //credit https://regexr.com/3bfsi
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/gm;
   const [passwordValidationBegun, setPasswordValidationBegun] = useState(false);
 
   const validatePassword = () => {
@@ -288,7 +291,7 @@ const NeederEmailRegister = () => {
               >
                 Sign up
               </Button>
-              {/* <Button
+              <Button
                 w={"full"}
                 variant={"outline"}
                 leftIcon={<FcGoogle />}
@@ -297,7 +300,7 @@ const NeederEmailRegister = () => {
                 <Center>
                   <Text>Sign up with Google</Text>
                 </Center>
-              </Button> */}
+              </Button>
               <Button backgroundColor="white" onClick={() => handleOpenModal()}>
                 Already have an account?&nbsp;<Text>Log In</Text>
               </Button>

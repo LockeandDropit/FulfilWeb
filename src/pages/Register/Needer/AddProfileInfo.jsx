@@ -89,6 +89,7 @@ const AddProfileInfo = () => {
   const [test, setTest] = useState(null);
   const [isEmployer, setIsEmployer] = useState(true);
   const [profilePicture, setProfilePicture] = useState(null)
+  const [phoneNumber, setPhoneNumber] = useState(null)
 
   const [hasRun, setHasRun] = useState(false);
   useEffect(() => {
@@ -110,10 +111,7 @@ const AddProfileInfo = () => {
     } else {
     }
   }, []);
-  const showID = () => {
-    //  console.log(user.uid)
-    console.log("this is the first name", firstName);
-  };
+
 
   const navigate = useNavigate();
 
@@ -186,6 +184,7 @@ useEffect(() => {
       isEmployer: true ,
       email: user.email,
       streamChatID: user.uid,
+      phoneNumber: phoneNumber ? phoneNumber : null,
       isOnboarded: false,
       emailVerified: false,
       stripeOnboarded: false,
@@ -208,6 +207,29 @@ useEffect(() => {
   navigate("/NeederMapScreen", { state: true});
   };
 
+  const [dateJoined, setDateJoined] = useState(null);
+
+  useEffect(() => {
+    //credit https://stackoverflow.com/questions/37271356/how-to-get-the-current-date-in-reactnative Irfan wani
+    setDateJoined(new Date().toLocaleString());
+  }, []);
+
+  const sendTylerEmail = () => {
+    setDoc(doc(db, "Tyler Dashboard", user.uid), {
+      firstName: firstName ? firstName : null,
+      lastName: lastName ? lastName : null,
+      isNeeder: true,
+      isDoer: false,
+      email: user.email,
+      dateJoined: dateJoined
+    })
+  }
+
+  //phone regex credit https://ihateregex.io/expr/phone/
+  const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
+  const [phoneValidationMessage, setPhoneValidationMessage] = useState();
+
+
   // big ty man regex https://www.sitepoint.com/using-regular-expressions-to-check-string-length/
   const minLengthRegEx = /^.{1,}$/;
 
@@ -218,12 +240,27 @@ useEffect(() => {
     const cityValid = minLengthRegEx.test(city);
     const stateValid = minLengthRegEx.test(state);
 
+    const phoneNumberValid = phoneRegex.test(phoneNumber)
+
     if (!firstName || !lastName || !city || !state || privacyPolicy !== true || ageAgreement !== true || termsOfService !== true) {
       alert("Please fill out all fields");
+    
+    } else if (phoneNumber ? !phoneNumberValid : null){
+      console.log("going through", phoneNumberValid)
+      setPhoneValidationMessage(
+        "Phone number format invalid"
+      );
+      //set red letter warning on phone number 
+      
     } else {
+      sendTylerEmail()
       updateUserProfileFirestore();
+      //send tyler email
     }
   };
+
+
+
 
   //handle check agreements
   const [termsOfService, setTermsOfService] = useState(false)
@@ -239,6 +276,8 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isOpenTOS, onOpen: onOpenTOS, onClose: onCloseTOS } = useDisclosure();
 
+
+  
   return (
     <>
       <Header />
@@ -247,11 +286,6 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
         <Center>
           <Box
             w={{base: "100vw", lg: "60vw"}}
-            // alignContent="center"
-            // justifyContent="center"
-            // display="flex"
-            // alignItems="baseline"
-
             borderColor="#E3E3E3"
             height="auto"
             // boxShadow="md"
@@ -261,7 +295,7 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
             paddingTop="8"
             paddingRight="8"
          
-            ml={{base: 0, lg: "96"}}
+            ml={{base: 0, lg: "0"}}
            
             //   overflowY="scroll"
           >
@@ -290,6 +324,7 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                     onChange={(e) => setLastName(e.target.value)}
                   />
                 </FormControl>
+
                 <FormControl isRequired>
                   <FormLabel marginTop="4">Enter your city</FormLabel>
                   <Input
@@ -303,6 +338,7 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                 <FormControl isRequired>
                   <FormLabel marginTop="4">Enter your state</FormLabel>
                   <Input
+                  bg={"white"}
                     placeholder="State"
                     borderColor="black"
                     borderWidth=".5px"
@@ -310,6 +346,21 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                     onChange={(e) => setState(e.target.value)}
                   />
                 </FormControl>
+                <FormLabel marginTop="4">Phone Number (optional)</FormLabel>
+                <Input
+                placeholder="(___) -___-____"
+                bg={'gray.100'}
+               
+                borderColor="black"
+                borderWidth=".5px"
+                color={'gray.500'}
+                _placeholder={{
+                  color: 'gray.500',
+                }}
+                w={{base: "85vw", lg: "640px"}}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+              <Text color="red">{phoneValidationMessage}</Text>
                 <Box marginTop="32px">
 
                 <Flex direction="row"> <Checkbox   isChecked={termsOfService} 
@@ -323,7 +374,7 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                 <Button
                   colorScheme="blue"
                   marginTop="48px"
-                  left={{base: "0", lg: "400px"}}
+                  left={{base: "0", lg: "0"}}
                   onClick={() => checkLength()}
                 >
                   Next{" "}

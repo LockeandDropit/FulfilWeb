@@ -132,6 +132,24 @@ const DoerAddProfileInfo = () => {
     );
   };
 
+  const [dateJoined, setDateJoined] = useState(null);
+
+  useEffect(() => {
+    //credit https://stackoverflow.com/questions/37271356/how-to-get-the-current-date-in-reactnative Irfan wani
+    setDateJoined(new Date().toLocaleString());
+  }, []);
+
+  const sendTylerEmail = () => {
+    setDoc(doc(db, "Tyler Dashboard", user.uid), {
+      firstName: firstName ? firstName : null,
+      lastName: lastName ? lastName : null,
+      isNeeder: false,
+      isDoer: true,
+      email: user.email,
+      dateJoined: dateJoined
+    })
+  }
+
   //yeah baby it WORKS. The below connects the user's auth ID with the firebase user document ID.. hopefully this helps in persistant auth and redux.
 
   //firestore help came from https://www.youtube.com/@NetNinja
@@ -184,6 +202,7 @@ const DoerAddProfileInfo = () => {
     if (!firstName || !lastName || !city || !state || privacyPolicy !== true || ageAgreement !== true || termsOfService !== true || taxAgreementConfirmed !== true) {
       onOpenIncomplete()
     } else {
+      sendTylerEmail()
       updateUserProfileFirestore();
     }
   };

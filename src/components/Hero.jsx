@@ -62,6 +62,7 @@ return (
               </Button>)}
             
             {/* <Button rounded={'full'}>How It Works</Button> */}
+           
           </Stack>
         </Stack>
       </Flex>

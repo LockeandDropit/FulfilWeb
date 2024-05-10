@@ -90,6 +90,8 @@ const DoerAddProfileInfo = () => {
   const [test, setTest] = useState(null);
   const [isEmployer, setIsEmployer] = useState(true);
   const [profilePicture, setProfilePicture] = useState(null)
+  const [phoneNumber, setPhoneNumber] = useState(null)
+
 
   const [hasRun, setHasRun] = useState(false);
   useEffect(() => {
@@ -189,6 +191,9 @@ const DoerAddProfileInfo = () => {
   navigate("/OnboardingDoerIDVerify");
   };
 
+  const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
+  const [phoneValidationMessage, setPhoneValidationMessage] = useState();
+
   // big ty man regex https://www.sitepoint.com/using-regular-expressions-to-check-string-length/
   const minLengthRegEx = /^.{1,}$/;
 
@@ -199,9 +204,18 @@ const DoerAddProfileInfo = () => {
     const cityValid = minLengthRegEx.test(city);
     const stateValid = minLengthRegEx.test(state);
 
+    const phoneNumberValid = phoneRegex.test(phoneNumber)
+
     if (!firstName || !lastName || !city || !state || privacyPolicy !== true || ageAgreement !== true || termsOfService !== true || taxAgreementConfirmed !== true) {
       onOpenIncomplete()
-    } else {
+    } else if (phoneNumber ? !phoneNumberValid : null){
+      console.log("going through", phoneNumberValid)
+      setPhoneValidationMessage(
+        "Phone number format invalid"
+      );
+      
+      
+    }else {
       sendTylerEmail()
       updateUserProfileFirestore();
     }
@@ -291,6 +305,21 @@ const DoerAddProfileInfo = () => {
                     onChange={(e) => setState(e.target.value)}
                   />
                 </FormControl>
+                <FormLabel marginTop="4">Phone Number (optional)</FormLabel>
+                <Input
+                placeholder="(___) -___-____"
+                bg={'gray.100'}
+               
+                borderColor="black"
+                borderWidth=".5px"
+                color={'gray.500'}
+                _placeholder={{
+                  color: 'gray.500',
+                }}
+                w={{base: "85vw", lg: "640px"}}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+              <Text color="red">{phoneValidationMessage}</Text>
                 <Box marginTop="32px">
 
 <Flex direction="row"> <Checkbox isChecked={termsOfService} 

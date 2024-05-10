@@ -229,7 +229,7 @@ const DoerHeader = () => {
      
      {isDesktop ? (
         <Box mx="4">
-          <Image src={TryMe}></Image>
+          <Image src={TryMe} onClick={() => navigate(`/`)}></Image>
         </Box>
       ) : (<>
         <HamburgerIcon onClick={() => onOpen()} ml={4} mt={4}/>{" "}

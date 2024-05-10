@@ -44,6 +44,7 @@ import NeederRegisterMapScreen from "../../../components/NeederRegisterMapScreen
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import Plausible from 'plausible-tracker'
+import LoggedOutHeader from "../../../components/Landing/LoggedOutHeader.jsx";
 
 const NeederEmailRegister = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -231,8 +232,9 @@ const NeederEmailRegister = () => {
   //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
-      <Header props={openModal} />
+      {/* <Header props={openModal} /> */}
 
+    
       <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
           <Stack spacing={4} w={"full"} maxW={"md"}>

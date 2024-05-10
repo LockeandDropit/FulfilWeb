@@ -32,6 +32,12 @@ import { Spinner } from "@chakra-ui/react";
 import Hero from "./components/Hero.jsx";
 import LandingPageMap from "./components/LandingPageMap.jsx";
 import Footer from "./components/Footer.jsx";
+import LoggedOutHeader from "./components/Landing/LoggedOutHeader.jsx";
+import MainHero from "./components/Landing/MainHero.jsx";
+import MapHero from "./components/Landing/MapHero.jsx";
+import MainCategories from "./components/Landing/MainCategories.jsx";
+import MainUserJourney from "./components/Landing/MainUserJourney.jsx";
+
 
 const Landing = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -41,12 +47,24 @@ const Landing = () => {
 
   return (
     <>
-      <Header />
+<LoggedOutHeader />
+<MainHero />
+
+<MapHero />
+<MainUserJourney />
+<MainCategories />
+
+      <Footer />
+
+
+
+      {/* <Header />
+    
 
       <Hero />
       <LandingPageMap />
       <Categories />
-      <Footer />
+      <Footer /> */}
     </>
   );
 };

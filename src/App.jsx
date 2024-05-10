@@ -21,6 +21,8 @@ import { doc, getDoc } from "firebase/firestore";
 
 import { Spinner, Center } from "@chakra-ui/react";
 
+
+
 function App() {
   //idk if this auth check is actually doing anything. can delete it right now and have no issues with any other part of the app.
   const navigate = useNavigate();

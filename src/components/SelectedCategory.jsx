@@ -64,6 +64,7 @@ import {
 import star_corner from "../images/star_corner.png";
 import star_filled from "../images/star_filled.png";
 import { useMediaQuery } from '@chakra-ui/react'
+import LoggedOutHeader from "./Landing/LoggedOutHeader.jsx";
 
 const SelectedCategory = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -242,7 +243,8 @@ const SelectedCategory = () => {
   //Card Social User PRofile Sample Template credit https://chakra-templates.vercel.app/components/cards
   return (
     <>
-      <Header props={openModal} />
+      {/* <Header props={openModal} /> */}
+     
 
       <Stack
         minH={"100vh"}
@@ -330,6 +332,7 @@ const SelectedCategory = () => {
             </Stack>
           </Stack>
         </Flex>
+         
         <Flex flex={2}>
           <Box w={{base: "100vw", lg: "60vw"}}  h="70vh" padding="8" alignContent="center">
             <Center>

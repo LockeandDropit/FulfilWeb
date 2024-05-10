@@ -103,7 +103,8 @@ const NeederDashboard = () => {
             </Flex>
           </Box>
           <Box fontWeight="600" href="#"   onClick={() => {
-              navigate("/NeederMessageList");
+              // navigate("/NeederMessageList");
+              navigate("/MainChat");
             }}>
             <Flex
               align="center"
@@ -117,7 +118,7 @@ const NeederDashboard = () => {
                 height: "42px"
               }}
             >
-              Messages
+              Test Messages
             </Flex>
           </Box>
           <Box fontWeight="600" href="#"   onClick={() => {

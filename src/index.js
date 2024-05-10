@@ -26,7 +26,8 @@ import DoerSavedList from "./pages/Doer/JobLists/DoerSavedList";
 import DoerInReviewList from "./pages/Doer/JobLists/DoerInReviewList";
 import DoerCompletedList from "./pages/Doer/JobLists/DoerCompletedList";
 import DoerEmailRegister from "./pages/Register/Doer/DoerEmailRegister";
-
+import UserProfile from "./pages/Doer/UserProfile";
+import FunnelSelectedCategory from "./components/FunnelSelectedCategory";
 //Needer Components
 import NeederPaymentComplete from "./pages/Needer/Jobs/NeederPaymentComplete";
 import NeederAccountManager from "./pages/Needer/AvatarMenu/NeederAccountManager";
@@ -94,6 +95,8 @@ import Landing from "./Landing";
 import SelectedCategory from "./components/SelectedCategory";
 import DoerSubscriptionComplete from "./pages/Doer/DoerSubscriptionComplete";
 import NeederSelectedCategory from "./pages/Needer/NeederSelectedCategory";
+
+
 
 
 import { onAuthStateChanged } from "firebase/auth";
@@ -361,6 +364,15 @@ const router = createBrowserRouter([
     path: "/NeederAllCategories",
     element: <NeederAllCategories />,
   },
+  {
+    path: "/UserProfile",
+    element: <UserProfile />,
+  },
+  {
+    path: "/FunnelSelectedCategory",
+    element: <FunnelSelectedCategory />,
+  },
+  
 ]);
 
 

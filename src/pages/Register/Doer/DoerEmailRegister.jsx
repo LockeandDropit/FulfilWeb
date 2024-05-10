@@ -220,7 +220,7 @@ setCloseInfoWindow(false)
  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
-      <Header props={openModal}/>
+      {/* <Header props={openModal}/> */}
  
       <Stack minH={"100vh"} direction={{ base: "column", md: "row" }} marginLeft={{base: 0, lg: 16}}>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
@@ -300,8 +300,8 @@ setCloseInfoWindow(false)
           </Stack>
         </Flex>
         <Flex flex={2}>
-        <Box w={{base: "70vw", lg: "60vw"}} h={{base: "50vh", lg: "70vh"}} padding="2"  alignContent="center">
-            <Box w={{base: "70vw" , lg: "60vw"}} h={{base: "50vh", lg: "70vh"}} >
+        <Box w={{base: "70vw", lg: "55vw"}} h={{base: "50vh", lg: "90vh"}} padding="2"  alignContent="center">
+            <Box w={{base: "70vw" , lg: "55vw"}} h={{base: "50vh", lg: "90vh"}} >
               <MapScreen props={closeInfoWindow}/>
             </Box>
           </Box>

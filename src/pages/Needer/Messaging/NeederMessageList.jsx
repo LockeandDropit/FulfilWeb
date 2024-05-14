@@ -66,6 +66,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
+import Header from "../Components/Header";
+import Dashboard from "../Components/Dashboard";
+
+
 
 const NeederMessageList = () => {
   // const { chatClient } = useChatContext();
@@ -768,7 +772,7 @@ const NeederMessageList = () => {
 
   return (
     <>
-      <NeederHeader />
+      <Header />
 
       {/* <Heading width="500px" marginLeft="320px" marginBottom="16px">
         Messages
@@ -776,12 +780,12 @@ const NeederMessageList = () => {
 
       <Flex direction="row">
         <Box
-          marginBottom={{ base: "", lg: "22px" }}
+          marginBottom={{ base: "", lg: "0" }}
           marginTop={{ base: "0", lg: "4" }}
         >
-          <NeederDashboard />
+          <Dashboard />
         </Box>
-        <Box height={{ base: "90vh", lg: "80vh" }}>
+        <Box height={{ base: "90vh", lg: "80vh" }} ml={{base: "0", lg: "240px"}}    marginTop={{ base: "0", lg: "20" }}>
           {doneLoading ? (
             chatClient ? (
               selectedChannel ? (

@@ -81,6 +81,10 @@ import { StreamChat } from "stream-chat";
 
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
 
+import Header from "../Components/Header";
+import Dashboard from "../Components/Dashboard";
+
+
 const NeederAccountManager = () => {
   const [hasRun, setHasRun] = useState(false);
   const [updatedBio, setUpdatedBio] = useState(null);
@@ -277,12 +281,12 @@ setIsLoading(false)
   //text flex end credit (margin-left: auto) https://www.glennstovall.com/flex-row-end-position/
   return (
     <>
-      <NeederHeader />
+      <Header />
 
       <Box width="100vw" height="85vh" alignItems="center" justifyContent="center">
       <Flex justifyContent="center">
         <Box position="absolute" left="0">
-        <NeederDashboard />
+        <Dashboard />
         </Box>
         {!loading ? (
              <Box justifyContent="center" marginTop="64px">

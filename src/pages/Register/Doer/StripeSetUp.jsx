@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../components/Header";
-
+import LoggedOutHeader from "../../../components/Landing/LoggedOutHeader";
 import {
   Input,
   Button,
@@ -195,98 +195,111 @@ const StripeSetUp = () => {
 
   return (
     <>
-      <Header />
+          <LoggedOutHeader />
 
-      <Flex justifyContent="center">
-      <Center  >
+<Center>
+   <div class="w-1/3 ">
+<div class="my-5 flex gap-x-3 ">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-11 h-10">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+</svg>
+
+
+  <div class="grow">
+    <h1 class="font-semibold text-xl text-gray-800 ">
+      Set Up Payments
+    </h1>
+
+    <p class="text-sm text-gray-500 ">
+      We use a Third-Party Payment processor (Stripe) to facilitate all of our financial transactions. Getting set up with them only takes a few minutes. Or you can do it later from your Account Settings Tab.
+    </p>
+  </div>
+</div>
+
+<div class="bg-white  shadow-sm rounded-xl  ">
+  <form>
+    <div class="py-2 sm:py-4 px-2">
+      <div class="p-4 space-y-5">
+     
+        {/* <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+          <div class="sm:col-span-3">
+            <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+              Avatar
+            </label>
+          </div>
+      
+
+          <div class="sm:col-span-9">
+        
+            <div class="flex flex-wrap items-center gap-3 sm:gap-5">
+              <span class="flex flex-shrink-0 justify-center items-center size-20 border-2 border-dotted border-gray-300 text-gray-400 rounded-full ">
+                <svg class="flex-shrink-0 size-7" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+              </span>
+
+              <div class="grow">
+                <div class="flex items-center gap-x-2">
+                  <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500" >
+                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    Upload photo
+                  </button>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+       
+        </div> */}
+  
+        
+   
     
-        <Box
-        
-        w={{base: "100vw", lg: "36vw"}}
-        // alignContent="center"
-        // justifyContent="center"
-        // display="flex"
-        // alignItems="baseline"
+      
+    
 
-        borderColor="#E3E3E3"
-        height={{base: "auto", lg: "auto"}}
-        // boxShadow="md"
-        rounded="lg"
-        // padding="8"
-        paddingLeft="8"
-        paddingTop="8"
-        paddingRight="8"
-        ml={{base: 0, lg: "0"}}
-        >
+  
+       
+        <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+          <div class="sm:col-span-3">
+            <label for="hs-pro-daufad" class="sm:mt-2.5 inline-block text-md text-gray-500 ">
+              Start Onboarding
+            </label>
+          </div>
+   
+
+          <div class="sm:col-span-9 space-y-3">
+           
+
+            <div class="p-6 pt-0 flex justify-end gap-x-2">
+      <div class="w-full flex justify-end items-center gap-x-2">
+      <button type="button" class="py-2 px-3 inline-flex justify-center items-center text-start bg-white border border-gray-200 text-gray-800 text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-gray-50" data-hs-overlay="#hs-pro-daem" onClick={() => navigate("/DoerMapScreen")}>
+            Skip
+          </button>
+
+        <input type="button"  value="Sign Up"   onClick={() => initializeOnboarding()} class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-500  hover:bg-sky-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 " data-hs-overlay="#">
           
-          
-          <Progress hasStripe value={75} /> 
-            <Flex direction="column" marginTop={{base: "120px", lg: "24px"}}>
-            
-              <Heading size="md">Lets make sure you get paid</Heading>
-        
-           
-            {/* <Image src={smallStripe}></Image> */}
-            <Box width={{base: "80vw", lg: "25vw"}} marginTop="16px">
-         
-                <Text>
-                  We use Stripe, a third-party payment processor, to handle all
-                  payment transactions to ensure the safety and security of all
-                  of our users. If you choose to skip this step now you can complete it later by accessing your "My Account".
-                </Text>
-           
-            </Box>
-           
-            <Center flexDirection="column">
-          <Box flexDirection="column" marginLeft={{base: "40px", lg: ""}} marginTop={{base: "32", lg: "16px"}}>
-            {paymentsLoading ? (
-              <Spinner
-                thickness="4px"
-                speed="0.65s"
-                emptyColor="gray.200"
-                color="#018ecb"
-                size="lg"
-                marginLeft="auto"
-                marginRight="28"
-                marginBottom="8px"
-              />
-            ) : (
-        <Flex direction="column" mr={{base: 10, lg: 150}}>
-              <Button
-              backgroundColor="#01A2E8"
-                 marginTop="24px"
-                  textColor="white"
-                marginBottom="8px"
-                _hover={{ bg: "#018ecb", textColor: "white" }}
-                width="240px"
-                // onClick={() => logIn()}
-                onClick={() => initializeOnboarding()}
-              >
-                Begin Onboarding
-              </Button>
-               <Button
-               backgroundColor="white"
-                  
-               textColor="#01A2E8"
-               // marginBottom="24px"
-               // width="240px"
-               // onClick={() => logIn()}
-               onClick={() => navigate("/DoerMapScreen")}
-             >
-               I'll do this later
-             </Button>
-             </Flex>
-            )}
+        </input>
+      </div>
+    </div>
 
            
+
             
-          </Box>
-          </Center>
-          </Flex>
-        </Box>
-        
-      </Center>
-      </Flex>
+          </div>
+       
+        </div>
+       
+      </div>
+
+    </div>
+  
+   
+  </form>
+</div>
+</div>
+
+</Center>
+
+     
     </>
   );
 };

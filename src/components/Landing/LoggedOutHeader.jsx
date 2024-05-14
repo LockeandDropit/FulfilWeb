@@ -252,6 +252,8 @@ const LoggedOutHeader = (props) => {
     setMobileOpen(!mobileOpen);
   };
 
+
+  // credit Sreenath H B input instead of button for submission/log in https://stackoverflow.com/questions/23420795/why-would-a-button-click-event-cause-site-to-reload-in-a-bootstrap-form
   return (
     <>
       {isDesktop ? (

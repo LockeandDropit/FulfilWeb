@@ -76,6 +76,9 @@ import {
 } from "firebase/firestore";
 import star_corner from "../../images/star_corner.png";
 import star_filled from "../../images/star_filled.png";
+import Header from "./Components/Header";
+import Dashboard from "./Components/Dashboard";
+
 
 const NeederAllCategories = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -90,7 +93,7 @@ const NeederAllCategories = () => {
   //Card Social User PRofile Sample Template credit https://chakra-templates.vercel.app/components/cards
   return (
     <>
-      <NeederHeader />
+      <Header />
 
       <Flex justifyContent="center">
         <Stack
@@ -100,7 +103,7 @@ const NeederAllCategories = () => {
           mb={{ base: 20, lg: "0" }}
         >
           <Box position="absolute" left="0">
-            <NeederDashboard />
+            <Dashboard />
           </Box>
           <Flex flex={2}>
             <Box
@@ -110,7 +113,7 @@ const NeederAllCategories = () => {
               mb={{ base: 20, lg: "0" }}
             >
               {/* <Center> */}
-              <Heading size="lg" marginLeft={6}>
+              <Heading size="lg" marginLeft={6} mt={{base: "0", lg: 50}}>
                 All Categories
               </Heading>
 

@@ -36,7 +36,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import {
   doc,
@@ -62,7 +62,7 @@ import { CloseIcon, EditIcon } from "@chakra-ui/icons";
 import EmbeddedPayments from "../../components/EmbeddedPayments";
 import { useLocation } from "react-router-dom";
 import NewVisitModal from "./NeederComponents/NewVisitModal";
-import { useMediaQuery } from '@chakra-ui/react'
+import { useMediaQuery } from "@chakra-ui/react";
 
 import Dashboard from "./Components/Dashboard";
 import Header from "./Components/Header";
@@ -74,21 +74,20 @@ const NeederMapScreen = () => {
 
   const location = useLocation();
 
-  const [firstVisitModalVisible ,setFirstVisitModalVisible] = useState(false)
+  const [firstVisitModalVisible, setFirstVisitModalVisible] = useState(false);
 
   useEffect(() => {
     if (location.state === null) {
     } else {
       console.log("first time? ", location.state);
 
-      setFirstVisitModalVisible(true)
+      setFirstVisitModalVisible(true);
     }
   }, [location]);
-  
 
   const [hasRun, setHasRun] = useState(false);
-  const [selectedLat, setSelectedLat] = useState(null)
-  const [selectedLng, setSelectedLng] = useState(null)
+  const [selectedLat, setSelectedLat] = useState(null);
+  const [selectedLng, setSelectedLng] = useState(null);
 
   useEffect(() => {
     if (hasRun === false) {
@@ -244,13 +243,13 @@ const NeederMapScreen = () => {
   const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState(null);
 
   const handleToggleOpen = (x) => {
-    setApplicant(null)
+    setApplicant(null);
     setOpenInfoWindowMarkerID(x.jobID);
-console.log("handle passed location", x.locationLat, x.locationLng )
+    console.log("handle passed location", x.locationLat, x.locationLng);
     //center map on spot selected
-    setSelectedLat(x.locationLat)
-    setSelectedLng(x.locationLng)
-setIsLoading(true)
+    setSelectedLat(x.locationLat);
+    setSelectedLng(x.locationLng);
+    setIsLoading(true);
     if (x.hasNewApplicant === true) {
       updateDoc(doc(db, "employers", user.uid, "Posted Jobs", x.jobTitle), {
         hasNewApplicant: false,
@@ -356,9 +355,8 @@ setIsLoading(true)
                 ...toMergeResults.find((t2) => t2.id === t1.id),
               }))
             );
-           
 
-            setIsLoading(false)
+            setIsLoading(false);
           }, 500);
 
           const ratingsQuery = query(
@@ -391,22 +389,18 @@ setIsLoading(true)
     });
 
     setTimeout(() => {
-      setIsLoading(false)
-      
-    }, 1000)
-  
+      setIsLoading(false);
+    }, 1000);
   };
-
-
 
   useEffect(() => {
     if (selectedLat) {
       setTimeout(() => {
-        setSelectedLat(null)
-        setSelectedLng(null)
-      }, 100)
+        setSelectedLat(null);
+        setSelectedLng(null);
+      }, 100);
     }
-  }, [selectedLat])
+  }, [selectedLat]);
 
   const [hiredApplicant, setHiredApplicant] = useState(null);
   const handleToggleInProgressOpen = (x) => {
@@ -672,8 +666,14 @@ setIsLoading(true)
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen: isOpenCancelConfirm, onOpen: onOpenCancelConfirm, onClose: onCloseCancelConfirm } = useDisclosure();
+  const {
+    isOpen: isOpenCancelConfirm,
+    onOpen: onOpenCancelConfirm,
+    onClose: onCloseCancelConfirm,
+  } = useDisclosure();
 
+
+  const [addJobVisible, setAddJobVisible] = useState(false)
   const [paymentsVisible, setPaymentsVisible] = useState(false);
   const [selectedJobForPayment, setSelectedJobForPayment] = useState(null);
 
@@ -683,14 +683,16 @@ setIsLoading(true)
     setSelectedJobForPayment(x);
   };
 
-  //handle canceling job
-  const confirmCancelModal = (x) => {
 
-    console.log("confirm cancel this", x)
-    onOpenCancelConfirm()
-
+  const handleAddNewJob = () => {
+    setAddJobVisible(true)
   }
 
+  //handle canceling job
+  const confirmCancelModal = (x) => {
+    console.log("confirm cancel this", x);
+    onOpenCancelConfirm();
+  };
 
   const handleDelete = (x) => {
     console.log("cancel this one", x);
@@ -706,9 +708,7 @@ setIsLoading(true)
         console.log(error);
       });
 
-
-      
-    deleteDoc(doc(db, "Map Jobs",  x.jobID), {})
+    deleteDoc(doc(db, "Map Jobs", x.jobID), {})
       .then(() => {
         //all good
       })
@@ -717,18 +717,15 @@ setIsLoading(true)
         console.log(error);
       });
 
-      deleteDoc(
-        doc(db, "employers", user.uid, "Posted Jobs", x.jobTitle),
-        {}
-      )
-        .then(() => {
-          //all good
-          onOpen();
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
+    deleteDoc(doc(db, "employers", user.uid, "Posted Jobs", x.jobTitle), {})
+      .then(() => {
+        //all good
+        onOpen();
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
 
     deleteDoc(
       doc(db, "employers", user.uid, "Jobs In Progress", x.jobTitle),
@@ -743,36 +740,44 @@ setIsLoading(true)
         console.log(error);
       });
 
-      onCloseCancelConfirm()
+    onCloseCancelConfirm();
   };
 
   const handleEdit = (x) => {
-    navigate("/EditPostedJob", { state: { jobID: x.jobID, jobTitle: x.jobTitle, isHourly: x.isHourly }})
-      };
+    navigate("/EditPostedJob", {
+      state: { jobID: x.jobID, jobTitle: x.jobTitle, isHourly: x.isHourly },
+    });
+  };
 
-const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   //payment verification and data movement initially taken from EmbeddedPayments component
 
-const handleCloseInfoWindow = () => {
-  setOpenInfoWindowMarkerID(null)
-  setApplicant(null)
-}
+  const handleCloseInfoWindow = () => {
+    setOpenInfoWindowMarkerID(null);
+    setApplicant(null);
+  };
 
-const [showList, setShowList] = useState(true)
-const [isDesktop] = useMediaQuery('(min-width: 500px)')
+  const [showList, setShowList] = useState(true);
+  const [isDesktop] = useMediaQuery("(min-width: 500px)");
   return (
     <div>
       <Header />
-      <Flex marginTop="4">
+      <Flex>
         <Dashboard />
 
         <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-          <Box  h={{base: "90vh", lg: "98vh"}} w={{base: "100vw", lg: "100vw"}}>
+          <Box
+            h={{ base: "90vh", lg: "100vh" }}
+            w={{ base: "100vw", lg: "100vw" }}
+            mt={10}
+          >
             <Map
-           
-            //   defaultCenter={{ lat: defaultLat, lng: defaultLong }}
-              defaultCenter={{ lat: selectedLat ? selectedLat : defaultLat, lng: selectedLng ? selectedLng : defaultLong }}
-              defaultZoom={(isDesktop ? 12 : 11)}
+              //   defaultCenter={{ lat: defaultLat, lng: defaultLong }}
+              defaultCenter={{
+                lat: selectedLat ? selectedLat : defaultLat,
+                lng: selectedLng ? selectedLng : defaultLong,
+              }}
+              defaultZoom={isDesktop ? 12 : 11}
               gestureHandling={"greedy"}
               disableDefaultUI={true}
               //move to env
@@ -797,455 +802,314 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                       onClick={() => handleToggleOpen(allJobs)}
                     >
                       {allJobs.hasNewApplicant || allJobs.hasUnreadMessage ? (
-                        <div>
-                          <Button
-                            colorScheme="blue"
-                            height="24px"
-                            marginRight={5}
-                          >
-                            {allJobs.isVolunteer ? (
-                              <Text>Volunteer!</Text>
-                            ) : allJobs.isFlatRate ? (
-                              <Text>${allJobs.flatRate}</Text>
-                            ) : (
-                              <Text>
-                                ${allJobs.lowerRate} - ${allJobs.upperRate}/hr
-                              </Text>
-                            )}
-                            <Badge
-                              backgroundColor="#df4b4b"
-                              textColor="white"
-                              marginBottom="16px"
-                              position="absolute"
-                              right="-4"
-                            >
-                              New
-                            </Badge>
-                          </Button>
-                        </div>
+                        <button
+                          type="button"
+                          class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
+                        >
+                          {allJobs.isVolunteer ? (
+                            <p>Volunteer!</p>
+                          ) : allJobs.isFlatRate ? (
+                            <p>${allJobs.flatRate}</p>
+                          ) : (
+                            <p>
+                              ${allJobs.lowerRate} - ${allJobs.upperRate}/hr
+                            </p>
+                          )}
+
+                          <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                            New
+                          </span>
+                        </button>
                       ) : (
-                        <div>
-                          <Button
-                            colorScheme="blue"
-                            height="24px"
-                            marginRight={5}
-                          >
-                            {allJobs.isVolunteer ? (
-                              <Text>Volunteer!</Text>
-                            ) : allJobs.isFlatRate ? (
-                              <Text>${allJobs.flatRate}</Text>
-                            ) : (
-                              <Text>
-                                ${allJobs.lowerRate} - ${allJobs.upperRate}/hr
-                              </Text>
-                            )}
-                          </Button>
-                        </div>
+                        <button
+                          type="button"
+                          class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
+                        >
+                          {allJobs.isVolunteer ? (
+                            <p>Volunteer!</p>
+                          ) : allJobs.isFlatRate ? (
+                            <p>${allJobs.flatRate}</p>
+                          ) : (
+                            <p>
+                              ${allJobs.lowerRate} - ${allJobs.upperRate}/hr
+                            </p>
+                          )}
+                        </button>
                       )}
                     </AdvancedMarker>
                     {openInfoWindowMarkerID === allJobs.jobID ? (
                       <>
-                      <Flex direction="row-reverse">
-                        <Card
-                          // align="flex-end"
-                          border="1px"
-                          borderColor="gray.400"
-                          borderWidth="1.5px"
-                          width="400px"
-                          boxShadow="lg"
-                          height="90vh"
-                          flexDirection="row"
-                        >
-                          <CloseButton
-                            position="absolute"
-                            right="2"
-                            size="lg"
-                            onClick={() => setOpenInfoWindowMarkerID(null)}
+                        <Flex direction="row-reverse">
+                          <Card
+                            width={{ base: "100vw", lg: "25vw" }}
+                            height={{ base: "94vh" }}
+                            mt={{ base: "0", lg: "10" }}
                           >
-                            X
-                          </CloseButton>
-                          <CardBody>
-                            <Flex direction="row" alignContent="center">
-                              {" "}
-                              <Heading fontSize="24" marginTop="16px">
-                                {allJobs.jobTitle}
-                              </Heading>
+                            <div class="w-100 max-h-full   bg-white rounded-xl  ">
+                              <div class="py-3 px-4 flex justify-between items-center"><button
+                                      type="button"
+                                      onClick={() => handleCloseInfoWindow()}
+                                      class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                                    >
+                                      <span class="sr-only">Close</span>
+                                      <svg
+                                        class="flex-shrink-0 size-4"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                      >
+                                        <path d="M18 6 6 18" />
+                                        <path d="m6 6 12 12" />
+                                      </svg>
+                                    </button></div>
+
+                              <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                                <div class="p-4 space-y-2">
+                                  <div class="">
+                                    
+                                    <div class="py-3  flex-column  items-center  ">
+                                      <label
+                                        for="hs-pro-dactmt"
+                                        class="block mb-2 text-xl font-medium text-gray-800 "
+                                      >
+                                        {allJobs.jobTitle}
+                                        
+                                      </label>
+                                      <p>{allJobs.city}, Minnesota</p>
+                                      {allJobs.isHourly ? (
+                                        <p>
+                                          ${allJobs.lowerRate}/hr-$
+                                          {allJobs.upperRate}
+                                          /hr
+                                        </p>
+                                      ) : (
+                                        <p>${allJobs.flatRate}</p>
+                                      )}
+                                     
+                                    </div>
+                                  </div>
+
+                                  <div class="">
+                                    <label
+                                      for="dactmi"
+                                      class=" text-lg font-medium text-gray-800 "
+                                    >
+                                      Description
+                                    </label>
+
+                                    <p>{allJobs.description}</p>
+                                  </div>
+
+                                  <div class="space-y-1 ">
+                                    <label
+                                      for="dactmm"
+                                      class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
+                                    >
+                                      Applicants
+                                    </label>
+                                    {isLoading ? (
+                                      <Center marginTop="32px">
+                                        <Spinner
+                                          thickness="4px"
+                                          speed="0.65s"
+                                          emptyColor="gray.200"
+                                          color="#01A2E8"
+                                          size="lg"
+                                        />
+                                      </Center>
+                                    ) : applicant ? (
+                                      applicant.map((applicant) => (
+                                        <>
+                                        <div className="mt-2 ">
+                                          {" "}
+                                          <li className="flex justify-between gap-x-6 py-1 ">
+                                            <div className="flex min-w-0 gap-x-4">
+                                              {applicant.profilePictureResponse ? (
+                                                <img
+                                                  className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                                                  src={
+                                                    applicant.profilePictureResponse
+                                                  }
+                                                  alt=""
+                                                />
+                                              ) : null}
+
+                                              <div className="min-w-0 flex-auto">
+                                                <p className="text-md font-semibold leading-6 text-gray-900">
+                                                  {applicant.firstName}
+                                                </p>
+
+                                                <p className="mt-1 truncate text-xs leading-5 text-gray-500"></p>
+                                                {applicant.numberOfRatings ? (
+                                                  <Flex>
+                                                    {maxRating.map(
+                                                      (item, key) => {
+                                                        return (
+                                                          <Box
+                                                            activeopacity={0.7}
+                                                            key={item}
+                                                            marginTop="5px"
+                                                          >
+                                                            <Image
+                                                              boxSize="16px"
+                                                              src={
+                                                                item <=
+                                                                applicant.rating
+                                                                  ? star_filled
+                                                                  : star_corner
+                                                              }
+                                                            ></Image>
+                                                          </Box>
+                                                        );
+                                                      }
+                                                    )}
+                                                    <p marginLeft="4px">
+                                                      (
+                                                      {
+                                                        applicant.numberOfRatings
+                                                      }{" "}
+                                                      reviews)
+                                                    </p>
+                                                  </Flex>
+                                                ) : (
+                                                  <p marginTop="2px">
+                                                    No reviews yet!
+                                                  </p>
+                                                )}
+                                              </div>
+                                            </div>
+
+                                            <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                                              {applicant.isPremium ? (
+                                                <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium bg-green-100 text-green-500 ">
+                                                  Premium Contractor
+                                                </span>
+                                              ) : null}
+                                            </div>
+                                          </li>
+                                          <div className="flex-column min-w-0 gap-x-4 mb-16">
+                                            {applicant.isPremium ? (
+                                              <>
+                                                {applicant.premiumCategoryOne ? (
+                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
+                                                    {
+                                                      applicant.premiumCategoryOne
+                                                    }
+                                                  </span>
+                                                ) : null}
+
+                                                {applicant.premiumCategoryTwo ? (
+                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                    {
+                                                      applicant.premiumCategoryTwo
+                                                    }
+                                                  </span>
+                                                ) : null}
+                                                {applicant.premiumCategoryThree ? (
+                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                    {
+                                                      applicant.premiumCategoryThree
+                                                    }
+                                                  </span>
+                                                ) : null}
+                                              </>
+                                            ) : null}
+                                            <div className="mt-2">
+                                              <p>{applicant.bio}</p>
+                                            </div>
+                                            {applicant.hasUnreadMessage ||
+                                    applicant.channelID ? ( <> <button class="w-auto  py-2 px-2 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500  "  onClick={() =>
+                                      navigateApplicantProfile(
+                                        applicant,
+                                        allJobs
+                                      )
+                                    }>
+                                    See Profile
+                                  </button>
+                                  <button class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "  onClick={() =>
+                                                navigateToChannel(applicant)
+                                              }>
+                                    See Messages
+                                    <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
+                            New
+                          </span>
+                                  </button>
+                                  </>) : ( <button class="w-auto py-2 px-2 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500  "  onClick={() =>
+                                              navigateApplicantProfile(
+                                                applicant,
+                                                allJobs
+                                              )
+                                            }>
+                                    See Profile
+                                  </button>)}
+                                           
+                                          </div>
+                                        </div>
+                                        </>
+                                      ))
+                                    ) : (
+                                      <p>No applicants yet</p>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div class="p-4 flex justify-between gap-x-2  absolute right-0 bottom-2">
+                                  <div class="w-full flex justify-end items-center gap-x-2">
+                                   
+
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        // handleDelete(allJobs)
+                                        confirmCancelModal(allJobs)
+                                      }
+                                      class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-red-600 border hover:bg-red-700 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                      data-hs-overlay="#hs-pro-datm"
+                                    >
+                                      Cancel Job
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </Card>
+                        </Flex>
+                      
+
+                        <Modal
+                          isCentered
+                          onClose={onCloseCancelConfirm}
+                          isOpen={isOpenCancelConfirm}
+                          motionPreset="slideInBottom"
+                        >
+                          <ModalOverlay />
+                          <ModalContent>
+                            <ModalHeader></ModalHeader>
+                            <ModalCloseButton />
+                            <ModalBody>
+                              <Text>
+                                Are you sure you want to cancel{" "}
+                                {allJobs.jobTitle}?
+                              </Text>
+                            </ModalBody>
+                            <ModalFooter>
                               <Button
-                                backgroundColor="white"
-                                _hover={{
-                                  bg: "white",
-                                }}
-                                onClick={() => handleEdit(allJobs)}
+                                colorScheme="blue"
+                                mr={3}
+                                onClick={() => handleDelete(allJobs)}
                               >
-                                <EditIcon />
+                                Continue
                               </Button>
-                              {/* <CloseButton position="absolute" right="2" size="lg" onClick={() => setOpenInfoWindowMarkerID(!openInfoWindowMarkerID)}>X</CloseButton> */}
-                            </Flex>
-
-                            <Heading size="sm" marginTop="2">
-                              {allJobs.city}, MN
-                            </Heading>
-                            {allJobs.isHourly ? (
-                              <Heading size="sm">
-                                ${allJobs.lowerRate}/hr-${allJobs.upperRate}/hr
-                              </Heading>
-                            ) : (
-                              <Heading size="sm">${allJobs.flatRate}</Heading>
-                            )}
-
-                            <Heading size="sm" marginTop="2">
-                              Description
-                            </Heading>
-                            <Text>{allJobs.description}</Text>
-                            <Heading size="sm" marginTop="2">
-                              Requirements
-                            </Heading>
-                            {allJobs.requirements ? (
-                              <Flex direction="row">
-                                {" "}
-                                <Text fontSize="14">{"\u25CF"} </Text>
-                                <Text marginLeft="1">
-                                  {allJobs.requirements}{" "}
-                                </Text>{" "}
-                              </Flex>
-                            ) : (
-                              <Text>No requirements listed</Text>
-                            )}
-
-                            {allJobs.requirements2 ? (
-                              <Flex direction="row">
-                                {" "}
-                                <Text fontSize="14">{"\u25CF"} </Text>
-                                <Text marginLeft="1">
-                                  {allJobs.requirements2}{" "}
-                                </Text>{" "}
-                              </Flex>
-                            ) : null}
-                            {allJobs.requirements3 ? (
-                              <Flex direction="row">
-                                {" "}
-                                <Text fontSize="14">{"\u25CF"} </Text>
-                                <Text marginLeft="1">
-                                  {allJobs.requirements3}{" "}
-                                </Text>{" "}
-                              </Flex>
-                            ) : null}
-                            <Heading size="sm" marginTop="2">
-                              Additional Notes
-                            </Heading>
-                            {allJobs.niceToHave ? (
-                              <Text>{allJobs.niceToHave}</Text>
-                            ) : (
-                              <Text>Nothing listed</Text>
-                            )}
-                            <Divider />
-                            <Heading
-                              size="md"
-                              marginTop="24px"
-                              marginBottom="16px"
-                            >
-                              Applicants
-                            </Heading>
-                            {isLoading ? (<Center  marginTop="32px">
-           <Spinner
-                      thickness="4px"
-                      speed="0.65s"
-                      emptyColor="gray.200"
-                      color="#01A2E8"
-                      size="lg"
-                    
-                    />
-        </Center>) : applicant ? (
-                              applicant.map((applicant) => (
-                                <>
-                                  {applicant.hasUnreadMessage ||
-                                  applicant.channelID ? (
-                                    <Card
-                                      padding="3"
-                                      marginTop="4px"
-                                      boxShadow="md"
-                                      key={applicant.id}
-                                    >
-                                      <Flex>
-                                        <Avatar
-                                          src={applicant.profilePictureResponse}
-                                          bg="#01A2E8"
-                                          size="md"
-                                        />
-                                        {/* <Box position="absolute" right="0" onClick={() => onOpen()}><CloseButton color='red.500'/></Box> */}
-                                        <Flex
-                                          direction="column"
-                                          marginLeft="4px"
-                                        >
-                                          <Heading size="md">
-                                            {" "}
-                                            {applicant.firstName}{" "}
-                                            {applicant.lastName}
-                                          </Heading>
-                                          {applicant.numberOfRatings ? (
-                                            <Flex>
-                                              {maxRating.map((item, key) => {
-                                                return (
-                                                  <Box
-                                                    activeopacity={0.7}
-                                                    key={item}
-                                                    marginTop="5px"
-                                                  >
-                                                    <Image
-                                                      boxSize="16px"
-                                                      src={
-                                                        item <= applicant.rating
-                                                          ? star_filled
-                                                          : star_corner
-                                                      }
-                                                    ></Image>
-                                                  </Box>
-                                                );
-                                              })}
-                                              <Text marginLeft="4px">
-                                                ({applicant.numberOfRatings} reviews)
-                                              </Text>
-                                            </Flex>
-                                          ) : (
-                                            <Text marginTop="4px">
-                                              No reviews yet!
-                                            </Text>
-                                          )}
-                                        </Flex>
-                                      </Flex>
-                                      <Flex direction="column">
-                                        {" "}
-                                        <Heading
-                                          size="sm"
-                                          marginTop="2px"
-                                          marginBottom="2px"
-                                        >
-                                          About
-                                        </Heading>
-                                        <Text
-                                          noOfLines={[1, 2]}
-                                          marginBottom="32px"
-                                        >
-                                          {applicant.bio}
-                                        </Text>
-                                        {applicant.hasUnreadMessage ? (
-                                          <Button
-                                            backgroundColor="#01A2E8"
-                                            textColor="white"
-                                            _hover={{
-                                              bg: "#018ecb",
-                                              textColor: "white",
-                                            }}
-                                            position="absolute"
-                                            right="0"
-                                            bottom="2"
-                                            height="32px"
-                                            onClick={() =>
-                                              navigateToChannel(applicant)
-                                            }
-                                          >
-                                            See Messages
-                                            <Badge
-                                              backgroundColor="#df4b4b"
-                                              textColor="white"
-                                              marginBottom="24px"
-                                              position="absolute"
-                                              right="-2"
-                                            >
-                                              New
-                                            </Badge>
-                                          </Button>
-                                        ) : (
-                                          <Button
-                                            backgroundColor="#01A2E8"
-                                            textColor="white"
-                                            _hover={{
-                                              bg: "#018ecb",
-                                              textColor: "white",
-                                            }}
-                                            position="absolute"
-                                            right="0"
-                                            bottom="2"
-                                            height="32px"
-                                            onClick={() =>
-                                              navigateToChannel(applicant)
-                                            }
-                                          >
-                                            See Messages
-                                          </Button>
-                                        )}
-                                      </Flex>
-                                    </Card>
-                                  ) : (
-                                    <Card
-                                      padding="3"
-                                      marginTop="4px"
-                                      boxShadow="md"
-                                      key={applicant.id}
-                                    >
-                                      <Flex>
-                                        <Avatar
-                                          // src="https://bit.ly/broken-link"
-                                          src={applicant.profilePictureResponse}
-                                          bg="#01A2E8"
-                                          size="md"
-                                        />
-                                        {/* <Box position="absolute" right="0" onClick={() => onOpen()}><CloseButton color='red.500'/></Box> */}
-                                        <Flex
-                                          direction="column"
-                                          marginLeft="8px"
-                                        >
-                                          <Heading size="md">
-                                            {" "}
-                                            {applicant.firstName}{" "}
-                                            {applicant.lastName}
-                                          </Heading>
-                                          {applicant.numberOfRatings ? (
-                                            <Flex>
-                                              {maxRating.map((item, key) => {
-                                                return (
-                                                  <Box
-                                                    activeopacity={0.7}
-                                                    key={item}
-                                                    marginTop="5px"
-                                                  >
-                                                    <Image
-                                                      boxSize="16px"
-                                                      src={
-                                                        item <= applicant.rating
-                                                          ? star_filled
-                                                          : star_corner
-                                                      }
-                                                    ></Image>
-                                                  </Box>
-                                                );
-                                              })}
-                                              <Text marginLeft="4px">
-                                                ({applicant.numberOfRatings} reviews)
-                                              </Text>
-                                            </Flex>
-                                          ) : (
-                                            <Text marginTop="4px">
-                                              No reviews yet!
-                                            </Text>
-                                          )}
-                                        </Flex>
-                                      </Flex>
-                                      <Flex direction="column">
-                                        {" "}
-                                        <Heading
-                                          size="sm"
-                                          marginTop="2px"
-                                          marginBottom="2px"
-                                        >
-                                          About
-                                        </Heading>
-                                        <Text
-                                          noOfLines={[1, 2]}
-                                          marginBottom="24px"
-                                        >
-                                          {applicant.bio}
-                                        </Text>
-                                        <Button
-                                          backgroundColor="white"
-                                          _hover={{
-                                            bg: "#01A2E8",
-                                            textColor: "white",
-                                          }}
-                                          position="absolute"
-                                          right="0"
-                                          bottom="0"
-                                          height="32px"
-                                          onClick={() =>
-                                            navigateApplicantProfile(
-                                              applicant,
-                                              allJobs
-                                            )
-                                          }
-                                        >
-                                          See more
-                                        </Button>
-                                      </Flex>
-                                    </Card>
-                                  )}
-                                    <Button
-                                position="absolute"
-                                bottom="8"
-                                  colorScheme="white"
-                                  textColor="red"
-                                  borderWidth="1px"
-                                  width="320px"
-                                  marginTop="8px"
-                                  onClick={() =>
-                                    // handleDelete(allJobs)
-                                    confirmCancelModal(allJobs)
-                                  }
-                                >
-                                  Cancel Job
-                                </Button>
-                                </>
-                              ))
-                              
-                            ) : (
-                              <CardFooter
-                                flexDirection="column"
-                                marginTop="4px"
-                              >
-                                <Text
-                                  alignContent="center"
-                                  justifyContent="center"
-                                  textAlign="center"
-                                  size="md"
-                                >
-                                  No applicants yet
-                                </Text>
-
-                                <Button
-                                position="absolute"
-                                bottom="8"
-                                  colorScheme="white"
-                                  textColor="red"
-                                  borderWidth="1px"
-                                  width="320px"
-                                  marginTop="8px"
-                                  onClick={() =>
-                                    // handleDelete(allJobs)
-                                    confirmCancelModal(allJobs)
-                                  }
-                                >
-                                  Cancel Job
-                                </Button>
-                              </CardFooter>
-                            )}
-                          </CardBody>
-                        </Card>
-                      </Flex>
-
-<Modal
-isCentered
-onClose={onCloseCancelConfirm}
-isOpen={isOpenCancelConfirm}
-motionPreset="slideInBottom"
->
-<ModalOverlay />
-<ModalContent>
-  <ModalHeader></ModalHeader>
-  <ModalCloseButton />
-  <ModalBody>
-    <Text>Are you sure you want to cancel {allJobs.jobTitle}?</Text>
-  </ModalBody>
-  <ModalFooter>
-    <Button
-      colorScheme="blue"
-      mr={3}
-      onClick={() => handleDelete(allJobs)}
-    >
-      Continue
-    </Button>
-  </ModalFooter>
-</ModalContent>
-</Modal>
-</>
+                            </ModalFooter>
+                          </ModalContent>
+                        </Modal>
+                      </>
                     ) : null}
                   </>
                 ))}
@@ -1270,287 +1134,264 @@ motionPreset="slideInBottom"
                       }
                     >
                       {jobsInProgressMap.hasNewApplicant ? (
-                        <div>
-                          <Button
-                            colorScheme="green"
-                            height="24px"
-                            marginRight={5}
-                          >
-                            {jobsInProgressMap.isVolunteer ? (
-                              <Text>Volunteer!</Text>
-                            ) : jobsInProgressMap.isFlatRate ? (
-                              <Text>${jobsInProgressMap.flatRate}</Text>
-                            ) : (
-                              <Text>
-                                ${jobsInProgressMap.lowerRate} - $
-                                {jobsInProgressMap.upperRate}/hr
-                              </Text>
-                            )}
-                            <Badge
-                              backgroundColor="#df4b4b"
-                              textColor="white"
-                              marginBottom="16px"
-                              position="absolute"
-                              right="-4"
-                            >
-                              New
-                            </Badge>
-                          </Button>
-                        </div>
+                        <button
+                          type="button"
+                          class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                        >
+                          {allJobs.isVolunteer ? (
+                            <p>Volunteer!</p>
+                          ) : allJobs.isFlatRate ? (
+                            <p>${allJobs.flatRate}</p>
+                          ) : (
+                            <p>
+                              ${allJobs.lowerRate} - ${allJobs.upperRate}/hr
+                            </p>
+                          )}
+
+                          <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                            New
+                          </span>
+                        </button>
                       ) : (
-                        <div>
-                          <Button
-                            colorScheme="green"
-                            height="24px"
-                            marginRight={5}
-                          >
-                            {/* {jobsInProgressMap.isVolunteer ? (
-                              <Text>Volunteer!</Text>
-                            ) : jobsInProgressMap.isHourly ? (
-                              <Text>${jobsInProgressMap.confirmedRate}/hr</Text>
-                            ) : (
-                              <Text>
-                               ${jobsInProgressMap.confirmedRate}
-                              </Text>
-                            )} */}
-                            <Text>In Progress</Text>
-                          </Button>
-                        </div>
+                        <button
+                          type="button"
+                          class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                        >
+                          <p>In Progress</p>
+                        </button>
                       )}
                     </AdvancedMarker>
                     {openInfoWindowMarkerID === jobsInProgressMap.jobID ? (
                       hiredApplicant ? (
                         <Flex direction="row-reverse">
                           <Card
-                            // align="flex-end"
-                            border="1px"
-                            borderColor="gray.400"
-                            borderWidth="1.5px"
-                            width="400px"
-                            boxShadow="lg"
-                            height="90vh"
-                            flexDirection="row"
+                            width={{ base: "100vw", lg: "25vw" }}
+                            height={{ base: "94vh" }}
+                            mt={{ base: "0", lg: "10" }}
                           >
-                            <CloseButton
-                              position="absolute"
-                              right="2"
-                              size="lg"
-                              onClick={() => setOpenInfoWindowMarkerID(null)}
-                            >
-                              X
-                            </CloseButton>
-                            <CardBody>
-                              <Flex direction="row" alignContent="center">
-                                {" "}
-                                <Heading fontSize="24" marginTop="16px">
-                                  {jobsInProgressMap.jobTitle}
-                                </Heading>
-                                {/* <CloseButton position="absolute" right="2" size="lg" onClick={() => setOpenInfoWindowMarkerID(!openInfoWindowMarkerID)}>X</CloseButton> */}
-                              </Flex>
-
-                              <Heading size="sm" marginTop="2">
-                                {jobsInProgressMap.city}, MN
-                              </Heading>
-                              {jobsInProgressMap.isHourly ? (
-                                <Heading size="sm">
-                                  ${jobsInProgressMap.confirmedRate}/hr
-                                </Heading>
-                              ) : (
-                                <Heading size="sm">
-                                  ${jobsInProgressMap.confirmedRate}
-                                </Heading>
-                              )}
-
-                              <Heading size="sm" marginTop="2">
-                                Description
-                              </Heading>
-                              <Text>{jobsInProgressMap.description}</Text>
-                              <Heading size="sm" marginTop="2">
-                                Requirements
-                              </Heading>
-                              {jobsInProgressMap.requirements ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {jobsInProgressMap.requirements}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : (
-                                <Text>No requirements listed</Text>
-                              )}
-
-                              {jobsInProgressMap.requirements2 ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {jobsInProgressMap.requirements2}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : null}
-                              {jobsInProgressMap.requirements3 ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {jobsInProgressMap.requirements3}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : null}
-                              <Heading size="sm" marginTop="2">
-                                Additional Notes
-                              </Heading>
-                              {jobsInProgressMap.niceToHave ? (
-                                <Text>{jobsInProgressMap.niceToHave}</Text>
-                              ) : (
-                                <Text>Nothing listed</Text>
-                              )}
-                              <Divider />
-                              <Heading
-                                size="md"
-                                marginTop="24px"
-                                marginBottom="16px"
-                              >
-                                You've Hired:
-                              </Heading>
-
-                              <>
-                                <Card
-                                  padding="3"
-                                  marginTop="4px"
-                                  boxShadow="md"
-                                  key={hiredApplicant.id}
-                                >
-                                  <Flex>
-                                    <Avatar
-                                      src={hiredApplicant.profilePictureResponse}
-                                      bg="#01A2E8"
-                                      size="md"
-                                    />
-                                    {/* <Box position="absolute" right="0" onClick={() => onOpen()}><CloseButton color='red.500'/></Box> */}
-                                    <Flex direction="column" marginLeft="4px">
-                                      <Heading size="md">
-                                        {" "}
-                                        {hiredApplicant.firstName}{" "}
-                                        {hiredApplicant.lastName}
-                                      </Heading>
-                                      {hiredApplicant.numberOfRatings ? (
-                                        <Flex>
-                                          {maxRating.map((item, key) => {
-                                            return (
-                                              <Box
-                                                activeopacity={0.7}
-                                                key={item}
-                                                marginTop="5px"
-                                              >
-                                                <Image
-                                                  boxSize="16px"
-                                                  src={
-                                                    item <= hiredApplicant.rating
-                                                      ? star_filled
-                                                      : star_corner
-                                                  }
-                                                ></Image>
-                                              </Box>
-                                            );
-                                          })}
-                                          <Text marginLeft="4px">
-                                            ({hiredApplicant.numberOfRatings} reviews)
-                                          </Text>
-                                        </Flex>
-                                      ) : (
-                                        <Text marginTop="4px">
-                                          No reviews yet!
-                                        </Text>
-                                      )}
-                                    </Flex>
-                                  </Flex>
-                                  <Flex direction="column">
-                                    {" "}
-                                    <Heading
-                                      size="sm"
-                                      marginTop="2px"
-                                      marginBottom="2px"
+                            <div class="w-100 max-h-full   bg-white rounded-xl  ">
+                              <div class="py-3 px-4 flex justify-between items-center"><button
+                                      type="button"
+                                      onClick={() => handleCloseInfoWindow()}
+                                      class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
                                     >
-                                      About
-                                    </Heading>
-                                    <Text
-                                      noOfLines={[1, 2]}
-                                      marginBottom="24px"
-                                    >
-                                      {hiredApplicant.bio}
-                                    </Text>
-                                    {/* <Button
-                                    backgroundColor="white"
-                                    _hover={{ bg: "#01A2E8", textColor: "white" }}
-                                    position="absolute"
-                                    right="0"
-                                    bottom="0"
-                                    height="32px"
-                                    onClick={() => navigateApplicantProfile(hiredApplicant, jobsInProgressMap)}
-                                  >
-                                    See more
-                                  </Button> */}
-                                  </Flex>
-                                </Card>
-                                <Modal
-                                  isCentered
-                                  onClose={onClose}
-                                  isOpen={isOpen}
-                                  motionPreset="slideInBottom"
-                                >
-                                  <ModalOverlay />
-                                  <ModalContent>
-                                    <ModalHeader>Success!</ModalHeader>
-                                    <ModalCloseButton />
-                                    <ModalBody>
-                                      <Text>This job was cancelled.</Text>
-                                    </ModalBody>
-                                    <ModalFooter>
-                                      <Button
-                                        colorScheme="blue"
-                                        mr={3}
-                                        onClick={onClose}
+                                      <span class="sr-only">Close</span>
+                                      <svg
+                                        class="flex-shrink-0 size-4"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
                                       >
-                                        Continue
-                                      </Button>
-                                    </ModalFooter>
-                                  </ModalContent>
-                                </Modal>
-                              </>
+                                        <path d="M18 6 6 18" />
+                                        <path d="m6 6 12 12" />
+                                      </svg>
+                                    </button></div>
 
-                              <CardFooter
-                                flexDirection="column"
-                                marginTop="16px"
-                              >
-                                <Button
-                                  backgroundColor="#01A2E8"
-                                  _hover={{ bg: "#018ecb", textColor: "white" }}
-                                  textColor="white"
-                                  width="320px"
-                                  marginTop="8px"
-                                  onClick={() =>
-                                    navigateToChannel(jobsInProgressMap)
-                                  }
-                                >
-                                  See Messages
-                                </Button>{" "}
-                                <Button
-                                  colorScheme="white"
-                                  textColor="red"
-                                  borderWidth="1px"
-                                  width="320px"
-                                  marginTop="8px"
-                                  onClick={() =>
-                                    handleDelete(jobsInProgressMap)
-                                  }
-                                >
-                                  Cancel Job
-                                </Button>
-                              </CardFooter>
-                            </CardBody>
+                              <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                                <div class="p-4 space-y-2">
+                                  <div class="">
+                                    
+                                    <div class="py-3  flex-column  items-center  ">
+                                      <label
+                                        for="hs-pro-dactmt"
+                                        class="block mb-2 text-xl font-medium text-gray-800 "
+                                      >
+                                        {jobsInProgressMap.jobTitle}
+                                        
+                                      </label>
+                                      <p>{jobsInProgressMap.city}, Minnesota</p>
+                                      {jobsInProgressMap.isHourly ? (
+                                        <p>
+                                          ${jobsInProgressMap.lowerRate}/hr-$
+                                          {jobsInProgressMap.upperRate}
+                                          /hr
+                                        </p>
+                                      ) : (
+                                        <p>${jobsInProgressMap.flatRate}</p>
+                                      )}
+                                     
+                                    </div>
+                                  </div>
+
+                                  <div class="">
+                                    <label
+                                      for="dactmi"
+                                      class=" text-lg font-medium text-gray-800 "
+                                    >
+                                      Description
+                                    </label>
+
+                                    <p>{jobsInProgressMap.description}</p>
+                                  </div>
+
+                                  <div class="space-y-1 ">
+                                    <label
+                                      for="dactmm"
+                                      class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
+                                    >
+                                      You've hired: 
+                                    </label>
+                                    {isLoading ? (
+                                      <Center marginTop="32px">
+                                        <Spinner
+                                          thickness="4px"
+                                          speed="0.65s"
+                                          emptyColor="gray.200"
+                                          color="#01A2E8"
+                                          size="lg"
+                                        />
+                                      </Center>
+                                    ) :   (
+                                     
+                                        <>
+                                        <div className="mt-2 ">
+                                          {" "}
+                                          <li className="flex justify-between gap-x-6 py-1 ">
+                                            <div className="flex min-w-0 gap-x-4">
+                                              {hiredApplicant.profilePictureResponse ? (
+                                                <img
+                                                  className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                                                  src={
+                                                    hiredApplicant.profilePictureResponse
+                                                  }
+                                                  alt=""
+                                                />
+                                              ) : null}
+
+                                              <div className="min-w-0 flex-auto">
+                                                <p className="text-md font-semibold leading-6 text-gray-900">
+                                                  {hiredApplicant.firstName}
+                                                </p>
+
+                                                <p className="mt-1 truncate text-xs leading-5 text-gray-500"></p>
+                                                {hiredApplicant.numberOfRatings ? (
+                                                  <Flex>
+                                                    {maxRating.map(
+                                                      (item, key) => {
+                                                        return (
+                                                          <Box
+                                                            activeopacity={0.7}
+                                                            key={item}
+                                                            marginTop="5px"
+                                                          >
+                                                            <Image
+                                                              boxSize="16px"
+                                                              src={
+                                                                item <=
+                                                                hiredApplicant.rating
+                                                                  ? star_filled
+                                                                  : star_corner
+                                                              }
+                                                            ></Image>
+                                                          </Box>
+                                                        );
+                                                      }
+                                                    )}
+                                                    <p marginLeft="4px">
+                                                      (
+                                                      {
+                                                        hiredApplicant.numberOfRatings
+                                                      }{" "}
+                                                      reviews)
+                                                    </p>
+                                                  </Flex>
+                                                ) : (
+                                                  <p marginTop="2px">
+                                                    No reviews yet!
+                                                  </p>
+                                                )}
+                                              </div>
+                                            </div>
+
+                                            <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                                              {hiredApplicant.isPremium ? (
+                                                <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium bg-green-100 text-green-500 ">
+                                                  Premium Contractor
+                                                </span>
+                                              ) : null}
+                                            </div>
+                                          </li>
+                                          <div className="flex-column min-w-0 gap-x-4 mb-16">
+                                            {hiredApplicant.isPremium ? (
+                                              <>
+                                                {hiredApplicant.premiumCategoryOne ? (
+                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
+                                                    {
+                                                     hiredApplicant.premiumCategoryOne
+                                                    }
+                                                  </span>
+                                                ) : null}
+
+                                                {hiredApplicant.premiumCategoryTwo ? (
+                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                    {
+                                                      hiredApplicant.premiumCategoryTwo
+                                                    }
+                                                  </span>
+                                                ) : null}
+                                                {hiredApplicant.premiumCategoryThree ? (
+                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                    {
+                                                      hiredApplicant.premiumCategoryThree
+                                                    }
+                                                  </span>
+                                                ) : null}
+                                              </>
+                                            ) : null}
+                                            <div className="mt-2">
+                                              <p>{hiredApplicant.bio}</p>
+                                            </div>
+                                            {hiredApplicant.hasUnreadMessage ? ( <> 
+                                  <button class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "  onClick={() =>
+                                                navigateToChannel(jobsInProgressMap)
+                                              }>
+                                    See Messages
+                                    <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
+                            New
+                          </span>
+                                  </button>
+                                  </>) : (   <button class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "  onClick={() =>
+                                                navigateToChannel(jobsInProgressMap)
+                                              }>
+                                    See Messages
+                                   
+                                  </button>)}
+                                           
+                                          </div>
+                                        </div>
+                                        </>
+                                      
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div class="p-4 flex justify-between gap-x-2  absolute right-0 bottom-2">
+                                  <div class="w-full flex justify-end items-center gap-x-2">
+                                   
+
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        // handleDelete(allJobs)
+                                        confirmCancelModal(jobsInProgressMap)
+                                      }
+                                      class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-red-600 border hover:bg-red-700 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                      data-hs-overlay="#hs-pro-datm"
+                                    >
+                                      Cancel Job
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </Card>
+                         
                         </Flex>
                       ) : (
                         <Text>No applicant here goes spinner</Text>
@@ -1576,21 +1417,13 @@ motionPreset="slideInBottom"
                       // onClick={() => handleToggleOpen(allJobs.jobID)}
                       onClick={() => handleToggleInReviewOpen(jobsInReviewMap)}
                     >
-                      <div>
+                      {/* <div>
                         <Button
                           colorScheme="green"
                           height="24px"
                           marginRight={5}
                         >
-                          {/* {jobsInProgressMap.isVolunteer ? (
-                              <Text>Volunteer!</Text>
-                            ) : jobsInProgressMap.isHourly ? (
-                              <Text>${jobsInProgressMap.confirmedRate}/hr</Text>
-                            ) : (
-                              <Text>
-                               ${jobsInProgressMap.confirmedRate}
-                              </Text>
-                            )} */}
+                          
                           <Text>Ready To Pay</Text>
                           <Badge
                             backgroundColor="#df4b4b"
@@ -1602,13 +1435,255 @@ motionPreset="slideInBottom"
                             Pay
                           </Badge>
                         </Button>
-                      </div>
+                      </div> */}
+
+                      <button
+                        type="button"
+                        class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                      >
+                        <p>Ready To Pay</p>
+
+                        <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                          New
+                        </span>
+                      </button>
                     </AdvancedMarker>
                     {openInfoWindowMarkerID === jobsInReviewMap.jobID ? (
                       hiredApplicant ? (
                         <Flex direction="row-reverse">
-                          <Card
-                            // align="flex-end"
+                           <Card
+                            width={{ base: "100vw", lg: "25vw" }}
+                            height={{ base: "94vh" }}
+                            mt={{ base: "0", lg: "10" }}
+                          >
+                            <div class="w-100 max-h-full   bg-white rounded-xl  ">
+                              <div class="py-3 px-4 flex justify-between items-center"><button
+                                      type="button"
+                                      onClick={() => handleCloseInfoWindow()}
+                                      class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                                    >
+                                      <span class="sr-only">Close</span>
+                                      <svg
+                                        class="flex-shrink-0 size-4"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                      >
+                                        <path d="M18 6 6 18" />
+                                        <path d="m6 6 12 12" />
+                                      </svg>
+                                    </button></div>
+
+                              <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                                <div class="p-4 space-y-2">
+                                  <div class="">
+                                    
+                                    <div class="py-3  flex-column  items-center  ">
+                                      <label
+                                        for="hs-pro-dactmt"
+                                        class="block mb-2 text-xl font-medium text-gray-800 "
+                                      >
+                                        {jobsInReviewMap.jobTitle}
+                                        
+                                      </label>
+                                      <p>{jobsInReviewMap.city}, Minnesota</p>
+                                      {jobsInReviewMap.isHourly ? (
+                                        <p>
+                                          ${jobsInReviewMap.lowerRate}/hr-$
+                                          {jobsInReviewMap.upperRate}
+                                          /hr
+                                        </p>
+                                      ) : (
+                                        <p>${jobsInReviewMap.flatRate}</p>
+                                      )}
+                                     
+                                    </div>
+                                  </div>
+
+                                  <div class="">
+                                    <label
+                                      for="dactmi"
+                                      class=" text-lg font-medium text-gray-800 "
+                                    >
+                                      Description
+                                    </label>
+
+                                    <p>{jobsInReviewMap.description}</p>
+                                  </div>
+
+                                  <div class="space-y-1 ">
+                                    <label
+                                      for="dactmm"
+                                      class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
+                                    >
+                                      You've hired: 
+                                    </label>
+                                    {isLoading ? (
+                                      <Center marginTop="32px">
+                                        <Spinner
+                                          thickness="4px"
+                                          speed="0.65s"
+                                          emptyColor="gray.200"
+                                          color="#01A2E8"
+                                          size="lg"
+                                        />
+                                      </Center>
+                                    ) :   (
+                                     
+                                        <>
+                                        <div className="mt-2 ">
+                                          {" "}
+                                          <li className="flex justify-between gap-x-6 py-1 ">
+                                            <div className="flex min-w-0 gap-x-4">
+                                              {hiredApplicant.profilePictureResponse ? (
+                                                <img
+                                                  className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                                                  src={
+                                                    hiredApplicant.profilePictureResponse
+                                                  }
+                                                  alt=""
+                                                />
+                                              ) : null}
+
+                                              <div className="min-w-0 flex-auto">
+                                                <p className="text-md font-semibold leading-6 text-gray-900">
+                                                  {hiredApplicant.firstName}
+                                                </p>
+
+                                                <p className="mt-1 truncate text-xs leading-5 text-gray-500"></p>
+                                                {hiredApplicant.numberOfRatings ? (
+                                                  <Flex>
+                                                    {maxRating.map(
+                                                      (item, key) => {
+                                                        return (
+                                                          <Box
+                                                            activeopacity={0.7}
+                                                            key={item}
+                                                            marginTop="5px"
+                                                          >
+                                                            <Image
+                                                              boxSize="16px"
+                                                              src={
+                                                                item <=
+                                                                hiredApplicant.rating
+                                                                  ? star_filled
+                                                                  : star_corner
+                                                              }
+                                                            ></Image>
+                                                          </Box>
+                                                        );
+                                                      }
+                                                    )}
+                                                    <p marginLeft="4px">
+                                                      (
+                                                      {
+                                                        hiredApplicant.numberOfRatings
+                                                      }{" "}
+                                                      reviews)
+                                                    </p>
+                                                  </Flex>
+                                                ) : (
+                                                  <p marginTop="2px">
+                                                    No reviews yet!
+                                                  </p>
+                                                )}
+                                              </div>
+                                            </div>
+
+                                            <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                                              {hiredApplicant.isPremium ? (
+                                                <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium bg-green-100 text-green-500 ">
+                                                  Premium Contractor
+                                                </span>
+                                              ) : null}
+                                            </div>
+                                          </li>
+                                          <div className="flex-column min-w-0 gap-x-4 mb-16">
+                                            {hiredApplicant.isPremium ? (
+                                              <>
+                                                {hiredApplicant.premiumCategoryOne ? (
+                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
+                                                    {
+                                                     hiredApplicant.premiumCategoryOne
+                                                    }
+                                                  </span>
+                                                ) : null}
+
+                                                {hiredApplicant.premiumCategoryTwo ? (
+                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                    {
+                                                      hiredApplicant.premiumCategoryTwo
+                                                    }
+                                                  </span>
+                                                ) : null}
+                                                {hiredApplicant.premiumCategoryThree ? (
+                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                    {
+                                                      hiredApplicant.premiumCategoryThree
+                                                    }
+                                                  </span>
+                                                ) : null}
+                                              </>
+                                            ) : null}
+                                            <div className="mt-2">
+                                              <p>{hiredApplicant.bio}</p>
+                                            </div>
+                                            {hiredApplicant.hasUnreadMessage ? ( <> 
+                                  <button class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "  onClick={() =>
+                                                navigateToChannel(jobsInReviewMap)
+                                              }>
+                                    See Messages
+                                    <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
+                            New
+                          </span>
+                                  </button>
+                                  </>) : (   <button class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "  onClick={() =>
+                                                navigateToChannel(jobsInReviewMap)
+                                              }>
+                                    See Messages
+                                   
+                                  </button>)}
+                                  <div class="w-full flex justify-end items-center gap-x-2">
+                                   
+
+                                   <button
+                                     type="button"
+                                     onClick={() =>
+                                       // handleDelete(allJobs)
+                                       handlePaymentsVisible(jobsInReviewMap)
+                                     }
+                                     class="py-2 px-3 inline-flex w-full justify-center items-center gap-x-2 text-start bg-sky-400 border hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                     data-hs-overlay="#hs-pro-datm"
+                                   >
+                                     Pay Now
+                                     <span class=" top-5 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
+                            Pay
+                          </span>
+                                   </button>
+                                 </div>
+                                           
+                                          </div>
+                                        </div>
+                                       
+                                 
+                                        </>
+                                        
+                                      
+                                    )}
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                          </Card>
+                          {/* <Card
+                       
                             border="1px"
                             borderColor="gray.400"
                             borderWidth="1.5px"
@@ -1631,7 +1706,7 @@ motionPreset="slideInBottom"
                                 <Heading fontSize="24" marginTop="16px">
                                   {jobsInReviewMap.jobTitle}
                                 </Heading>
-                                {/* <CloseButton position="absolute" right="2" size="lg" onClick={() => setOpenInfoWindowMarkerID(!openInfoWindowMarkerID)}>X</CloseButton> */}
+                               
                               </Flex>
 
                               <Heading size="sm" marginTop="2">
@@ -1710,11 +1785,13 @@ motionPreset="slideInBottom"
                                 >
                                   <Flex>
                                     <Avatar
-                                      src={hiredApplicant.profilePictureResponse}
+                                      src={
+                                        hiredApplicant.profilePictureResponse
+                                      }
                                       bg="#01A2E8"
                                       size="md"
                                     />
-                                    {/* <Box position="absolute" right="0" onClick={() => onOpen()}><CloseButton color='red.500'/></Box> */}
+                                    
                                     <Flex direction="column" marginLeft="4px">
                                       <Heading size="md">
                                         {" "}
@@ -1733,7 +1810,8 @@ motionPreset="slideInBottom"
                                                 <Image
                                                   boxSize="16px"
                                                   src={
-                                                    item <= hiredApplicant.rating
+                                                    item <=
+                                                    hiredApplicant.rating
                                                       ? star_filled
                                                       : star_corner
                                                   }
@@ -1742,7 +1820,8 @@ motionPreset="slideInBottom"
                                             );
                                           })}
                                           <Text marginLeft="4px">
-                                            ({hiredApplicant.numberOfRatings} reviews)
+                                            ({hiredApplicant.numberOfRatings}{" "}
+                                            reviews)
                                           </Text>
                                         </Flex>
                                       ) : (
@@ -1767,20 +1846,10 @@ motionPreset="slideInBottom"
                                     >
                                       {hiredApplicant.bio}
                                     </Text>
-                                    {/* <Button
-                                    backgroundColor="white"
-                                    _hover={{ bg: "#01A2E8", textColor: "white" }}
-                                    position="absolute"
-                                    right="0"
-                                    bottom="0"
-                                    height="32px"
-                                    onClick={() => navigateApplicantProfile(hiredApplicant, jobsInProgressMap)}
-                                  >
-                                    See more
-                                  </Button> */}
+                                   
                                   </Flex>
-                                </Card>
-                                <Modal
+                                </Card> */}
+                                {/* <Modal
                                   isCentered
                                   onClose={onClose}
                                   isOpen={isOpen}
@@ -1863,7 +1932,7 @@ motionPreset="slideInBottom"
                                 )}
                               </CardFooter>
                             </CardBody>
-                          </Card>
+                          </Card> */}
                         </Flex>
                       ) : (
                         <Text>No applicant here goes spinner</Text>
@@ -1875,7 +1944,9 @@ motionPreset="slideInBottom"
                 <EmbeddedPayments props={selectedJobForPayment} />
               ) : null}
 
-              {firstVisitModalVisible ? (<NewVisitModal />) : null}
+              {firstVisitModalVisible ? <NewVisitModal /> : null}
+
+             
             </Map>
           </Box>
         </APIProvider>

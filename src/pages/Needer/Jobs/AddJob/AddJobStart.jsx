@@ -71,7 +71,8 @@ import {
   AlertDescription,
   CloseButton,
 } from "@chakra-ui/react";
-
+import Header from "../../Components/Header";
+import Dashboard from "../../Components/Dashboard";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
@@ -708,11 +709,11 @@ const AddJobStart = () => {
 
   return (
     <>
-      <NeederHeader />
+      <Header />
 
       <Flex justifyContent="center" >
         <Box position="absolute" left="0">
-          <NeederDashboard />
+          <Dashboard />
         </Box>
         <Box
        

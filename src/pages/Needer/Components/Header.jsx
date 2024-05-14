@@ -1,6 +1,65 @@
 import React from 'react'
+import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import { auth, logout, db } from "../../../firebaseConfig";
+import { useState, useEffect } from "react";
+import { query, collection, onSnapshot, getDoc, doc } from "firebase/firestore";
+
 
 const Header = () => {
+    const [user, setUser] = useState();
+
+    const [hasRun, setHasRun] = useState(false);
+
+    useEffect(() => {
+      if (hasRun === false) {
+        onAuthStateChanged(auth, (currentUser) => {
+          setUser(currentUser);
+          console.log(currentUser.uid);
+        });
+        setHasRun(true);
+      } else {
+      }
+    }, []);
+
+    const [userFirstName, setUserFirstName] = useState("User");
+
+    useEffect(() => {
+      if (user != null) {
+        const docRef = doc(db, "employers", user.uid);
+  
+        getDoc(docRef).then((snapshot) => {
+          // console.log(snapshot.data());
+          setUserFirstName(snapshot.data().firstName);
+        });
+      } else {
+        console.log("oops!");
+      }
+    }, [user]);
+
+    const [profilePicture, setProfilePicture] = useState(null);
+
+    useEffect(() => {
+      if (user) {
+        getProfilePicture();
+      } else {
+      }
+    }, [user]);
+  
+    const getProfilePicture = async () => {
+      getDoc(doc(db, "employers", user.uid)).then((snapshot) => {
+        if (!snapshot.data().profilePictureResponse) {
+        } else {
+          setProfilePicture(snapshot.data().profilePictureResponse);
+        }
+      });
+    };
+
+    console.log(profilePicture)
+
+
+ 
+        
+
   return (
     <>
     <header class="lg:ms-[260px] fixed top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 bg-white border-b border-gray-200">
@@ -16,7 +75,7 @@ const Header = () => {
   
         <div class="hidden lg:block min-w-80 xl:w-full">
         
-          <div class="relative">
+          {/* <div class="relative">
             <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
               <svg class="flex-shrink-0 size-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             </div>
@@ -28,105 +87,35 @@ const Header = () => {
               </span>
               <span class="text-xs">/</span>
             </div>
-          </div>
+          </div> */}
      
         </div>
       </div>
   
       <div class="xl:col-span-2 flex justify-end items-center gap-x-2">
         <div class="flex items-center">
-          <div class="lg:hidden">
+          {/* <div class="lg:hidden">
          
             <button type="button" class="inline-flex flex-shrink-0 justify-center items-center gap-x-2 size-[38px] rounded-full text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100" data-hs-overlay="#hs-pro-dnsm">
               <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             </button>
          
-          </div>
+          </div> */}
   
     
-          <div class="hs-dropdown relative inline-flex [--placement:bottom-right]">
-         
-              <button id="hs-pro-dnhd" type="button" class=" size-[38px] inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 ">
-                <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              </button>
-           
-  
-         
-            <div class="hs-dropdown-menu hs-dropdown-open:opacity-100 w-60 transition-[opacity,margin] duration opacity-0 hidden z-10 bg-white rounded-xl shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)]" aria-labelledby="hs-pro-dnhd">
-              <div class="p-1">
-                <a class="flex gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100" href="#">
-                  <svg class="flex-shrink-0 mt-1 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-                  Help Centre
-                </a>
-                <a class="flex gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100" href="#">
-                  <svg class="flex-shrink-0 mt-1 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                  Community
-                </a>
-                <a class="flex gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100" href="#">
-                  <svg class="flex-shrink-0 mt-1 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-                  What’s New
-                </a>
-  
-                <div class="my-1 border-t border-gray-200"></div>
-  
-                <a class="flex gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100" href="#">
-                  <svg class="flex-shrink-0 mt-1 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                  Privacy and Legal
-                </a>
-                <a class="flex gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100" href="#">
-                  <svg class="flex-shrink-0 mt-1 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                  Documentation
-                </a>
-                <a class="flex gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100" href="#">
-                  <svg class="flex-shrink-0 mt-1 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                  Hire an Expert
-                  <div class="ms-auto">
-                    <span class="inline-flex items-center gap-1.5 py-px px-1.5 rounded text-[10px] leading-4 font-medium bg-gray-100 text-gray-800">
-                      New
-                    </span>
-                  </div>
-                </a>
-  
-                <div class="my-1 border-t border-gray-200"></div>
-  
-                <a class="flex gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100" href="#">
-                  <svg class="flex-shrink-0 mt-1 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" x2="15" y1="10" y2="10"/><line x1="12" x2="12" y1="7" y2="13"/></svg>
-                  Submit Feedback
-                </a>
-                <div class="hs-dropdown [--strategy:static] md:[--strategy:absolute] [--adaptive:none] md:[--trigger:hover] relative">
-                  <button type="button" class="hs-dropdown-toggle w-full flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100">
-                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                    Contact Us
-                    <svg class="rotate-90 md:rotate-0 ms-auto size-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                  </button>
-  
-                  <div class="hs-dropdown-menu transition-[opacity,margin] duration-[0.1ms] md:duration-[150ms] hs-dropdown-open:opacity-100 opacity-0 md:w-48 hidden z-10 top-0 end-full md:!me-3 md:mt-1 md:p-1 bg-white md:shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)] md:rounded-lg before:absolute before:-end-5 before:top-0 before:h-full before:w-5">
-                    <a class="flex gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100" href="#">
-                      <svg class="flex-shrink-0 mt-1 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v5Z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>
-                      Contact Support
-                    </a>
-                    <a class="flex gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100" href="#">
-                      <svg class="flex-shrink-0 mt-1 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/></svg>
-                      Contact Sales
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-           
-          </div>
+          
       
   
           <div class="hs-dropdown [--auto-close:inside] relative inline-flex">
             <div class="hs-tooltip [--placement:bottom] inline-block">
               <button id="hs-pro-dnnd" type="button" class="hs-tooltip-toggle relative size-[38px] inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
                 <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-                <span class="flex absolute top-0 end-0 z-10 -mt-1.5 -me-1.5">
+                {/* <span class="flex absolute top-0 end-0 z-10 -mt-1.5 -me-1.5">
                   <span class="animate-ping absolute inline-flex size-full rounded-full bg-red-400 opacity-75"></span>
                   <span class="relative min-w-[18px] min-h-[18px] inline-flex justify-center items-center text-[10px] bg-red-500 text-white rounded-full px-1">
                     2
                   </span>
-                </span>
+                </span> */}
               </button>
               <span class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1.5 px-2.5 bg-gray-900 text-xs text-white rounded-lg" role="tooltip">
                 Notifications
@@ -502,367 +491,12 @@ const Header = () => {
      
   
        
-          <div class="hs-tooltip [--placement:bottom] inline-block">
-            <button type="button" class="hs-tooltip-toggle size-[38px] inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100" data-hs-overlay="#hs-pro-dnam">
-              <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-            </button>
-            <span class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 inline-block absolute invisible z-20 py-1.5 px-2.5 bg-gray-900 text-xs text-white rounded-lg" role="tooltip">
-              Activity
-            </span>
-          </div>
+       
         
         </div>
   
  
-        <div class="hs-dropdown [--auto-close:inside] relative inline-flex">
-          <button id="hs-pro-dnshd" type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-            Share
-          </button>
-  
-     
-          <div class="hs-dropdown-menu hs-dropdown-open:opacity-100 w-full sm:w-[460px] transition-[opacity,margin] duration opacity-0 hidden z-10 bg-white border-t border-gray-200 sm:border-t-0 sm:rounded-lg shadow-md sm:shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)]" aria-labelledby="hs-pro-dnshd">
-      
-            <div class="p-4 border-b border-gray-200">
-              <span class="block text-xs font-medium text-gray-800 mb-2">
-                Invite
-              </span>
-  
-            
-              <div class="flex items-center gap-x-2">
-                <div class="relative w-full">
-                  <input type="text" class="py-2 px-3 pe-24 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500" placeholder="Add name or emails" />
-                  <div class="absolute inset-y-0 end-0 flex items-center z-20 pe-[5px] text-gray-400">
-               
-                    <div class="relative inline-block">
-                      <select data-hs-select='{
-                          "placeholder": "Select option...",
-                          "toggleTag": "<button type=\"button\"></button>",
-                          "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1.5 ps-2.5 pe-6 inline-flex flex-shrink-0 justify-center items-center gap-x-1.5 text-xs text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 before:absolute before:inset-0 before:z-[1]",
-                          "dropdownClasses": "end-0 mt-2 z-50 w-28 p-1 space-y-0.5 bg-white rounded-xl shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)]",
-                          "optionClasses": "hs-selected:bg-gray-100 py-1.5 px-2 w-full text-xs text-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100",
-                          "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><svg class=\"flex-shrink-0 size-3.5 text-gray-800" xmlns=\"http:.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></span></div>"
-                        }' class="hidden">
-                        <option value="">Choose</option>
-                        <option selected>Can view</option>
-                        <option>Can edit</option>
-                        <option>Admin</option>
-                      </select>
-  
-                      <div class="absolute top-1/2 end-1.5 -translate-y-1/2">
-                        <svg class="flex-shrink-0 size-3.5 text-gray-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                      </div>
-                    </div>
-                
-                  </div>
-                </div>
-  
-                <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  Send
-                </button>
-              </div>
-           
-  
-              <div class="flex mt-2">
-                <input type="checkbox" class="shrink-0 size-3.5 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" id="hs-pro-dnshdch" checked />
-                <label for="hs-pro-dnshdch" class="text-xs text-gray-600 ms-1.5">
-                  Notify recipients via email
-                </label>
-              </div>
-            </div>
-           
-            <div id="hs-dropdown-share-body" class="p-4 space-y-4 overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300" >
-              <span class="block text-xs font-medium text-gray-800">
-                From Htmlstream
-              </span>
-  
-        
-              <div class="w-full flex items-center gap-x-3">
-                <img class="flex-shrink-0 size-[38px] rounded-full" src="https://images.unsplash.com/photo-1659482633369-9fe69af50bfb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=3&w=320&h=320&q=80" alt="Image Description" />
-                <div class="grow">
-                  <span class="block text-sm font-medium text-gray-800">
-                    James Collison <span class="text-xs font-normal text-gray-500">(you)</span>
-                  </span>
-                  <span class="block text-xs text-gray-500">
-                    james@site.com
-                  </span>
-                </div>
-  
-       
-                <div class="relative">
-                  <select data-hs-select='{
-                      "placeholder": "Select option...",
-                      "toggleTag": "<button type=\"button\"></button>",
-                      "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1.5 ps-2.5 pe-6 inline-flex flex-shrink-0 justify-center items-center gap-x-1.5 text-xs text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 before:absolute before:inset-0 before:z-[1]",
-                      "dropdownClasses": "end-0 mt-2 z-50 w-28 p-1 space-y-0.5 bg-white rounded-xl shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)]",
-                      "optionClasses": "hs-selected:bg-gray-100 py-1.5 px-2 w-full text-xs text-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100",
-                      "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><svg class=\"flex-shrink-0 size-3.5 text-gray-800" xmlns=\"http:.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></span></div>",
-                      "viewport": "#hs-dropdown-share-body"
-                    }' class="hidden">
-                    <option value="">Choose</option>
-                    <option>Can view</option>
-                    <option>Can edit</option>
-                    <option selected>Admin</option>
-                    <option>Remove</option>
-                  </select>
-  
-                  <div class="absolute top-1/2 end-1.5 -translate-y-1/2">
-                    <svg class="flex-shrink-0 size-3.5 text-gray-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                  </div>
-                </div>
-          
-              </div>
-   
-  
-              <div class="w-full flex items-center gap-x-3">
-                <span class="flex flex-shrink-0 justify-center items-center size-[38px] bg-white border border-gray-200 text-gray-500 text-sm font-semibold rounded-full shadow-sm">
-                  L
-                </span>
-                <div class="grow">
-                  <span class="block text-sm font-medium text-gray-800">
-                    Liza Harrison
-                  </span>
-                  <span class="block text-xs text-gray-500">
-                    liza@site.com
-                  </span>
-                </div>
-  
- 
-                <div class="relative">
-                  <select data-hs-select='{
-                      "placeholder": "Select option...",
-                      "toggleTag": "<button type=\"button\"></button>",
-                      "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1.5 ps-2.5 pe-6 inline-flex flex-shrink-0 justify-center items-center gap-x-1.5 text-xs text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 before:absolute before:inset-0 before:z-[1]",
-                      "dropdownClasses": "end-0 mt-2 z-50 w-28 p-1 space-y-0.5 bg-white rounded-xl shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)]",
-                      "optionClasses": "hs-selected:bg-gray-100 py-1.5 px-2 w-full text-xs text-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100",
-                      "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><svg class=\"flex-shrink-0 size-3.5 text-gray-800" xmlns=\"http:.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></span></div>",
-                      "viewport": "#hs-dropdown-share-body"
-                    }' class="hidden">
-                    <option value="">Choose</option>
-                    <option selected>Can view</option>
-                    <option>Can edit</option>
-                    <option>Admin</option>
-                    <option>Remove</option>
-                  </select>
-  
-                  <div class="absolute top-1/2 end-1.5 -translate-y-1/2">
-                    <svg class="flex-shrink-0 size-3.5 text-gray-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                  </div>
-                </div>
 
-              </div>
-       
-  
-         
-              <div class="w-full flex items-center gap-x-3">
-                <img class="flex-shrink-0 size-[38px] rounded-full" src="https://images.unsplash.com/photo-1601935111741-ae98b2b230b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=3&w=320&h=320&q=80" alt="Image Description" />
-                <div class="grow">
-                  <span class="block text-sm font-medium text-gray-800">
-                    Daniel Hobbs
-                  </span>
-                  <span class="block text-xs text-gray-500">
-                    dhobbs@site.com
-                  </span>
-                </div>
-  
-                <div class="relative">
-                  <select data-hs-select='{
-                      "placeholder": "Select option...",
-                      "toggleTag": "<button type=\"button\"></button>",
-                      "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1.5 ps-2.5 pe-6 inline-flex flex-shrink-0 justify-center items-center gap-x-1.5 text-xs text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 before:absolute before:inset-0 before:z-[1]",
-                      "dropdownClasses": "end-0 mt-2 z-50 w-28 p-1 space-y-0.5 bg-white rounded-xl shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)]",
-                      "optionClasses": "hs-selected:bg-gray-100 py-1.5 px-2 w-full text-xs text-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100",
-                      "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><svg class=\"flex-shrink-0 size-3.5 text-gray-800" xmlns=\"http:.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></span></div>",
-                      "viewport": "#hs-dropdown-share-body"
-                    }' class="hidden">
-                    <option value="">Choose</option>
-                    <option>Can view</option>
-                    <option selected>Can edit</option>
-                    <option>Admin</option>
-                    <option>Remove</option>
-                  </select>
-  
-                  <div class="absolute top-1/2 end-1.5 -translate-y-1/2">
-                    <svg class="flex-shrink-0 size-3.5 text-gray-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                  </div>
-                </div>
-               
-              </div>
-          
-  
-           
-              <button type="button" class="hs-collapse-toggle hs-collapse-open:hidden w-full text-start flex items-center gap-x-3 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100" id="hs-pro-dshdc-item-button" data-hs-collapse="#hs-pro-dshdc-button">
-                <span class="flex flex-shrink-0 justify-center items-center size-[38px] text-sm font-semibold text-gray-500 rounded-lg">
-                  <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-                  </svg>
-                </span>
-  
-                <span class="grow">
-                  <span class="text-xs text-gray-500">
-                    2 more people
-                  </span>
-                </span>
-              </button>
-        
-  
-              <div id="hs-pro-dshdc-button" class="hs-collapse hidden w-full transition-none space-y-4" aria-labelledby="hs-pro-dshdc-item-button">
-           
-                <div class="w-full flex items-center gap-x-3">
-                  <span class="flex flex-shrink-0 justify-center items-center size-[38px] bg-white border border-gray-200 text-gray-500 text-sm font-semibold rounded-full shadow-sm">
-                    O
-                  </span>
-                  <div class="grow">
-                    <span class="block text-sm font-medium text-gray-800">
-                      Ols Shols
-                    </span>
-                    <span class="block text-xs text-gray-500">
-                      ols@site.com
-                    </span>
-                  </div>
-  
-                  <div class="relative">
-                    <select data-hs-select='{
-                        "placeholder": "Select option...",
-                        "toggleTag": "<button type=\"button\"></button>",
-                        "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1.5 ps-2.5 pe-6 inline-flex flex-shrink-0 justify-center items-center gap-x-1.5 text-xs text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 before:absolute before:inset-0 before:z-[1]",
-                        "dropdownClasses": "end-0 mt-2 z-50 w-28 p-1 space-y-0.5 bg-white rounded-xl shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)]",
-                        "optionClasses": "hs-selected:bg-gray-100 py-1.5 px-2 w-full text-xs text-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100",
-                        "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><svg class=\"flex-shrink-0 size-3.5 text-gray-800" xmlns=\"http:.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></span></div>",
-                      "viewport": "#hs-dropdown-share-body"
-                      }' class="hidden">
-                      <option value="">Choose</option>
-                      <option>Can view</option>
-                      <option selected>Can edit</option>
-                      <option>Admin</option>
-                      <option>Remove</option>
-                    </select>
-  
-                    <div class="absolute top-1/2 end-1.5 -translate-y-1/2">
-                      <svg class="flex-shrink-0 size-2.5 text-gray-600" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                      </svg>
-                    </div>
-                  </div>
-               
-                </div>
-            
-  
-             
-                <div class="w-full flex items-center gap-x-3">
-                  <img class="flex-shrink-0 size-[38px] rounded-full" src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=3&w=320&h=320&q=80" alt="Image Description" />
-                  <div class="grow">
-                    <span class="block text-sm font-medium text-gray-800">
-                      Crane
-                    </span>
-                    <span class="block text-xs text-gray-500">
-                      crane@site.com
-                    </span>
-                  </div>
-  
-              
-                  <div class="relative">
-                    <select data-hs-select='{
-                        "placeholder": "Select option...",
-                        "toggleTag": "<button type=\"button\"></button>",
-                        "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1.5 ps-2.5 pe-6 inline-flex flex-shrink-0 justify-center items-center gap-x-1.5 text-xs text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 before:absolute before:inset-0 before:z-[1]",
-                        "dropdownClasses": "end-0 mt-2 z-50 w-28 p-1 space-y-0.5 bg-white rounded-xl shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)]",
-                        "optionClasses": "hs-selected:bg-gray-100 py-1.5 px-2 w-full text-xs text-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100",
-                        "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><svg class=\"flex-shrink-0 size-3.5 text-gray-800" xmlns=\"http:.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></span></div>",
-                      "viewport": "#hs-dropdown-share-body"
-                      }' class="hidden">
-                      <option value="">Choose</option>
-                      <option selected>Can view</option>
-                      <option>Can edit</option>
-                      <option>Admin</option>
-                      <option>Remove</option>
-                    </select>
-  
-                    <div class="absolute top-1/2 end-1.5 -translate-y-1/2">
-                      <svg class="flex-shrink-0 size-2.5 text-gray-600" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                      </svg>
-                    </div>
-                  </div>
-                  
-                </div>
-          
-              </div>
-             
-  
-            
-              <div class="w-full flex items-center gap-x-3">
-                <img class="flex-shrink-0 size-[38px] rounded-full" src="https://images.unsplash.com/photo-1670272505340-d906d8d77d03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=3&w=320&h=320&q=80" alt="Image Description" />
-                <div class="grow">
-                  <span class="block text-sm font-medium text-gray-800">
-                    Anna Richard
-                  </span>
-                  <span class="block text-xs text-gray-500">
-                    anna@site.com
-                  </span>
-                </div>
-  
-           
-                <div class="relative">
-                  <select data-hs-select='{
-                      "placeholder": "Select option...",
-                      "toggleTag": "<button type=\"button\"></button>",
-                      "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-1.5 ps-2.5 pe-6 inline-flex flex-shrink-0 justify-center items-center gap-x-1.5 text-xs text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 before:absolute before:inset-0 before:z-[1]",
-                      "dropdownClasses": "end-0 mt-2 z-50 w-28 p-1 space-y-0.5 bg-white rounded-xl shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)]",
-                      "optionClasses": "hs-selected:bg-gray-100 py-1.5 px-2 w-full text-xs text-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100",
-                      "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><svg class=\"flex-shrink-0 size-3.5 text-gray-800" xmlns=\"http:.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></span></div>",
-                      "viewport": "#hs-dropdown-share-body"
-                    }' class="hidden">
-                    <option value="">Choose</option>
-                    <option>Can view</option>
-                    <option selected>Can edit</option>
-                    <option>Admin</option>
-                    <option>Remove</option>
-                  </select>
-  
-                  <div class="absolute top-1/2 end-1.5 -translate-y-1/2">
-                    <svg class="flex-shrink-0 size-3.5 text-gray-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                  </div>
-                </div>
-             
-              </div>
-           
-            </div>
-       
-            <div class="p-5 border-t border-gray-200">
-              <span class="block text-xs font-medium text-gray-800 mb-2">
-                Share read-only link
-              </span>
-  
-      
-              <div class="flex items-center gap-x-2">
-                <input type="text" class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500" value="https://www.figma.com/community/file/1179068859697769656" />
-  
-                <button type="button" class="js-clipboard [--is-toggle-tooltip:false] hs-tooltip size-[38px] flex-shrink-0 inline-flex justify-center items-center gap-x-2 rounded-lg border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-200"
-                  data-clipboard-target="#hs-mshct"
-                  data-clipboard-action="copy"
-                  data-clipboard-success-text="Copied">
-                  <svg class="js-clipboard-default flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                  <svg class="js-clipboard-success hidden size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity hidden invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-lg shadow-sm" role="tooltip">
-                    <span class="js-clipboard-success-text">Copy</span>
-                  </span>
-                </button>
-              </div>
-            
-            </div>
-       
-  
-   
-            <div class="p-4 border-t border-gray-200">
-              <a class="inline-flex items-center gap-x-1.5 text-xs text-gray-500 hover:underline font-medium focus:outline-none focus:underline" href="#">
-                <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                Read more about share
-              </a>
-            </div>
-    
-          </div>
-       
-        </div>
      
   
         <div class="border-e border-gray-200 w-px h-6 mx-1.5"></div>
@@ -871,7 +505,15 @@ const Header = () => {
       
           <div class="hs-dropdown relative inline-flex   [--strategy:absolute] [--auto-close:inside] [--placement:bottom-right]">
             <button id="@@id" type="button" class="inline-flex flex-shrink-0 items-center gap-x-3 text-start rounded-full focus:outline-none focus:bg-gray-100" >
-              <img class="flex-shrink-0 size-[38px] rounded-full" src="https://images.unsplash.com/photo-1659482633369-9fe69af50bfb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=3&w=320&h=320&q=80" alt="Image Description" />
+              {profilePicture ? ( <img class="flex-shrink-0 size-[38px] rounded-full" src={profilePicture} alt="Image Description" />) : (   <span class="inline-block size-[46px] bg-gray-100 rounded-full overflow-hidden">
+  <svg class="size-full text-gray-300" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0.62854" y="0.359985" width="15" height="15" rx="7.5" fill="white"></rect>
+    <path d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z" fill="currentColor"></path>
+    <path d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z" fill="currentColor"></path>
+  </svg>
+</span>)}
+             
+
             </button>
   
           

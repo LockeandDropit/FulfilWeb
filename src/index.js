@@ -59,7 +59,7 @@ import NeederEmailRegister from "./pages/Register/Needer/NeederEmailRegister";
 import EditPostedJob from "./pages/Needer/Jobs/EditPostedJob";
 import EditJobInfo from "./pages/Needer/Jobs/EditJobInfo";
 import NeederAllCategories from "./pages/Needer/NeederAllCategories";
-
+import Test from "./pages/Needer/Test";
 
 
 
@@ -372,7 +372,10 @@ const router = createBrowserRouter([
     path: "/FunnelSelectedCategory",
     element: <FunnelSelectedCategory />,
   },
-  
+  {
+    path: "/Test",
+    element: <Test />,
+  },
 ]);
 
 

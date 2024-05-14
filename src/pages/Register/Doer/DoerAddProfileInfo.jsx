@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../components/Header";
-
+import LoggedOutHeader from "../../../components/Landing/LoggedOutHeader";
 import {
   Input,
   Button,
@@ -188,7 +188,7 @@ const DoerAddProfileInfo = () => {
         console.log(error);
       });
 
-  navigate("/OnboardingDoerIDVerify");
+  navigate("/StripeSetUp");
   };
 
   const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
@@ -238,9 +238,221 @@ const DoerAddProfileInfo = () => {
     const { isOpen: isOpenIncomplete, onOpen: onOpenIncomplete, onClose: onCloseIncomplete } = useDisclosure();
   return (
     <>
-      <Header />
+      <LoggedOutHeader />
 
-      <Flex justifyContent="center">
+<Center>
+   <div class="w-1/3 ">
+<div class="my-5 flex gap-x-3 ">
+  <svg class="flex-shrink-0 size-10 text-gray-400 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
+
+  <div class="grow">
+    <h1 class="font-semibold text-xl text-gray-800 ">
+      Create your profile
+    </h1>
+
+    <p class="text-sm text-gray-500 ">
+      We just need a few pieces of information to get started
+    </p>
+  </div>
+</div>
+
+<div class="bg-white  shadow-sm rounded-xl  ">
+  <form>
+    <div class="py-2 sm:py-4 px-2">
+      <div class="p-4 space-y-5">
+     
+        {/* <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+          <div class="sm:col-span-3">
+            <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+              Avatar
+            </label>
+          </div>
+      
+
+          <div class="sm:col-span-9">
+        
+            <div class="flex flex-wrap items-center gap-3 sm:gap-5">
+              <span class="flex flex-shrink-0 justify-center items-center size-20 border-2 border-dotted border-gray-300 text-gray-400 rounded-full ">
+                <svg class="flex-shrink-0 size-7" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+              </span>
+
+              <div class="grow">
+                <div class="flex items-center gap-x-2">
+                  <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500" >
+                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    Upload photo
+                  </button>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+       
+        </div> */}
+  
+        <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+          <div class="sm:col-span-3">
+            <label for="hs-pro-daufnm" class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+              First Name
+            </label>
+          </div>
+      
+          <div class="sm:col-span-9">
+            <input id="hs-pro-daufnm"  onChange={(e) => setFirstName(e.target.value)} type="text" class="py-2 px-3 block w-full  rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="First Name"  />
+          </div>
+        
+        </div>
+        <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+          <div class="sm:col-span-3">
+            <label for="hs-pro-daufnm" class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+              Last Name
+            </label>
+          </div>
+      
+          <div class="sm:col-span-9">
+            <input id="hs-pro-daufnm"  onChange={(e) => setLastName(e.target.value)} type="text" class="py-2 px-3 block w-full  rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="Last Name"  />
+          </div>
+        
+        </div>
+    
+        <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+          <div class="sm:col-span-3">
+            <label for="hs-pro-daufnm" class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+              Business Name (optional)
+            </label>
+          </div>
+  
+
+          <div class="sm:col-span-9">
+            <input id="hs-pro-daufem" type="email" class="py-2 px-3 block w-full  rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="My Business Inc."  />
+          </div>
+   
+        </div>
+    
+
+  
+        <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+          <div class="sm:col-span-3">
+            <label for="hs-pro-daufph" class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+              Phone (optional)
+            </label>
+          </div>
+      
+
+          <div class="sm:col-span-9">
+            <div id="hs-wrapper-for-copy" class="space-y-3">
+              <div id="hs-content-for-copy" class="grid grid-cols-12 gap-2">
+                
+                <div class="col-span-9">
+                  <input type="text"   onChange={(e) => setPhoneNumber(e.target.value)} class="py-2 px-3 block w-full  rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="Phone"  />
+                </div>
+              </div>
+            </div>
+
+           
+       
+          </div>
+   
+        </div>
+  
+        <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+          <div class="sm:col-span-3">
+            <label for="hs-pro-daufad" class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+              Address
+            </label>
+          </div>
+   
+
+          <div class="sm:col-span-9 space-y-3">
+            <div class="space-y-3">
+              <input id="hs-pro-daufad" type="text" class="py-2 px-3 block w-full  rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="City"  onChange={(e) => setCity(e.target.value)} />
+              
+            </div>
+
+            <div class="grid grid-cols-2 gap-x-3">
+              <div>
+                <input type="text" class="py-2 px-3 block w-full  rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="State"  onChange={(e) => setState(e.target.value)}/>
+              </div>
+              
+            </div>
+
+            
+          </div>
+       
+        </div>
+       
+      </div>
+
+    </div>
+    <ul class="max-w-lg flex flex-col">
+ 
+    <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white  text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg ">
+    <div class="relative flex items-start w-full">
+      <div class="flex items-center h-5">
+        <input  name="hs-list-group-item-checkbox-2" type="checkbox"  onChange={(e) => setTermsOfService(e.target.checked)}/>
+      </div>
+      <label onClick={() => onOpenTOS()} for="hs-list-group-item-checkbox-2" class="ms-3.5 block w-full text-sm text-gray-600 ">
+      I have read and agree to the <span class="text-sky-400">Terms of Service.</span>
+      </label>
+    </div>
+  </li>
+  <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
+    <div class="relative flex items-start w-full">
+      <div class="flex items-center h-5">
+        <input  name="hs-list-group-item-checkbox-2" type="checkbox"  onChange={(e) => setPrivacyPolicy(e.target.checked)}/>
+      </div>
+      <label onClick={() => onOpen()} type="button" for="hs-list-group-item-checkbox-2" class="ms-3.5 block w-full text-sm text-gray-600 ">
+      I have read and agree to the  <span class="text-sky-400">Privacy Policy.</span>
+      </label>
+    </div>
+  </li>
+  <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white  text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg  ">
+    <div class="relative flex items-start w-full">
+      <div class="flex items-center h-5">
+        <input  name="hs-list-group-item-checkbox-2" type="checkbox"  onChange={(e) => setAgeAgreement(e.target.checked)}/>
+      </div>
+      <label for="hs-list-group-item-checkbox-2" class="ms-3.5 block w-full text-sm text-gray-600 0">
+        I am over 18 years of age
+      </label>
+    </div>
+  </li>
+
+  <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white  text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
+    <div class="relative flex items-start w-full">
+      <div class="flex items-center h-5">
+        <input  name="hs-list-group-item-checkbox-3" type="checkbox"  onChange={(e) => setTaxAgreementConfirmed(e.target.checked)}/>
+      </div>
+      <label for="hs-list-group-item-checkbox-3" class="ms-3.5 block w-full text-sm text-gray-600">
+      By continuing I agree and understand that I am an independent contractor and not an employee of Fulfil.
+      </label>
+    </div>
+  </li>
+</ul>
+
+
+    <div class="p-6 pt-0 flex justify-end gap-x-2">
+      <div class="w-full flex justify-end items-center gap-x-2">
+        
+
+        <input type="button"  value="Sign Up" onClick={() => checkLength()} class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-500  hover:bg-sky-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 " data-hs-overlay="#">
+          
+        </input>
+      </div>
+    </div>
+   
+  </form>
+</div>
+</div>
+
+</Center>
+
+
+
+
+
+      
+
+      {/* <Flex justifyContent="center">
         <Center>
           <Box
                w={{base: "100vw", lg: "36vw"}}
@@ -255,7 +467,7 @@ const DoerAddProfileInfo = () => {
             rounded="lg"
             // padding="8"
             paddingLeft="8"
-            paddingTop="8"
+            paddingTop="0"
             paddingRight="8"
             ml={{base: 0, lg: "0"}}
            
@@ -347,7 +559,7 @@ not an employee of Fulfil.</Text></Checkbox> </Flex>
             </Center>
           </Box>
         </Center>
-      </Flex>
+      </Flex> */}
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
                 <ModalOverlay />
                 <ModalContent>

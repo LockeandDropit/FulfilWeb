@@ -66,6 +66,9 @@ import ImageUploading from "react-images-uploading";
 
 import star_corner from "../../images/star_corner.png";
 import star_filled from "../../images/star_filled.png";
+import Header from "./Components/Header";
+import Dashboard from "./Components/Dashboard";
+
 
 const NeederProfile = () => {
   const [rating, setRating] = useState(null); //make dynamic, pull from Backend
@@ -361,16 +364,16 @@ const NeederProfile = () => {
 
   return (
     <>
-      <NeederHeader />
+      <Header />
 
       <Flex justifyContent="center">
         <Box position="absolute" left="0">
-          <NeederDashboard />
+          <Dashboard />
         </Box>
         {user ? (
           <Box
             w={{base: "100vw", lg: "34vw"}}
-          
+          mt={{base:"0", lg: "30"}}
          
             height="auto"
             boxShadow=""

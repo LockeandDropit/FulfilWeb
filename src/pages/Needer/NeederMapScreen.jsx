@@ -64,6 +64,9 @@ import { useLocation } from "react-router-dom";
 import NewVisitModal from "./NeederComponents/NewVisitModal";
 import { useMediaQuery } from '@chakra-ui/react'
 
+import Dashboard from "./Components/Dashboard";
+import Header from "./Components/Header";
+
 const NeederMapScreen = () => {
   const [user, setUser] = useState(null);
   const [postedJobs, setPostedJobs] = useState([]);
@@ -759,12 +762,12 @@ const [showList, setShowList] = useState(true)
 const [isDesktop] = useMediaQuery('(min-width: 500px)')
   return (
     <div>
-      <NeederHeader />
+      <Header />
       <Flex marginTop="4">
-        <NeederDashboard />
+        <Dashboard />
 
         <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-          <Box  h={{base: "90vh", lg: "92vh"}} w={{base: "100vw", lg: "93vw"}}>
+          <Box  h={{base: "90vh", lg: "98vh"}} w={{base: "100vw", lg: "100vw"}}>
             <Map
            
             //   defaultCenter={{ lat: defaultLat, lng: defaultLong }}

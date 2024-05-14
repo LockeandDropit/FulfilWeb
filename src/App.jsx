@@ -36,7 +36,7 @@ function App() {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
-        // setUserID(currentUser.uid);
+       
         // console.log(currentUser.uid);
       });
 
@@ -70,7 +70,7 @@ function App() {
       setTimeout(() => {
         setLoading(false);
        
-      }, 1000);
+      }, 2000);
     }
   }, [user]);
 

@@ -58,13 +58,7 @@ const Landing = () => {
 
 
 
-      {/* <Header />
-    
-
-      <Hero />
-      <LandingPageMap />
-      <Categories />
-      <Footer /> */}
+   
     </>
   );
 };

@@ -242,6 +242,211 @@ const DoerAddProfileInfo = () => {
 
 <Center>
    <div class="w-1/3 ">
+
+
+    <form>
+      <div className="space-y-12">
+       
+
+        <div className="border-b border-gray-900/10 pb-0">
+          <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
+          <p className="mt-1 text-sm leading-6 text-gray-600"> We just need a few pieces of information to get started</p>
+
+          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div className="sm:col-span-3">
+              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                First name
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="first-name"
+                  id="first-name"
+                  autoComplete="given-name"
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div className="sm:col-span-3">
+              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">
+                Last name
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="last-name"
+                  id="last-name"
+                  onChange={(e) => setLastName(e.target.value)}
+                  autoComplete="family-name"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div className="sm:col-span-4">
+              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                Phone Number (optional)
+              </label>
+              <div className="mt-2">
+                <input
+                  id="phone"
+                  name="phone"
+                  type="phone"
+                  autoComplete="phone"
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div className="sm:col-span-4">
+              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                Business Name (optional)
+              </label>
+              <div className="mt-2">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            
+
+            
+
+            <div className="sm:col-span-2 sm:col-start-1">
+              <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
+                City
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="city"
+                  id="city"
+                  onChange={(e) => setCity(e.target.value)}
+                  autoComplete="address-level2"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div className="sm:col-span-2">
+              <label htmlFor="region" className="block text-sm font-medium leading-6 text-gray-900">
+                State / Province
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="region"
+                  id="region"
+                  onChange={(e) => setState(e.target.value)}
+                  autoComplete="address-level1"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            
+          </div>
+        </div>
+
+        <div className="border-b border-gray-900/10 pb-12">
+         
+
+          <div className="mt-10 space-y-10">
+            <fieldset>
+              <legend className="text-sm font-semibold leading-6 text-gray-900">Agreements</legend>
+              <div className="mt-6 space-y-6">
+                <div className="relative flex gap-x-3">
+                  <div className="flex h-6 items-center">
+                    <input
+                      id="comments"
+                      name="comments"
+                      type="checkbox"
+                      onChange={(e) => setTermsOfService(e.target.checked)}
+                      className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                    />
+                  </div>
+                  <div className="text-sm leading-6">
+                    <label htmlFor="comments" className="font-medium text-gray-900" onClick={() => onOpenTOS()}>
+                    I have read and agree to the <span class="text-sky-400">Terms of Service.</span>
+                    </label>
+                   
+                  </div>
+                </div>
+                <div className="relative flex gap-x-3">
+                  <div className="flex h-6 items-center">
+                    <input
+                      id="candidates"
+                      name="candidates"
+                      onChange={(e) => setPrivacyPolicy(e.target.checked)}
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                    />
+                  </div>
+                  <div className="text-sm leading-6">
+                    <label htmlFor="candidates" className="font-medium text-gray-900" onClick={() => onOpen()}>
+                    I have read and agree to the  <span class="text-sky-400">Privacy Policy.</span>
+                    </label>
+                   
+                  </div>
+                </div>
+                <div className="relative flex gap-x-3">
+                  <div className="flex h-6 items-center">
+                    <input
+                      id="offers"
+                      name="offers"
+                      type="checkbox"
+                      onChange={(e) => setAgeAgreement(e.target.checked)}
+                      className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                    />
+                  </div>
+                  <div className="text-sm leading-6">
+                    <label htmlFor="offers" className="font-medium text-gray-900">
+                    I am over 18 years of age
+                    </label>
+                    
+                  </div>
+                </div>
+                <div className="relative flex gap-x-3">
+                  <div className="flex h-6 items-center">
+                    <input
+                      id="offers"
+                      name="offers"
+                      type="checkbox"
+                      onChange={(e) => setTaxAgreementConfirmed(e.target.checked)}
+                      className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                    />
+                  </div>
+                  <div className="text-sm leading-6">
+                    <label htmlFor="offers" className="font-medium text-gray-900">
+                    By continuing I agree and understand that I am an independent contractor and not an employee of Fulfil.
+                    </label>
+                    
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+           
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 flex items-center justify-end gap-x-6">
+      
+      <input type="button"  value="Sign Up" onClick={() => checkLength()} class="py-2 px-3 inline-flex justify-center mb-12 items-center gap-x-2 text-start bg-sky-500  hover:bg-sky-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 " data-hs-overlay="#">
+          
+          </input>
+      </div>
+    </form>
+  
+
+{/* 
 <div class="my-5 flex gap-x-3 ">
   <svg class="flex-shrink-0 size-10 text-gray-400 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
 
@@ -255,40 +460,33 @@ const DoerAddProfileInfo = () => {
     </p>
   </div>
 </div>
-
-<div class="bg-white  shadow-sm rounded-xl  ">
+<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div className="sm:col-span-4">
+              <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+                Username
+              </label>
+              <div className="mt-2">
+                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                  <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">workcation.com/</span>
+                  <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    autoComplete="username"
+                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="janesmith"
+                  />
+                </div>
+              </div>
+            </div>
+            </div> */}
+{/* <div class="bg-white  shadow-sm rounded-xl  ">
   <form>
     <div class="py-2 sm:py-4 px-2">
       <div class="p-4 space-y-5">
      
-        {/* <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
-          <div class="sm:col-span-3">
-            <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
-              Avatar
-            </label>
-          </div>
       
 
-          <div class="sm:col-span-9">
-        
-            <div class="flex flex-wrap items-center gap-3 sm:gap-5">
-              <span class="flex flex-shrink-0 justify-center items-center size-20 border-2 border-dotted border-gray-300 text-gray-400 rounded-full ">
-                <svg class="flex-shrink-0 size-7" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-              </span>
-
-              <div class="grow">
-                <div class="flex items-center gap-x-2">
-                  <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500" >
-                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-                    Upload photo
-                  </button>
-                </div>
-              </div>
-            </div>
-           
-          </div>
-       
-        </div> */}
   
         <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
           <div class="sm:col-span-3">
@@ -441,7 +639,7 @@ const DoerAddProfileInfo = () => {
     </div>
    
   </form>
-</div>
+</div> */}
 </div>
 
 </Center>
@@ -452,121 +650,14 @@ const DoerAddProfileInfo = () => {
 
       
 
-      {/* <Flex justifyContent="center">
-        <Center>
-          <Box
-               w={{base: "100vw", lg: "36vw"}}
-            // alignContent="center"
-            // justifyContent="center"
-            // display="flex"
-            // alignItems="baseline"
-
-            borderColor="#E3E3E3"
-            height="auto"
-            // boxShadow="md"
-            rounded="lg"
-            // padding="8"
-            paddingLeft="8"
-            paddingTop="0"
-            paddingRight="8"
-            ml={{base: 0, lg: "0"}}
-           
-            //   overflowY="scroll"
-          >
-            <Center>
-              <Flex direction="column">
-              <Progress hasStripe value={25} marginBottom="16px"/>
-                <Heading size="md">Basic Info</Heading>
-                <FormControl isRequired>
-                  <FormLabel marginTop="8">First Name</FormLabel>
-                  <Input
-                    borderColor="black"
-                    borderWidth=".5px"
-                    placeholder={firstName ? firstName : "First Name"}
-                    defaultValue={firstName ? firstName : null}
-                    w={{base: "85vw", lg: "640px"}}
-                    onChange={(e) => setFirstName(e.target.value)}
-                  />
-                  <FormLabel marginTop="8">Last Name</FormLabel>
-                  <Input
-                         placeholder={lastName ? lastName : "Last Name"}
-                         defaultValue={lastName ? lastName : null}
-                    borderColor="black"
-                    borderWidth=".5px"
-                    w={{base: "85vw", lg: "640px"}}
-                    onChange={(e) => setLastName(e.target.value)}
-                  />
-                </FormControl>
-                <FormControl isRequired>
-                  <FormLabel marginTop="4">Enter your city</FormLabel>
-                  <Input
-                    placeholder="City"
-                    borderColor="black"
-                    borderWidth=".5px"
-                    w={{base: "85vw", lg: "640px"}}
-                    onChange={(e) => setCity(e.target.value)}
-                  />
-                </FormControl>
-                <FormControl isRequired>
-                  <FormLabel marginTop="4">Enter your state</FormLabel>
-                  <Input
-                    placeholder="State"
-                    borderColor="black"
-                    borderWidth=".5px"
-                    w={{base: "85vw", lg: "640px"}}
-                    onChange={(e) => setState(e.target.value)}
-                  />
-                </FormControl>
-                <FormLabel marginTop="4">Phone Number (optional)</FormLabel>
-                <Input
-                placeholder="(___) -___-____"
-                bg={'gray.100'}
-               
-                borderColor="black"
-                borderWidth=".5px"
-                color={'gray.500'}
-                _placeholder={{
-                  color: 'gray.500',
-                }}
-                w={{base: "85vw", lg: "640px"}}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-              <Text color="red">{phoneValidationMessage}</Text>
-                <Box marginTop="32px">
-
-<Flex direction="row"> <Checkbox isChecked={termsOfService} 
-onChange={(e) => setTermsOfService(e.target.checked)}><Text marginTop="8px" marginLeft="4px"> I have read and agree to the  <Button backgroundColor="white" textColor="#01A2E8" height={6} _hover={{backgroundColor: "white", textColor: "#01A2E8"}}  w={{base: "120px", lg: "auto"}} ml={{base: 5, lg: "0"}} onClick={() => onOpenTOS()}>Terms and Conditions</Button> </Text></Checkbox></Flex>
-<Flex direction="row"> <Checkbox isChecked={privacyPolicy}
-onChange={(e) => setPrivacyPolicy(e.target.checked)}> <Text marginLeft="4px" marginTop="8px"> I have read and agree to the <Button backgroundColor="white" textColor="#01A2E8" _hover={{backgroundColor: "white", textColor: "#01A2E8"}} w={{base: "100px", lg: "auto"}} ml={{base: 0, lg: "0"}} onClick={() => onOpen()}>Privacy Policy</Button></Text></Checkbox></Flex>
-<Flex direction="row" marginBottom="8px"> <Checkbox isChecked={ageAgreement}
-onChange={(e) => setAgeAgreement(e.target.checked)}> <Text marginLeft="4px"> I am over 18 years of age</Text> </Checkbox></Flex>
-<Flex direction="row" > <Checkbox isChecked={taxAgreementConfirmed}
-onChange={(e) => setTaxAgreementConfirmed(e.target.checked)}><Text marginLeft="4px">  By continuing I agree and understand that I am an independent contractor and
-not an employee of Fulfil.</Text></Checkbox> </Flex>
-</Box>
-                <Button
-                   colorScheme="blue"
-                   marginTop="48px"
-                   width={{base: "auto", lg: "120px"}}
-                   left={{base: "0", lg: "0"}}
-                   marginLeft={{base: "", lg: "auto"}}
-                  onClick={() => checkLength()}
-
-                >
-                  Next{" "}
-                </Button>
-              </Flex>
-            </Center>
-          </Box>
-        </Center>
-      </Flex> */}
+    
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
-                <ModalOverlay />
-                <ModalContent>
-                  <ModalHeader fontSize="16px">Privacy Policy</ModalHeader>
-                  <ModalCloseButton />
-              <ModalBody overflowY="scroll">
-              <Text marginTop="8">
+      <ModalOverlay />
+<ModalContent height="66vh">
+  <ModalHeader fontSize="16px">Privacy Policy</ModalHeader>
+  <ModalCloseButton />
+<ModalBody overflowY="scroll">
+<Text marginTop="8" >
             Last Updated: [07/28/23] FULFIL INC. PRIVACY POLICY This policy
             explains our information practices, defines your privacy options and
             describes how your information is collected and used. This policy

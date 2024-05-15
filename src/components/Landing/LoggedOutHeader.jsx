@@ -416,7 +416,7 @@ const LoggedOutHeader = (props) => {
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
-          <div class="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm">
+          <div class="mt-7 bg-white rounded-xl ">
             <div class="p-4 sm:p-7">
               <div class="text-center">
                 <h1 class="block text-2xl font-bold text-gray-800">Sign in</h1>
@@ -481,7 +481,7 @@ const LoggedOutHeader = (props) => {
                           name="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                          className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                           required
                           aria-describedby="email-error"
                         />
@@ -521,7 +521,7 @@ const LoggedOutHeader = (props) => {
                           name="password"
                           value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                          class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                          className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                           required
                           aria-describedby="password-error"
                         />
@@ -552,7 +552,7 @@ const LoggedOutHeader = (props) => {
                           id="remember-me"
                           name="remember-me"
                           type="checkbox"
-                          class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500"
+                          class="shrink-0 mt-0.5 border-gray-200  text-blue-600 focus:ring-blue-500"
                         />
                       </div>
                       <div class="ms-3">

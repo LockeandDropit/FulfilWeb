@@ -248,7 +248,7 @@ const DoerAddProfileInfo = () => {
       <div className="space-y-12">
        
 
-        <div className="border-b border-gray-900/10 pb-0">
+        <div className=" border-gray-900/10 pb-0">
           <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
           <p className="mt-1 text-sm leading-6 text-gray-600"> We just need a few pieces of information to get started</p>
 
@@ -286,17 +286,17 @@ const DoerAddProfileInfo = () => {
             </div>
 
             <div className="sm:col-span-4">
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              <label  className="block text-sm font-medium leading-6 text-gray-900">
                 Phone Number (optional)
               </label>
               <div className="mt-2">
                 <input
-                  id="phone"
-                  name="phone"
-                  type="phone"
-                  autoComplete="phone"
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                  className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -373,8 +373,8 @@ const DoerAddProfileInfo = () => {
                     />
                   </div>
                   <div className="text-sm leading-6">
-                    <label htmlFor="comments" className="font-medium text-gray-900" onClick={() => onOpenTOS()}>
-                    I have read and agree to the <span class="text-sky-400">Terms of Service.</span>
+                    <label  className="font-medium text-gray-900" >
+                    I have read and agree to the <span class="text-sky-400" onClick={() => onOpenTOS()}>Terms of Service.</span>
                     </label>
                    
                   </div>
@@ -390,8 +390,8 @@ const DoerAddProfileInfo = () => {
                     />
                   </div>
                   <div className="text-sm leading-6">
-                    <label htmlFor="candidates" className="font-medium text-gray-900" onClick={() => onOpen()}>
-                    I have read and agree to the  <span class="text-sky-400">Privacy Policy.</span>
+                    <label  className="font-medium text-gray-900" >
+                    I have read and agree to the  <span class="text-sky-400" onClick={() => onOpen()} > Privacy Policy.</span>
                     </label>
                    
                   </div>

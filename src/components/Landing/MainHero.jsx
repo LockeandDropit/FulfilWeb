@@ -22,7 +22,7 @@ const MainHero = () => {
               class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-600 disabled:opacity-50 disabled:pointer-events-none"
               onClick={() => navigate("/NeederEmailRegister")}
             >
-              Get started
+              Post A Job
               <svg
                 class="flex-shrink-0 size-4"
                 xmlns="http://www.w3.org/2000/svg"

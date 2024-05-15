@@ -320,23 +320,24 @@ const LoggedOutHeader = (props) => {
                 class="hs-collapse  overflow-hidden transition-all duration-300 basis-full grow md:block"
               >
                 <div class="flex flex-col gap-y-4 gap-x-0 mt-5 md:flex-row md:items-center md:justify-end md:gap-y-0 md:gap-x-7 md:mt-0 md:ps-7">
-                  <button
+                  {/* <button
                     class="font-medium text-gray-500 hover:text-gray-400 md:py-6"
                     onClick={() => navigate("/NeederEmailRegister")}
                   >
                     Post A Job
-                  </button>
+                  </button> */}
                   <button
                     class="font-medium text-gray-500 hover:text-gray-400 md:py-6"
-                    onClick={() => navigate("/DoerEmailRegister")}
+                    onClick={() => onOpen()}
                   >
-                    Become A Doer
+                    Log In
                   </button>
 
                   <button
                     type="button"
                     className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    onClick={() => onOpen()}
+                  
+                    onClick={() => navigate("/DoerEmailRegister")}
                   >
                     <svg
                       class="flex-shrink-0 size-4"
@@ -353,7 +354,7 @@ const LoggedOutHeader = (props) => {
                       <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                       <circle cx="12" cy="7" r="4" />
                     </svg>
-                    Log in
+                    Become A Doer
                   </button>
                 </div>
               </div>
@@ -481,7 +482,7 @@ const LoggedOutHeader = (props) => {
                           name="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                          className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                           required
                           aria-describedby="email-error"
                         />
@@ -521,7 +522,7 @@ const LoggedOutHeader = (props) => {
                           name="password"
                           value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                          className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                  className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                           required
                           aria-describedby="password-error"
                         />

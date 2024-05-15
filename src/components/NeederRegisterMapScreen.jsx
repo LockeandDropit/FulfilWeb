@@ -201,9 +201,11 @@ console.log(closeInfoWindow)
   };
 
   return (
-    <div>
+    <div >
       <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-        <Box w={{base: "90vw", lg: "60vw"}} h={{base: "40vh", lg: "100vh"}} ml={{base: "16px" , lg: "0px"}}>
+        {/* <Box w={{base: "90vw", lg: "60vw"}} h={{base: "40vh", lg: "100vh"}} ml={{base: "16px" , lg: "0px"}}> */}
+        <Box w={{base: "90vw", lg: "40vw"}} h={{base: "40vh", lg: "60vh"}} ml={{base: "16px" , lg: "0px"}} borderRadius="md">
+     
           <Map
             defaultCenter={{ lat: 44.89929301068098, lng: -93.3413753387615}}
             defaultZoom={12}
@@ -320,6 +322,7 @@ console.log(closeInfoWindow)
                 </AdvancedMarker>
               ))}
           </Map>
+       
         </Box>
       </APIProvider>
     </div>

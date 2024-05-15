@@ -110,13 +110,13 @@ const LoggedOutHeader = (props) => {
             getDoc(doc(db, "employers", response.user.uid)),
           ])
             .then((results) =>
-              console.log(results)
-              // navigate(
-              //   results[0]._document !== null &&
-              //     results[0]._document.data.value.mapValue.fields.isEmployer
-              //     ? "/DoerMapScreen"
-              //     : "/NeederMapScreen"
-              // )
+            
+              navigate(
+                results[0]._document !== null &&
+                  results[0]._document.data.value.mapValue.fields.isEmployer
+                  ? "/DoerMapScreen"
+                  : "/NeederMapScreen"
+              )
             )
             .catch();
         })
@@ -210,7 +210,7 @@ const LoggedOutHeader = (props) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [emailValidationBegun, setEmailValidationBegun] = useState(false);
 
-  const validate = () => {
+  const modalValidate = () => {
     setEmailValidationBegun(true);
     const isValid = emailRegex.test(email);
     if (!isValid) {
@@ -320,12 +320,7 @@ const LoggedOutHeader = (props) => {
                 class="hs-collapse  overflow-hidden transition-all duration-300 basis-full grow md:block"
               >
                 <div class="flex flex-col gap-y-4 gap-x-0 mt-5 md:flex-row md:items-center md:justify-end md:gap-y-0 md:gap-x-7 md:mt-0 md:ps-7">
-                  {/* <button
-                    class="font-medium text-gray-500 hover:text-gray-400 md:py-6"
-                    onClick={() => navigate("/NeederEmailRegister")}
-                  >
-                    Post A Job
-                  </button> */}
+                
                   <button
                     class="font-medium text-gray-500 hover:text-gray-400 md:py-6"
                     onClick={() => onOpen()}
@@ -486,26 +481,11 @@ const LoggedOutHeader = (props) => {
                           required
                           aria-describedby="email-error"
                         />
-                        <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
-                          <svg
-                            class="size-5 text-red-500"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            viewBox="0 0 16 16"
-                            aria-hidden="true"
-                          >
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                          </svg>
-                        </div>
+                         {emailValidationBegun === true ? (
+                <p class="block text-sm mb-2 text-red-500">{validationMessage}</p>
+              ) : null}
                       </div>
-                      <p
-                        class="hidden text-xs text-red-600 mt-2"
-                        id="email-error"
-                      >
-                        Please include a valid email address so we can get back
-                        to you
-                      </p>
+                      
                     </div>
 
                     <div>
@@ -526,18 +506,9 @@ const LoggedOutHeader = (props) => {
                           required
                           aria-describedby="password-error"
                         />
-                        <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
-                          <svg
-                            class="size-5 text-red-500"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            viewBox="0 0 16 16"
-                            aria-hidden="true"
-                          >
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                          </svg>
-                        </div>
+                         {passwordValidationBegun === true ? (
+                <p class="block text-sm mb-2 text-red-500">{passwordValidationMessage}</p>
+              ) : null}
                       </div>
                       <p
                         class="hidden text-xs text-red-600 mt-2"
@@ -564,7 +535,7 @@ const LoggedOutHeader = (props) => {
                     </div>
 
                     <input type="button"
-                     onClick={() => validate()}
+                     onClick={() => modalValidate()}
                      value="Sign In"
                       className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
                     >

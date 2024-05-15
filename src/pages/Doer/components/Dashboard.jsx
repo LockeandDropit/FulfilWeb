@@ -4,7 +4,7 @@ import { StreamChat } from "stream-chat";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { auth, logout, db } from "../../../firebaseConfig";
-import AddJob from "./AddJob";
+
 import { v4 as uuidv4 } from "uuid";
 import {
   doc,
@@ -33,7 +33,7 @@ import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 const Dashboard = () => {
   const navigate = useNavigate();
   //validate & set current user
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
 
   const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
 
@@ -594,8 +594,8 @@ const Dashboard = () => {
   }, [user]);
 
   useEffect(() => {
-    if (employerID !== null) {
-      const docRef = doc(db, "employers", employerID);
+    if (user !== null) {
+      const docRef = doc(db, "users", user.uid);
 
       getDoc(docRef).then((snapshot) => {
         console.log(snapshot.data());
@@ -605,7 +605,7 @@ const Dashboard = () => {
       });
     } else {
     }
-  }, [employerID]);
+  }, [user]);
 
   const submitJob = () => {
     // createJobID();
@@ -752,14 +752,14 @@ const Dashboard = () => {
                       <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                       <polyline points="9 22 9 12 15 12 15 22" />
                     </svg>
-                    My Jobs
+                    Explore
                   </button>
                 </li>
 
                 <button
                   type="button"
                   class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
-                  onClick={() => navigate("/NeederMessageList")}
+                  onClick={() => navigate("/DoerMessageList")}
                 >
                   <svg
                     class="flex-shrink-0 mt-0.5 size-4"
@@ -784,7 +784,7 @@ const Dashboard = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    navigate("/NeederProfile");
+                    navigate("/DoerProfile");
                   }}
                   class="hs-accordion-toggle  px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
                 >
@@ -809,7 +809,7 @@ const Dashboard = () => {
 
                 <button
                   type="button"
-                  onClick={() => navigate("/NeederAccountManager")}
+                  onClick={() => navigate("/DoerAccountManager")}
                   class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
                 >
                   <svg
@@ -839,7 +839,7 @@ const Dashboard = () => {
                   Account Settings
                 </button>
 
-                <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
+                {/* <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
                   <span class="block text-xs uppercase text-gray-500">
                     Actions
                   </span>
@@ -870,28 +870,16 @@ const Dashboard = () => {
                     </span>
                     Find A Pro
                   </button>
-                </li>
+                </li> */}
                 <li class="px-8 mb-0.5 mt-10">
                   <button
                     type="button"
-                    class="py-2 w-3/4 px-3 inline-flex text-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    onClick={() => setShowAddJob(!showAddJob)}
+                    class="py-2 w-full px-11 inline-flex text-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                   
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-6 h-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12 4.5v15m7.5-7.5h-15"
-                      />
-                    </svg>
-                    Create A Job
+                    
+                   
+                   Upgrade to Pro
                   </button>
                  
                 </li>

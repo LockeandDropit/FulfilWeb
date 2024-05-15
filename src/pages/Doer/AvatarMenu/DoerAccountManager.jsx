@@ -171,7 +171,7 @@ const DoerAccountManager = () => {
         getDoc(docRef).then((snapshot) => {
         
           setPrivacyAgreement(snapshot.data().PrivacyPolicyAgree);
-          setIDVerified(snapshot.data().IDVerified);
+          // setIDVerified(snapshot.data().IDVerified);
           setTaxAgreementConfirmed(snapshot.data().taxAgreementConfirmed);
           setPaymentsActive(snapshot.data().stripeActive);
           if (snapshot.data().stripeID) {
@@ -188,7 +188,7 @@ const DoerAccountManager = () => {
     if (
       user !== null &&
       privacyAgreement === true &&
-      IDVerified === true &&
+      // IDVerified === true &&
       taxAgreementConfirmed === true &&
       paymentsActive === true
     ) {
@@ -197,7 +197,7 @@ const DoerAccountManager = () => {
       });
     } else {
     }
-  }, [privacyAgreement, IDVerified, taxAgreementConfirmed, paymentsActive]);
+  }, [privacyAgreement, taxAgreementConfirmed, paymentsActive]);
 
   const [stripeID, setStripeID] = useState(null);
   const [getIDHasRun, setGetIDHasRun] = useState(false);

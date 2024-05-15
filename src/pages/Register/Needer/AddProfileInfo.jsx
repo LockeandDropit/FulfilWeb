@@ -204,7 +204,7 @@ useEffect(() => {
         console.log(error);
       });
 
-  navigate("/NeederMapScreen", { state: true});
+  navigate("/NeederMapScreen", { state: {firstVisit: true}});
   };
 
   const [dateJoined, setDateJoined] = useState(null);

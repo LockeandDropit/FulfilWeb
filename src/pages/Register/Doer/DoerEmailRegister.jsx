@@ -43,14 +43,15 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import { FcGoogle } from "react-icons/fc";
 import LoggedOutHeader from "../../../components/Landing/LoggedOutHeader.jsx";
-
+import { useMediaQuery } from "@chakra-ui/react";
 
 import Plausible from 'plausible-tracker'
+
 
 const DoerEmailRegister = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
   const navigate = useNavigate();
- 
+  const [isDesktop] = useMediaQuery("(min-width: 500px)");
   //background image https://www.freecodecamp.org/news/react-background-image-tutorial-how-to-set-backgroundimage-with-inline-css-style/
   //image from Photo by Blue Bird https://www.pexels.com/photo/man-standing-beside-woman-on-a-stepladder-painting-the-wall-7217988/
 
@@ -399,105 +400,26 @@ setCloseInfoWindow(false)
 
   
   </div>
-  <div class="w-full rounded-lg ml-6">
+{isDesktop ? ( <div class="w-full rounded-lg ml-6">
     {/* <Flex flex={1}> */}
-          {/* <Box w={{base: "70vw", lg: "30vw"}} h={{base: "50vh", lg: "50vh"}} padding="2" alignContent="center">
-            <Box w={{base: "70vw" , lg: "30vw"}} h={{base: "50vh", lg: "50vh"}}> */}
+
               <MapScreen props={closeInfoWindow} />
-            {/* </Box>
-          </Box> */}
-        {/* </Flex> */}
+         
       
-    </div>
-</div>
+    </div>) : (null)}
+  
  
-      {/* <Stack minH={"100vh"} direction={{ base: "column", md: "row" }} marginLeft={{base: 0, lg: 16}}>
-        <Flex p={8} flex={1} align={"center"} justify={"center"}>
-          <Stack spacing={4} w={"full"} maxW={"md"} >
-            <Center flexDirection="column">
-              <Heading fontSize={"3xl"}>Create an account</Heading>
-             
-              <Heading fontSize={"2xl"}>Find Work Today</Heading>
-            </Center>
-           
-            <Center>
-            <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-            Get access to available work in your area. Find jobs that fit your speciality.
-          </Text>
-          </Center>
+</div>
 
-            <FormControl>
-              <FormLabel>Email</FormLabel>
-              <Input
-                borderColor="grey"
-                borderWidth=".25px"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onFocus={handleFocus} 
-              />
-              {emailValidationBegun === true ? (
-                <Text color="red">{validationMessage}</Text>
-              ) : null}
-            </FormControl>
-            <FormControl marginTop="8px">
-              <FormLabel>Password</FormLabel>
+{isDesktop ? ( null) : (<div class="w-full rounded-lg mt-10">
+   
 
-              <InputGroup>
-                <Input
-                  borderColor="grey"
-                  borderWidth=".5px"
-                  type={visibleToggle}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => handleFocus()} 
-                />
-                <InputRightElement>
-                  <ViewIcon onClick={() => handlePasswordVisible()} />
-                </InputRightElement>
-              </InputGroup>
-              {passwordValidationBegun === true ? (
-                <Text color="red">{passwordValidationMessage}</Text>
-              ) : null}
-            </FormControl>
-            <Stack spacing={{base: 1, lg: 6}}>
-              <Stack
-                direction={{ base: "column", sm: "row" }}
-                align={"start"}
-                justify={"space-between"}
-              ></Stack>
-              <Button   bg="#01A2E8"
-                color={'white'}
-                _hover={{
-                  bg: 'blue.500',
-                }}
-                onClick={() => validate()}>
-                Sign up
-              </Button>
-              <Button
-                w={"full"}
-                variant={"outline"}
-                leftIcon={<FcGoogle />}
-                onClick={() => handleGoogleSignUp()}
-              >
-                <Center>
-                  <Text>Sign up with Google</Text>
-                </Center>
-              </Button>
-              <Button backgroundColor="white" onClick={() => handleOpenModal()}>Already have an account?&nbsp;<Text>Log In</Text></Button>
-            </Stack>
-          </Stack>
-        </Flex>
-        <Flex flex={2}>
-        <Box w={{base: "70vw", lg: "55vw"}} h={{base: "50vh", lg: "90vh"}} padding="2"  alignContent="center">
-            <Box w={{base: "70vw" , lg: "55vw"}} h={{base: "50vh", lg: "90vh"}} >
-              <MapScreen props={closeInfoWindow}/>
-            </Box>
-          </Box>
-
-          
-        </Flex>
-      </Stack> */}
+              <MapScreen props={closeInfoWindow} />
+         
+      
+    </div>)}
+ 
+      
     </>
   );
 };

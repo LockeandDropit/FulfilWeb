@@ -51,6 +51,7 @@ import { useMediaQuery } from "@chakra-ui/react";
 const NeederEmailRegister = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
   const navigate = useNavigate();
+ 
   
   //background image https://www.freecodecamp.org/news/react-background-image-tutorial-how-to-set-backgroundimage-with-inline-css-style/
   //image from Photo by Blue Bird https://www.pexels.com/photo/man-standing-beside-woman-on-a-stepladder-painting-the-wall-7217988/
@@ -413,18 +414,27 @@ const NeederEmailRegister = () => {
 
   
   </div>
-  <div class="w-full rounded-lg ml-6">
+ 
+
+    {isDesktop ? ( <div class="w-full rounded-lg ml-6">
     {/* <Flex flex={1}> */}
-          {/* <Box w={{base: "70vw", lg: "30vw"}} h={{base: "50vh", lg: "50vh"}} padding="2" alignContent="center">
-            <Box w={{base: "70vw" , lg: "30vw"}} h={{base: "50vh", lg: "50vh"}}> */}
-              <NeederRegisterMapScreen props={closeInfoWindow} />
-            {/* </Box>
-          </Box> */}
-        {/* </Flex> */}
+
+    <NeederRegisterMapScreen props={closeInfoWindow} />
+         
       
-    </div>
+    </div>) : (null)}
+  
+ 
 </div>
-    
+
+{isDesktop ? ( null) : (<div class="w-full rounded-lg mt-10">
+   
+
+<NeederRegisterMapScreen props={closeInfoWindow} />
+         
+      
+    </div>)}
+
       {/* <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>
           <Stack spacing={4} w={"full"} maxW={"md"}>

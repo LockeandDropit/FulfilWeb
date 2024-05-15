@@ -66,6 +66,7 @@ import { useMediaQuery } from "@chakra-ui/react";
 
 import Dashboard from "./Components/Dashboard";
 import Header from "./Components/Header";
+import EditSelectedJob from "./Components/EditSelectedJob";
 
 const NeederMapScreen = () => {
   const [user, setUser] = useState(null);
@@ -79,9 +80,11 @@ const NeederMapScreen = () => {
   useEffect(() => {
     if (location.state === null) {
     } else {
-      console.log("first time? ", location.state);
-
-      setFirstVisitModalVisible(true);
+      if (location.state.editReset) {
+        setEditVisible(false);
+      } else if (location.state.firstVisit) {
+        setFirstVisitModalVisible(true);
+      }
     }
   }, [location]);
 
@@ -672,8 +675,7 @@ const NeederMapScreen = () => {
     onClose: onCloseCancelConfirm,
   } = useDisclosure();
 
-
-  const [addJobVisible, setAddJobVisible] = useState(false)
+  const [addJobVisible, setAddJobVisible] = useState(false);
   const [paymentsVisible, setPaymentsVisible] = useState(false);
   const [selectedJobForPayment, setSelectedJobForPayment] = useState(null);
 
@@ -683,10 +685,9 @@ const NeederMapScreen = () => {
     setSelectedJobForPayment(x);
   };
 
-
   const handleAddNewJob = () => {
-    setAddJobVisible(true)
-  }
+    setAddJobVisible(true);
+  };
 
   //handle canceling job
   const confirmCancelModal = (x) => {
@@ -755,6 +756,12 @@ const NeederMapScreen = () => {
   const handleCloseInfoWindow = () => {
     setOpenInfoWindowMarkerID(null);
     setApplicant(null);
+  };
+
+  const [editVisible, setEditVisible] = useState(false);
+
+  const handleEditJob = (x) => {
+    setEditVisible(true);
   };
 
   const [showList, setShowList] = useState(true);
@@ -840,13 +847,15 @@ const NeederMapScreen = () => {
                     {openInfoWindowMarkerID === allJobs.jobID ? (
                       <>
                         <Flex direction="row-reverse">
-                          <Card
-                            width={{ base: "100vw", lg: "25vw" }}
-                            height={{ base: "94vh" }}
-                            mt={{ base: "0", lg: "10" }}
+                          <div
+                            class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
+                            tabindex="-1"
                           >
-                            <div class="w-100 max-h-full   bg-white rounded-xl  ">
-                              <div class="py-3 px-4 flex justify-between items-center"><button
+                            <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+                              <div class="py-3 px-4 flex justify-between items-center border-b ">
+                                <div class="w-100 max-h-full   bg-white rounded-xl  ">
+                                  <div class="py-3 px-4 flex justify-between items-center">
+                                    <button
                                       type="button"
                                       onClick={() => handleCloseInfoWindow()}
                                       class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
@@ -867,220 +876,256 @@ const NeederMapScreen = () => {
                                         <path d="M18 6 6 18" />
                                         <path d="m6 6 12 12" />
                                       </svg>
-                                    </button></div>
-
-                              <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-                                <div class="p-4 space-y-2">
-                                  <div class="">
-                                    
-                                    <div class="py-3  flex-column  items-center  ">
-                                      <label
-                                        for="hs-pro-dactmt"
-                                        class="block mb-2 text-xl font-medium text-gray-800 "
-                                      >
-                                        {allJobs.jobTitle}
-                                        
-                                      </label>
-                                      <p>{allJobs.city}, Minnesota</p>
-                                      {allJobs.isHourly ? (
-                                        <p>
-                                          ${allJobs.lowerRate}/hr-$
-                                          {allJobs.upperRate}
-                                          /hr
-                                        </p>
-                                      ) : (
-                                        <p>${allJobs.flatRate}</p>
-                                      )}
-                                     
-                                    </div>
-                                  </div>
-
-                                  <div class="">
-                                    <label
-                                      for="dactmi"
-                                      class=" text-lg font-medium text-gray-800 "
-                                    >
-                                      Description
-                                    </label>
-
-                                    <p>{allJobs.description}</p>
-                                  </div>
-
-                                  <div class="space-y-1 ">
-                                    <label
-                                      for="dactmm"
-                                      class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
-                                    >
-                                      Applicants
-                                    </label>
-                                    {isLoading ? (
-                                      <Center marginTop="32px">
-                                        <Spinner
-                                          thickness="4px"
-                                          speed="0.65s"
-                                          emptyColor="gray.200"
-                                          color="#01A2E8"
-                                          size="lg"
-                                        />
-                                      </Center>
-                                    ) : applicant ? (
-                                      applicant.map((applicant) => (
-                                        <>
-                                        <div className="mt-2 ">
-                                          {" "}
-                                          <li className="flex justify-between gap-x-6 py-1 ">
-                                            <div className="flex min-w-0 gap-x-4">
-                                              {applicant.profilePictureResponse ? (
-                                                <img
-                                                  className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                                                  src={
-                                                    applicant.profilePictureResponse
-                                                  }
-                                                  alt=""
-                                                />
-                                              ) : null}
-
-                                              <div className="min-w-0 flex-auto">
-                                                <p className="text-md font-semibold leading-6 text-gray-900">
-                                                  {applicant.firstName}
-                                                </p>
-
-                                                <p className="mt-1 truncate text-xs leading-5 text-gray-500"></p>
-                                                {applicant.numberOfRatings ? (
-                                                  <Flex>
-                                                    {maxRating.map(
-                                                      (item, key) => {
-                                                        return (
-                                                          <Box
-                                                            activeopacity={0.7}
-                                                            key={item}
-                                                            marginTop="5px"
-                                                          >
-                                                            <Image
-                                                              boxSize="16px"
-                                                              src={
-                                                                item <=
-                                                                applicant.rating
-                                                                  ? star_filled
-                                                                  : star_corner
-                                                              }
-                                                            ></Image>
-                                                          </Box>
-                                                        );
-                                                      }
-                                                    )}
-                                                    <p marginLeft="4px">
-                                                      (
-                                                      {
-                                                        applicant.numberOfRatings
-                                                      }{" "}
-                                                      reviews)
-                                                    </p>
-                                                  </Flex>
-                                                ) : (
-                                                  <p marginTop="2px">
-                                                    No reviews yet!
-                                                  </p>
-                                                )}
-                                              </div>
-                                            </div>
-
-                                            <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                                              {applicant.isPremium ? (
-                                                <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium bg-green-100 text-green-500 ">
-                                                  Premium Contractor
-                                                </span>
-                                              ) : null}
-                                            </div>
-                                          </li>
-                                          <div className="flex-column min-w-0 gap-x-4 mb-16">
-                                            {applicant.isPremium ? (
-                                              <>
-                                                {applicant.premiumCategoryOne ? (
-                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
-                                                    {
-                                                      applicant.premiumCategoryOne
-                                                    }
-                                                  </span>
-                                                ) : null}
-
-                                                {applicant.premiumCategoryTwo ? (
-                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
-                                                    {
-                                                      applicant.premiumCategoryTwo
-                                                    }
-                                                  </span>
-                                                ) : null}
-                                                {applicant.premiumCategoryThree ? (
-                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
-                                                    {
-                                                      applicant.premiumCategoryThree
-                                                    }
-                                                  </span>
-                                                ) : null}
-                                              </>
-                                            ) : null}
-                                            <div className="mt-2">
-                                              <p>{applicant.bio}</p>
-                                            </div>
-                                            {applicant.hasUnreadMessage ||
-                                    applicant.channelID ? ( <> <button class="w-auto  py-2 px-2 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500  "  onClick={() =>
-                                      navigateApplicantProfile(
-                                        applicant,
-                                        allJobs
-                                      )
-                                    }>
-                                    See Profile
-                                  </button>
-                                  <button class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "  onClick={() =>
-                                                navigateToChannel(applicant)
-                                              }>
-                                    See Messages
-                                    <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
-                            New
-                          </span>
-                                  </button>
-                                  </>) : ( <button class="w-auto py-2 px-2 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500  "  onClick={() =>
-                                              navigateApplicantProfile(
-                                                applicant,
-                                                allJobs
-                                              )
-                                            }>
-                                    See Profile
-                                  </button>)}
-                                           
-                                          </div>
-                                        </div>
-                                        </>
-                                      ))
-                                    ) : (
-                                      <p>No applicants yet</p>
-                                    )}
-                                  </div>
-                                </div>
-
-                                <div class="p-4 flex justify-between gap-x-2  absolute right-0 bottom-2">
-                                  <div class="w-full flex justify-end items-center gap-x-2">
-                                   
-
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        // handleDelete(allJobs)
-                                        confirmCancelModal(allJobs)
-                                      }
-                                      class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-red-600 border hover:bg-red-700 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                      data-hs-overlay="#hs-pro-datm"
-                                    >
-                                      Cancel Job
                                     </button>
+                                  </div>
+
+                                  <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                                    <div class="p-4 space-y-2">
+                                      <div class="">
+                                        <div class="py-3  flex-column  items-center  ">
+                                          <label
+                                            for="hs-pro-dactmt"
+                                            class="block mb-2 text-xl font-medium text-gray-800 "
+                                          >
+                                            {allJobs.jobTitle}
+                                          </label>
+                                          <p>{allJobs.city}, Minnesota</p>
+                                          {allJobs.isHourly ? (
+                                            <p>
+                                              ${allJobs.lowerRate}/hr-$
+                                              {allJobs.upperRate}
+                                              /hr
+                                            </p>
+                                          ) : (
+                                            <p>${allJobs.flatRate}</p>
+                                          )}
+                                        </div>
+                                      </div>
+
+                                      <div class="">
+                                        <label
+                                          for="dactmi"
+                                          class=" text-lg font-medium text-gray-800 "
+                                        >
+                                          Description
+                                        </label>
+
+                                        <p>{allJobs.description}</p>
+                                      </div>
+
+                                      <div class="space-y-1 ">
+                                        <label
+                                          for="dactmm"
+                                          class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
+                                        >
+                                          Applicants
+                                        </label>
+                                        {isLoading ? (
+                                          <Center marginTop="32px">
+                                            <Spinner
+                                              thickness="4px"
+                                              speed="0.65s"
+                                              emptyColor="gray.200"
+                                              color="#01A2E8"
+                                              size="lg"
+                                            />
+                                          </Center>
+                                        ) : applicant ? (
+                                          applicant.map((applicant) => (
+                                            <>
+                                              <div className="mt-2 ">
+                                                {" "}
+                                                <li className="flex justify-between gap-x-6 py-1 ">
+                                                  <div className="flex min-w-0 gap-x-4">
+                                                    {applicant.profilePictureResponse ? (
+                                                      <img
+                                                        className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                                                        src={
+                                                          applicant.profilePictureResponse
+                                                        }
+                                                        alt=""
+                                                      />
+                                                    ) : ( <span class="inline-block size-[46px] bg-gray-100 rounded-full overflow-hidden">
+                                                    <svg class="size-full text-gray-300" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                      <rect x="0.62854" y="0.359985" width="15" height="15" rx="7.5" fill="white"></rect>
+                                                      <path d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z" fill="currentColor"></path>
+                                                      <path d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z" fill="currentColor"></path>
+                                                    </svg>
+                                                  </span>)}
+
+                                                    <div className="min-w-0 flex-auto">
+                                                      <p className="text-md font-semibold leading-6 text-gray-900">
+                                                        {applicant.firstName}
+                                                      </p>
+
+                                                      <p className="mt-1 truncate text-xs leading-5 text-gray-500"></p>
+                                                      {applicant.numberOfRatings ? (
+                                                        <Flex>
+                                                          {maxRating.map(
+                                                            (item, key) => {
+                                                              return (
+                                                                <Box
+                                                                  activeopacity={
+                                                                    0.7
+                                                                  }
+                                                                  key={item}
+                                                                  marginTop="5px"
+                                                                >
+                                                                  <Image
+                                                                    boxSize="16px"
+                                                                    src={
+                                                                      item <=
+                                                                      applicant.rating
+                                                                        ? star_filled
+                                                                        : star_corner
+                                                                    }
+                                                                  ></Image>
+                                                                </Box>
+                                                              );
+                                                            }
+                                                          )}
+                                                          <p marginLeft="4px">
+                                                            (
+                                                            {
+                                                              applicant.numberOfRatings
+                                                            }{" "}
+                                                            reviews)
+                                                          </p>
+                                                        </Flex>
+                                                      ) : (
+                                                        <p marginTop="2px">
+                                                          No reviews yet!
+                                                        </p>
+                                                      )}
+                                                    </div>
+                                                  </div>
+
+                                                  <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                                                    {applicant.isPremium ? (
+                                                      <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium bg-green-100 text-green-500 ">
+                                                        Premium Contractor
+                                                      </span>
+                                                    ) : null}
+                                                  </div>
+                                                </li>
+                                                <div className="flex-column min-w-0 gap-x-4 mb-16">
+                                                  {applicant.isPremium ? (
+                                                    <>
+                                                      {applicant.premiumCategoryOne ? (
+                                                        <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
+                                                          {
+                                                            applicant.premiumCategoryOne
+                                                          }
+                                                        </span>
+                                                      ) : null}
+
+                                                      {applicant.premiumCategoryTwo ? (
+                                                        <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                          {
+                                                            applicant.premiumCategoryTwo
+                                                          }
+                                                        </span>
+                                                      ) : null}
+                                                      {applicant.premiumCategoryThree ? (
+                                                        <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                          {
+                                                            applicant.premiumCategoryThree
+                                                          }
+                                                        </span>
+                                                      ) : null}
+                                                    </>
+                                                  ) : null}
+                                                  <div className="mt-2">
+                                                    <p>{applicant.bio}</p>
+                                                  </div>
+                                                  {applicant.hasUnreadMessage ||
+                                                  applicant.channelID ? (
+                                                    <>
+                                                      {" "}
+                                                      <button
+                                                        class="w-auto  py-2 px-2 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500  "
+                                                        onClick={() =>
+                                                          navigateApplicantProfile(
+                                                            applicant,
+                                                            allJobs
+                                                          )
+                                                        }
+                                                      >
+                                                        See Profile
+                                                      </button>
+                                                      <button
+                                                        class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
+                                                        onClick={() =>
+                                                          navigateToChannel(
+                                                            applicant
+                                                          )
+                                                        }
+                                                      >
+                                                        See Messages
+                                                        <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
+                                                          New
+                                                        </span>
+                                                      </button>
+                                                    </>
+                                                  ) : (
+                                                    <button
+                                                      class="w-auto py-2 px-2 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500  "
+                                                      onClick={() =>
+                                                        navigateApplicantProfile(
+                                                          applicant,
+                                                          allJobs
+                                                        )
+                                                      }
+                                                    >
+                                                      See Profile
+                                                    </button>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </>
+                                          ))
+                                        ) : (
+                                          <p>No applicants yet</p>
+                                        )}
+                                      </div>
+                                    </div>
+
+                                    <div class="p-4 flex justify-between gap-x-2  absolute right-0 bottom-12">
+                                      <div class="w-full flex justify-end items-center gap-x-2">
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            // handleDelete(allJobs)
+                                            setEditVisible(true)
+                                          }
+                                          class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-white border hover:bg-gray-200 text-black text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                          data-hs-overlay="#hs-pro-datm"
+                                        >
+                                          Edit Post
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            // handleDelete(allJobs)
+                                            handleEditJob(allJobs)
+                                          }
+                                          class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-red-600 border hover:bg-red-700 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                          data-hs-overlay="#hs-pro-datm"
+                                        >
+                                          Cancel Job
+                                        </button>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </Card>
+                          </div>
                         </Flex>
-                      
+
+                        {editVisible ? (
+                          <EditSelectedJob props={allJobs} />
+                        ) : null}
 
                         <Modal
                           isCentered
@@ -1164,13 +1209,15 @@ const NeederMapScreen = () => {
                     {openInfoWindowMarkerID === jobsInProgressMap.jobID ? (
                       hiredApplicant ? (
                         <Flex direction="row-reverse">
-                          <Card
-                            width={{ base: "100vw", lg: "25vw" }}
-                            height={{ base: "94vh" }}
-                            mt={{ base: "0", lg: "10" }}
+                          <div
+                            class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
+                            tabindex="-1"
                           >
-                            <div class="w-100 max-h-full   bg-white rounded-xl  ">
-                              <div class="py-3 px-4 flex justify-between items-center"><button
+                            <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+                              <div class="py-3 px-4 flex justify-between items-center border-b ">
+                                <div class="w-100 max-h-full   bg-white rounded-xl  ">
+                                  <div class="py-3 px-4 flex justify-between items-center">
+                                    <button
                                       type="button"
                                       onClick={() => handleCloseInfoWindow()}
                                       class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
@@ -1191,207 +1238,228 @@ const NeederMapScreen = () => {
                                         <path d="M18 6 6 18" />
                                         <path d="m6 6 12 12" />
                                       </svg>
-                                    </button></div>
-
-                              <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-                                <div class="p-4 space-y-2">
-                                  <div class="">
-                                    
-                                    <div class="py-3  flex-column  items-center  ">
-                                      <label
-                                        for="hs-pro-dactmt"
-                                        class="block mb-2 text-xl font-medium text-gray-800 "
-                                      >
-                                        {jobsInProgressMap.jobTitle}
-                                        
-                                      </label>
-                                      <p>{jobsInProgressMap.city}, Minnesota</p>
-                                      {jobsInProgressMap.isHourly ? (
-                                        <p>
-                                          ${jobsInProgressMap.lowerRate}/hr-$
-                                          {jobsInProgressMap.upperRate}
-                                          /hr
-                                        </p>
-                                      ) : (
-                                        <p>${jobsInProgressMap.flatRate}</p>
-                                      )}
-                                     
-                                    </div>
+                                    </button>
                                   </div>
 
-                                  <div class="">
-                                    <label
-                                      for="dactmi"
-                                      class=" text-lg font-medium text-gray-800 "
-                                    >
-                                      Description
-                                    </label>
+                                  <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                                    <div class="p-4 space-y-2">
+                                      <div class="">
+                                        <div class="py-3  flex-column  items-center  ">
+                                          <label
+                                            for="hs-pro-dactmt"
+                                            class="block mb-2 text-xl font-medium text-gray-800 "
+                                          >
+                                            {jobsInProgressMap.jobTitle}
+                                            <span class="inline-flex items-center gap-x-1.5 py-1.5  ml-2 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">In Progress</span>
+                                          </label>
+                                          <p>
+                                            {jobsInProgressMap.city}, Minnesota
+                                          </p>
+                                          {jobsInProgressMap.isHourly ? (
+                                            <p>
+                                              ${jobsInProgressMap.lowerRate}
+                                              /hr-$
+                                              {jobsInProgressMap.upperRate}
+                                              /hr
+                                            </p>
+                                          ) : (
+                                            <p>${jobsInProgressMap.flatRate}</p>
+                                          )}
+                                        </div>
+                                      </div>
 
-                                    <p>{jobsInProgressMap.description}</p>
-                                  </div>
+                                      <div class="">
+                                        <label
+                                          for="dactmi"
+                                          class=" text-lg font-medium text-gray-800 "
+                                        >
+                                          Description
+                                        </label>
 
-                                  <div class="space-y-1 ">
-                                    <label
-                                      for="dactmm"
-                                      class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
-                                    >
-                                      You've hired: 
-                                    </label>
-                                    {isLoading ? (
-                                      <Center marginTop="32px">
-                                        <Spinner
-                                          thickness="4px"
-                                          speed="0.65s"
-                                          emptyColor="gray.200"
-                                          color="#01A2E8"
-                                          size="lg"
-                                        />
-                                      </Center>
-                                    ) :   (
-                                     
-                                        <>
-                                        <div className="mt-2 ">
-                                          {" "}
-                                          <li className="flex justify-between gap-x-6 py-1 ">
-                                            <div className="flex min-w-0 gap-x-4">
-                                              {hiredApplicant.profilePictureResponse ? (
-                                                <img
-                                                  className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                                                  src={
-                                                    hiredApplicant.profilePictureResponse
-                                                  }
-                                                  alt=""
-                                                />
-                                              ) : null}
+                                        <p>{jobsInProgressMap.description}</p>
+                                      </div>
 
-                                              <div className="min-w-0 flex-auto">
-                                                <p className="text-md font-semibold leading-6 text-gray-900">
-                                                  {hiredApplicant.firstName}
-                                                </p>
-
-                                                <p className="mt-1 truncate text-xs leading-5 text-gray-500"></p>
-                                                {hiredApplicant.numberOfRatings ? (
-                                                  <Flex>
-                                                    {maxRating.map(
-                                                      (item, key) => {
-                                                        return (
-                                                          <Box
-                                                            activeopacity={0.7}
-                                                            key={item}
-                                                            marginTop="5px"
-                                                          >
-                                                            <Image
-                                                              boxSize="16px"
-                                                              src={
-                                                                item <=
-                                                                hiredApplicant.rating
-                                                                  ? star_filled
-                                                                  : star_corner
-                                                              }
-                                                            ></Image>
-                                                          </Box>
-                                                        );
+                                      <div class="space-y-1 ">
+                                        <label
+                                          for="dactmm"
+                                          class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
+                                        >
+                                          You've hired:
+                                        </label>
+                                        {isLoading ? (
+                                          <Center marginTop="32px">
+                                            <Spinner
+                                              thickness="4px"
+                                              speed="0.65s"
+                                              emptyColor="gray.200"
+                                              color="#01A2E8"
+                                              size="lg"
+                                            />
+                                          </Center>
+                                        ) : (
+                                          <>
+                                            <div className="mt-2 ">
+                                              {" "}
+                                              <li className="flex justify-between gap-x-6 py-1 ">
+                                                <div className="flex min-w-0 gap-x-4">
+                                                  {hiredApplicant.profilePictureResponse ? (
+                                                    <img
+                                                      className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                                                      src={
+                                                        hiredApplicant.profilePictureResponse
                                                       }
-                                                    )}
-                                                    <p marginLeft="4px">
-                                                      (
-                                                      {
-                                                        hiredApplicant.numberOfRatings
-                                                      }{" "}
-                                                      reviews)
+                                                      alt=""
+                                                    />
+                                                  ) : ( <span class="inline-block size-[46px] bg-gray-100 rounded-full overflow-hidden">
+                                                  <svg class="size-full text-gray-300" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.62854" y="0.359985" width="15" height="15" rx="7.5" fill="white"></rect>
+                                                    <path d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z" fill="currentColor"></path>
+                                                    <path d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z" fill="currentColor"></path>
+                                                  </svg>
+                                                </span>)}
+
+                                                  <div className="min-w-0 flex-auto">
+                                                    <p className="text-md font-semibold leading-6 text-gray-900">
+                                                      {hiredApplicant.firstName}
                                                     </p>
-                                                  </Flex>
+
+                                                    <p className="mt-1 truncate text-xs leading-5 text-gray-500"></p>
+                                                    {hiredApplicant.numberOfRatings ? (
+                                                      <Flex>
+                                                        {maxRating.map(
+                                                          (item, key) => {
+                                                            return (
+                                                              <Box
+                                                                activeopacity={
+                                                                  0.7
+                                                                }
+                                                                key={item}
+                                                                marginTop="5px"
+                                                              >
+                                                                <Image
+                                                                  boxSize="16px"
+                                                                  src={
+                                                                    item <=
+                                                                    hiredApplicant.rating
+                                                                      ? star_filled
+                                                                      : star_corner
+                                                                  }
+                                                                ></Image>
+                                                              </Box>
+                                                            );
+                                                          }
+                                                        )}
+                                                        <p marginLeft="4px">
+                                                          (
+                                                          {
+                                                            hiredApplicant.numberOfRatings
+                                                          }{" "}
+                                                          reviews)
+                                                        </p>
+                                                      </Flex>
+                                                    ) : (
+                                                      <p marginTop="2px">
+                                                        No reviews yet!
+                                                      </p>
+                                                    )}
+                                                  </div>
+                                                </div>
+
+                                                <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                                                  {hiredApplicant.isPremium ? (
+                                                    <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium bg-green-100 text-green-500 ">
+                                                      Premium Contractor
+                                                    </span>
+                                                  ) : null}
+                                                </div>
+                                              </li>
+                                              <div className="flex-column min-w-0 gap-x-4 mb-16">
+                                                {hiredApplicant.isPremium ? (
+                                                  <>
+                                                    {hiredApplicant.premiumCategoryOne ? (
+                                                      <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
+                                                        {
+                                                          hiredApplicant.premiumCategoryOne
+                                                        }
+                                                      </span>
+                                                    ) : null}
+
+                                                    {hiredApplicant.premiumCategoryTwo ? (
+                                                      <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                        {
+                                                          hiredApplicant.premiumCategoryTwo
+                                                        }
+                                                      </span>
+                                                    ) : null}
+                                                    {hiredApplicant.premiumCategoryThree ? (
+                                                      <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                        {
+                                                          hiredApplicant.premiumCategoryThree
+                                                        }
+                                                      </span>
+                                                    ) : null}
+                                                  </>
+                                                ) : null}
+                                                <div className="mt-2">
+                                                  <p>{hiredApplicant.bio}</p>
+                                                </div>
+                                                {hiredApplicant.hasUnreadMessage ? (
+                                                  <>
+                                                    <button
+                                                      class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
+                                                      onClick={() =>
+                                                        navigateToChannel(
+                                                          jobsInProgressMap
+                                                        )
+                                                      }
+                                                    >
+                                                      See Messages
+                                                      <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
+                                                        New
+                                                      </span>
+                                                    </button>
+                                                  </>
                                                 ) : (
-                                                  <p marginTop="2px">
-                                                    No reviews yet!
-                                                  </p>
+                                                  <button
+                                                    class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
+                                                    onClick={() =>
+                                                      navigateToChannel(
+                                                        jobsInProgressMap
+                                                      )
+                                                    }
+                                                  >
+                                                    See Messages
+                                                  </button>
                                                 )}
                                               </div>
                                             </div>
+                                          </>
+                                        )}
+                                      </div>
+                                    </div>
 
-                                            <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                                              {hiredApplicant.isPremium ? (
-                                                <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium bg-green-100 text-green-500 ">
-                                                  Premium Contractor
-                                                </span>
-                                              ) : null}
-                                            </div>
-                                          </li>
-                                          <div className="flex-column min-w-0 gap-x-4 mb-16">
-                                            {hiredApplicant.isPremium ? (
-                                              <>
-                                                {hiredApplicant.premiumCategoryOne ? (
-                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
-                                                    {
-                                                     hiredApplicant.premiumCategoryOne
-                                                    }
-                                                  </span>
-                                                ) : null}
-
-                                                {hiredApplicant.premiumCategoryTwo ? (
-                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
-                                                    {
-                                                      hiredApplicant.premiumCategoryTwo
-                                                    }
-                                                  </span>
-                                                ) : null}
-                                                {hiredApplicant.premiumCategoryThree ? (
-                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
-                                                    {
-                                                      hiredApplicant.premiumCategoryThree
-                                                    }
-                                                  </span>
-                                                ) : null}
-                                              </>
-                                            ) : null}
-                                            <div className="mt-2">
-                                              <p>{hiredApplicant.bio}</p>
-                                            </div>
-                                            {hiredApplicant.hasUnreadMessage ? ( <> 
-                                  <button class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "  onClick={() =>
-                                                navigateToChannel(jobsInProgressMap)
-                                              }>
-                                    See Messages
-                                    <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
-                            New
-                          </span>
-                                  </button>
-                                  </>) : (   <button class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "  onClick={() =>
-                                                navigateToChannel(jobsInProgressMap)
-                                              }>
-                                    See Messages
-                                   
-                                  </button>)}
-                                           
-                                          </div>
-                                        </div>
-                                        </>
-                                      
-                                    )}
-                                  </div>
-                                </div>
-
-                                <div class="p-4 flex justify-between gap-x-2  absolute right-0 bottom-2">
-                                  <div class="w-full flex justify-end items-center gap-x-2">
-                                   
-
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        // handleDelete(allJobs)
-                                        confirmCancelModal(jobsInProgressMap)
-                                      }
-                                      class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-red-600 border hover:bg-red-700 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                      data-hs-overlay="#hs-pro-datm"
-                                    >
-                                      Cancel Job
-                                    </button>
+                                    <div class="p-4 flex justify-between gap-x-2  absolute right-0 bottom-12">
+                                      <div class="w-full flex justify-end items-center gap-x-2">
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            // handleDelete(allJobs)
+                                            confirmCancelModal(
+                                              jobsInProgressMap
+                                            )
+                                          }
+                                          class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-red-600 border hover:bg-red-700 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                          data-hs-overlay="#hs-pro-datm"
+                                        >
+                                          Cancel Job
+                                        </button>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </Card>
-                         
+                          </div>
                         </Flex>
                       ) : (
                         <Text>No applicant here goes spinner</Text>
@@ -1451,13 +1519,15 @@ const NeederMapScreen = () => {
                     {openInfoWindowMarkerID === jobsInReviewMap.jobID ? (
                       hiredApplicant ? (
                         <Flex direction="row-reverse">
-                           <Card
-                            width={{ base: "100vw", lg: "25vw" }}
-                            height={{ base: "94vh" }}
-                            mt={{ base: "0", lg: "10" }}
+                          <div
+                            class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
+                            tabindex="-1"
                           >
-                            <div class="w-100 max-h-full   bg-white rounded-xl  ">
-                              <div class="py-3 px-4 flex justify-between items-center"><button
+                            <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+                              <div class="py-3 px-4 flex justify-between items-center border-b ">
+                                <div class="w-100 max-h-full   bg-white rounded-xl  ">
+                                  <div class="py-3 px-4 flex justify-between items-center">
+                                    <button
                                       type="button"
                                       onClick={() => handleCloseInfoWindow()}
                                       class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
@@ -1478,461 +1548,228 @@ const NeederMapScreen = () => {
                                         <path d="M18 6 6 18" />
                                         <path d="m6 6 12 12" />
                                       </svg>
-                                    </button></div>
-
-                              <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-                                <div class="p-4 space-y-2">
-                                  <div class="">
-                                    
-                                    <div class="py-3  flex-column  items-center  ">
-                                      <label
-                                        for="hs-pro-dactmt"
-                                        class="block mb-2 text-xl font-medium text-gray-800 "
-                                      >
-                                        {jobsInReviewMap.jobTitle}
-                                        
-                                      </label>
-                                      <p>{jobsInReviewMap.city}, Minnesota</p>
-                                      {jobsInReviewMap.isHourly ? (
-                                        <p>
-                                          ${jobsInReviewMap.lowerRate}/hr-$
-                                          {jobsInReviewMap.upperRate}
-                                          /hr
-                                        </p>
-                                      ) : (
-                                        <p>${jobsInReviewMap.flatRate}</p>
-                                      )}
-                                     
-                                    </div>
+                                    </button>
                                   </div>
 
-                                  <div class="">
-                                    <label
-                                      for="dactmi"
-                                      class=" text-lg font-medium text-gray-800 "
-                                    >
-                                      Description
-                                    </label>
+                                  <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                                    <div class="p-4 space-y-2">
+                                      <div class="">
+                                        <div class="py-3  flex-column  items-center  ">
+                                          <label
+                                            for="hs-pro-dactmt"
+                                            class="block mb-2 text-xl font-medium text-gray-800 "
+                                          >
+                                            {jobsInReviewMap.jobTitle}
+                                            <span class=" ml-2 inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium bg-green-100 text-green-500 ">
+                                                     Ready To Pay
+                                                    </span>
+                                          </label>
+                                          
+                                          <p>
+                                            {jobsInReviewMap.city}, Minnesota
+                                          </p>
+                                          {jobsInReviewMap.isHourly ? (
+                                            <p>
+                                              ${jobsInReviewMap.lowerRate}/hr-$
+                                              {jobsInReviewMap.upperRate}
+                                              /hr
+                                            </p>
+                                          ) : (
+                                            <p>${jobsInReviewMap.flatRate}</p>
+                                          )}
+                                        </div>
+                                      </div>
 
-                                    <p>{jobsInReviewMap.description}</p>
-                                  </div>
+                                      <div class="">
+                                        <label
+                                          for="dactmi"
+                                          class=" text-lg font-medium text-gray-800 "
+                                        >
+                                          Description
+                                        </label>
 
-                                  <div class="space-y-1 ">
-                                    <label
-                                      for="dactmm"
-                                      class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
-                                    >
-                                      You've hired: 
-                                    </label>
-                                    {isLoading ? (
-                                      <Center marginTop="32px">
-                                        <Spinner
-                                          thickness="4px"
-                                          speed="0.65s"
-                                          emptyColor="gray.200"
-                                          color="#01A2E8"
-                                          size="lg"
-                                        />
-                                      </Center>
-                                    ) :   (
-                                     
-                                        <>
-                                        <div className="mt-2 ">
-                                          {" "}
-                                          <li className="flex justify-between gap-x-6 py-1 ">
-                                            <div className="flex min-w-0 gap-x-4">
-                                              {hiredApplicant.profilePictureResponse ? (
-                                                <img
-                                                  className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                                                  src={
-                                                    hiredApplicant.profilePictureResponse
-                                                  }
-                                                  alt=""
-                                                />
-                                              ) : null}
+                                        <p>{jobsInReviewMap.description}</p>
+                                      </div>
 
-                                              <div className="min-w-0 flex-auto">
-                                                <p className="text-md font-semibold leading-6 text-gray-900">
-                                                  {hiredApplicant.firstName}
-                                                </p>
-
-                                                <p className="mt-1 truncate text-xs leading-5 text-gray-500"></p>
-                                                {hiredApplicant.numberOfRatings ? (
-                                                  <Flex>
-                                                    {maxRating.map(
-                                                      (item, key) => {
-                                                        return (
-                                                          <Box
-                                                            activeopacity={0.7}
-                                                            key={item}
-                                                            marginTop="5px"
-                                                          >
-                                                            <Image
-                                                              boxSize="16px"
-                                                              src={
-                                                                item <=
-                                                                hiredApplicant.rating
-                                                                  ? star_filled
-                                                                  : star_corner
-                                                              }
-                                                            ></Image>
-                                                          </Box>
-                                                        );
+                                      <div class="space-y-1 ">
+                                        <label
+                                          for="dactmm"
+                                          class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
+                                        >
+                                          You've hired:
+                                        </label>
+                                        {isLoading ? (
+                                          <Center marginTop="32px">
+                                            <Spinner
+                                              thickness="4px"
+                                              speed="0.65s"
+                                              emptyColor="gray.200"
+                                              color="#01A2E8"
+                                              size="lg"
+                                            />
+                                          </Center>
+                                        ) : (
+                                          <>
+                                            <div className="mt-2  ">
+                                              {" "}
+                                              <li className="flex justify-between gap-x-6 py-1 ">
+                                                <div className="flex min-w-0 gap-x-4">
+                                                  {hiredApplicant.profilePictureResponse ? (
+                                                    <img
+                                                      className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                                                      src={
+                                                        hiredApplicant.profilePictureResponse
                                                       }
-                                                    )}
-                                                    <p marginLeft="4px">
-                                                      (
-                                                      {
-                                                        hiredApplicant.numberOfRatings
-                                                      }{" "}
-                                                      reviews)
+                                                      alt=""
+                                                    />
+                                                  ) : ( <span class="inline-block size-[46px] bg-gray-100 rounded-full overflow-hidden">
+                                                  <svg class="size-full text-gray-300" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.62854" y="0.359985" width="15" height="15" rx="7.5" fill="white"></rect>
+                                                    <path d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z" fill="currentColor"></path>
+                                                    <path d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z" fill="currentColor"></path>
+                                                  </svg>
+                                                </span>)}
+
+                                                  <div className="min-w-0 flex-auto">
+                                                    <p className="text-md font-semibold leading-6 text-gray-900">
+                                                      {hiredApplicant.firstName}
                                                     </p>
-                                                  </Flex>
+
+                                                    <p className="mt-1 truncate text-xs leading-5 text-gray-500"></p>
+                                                    {hiredApplicant.numberOfRatings ? (
+                                                      <Flex>
+                                                        {maxRating.map(
+                                                          (item, key) => {
+                                                            return (
+                                                              <Box
+                                                                activeopacity={
+                                                                  0.7
+                                                                }
+                                                                key={item}
+                                                                marginTop="5px"
+                                                              >
+                                                                <Image
+                                                                  boxSize="16px"
+                                                                  src={
+                                                                    item <=
+                                                                    hiredApplicant.rating
+                                                                      ? star_filled
+                                                                      : star_corner
+                                                                  }
+                                                                ></Image>
+                                                              </Box>
+                                                            );
+                                                          }
+                                                        )}
+                                                        <p marginLeft="4px">
+                                                          (
+                                                          {
+                                                            hiredApplicant.numberOfRatings
+                                                          }{" "}
+                                                          reviews)
+                                                        </p>
+                                                      </Flex>
+                                                    ) : (
+                                                      <p marginTop="2px">
+                                                        No reviews yet!
+                                                      </p>
+                                                    )}
+                                                  </div>
+                                                </div>
+
+                                                <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                                                  {hiredApplicant.isPremium ? (
+                                                    <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium bg-green-100 text-green-500 ">
+                                                      Premium Contractor
+                                                    </span>
+                                                  ) : null}
+                                                </div>
+                                              </li>
+                                              <div className="flex-column min-w-0 gap-x-4 mb-16">
+                                                {hiredApplicant.isPremium ? (
+                                                  <>
+                                                    {hiredApplicant.premiumCategoryOne ? (
+                                                      <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
+                                                        {
+                                                          hiredApplicant.premiumCategoryOne
+                                                        }
+                                                      </span>
+                                                    ) : null}
+
+                                                    {hiredApplicant.premiumCategoryTwo ? (
+                                                      <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                        {
+                                                          hiredApplicant.premiumCategoryTwo
+                                                        }
+                                                      </span>
+                                                    ) : null}
+                                                    {hiredApplicant.premiumCategoryThree ? (
+                                                      <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                        {
+                                                          hiredApplicant.premiumCategoryThree
+                                                        }
+                                                      </span>
+                                                    ) : null}
+                                                  </>
+                                                ) : null}
+                                                <div className="mt-2">
+                                                  <p>{hiredApplicant.bio}</p>
+                                                </div>
+                                                {hiredApplicant.hasUnreadMessage ? (
+                                                  <>
+                                                    <button
+                                                      class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
+                                                      onClick={() =>
+                                                        navigateToChannel(
+                                                          jobsInReviewMap
+                                                        )
+                                                      }
+                                                    >
+                                                      See Messages
+                                                      <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
+                                                        New
+                                                      </span>
+                                                    </button>
+                                                  </>
                                                 ) : (
-                                                  <p marginTop="2px">
-                                                    No reviews yet!
-                                                  </p>
+                                                  <button
+                                                    class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
+                                                    onClick={() =>
+                                                      navigateToChannel(
+                                                        jobsInReviewMap
+                                                      )
+                                                    }
+                                                  >
+                                                    See Messages
+                                                  </button>
                                                 )}
+                                                <div class=" ml-8 w-3/4 flex justify-center items-center gap-x-2 absolute bottom-16">
+                                                  <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                      // handleDelete(allJobs)
+                                                      handlePaymentsVisible(
+                                                        jobsInReviewMap
+                                                      )
+                                                    }
+                                                    class="py-2 px-3 inline-flex w-full  justify-center  items-center gap-x-2 text-start bg-sky-400 border hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                                    data-hs-overlay="#hs-pro-datm"
+                                                  >
+                                                    Pay Now
+                                                   
+                                                  </button>
+                                                </div>
                                               </div>
                                             </div>
-
-                                            <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                                              {hiredApplicant.isPremium ? (
-                                                <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium bg-green-100 text-green-500 ">
-                                                  Premium Contractor
-                                                </span>
-                                              ) : null}
-                                            </div>
-                                          </li>
-                                          <div className="flex-column min-w-0 gap-x-4 mb-16">
-                                            {hiredApplicant.isPremium ? (
-                                              <>
-                                                {hiredApplicant.premiumCategoryOne ? (
-                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
-                                                    {
-                                                     hiredApplicant.premiumCategoryOne
-                                                    }
-                                                  </span>
-                                                ) : null}
-
-                                                {hiredApplicant.premiumCategoryTwo ? (
-                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
-                                                    {
-                                                      hiredApplicant.premiumCategoryTwo
-                                                    }
-                                                  </span>
-                                                ) : null}
-                                                {hiredApplicant.premiumCategoryThree ? (
-                                                  <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
-                                                    {
-                                                      hiredApplicant.premiumCategoryThree
-                                                    }
-                                                  </span>
-                                                ) : null}
-                                              </>
-                                            ) : null}
-                                            <div className="mt-2">
-                                              <p>{hiredApplicant.bio}</p>
-                                            </div>
-                                            {hiredApplicant.hasUnreadMessage ? ( <> 
-                                  <button class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "  onClick={() =>
-                                                navigateToChannel(jobsInReviewMap)
-                                              }>
-                                    See Messages
-                                    <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
-                            New
-                          </span>
-                                  </button>
-                                  </>) : (   <button class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "  onClick={() =>
-                                                navigateToChannel(jobsInReviewMap)
-                                              }>
-                                    See Messages
-                                   
-                                  </button>)}
-                                  <div class="w-full flex justify-end items-center gap-x-2">
-                                   
-
-                                   <button
-                                     type="button"
-                                     onClick={() =>
-                                       // handleDelete(allJobs)
-                                       handlePaymentsVisible(jobsInReviewMap)
-                                     }
-                                     class="py-2 px-3 inline-flex w-full justify-center items-center gap-x-2 text-start bg-sky-400 border hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                     data-hs-overlay="#hs-pro-datm"
-                                   >
-                                     Pay Now
-                                     <span class=" top-5 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
-                            Pay
-                          </span>
-                                   </button>
-                                 </div>
-                                           
-                                          </div>
-                                        </div>
-                                       
-                                 
-                                        </>
-                                        
-                                      
-                                    )}
+                                          </>
+                                        )}
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
-
                               </div>
                             </div>
-                          </Card>
-                          {/* <Card
-                       
-                            border="1px"
-                            borderColor="gray.400"
-                            borderWidth="1.5px"
-                            width="400px"
-                            boxShadow="lg"
-                            height="90vh"
-                            flexDirection="row"
-                          >
-                            <CloseButton
-                              position="absolute"
-                              right="2"
-                              size="lg"
-                              onClick={() => setOpenInfoWindowMarkerID(null)}
-                            >
-                              X
-                            </CloseButton>
-                            <CardBody>
-                              <Flex direction="row" alignContent="center">
-                                {" "}
-                                <Heading fontSize="24" marginTop="16px">
-                                  {jobsInReviewMap.jobTitle}
-                                </Heading>
-                               
-                              </Flex>
-
-                              <Heading size="sm" marginTop="2">
-                                {jobsInReviewMap.city}, MN
-                              </Heading>
-                              {jobsInReviewMap.isHourly ? (
-                                <Heading size="sm">
-                                  ${jobsInReviewMap.confirmedRate}/hr
-                                </Heading>
-                              ) : (
-                                <Heading size="sm">
-                                  ${jobsInReviewMap.confirmedRate}
-                                </Heading>
-                              )}
-
-                              <Heading size="sm" marginTop="2">
-                                Description
-                              </Heading>
-                              <Text>{jobsInReviewMap.description}</Text>
-                              <Heading size="sm" marginTop="2">
-                                Requirements
-                              </Heading>
-                              {jobsInReviewMap.requirements ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {jobsInReviewMap.requirements}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : (
-                                <Text>No requirements listed</Text>
-                              )}
-
-                              {jobsInReviewMap.requirements2 ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {jobsInReviewMap.requirements2}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : null}
-                              {jobsInReviewMap.requirements3 ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {jobsInReviewMap.requirements3}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : null}
-                              <Heading size="sm" marginTop="2">
-                                Additional Notes
-                              </Heading>
-                              {jobsInReviewMap.niceToHave ? (
-                                <Text>{jobsInReviewMap.niceToHave}</Text>
-                              ) : (
-                                <Text>Nothing listed</Text>
-                              )}
-                              <Divider />
-                              <Heading
-                                size="md"
-                                marginTop="24px"
-                                marginBottom="16px"
-                              >
-                                You've Hired:
-                              </Heading>
-
-                              <>
-                                <Card
-                                  padding="3"
-                                  marginTop="4px"
-                                  boxShadow="md"
-                                  key={hiredApplicant.id}
-                                >
-                                  <Flex>
-                                    <Avatar
-                                      src={
-                                        hiredApplicant.profilePictureResponse
-                                      }
-                                      bg="#01A2E8"
-                                      size="md"
-                                    />
-                                    
-                                    <Flex direction="column" marginLeft="4px">
-                                      <Heading size="md">
-                                        {" "}
-                                        {hiredApplicant.firstName}{" "}
-                                        {hiredApplicant.lastName}
-                                      </Heading>
-                                      {hiredApplicant.numberOfRatings ? (
-                                        <Flex>
-                                          {maxRating.map((item, key) => {
-                                            return (
-                                              <Box
-                                                activeopacity={0.7}
-                                                key={item}
-                                                marginTop="5px"
-                                              >
-                                                <Image
-                                                  boxSize="16px"
-                                                  src={
-                                                    item <=
-                                                    hiredApplicant.rating
-                                                      ? star_filled
-                                                      : star_corner
-                                                  }
-                                                ></Image>
-                                              </Box>
-                                            );
-                                          })}
-                                          <Text marginLeft="4px">
-                                            ({hiredApplicant.numberOfRatings}{" "}
-                                            reviews)
-                                          </Text>
-                                        </Flex>
-                                      ) : (
-                                        <Text marginTop="4px">
-                                          No reviews yet!
-                                        </Text>
-                                      )}
-                                    </Flex>
-                                  </Flex>
-                                  <Flex direction="column">
-                                    {" "}
-                                    <Heading
-                                      size="sm"
-                                      marginTop="2px"
-                                      marginBottom="2px"
-                                    >
-                                      About
-                                    </Heading>
-                                    <Text
-                                      noOfLines={[1, 2]}
-                                      marginBottom="24px"
-                                    >
-                                      {hiredApplicant.bio}
-                                    </Text>
-                                   
-                                  </Flex>
-                                </Card> */}
-                                {/* <Modal
-                                  isCentered
-                                  onClose={onClose}
-                                  isOpen={isOpen}
-                                  motionPreset="slideInBottom"
-                                >
-                                  <ModalOverlay />
-                                  <ModalContent>
-                                    <ModalHeader>
-                                      {allJobs.jobTitle}
-                                    </ModalHeader>
-                                    <ModalCloseButton />
-                                    <ModalBody>
-                                      <Text>{hiredApplicant.firstName}</Text>
-                                    </ModalBody>
-                                    <ModalFooter>
-                                      <Button
-                                        colorScheme="blue"
-                                        mr={3}
-                                        onClick={onClose}
-                                      >
-                                        Close
-                                      </Button>
-                                      <Button variant="ghost">
-                                        Secondary Action
-                                      </Button>
-                                    </ModalFooter>
-                                  </ModalContent>
-                                </Modal>
-                              </>
-
-                              <CardFooter
-                                flexDirection="column"
-                                marginTop="16px"
-                              >
-                                <Button
-                                  backgroundColor="#01A2E8"
-                                  textColor="white"
-                                  _hover={{ bg: "#018ecb", textColor: "white" }}
-                                  width="320px"
-                                  marginTop="8px"
-                                  onClick={() =>
-                                    handlePaymentsVisible(jobsInReviewMap)
-                                  }
-                                >
-                                  Pay now
-                                </Button>{" "}
-                                {jobsInReviewMap.hasUnreadMessage ? (
-                                  <Button
-                                    backgroundColor="white"
-                                    textColor="#01A2E8"
-                                    width="320px"
-                                    marginTop="8px"
-                                    onClick={() =>
-                                      navigateToChannel(jobsInReviewMap)
-                                    }
-                                  >
-                                    See Messages
-                                    <Badge
-                                      backgroundColor="#df4b4b"
-                                      textColor="white"
-                                      marginBottom="24px"
-                                      position="absolute"
-                                      right="20"
-                                    >
-                                      New
-                                    </Badge>
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    backgroundColor="white"
-                                    textColor="#01A2E8"
-                                    width="320px"
-                                    marginTop="8px"
-                                    onClick={() =>
-                                      navigateToChannel(jobsInReviewMap)
-                                    }
-                                  >
-                                    See Messages
-                                  </Button>
-                                )}
-                              </CardFooter>
-                            </CardBody>
-                          </Card> */}
+                          </div>
                         </Flex>
                       ) : (
                         <Text>No applicant here goes spinner</Text>
@@ -1945,8 +1782,6 @@ const NeederMapScreen = () => {
               ) : null}
 
               {firstVisitModalVisible ? <NewVisitModal /> : null}
-
-             
             </Map>
           </Box>
         </APIProvider>

@@ -271,7 +271,7 @@ const StripeSetUp = () => {
 
             <div class="p-6 pt-0 flex justify-end gap-x-2">
       <div class="w-full flex justify-end items-center gap-x-2">
-      <button type="button" class="py-2 px-3 inline-flex justify-center items-center text-start bg-white border border-gray-200 text-gray-800 text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-gray-50" data-hs-overlay="#hs-pro-daem" onClick={() => navigate("/DoerMapScreen")}>
+      <button type="button" class="py-2 px-3 inline-flex justify-center items-center text-start bg-white border border-gray-200 text-gray-800 text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-gray-50" data-hs-overlay="#hs-pro-daem" onClick={() => navigate("/DoerMapScreen", {state: {firstVisit: true}})}>
             Skip
           </button>
 

@@ -62,8 +62,12 @@ import star_corner from "../../images/star_corner.png";
 import star_filled from "../../images/star_filled.png";
 import NoCategoryMatchModal from "../../components/NoCategoryMatchModal";
 import { useChatContext } from "stream-chat-react";
-import { useMediaQuery } from '@chakra-ui/react'
+import { useMediaQuery } from "@chakra-ui/react";
+import { useLocation } from "react-router-dom";
+import DoerFirstVisitModal from "./components/DoerFirstVisitModal";
 
+import Dashboard from "./components/Dashboard";
+import Header from "./components/Header";
 const DoerMapScreen = () => {
   const [user, setUser] = useState(null);
   const [postedJobs, setPostedJobs] = useState([]);
@@ -71,19 +75,26 @@ const DoerMapScreen = () => {
 
   const [hasRun, setHasRun] = useState(false);
 
-  const [selectedLat, setSelectedLat] = useState(null)
-  const [selectedLng, setSelectedLng] = useState(null)
+  const [selectedLat, setSelectedLat] = useState(null);
+  const [selectedLng, setSelectedLng] = useState(null);
 
+  const location = useLocation();
 
+  const [firstVisitModalVisible, setFirstVisitModalVisible] = useState(false);
 
-
- 
+  useEffect(() => {
+    if (location.state === null) {
+    } else {
+      if (location.state.firstVisit) {
+        setFirstVisitModalVisible(true);
+      }
+    }
+  }, [location]);
 
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
-     
       });
       setHasRun(true);
     } else {
@@ -100,13 +111,12 @@ const DoerMapScreen = () => {
       snapshot.docs.forEach((doc) => {
         //review what thiss does
         if (doc.id === "0a9fb80c-8dc5-4ec0-9316-7335f7fc0058") {
-         //ignore this job is for Needer map screen
+          //ignore this job is for Needer map screen
         } else {
           results.push({ ...doc.data(), id: doc.id });
         }
-       
       });
-    
+
       setPostedJobs(results);
     });
     // } else {
@@ -126,7 +136,7 @@ const DoerMapScreen = () => {
           //review what thiss does
           results.push({ ...doc.data(), id: doc.id });
         });
-       
+
         setAppliedJobs(results);
       });
     }
@@ -143,7 +153,7 @@ const DoerMapScreen = () => {
         let results = [];
         snapshot.docs.forEach((doc) => {
           //review what thiss does
-         
+
           results.push({ ...doc.data(), id: doc.id });
         });
         if (!results || !results.length) {
@@ -151,11 +161,9 @@ const DoerMapScreen = () => {
           // setPostedJobs(0);
         } else {
           setJobsInProgress(results);
-        
         }
       });
     } else {
-     
     }
   }, [user]);
 
@@ -170,7 +178,7 @@ const DoerMapScreen = () => {
         let results = [];
         snapshot.docs.forEach((doc) => {
           //review what thiss does
-         
+
           results.push({ ...doc.data(), id: doc.id });
         });
         if (!results || !results.length) {
@@ -178,16 +186,13 @@ const DoerMapScreen = () => {
           // setPostedJobs(0);
         } else {
           setJobsInReview(results);
-         
         }
       });
     } else {
-      
     }
   }, [user]);
 
   const [allJobs, setAllJobs] = useState([]);
-
 
   const [completedJobsMap, setCompletedJobsMap] = useState([]);
 
@@ -200,7 +205,7 @@ const DoerMapScreen = () => {
         let results = [];
         snapshot.docs.forEach((doc) => {
           //review what thiss does
-          
+
           results.push({ ...doc.data(), id: doc.id });
         });
         if (!results || !results.length) {
@@ -208,15 +213,11 @@ const DoerMapScreen = () => {
           // setPostedJobs(0);
         } else {
           setCompletedJobsMap(results);
-         
         }
       });
     } else {
-      
     }
   }, [user]);
-
-
 
   //huge shout out to junaid7898 https://github.com/react-native-maps/react-native-maps/issues/350
   const filteredLocations = (postedJobs) => {
@@ -238,8 +239,6 @@ const DoerMapScreen = () => {
           locationLat: lat - offset * 0.0001,
           locationLng: lng - offset * 0.0001,
         });
-
-        
       } else {
         // If it hasn't been encountered before, mark it as seen in the hash table with an offset of 1
         hash[latLng] = 1;
@@ -254,16 +253,13 @@ const DoerMapScreen = () => {
 
   useEffect(() => {
     if (!postedJobs.length || !postedJobs) {
-    
     } else {
       filteredLocations(postedJobs);
     }
   }, [postedJobs]);
 
   useEffect(() => {
-    allJobs.map((allJobs) => {
-    
-    });
+    allJobs.map((allJobs) => {});
   }, [allJobs]);
 
   const defaultLat = 44.96797106363888;
@@ -282,38 +278,30 @@ const DoerMapScreen = () => {
   const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState(null);
 
   const handleToggleOpen = (x) => {
-  
     setOpenInfoWindowMarkerID(x);
     getData(x);
   };
 
   const handleToggleAppliedOpen = (x) => {
-    
     setOpenInfoWindowMarkerID(x.jobID);
     getData(x.jobID);
   };
 
-  useEffect(() => {
- 
-  }, [openInfoWindowMarkerID]);
+  useEffect(() => {}, [openInfoWindowMarkerID]);
 
   useEffect(() => {
     if (appliedJobs.length !== 0 && postedJobs.length !== 0) {
       appliedJobs.forEach((appliedJob) => {
         postedJobs.forEach((postedJob) => {
           if (appliedJob.jobID === postedJob.jobID) {
-            
-
             //credit user1438038 & Niet the Dark Absol https://stackoverflow.com/questions/15287865/remove-array-element-based-on-object-property
 
             for (var i = allJobs.length - 1; i >= 0; --i) {
               if (allJobs[i].jobID == postedJob.jobID) {
                 allJobs.splice(i, 1);
-               
               }
             }
           } else {
-         
           }
         });
       });
@@ -362,11 +350,9 @@ const DoerMapScreen = () => {
       const docRef = doc(db, "users", user.uid);
 
       getDoc(docRef).then((snapshot) => {
-      
         setIsOnboarded(snapshot.data().isOnboarded);
       });
     } else {
-    
     }
   }, [user]);
 
@@ -378,11 +364,10 @@ const DoerMapScreen = () => {
     onClose: onCloseNoResults,
   } = useDisclosure();
   const {
-    isOpen:   isOpenNotOnboarded,
-    onOpen:   onOpenNotOnboarded,
-    onClose:  onCloseNotOnboarded,
+    isOpen: isOpenNotOnboarded,
+    onOpen: onOpenNotOnboarded,
+    onClose: onCloseNotOnboarded,
   } = useDisclosure();
-
 
   const {
     isOpen: isOpenMarkComplete,
@@ -400,13 +385,22 @@ const DoerMapScreen = () => {
     onClose: onCloseSuccess,
   } = useDisclosure();
 
+  const {
+    isOpen: isOpenSaved,
+    onOpen: onOpenSaved,
+    onClose: onCloseSaved,
+  } = useDisclosure();
 
-const handleNotOboarded = () => {
-  onCloseNotOnboarded()
-  navigate("/DoerAccountManager")
-}
+  const {
+    isOpen: isOpenApplied,
+    onOpen: onOpenApplied,
+    onClose: onCloseApplied,
+  } = useDisclosure();
 
-
+  const handleNotOboarded = () => {
+    onCloseNotOnboarded();
+    navigate("/DoerAccountManager");
+  };
 
   //apply logic
   const applyAndNavigate = () => {
@@ -419,7 +413,6 @@ const handleNotOboarded = () => {
         })
         .catch((error) => {
           //uh oh
-         
         });
 
       setDoc(
@@ -439,13 +432,10 @@ const handleNotOboarded = () => {
       )
         .then(() => {
           //user info submitted to Job applicant file
-
-        
           // navigation.navigate("BottomUserTab");
         })
         .catch((error) => {
           //uh oh
-       
         });
 
       setDoc(doc(db, "users", user.uid, "Applied", jobTitle), {
@@ -483,10 +473,9 @@ const handleNotOboarded = () => {
         })
         .catch((error) => {
           //uh oh
-          
         });
     } else {
-     onOpenNotOnboarded()
+      onOpenNotOnboarded();
     }
   };
 
@@ -515,7 +504,6 @@ const handleNotOboarded = () => {
     const docRef = doc(db, "Map Jobs", openInfoWindowMarkerID);
 
     await getDoc(docRef).then((snapshot) => {
-   
       setFlatRate(snapshot.data().flatRate);
       setJobTitle(snapshot.data().jobTitle);
       setLowerRate(snapshot.data().lowerRate);
@@ -544,11 +532,9 @@ const handleNotOboarded = () => {
   };
 
   const handleToggleInProgressOpen = (x) => {
-  
     setOpenInfoWindowMarkerID(x.jobID);
   };
   const handleToggleInReviewOpen = (x) => {
-   
     setOpenInfoWindowMarkerID(x.jobID);
   };
 
@@ -556,7 +542,6 @@ const handleNotOboarded = () => {
     const docRef = doc(db, "user", openInfoWindowMarkerID);
 
     await getDoc(docRef).then((snapshot) => {
-     
       setFlatRate(snapshot.data().flatRate);
       setJobTitle(snapshot.data().jobTitle);
       setLowerRate(snapshot.data().lowerRate);
@@ -616,13 +601,12 @@ const handleNotOboarded = () => {
     })
       .then(() => {
         //all good
-       
+
         // navigation.navigate("BottomUserTab");
-        alert("Job Saved");
+        onOpenSaved()
       })
       .catch((error) => {
         // no bueno
-    
       });
 
     //submit data
@@ -640,7 +624,6 @@ const handleNotOboarded = () => {
   }, [searchJobCategory]);
 
   const searchCategory = (value) => {
-   
     const q = query(collection(db, "Map Jobs"));
 
     if (value === "all") {
@@ -667,13 +650,12 @@ const handleNotOboarded = () => {
         results.map((results) => {
           if (results.category == value) {
             secondResults.push(results);
-            
           } else {
           }
         });
 
         if (secondResults.length === 0) {
-       onOpenNoResults()
+          onOpenNoResults();
         } else {
           setPostedJobs(secondResults);
         }
@@ -689,8 +671,6 @@ const handleNotOboarded = () => {
 
   //remove newHireNotification
   const handleInProgressNavigate = (x) => {
-   
-
     if (x.firstHiredNotification === true) {
       updateDoc(doc(db, "users", user.uid, "Jobs In Progress", x.jobTitle), {
         firstHiredNotification: false,
@@ -702,7 +682,6 @@ const handleNotOboarded = () => {
     } else {
       navigateToChannel(x);
     }
-    
   };
 
   //logic for marking job complete
@@ -720,7 +699,6 @@ const handleNotOboarded = () => {
   const [isVolunteer, setIsVolunteer] = useState(null);
 
   const getSelectedData = (jobsInProgress) => {
-    
     setJobTitle(jobsInProgress.jobTitle);
     setEmployerID(jobsInProgress.employerID);
     setJobID(jobsInProgress.jobID);
@@ -755,7 +733,7 @@ const handleNotOboarded = () => {
     } else {
       //move to under Review.. should this be for both users? Most likely
 
-      setIsLoading(true)
+      setIsLoading(true);
 
       //submitted if flat rate
 
@@ -785,12 +763,8 @@ const handleNotOboarded = () => {
         jobCompleteApplicant: true,
         jobCompleteEmployer: false,
       })
-        .then(() => {
-         
-        })
-        .catch((error) => {
-       
-        });
+        .then(() => {})
+        .catch((error) => {});
 
       setDoc(doc(db, "employers", employerID, "In Review", jobTitle), {
         confirmedRate: confirmedRate,
@@ -820,31 +794,23 @@ const handleNotOboarded = () => {
         jobCompleteApplicant: true,
         jobCompleteEmployer: false,
       })
-        .then(() => {
-         
-        })
-        .catch((error) => {
-         
-        });
+        .then(() => {})
+        .catch((error) => {});
 
       deleteDoc(doc(db, "users", user.uid, "Jobs In Progress", jobTitle))
         .then(() => {
           //all good
-          
         })
         .catch((error) => {
           // no bueno
-      
         });
 
       deleteDoc(doc(db, "employers", employerID, "Jobs In Progress", jobTitle))
         .then(() => {
           //all good
-         
         })
         .catch((error) => {
           // no bueno
-       
         });
 
       //submit data
@@ -854,26 +820,22 @@ const handleNotOboarded = () => {
       })
         .then(() => {
           //all good
-        
         })
         .catch((error) => {
           // no bueno
-         
         });
 
       setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
         ratingComplete: false,
       })
         .then(() => {})
-        .catch((error) => {
-        
-        });
+        .catch((error) => {});
 
       setTimeout(() => {
-        setIsLoading(false)
-       
+        setIsLoading(false);
+
         onClose();
-        onOpenSuccess()
+        onOpenSuccess();
         navigate("/DoerMapScreen");
       }, 2500);
     }
@@ -882,7 +844,7 @@ const handleNotOboarded = () => {
   const addHoursWorkedNavigate = () => {
     //push to respective In Review dbs, user and employer
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     //set hasbeenRated to false so employer can check if they have been rated yet
 
@@ -916,12 +878,8 @@ const handleNotOboarded = () => {
       jobCompleteApplicant: true,
       jobCompleteEmployer: false,
     })
-      .then(() => {
-      
-      })
-      .catch((error) => {
-       
-      });
+      .then(() => {})
+      .catch((error) => {});
 
     setDoc(doc(db, "employers", employerID, "In Review", jobTitle), {
       confirmedRate: confirmedRate,
@@ -949,31 +907,23 @@ const handleNotOboarded = () => {
       jobCompleteApplicant: true,
       jobCompleteEmployer: false,
     })
-      .then(() => {
-   
-      })
-      .catch((error) => {
-    
-      });
+      .then(() => {})
+      .catch((error) => {});
 
     deleteDoc(doc(db, "users", user.uid, "Jobs In Progress", jobTitle))
       .then(() => {
         //all good
-      
       })
       .catch((error) => {
         // no bueno
-      
       });
 
     deleteDoc(doc(db, "employers", employerID, "Jobs In Progress", jobTitle))
       .then(() => {
         //all good
-       
       })
       .catch((error) => {
         // no bueno
-       
       });
 
     //submit data
@@ -982,26 +932,22 @@ const handleNotOboarded = () => {
     })
       .then(() => {
         //all good
-      
       })
       .catch((error) => {
         // no bueno
-     
       });
 
     setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
       ratingComplete: false,
     })
       .then(() => {})
-      .catch((error) => {
-     
-      });
+      .catch((error) => {});
 
     setTimeout(() => {
-      setIsLoading(false)
-      
+      setIsLoading(false);
+
       onCloseHourly();
-      onOpenSuccess()
+      onOpenSuccess();
       navigate("/DoerMapScreen");
     }, 2500);
   };
@@ -1044,12 +990,8 @@ const handleNotOboarded = () => {
         jobCompleteApplicant: true,
         jobCompleteEmployer: false,
       })
-        .then(() => {
-         
-        })
-        .catch((error) => {
-          
-        });
+        .then(() => {})
+        .catch((error) => {});
 
       setDoc(doc(db, "employers", employerID, "In Review", jobTitle), {
         confirmedRate: confirmedRate,
@@ -1078,23 +1020,17 @@ const handleNotOboarded = () => {
         jobCompleteApplicant: true,
         jobCompleteEmployer: false,
       })
-        .then(() => {
-          
-        })
-        .catch((error) => {
-         
-        });
+        .then(() => {})
+        .catch((error) => {});
 
       deleteDoc(
         doc(db, "users", user.uid, "Jobs In Progress", postedJobs[0].jobTitle)
       )
         .then(() => {
           //all good
-       
         })
         .catch((error) => {
           // no bueno
-       
         });
 
       deleteDoc(
@@ -1108,11 +1044,8 @@ const handleNotOboarded = () => {
       )
         .then(() => {
           //all good
-        
         })
-        .catch((error) => {
-         
-        });
+        .catch((error) => {});
 
       setDoc(doc(db, "users", user.uid, "Ratings", postedJobs[0].jobTitle), {
         ratingComplete: false,
@@ -1120,15 +1053,13 @@ const handleNotOboarded = () => {
         .then(() => {
           setIsLoading(true);
         })
-        .catch((error) => {
-         
-        });
+        .catch((error) => {});
 
       setTimeout(() => {
         setIsLoading(false);
-        
+
         onClose();
-        onOpenSuccess()
+        onOpenSuccess();
         navigate("/DoerMapScreen");
       }, 2500);
     }
@@ -1149,7 +1080,7 @@ const handleNotOboarded = () => {
     const isValid = numberOnlyRegexMinimumCharacterInput.test(confirmHours);
     if (!isValid) {
       setConfirmHoursValidationMessage("Please enter valid hours");
-    
+
       setConfirmHours(confirmHours);
     } else {
       setConfirmHoursValidationMessage();
@@ -1185,115 +1116,109 @@ const handleNotOboarded = () => {
   };
 
   const handleBothModalClose = () => {
-    onCloseHourly()
-    onCloseMarkComplete()
-    onCloseSuccess()
-  }
+    onCloseHourly();
+    onCloseMarkComplete();
+    onCloseSuccess();
+  };
 
+  //handle stripe log in
 
+  const [sessionUrl, setSessionUrl] = useState(null);
 
-//handle stripe log in
+  const [stripeID, setStripeID] = useState(null);
 
+  useEffect(() => {
+    if (user != null) {
+      const docRef = doc(db, "users", user.uid);
 
-const [sessionUrl, setSessionUrl] = useState(null);
-
-const [stripeID, setStripeID] = useState(null);
-
-useEffect(() => {
-  if (user != null) {
-    const docRef = doc(db, "users", user.uid);
-
-    getDoc(docRef).then((snapshot) => {
-      // console.log(snapshot.data());
-      setStripeID({ stripeID: snapshot.data().stripeID });
-    });
-  } else {
-
-  }
-}, [user]);
-
-const logInStripe = async () => {
-  const response = await fetch(
-    //this one is the live one
-    // "https://fulfil-api.onrender.com/create-checkout-web",
-
-    //this is test
-    "https://fulfil-api.onrender.com/stripe-log-in",
-
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(stripeID),
+      getDoc(docRef).then((snapshot) => {
+        // console.log(snapshot.data());
+        setStripeID({ stripeID: snapshot.data().stripeID });
+      });
+    } else {
     }
-  );
+  }, [user]);
 
-  const { loginLink } = await response.json();
+  const logInStripe = async () => {
+    const response = await fetch(
+      //this one is the live one
+      // "https://fulfil-api.onrender.com/create-checkout-web",
 
- 
+      //this is test
+      "https://fulfil-api.onrender.com/stripe-log-in",
 
-  setTimeout(() => {
-    if (loginLink) {
-      setSessionUrl(loginLink);
-      setLoadingPayment(false)
-    }
-  }, 1000);
-};
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(stripeID),
+      }
+    );
 
-useEffect(() => {
-  if (sessionUrl !== null) {
+    const { loginLink } = await response.json();
+
     setTimeout(() => {
-      // setPaymentsLoading(false)
-      // window.location.replace(sessionUrl);
-      // help from gun https://stackoverflow.com/questions/45046030/maintaining-href-open-in-new-tab-with-an-onclick-handler-in-react
-      window.open(sessionUrl, "_blank").then(() => {
-        setSessionUrl(null)
-      })
+      if (loginLink) {
+        setSessionUrl(loginLink);
+        setLoadingPayment(false);
+      }
     }, 1000);
-  } else {
-  }
-}, []);
+  };
 
-const [loadingPayment, setLoadingPayment] = useState(false)
+  useEffect(() => {
+    if (sessionUrl !== null) {
+      setTimeout(() => {
+        // setPaymentsLoading(false)
+        // window.location.replace(sessionUrl);
+        // help from gun https://stackoverflow.com/questions/45046030/maintaining-href-open-in-new-tab-with-an-onclick-handler-in-react
+        window.open(sessionUrl, "_blank").then(() => {
+          setSessionUrl(null);
+        });
+      }, 1000);
+    } else {
+    }
+  }, []);
 
-const handleSeePayment = (x) => {
-  setLoadingPayment(true)
-  if (x.firstViewNotification === true) {
-    updateDoc(doc(db, "users", user.uid, "Past Jobs Map", x.jobTitle), {
-      firstViewNotification: false,
-    }).then(() => {
-      logInStripe()
+  const [loadingPayment, setLoadingPayment] = useState(false);
 
-    })
-  } else {
-    logInStripe()
-  }
+  const handleSeePayment = (x) => {
+    setLoadingPayment(true);
+    if (x.firstViewNotification === true) {
+      updateDoc(doc(db, "users", user.uid, "Past Jobs Map", x.jobTitle), {
+        firstViewNotification: false,
+      }).then(() => {
+        logInStripe();
+      });
+    } else {
+      logInStripe();
+    }
+  };
 
-}
-
-const handleRemoveFromMap = (x) => {
-
-
-    deleteDoc(doc(db, "users", user.uid, "Past Jobs Map", x.jobTitle), {
-    })
-  
-
-}
-const [isDesktop] = useMediaQuery('(min-width: 500px)')
+  const handleRemoveFromMap = (x) => {
+    deleteDoc(doc(db, "users", user.uid, "Past Jobs Map", x.jobTitle), {});
+  };
+  const [isDesktop] = useMediaQuery("(min-width: 500px)");
   return (
     <div>
-      <DoerHeader />
+      <Header />
       <Flex marginTop="4">
-        <DoerDashboard />
+        <Dashboard />
         {process.env.REACT_APP_GOOGLE_API_KEY ? (
           <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-             <Box  h={{base: "90vh", lg: "92vh"}} w={{base: "100vw", lg: "93vw"}}>
+            <Box
+              h={{ base: "90vh", lg: "94vh" }}
+              w={{ base: "100vw", lg: "100vw" }}
+              mt={10}
+            >
               <Map
                 // center={{ lat: selectedLat ? selectedLat : defaultLat, lng: selectedLng ? selectedLng : defaultLong }}
-                defaultCenter={{ lat: selectedLat ? selectedLat : defaultLat, lng: selectedLng ? selectedLng : defaultLong }}
-                defaultZoom={(isDesktop ? 12 : 11)}
+                defaultCenter={{
+                  lat: selectedLat ? selectedLat : defaultLat,
+                  lng: selectedLng ? selectedLng : defaultLong,
+                }}
+                defaultZoom={isDesktop ? 12 : 11}
                 gestureHandling={"greedy"}
                 disableDefaultUI={true}
                 //move to env
@@ -1360,141 +1285,137 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                         }}
                         onClick={() => handleToggleOpen(allJobs.jobID)}
                       >
-                        <div>
-                          <Button
-                            backgroundColor="#01A2E8"
-                            color="white"
-                            _hover={{ bg: "#018ecb", textColor: "white" }}
-                            height="24px"
-                            marginRight={5}
-                          >
-                            {allJobs.isVolunteer ? (
-                              <Text>Volunteer!</Text>
-                            ) : allJobs.isFlatRate ? (
-                              <Text>${allJobs.flatRate}</Text>
-                            ) : (
-                              <Text>
-                                ${allJobs.lowerRate} - ${allJobs.upperRate}/hr
-                              </Text>
-                            )}
-                          </Button>
-                        </div>
+                        <button
+                          type="button"
+                          class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
+                        >
+                          {allJobs.isVolunteer ? (
+                            <p>Volunteer!</p>
+                          ) : allJobs.isFlatRate ? (
+                            <p>${allJobs.flatRate}</p>
+                          ) : (
+                            <p>
+                              ${allJobs.lowerRate} - ${allJobs.upperRate}/hr
+                            </p>
+                          )}
+                        </button>
                         /
                       </AdvancedMarker>
                       {openInfoWindowMarkerID === allJobs.jobID ? (
                         <Flex direction="row-reverse">
-                          <Card
-                            // align="flex-end"
-                            border="1px"
-                            borderColor="gray.400"
-                            borderWidth="1.5px"
-                            width="400px"
-                            boxShadow="lg"
-                            height="90vh"
-                            flexDirection="row"
+                          <div
+                            class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
+                            tabindex="-1"
                           >
-                            <CloseButton
-                              position="absolute"
-                              right="2"
-                              size="lg"
-                              onClick={() => setOpenInfoWindowMarkerID(null)}
-                            >
-                              X
-                            </CloseButton>
-                            <CardBody>
-                              <Flex direction="row" alignContent="center">
-                                {" "}
-                                <Heading fontSize="24" marginTop="16px">
-                                  {allJobs.jobTitle}
-                                </Heading>
-                              </Flex>
+                            <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+                              <div class="py-3 px-4 flex justify-between items-center  ">
+                                <div class="w-100 max-h-full   bg-white rounded-xl  ">
+                                  <div class="py-3 px-4 flex justify-between items-center">
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setOpenInfoWindowMarkerID(null)
+                                      }
+                                      class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                                    >
+                                      <span class="sr-only">Close</span>
+                                      <svg
+                                        class="flex-shrink-0 size-4"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                      >
+                                        <path d="M18 6 6 18" />
+                                        <path d="m6 6 12 12" />
+                                      </svg>
+                                    </button>
+                                  </div>
 
-                              <Heading size="sm" marginTop="2">
-                                {allJobs.city}, MN
-                              </Heading>
-                              {allJobs.isHourly ? (
-                                <Heading size="sm">
-                                  ${allJobs.lowerRate}/hr-${allJobs.upperRate}
-                                  /hr
-                                </Heading>
-                              ) : (
-                                <Heading size="sm">${allJobs.flatRate}</Heading>
-                              )}
+                                  <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                                    <div class="p-4 space-y-2">
+                                      <div class="">
+                                        <div class="py-3  flex-column  items-center  ">
+                                          <label
+                                            for="hs-pro-dactmt"
+                                            class="block mb-2 text-xl font-medium text-gray-800 "
+                                          >
+                                            {allJobs.jobTitle}
+                                          </label>
+                                          <p>{allJobs.city}, Minnesota</p>
+                                        </div>
 
-                              <Heading size="sm" marginTop="2">
-                                Description
-                              </Heading>
-                              <Text>{allJobs.description}</Text>
-                              <Heading size="sm" marginTop="2">
-                                Requirements
-                              </Heading>
-                              {allJobs.requirements ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {allJobs.requirements}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : (
-                                <Text>No requirements listed</Text>
-                              )}
+                                        <div class=" flex-row  items-center  ">
+                                          {allJobs.isHourly ? (
+                                            <p>
+                                              ${allJobs.lowerRate}/hr-$
+                                              {allJobs.upperRate}
+                                              /hr
+                                            </p>
+                                          ) : (
+                                            <div className="flex flex-row items-center">
+                                              <p>
+                                               
+                                                Offer: ${allJobs.flatRate}
+                                              </p>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
 
-                              {allJobs.requirements2 ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {allJobs.requirements2}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : null}
-                              {allJobs.requirements3 ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {allJobs.requirements3}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : null}
-                              <Heading size="sm" marginTop="2">
-                                Additional Notes
-                              </Heading>
-                              {allJobs.niceToHave ? (
-                                <Text>{allJobs.niceToHave}</Text>
-                              ) : (
-                                <Text>Nothing listed</Text>
-                              )}
-                              <Divider />
-                              <CardFooter
-                                flexDirection="column"
-                                marginTop="16px"
-                              >
-                                <Button
-                                  backgroundColor="#01A2E8"
-                                  textColor="white"
-                                  _hover={{ bg: "#018ecb", textColor: "white" }}
-                                  width="320px"
-                                  marginTop="8px"
-                                  onClick={() => applyAndNavigate()}
-                                >
-                                  Apply
-                                </Button>{" "}
-                                <Button
-                                  colorScheme="white"
-                                  textColor="#01A2E8"
-                                  borderColor="#01A2E8"
-                                  borderWidth="1px"
-                                  width="320px"
-                                  marginTop="8px"
-                                  onClick={() => saveJob()}
-                                >
-                                  Save
-                                </Button>
-                              </CardFooter>
-                            </CardBody>
-                          </Card>
+                                      <div class="">
+                                        <label
+                                          for="dactmi"
+                                          class=" text-lg font-medium text-gray-800 "
+                                        >
+                                          Description
+                                        </label>
+
+                                        <p  class=" text-md  ">{allJobs.description}</p>
+                                      </div>
+
+                                      {/* <div class="space-y-1 ">
+                                        <label
+                                          for="dactmm"
+                                          class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
+                                        >
+                                          Applicants
+                                        </label>
+                                        
+                                      </div> */}
+                                    </div>
+
+                                    <div class="p-4 flex justify-between gap-x-2  absolute right-0 ">
+                                      <div class="w-full flex justify-end items-center gap-x-2">
+                                        <button
+                                          type="button"
+                                          onClick={() => saveJob()}
+                                          class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-white  hover:bg-gray-200 text-black text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                          data-hs-overlay="#hs-pro-datm"
+                                        >
+                                          Save Job
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => applyAndNavigate()}
+                                          class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                          data-hs-overlay="#hs-pro-datm"
+                                        >
+                                          Apply
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        
                         </Flex>
                       ) : null}
                     </>
@@ -1506,7 +1427,7 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                     <ModalHeader>Success!</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                      <Text>Application submitted</Text>
+                      <Text>Application submitted.</Text>
                     </ModalBody>
 
                     <ModalFooter>
@@ -1535,227 +1456,189 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                       >
                         <div>
                           {appliedJobs.hasUnreadMessage ? (
-                            <Button
-                              colorScheme="blue"
-                              height="24px"
-                              marginRight={5}
-                            >
+                             <button
+                             type="button"
+                             class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                           >
+                             {appliedJobs.isVolunteer ? (
+                               <p>Volunteer!</p>
+                             ) : appliedJobs.isFlatRate ? (
+                               <p>${appliedJobs.flatRate}</p>
+                             ) : (
+                               <p>
+                                 ${appliedJobs.lowerRate} - ${appliedJobs.upperRate}/hr
+                               </p>
+                             )}
+   
+                             <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                               New
+                             </span>
+                           </button>
+                         ) : (
+                           <button
+                             type="button"
+                             class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                           >
                               {appliedJobs.isVolunteer ? (
-                                <Text>Volunteer!</Text>
-                              ) : appliedJobs.isFlatRate ? (
-                                <Text>${appliedJobs.flatRate}</Text>
-                              ) : (
-                                <Text>
-                                  ${appliedJobs.lowerRate} - $
-                                  {appliedJobs.upperRate}/hr
-                                </Text>
-                              )}
-                              <Badge
-                                backgroundColor="#df4b4b"
-                                textColor="white"
-                                top="-2"
-                                position="absolute"
-                                right="-4"
-                              >
-                                New
-                              </Badge>
-                            </Button>
-                          ) : (
-                            <Button
-                              colorScheme="blue"
-                              height="24px"
-                              marginRight={5}
-                            >
-                              {appliedJobs.isVolunteer ? (
-                                <Text>Volunteer!</Text>
-                              ) : appliedJobs.isFlatRate ? (
-                                <Text>${appliedJobs.flatRate}</Text>
-                              ) : (
-                                <Text>
-                                  ${appliedJobs.lowerRate} - $
-                                  {appliedJobs.upperRate}/hr
-                                </Text>
-                              )}
-                            </Button>
-                          )}
+                               <p>Volunteer!</p>
+                             ) : appliedJobs.isFlatRate ? (
+                               <p>${appliedJobs.flatRate}</p>
+                             ) : (
+                               <p>
+                                 ${appliedJobs.lowerRate} - ${appliedJobs.upperRate}/hr
+                               </p>
+                             )}
+                           </button> )}
+                            
                         </div>
                         /
                       </AdvancedMarker>
                       {openInfoWindowMarkerID === appliedJobs.jobID ? (
                         <Flex direction="row-reverse">
-                          <Card
-                            // align="flex-end"
-                            border="1px"
-                            borderColor="gray.400"
-                            borderWidth="1.5px"
-                            width="400px"
-                            boxShadow="lg"
-                            height="90vh"
-                            flexDirection="row"
+
+<div
+                            class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
+                            tabindex="-1"
                           >
-                            <CloseButton
-                              position="absolute"
-                              right="2"
-                              size="lg"
-                              onClick={() => setOpenInfoWindowMarkerID(null)}
-                            >
-                              X
-                            </CloseButton>
-                            <CardBody>
-                              <Flex direction="row" alignContent="center">
-                                {" "}
-                                <Heading fontSize="24" marginTop="16px">
-                                  {appliedJobs.jobTitle}
-                                </Heading>
-                              </Flex>
-
-                              <Heading size="sm" marginTop="2">
-                                {appliedJobs.city}, MNs
-                              </Heading>
-                              {appliedJobs.isHourly ? (
-                                <Heading size="sm">
-                                  ${appliedJobs.lowerRate}/hr-$
-                                  {appliedJobs.upperRate}
-                                  /hr
-                                </Heading>
-                              ) : (
-                                <Heading size="sm">
-                                  ${appliedJobs.flatRate}
-                                </Heading>
-                              )}
-
-                              <Heading size="sm" marginTop="2">
-                                Description
-                              </Heading>
-                              <Text>{appliedJobs.description}</Text>
-                              <Heading size="sm" marginTop="2">
-                                Requirements
-                              </Heading>
-                              {appliedJobs.requirements ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {appliedJobs.requirements}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : (
-                                <Text>No requirements listed</Text>
-                              )}
-
-                              {appliedJobs.requirements2 ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {appliedJobs.requirements2}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : null}
-                              {appliedJobs.requirements3 ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {appliedJobs.requirements3}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : null}
-                              <Heading size="sm" marginTop="2">
-                                Additional Notes
-                              </Heading>
-                              {appliedJobs.niceToHave ? (
-                                <Text>{appliedJobs.niceToHave}</Text>
-                              ) : (
-                                <Text>Nothing listed</Text>
-                              )}
-                              <Divider />
-                              <CardFooter
-                                flexDirection="column"
-                                marginTop="16px"
-                                alignContent="center"
-                                justifyContent="center"
-                                textAlign="center"
-                              >
-                                {appliedJobs.interviewStarted ? (
-                                  <>
-                                    <Heading
-                                      alignContent="center"
-                                      justifyContent="center"
-                                      textAlign="center"
-                                      size="md"
+                            <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+                              <div class="py-3 px-4 flex justify-between items-center  ">
+                                <div class="w-100 max-h-full   bg-white rounded-xl  ">
+                                  <div class="py-3 px-4 flex justify-between items-center">
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setOpenInfoWindowMarkerID(null)
+                                      }
+                                      class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
                                     >
-                                      {" "}
-                                      Interview Started
-                                    </Heading>
+                                      <span class="sr-only">Close</span>
+                                      <svg
+                                        class="flex-shrink-0 size-4"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                      >
+                                        <path d="M18 6 6 18" />
+                                        <path d="m6 6 12 12" />
+                                      </svg>
+                                    </button>
+                                  </div>
+
+                                  <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                                    <div class="p-4 space-y-2">
+                                      <div class="">
+                                        <div class="py-3  flex-column  items-center  ">
+                                          <label
+                                            for="hs-pro-dactmt"
+                                            class="block mb-2 text-xl font-medium text-gray-800 "
+                                          >
+                                            {appliedJobs.jobTitle}
+                                          </label>
+                                          <p>{appliedJobs.city}, Minnesota</p>
+                                        </div>
+
+                                        <div class=" flex-row  items-center  ">
+                                          {appliedJobs.isHourly ? (
+                                            <p>
+                                              ${appliedJobs.lowerRate}/hr-$
+                                              {appliedJobs.upperRate}
+                                              /hr
+                                            </p>
+                                          ) : (
+                                            <div className="flex flex-row items-center">
+                                              <p>
+                                               
+                                                Offer: ${appliedJobs.flatRate}
+                                              </p>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+
+                                      <div class="">
+                                        <label
+                                          for="dactmi"
+                                          class=" text-lg font-medium text-gray-800 "
+                                        >
+                                          Description
+                                        </label>
+
+                                        <p  class=" text-md  ">{appliedJobs.description}</p>
+                                      </div>
+
+                                      {appliedJobs.interviewStarted ? (
+                                  <>
+                                   <div class="py-3  flex-column  items-center  ">
+                                          <label
+                                            for="hs-pro-dactmt"
+                                            class="block  text-xl font-medium text-gray-800 "
+                                          >
+                                            Interview Started
+                                          </label>
+                                          <p  class="block mb-2 text-sm font-medium text-gray-500 ">Continue to your messages to respond to messages</p>
+                                        </div>
 
                                     {appliedJobs.hasUnreadMessage ? (
-                                      <Button
-                                        marginTop="16px"
-                                        backgroundColor="#01A2E8"
-                                        color="white"
-                                        _hover={{
-                                          bg: "#018ecb",
-                                          textColor: "white",
-                                        }}
-                                        onClick={() =>
-                                          navigateToChannel(appliedJobs)
-                                        }
-                                      >
-                                        See Messages
-                                        <Badge
-                                          backgroundColor="#df4b4b"
-                                          textColor="white"
-                                          top="-2"
-                                          position="absolute"
-                                          right="8"
-                                        >
-                                          New
-                                        </Badge>
-                                      </Button>
+                                       <button
+                                       type="button"
+                                       onClick={() =>
+                                        navigateToChannel(appliedJobs)
+                                      }
+                                       class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                     >
+                                       See Messages
+             
+                                       <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                         New
+                                       </span>
+                                     </button>
+                                    
                                     ) : (
-                                      <Button
-                                        marginTop="16px"
-                                        backgroundColor="#01A2E8"
-                                        color="white"
-                                        _hover={{
-                                          bg: "#018ecb",
-                                          textColor: "white",
-                                        }}
-                                        onClick={() =>
-                                          navigateToChannel(appliedJobs)
-                                        }
-                                      >
-                                        See Messages
-                                      </Button>
+                                      <button
+                                      type="button"
+                                      onClick={() =>
+                                       navigateToChannel(appliedJobs)
+                                     }
+                                      class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                    >
+                                      See Messages
+            
+                                    
+                                    </button>
                                     )}
                                   </>
                                 ) : (
                                   <>
-                                    <Heading
-                                      alignContent="center"
-                                      justifyContent="center"
-                                      textAlign="center"
-                                      size="md"
-                                    >
-                                      {" "}
-                                      Application pending
-                                    </Heading>
-                                    <Text
-                                      alignContent="center"
-                                      justifyContent="center"
-                                      textAlign="center"
-                                      marginTop="16px"
-                                    >
-                                      Message notifications will appear here if
+
+<div class="py-3  flex-column  items-center  ">
+                                          <label
+                                            for="hs-pro-dactmt"
+                                            class="block  text-xl font-medium text-gray-800 "
+                                          >
+                                           Application pending
+                                          </label>
+                                          <p  class="block mb-2 text-sm font-medium text-gray-500 "> Message notifications will appear here if
                                       the person who posted this job contacts
-                                      you.
-                                    </Text>
+                                      you.</p>
+                                        </div>
+                                  
                                   </>
                                 )}
-                              </CardFooter>
-                            </CardBody>
-                          </Card>
+                                    </div>
+
+                                   
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                         
                         </Flex>
                       ) : null}
                     </>
@@ -1782,37 +1665,170 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                         <div>
                           {jobsInProgress.hasUnreadMessage ||
                           jobsInProgress.firstHiredNotification ? (
-                            <Button
-                              colorScheme="green"
-                              height="24px"
-                              marginRight={5}
-                            >
-                              <Text>In Progress</Text>
-
-                              <Badge
-                                backgroundColor="#df4b4b"
-                                textColor="white"
-                                top="-2"
-                                position="absolute"
-                                right="-4"
-                              >
-                                New
-                              </Badge>
-                            </Button>
+                            <button
+                             type="button"
+                             class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                           >
+                             In Progress
+   
+                             <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                               New
+                             </span>
+                           </button>
+                           
                           ) : (
-                            <Button
-                              colorScheme="green"
-                              height="24px"
-                              marginRight={5}
-                            >
-                              <Text>In Progress</Text>
-                            </Button>
+                            
+                            <button
+                             type="button"
+                             class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                           >
+                             In Progress
+   
+                            
+                           </button>
                           )}
                         </div>
                         /
                       </AdvancedMarker>
                       {openInfoWindowMarkerID === jobsInProgress.jobID ? (
                         <Flex direction="row-reverse">
+                           <div
+                            class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
+                            tabindex="-1"
+                          >
+                            <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+                              <div class="py-3 px-4 flex justify-between items-center  ">
+                                <div class="w-100 max-h-full   bg-white rounded-xl  ">
+                                  <div class="py-3 px-4 flex justify-between items-center">
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setOpenInfoWindowMarkerID(null)
+                                      }
+                                      class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                                    >
+                                      <span class="sr-only">Close</span>
+                                      <svg
+                                        class="flex-shrink-0 size-4"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                      >
+                                        <path d="M18 6 6 18" />
+                                        <path d="m6 6 12 12" />
+                                      </svg>
+                                    </button>
+                                  </div>
+
+                                  <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                                    <div class="p-4 space-y-2">
+                                      <div class="">
+                                        <div class="py-3  flex-column  items-center  ">
+                                          <label
+                                            for="hs-pro-dactmt"
+                                            class="block mb-2 text-xl font-medium text-gray-800 "
+                                          >
+                                            {jobsInProgress.jobTitle}
+                                          </label>
+                                          <p>{jobsInProgress.city}, Minnesota</p>
+                                        </div>
+
+                                        <div class=" flex-row  items-center  ">
+                                          {jobsInProgress.isHourly ? (
+                                            <p>
+                                              ${jobsInProgress.lowerRate}/hr-$
+                                              {jobsInProgress.upperRate}
+                                              /hr
+                                            </p>
+                                          ) : (
+                                            <div className="flex flex-row items-center">
+                                              <p>
+                                               
+                                                Offer: ${jobsInProgress.flatRate}
+                                              </p>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+
+                                      <div class="">
+                                        <label
+                                          for="dactmi"
+                                          class=" text-lg font-medium text-gray-800 "
+                                        >
+                                          Description
+                                        </label>
+
+                                        <p  class=" text-md  ">{jobsInProgress.description}</p>
+                                      </div>
+
+                                      <div class="space-y-1 ">
+                                        <label
+                                          for="dactmm"
+                                          class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
+                                        >
+                                          You've been hired for this position!
+                                        </label>
+                                        
+                                      </div>
+                                    </div>
+                                    {jobsInProgress.hasUnreadMessage ? (
+                                        <button
+                                        type="button"
+                                        onClick={() =>
+                                          handleInProgressNavigate(jobsInProgress)
+                                        }
+                                        class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none"
+                                      >
+                                        See Messages
+              
+                                        <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                          New
+                                        </span>
+                                      </button>
+                                  
+                                  ) : (
+                                    <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleInProgressNavigate(jobsInProgress)
+                                    }
+                                    class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none"
+                                  >
+                                    See Messages
+          
+                                   
+                                  </button>
+                                  )}
+
+
+                                    <div class="p-4 flex justify-between gap-x-2  w-full absolute bottom-12 right-0 ">
+                                      <div class="w-full flex justify-center items-center gap-x-2">
+                                       
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            handleCompleteModalOpen(jobsInProgress)
+                                          }
+                                          class="py-2 px-3 w-3/4 inline-flex  justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                          data-hs-overlay="#hs-pro-datm"
+                                        >
+                                          Mark Complete
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
                           <Card
                             // align="flex-end"
                             border="1px"
@@ -1845,7 +1861,6 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                               {jobsInProgress.isHourly ? (
                                 <Heading size="sm">
                                   ${jobsInProgress.confirmedRate}/hr
-                                  
                                 </Heading>
                               ) : (
                                 <Heading size="sm">
@@ -1980,7 +1995,7 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                     </>
                   ))}
 
-{jobsInReview !== null &&
+                {jobsInReview !== null &&
                   jobsInReview.map((jobsInReview) => (
                     //credit https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN
                     <>
@@ -1994,9 +2009,7 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                             ? jobsInReview.locationLng
                             : -93.26177106829272,
                         }}
-                        onClick={() =>
-                          handleToggleInReviewOpen(jobsInReview)
-                        }
+                        onClick={() => handleToggleInReviewOpen(jobsInReview)}
                       >
                         <div>
                           {jobsInReview.hasUnreadMessage ||
@@ -2063,7 +2076,8 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                               </Heading>
                               {jobsInReview.isHourly ? (
                                 <Heading size="sm">
-                                  {jobsInReview.confirmHours} hours worked at ${jobsInReview.confirmedRate}/hour 
+                                  {jobsInReview.confirmHours} hours worked at $
+                                  {jobsInReview.confirmedRate}/hour
                                 </Heading>
                               ) : (
                                 <Heading size="sm">
@@ -2184,8 +2198,6 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                                     </Button>
                                   )}
                                 </>
-
-                               
                               </CardFooter>
                             </CardBody>
                           </Card>
@@ -2194,7 +2206,7 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                     </>
                   ))}
 
-{completedJobsMap !== null &&
+                {completedJobsMap !== null &&
                   completedJobsMap.map((completedJobsMap) => (
                     //credit https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN
                     <>
@@ -2216,15 +2228,15 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                           {completedJobsMap.hasUnreadMessage ||
                           completedJobsMap.firstViewNotification ? (
                             <Button
-                            backgroundColor="white"
-                            textColor="#018ecb"
-                            // borderWidth="1px"
-                            borderBottomWidth="1px"
-                            borderTopWidth="1px"
-                            borderRightWidth="1px"
-                            borderLeftWidth="1px"
-                            borderColor="#018ecb"
-                            _hover={{ bg: "#018ecb", textColor: "white" }}
+                              backgroundColor="white"
+                              textColor="#018ecb"
+                              // borderWidth="1px"
+                              borderBottomWidth="1px"
+                              borderTopWidth="1px"
+                              borderRightWidth="1px"
+                              borderLeftWidth="1px"
+                              borderColor="#018ecb"
+                              _hover={{ bg: "#018ecb", textColor: "white" }}
                               height="24px"
                               marginRight={5}
                             >
@@ -2242,15 +2254,15 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                             </Button>
                           ) : (
                             <Button
-                            backgroundColor="white"
-                            textColor="#018ecb"
-                            // borderWidth="1px"
-                            borderBottomWidth="1px"
-                            borderTopWidth="1px"
-                            borderRightWidth="1px"
-                            borderLeftWidth="1px"
-                            borderColor="#018ecb"
-                            _hover={{ bg: "#018ecb", textColor: "white" }}
+                              backgroundColor="white"
+                              textColor="#018ecb"
+                              // borderWidth="1px"
+                              borderBottomWidth="1px"
+                              borderTopWidth="1px"
+                              borderRightWidth="1px"
+                              borderLeftWidth="1px"
+                              borderColor="#018ecb"
+                              _hover={{ bg: "#018ecb", textColor: "white" }}
                               height="24px"
                               marginRight={5}
                             >
@@ -2293,7 +2305,8 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                               </Heading>
                               {completedJobsMap.isHourly ? (
                                 <Heading size="sm">
-                                  {completedJobsMap.confirmHours} hours worked at ${completedJobsMap.confirmedRate}/hour 
+                                  {completedJobsMap.confirmHours} hours worked
+                                  at ${completedJobsMap.confirmedRate}/hour
                                 </Heading>
                               ) : (
                                 <Heading size="sm">
@@ -2369,23 +2382,21 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                                     textAlign="center"
                                     size="md"
                                     marginTop="8px"
-                                  >
-                                    
-                                  </Text>
+                                  ></Text>
                                   {loadingPayment ? (
-                        <Center>
-                          {" "}
-                          <Spinner
-                            thickness="4px"
-                            speed="0.65s"
-                            emptyColor="gray.200"
-                            color="blue.500"
-                            size="xl"
-                            marginTop="24px"
-                          />
-                        </Center>
-                      ) : (
-                                  <Button
+                                    <Center>
+                                      {" "}
+                                      <Spinner
+                                        thickness="4px"
+                                        speed="0.65s"
+                                        emptyColor="gray.200"
+                                        color="blue.500"
+                                        size="xl"
+                                        marginTop="24px"
+                                      />
+                                    </Center>
+                                  ) : (
+                                    <Button
                                       marginTop="24px"
                                       backgroundColor="#01A2E8"
                                       color="white"
@@ -2402,25 +2413,21 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                                     >
                                       See Payment
                                     </Button>
-                      )}
-                                    <Button
-                                      marginTop="24px"
-                                      backgroundColor="white"
-                                      textColor="#df4b4b"
-                                     
-                                      onClick={() =>
-                                        // navigateToChannel(completedJobsMap)
-                                        //go to stripe account, add li
+                                  )}
+                                  <Button
+                                    marginTop="24px"
+                                    backgroundColor="white"
+                                    textColor="#df4b4b"
+                                    onClick={() =>
+                                      // navigateToChannel(completedJobsMap)
+                                      //go to stripe account, add li
 
-                                        handleRemoveFromMap(completedJobsMap)
-                                      }
-                                    >
-                                     Remove
-                                    </Button>
-                                  
+                                      handleRemoveFromMap(completedJobsMap)
+                                    }
+                                  >
+                                    Remove
+                                  </Button>
                                 </>
-
-                               
                               </CardFooter>
                             </CardBody>
                           </Card>
@@ -2554,19 +2561,27 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                     </ModalFooter>
                   </ModalContent>
                 </Modal>
-                <Modal isOpen={isOpenSuccess} onClose={onCloseSuccess} size="xl">
+                <Modal
+                  isOpen={isOpenSuccess}
+                  onClose={onCloseSuccess}
+                  size="xl"
+                >
                   <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>Success!</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                     
-                       <Text>This job has been completed and the person who posted this job has been notified.</Text>
-                       <Text>Payment will be sent when they confirm the job has been completed.</Text>
+                      <Text>
+                        This job has been completed and the person who posted
+                        this job has been notified.
+                      </Text>
+                      <Text>
+                        Payment will be sent when they confirm the job has been
+                        completed.
+                      </Text>
                     </ModalBody>
 
                     <ModalFooter>
-                      
                       <Button
                         colorScheme="blue"
                         onClick={() => handleBothModalClose()}
@@ -2576,19 +2591,23 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                     </ModalFooter>
                   </ModalContent>
                 </Modal>
-                <Modal isOpen={isOpenNoResults} onClose={onCloseNoResults} size="xl">
+                <Modal
+                  isOpen={isOpenNoResults}
+                  onClose={onCloseNoResults}
+                  size="xl"
+                >
                   <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>No Results</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                     
-                       <Text>There are currently no jobs posted in this category.</Text>
-                       <Text>Try a different category or try again later</Text>
+                      <Text>
+                        There are currently no jobs posted in this category.
+                      </Text>
+                      <Text>Try a different category or try again later</Text>
                     </ModalBody>
 
                     <ModalFooter>
-                      
                       <Button
                         colorScheme="blue"
                         onClick={() => onCloseNoResults()}
@@ -2598,19 +2617,23 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                     </ModalFooter>
                   </ModalContent>
                 </Modal>
-                <Modal isOpen={isOpenNotOnboarded} onClose={onCloseNotOnboarded} size="xl">
+                <Modal
+                  isOpen={isOpenNotOnboarded}
+                  onClose={onCloseNotOnboarded}
+                  size="xl"
+                >
                   <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>Oops!</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                     
-                       <Text>Looks like your account isn't fully set up!</Text>
-                       <Text>Finish the onbaording process before applying.</Text>
+                      <Text>Looks like your account isn't fully set up!</Text>
+                      <Text>
+                        Finish the onbaording process before applying.
+                      </Text>
                     </ModalBody>
 
                     <ModalFooter>
-                      
                       <Button
                         colorScheme="blue"
                         onClick={() => handleNotOboarded()}
@@ -2620,8 +2643,46 @@ const [isDesktop] = useMediaQuery('(min-width: 500px)')
                     </ModalFooter>
                   </ModalContent>
                 </Modal>
+
+                <Modal isOpen={isOpenApplied} onClose={onCloseApplied}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Your job has been posted.</Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3}  onClick={() => onCloseApplied}>
+              Close
+            </Button>
+          
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isOpenSaved} onClose={onCloseSaved}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>You've saved this job</Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3}  onClick={() => onCloseSaved()}>
+              Close
+            </Button>
+          
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      
               </Map>
             </Box>
+            {firstVisitModalVisible ? <DoerFirstVisitModal /> : null}
           </APIProvider>
         ) : (
           <Text>loading...</Text>

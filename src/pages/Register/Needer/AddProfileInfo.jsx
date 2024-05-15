@@ -71,7 +71,7 @@ import {
   AlertDescription,
   CloseButton,
 } from "@chakra-ui/react";
-
+import LoggedOutHeader from "../../../components/Landing/LoggedOutHeader";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
@@ -243,8 +243,8 @@ useEffect(() => {
     const phoneNumberValid = phoneRegex.test(phoneNumber)
 
     if (!firstName || !lastName || !city || !state || privacyPolicy !== true || ageAgreement !== true || termsOfService !== true) {
-      alert("Please fill out all fields");
-    
+     
+      onOpenIncomplete()
     } else if (phoneNumber ? !phoneNumberValid : null){
       console.log("going through", phoneNumberValid)
       setPhoneValidationMessage(
@@ -275,12 +275,194 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
   //modal control
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isOpenTOS, onOpen: onOpenTOS, onClose: onCloseTOS } = useDisclosure();
-
+  const { isOpen: isOpenIncomplete, onOpen: onOpenIncomplete, onClose: onCloseIncomplete } = useDisclosure();
 
   
   return (
     <>
-      <Header />
+
+<LoggedOutHeader />
+
+<Center>
+   <div class="w-1/3 ">
+
+
+    <form>
+      <div className="space-y-12">
+       
+
+        <div className=" border-gray-900/10 pb-0">
+          <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
+          <p className="mt-1 text-sm leading-6 text-gray-600"> We just need a few pieces of information to get started</p>
+
+          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div className="sm:col-span-3">
+              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                First name
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="first-name"
+                  id="first-name"
+                  autoComplete="given-name"
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div className="sm:col-span-3">
+              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">
+                Last name
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="last-name"
+                  id="last-name"
+                  onChange={(e) => setLastName(e.target.value)}
+                  autoComplete="family-name"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div className="sm:col-span-4">
+              <label  className="block text-sm font-medium leading-6 text-gray-900">
+                Phone Number (optional)
+              </label>
+              <div className="mt-2">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            
+
+            
+
+            
+
+            <div className="sm:col-span-2 sm:col-start-1">
+              <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
+                City
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="city"
+                  id="city"
+                  onChange={(e) => setCity(e.target.value)}
+                  autoComplete="address-level2"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div className="sm:col-span-2">
+              <label htmlFor="region" className="block text-sm font-medium leading-6 text-gray-900">
+                State / Province
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="region"
+                  id="region"
+                  onChange={(e) => setState(e.target.value)}
+                  autoComplete="address-level1"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            
+          </div>
+        </div>
+
+        <div className="border-b border-gray-900/10 pb-12">
+         
+
+          <div className="mt-10 space-y-10">
+            <fieldset>
+              <legend className="text-sm font-semibold leading-6 text-gray-900">Agreements</legend>
+              <div className="mt-6 space-y-6">
+                <div className="relative flex gap-x-3">
+                  <div className="flex h-6 items-center">
+                    <input
+                      id="comments"
+                      name="comments"
+                      type="checkbox"
+                      onChange={(e) => setTermsOfService(e.target.checked)}
+                      className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                    />
+                  </div>
+                  <div className="text-sm leading-6">
+                    <label  className="font-medium text-gray-900" >
+                    I have read and agree to the <span class="text-sky-400" onClick={() => onOpenTOS()}>Terms of Service.</span>
+                    </label>
+                   
+                  </div>
+                </div>
+                <div className="relative flex gap-x-3">
+                  <div className="flex h-6 items-center">
+                    <input
+                      id="candidates"
+                      name="candidates"
+                      onChange={(e) => setPrivacyPolicy(e.target.checked)}
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                    />
+                  </div>
+                  <div className="text-sm leading-6">
+                    <label  className="font-medium text-gray-900" >
+                    I have read and agree to the  <span class="text-sky-400" onClick={() => onOpen()} > Privacy Policy.</span>
+                    </label>
+                   
+                  </div>
+                </div>
+                <div className="relative flex gap-x-3">
+                  <div className="flex h-6 items-center">
+                    <input
+                      id="offers"
+                      name="offers"
+                      type="checkbox"
+                      onChange={(e) => setAgeAgreement(e.target.checked)}
+                      className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                    />
+                  </div>
+                  <div className="text-sm leading-6">
+                    <label htmlFor="offers" className="font-medium text-gray-900">
+                    I am over 18 years of age
+                    </label>
+                    
+                  </div>
+                </div>
+                
+              </div>
+            </fieldset>
+           
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 flex items-center justify-end gap-x-6">
+      
+      <input type="button"  value="Sign Up" onClick={() => checkLength()} class="py-2 px-3 inline-flex justify-center mb-12 items-center gap-x-2 text-start bg-sky-500  hover:bg-sky-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 " data-hs-overlay="#">
+          
+          </input>
+      </div>
+    </form>
+    </div>
+
+</Center>
+  
+      {/* <Header />
 
       <Flex justifyContent="center" >
         <Center>
@@ -383,7 +565,7 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
             </Center>
           </Box>
         </Center>
-      </Flex>
+      </Flex> */}
 
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
                 <ModalOverlay />
@@ -713,6 +895,23 @@ You give your consent to receive any agreements, notifications, disclosures, and
   </ModalFooter>
 </ModalContent>
 </Modal>
+<Modal isOpen={isOpenIncomplete} onClose={onCloseIncomplete}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Form Incomplete</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Please fill out all fields and agree to the statements at the bottom of the form before continuing.</Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onCloseIncomplete}>
+              Close
+            </Button>
+           
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

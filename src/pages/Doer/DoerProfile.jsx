@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import DoerHeader from "./DoerHeader";
 import DoerDashboard from "./DoerDashboard";
-
+import Header from "./components/Header"
+import Dashboard from "./components/Dashboard";
 import {
   Input,
   Button,
@@ -153,7 +154,7 @@ const DoerProfile = () => {
       setHasRun(true);
     } else {
     }
-  });
+  },[]);
 
   useEffect(() => {
     if (user != null) {
@@ -872,24 +873,26 @@ console.log("props", props.Title)
 
   return (
     <>
-      <DoerHeader />
+      <Header />
 
       <Flex justifyContent="center">
         <Box position="absolute" left="0">
-          <DoerDashboard />
+          <Dashboard />
         </Box>
         {user ? (
+         
+          
+         
           <Box
           w={{base: "100vw", lg: "38vw"}}
         
             borderColor="#E3E3E3"
-            // borderLeftWidth="4px"
-            // borderRightWidth="4px"
+         
             height="auto"
             boxShadow=""
             rounded="lg"
             padding="8"
-            //   overflowY="scroll"
+  
           >
             <Flex direction="column">
               <Avatar

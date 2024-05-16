@@ -1225,7 +1225,7 @@ const DoerMapScreen = () => {
                 mapId="6cc03a62d60ca935"
                 onClick={() => setOpenInfoWindowMarkerID(null)}
               >
-                <Center marginTop="8px">
+                <Center marginTop="8px" ml={24}>
                   <Card
                     align="center"
                     border="1px"
@@ -1235,12 +1235,14 @@ const DoerMapScreen = () => {
                     boxShadow="lg"
                     flexDirection="row"
                   >
-                    <Select
-                      placeholder="Looking for something specific?"
+                    <select
+                    className="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                      placeholder="Search"
                       width="360px"
                       onChange={(e) => setSearchJobCategory(e.target.value)}
                     >
-                      <option value="all">Clear Selection</option>
+                      <option>Search</option>
+                      <option value="all">See All</option>
                       <option>--------------------------------</option>
                       <option value="asphalt">Asphalt</option>
                       <option value="carpentry">Carpentry</option>
@@ -1262,7 +1264,7 @@ const DoerMapScreen = () => {
                       </option>
                       <option value="window washing">Window Washing</option>
                       <option value="yard work">Yard Work</option>
-                    </Select>
+                    </select>
                     {/* <Button colorScheme="blue" width="240px">
                     Search
                   </Button> */}
@@ -1777,14 +1779,13 @@ const DoerMapScreen = () => {
                                         </label>
                                         
                                       </div>
-                                    </div>
-                                    {jobsInProgress.hasUnreadMessage ? (
+                                      {jobsInProgress.hasUnreadMessage ? (
                                         <button
                                         type="button"
                                         onClick={() =>
                                           handleInProgressNavigate(jobsInProgress)
                                         }
-                                        class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none"
+                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
                                       >
                                         See Messages
               
@@ -1799,13 +1800,15 @@ const DoerMapScreen = () => {
                                     onClick={() =>
                                       handleInProgressNavigate(jobsInProgress)
                                     }
-                                    class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none"
+                                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
                                   >
                                     See Messages
           
                                    
                                   </button>
                                   )}
+                                    </div>
+                                   
 
 
                                     <div class="p-4 flex justify-between gap-x-2  w-full absolute bottom-12 right-0 ">
@@ -1829,167 +1832,7 @@ const DoerMapScreen = () => {
                             </div>
                           </div>
 
-                          <Card
-                            // align="flex-end"
-                            border="1px"
-                            borderColor="gray.400"
-                            borderWidth="1.5px"
-                            width="400px"
-                            boxShadow="lg"
-                            height="90vh"
-                            flexDirection="row"
-                          >
-                            <CloseButton
-                              position="absolute"
-                              right="2"
-                              size="lg"
-                              onClick={() => setOpenInfoWindowMarkerID(null)}
-                            >
-                              X
-                            </CloseButton>
-                            <CardBody>
-                              <Flex direction="row" alignContent="center">
-                                {" "}
-                                <Heading fontSize="24" marginTop="16px">
-                                  {jobsInProgress.jobTitle}
-                                </Heading>
-                              </Flex>
-
-                              <Heading size="sm" marginTop="2">
-                                {jobsInProgress.city}, MN
-                              </Heading>
-                              {jobsInProgress.isHourly ? (
-                                <Heading size="sm">
-                                  ${jobsInProgress.confirmedRate}/hr
-                                </Heading>
-                              ) : (
-                                <Heading size="sm">
-                                  ${jobsInProgress.confirmedRate}
-                                </Heading>
-                              )}
-
-                              <Heading size="sm" marginTop="2">
-                                Description
-                              </Heading>
-                              <Text>{jobsInProgress.description}</Text>
-                              <Heading size="sm" marginTop="2">
-                                Requirements
-                              </Heading>
-                              {jobsInProgress.requirements ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {jobsInProgress.requirements}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : (
-                                <Text>No requirements listed</Text>
-                              )}
-
-                              {jobsInProgress.requirements2 ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {jobsInProgress.requirements2}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : null}
-                              {jobsInProgress.requirements3 ? (
-                                <Flex direction="row">
-                                  {" "}
-                                  <Text fontSize="14">{"\u25CF"} </Text>
-                                  <Text marginLeft="1">
-                                    {jobsInProgress.requirements3}{" "}
-                                  </Text>{" "}
-                                </Flex>
-                              ) : null}
-                              <Heading size="sm" marginTop="2">
-                                Additional Notes
-                              </Heading>
-                              {jobsInProgress.niceToHave ? (
-                                <Text>{jobsInProgress.niceToHave}</Text>
-                              ) : (
-                                <Text>Nothing listed</Text>
-                              )}
-                              <Divider />
-                              <CardFooter
-                                flexDirection="column"
-                                marginTop="16px"
-                                alignContent="center"
-                                justifyContent="center"
-                                textAlign="center"
-                              >
-                                <>
-                                  <Heading
-                                    alignContent="center"
-                                    justifyContent="center"
-                                    textAlign="center"
-                                    size="md"
-                                  >
-                                    You've been hired for this position!
-                                  </Heading>
-
-                                  {jobsInProgress.hasUnreadMessage ? (
-                                    <Button
-                                      marginTop="24px"
-                                      backgroundColor="white"
-                                      color="#01A2E8"
-                                      _hover={{
-                                        bg: "#01A2E8",
-                                        textColor: "white",
-                                      }}
-                                      onClick={() =>
-                                        handleInProgressNavigate(jobsInProgress)
-                                      }
-                                    >
-                                      See Messages
-                                      <Badge
-                                        backgroundColor="#df4b4b"
-                                        textColor="white"
-                                        top="-2"
-                                        position="absolute"
-                                        right="8"
-                                      >
-                                        New
-                                      </Badge>
-                                    </Button>
-                                  ) : (
-                                    <Button
-                                      marginTop="24px"
-                                      backgroundColor="white"
-                                      color="#01A2E8"
-                                      _hover={{
-                                        bg: "#01A2E8",
-                                        textColor: "white",
-                                      }}
-                                      onClick={() =>
-                                        handleInProgressNavigate(jobsInProgress)
-                                      }
-                                    >
-                                      See Messages
-                                    </Button>
-                                  )}
-                                </>
-
-                                <Button
-                                  marginTop="24px"
-                                  backgroundColor="#01A2E8"
-                                  color="white"
-                                  _hover={{
-                                    bg: "#018ecb",
-                                    textColor: "white",
-                                  }}
-                                  onClick={() =>
-                                    handleCompleteModalOpen(jobsInProgress)
-                                  }
-                                >
-                                  Mark Complete
-                                </Button>
-                              </CardFooter>
-                            </CardBody>
-                          </Card>
+                         
                         </Flex>
                       ) : null}
                     </>
@@ -2014,37 +1857,171 @@ const DoerMapScreen = () => {
                         <div>
                           {jobsInReview.hasUnreadMessage ||
                           jobsInReview.firstHiredNotification ? (
-                            <Button
-                              colorScheme="green"
-                              height="24px"
-                              marginRight={5}
-                            >
-                              <Text>Awaiting Payment</Text>
-
-                              <Badge
-                                backgroundColor="#df4b4b"
-                                textColor="white"
-                                top="-2"
-                                position="absolute"
-                                right="-4"
-                              >
-                                New
-                              </Badge>
-                            </Button>
+                            <button
+                             type="button"
+                             class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                           >
+                             Awaiting Payment
+   
+                             <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                               New
+                             </span>
+                           </button>
+                           
                           ) : (
-                            <Button
-                              colorScheme="green"
-                              height="24px"
-                              marginRight={5}
-                            >
-                              <Text>Awaiting Payment</Text>
-                            </Button>
+                            
+                            <button
+                             type="button"
+                             class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                           >
+                             Awaiting Payment
+   
+                            
+                           </button>
                           )}
                         </div>
                         /
                       </AdvancedMarker>
                       {openInfoWindowMarkerID === jobsInReview.jobID ? (
                         <Flex direction="row-reverse">
+
+<div
+                            class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
+                            tabindex="-1"
+                          >
+                            <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+                              <div class="py-3 px-4 flex justify-between items-center  ">
+                                <div class="w-100 max-h-full   bg-white rounded-xl  ">
+                                  <div class="py-3 px-4 flex justify-between items-center">
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setOpenInfoWindowMarkerID(null)
+                                      }
+                                      class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                                    >
+                                      <span class="sr-only">Close</span>
+                                      <svg
+                                        class="flex-shrink-0 size-4"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                      >
+                                        <path d="M18 6 6 18" />
+                                        <path d="m6 6 12 12" />
+                                      </svg>
+                                    </button>
+                                  </div>
+
+                                  <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                                    <div class="p-4 space-y-2">
+                                      <div class="">
+                                        <div class="mt-3 mb-1  flex-column  items-center  ">
+                                          <label
+                                            for="hs-pro-dactmt"
+                                            class="block text-xl font-medium text-gray-800 "
+                                          >
+                                            {jobsInReview.jobTitle}
+                                          </label>
+                                          <p>{jobsInReview.city}, Minnesota</p>
+                                        </div>
+
+                                        <div class=" flex-row  items-center  ">
+                                          {jobsInReview.isHourly ? (
+                                            <p>
+                                              {jobsInReview.confirmHours} hours worked at $
+                                  {jobsInReview.confirmedRate}/hour
+                                            </p>
+                                          ) : (
+                                            <div className="flex flex-row items-center">
+                                              <p>
+                                               
+                                              Pending payment: ${jobsInReview.confirmedRate}
+                                              </p>
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+
+                                      <div class="">
+                                        <label
+                                          for="dactmi"
+                                          class=" text-lg mt-2 font-medium text-gray-800 "
+                                        >
+                                          Description
+                                        </label>
+
+                                        <p  class=" text-md  ">{jobsInReview.description}</p>
+                                      </div>
+
+                                      <div class=" ">
+                                        <label
+                                          for="dactmm"
+                                          class="block  mt-10 text-lg font-medium text-gray-800 "
+                                        >
+                                           You've completed this job
+                                        </label>
+                                        <p className="text-md mb-2 text-gray-500">Payment pending confirmation</p>
+                                        
+                                      </div>
+                                      {jobsInReview.hasUnreadMessage ? (
+                                        <button
+                                        type="button"
+                                        onClick={() =>
+                                          navigateToChannel(jobsInReview)
+                                        }
+                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                      >
+                                        See Messages
+              
+                                        <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                          New
+                                        </span>
+                                      </button>
+                                  
+                                  ) : (
+                                    <button
+                                    type="button"
+                                    onClick={() =>
+                                      navigateToChannel(jobsInReview)
+                                    }
+                                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                  >
+                                    See Messages
+          
+                                   
+                                  </button>
+                                  )}
+                                    </div>
+                                   
+
+
+                                    <div class="p-4 flex justify-between gap-x-2  w-full absolute bottom-12 right-0 ">
+                                      <div class="w-full flex justify-center items-center gap-x-2">
+                                       
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            handleCompleteModalOpen(jobsInReview)
+                                          }
+                                          class="py-2 px-3 w-3/4 inline-flex  justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                          data-hs-overlay="#hs-pro-datm"
+                                        >
+                                          Mark Complete
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                           <Card
                             // align="flex-end"
                             border="1px"

@@ -91,6 +91,7 @@ const DoerAddProfileInfo = () => {
   const [isEmployer, setIsEmployer] = useState(true);
   const [profilePicture, setProfilePicture] = useState(null)
   const [phoneNumber, setPhoneNumber] = useState(null)
+  const [businessName, setBusinessName] = useState(null)
 
 
   const [hasRun, setHasRun] = useState(false);
@@ -161,10 +162,12 @@ const DoerAddProfileInfo = () => {
     setDoc(doc(db, "users", user.uid), {
       firstName: firstName,
       lastName: lastName,
+      businessName : businessName ? businessName : null,
       city: city,
       state: state,
       test: test,
       idStreamChat: user.uid,
+      isPremium: false,
       isEmployer: true,
       email: user.email,
       streamChatID: user.uid,
@@ -310,6 +313,7 @@ const DoerAddProfileInfo = () => {
                   name="email"
                   type="email"
                   autoComplete="email"
+                  onChange={(e) => setBusinessName(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                 />
               </div>

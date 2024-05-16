@@ -4,7 +4,27 @@ import { StreamChat } from "stream-chat";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { auth, logout, db } from "../../../firebaseConfig";
-
+import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Button,
+  Divider,
+  Heading,
+  Stack,
+  useColorModeValue,
+  List,
+  ListIcon,
+  ListItem,
+  VStack,
+  Skeleton
+} from "@chakra-ui/react";
+import { CheckIcon } from "@chakra-ui/icons";
+import { Container, Text, Flex, Box, Center } from "@chakra-ui/react";
 import { v4 as uuidv4 } from "uuid";
 import {
   doc,
@@ -66,39 +86,19 @@ const Dashboard = () => {
       .catch((e) => console.log(e));
   };
 
-  const handleAddNewJob = () => {
-    setAddJobVisible(true);
-  };
-
-  const [showAddJob, setShowAddJob] = useState(false);
-
-
-  //all add job logic
-
-  const [isFlatRate, setIsFlatRate] = useState();
-  const [flatRate, setFlatRate] = useState(0);
-  const [isHourly, setIsHourly] = useState();
-  const [lowerRate, setLowerRate] = useState(0);
-  const [upperRate, setUpperRate] = useState(0);
-  const [jobTitle, setJobTitle] = useState(null);
 
   const [employerID, setEmployerID] = useState(null);
-  const [jobID, setJobID] = useState(null);
-  const [isVolunteer, setIsVolunteer] = useState(null);
+
   const [city, setCity] = useState(null);
   const [state, setState] = useState(null);
-  const [businessName, setBusinessName] = useState(null);
+
   const [firstName, setFirstName] = useState(null);
-  const [description, setDescription] = useState(null);
-  const [requirements, setRequirements] = useState("");
+
 
        //modal control
        const { isOpen, onOpen, onClose } = useDisclosure()
 
 
-  const [requirements2, setRequirements2] = useState("");
-  const [requirements3, setRequirements3] = useState("");
-  const [niceToHave, setNiceToHave] = useState(null);
 
 
 
@@ -114,484 +114,13 @@ const Dashboard = () => {
     }
   }, [hasRun]);
 
-  //credit https://www.code-sample.com/2019/12/react-allow-only-numbers-in-textbox.html
-  const numberOnlyRegexMinimumCharacterInput = /^[0-9\b]{1,7}$/;
-
-  const [flatRateValidationMessage, setFlatRateValidationMessage] = useState();
-
-  const [flatRateValidationBegun, setFlatRateValidationBegun] = useState(false);
-
-  //this little diddy is from MissCoding via Youtube
-
-  const handleFlatRateChange = (flatRate) => {
-    setFlatRate(flatRate);
-
-    if (flatRateValidationMessage) {
-      flatRateValidate(flatRate);
-    }
-  };
-
-  const flatRateValidate = (flatRate) => {
-    setFlatRateValidationBegun(true);
-    const isValid = numberOnlyRegexMinimumCharacterInput.test(flatRate);
-    if (!isValid) {
-      setFlatRateValidationMessage("Please enter valid rate");
-      console.log(flatRateValidationMessage);
-    } else {
-      setFlatRateValidationMessage();
-      setFlatRate(flatRate);
-    }
-  };
-
-  const [lowerRateValidationMessage, setLowerRateValidationMessage] =
-    useState();
-
-  const [lowerRateValidationBegun, setLowerRateValidationBegun] =
-    useState(false);
-
-  const handleLowerRateChange = (lowerRate) => {
-    setLowerRate(lowerRate);
-
-    if (lowerRateValidationMessage) {
-      lowerRateValidate(lowerRate);
-    }
-  };
-
-  const lowerRateValidate = (lowerRate) => {
-    setLowerRateValidationBegun(true);
-    const isValid = numberOnlyRegexMinimumCharacterInput.test(lowerRate);
-    if (!isValid) {
-      setLowerRateValidationMessage("Please enter valid rate");
-      console.log(lowerRateValidationMessage);
-    } else {
-      setLowerRateValidationMessage();
-      setLowerRate(lowerRate);
-    }
-  };
-
-  const [upperRateValidationMessage, setUpperRateValidationMessage] =
-    useState();
-
-  const [upperRateValidationBegun, setUpperRateValidationBegun] =
-    useState(false);
-
-  const handleUpperRateChange = (upperRate) => {
-    setUpperRate(upperRate);
-
-    if (upperRateValidationMessage) {
-      upperRateValidate(upperRate);
-    }
-  };
-
-  const upperRateValidate = (upperRate) => {
-    setUpperRateValidationBegun(true);
-    const isValid = numberOnlyRegexMinimumCharacterInput.test(upperRate);
-    if (!isValid) {
-      setUpperRateValidationMessage("Please enter valid rate");
-      console.log(upperRateValidationMessage);
-    } else {
-      setUpperRateValidationMessage();
-      setUpperRate(upperRate);
-    }
-  };
-
-  //credit https://stackoverflow.com/questions/11511154/regex-for-maximum-length-in-javascript
-  const minLengthRegEx = /^.{1,}$/;
-
-  const checkLength = () => {
-    //check to see if everything is entered
-    const descriptionValid = minLengthRegEx.test(description)
-    const jobTitleValid = minLengthRegEx.test(jobTitle);
-    const upperRateValid = numberOnlyRegexMinimumCharacterInput.test(upperRate);
-    const lowerRateValid = numberOnlyRegexMinimumCharacterInput.test(lowerRate);
-    const flatRateValid = numberOnlyRegexMinimumCharacterInput.test(flatRate);
-
-    //check for null values https://stackoverflow.com/questions/6003884/how-do-i-check-for-null-values-in-javascript user578895
-
-    if (!jobTitleValid || isOneTime === null ) {
-      console.log("1");
-      alert("Please fill out all fields");
-      console.log("1");
-    } else {
-      if (isOneTime === true && isFlatRate === true && !flatRateValid || !descriptionValid) {
-        alert("Please fill out all fields");
-        console.log("2");
-      } else {
-        if (
-          (isOneTime === true && isHourly === true && !upperRateValid || !descriptionValid) ||
-          !lowerRateValid
-        ) {
-          console.log("3");
-          alert("Please fill out all fields");
-        } else {
-          if (isOneTime === false && isFlatRate === true && !flatRateValid || !descriptionValid) {
-            console.log("4");
-            alert("Please fill out all fields");
-          } else {
-            if (
-              (isOneTime === false && isHourly !== null && !upperRateValid) ||
-              !lowerRateValid
-            ) {
-              console.log("5");
-              alert("Please fill out all fields");
-            } else {
-            }
-          }
-        }
-      }
-    }
-    checkAddress();
-  };
-
-  const checkAddress = () => {
-    if (!streetAddress || !locationLat) {
-      console.log(streetAddress, locationLat);
-      alert("Please fill out all fields");
-      console.log("6");
-    } else {
-      submitJob();
-    }
-  };
-
-  const [payType, setPayType] = useState(null);
-
-  // credit help Michael with setting state from select component https://stackoverflow.com/questions/70353397/how-to-update-the-state-if-dropdown-has-selected-value-with-hooks-and-usestate
-  const handleIsHourly = () => {
-    setIsHourly(true);
-    setIsFlatRate(false);
-    setFlatRate(0);
-  };
-
-  const handleIsFixed = () => {
-    setIsFlatRate(true);
-    setIsHourly(false);
-    setUpperRate(0);
-    setLowerRate(0);
-  };
-
-  useEffect(() => {
-    if (payType === "Hourly") {
-      handleIsHourly();
-    } else if (payType === "Fixed") {
-      handleIsFixed();
-    } else {
-    }
-  }, [payType]);
-
-  const [jobFrequency, setJobFrequency] = useState(null);
-
-  const [isOneTime, setIsOneTime] = useState(true);
-  const [locationLat, setLocationLat] = useState(null);
-  const [locationLng, setLocationLng] = useState(null);
-
-  useEffect(() => {
-    if (jobFrequency === "One Time") {
-      setIsOneTime(true);
-    } else if (jobFrequency === "Regular Need") {
-      setIsOneTime(false);
-    } else {
-    }
-  }, [jobFrequency]);
-
-  console.log(
-    "Info",
-    jobTitle,
-    isOneTime,
-    isHourly,
-    upperRate,
-    lowerRate,
-    flatRate
-  );
-
-  const [datePosted, setDatePosted] = useState(null);
-
-  useEffect(() => {
-    //credit https://stackoverflow.com/questions/37271356/how-to-get-the-current-date-in-reactnative Irfan wani
-    setDatePosted(new Date().toLocaleString());
-  }, []);
-
-  const addNewJob = () => {
-    const dbRef = collection(
-      db,
-      "employers",
-      user.uid,
-      "Posted Jobs",
-      jobTitle,
-      "Applicants"
-    );
-    const placeholderApplicant = { placeholder: "applicant" };
-
-    //submit data
-    setDoc(doc(db, "employers", user.uid, "Posted Jobs", jobTitle), {
-      employerID: employerID,
-      jobTitle: jobTitle,
-      jobID: jobID,
-      firstName: firstName,
-      lowerRate: lowerRate,
-      upperRate: upperRate,
-      isVolunteer: isVolunteer,
-      isOneTime: isOneTime,
-      isFlatRate: isFlatRate,
-      flatRate: flatRate,
-      isHourly: isHourly,
-      lowerCaseJobTitle: lowerCaseJobTitle,
-      datePosted: datePosted,
-      category: jobCategory,
-      city: city,
-      streetAddress: streetAddress,
-      state: state,
-      zipCode: zipCode,
-      locationLat: locationLat,
-      locationLng: locationLng,
-      description: description,
-      requirements: requirements,
-      requirements2: requirements2,
-      requirements3: requirements3,
-      niceToHave: niceToHave,
-    })
-      .then(() => {
-        addDoc(dbRef, placeholderApplicant);
-        console.log("data submitted employers");
-      })
-      .catch((error) => {
-        // no bueno
-        console.log(error);
-      });
-  };
-
-  const addJobMap = () => {
-    //submit data
-    setDoc(doc(db, "Map Jobs", jobID), {
-      employerID: employerID,
-      jobTitle: jobTitle,
-      jobID: jobID,
-      firstName: firstName,
-      lowerRate: lowerRate,
-      upperRate: upperRate,
-      isVolunteer: isVolunteer,
-      isOneTime: isOneTime,
-      // isOneTime: isOneTime,
-      isFlatRate: isFlatRate,
-      flatRate: flatRate,
-      isHourly: isHourly,
-      lowerCaseJobTitle: lowerCaseJobTitle,
-      datePosted: datePosted,
-      category: jobCategory,
-      city: city,
-      streetAddress: streetAddress,
-      state: state,
-      zipCode: zipCode,
-      locationLat: locationLat,
-      locationLng: locationLng,
-      description: description,
-      requirements: requirements,
-      requirements2: requirements2,
-      requirements3: requirements3,
-      niceToHave: niceToHave,
-    })
-      .then(() => {
-        //all good
-        console.log("data submitted for Maps");
-      })
-      .catch((error) => {
-        // no bueno
-        console.log(error);
-      });
-
-    if (isVolunteer == true) {
-      //adds to volunteer only db for map
-      setDoc(doc(db, "Map Jobs Volunteer", jobID), {
-        employerID: employerID,
-        jobTitle: jobTitle,
-        jobID: jobID,
-        firstName: firstName,
-        lowerRate: lowerRate,
-        upperRate: upperRate,
-        isVolunteer: isVolunteer,
-        isOneTime: isOneTime,
-        // isOneTime: isOneTime,
-        isFlatRate: isFlatRate,
-        flatRate: flatRate,
-        isHourly: isHourly,
-        lowerCaseJobTitle: lowerCaseJobTitle,
-        category: jobCategory,
-        city: city,
-        streetAddress: streetAddress,
-        state: state,
-        zipCode: zipCode,
-        locationLat: locationLat,
-        locationLng: locationLng,
-        description: description,
-        requirements: requirements,
-        requirements2: requirements2,
-        requirements3: requirements3,
-        niceToHave: niceToHave,
-      })
-        .then(() => {
-          //all good
-          console.log("data submitted for Maps");
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-    } else {
-      setDoc(doc(db, "Map Jobs Paid", jobID), {
-        employerID: employerID,
-        jobTitle: jobTitle,
-        jobID: jobID,
-        firstName: firstName,
-        lowerRate: lowerRate,
-        upperRate: upperRate,
-        isVolunteer: isVolunteer,
-        isOneTime: isOneTime,
-        // isOneTime: isOneTime,
-        isFlatRate: isFlatRate,
-        flatRate: flatRate,
-        isHourly: isHourly,
-        lowerCaseJobTitle: lowerCaseJobTitle,
-        datePosted: datePosted,
-        category: jobCategory,
-        city: city,
-        streetAddress: streetAddress,
-        state: state,
-        zipCode: zipCode,
-        locationLat: locationLat,
-        locationLng: locationLng,
-        description: description,
-        requirements: requirements,
-        requirements2: requirements2,
-        requirements3: requirements3,
-        niceToHave: niceToHave,
-      })
-        .then(() => {
-          //all good
-          console.log("data submitted for Maps");
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-      //adds to paid only db for map
-    }
-  };
-
-  const addJobGlobal = () => {
-    //submit data
-    setDoc(doc(db, "Jobs", user.uid, "Posted Jobs", jobTitle), {
-      employerID: employerID,
-      jobTitle: jobTitle,
-      jobID: jobID,
-      firstName: firstName,
-      lowerRate: lowerRate,
-      upperRate: upperRate,
-      isVolunteer: isVolunteer,
-      isOneTime: isOneTime,
-      isFlatRate: isFlatRate,
-      flatRate: flatRate,
-      isHourly: isHourly,
-      lowerCaseJobTitle: lowerCaseJobTitle,
-      datePosted: datePosted,
-      category: jobCategory,
-      city: city,
-      streetAddress: streetAddress,
-      state: state,
-      zipCode: zipCode,
-      locationLat: locationLat,
-      locationLng: locationLng,
-      description: description,
-      requirements: requirements,
-      requirements2: requirements2,
-      requirements3: requirements3,
-      niceToHave: niceToHave,
-    })
-      .then(() => {
-        //all good
-        console.log("data submitted global");
-      })
-      .catch((error) => {
-        // no bueno
-        console.log(error);
-      });
-
-    //submit data
-    setDoc(doc(db, "All Jobs", jobID), {
-      employerID: employerID,
-      jobTitle: jobTitle,
-      jobID: jobID,
-      firstName: firstName,
-      lowerRate: lowerRate,
-      upperRate: upperRate,
-      isVolunteer: isVolunteer,
-      isOneTime: isOneTime,
-      isFlatRate: isFlatRate,
-      flatRate: flatRate,
-      isHourly: isHourly,
-      lowerCaseJobTitle: lowerCaseJobTitle,
-      city: city,
-      state: state,
-      datePosted: datePosted,
-      category: jobCategory,
-
-      streetAddress: streetAddress,
-
-      zipCode: zipCode,
-      locationLat: locationLat,
-      locationLng: locationLng,
-      description: description,
-      requirements: requirements,
-      requirements2: requirements2,
-      requirements3: requirements3,
-      niceToHave: niceToHave,
-    })
-      .then(() => {
-        //all good
-        console.log("submitted");
-      })
-      .catch((error) => {
-        // no bueno
-        console.log(error);
-      });
-
-      setShowAddJob(!showAddJob)
-
-    onOpen()
-
-    // navigate("/AddJobInfo", {
-    //   state: {
-    //     jobTitle: jobTitle,
-    //     isVolunteer: isVolunteer,
-    //     jobID: jobID,
-    //     firstName: firstName,
-    //   },
-    // });
-  };
+  
 
 
 
-  const testButtonNavigate = () => {
-    navigate("/AddJobInfo", {
-      state: {
-        jobTitle: jobTitle,
-        isVolunteer: isVolunteer,
-        jobID: jobID,
-        firstName: firstName,
-      },
-    });
-  };
 
-  const [lowerCaseJobTitle, setLowerCaseJobTitle] = useState(null);
 
-  useEffect(() => {
-    if (jobTitle !== null) {
-      setLowerCaseJobTitle(jobTitle.toLowerCase());
-    } else {
-    }
-  }, [jobTitle]);
 
-  useEffect(() => {
-    setJobID(uuidv4());
-  }, [user]);
 
   useEffect(() => {
     if (user !== null) {
@@ -607,90 +136,11 @@ const Dashboard = () => {
     }
   }, [user]);
 
-  const submitJob = () => {
-    // createJobID();
-    addNewJob();
-    addJobMap();
-    addJobGlobal();
-  };
 
-  const [jobCategory, setJobCategory] = useState(false);
 
-  const [rawAddress, setRawAddress] = useState(null);
-  const [firstAddress, setFirstAddress] = useState(null);
-  const [streetAddress, setStreetAddress] = useState(null);
-  const [streetNumber, setStreetNumber] = useState(null);
-  const [streetName, setStreetName] = useState(null);
-  const [zipCode, setZipCode] = useState(null);
 
-  useEffect(() => {
-    setStreetAddress(streetNumber + " " + streetName);
-    console.log(streetAddress);
-  }, [streetName, streetName]);
 
-  const [addressIncorrect, setAddressIncorrect] = useState(false)
-  let addressIncorrectMessage = "Please enter a more specific address"
 
-  useEffect(() => {
-    if (firstAddress !== null) {
-      let results = [];
-      // run through ewach object in array (if else)
-      //evaluate if type == street address, city, state, etc
-      // if true, push to corresponding state
-      // firstAddress.forEach((firstAddress) => {
-      if (firstAddress[0]) {
-        console.log(firstAddress);
-        setStreetNumber(firstAddress[0].long_name);
-        // setStreetNumber(firstAddress[0].long_name);
-        // console.log("first one", firstAddress[0].long_name);
-      } else {
-        setAddressIncorrect(true)
-      }
-      if (firstAddress[1]) {
-        setStreetName(firstAddress[1].long_name);
-        // console.log(firstAddress[1].long_name);
-      } else {
-        setAddressIncorrect(true)
-      }
-      if (firstAddress[2]) {
-        setCity(firstAddress[2].long_name);
-        // console.log(firstAddress[2].long_name);
-      } else {
-        setAddressIncorrect(true)
-      }
-      if (firstAddress[4]) {
-        setState(firstAddress[4].long_name);
-        // console.log(firstAddress[4].long_name);
-      } else {
-        setAddressIncorrect(true)
-      }
-      if (firstAddress[6]) {
-        setZipCode(firstAddress[6].long_name);
-       setAddressIncorrect(false)
-      } else {
-        setAddressIncorrect(true)
-      }
-      // });
-    } else {
-    }
-  }, [firstAddress]);
-
-  useEffect(() => {
-    console.log("raw address", rawAddress);
-    if (rawAddress) {
-      geocodeByAddress(rawAddress.value.description)
-        .then((results) => getLatLng(results[0]))
-        .then(({ lat }) => setLocationLat(lat));
-      // .then(({ lng }) => setLocationLng(lng));
-      geocodeByAddress(rawAddress.value.description)
-        .then((results) => getLatLng(results[0]))
-        .then(({ lng }) => setLocationLng(lng));
-      geocodeByPlaceId(rawAddress.value.place_id)
-        .then((results) => setFirstAddress(results[0].address_components))
-        .catch((error) => console.error(error));
-    } else {
-    }
-  }, [rawAddress]);
 
   //laoding control
 
@@ -698,6 +148,73 @@ const Dashboard = () => {
   setTimeout(() => {
     setLoading(false);
   }, 1000);
+
+  const [isLoading, setIsLoading] = useState(true)
+  const [isPremium, setIsPremium] = useState(null)
+
+  const [test, setTest] = useState("test")
+
+  useEffect(() => {
+    if (user) {
+      const docRef = doc(db, "users", user.uid);
+      getDoc(docRef).then((snapshot) => {
+     console.log(snapshot.data())
+        setIsPremium(snapshot.data().isPremium)
+      })
+        .then(() => {
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 500)
+        
+        })
+        .catch((error) => {
+          // no buen
+          console.log(error)
+        });
+    }
+  }, [user]);
+
+
+  useEffect(() => {
+    console.log(isLoading, isPremium)
+  }, [isLoading, isPremium])
+
+
+
+  const [subscriptionID, setSubscriptionID] = useState(null);
+
+  const initializeSubscription = () => {
+    //credit and help from https://github.com/pagecow/stripe-subscribe-payments
+    fetch("https://fulfil-api.onrender.com/create-subscription-session", {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then(({ session }) => {
+        setSubscriptionID(session.id);
+        window.open(session.url, "_blank");
+      })
+      // .then(({ url }) => {
+      //   // window.location = url
+      //   window.open(url, "_blank")
+      // })
+      .catch((e) => {
+        console.error(e.error);
+      });
+  };
+
+  useEffect(() => {
+    if (subscriptionID) {
+      updateDoc(doc(db, "users", user.uid), {
+        subscriptionID: subscriptionID,
+      })
+        .then(() => {
+          //all good
+        })
+        .catch((error) => {
+          // no bueno
+        });
+    }
+  }, [subscriptionID]);
 
 
   return (
@@ -720,7 +237,7 @@ const Dashboard = () => {
             <a
               class="flex-none text-4xl font-sans font-bold text-sky-400"
               aria-label="Brand"
-              onClick={() => navigate("/NeederMapScreen")}
+              onClick={() => navigate("/DoerMapScreen")}
             >
               Fulfil
             </a>
@@ -735,7 +252,7 @@ const Dashboard = () => {
                 <li class="px-5 mb-1.5">
                   <button
                     class="flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
-                    onClick={() => navigate("/NeederMapScreen")}
+                    onClick={() => navigate("/DoerMapScreen")}
                   >
                     <svg
                       class="flex-shrink-0 mt-0.5 size-4"
@@ -784,7 +301,7 @@ const Dashboard = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    navigate("/DoerProfile");
+                    navigate("/UserProfile");
                   }}
                   class="hs-accordion-toggle  px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
                 >
@@ -875,7 +392,7 @@ const Dashboard = () => {
                   <button
                     type="button"
                     class="py-2 w-full px-11 inline-flex text-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                   
+                   onClick={() => initializeSubscription()}
                   >
                     
                    
@@ -916,269 +433,88 @@ const Dashboard = () => {
         </div>
       </aside>
 
-      {showAddJob ? (
-        <div
-          class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
-          tabindex="-1"
-        >
-          <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
-            <div class="py-3 px-4 flex justify-between items-center border-b ">
-              <h3 class="font-semibold text-gray-800">Create A Job</h3>
-              <button
-                type="button"
-                class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
-                data-hs-overlay="#hs-pro-datm"
-                onClick={() => setShowAddJob(!showAddJob)}
-              >
-                <span class="sr-only">Close</span>
-                <svg
-                  class="flex-shrink-0 size-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
-              </button>
-            </div>
-
-            <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-              <div class="p-4 space-y-5">
-                <div class="space-y-2">
-                  <label
-                    for="hs-pro-dactmt"
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                  >
-                    Title
-                  </label>
-
-                  <input
-                    id="hs-pro-dactmt"
-                    type="text"
-                    class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                    placeholder="Title goes here"
-                // width="560px"
-                onChange={(e) => setJobTitle(e.target.value)}
-                 
-                  />
-                </div>
-
-                <div class="space-y-2">
-                  <label
-                    for="dactmi"
-                    
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                    placeholder="ex: I have a downed tree in my yard and would like someone to remove it."
-                  >
-                    Description
-                  </label>
-
-                  <div class="">
-  <textarea onChange={(e) => setDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="3" placeholder="ex: I have a downed tree in my yard and would like someone to remove it."></textarea>
-</div>
-                </div>
-
-                <div class="space-y-2">
-                  <label
-                    for="dactmd"
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                  >
-                     Where will this work be located?
-                  </label>
-
-                  <GooglePlacesAutocomplete
-                apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
-                fetchDetails={true}
-                // minLengthAutocomplete={3}
-                autocompletionRequest={{
-                  
-                    types: ["address"],
-                  
-                }}
-                selectProps={{
-                  rawAddress,
-
-                  onChange: setRawAddress,
-                  placeholder: "Type address here",
-                 
-                }}
-              />
-                </div>
-                <div class="space-y-2">
-                  <label
-                    for="dactmi"
-                    onChange={(e) => setDescription(e.target.value)}
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                    placeholder="ex: I have a downed tree in my yard and would like someone to remove it."
-                  >
-                    What category of work is this? (optional)
-                  </label>
-
-                  <select
-                  class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                placeholder="Select category"
-              
-                onChange={(e) => setJobCategory(e.target.value)}
-              >
-                <option value="asphalt">Asphalt</option>
-                <option value="carpentry">Carpentry</option>
-                <option value="concrete">Concrete</option>
-                <option value="drywall">Drywall</option>
-                <option value="electrical work">Electrical Work</option>
-                <option value="general handyman">General Handyman</option>
-                <option value="gutter cleaning">Gutter Cleaning</option>
-                <option value="hvac">HVAC</option>
-                <option value="landscaping">Landscaping</option>
-                <option value="painting">Painting</option>
-                <option value="plumbing">Plumbing</option>
-                <option value="pressure washing">Pressure Washing</option>
-                <option value="roofing">Roofing</option>
-                <option value="siding">Siding</option>
-                <option value="snow removal">Snow Removal</option>
-                <option value="window installation">Window Installation</option>
-                <option value="window washing">Window Washing</option>
-                <option value="yard work">Yard Work</option>
-                <option value={false}>Clear Selection</option>
-              </select>
-                </div>
-                <div class="space-y-2">
-                  <label
-                    for="dactmi"
-                   
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                   
-                  >
-                    Are you offering an hourly rate or a fixed amount
-                  </label>
-
-                  <label  for="dactmi"
-                   
-                   class="block mb-2 text-sm font-medium text-gray-800 ">
-                  (ex: $50 to mow
-              my lawn)
-                  </label>
-
-                  <select
-              placeholder="Select option"
-              class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-              onChange={(e) => setPayType(e.target.value)}
-            >
-              <option value="Hourly">Hourly</option>
-              <option value="Fixed">Fixed Amount</option>
-            </select>
-                </div>
-
-{isHourly ? (
- <div class="space-y-2 ">
- <label
-   for="hs-pro-dactmt"
-   class="block mb-2 text-sm font-medium text-gray-800 "
- >
-    Enter your desired pay range
- </label>
-
-<div class="flex align-items-center">
-  <p className="mt-2 mr-1 text-sm font-medium">$</p>
- <input
-   id="hs-pro-dactmt"
-   type="text"
-   class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-   placeholder="lower rate"
- 
-   onChange={(e) => lowerRateValidate(e.target.value)}
-
- />
- <p className="mt-2 text-sm font-medium mr-1 ml-1">/hour - $</p>
- <input
-   id="hs-pro-dactmt"
-   type="text"
-   class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-   placeholder="upper rate"
-                    onChange={(e) => upperRateValidate(e.target.value)}
-
- />
- <p className="mt-2 text-sm font-medium">/hour</p>
-   {lowerRateValidationBegun === true ? (
-    <p color="red">{lowerRateValidationMessage}</p>
-  ) : null}
-  {upperRateValidationBegun === true ? (
-    <p color="red">{upperRateValidationMessage}</p>
-  ) : null}
-  </div>
-</div>
-
-) : (
-  null
-)}
-
-{isFlatRate ? (<div class="space-y-2">
-  <label
-    for="hs-pro-dactmt"
-    class="block mb-2 text-sm font-medium text-gray-800 "
-  >
-    Enter your desired budget
-  </label>
-  <div className="flex">
-  <p className="mt-2 mr-1 text-sm font-medium">$</p>
-  <input
-    id="hs-pro-dactmt"
-    type="text"
-    class="py-2 px-3 block w-2/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-    placeholder="Enter budget here"
-    onChange={(e) => flatRateValidate(e.target.value)}
- 
-  />
-   <p className="mt-2 ml-1 text-sm font-medium">total</p>
-   </div>
-</div>) : (null)}
-                
-              </div>
-
-              <div class="p-4 flex justify-between gap-x-2">
-                <div class="w-full flex justify-end items-center gap-x-2">
-                  
-
-                  <button
-                    type="button"
-                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                    data-hs-overlay="#hs-pro-datm"
-                    onClick={() => checkLength()}
-                  >
-                    Post Job
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : null}
-        <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Success!</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <p>Your job has been posted.</p>
-          </ModalBody>
+          <Center py={6}>
+            <Box
+              maxW={"330px"}
+              w={"full"}
+              bg={useColorModeValue("white", "gray.800")}
+              rounded={"md"}
+              overflow={"hidden"}
+            >
+              <VStack spacing={1} textAlign="center">
+                <Heading as="h1" fontSize="4xl">
+                  Upgrade to premium
+                </Heading>
+                <Text fontSize="lg" color={"gray.500"}>
+                  Get the frist 2 months for $1/month. Then continue at
+                  $29/month.
+                </Text>
 
-          <ModalFooter>
-          <button
-                    type="button"
-                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                    data-hs-overlay="#hs-pro-datm"
-                    onClick={() => onClose()}
-                  >
-              Close
-            </button>
-          
-          </ModalFooter>
+                <Text fontSize="md" color={"gray.500"}>
+                  Cancel at anytime.
+                </Text>
+              </VStack>
+              <Stack
+                textAlign={"center"}
+                p={5}
+                color={useColorModeValue("gray.800", "white")}
+                align={"center"}
+              >
+                <Text
+                  fontSize={"md"}
+                  fontWeight={500}
+                  textColor="#01A2E8"
+                  p={2}
+                  px={3}
+                  rounded={"full"}
+                >
+                  Premium Subscription
+                </Text>
+                <Stack direction={"row"} align={"center"} justify={"center"}>
+                  <Text fontSize={"3xl"}>$</Text>
+                  <Text fontSize={"6xl"} fontWeight={800}>
+                    1
+                  </Text>
+                  <Text color={"gray.500"}>/month</Text>
+                </Stack>
+              </Stack>
+
+              <Box px={1} py={6}>
+                <List spacing={3}>
+                  <ListItem>
+                    <ListIcon as={CheckIcon} color="#01A2E8" />
+                    Save 50% on all transaction fees
+                  </ListItem>
+                  <ListItem>
+                    <ListIcon as={CheckIcon} color="#01A2E8" />
+                    Get noticed by customers as a Premium Contractor
+                  </ListItem>
+
+                  <ListItem>
+                    <ListIcon as={CheckIcon} color="#01A2E8" />
+                    Be seen by customers who are looking for contractors in your
+                    category
+                  </ListItem>
+                </List>
+
+                <Button
+                  mt={10}
+                  w={"full"}
+                  bg="#01A2E8"
+                  color={"white"}
+                  rounded={"xl"}
+                  boxShadow={"0 5px 20px 0px rgb(72 187 120 / 43%)"}
+                  _hover={{ bg: "#018ecb", textColor: "white" }}
+                  onClick={() => initializeSubscription()}
+                >
+                  Start your trial
+                </Button>
+              </Box>
+            </Box>
+          </Center>
         </ModalContent>
       </Modal>
     </div>

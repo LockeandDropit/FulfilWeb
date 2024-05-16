@@ -94,6 +94,7 @@ const Dashboard = () => {
 
        //modal control
        const { isOpen, onOpen, onClose } = useDisclosure()
+       const { isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
 
 
   const [requirements2, setRequirements2] = useState("");
@@ -210,11 +211,11 @@ const Dashboard = () => {
 
     if (!jobTitleValid || isOneTime === null ) {
       console.log("1");
-      alert("Please fill out all fields");
+      onOpenError()
       console.log("1");
     } else {
       if (isOneTime === true && isFlatRate === true && !flatRateValid || !descriptionValid) {
-        alert("Please fill out all fields");
+        onOpenError()
         console.log("2");
       } else {
         if (
@@ -222,18 +223,18 @@ const Dashboard = () => {
           !lowerRateValid
         ) {
           console.log("3");
-          alert("Please fill out all fields");
+          onOpenError()
         } else {
           if (isOneTime === false && isFlatRate === true && !flatRateValid || !descriptionValid) {
             console.log("4");
-            alert("Please fill out all fields");
+            onOpenError()
           } else {
             if (
               (isOneTime === false && isHourly !== null && !upperRateValid) ||
               !lowerRateValid
             ) {
               console.log("5");
-              alert("Please fill out all fields");
+              onOpenError()
             } else {
             }
           }
@@ -246,7 +247,7 @@ const Dashboard = () => {
   const checkAddress = () => {
     if (!streetAddress || !locationLat) {
       console.log(streetAddress, locationLat);
-      alert("Please fill out all fields");
+      onOpenError()
       console.log("6");
     } else {
       submitJob();
@@ -1039,6 +1040,7 @@ const Dashboard = () => {
               
                 onChange={(e) => setJobCategory(e.target.value)}
               >
+                <option value={false}>Select category</option>
                 <option value="asphalt">Asphalt</option>
                 <option value="carpentry">Carpentry</option>
                 <option value="concrete">Concrete</option>
@@ -1082,6 +1084,7 @@ const Dashboard = () => {
               class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
               onChange={(e) => setPayType(e.target.value)}
             >
+              <option>Select option</option>
               <option value="Hourly">Hourly</option>
               <option value="Fixed">Fixed Amount</option>
             </select>
@@ -1181,11 +1184,36 @@ const Dashboard = () => {
           </ModalBody>
 
           <ModalFooter>
+            
           <button
                     type="button"
                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                     data-hs-overlay="#hs-pro-datm"
                     onClick={() => onClose()}
+                  >
+              Close
+            </button>
+          
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isOpenError} onClose={onCloseError}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Oops!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p>Please fill out all required fields.</p>
+          </ModalBody>
+
+          <ModalFooter>
+            
+          <button
+                    type="button"
+                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                    data-hs-overlay="#hs-pro-datm"
+                    onClick={() => onCloseError()}
                   >
               Close
             </button>

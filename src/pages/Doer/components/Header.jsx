@@ -3,12 +3,47 @@ import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { auth, logout, db } from "../../../firebaseConfig";
 import { useState, useEffect } from "react";
 import { query, collection, onSnapshot, getDoc, doc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalCloseButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
+  Button,
+  Spinner,
+  Center,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+  Skeleton,
+  Stack,
+  useColorModeValue,
+  List,
+  ListIcon,
+  ListItem,
+  VStack,
+  Text
+} from "@chakra-ui/react";
 
 const Header = () => {
     const [user, setUser] = useState(null);
 
     const [hasRun, setHasRun] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
       if (hasRun === false) {
@@ -21,7 +56,22 @@ const Header = () => {
       }
     }, []);
 
+    const [loggingOut, setLoggingOut] = useState(false); 
+    const handleLogOut = async () => {
+      setLoggingOut(true);
+
+      await signOut(auth)
+        .then(
+          setTimeout(() => {
+            navigate("/");
+          }, 2000)
+        ) // undefined
+        .catch((e) => console.log(e));
+    };
+
     const [userFirstName, setUserFirstName] = useState("User");
+    const [userLastName, setUserLastName] = useState(null)
+    const [email, setEmail] = useState(null)
 
     useEffect(() => {
       if (user != null) {
@@ -29,7 +79,9 @@ const Header = () => {
   
         getDoc(docRef).then((snapshot) => {
           // console.log(snapshot.data());
-          setUserFirstName(snapshot.data().firstName);
+          setUserFirstName(snapshot.data().firstName)
+          setUserLastName(snapshot.data().lastName)
+          setEmail(snapshot.data().email)
         });
       } else {
         console.log("oops!");
@@ -58,6 +110,10 @@ const Header = () => {
     console.log(profilePicture)
 
 
+
+ 
+ const [showDropdown, setShowDropdown] = useState(false)
+ 
  
         
 
@@ -505,83 +561,84 @@ const Header = () => {
         <div class="h-[38px] ">
       
           <div class="hs-dropdown relative inline-flex   [--strategy:absolute] [--auto-close:inside] [--placement:bottom-right]">
-            <button id="@@id" type="button" class="inline-flex flex-shrink-0 items-center gap-x-3 text-start rounded-full focus:outline-none focus:bg-gray-100" >
-              {profilePicture ? ( <img class="flex-shrink-0 size-[38px] rounded-full" src={profilePicture} alt="Image Description" />) : (   <span class="inline-block size-[46px] bg-gray-100 rounded-full overflow-hidden">
-  <svg class="size-full text-gray-300" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0.62854" y="0.359985" width="15" height="15" rx="7.5" fill="white"></rect>
-    <path d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z" fill="currentColor"></path>
-    <path d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z" fill="currentColor"></path>
-  </svg>
-</span>)}
+          
+          <Menu>
+          <MenuButton>
+          <button id="@@id" type="button" class="inline-flex flex-shrink-0 items-center gap-x-3 text-start rounded-full focus:outline-none focus:bg-gray-100 dark:focus:bg-neutral-700">
+          {profilePicture ? (
+                    <img
+                      class="flex-shrink-0 size-[38px] rounded-full"
+                      src={profilePicture}
+                      alt="Image Description"
+                    />
+                  ) : (
+                    <svg
+                      class="size-full text-gray-500"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect
+                        x="0.62854"
+                        y="0.359985"
+                        width="15"
+                        height="15"
+                        rx="7.5"
+                        fill="white"
+                      ></rect>
+                      <path
+                        d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                        fill="currentColor"
+                      ></path>
+                      <path
+                        d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>
+                  )}
+            </button>
+          </MenuButton>
+          <MenuList>
+          
+       
+
+            <MenuItem onClick={() => navigate("/DoerAccountManager")}>
+              <p  class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"> Account Settings</p>
+            
+            </MenuItem>
+            <MenuItem onClick={() => navigate("/UserProfile")}>
+            <p  class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"> My Profile</p>
+            </MenuItem>
+            {/* <MenuItem onClick={() => navigate("/DoerPaymentHistory")}>Payment History</MenuItem> */}
+
+           
+            {loggingOut ? (
+              <Center>
+                <Spinner />
+              </Center>
+            ) : (
+              <Center>
+                <Button
+                  width="160px"
+                  colorScheme="red"
+                  height="32px"
+                  marginTop="8px"
+                  onClick={() => handleLogOut()}
+                >
+                  Log Out
+                </Button>
+              </Center>
+            )}
+          </MenuList>
+        </Menu>
              
 
-            </button>
+            
   
           
-            <div class="hs-dropdown-menu hs-dropdown-open:opacity-100 w-60 transition-[opacity,margin] duration opacity-0 hidden z-10 bg-white rounded-xl shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)]" aria-labelledby="@@id">
-              <div class="p-1 border-b border-gray-200">
-                <a class="py-2 px-3 flex items-center gap-x-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100" href="../../pro/dashboard/user-profile-my-profile.html">
-                  <img class="flex-shrink-0 size-8 rounded-full" src="https://images.unsplash.com/photo-1659482633369-9fe69af50bfb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=3&w=320&h=320&q=80" alt="Image Description" />
-  
-                  <div class="grow">
-                    <span class="text-sm font-semibold text-gray-800">
-                      James Collison
-                    </span>
-                    <p class="text-xs text-gray-500">
-                      Preline@HS
-                    </p>
-                  </div>
-                </a>
-              </div>
-              <div class="p-1">
-                <a class="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100" href="#">
-                  <svg class="flex-shrink-0 mt-0.5 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
-                  Billing
-                </a>
-                <a class="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100" href="#">
-                  <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                  Settings
-                </a>
-                <a class="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100" href="#">
-                  <svg class="flex-shrink-0 mt-0.5 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                  My account
-                </a>
-              </div>
-              <div class="px-4 py-3.5 border-y border-gray-200">
-            
-                <div class="flex justify-between items-center">
-                  <label for="@@darkmodeID" class="text-sm text-gray-800">Dark mode</label>
-                  <div class="relative inline-block">
-                    <input data-hs-theme-switch type="checkbox" id="@@darkmodeID" class="relative w-11 h-6 p-px bg-gray-100 border-transparent text-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-blue-600 disabled:opacity-50 disabled:pointer-events-none checked:bg-none checked:text-blue-600 checked:border-blue-600 focus:checked:border-blue-600
-  
-                    before:inline-block before:size-5 before:bg-white checked:before:bg-white before:translate-x-0 checked:before:translate-x-full before:rounded-full before:shadow before:transform before:ring-0 before:transition before:ease-in-out before:duration-200" />
-                  </div>
-                </div>
-             
-              </div>
-              <div class="p-1">
-                <a class="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100" href="#">
-                  Customization
-                  <div class="ms-auto">
-                    <span class="ms-auto inline-flex items-center gap-1.5 py-px px-1.5 rounded text-[10px] leading-4 font-medium bg-gray-100 text-gray-800">
-                      New
-                    </span>
-                  </div>
-                </a>
-                <a class="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100" href="#">
-                  Manage team
-                </a>
-                <a class="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100" href="#">
-                  Sign out
-                </a>
-              </div>
-              <div class="p-1 border-t border-gray-200">
-                <button type="button" class="flex mt-0.5 gap-x-3 py-2 px-3 w-full rounded-lg text-sm text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100" data-hs-overlay="#hs-pro-dasadam">
-                  <svg class="flex-shrink-0 size-4 mt-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
-                  Add team account
-                </button>
-              </div>
-            </div>
+         
        
           </div>
        

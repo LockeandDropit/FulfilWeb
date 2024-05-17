@@ -95,482 +95,348 @@ const NeederAllCategories = () => {
     <>
       <Header />
 
-      <Flex justifyContent="center">
-        <Stack
-          minH={"100vh"}
-          direction={{ base: "column", md: "row" }}
-          marginTop="16px"
-          mb={{ base: 20, lg: "0" }}
-        >
-          <Box position="absolute" left="0">
+      
+      
             <Dashboard />
-          </Box>
-          <Flex flex={2}>
-            <Box
-              w={{ base: "100vw", lg: "60vw" }}
-              h="90vh"
-              padding={{ base: 0, lg: "4" }}
-              mb={{ base: 20, lg: "0" }}
+       
+          <div class="mt-20 max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+      <h1 class="block text-xl font-bold text-gray-800 sm:text-4xl lg:text-4xl lg:leading-tight">
+        Looking for a <span class="text-sky-400">Pro?</span>
+      </h1>
+      <p class="mt-3 text-lg text-gray-800">
+        Browse our contractors by category and send them a message!
+      </p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+            src="/landingImages/DrivewayAsphalt.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Asphalt</h3>
+            <p class="mt-3 text-gray-500">
+              Need a new driveway or looking for someone who can handle a
+              commercial sized job?
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Asphalt")}
             >
-              {/* <Center> */}
-              <Heading size="lg" marginLeft={6} mt={{base: "0", lg: 50}}>
-                All Categories
-              </Heading>
+              See Pros
+            </button>
+          </div>
+        </div>
 
-              <Center>
-                <SimpleGrid columns={[1, null, 3]} spacing="64px" marginTop="8">
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/DrivewayAsphalt.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+            src="/landingImages/CarpentryTrim.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Carpentry</h3>
+            <p class="mt-3 text-gray-500">
+              From simple framing to large scale industrial projects, our pros
+              can get the job done.
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Carpentry")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
 
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Asphalt
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Asphalt")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/CarpentryTrim.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+        {/* //credit Towfiqu Barbhuiya https://unsplash.com/photos/person-in-blue-long-sleeve-shirt-sitting-beside-black-laptop-computer--9gPKrsbGmc */}
+          <img src="/landingImages/Cleaning.jpg" className="rounded-t-xl" />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Cleaning</h3>
+            <p class="mt-3 text-gray-500">
+              Need a new driveway or looking for someone who can handle a
+              commercial sized job?
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Cleaning")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+              src="/landingImages/ConcreteAsphalt.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Concrete</h3>
+            <p class="mt-3 text-gray-500">
+              Browse our pros for all of your roofing needs
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Concrete")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img src="/landingImages/Drywall.jpg" className="rounded-t-xl" />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Drywall</h3>
+            <p class="mt-3 text-gray-500">
+              Need a new driveway or looking for someone who can handle a
+              commercial sized job?
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Drywall")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+            src="/landingImages/electrical.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800"> Electrical Work</h3>
+            <p class="mt-3 text-gray-500">
+              Browse our pros for all of your electrical needs
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Electrical Work")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+            src="/landingImages/GutterCleaning.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Gutter Cleaning</h3>
+            <p class="mt-3 text-gray-500">
+              Have your gutters cleaned by a profesisonal
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Gutter Cleaning")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
 
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Carpentry
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Carpentry")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        //credit Towfiqu Barbhuiya https://unsplash.com/photos/person-in-blue-long-sleeve-shirt-sitting-beside-black-laptop-computer--9gPKrsbGmc
-                        src="/landingImages/Cleaning.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Cleaning
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Cleaning")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/ConcreteAsphalt.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Concrete
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Concrete")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/Drywall.jpg"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Drywall
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Drywall")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/electrical.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Electrical Work
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Electrical Work")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/Handyman.jpg"
-                        alt="Group cutting wood"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          General Handyman
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("General Handyman")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/GutterCleaning.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Gutter Cleaning
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Gutter Cleaning")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/NewHVAC.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          HVAC
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("HVAC")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/NewLandscaping2.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Landscaping
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Landscaping")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/Painting.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Painting
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Painting")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/Plumbing.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Plumbing
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Plumbing")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/PressureWashing.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Pressure Washing
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Pressure Washing")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/RoofingSiding.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Roofing
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Roofing")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/Shoveling.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Snow Removal
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() => handleNavigation("Snow Removal")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/WindowInstallation.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Window Installation
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          onClick={() =>
-                            handleNavigation("Window Installation")
-                          }
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                  <Card maxW="sm" boxShadow="">
-                    <CardBody>
-                      <Image
-                        src="/landingImages/NewYardWork.jpg"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
-
-                      <Flex direction={{ base: "column", lg: "row" }}>
-                        {" "}
-                        <Heading size="md" marginTop="8px">
-                          Yard Work
-                        </Heading>{" "}
-                        <Button
-                          w={{ base: "72px", lg: "auto" }}
-                          h={{ base: "12px", lg: "auto" }}
-                          variant="ghost"
-                          colorScheme="blue"
-                          marginLeft={{ base: "", lg: "auto" }}
-                          mb={{ base: 20, lg: "0" }}
-                          onClick={() => handleNavigation("Yard Work")}
-                        >
-                          See More
-                        </Button>
-                      </Flex>
-                    </CardBody>
-                  </Card>
-                </SimpleGrid>
-              </Center>
-            </Box>
-          </Flex>
-        </Stack>
-      </Flex>
+      
+       
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+             src="/landingImages/Handyman.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800"> General Handyman</h3>
+            <p class="mt-3 text-gray-500">
+              Browse our pros for all of your general handyman needs
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("General Handyman")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+                src="/landingImages/NewHVAC.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">HVAC</h3>
+            <p class="mt-3 text-gray-500">
+              For all of your residential and industrial needs
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("HVAC")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+           src="/landingImages/NewLandscaping2.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Landscaping</h3>
+            <p class="mt-3 text-gray-500">
+              Browse our pros for highly-rated landscapers
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Landscaping")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+          src="/landingImages/Painting.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Painting</h3>
+            <p class="mt-3 text-gray-500">
+              Browse our pros for all your painting needs
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Painting")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+                src="/landingImages/Plumbing.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Plumbing</h3>
+            <p class="mt-3 text-gray-500">
+              Browse our pros for all of your plumbing needs
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Plumbing")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+           src="/landingImages/PressureWashing.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Pressure Washing</h3>
+            <p class="mt-3 text-gray-500">
+              Browse our pros for all of your pressure washing needs
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Pressure Washing")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+             src="/landingImages/RoofingSiding.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Roofing</h3>
+            <p class="mt-3 text-gray-500">
+              Browse our pros for all of your roofing needs
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Roofing")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+           src="/landingImages/Shoveling.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Snow Removal</h3>
+            <p class="mt-3 text-gray-500">
+              Browse our pros for all of your snow removal needs
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() => handleNavigation("Snow Removal")}
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+        <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
+          <img
+          src="/landingImages/WindowInstallation.jpg"
+            className="rounded-t-xl"
+          />
+          <div class="p-4 md:p-6">
+            <h3 class="text-xl font-semibold text-gray-800">Window Installation</h3>
+            <p class="mt-3 text-gray-500">
+              Browse our pros for all of your window installation needs
+            </p>
+          </div>
+          <div class="mt-auto flex border-t border-gray-200 divide-x divide-gray-200">
+            <button
+              class=" text-sky-600 w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-ee-xl bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={() =>
+                handleNavigation("Window Installation")
+              }
+            >
+              See Pros
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+         
+     
     </>
   );
 };

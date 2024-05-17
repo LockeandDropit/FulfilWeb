@@ -2611,33 +2611,7 @@ const UserProfile = () => {
                             </div>
                           </div>
 
-                          {userExperienceLength < 3 ? (
-                            <div class="p-5 min-h-[80px] flex flex-col justify-end items-end text-center">
-                              <button
-                                type="button"
-                                class="py-2 px-3 inline-flex  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
-                                data-hs-overlay="#hs-pro-dasadpm"
-                                onClick={() => onOpenAddExperience()}
-                              >
-                                <svg
-                                  class="hidden sm:block flex-shrink-0 size-4"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <path d="M5 12h14" />
-                                  <path d="M12 5v14" />
-                                </svg>
-                                Add experience
-                              </button>
-                            </div>
-                          ) : null}
+                         
 
                           {openModalID === userExperience.id ? (
                             <Modal
@@ -2790,8 +2764,10 @@ const UserProfile = () => {
                               </ModalContent>
                             </Modal>
                           ) : null}
+                          
                         </>
                       ))
+                      
                     ) : (
                       <div class="p-5 min-h-[328px] flex flex-col justify-center items-center text-center">
                         <svg
@@ -3015,6 +2991,34 @@ const UserProfile = () => {
                       </div>
                     )}
 
+{userExperienceLength < 3 ? (
+                            <div class="p-5 min-h-[80px] flex flex-col justify-end items-end text-center">
+                              <button
+                                type="button"
+                                class="py-2 px-3 inline-flex  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
+                                data-hs-overlay="#hs-pro-dasadpm"
+                                onClick={() => onOpenAddExperience()}
+                              >
+                                <svg
+                                  class="hidden sm:block flex-shrink-0 size-4"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M5 12h14" />
+                                  <path d="M12 5v14" />
+                                </svg>
+                                Add experience
+                              </button>
+                            </div>
+                          ) : null}
+
                     <Modal
                       isOpen={isOpenAddExperience}
                       onClose={onCloseAddExperience}
@@ -3197,7 +3201,7 @@ const UserProfile = () => {
                           </div>
                           <div class="flex flex-col bg-white  rounded-xl shadow-sm xl:shadow-none ">
                       <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
-                        <h2 class="inline-block  ">
+                        <h2 class="inline-block font-semibold text-gray-800 ">
                           
                         </h2>
 

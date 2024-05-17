@@ -60,7 +60,7 @@ import EditPostedJob from "./pages/Needer/Jobs/EditPostedJob";
 import EditJobInfo from "./pages/Needer/Jobs/EditJobInfo";
 import NeederAllCategories from "./pages/Needer/NeederAllCategories";
 import Test from "./pages/Needer/Test";
-
+import UserProfileNeeder from "./pages/Needer/UserProfileNeeder";
 
 
 
@@ -376,6 +376,11 @@ const router = createBrowserRouter([
     path: "/Test",
     element: <Test />,
   },
+  {
+    path: "/UserProfileNeeder",
+    element: <UserProfileNeeder />,
+  },
+
 ]);
 
 

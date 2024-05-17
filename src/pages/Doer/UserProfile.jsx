@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import DoerHeader from "./DoerHeader";
 import DoerDashboard from "./DoerDashboard";
 import Header from "./components/Header";
 import Dashboard from "./components/Dashboard";
+import useEmblaCarousel from 'embla-carousel-react'
 import {
   Input,
   Button,
@@ -99,6 +100,15 @@ const UserProfile = () => {
 
   const [user, setUser] = useState();
 
+  const [emblaRef, emblaApi] = useEmblaCarousel()
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev()
+  }, [emblaApi])
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext()
+  }, [emblaApi])
   // this gets the profile picture
   // const profilePictureURL = useSelector(selectUserProfilePicture);
 
@@ -145,8 +155,13 @@ const UserProfile = () => {
   const [updatedBio, setUpdatedBio] = useState(null);
   const [isPremium, setIsPremium] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
-  const [businessName, setBusinessName] = useState(null)
-
+  const [businessName, setBusinessName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [projectPictureOne, setProjectPictureOne] = useState(null);
+  const [projectPictureTwo, setProjectPictureTwo] = useState(null);
+  const [projectPictureThree, setProjectPictureThree] = useState(null);
+  const [projectPictureFour, setProjectPictureFour] = useState(null);
+  const [projectPictureFive, setProjectPictureFive] = useState(null);
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
@@ -163,16 +178,34 @@ const UserProfile = () => {
 
       getDoc(docRef).then((snapshot) => {
         setUserInfo(snapshot.data());
+        setEmail(snapshot.data().email);
         setIsPremium(snapshot.data().isPremium);
         setProfilePicture(snapshot.data().profilePictureResponse);
         setUserFirstName(snapshot.data().firstName);
         setUserLastName(snapshot.data().lastName);
         // setUserBio(snapshot.data().bio);
+
         setUserState(snapshot.data().state);
 
         setUserCity(snapshot.data().city);
+        if (snapshot.data().projectPictureOne) {
+          setProjectPictureOne(snapshot.data().projectPictureOne);
+        }
+        if (snapshot.data().projectPictureTwo) {
+          setProjectPictureTwo(snapshot.data().projectPictureTwo);
+        }
+        if (snapshot.data().projectPictureThree) {
+          setProjectPictureThree(snapshot.data().projectPictureThree);
+        }
+        if (snapshot.data().projectPictureFour) {
+          setProjectPictureFour(snapshot.data().projectPictureFour);
+        }
+        if (snapshot.data().projectPictureFive) {
+          setProjectPictureFive(snapshot.data().projectPictureFive);
+        }
+
         if (snapshot.data().businessName) {
-          setBusinessName(snapshot.data().businessName)
+          setBusinessName(snapshot.data().businessName);
         }
 
         if (snapshot.data().premiumCategoryOne) {
@@ -348,6 +381,11 @@ const UserProfile = () => {
 
   //varying modal control credit Prem G and Alireza Khanamani https://stackoverflow.com/questions/65988633/chakra-ui-using-multiple-models-in-a-single-component
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenProject,
+    onOpen: onOpenProject,
+    onClose: onCloseProject,
+  } = useDisclosure();
   const {
     isOpen: isOpenAvatar,
     onOpen: onOpenAvatar,
@@ -835,16 +873,47 @@ const UserProfile = () => {
     setProfilePicture(imageList[0].data_url);
   };
 
-  const uploadToFirebase = async () => {
+
+  //project image handling
+
+  const [projectImages, setProjectImages] = React.useState(null);
+  const [newProjectImage, setNewProjectImage] = React.useState(null);
+  const maxProjectNumber = 5;
+  const onChangeProject = (imageList, addUpdateIndex) => {
+    // data for submit
+
+    setProjectImages(imageList);
+    setNewProjectImage(imageList[0].data_url);
+  };
+
+  const uploadProjectsToFirebase = async () => {
     const storage = getStorage();
-    const pictureRef = ref(
+    const pictureRefOne = ref(storage, "users/" + user.uid + "/projectOne.jpg");
+    const pictureRefTwo = ref(storage, "users/" + user.uid + "/projectTwo.jpg");
+    const pictureRefThree = ref(
       storage,
-      "users/" + user.uid + "/profilePicture.jpg"
+      "users/" + user.uid + "/projectThree.jpg"
+    );
+    const pictureRefFour = ref(
+      storage,
+      "users/" + user.uid + "/projectFour.jpg"
+    );
+    const pictureRefFive = ref(
+      storage,
+      "users/" + user.uid + "/projectFive.jpg"
     );
 
+    // setImage(result.assets[0].uri);
+    // dispatch(selectUserProfilePicture(result.assets[0].uri))
 
+    const img = await fetch(projectImages[0].data_url);
+    const bytes = await img.blob();
+
+    if (projectPictureOne === null) { await uploadBytes(pictureRefOne, bytes).then((snapshot) => {});
+
+    await getDownloadURL(pictureRefOne).then((response) => {
       updateDoc(doc(db, "users", user.uid), {
-        profilePictureResponse: URL.createObjectURL(selectedImage),
+        projectPictureOne: response,
       })
         .then(() => {
           //all good
@@ -852,7 +921,94 @@ const UserProfile = () => {
         .catch((error) => {
           // no bueno
         });
+    })} else if (projectPictureTwo === null) {
+      await uploadBytes(pictureRefTwo, bytes).then((snapshot) => {});
+
+      await getDownloadURL(pictureRefTwo).then((response) => {
+        updateDoc(doc(db, "users", user.uid), {
+          projectPictureTwo: response,
+        })
+          .then(() => {
+            //all good
+          })
+          .catch((error) => {
+            // no bueno
+          });
+      });
+    } else if (projectPictureThree === null) {
+      await uploadBytes(pictureRefThree, bytes).then((snapshot) => {});
+
+      await getDownloadURL(pictureRefThree).then((response) => {
+        updateDoc(doc(db, "users", user.uid), {
+          projectPictureThree: response,
+        })
+          .then(() => {
+            //all good
+          })
+          .catch((error) => {
+            // no bueno
+          });
+      });
+    } else if (projectPictureFour === null) {
+      await uploadBytes(pictureRefFour, bytes).then((snapshot) => {});
+
+      await getDownloadURL(pictureRefFour).then((response) => {
+        updateDoc(doc(db, "users", user.uid), {
+          projectPictureFour: response,
+        })
+          .then(() => {
+            //all good
+          })
+          .catch((error) => {
+            // no bueno
+          });
+      });
+    } else {
+      await uploadBytes(pictureRefFive, bytes).then((snapshot) => {});
+
+      await getDownloadURL(pictureRefFive).then((response) => {
+        updateDoc(doc(db, "users", user.uid), {
+          projectPictureFive: response,
+        })
+          .then(() => {
+            //all good
+          })
+          .catch((error) => {
+            // no bueno
+          });
+      });
+    }
     
+
+    onCloseProject();
+  };
+
+  const uploadToFirebase = async () => {
+    const storage = getStorage();
+    const pictureRef = ref(
+      storage,
+      "users/" + user.uid + "/profilePicture.jpg"
+    );
+
+    // setImage(result.assets[0].uri);
+    // dispatch(selectUserProfilePicture(result.assets[0].uri))
+
+    const img = await fetch(images[0].data_url);
+    const bytes = await img.blob();
+
+    await uploadBytes(pictureRef, bytes).then((snapshot) => {});
+
+    await getDownloadURL(pictureRef).then((response) => {
+      updateDoc(doc(db, "users", user.uid), {
+        profilePictureResponse: response,
+      })
+        .then(() => {
+          //all good
+        })
+        .catch((error) => {
+          // no bueno
+        });
+    });
 
     setTimeout(() => {
       updateDoc(doc(db, "users", user.uid), {
@@ -904,9 +1060,7 @@ const UserProfile = () => {
     }
   }, [subscriptionID]);
 
-
   const [selectedImage, setSelectedImage] = useState(null);
-
 
   return (
     <>
@@ -988,53 +1142,62 @@ const UserProfile = () => {
                 </svg>
               </figure>
 
-              <div class="-mt-24">
-                <div class="relative flex w-[120px] h-[120px] mx-auto border-4 border-white rounded-full ">
-                  {profilePicture ? (<img
+              {/* {profilePicture ? (<img
                     class="object-cover size-full rounded-full"
                     src={profilePicture}
                     
                     alt="Image Description"
-                  />) : selectedImage ?  ( <img
-                    alt="Profile Picture"
-                    class="object-cover size-full rounded-full"
-                    src={URL.createObjectURL(selectedImage)}
-                  />) : ( <svg class="size-full text-gray-500" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  />) :  ( <svg class="size-full text-gray-500" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="0.62854" y="0.359985" width="15" height="15" rx="7.5" fill="white"></rect>
                   <path d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z" fill="currentColor"></path>
                   <path d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z" fill="currentColor"></path>
-                </svg>) }
+                </svg>) } */}
 
-                
-              
-    
-        
+              <div class="-mt-24">
+                <div class="relative flex w-[120px] h-[120px] mx-auto border-4 border-white rounded-full ">
+                  {profilePicture ? (
+                    <img
+                      class="object-cover size-full rounded-full"
+                      src={profilePicture}
+                      alt="Image Description"
+                    />
+                  ) : (
+                    <svg
+                      class="size-full text-gray-500"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect
+                        x="0.62854"
+                        y="0.359985"
+                        width="15"
+                        height="15"
+                        rx="7.5"
+                        fill="white"
+                      ></rect>
+                      <path
+                        d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                        fill="currentColor"
+                      ></path>
+                      <path
+                        d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>
+                  )}
 
                   <div class="absolute bottom-0 -end-2">
-                    <input
-                      type="file"
+                    <button
+                      type="button"
+                      onClick={() => onOpenAvatar()}
                       class="group p-2 max-w-[125px] inline-flex justify-center items-center gap-x-1.5 text-start bg-white border border-gray-200 text-gray-800 text-xs font-medium rounded-full whitespace-nowrap shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:bg-gray-100 "
                       data-hs-overlay="#hs-pro-dsm"
-                     
-                      name="myImage"
-                      onChange={(event) => {
-                        console.log(event.target.files); // Log the selected file
-                        setSelectedImage(event.target.files[0]); // Update the state with the selected file
-                        setTimeout(() => {
-                          uploadToFirebase()
-                        }, 500)
-                      }}
-                      
-        >
-        {/* <span class="group-hover:block hidden">Change picture</span>}
-                      // Event handler to capture file selection and update the state
-                      onChange={(event) => {
-                        console.log(event.target.files[0]); // Log the selected file
-                        setSelectedImage(event.target.files[0]); // Update the state with the selected file
-                      }}
                     >
-                      {/* <svg
-                        class="flex-shrink-0 size-4 text-gray-500 "
+                      <svg
+                        class="flex-shrink-0 size-4 text-gray-500 dark:text-neutral-400"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
@@ -1049,11 +1212,183 @@ const UserProfile = () => {
                         <path d="M8 14s1.5 2 4 2 4-2 4-2" />
                         <line x1="9" x2="9.01" y1="9" y2="9" />
                         <line x1="15" x2="15.01" y1="9" y2="9" />
-                      </svg> */}
-                      {/* <span class="group-hover:block hidden">Change picture</span> */}
-                    </input>
+                      </svg>
+                      <span class="group-hover:block hidden">
+                        Change Picture
+                      </span>
+                    </button>
                   </div>
                 </div>
+
+                <Modal
+                  isOpen={isOpenAvatar}
+                  onClose={onCloseAvatar}
+                  size="xl"
+                  height="420px"
+                >
+                  <ModalOverlay />
+                  <ModalContent>
+                    <div
+                      id="hs-pro-dasadpm"
+                      class=" size-full fixed top-0 start-0 z-[80]  overflow-y-auto pointer-events-none [--close-when-click-inside:true] "
+                    >
+                      <div class="mt-7 opacity-100 duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
+                        <div class="w-full max-h-full flex flex-col bg-white rounded-xl pointer-events-auto shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)] ">
+                          <div class="py-3 px-4 flex justify-between items-center border-b ">
+                            <h3 class="font-semibold text-gray-800 ">
+                              Profile Picture
+                            </h3>
+                            <button
+                              type="button"
+                              onClick={() => onCloseAvatar()}
+                              class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                              data-hs-overlay="#hs-pro-dasadpm"
+                            >
+                              <span class="sr-only">Close</span>
+                              <svg
+                                class="flex-shrink-0 size-4"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path d="M18 6 6 18" />
+                                <path d="m6 6 12 12" />
+                              </svg>
+                            </button>
+                          </div>
+
+                          <form>
+                            <div class="p-4 space-y-5">
+                              <div>
+                                <div class="flex flex-wrap items-center gap-3 sm:gap-5">
+                                  <img
+                                    src={
+                                      profilePicture ? (
+                                        profilePicture
+                                      ) : images ? (
+                                        images
+                                      ) : (
+                                        <span class="flex flex-shrink-0 justify-center items-center size-20 border-2 border-dotted border-gray-300 text-gray-400 rounded-full dark:border-neutral-700 dark:text-neutral-600">
+                                          <svg
+                                            class="flex-shrink-0 size-7"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                          >
+                                            <rect
+                                              width="18"
+                                              height="18"
+                                              x="3"
+                                              y="3"
+                                              rx="2"
+                                              ry="2"
+                                            />
+                                            <circle cx="9" cy="9" r="2" />
+                                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                                          </svg>
+                                        </span>
+                                      )
+                                    }
+                                  ></img>
+
+                                  <div class="grow">
+                                    <div class="flex items-center gap-x-2">
+                                      <ImageUploading
+                                        multiple
+                                        value={images}
+                                        onChange={onChange}
+                                        maxNumber={maxNumber}
+                                        dataURLKey="data_url"
+                                      >
+                                        {({
+                                          imageList,
+                                          onImageUpload,
+                                          onImageRemoveAll,
+                                          onImageUpdate,
+                                          onImageRemove,
+                                          isDragging,
+                                          dragProps,
+                                        }) => (
+                                          // write your building UI
+                                          <div className="upload__image-wrapper">
+                                            <button
+                                              type="button"
+                                              onClick={() => onImageUpdate()}
+                                              {...dragProps}
+                                              class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            >
+                                              <svg
+                                                class="flex-shrink-0 size-4"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                              >
+                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                                <polyline points="17 8 12 3 7 8" />
+                                                <line
+                                                  x1="12"
+                                                  x2="12"
+                                                  y1="3"
+                                                  y2="15"
+                                                />
+                                              </svg>
+                                              Upload photo
+                                            </button>
+                                            &nbsp;
+                                          </div>
+                                        )}
+                                      </ImageUploading>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="p-4 flex justify-end gap-x-2">
+                              <div class="w-full flex justify-end items-center gap-x-2">
+                                <button
+                                  type="button"
+                                  onClick={() => onCloseAvatar()}
+                                  class="py-2 px-3  inline-flex justify-center items-center text-start bg-white border border-gray-200 text-gray-800 text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-gray-50 "
+                                  data-hs-overlay="#hs-pro-dasadpm"
+                                >
+                                  Cancel
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => uploadToFirebase()}
+                                  class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-blue-600 border border-blue-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                  data-hs-overlay="#hs-pro-dasadpm"
+                                >
+                                  Save
+                                </button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </ModalContent>
+                </Modal>
 
                 <div class="mt-3 text-center">
                   <h1 class="text-xl font-semibold text-gray-800 ">
@@ -1064,7 +1399,6 @@ const UserProfile = () => {
                         </p> */}
                 </div>
               </div>
-            
 
               <div class="mt-7 py-0.5 flex flex-row justify-between items-center gap-x-2 whitespace-nowrap overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
                 {/* <nav class="flex space-x-1">
@@ -1247,34 +1581,33 @@ const UserProfile = () => {
                       </h2>
 
                       <ul class="mt-3 space-y-2">
-                      {businessName ? (
-                        <li>
-                        <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
-                          <svg
-                            class="flex-shrink-0 size-4 text-gray-600 "
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          >
-                            <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
-                            <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
-                            <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
-                            <path d="M10 6h4" />
-                            <path d="M10 10h4" />
-                            <path d="M10 14h4" />
-                            <path d="M10 18h4" />
-                          </svg>
-                          
-                        </div>
-                      </li>
-                      ) : (null)}
-                        
+                        {businessName ? (
+                          <li>
+                            <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                              <svg
+                                class="flex-shrink-0 size-4 text-gray-600 "
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
+                                <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
+                                <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
+                                <path d="M10 6h4" />
+                                <path d="M10 10h4" />
+                                <path d="M10 14h4" />
+                                <path d="M10 18h4" />
+                              </svg>
+                            </div>
+                          </li>
+                        ) : null}
+
                         <li>
                           <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
                             <svg
@@ -1297,33 +1630,50 @@ const UserProfile = () => {
                         </li>
                         <li>
                           <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
-                          
+                            {numberOfRatings ? (
+                              <Flex>
+                                {maxRating.map((item, key) => {
+                                  return (
+                                    <Box
+                                      activeopacity={0.7}
+                                      key={item}
+                                      marginTop="4px"
+                                    >
+                                      <Image
+                                        boxSize="16px"
+                                        src={
+                                          item <= rating
+                                            ? star_filled
+                                            : star_corner
+                                        }
+                                      ></Image>
+                                    </Box>
+                                  );
+                                })}
 
-{numberOfRatings ? (
-                <Flex>
-                  {maxRating.map((item, key) => {
-                    return (
-                      <Box activeopacity={0.7} key={item} marginTop="4px">
-                         
-                        <Image
-                          boxSize="16px"
-                          src={item <= rating ? star_filled : star_corner}
-                        ></Image>
-                      </Box>
-                    );
-                  })}
-
-                  <Text marginTop="4px" marginLeft="4px">
-                    ({numberOfRatings} reviews)
-                  </Text>
-                </Flex>
-              ) : (<>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"  class="flex-shrink-0 size-4 text-gray-600 ">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
-</svg>
-                <Text>No reviews yet</Text>
-                </>
-              )}
+                                <Text marginTop="4px" marginLeft="4px">
+                                  ({numberOfRatings} reviews)
+                                </Text>
+                              </Flex>
+                            ) : (
+                              <>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  class="flex-shrink-0 size-4 text-gray-600 "
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                                  />
+                                </svg>
+                                <Text>No reviews yet</Text>
+                              </>
+                            )}
                           </div>
                         </li>
                         <li>
@@ -1343,7 +1693,7 @@ const UserProfile = () => {
                               <rect width="20" height="16" x="2" y="4" rx="2" />
                               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                             </svg>
-                            Email
+                            {email}
                           </div>
                         </li>
                       </ul>
@@ -1353,7 +1703,7 @@ const UserProfile = () => {
                         <h2 class="mb-2  mt-2 text-sm font-semibold text-gray-800 ">
                           Specialties
                         </h2>
-                        <button  onClick={onOpenCategories}>
+                        <button onClick={onOpenCategories}>
                           <svg
                             type="button"
                             xmlns="http://www.w3.org/2000/svg"
@@ -1663,42 +2013,42 @@ const UserProfile = () => {
                                       <option value="null">
                                         Clear Selection
                                       </option>
-                                      <option value="asphalt">Asphalt</option>
-                                      <option value="carpentry">
+                                      <option value="Asphalt">Asphalt</option>
+                                      <option value="Carpentry">
                                         Carpentry
                                       </option>
-                                      <option value="concrete">Concrete</option>
-                                      <option value="drywall">Drywall</option>
-                                      <option value="electrical work">
+                                      <option value="Concrete">Concrete</option>
+                                      <option value="Drywall">Drywall</option>
+                                      <option value="Electrical work">
                                         Electrical Work
                                       </option>
-                                      <option value="general handyman">
+                                      <option value="General handyman">
                                         General Handyman
                                       </option>
-                                      <option value="gutter cleaning">
+                                      <option value="Gutter cleaning">
                                         Gutter Cleaning
                                       </option>
-                                      <option value="hvac">HVAC</option>
-                                      <option value="landscaping">
+                                      <option value="Hvac">HVAC</option>
+                                      <option value="Landscaping">
                                         Landscaping
                                       </option>
-                                      <option value="painting">Painting</option>
-                                      <option value="plumbing">Plumbing</option>
-                                      <option value="pressure washing">
+                                      <option value="Painting">Painting</option>
+                                      <option value="Plumbing">Plumbing</option>
+                                      <option value="Pressure washing">
                                         Pressure Washing
                                       </option>
-                                      <option value="roofing">Roofing</option>
-                                      <option value="siding">Siding</option>
-                                      <option value="snow removal">
+                                      <option value="Roofing">Roofing</option>
+                                      <option value="Siding">Siding</option>
+                                      <option value="Snow removal">
                                         Snow Removal
                                       </option>
-                                      <option value="window installation">
+                                      <option value="Window installation">
                                         Window Installation
                                       </option>
-                                      <option value="window washing">
+                                      <option value="Window washing">
                                         Window Washing
                                       </option>
-                                      <option value="yard work">
+                                      <option value="Yard work">
                                         Yard Work
                                       </option>
                                       <option value={false}>
@@ -1733,42 +2083,42 @@ const UserProfile = () => {
                                       <option value="null">
                                         Clear Selection
                                       </option>
-                                      <option value="asphalt">Asphalt</option>
-                                      <option value="carpentry">
+                                      <option value="Asphalt">Asphalt</option>
+                                      <option value="Carpentry">
                                         Carpentry
                                       </option>
-                                      <option value="concrete">Concrete</option>
-                                      <option value="drywall">Drywall</option>
-                                      <option value="electrical work">
+                                      <option value="Concrete">Concrete</option>
+                                      <option value="Drywall">Drywall</option>
+                                      <option value="Electrical work">
                                         Electrical Work
                                       </option>
-                                      <option value="general handyman">
+                                      <option value="General handyman">
                                         General Handyman
                                       </option>
-                                      <option value="gutter cleaning">
+                                      <option value="Gutter cleaning">
                                         Gutter Cleaning
                                       </option>
-                                      <option value="hvac">HVAC</option>
-                                      <option value="landscaping">
+                                      <option value="Hvac">HVAC</option>
+                                      <option value="Landscaping">
                                         Landscaping
                                       </option>
-                                      <option value="painting">Painting</option>
-                                      <option value="plumbing">Plumbing</option>
-                                      <option value="pressure washing">
+                                      <option value="Painting">Painting</option>
+                                      <option value="Plumbing">Plumbing</option>
+                                      <option value="Pressure washing">
                                         Pressure Washing
                                       </option>
-                                      <option value="roofing">Roofing</option>
-                                      <option value="siding">Siding</option>
-                                      <option value="snow removal">
+                                      <option value="Roofing">Roofing</option>
+                                      <option value="Siding">Siding</option>
+                                      <option value="Snow removal">
                                         Snow Removal
                                       </option>
-                                      <option value="window installation">
+                                      <option value="Window installation">
                                         Window Installation
                                       </option>
-                                      <option value="window washing">
+                                      <option value="Window washing">
                                         Window Washing
                                       </option>
-                                      <option value="yard work">
+                                      <option value="Yard work">
                                         Yard Work
                                       </option>
                                       <option value={false}>
@@ -1803,42 +2153,42 @@ const UserProfile = () => {
                                       <option value="null">
                                         Clear Selection
                                       </option>
-                                      <option value="asphalt">Asphalt</option>
-                                      <option value="carpentry">
+                                      <option value="Asphalt">Asphalt</option>
+                                      <option value="Carpentry">
                                         Carpentry
                                       </option>
-                                      <option value="concrete">Concrete</option>
-                                      <option value="drywall">Drywall</option>
-                                      <option value="electrical work">
+                                      <option value="Concrete">Concrete</option>
+                                      <option value="Drywall">Drywall</option>
+                                      <option value="Electrical work">
                                         Electrical Work
                                       </option>
-                                      <option value="general handyman">
+                                      <option value="General handyman">
                                         General Handyman
                                       </option>
-                                      <option value="gutter cleaning">
+                                      <option value="Gutter cleaning">
                                         Gutter Cleaning
                                       </option>
-                                      <option value="hvac">HVAC</option>
-                                      <option value="landscaping">
+                                      <option value="Hvac">HVAC</option>
+                                      <option value="Landscaping">
                                         Landscaping
                                       </option>
-                                      <option value="painting">Painting</option>
-                                      <option value="plumbing">Plumbing</option>
-                                      <option value="pressure washing">
+                                      <option value="Painting">Painting</option>
+                                      <option value="Plumbing">Plumbing</option>
+                                      <option value="Pressure washing">
                                         Pressure Washing
                                       </option>
-                                      <option value="roofing">Roofing</option>
-                                      <option value="siding">Siding</option>
-                                      <option value="snow removal">
+                                      <option value="Roofing">Roofing</option>
+                                      <option value="Siding">Siding</option>
+                                      <option value="Snow removal">
                                         Snow Removal
                                       </option>
-                                      <option value="window installation">
+                                      <option value="Window installation">
                                         Window Installation
                                       </option>
-                                      <option value="window washing">
+                                      <option value="Window washing">
                                         Window Washing
                                       </option>
-                                      <option value="yard work">
+                                      <option value="Yard work">
                                         Yard Work
                                       </option>
                                       <option value={false}>
@@ -1872,42 +2222,42 @@ const UserProfile = () => {
                                       <option value="null">
                                         Clear Selection
                                       </option>
-                                      <option value="asphalt">Asphalt</option>
-                                      <option value="carpentry">
+                                      <option value="Asphalt">Asphalt</option>
+                                      <option value="Carpentry">
                                         Carpentry
                                       </option>
-                                      <option value="concrete">Concrete</option>
-                                      <option value="drywall">Drywall</option>
-                                      <option value="electrical work">
+                                      <option value="Concrete">Concrete</option>
+                                      <option value="Drywall">Drywall</option>
+                                      <option value="Electrical work">
                                         Electrical Work
                                       </option>
-                                      <option value="general handyman">
+                                      <option value="General handyman">
                                         General Handyman
                                       </option>
-                                      <option value="gutter cleaning">
+                                      <option value="Gutter cleaning">
                                         Gutter Cleaning
                                       </option>
-                                      <option value="hvac">HVAC</option>
-                                      <option value="landscaping">
+                                      <option value="Hvac">HVAC</option>
+                                      <option value="Landscaping">
                                         Landscaping
                                       </option>
-                                      <option value="painting">Painting</option>
-                                      <option value="plumbing">Plumbing</option>
-                                      <option value="pressure washing">
+                                      <option value="Painting">Painting</option>
+                                      <option value="Plumbing">Plumbing</option>
+                                      <option value="Pressure washing">
                                         Pressure Washing
                                       </option>
-                                      <option value="roofing">Roofing</option>
-                                      <option value="siding">Siding</option>
-                                      <option value="snow removal">
+                                      <option value="Roofing">Roofing</option>
+                                      <option value="Siding">Siding</option>
+                                      <option value="Snow removal">
                                         Snow Removal
                                       </option>
-                                      <option value="window installation">
+                                      <option value="Window installation">
                                         Window Installation
                                       </option>
-                                      <option value="window washing">
+                                      <option value="Window washing">
                                         Window Washing
                                       </option>
-                                      <option value="yard work">
+                                      <option value="Yard work">
                                         Yard Work
                                       </option>
                                       <option value={false}>
@@ -1942,42 +2292,42 @@ const UserProfile = () => {
                                       <option value="null">
                                         Clear Selection
                                       </option>
-                                      <option value="asphalt">Asphalt</option>
-                                      <option value="carpentry">
+                                      <option value="Asphalt">Asphalt</option>
+                                      <option value="Carpentry">
                                         Carpentry
                                       </option>
-                                      <option value="concrete">Concrete</option>
-                                      <option value="drywall">Drywall</option>
-                                      <option value="electrical work">
+                                      <option value="Concrete">Concrete</option>
+                                      <option value="Drywall">Drywall</option>
+                                      <option value="Electrical work">
                                         Electrical Work
                                       </option>
-                                      <option value="general handyman">
+                                      <option value="General handyman">
                                         General Handyman
                                       </option>
-                                      <option value="gutter cleaning">
+                                      <option value="Gutter cleaning">
                                         Gutter Cleaning
                                       </option>
-                                      <option value="hvac">HVAC</option>
-                                      <option value="landscaping">
+                                      <option value="Hvac">HVAC</option>
+                                      <option value="Landscaping">
                                         Landscaping
                                       </option>
-                                      <option value="painting">Painting</option>
-                                      <option value="plumbing">Plumbing</option>
-                                      <option value="pressure washing">
+                                      <option value="Painting">Painting</option>
+                                      <option value="Plumbing">Plumbing</option>
+                                      <option value="Pressure washing">
                                         Pressure Washing
                                       </option>
-                                      <option value="roofing">Roofing</option>
-                                      <option value="siding">Siding</option>
-                                      <option value="snow removal">
+                                      <option value="Roofing">Roofing</option>
+                                      <option value="Siding">Siding</option>
+                                      <option value="Snow removal">
                                         Snow Removal
                                       </option>
-                                      <option value="window installation">
+                                      <option value="Window installation">
                                         Window Installation
                                       </option>
-                                      <option value="window washing">
+                                      <option value="Window washing">
                                         Window Washing
                                       </option>
-                                      <option value="yard work">
+                                      <option value="Yard work">
                                         Yard Work
                                       </option>
                                       <option value={false}>
@@ -1986,10 +2336,6 @@ const UserProfile = () => {
                                     </select>
                                   </div>
                                 </div>
-
-
-
-
 
                                 <div class="p-4 flex justify-end gap-x-2">
                                   <div class="w-full flex justify-end items-center gap-x-2">
@@ -2004,7 +2350,9 @@ const UserProfile = () => {
 
                                     <button
                                       type="button"
-                                      onClick={() => handleAllFBCategoryChange()}
+                                      onClick={() =>
+                                        handleAllFBCategoryChange()
+                                      }
                                       class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-blue-600 border border-blue-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                                       data-hs-overlay="#hs-pro-dasadpm"
                                     >
@@ -2066,21 +2414,17 @@ const UserProfile = () => {
 
                       {userBio ? (
                         <div class="flex sm:justify-end items-center gap-x-2">
-                          <button
-                            type="button"
-                          
-                            onClick={() => onOpenBio()}
-                          >
-                             <svg
-                            type="button"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="#5D5D5D"
-                            class="w-4 h-4 ml-2 mb-2 hover:text-gray-700"
-                          >
-                            <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
-                            <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
-                          </svg>
+                          <button type="button" onClick={() => onOpenBio()}>
+                            <svg
+                              type="button"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="#5D5D5D"
+                              class="w-4 h-4 ml-2 mb-2 hover:text-gray-700"
+                            >
+                              <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                              <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+                            </svg>
                           </button>
                         </div>
                       ) : null}
@@ -2257,7 +2601,7 @@ const UserProfile = () => {
 
                                 {/* <p class=" text-md  text-gray-500 ">Business</p> */}
                                 <p class=" text-sm  text-gray-500 ">
-                                  {userExperience.Years} years
+                                  {userExperience.Years}
                                 </p>
 
                                 <p class=" text-md  text-black ">
@@ -2808,12 +3152,311 @@ const UserProfile = () => {
                         
                       </div>
                     </div> */}
+
+                    <div class="flex flex-col bg-white  rounded-xl shadow-sm xl:shadow-none ">
+                      <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
+                        <h2 class="inline-block font-semibold text-gray-800 ">
+                          Projects
+                        </h2>
+
+                        <div class="flex sm:justify-end items-center gap-x-2">
+                          <button
+                            type="button"
+                            onClick={() => onOpenProject()}
+                            class="py-2 px-2 inline-flex  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
+                            data-hs-overlay="#hs-pro-dasadpm"
+                          >
+                            <svg
+                              class="hidden sm:block flex-shrink-0 size-4"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M5 12h14" />
+                              <path d="M12 5v14" />
+                            </svg>
+                            Add pictures
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="space-y-2">
+                        <label class="block block mb-2 ml-5 text-sm font-medium text-gray-600 ">
+                          Upload attachments of work you're proud of!
+                        </label>
+
+                        {projectPictureOne ? (
+                          <div class="p-12 mx-5 mb-5 flex justify-center bg-white border border border-gray-300 rounded-xl ">
+                             <button className="embla__prev" onClick={scrollPrev}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+</svg>
+</button>
+                            <div className="overflow-hidden" >
+                            
+                              <div className="w-full max-w-96 " ref={emblaRef}>
+      <div className="flex">
+       
+        <div className="grow-0 shrink-0  w-full h-full"><img className="w-full h-full" src={projectPictureOne} ></img></div>
+        {projectPictureTwo ? (<div className="grow-0 shrink-0 w-full h-full"><img className="w-full"  src={projectPictureTwo} ></img></div>) : (null)}
+        {projectPictureThree ? (<div className="grow-0 shrink-0 w-full h-full"><img className="w-full "  src={projectPictureThree} ></img></div>) : (null)}
+        {projectPictureFour ? (<div className="grow-0 shrink-0 w-full h-full"><img className="w-full "  src={projectPictureFour} ></img></div>) : (null)}
+        {projectPictureFive ? (<div className="grow-0 shrink-0 w-full h-full"><img className="w-full "  src={projectPictureFive} ></img></div>) : (null)}
+
+        
+      </div>
+    </div>
+    </div>
+    
+    <button className="embla__next" onClick={scrollNext}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ml-2">
+  <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+</svg>
+</button>
+                          </div>
+                        ) : (
+                          <div class="p-12 mx-5 mb-5 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl ">
+                            <div class="text-center">
+                              <svg
+                                class="w-16 text-gray-400 mx-auto "
+                                width="70"
+                                height="46"
+                                viewBox="0 0 70 46"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M6.05172 9.36853L17.2131 7.5083V41.3608L12.3018 42.3947C9.01306 43.0871 5.79705 40.9434 5.17081 37.6414L1.14319 16.4049C0.515988 13.0978 2.73148 9.92191 6.05172 9.36853Z"
+                                  fill="currentColor"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  class="fill-white stroke-gray-400 "
+                                />
+                                <path
+                                  d="M63.9483 9.36853L52.7869 7.5083V41.3608L57.6982 42.3947C60.9869 43.0871 64.203 40.9434 64.8292 37.6414L68.8568 16.4049C69.484 13.0978 67.2685 9.92191 63.9483 9.36853Z"
+                                  fill="currentColor"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  class="fill-white stroke-gray-400 "
+                                />
+                                <rect
+                                  x="17.0656"
+                                  y="1.62305"
+                                  width="35.8689"
+                                  height="42.7541"
+                                  rx="5"
+                                  fill="currentColor"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  class="fill-white stroke-gray-400 "
+                                />
+                                <path
+                                  d="M47.9344 44.3772H22.0655C19.3041 44.3772 17.0656 42.1386 17.0656 39.3772L17.0656 35.9161L29.4724 22.7682L38.9825 33.7121C39.7832 34.6335 41.2154 34.629 42.0102 33.7025L47.2456 27.5996L52.9344 33.7209V39.3772C52.9344 42.1386 50.6958 44.3772 47.9344 44.3772Z"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  class="stroke-gray-400 "
+                                />
+                                <circle
+                                  cx="39.5902"
+                                  cy="14.9672"
+                                  r="4.16393"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  class="stroke-gray-400 dark:stroke-neutral-500"
+                                />
+                              </svg>
+
+                              <div class="mt-4 flex flex-wrap justify-center text-sm leading-6 text-gray-600">
+                                <span class="pe-1 font-medium text-gray-800 ">
+                                  Drop your files here or
+                                </span>
+                                <label
+                                  for="hs-pro-upcebb"
+                                  class="relative cursor-pointer bg-white font-semibold text-blue-600 hover:text-blue-700 rounded-lg decoration-2 hover:underline focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 "
+                                >
+                                  <button onClick={() => onOpenProject()}>
+                                    browse
+                                  </button>
+                                  <input
+                                    id="hs-pro-upcebb"
+                                    type="file"
+                                    class="sr-only"
+                                  />
+                                </label>
+                              </div>
+
+                              <p class="mt-1 text-xs text-gray-400 ">
+                                JPEG, IMAGES
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <Modal
+          isOpen={isOpenProject}
+          onClose={onCloseProject}
+          size="xl"
+          height="420px"
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <div
+              id="hs-pro-dasadpm"
+              class=" size-full fixed top-0 start-0 z-[80]  overflow-y-auto pointer-events-none [--close-when-click-inside:true] "
+            >
+              <div class="mt-7 opacity-100 duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
+                <div class="w-full max-h-full flex flex-col bg-white rounded-xl pointer-events-auto shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)] ">
+                  <div class="py-3 px-4 flex justify-between items-center border-b ">
+                    <h3 class="font-semibold text-gray-800 ">
+                      Add a photo of your work (limit 5)
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() => onCloseProject()}
+                      class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                      data-hs-overlay="#hs-pro-dasadpm"
+                    >
+                      <span class="sr-only">Close</span>
+                      <svg
+                        class="flex-shrink-0 size-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <form>
+                    <div class="p-4 space-y-5">
+                      <div>
+                        <div class="flex flex-wrap items-center gap-3 sm:gap-5">
+                          {newProjectImage ? (<img class="w-full h-full" src={newProjectImage} />) : (<span class="flex flex-shrink-0 justify-center items-center size-20 border-2 border-dotted border-gray-300 text-gray-400 rounded-full dark:border-neutral-700 dark:text-neutral-600">
+                                  <svg
+                                    class="flex-shrink-0 size-7"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <rect
+                                      width="18"
+                                      height="18"
+                                      x="3"
+                                      y="3"
+                                      rx="2"
+                                      ry="2"
+                                    />
+                                    <circle cx="9" cy="9" r="2" />
+                                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                                  </svg>
+                                </span>)}
+                          
+                          <div class="grow">
+                            <div class="flex items-center gap-x-2">
+                              <ImageUploading
+                                multiple
+                                value={projectImages}
+                                onChange={onChangeProject}
+                                maxNumber={maxProjectNumber}
+                                dataURLKey="data_url"
+                              >
+                                {({
+                                  projectImageList,
+                                  onImageUpload,
+                                  onImageRemoveAll,
+                                  onImageUpdate,
+                                  onImageRemove,
+                                  isDragging,
+                                  dragProps,
+                                }) => (
+                                  // write your building UI
+                                  <div className="upload__image-wrapper">
+                                    <button
+                                      type="button"
+                                      onClick={() => onImageUpdate()}
+                                      {...dragProps}
+                                      class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                      <svg
+                                        class="flex-shrink-0 size-4"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                      >
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                        <polyline points="17 8 12 3 7 8" />
+                                        <line x1="12" x2="12" y1="3" y2="15" />
+                                      </svg>
+                                      Upload photo
+                                    </button>
+                                    &nbsp;
+                                  </div>
+                                )}
+                              </ImageUploading>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="p-4 flex justify-end gap-x-2">
+                      <div class="w-full flex justify-end items-center gap-x-2">
+                        <button
+                          type="button"
+                          onClick={() => onCloseProject()}
+                          class="py-2 px-3  inline-flex justify-center items-center text-start bg-white border border-gray-200 text-gray-800 text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-gray-50 "
+                          data-hs-overlay="#hs-pro-dasadpm"
+                        >
+                          Cancel
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => uploadProjectsToFirebase()}
+                          class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-blue-600 border border-blue-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                          data-hs-overlay="#hs-pro-dasadpm"
+                        >
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </ModalContent>
+        </Modal>
       </main>
     </>
   );

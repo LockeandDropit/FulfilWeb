@@ -401,7 +401,7 @@ setCloseInfoWindow(false)
   
   </div>
 {isDesktop ? ( <div class="w-full rounded-lg ml-6">
-    {/* <Flex flex={1}> */}
+  
 
               <MapScreen props={closeInfoWindow} />
          

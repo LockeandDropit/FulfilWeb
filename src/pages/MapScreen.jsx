@@ -225,12 +225,12 @@ console.log(closeInfoWindow)
 
 
   return (
-    <div>
+    <div className="max-w-[50rem]">
       
 
       <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
         {/* <Box w={{base: "90vw", lg: "61vw"}} h={{base: "40vh", lg: "100vh"}} ml={{base: "16px" , lg: "0px"}}> */}
-        <Box w={{base: "90vw", lg: "40vw"}} h={{base: "40vh", lg: "60vh"}} ml={{base: "16px" , lg: "0px"}} borderRadius="md">
+        <Box w={{base: "70vw", lg: "40vw"}} h={{base: "40vh", lg: "60vh"}} ml={{base: "16px" , lg: "0px"}} borderRadius="md">
          
           <Map
             defaultCenter={{ lat: defaultLat, lng: defaultLong }}

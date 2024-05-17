@@ -189,9 +189,9 @@ const LandingNeederMapScreen = () => {
   };
 
   return (
-    <div>
+    <div className="max-w-[20rem]">
       <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-        <Box h={{base: "50vh", lg: "70vh"}} w={{base: "90vw", md: "30vw", lg: "35vw"}}>
+      <Box w={{base: "70vw", lg: "33vw", xl: "600px"}} h={{base: "40vh", lg: "60vh"}} ml={{base: "16px" , lg: "0px"}} borderRadius="md">
       
           <Map
             defaultCenter={{ lat: 44.89929301068098, lng: -93.3413753387615}}

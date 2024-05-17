@@ -3159,39 +3159,16 @@ const UserProfile = () => {
                           Projects
                         </h2>
 
-                        <div class="flex sm:justify-end items-center gap-x-2">
-                          <button
-                            type="button"
-                            onClick={() => onOpenProject()}
-                            class="py-2 px-2 inline-flex  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
-                            data-hs-overlay="#hs-pro-dasadpm"
-                          >
-                            <svg
-                              class="hidden sm:block flex-shrink-0 size-4"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            >
-                              <path d="M5 12h14" />
-                              <path d="M12 5v14" />
-                            </svg>
-                            Add pictures
-                          </button>
-                        </div>
+                       
                       </div>
 
                       <div class="space-y-2">
                         <label class="block block mb-2 ml-5 text-sm font-medium text-gray-600 ">
-                          Upload attachments of work you're proud of!
+                          Upload attachments of work you've completed.
                         </label>
 
                         {projectPictureOne ? (
+                          <>
                           <div class="p-12 mx-5 mb-5 flex justify-center bg-white border border border-gray-300 rounded-xl ">
                              <button className="embla__prev" onClick={scrollPrev}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
   <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
@@ -3218,6 +3195,41 @@ const UserProfile = () => {
 </svg>
 </button>
                           </div>
+                          <div class="flex flex-col bg-white  rounded-xl shadow-sm xl:shadow-none ">
+                      <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
+                        <h2 class="inline-block  ">
+                          
+                        </h2>
+
+                        <div class="flex sm:justify-end items-center gap-x-2">
+                          <button
+                            type="button"
+                            onClick={() => onOpenProject()}
+                            class="py-2 px-2 inline-flex  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
+                            data-hs-overlay="#hs-pro-dasadpm"
+                          >
+                            <svg
+                              class="hidden sm:block flex-shrink-0 size-4"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M5 12h14" />
+                              <path d="M12 5v14" />
+                            </svg>
+                            Add pictures
+                          </button>
+                        </div>
+                      </div>
+                      </div>
+                          </>
+                          
                         ) : (
                           <div class="p-12 mx-5 mb-5 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl ">
                             <div class="text-center">

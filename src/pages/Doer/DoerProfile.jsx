@@ -145,6 +145,7 @@ const DoerProfile = () => {
   const [updatedBio, setUpdatedBio] = useState(null);
   const [isPremium, setIsPremium] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [email, setEmail] = useState(null);
 
   useEffect(() => {
     if (hasRun === false) {
@@ -166,7 +167,7 @@ const DoerProfile = () => {
         setProfilePicture(snapshot.data().profilePictureResponse);
         setUserFirstName(snapshot.data().firstName);
         setUserLastName(snapshot.data().lastName);
-        // setUserBio(snapshot.data().bio);
+        setEmail(snapshot.data().email);
         setUserState(snapshot.data().state);
 
         setUserCity(snapshot.data().city);

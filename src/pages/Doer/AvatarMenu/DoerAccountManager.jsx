@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import DoerHeader from "../DoerHeader";
 import DoerDashboard from "../DoerDashboard";
-
+import Header from "../components/Header";
+import Dashboard from "../components/Dashboard";
 import {
   Input,
   Button,
@@ -31,16 +32,8 @@ import {
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
-import {
-  doc,
-  getDoc,
-  updateDoc,
-  setDoc,
-} from "firebase/firestore";
+import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
-
-
 
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "@chakra-ui/react";
@@ -56,6 +49,7 @@ const DoerAccountManager = () => {
   const [userEmail, setUserEmail] = useState(null);
   const [loading, setLoading] = useState(false);
   const [paymentsLoading, setPaymentsLoading] = useState(false);
+  const [userLastName, setUserLastName] = useState();
 
   const navigate = useNavigate();
 
@@ -64,7 +58,6 @@ const DoerAccountManager = () => {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
         setUserEmail(currentUser.email);
-       
       });
       setHasRun(true);
       setLoading(false);
@@ -87,11 +80,9 @@ const DoerAccountManager = () => {
   const getProfilePicture = async () => {
     const storage = getStorage();
     const reference = ref(storage, "users/" + user.uid + "/profilePicture.jpg");
-    
- 
 
     // if (!reference._service._url) {
-    
+
     // } else {
     //   await getDownloadURL(reference).then((response) => {
     //     setProfilePicture(response);
@@ -100,9 +91,9 @@ const DoerAccountManager = () => {
   };
 
   const [userFirstName, setUserFirstName] = useState("User");
-  const [lastName, setLastName] = useState(null)
-  const [city, setCity] = useState(null)
-  const [state, setState] = useState(null)
+  const [lastName, setLastName] = useState(null);
+  const [city, setCity] = useState(null);
+  const [state, setState] = useState(null);
 
   useEffect(() => {
     if (user != null) {
@@ -111,13 +102,12 @@ const DoerAccountManager = () => {
       getDoc(docRef).then((snapshot) => {
         // console.log(snapshot.data());
         setUserFirstName(snapshot.data().firstName);
-        setLastName(snapshot.data().lastName);
-        setCity(snapshot.data().city)
-        setState(snapshot.data().state)
-
+        setUserLastName(snapshot.data().lastName);
+        setUserEmail(snapshot.data().email)
+        setCity(snapshot.data().city);
+        setState(snapshot.data().state);
       });
     } else {
-   
     }
   }, [user]);
 
@@ -134,14 +124,16 @@ const DoerAccountManager = () => {
     process.env.REACT_APP_STREAM_CHAT_API_KEY
   );
 
-  
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const { isOpen: isOpenLogOut, onOpen: onOpenLogOut, onClose: onCloseLogOut } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenLogOut,
+    onOpen: onOpenLogOut,
+    onClose: onCloseLogOut,
+  } = useDisclosure();
 
   const handleConfirmDelete = () => {
-    onOpen()
-  }
-
+    onOpen();
+  };
 
   const handleLogOut = async () => {
     setLoading(true);
@@ -150,7 +142,7 @@ const DoerAccountManager = () => {
     await client.disconnectUser();
 
     setTimeout(() => {
-     onOpenLogOut()
+      onOpenLogOut();
       navigate("/");
     }, 2000);
   };
@@ -169,7 +161,6 @@ const DoerAccountManager = () => {
         const docRef = doc(db, "users", user.uid);
 
         getDoc(docRef).then((snapshot) => {
-        
           setPrivacyAgreement(snapshot.data().PrivacyPolicyAgree);
           // setIDVerified(snapshot.data().IDVerified);
           setTaxAgreementConfirmed(snapshot.data().taxAgreementConfirmed);
@@ -179,7 +170,6 @@ const DoerAccountManager = () => {
           }
         });
       } else {
-       
       }
     }, 50);
   }, [user]);
@@ -202,14 +192,12 @@ const DoerAccountManager = () => {
   const [stripeID, setStripeID] = useState(null);
   const [getIDHasRun, setGetIDHasRun] = useState(false);
   const [stripeActive, setStripeActive] = useState(null);
- 
 
   useEffect(() => {
     if (getIDHasRun === false) {
       if (stripeIDFromFB) {
         setStripeID({ stripeID: stripeIDFromFB });
         setGetIDHasRun(true);
-        
       }
     } else {
     }
@@ -218,9 +206,8 @@ const DoerAccountManager = () => {
   useEffect(() => {
     if (stripeID && user !== null && stripeActive === false) {
       setTimeout(() => {
-        verifyStripeStatus()
+        verifyStripeStatus();
       }, 1500);
-   
     } else {
     }
   }, [stripeID, stripeActive]);
@@ -242,8 +229,6 @@ const DoerAccountManager = () => {
     );
     const { chargesEnabled, payoutsEnabled } = await response.json();
 
-  
-
     if (chargesEnabled === true && payoutsEnabled === true) {
       setStripeActive(true);
 
@@ -252,11 +237,9 @@ const DoerAccountManager = () => {
       })
         .then(() => {
           //all good
-   
         })
         .catch((error) => {
           // no bueno
-    
         });
     } else {
       // alert(
@@ -268,8 +251,6 @@ const DoerAccountManager = () => {
   };
 
   //Stripe onboarding
-
-
 
   const [onboardURL, setOnboardURL] = useState(null);
 
@@ -293,8 +274,6 @@ const DoerAccountManager = () => {
 
     const { accountLink, error, accountID } = await response.json();
 
-   
-
     // setOnboardURL(accountLink.url);
     setStripeID({ stripeID: accountID });
     setStripeIDToFireBase(accountID);
@@ -308,8 +287,6 @@ const DoerAccountManager = () => {
     return { accountLink, error };
   };
 
- 
-
   useEffect(() => {
     if (stripeIDToFireBase !== null && user !== null) {
       updateDoc(doc(db, "users", user.uid), {
@@ -317,216 +294,304 @@ const DoerAccountManager = () => {
       })
         .then(() => {
           //all good
-        
         })
         .catch((error) => {
           // no bueno
-         
         });
     }
   }, [stripeID, user]);
   //text flex end credit (margin-left: auto) https://www.glennstovall.com/flex-row-end-position/
   return (
     <>
-      <DoerHeader />
-<Box width="100vw" height="85vh" alignItems="center" justifyContent="center">
-      <Flex justifyContent="center">
-        <Box position="absolute" left="0">
-        <DoerDashboard />
-        </Box>
-        {!loading ? (
-          <Box justifyContent="center" marginTop="64px">
-          <Center >
-          <Box
-         
-         w={{base: "100vw", lg: "34vw"}}
-         height={{base: "100vh", lg: "auto"}}
-            boxShadow=""
-            rounded="lg"
-            padding="10"
-            //   overflowY="scroll"
+      <Header />
+
+      <Dashboard />
+      <main id="content" class="lg:ps-[260px] pt-[59px]">
+        <ol class="md:hidden py-3 px-2 sm:px-5 flex items-center whitespace-nowrap">
+          <li class="flex items-center text-sm text-gray-600 ">
+            Account
+            <svg
+              class="flex-shrink-0 mx-1 overflow-visible size-4 text-gray-400 "
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </li>
+
+          <li
+            class="text-sm font-semibold text-gray-800 truncate "
+            aria-current="page"
           >
-    
-              <Heading size="md" marginTop="16px">
-                Account Settings
-              </Heading>
+            Preferences
+          </li>
+        </ol>
+
+        <div class="p-2 sm:p-5 sm:py-0 md:pt-5 space-y-3">
+          <div class="w-full flex flex-row whitespace-nowrap overflow-x-auto overflow-y-hidden pb-1 [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
+            <a
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500  "
+              href="../../pro/dashboard/account-profile.html"
+            >
+              Profile
+            </a>
+            <a
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500  "
+              href="../../pro/dashboard/account-notifications.html"
+            >
+              Notifications
+            </a>
+            <a
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500 "
+              href="../../pro/dashboard/account-integrations.html"
+            >
+              Integrations
+            </a>
+            <a
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500 active-link bg-white !border-gray-200 focus:text-gray-800 shadow-sm  "
+              href="../../pro/dashboard/account-preferences.html"
+            >
+              Preferences
+            </a>
+            <a
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500  "
+              href="../../pro/dashboard/account-workspace.html"
+            >
+              Workspace
+            </a>
+            <a
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500 "
+              href="../../pro/dashboard/account-plan-and-billing.html"
+            >
+              Plan &amp; Billing
+            </a>
+            <a
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500 "
+              href="../../pro/dashboard/account-members.html"
+            >
+              Members
+            </a>
+          </div>
+
+          <div class="p-5 md:p-8 bg-white border border-gray-200 shadow-sm rounded-xl ">
+          <div class="mb-4 xl:mb-8">
+              <h1 class="text-lg font-semibold text-gray-800 ">Account Settings</h1>
+              <p class="text-sm text-gray-500 ">
+                Your personal settings
+              </p>
+            </div>
+            <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
+                <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4 2xl:col-span-2">
+                    <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+                      Full Name
+                    </label>
+                  </div>
+
+                  <div class="sm:col-span-8 xl:col-span-6 mt-2 2xl:col-span-5">
+                  <p class="text-sm text-black ">
+                {userFirstName} {userLastName}
+                </p>
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
+                <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4 2xl:col-span-2">
+                    <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+                      Location
+                    </label>
+                  </div>
+
+                  <div class="sm:col-span-8 xl:col-span-6 mt-2 2xl:col-span-5">
+                  <p class="text-sm text-black ">
+                {city} {state} 
+                </p>
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="py-3 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
+                <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4 2xl:col-span-2">
+                    <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+                     Contact
+                    </label>
+                  </div>
+
+                  <div class="sm:col-span-8 xl:col-span-6 mt-2 2xl:col-span-5">
+                  <p class="text-sm text-black ">
+                {userEmail}
+                </p>
+                  </div>
+                  
+                </div>
+              </div>
+
+
+            <div class="mb-4 xl:mb-8">
+              <h1 class="text-lg font-semibold text-gray-800 ">Onboarding</h1>
+              <p class="text-sm text-gray-500 ">
+                You must complete all steps below before you can apply to posts.
+              </p>
+            </div>
+
+            <form>
+              <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
+                <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4 2xl:col-span-2">
+                    <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+                      Privacy Agreement
+                    </label>
+                  </div>
+
+                  <div class="sm:col-span-8 xl:col-span-6 2xl:col-span-5">
+                    {privacyAgreement ? (
+                      <CheckCircleIcon
+                        color="green"
+                        boxSize={5}
+                        marginLeft="auto"
+                        marginRight="8"
+                        marginTop="0.5"
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        class="py-1.5 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-red-500  hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                        data-hs-overlay="#hs-pro-dasadpm"
+                      >
+                        update
+                      </button>
+                    )}
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
+                <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4 2xl:col-span-2">
+                    <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+                      Tax Agreement
+                    </label>
+                  </div>
+                
+
+                  <div class="sm:col-span-8 xl:col-span-6 2xl:col-span-5">
+                    {taxAgreementConfirmed ? (
+                      <CheckCircleIcon
+                        color="green"
+                        boxSize={5}
+                        marginLeft="auto"
+                        marginRight="8"
+                        marginTop="0.5"
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        class="py-1.5 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-red-500  hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                        data-hs-overlay="#hs-pro-dasadpm"
+                      >
+                        update
+                      </button>
+                    )}
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
+                <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4 2xl:col-span-2">
+                    <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+                      Payments Active
+                    </label>
+                  </div>
+
+                  <div class="sm:col-span-8 xl:col-span-6 2xl:col-span-5">
+                    {paymentsActive ? (
+                      <CheckCircleIcon
+                        color="green"
+                        boxSize={5}
+                        marginLeft="auto"
+                        marginRight="8"
+                        marginTop="0.5"
+                      />
+                    ) : paymentsLoading ? (
+                      <div
+                      class="animate-spin ml-4 inline-block size-6 border-[3px] border-current border-t-transparent text-red-600 rounded-full"
+                      role="status"
+                      aria-label="loading"
+                    >
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    ) : (
+                      <button
+                        type="button"
+                        class="py-1.5 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-red-500  hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                        data-hs-overlay="#hs-pro-dasadpm"
+                        onClick={() => initializeOnboarding()}
+                      >
+                        update
+                      </button>
+                    )}
+                  </div>
+                  
+                </div>
+              </div>
+
+              <div class="mb-4 xl:mb-8">
+              <h1 class="text-lg font-semibold text-gray-800 ">Account Management</h1>
+              <p class="text-sm text-gray-500 ">
+                All actions pertaining to your account
+              </p>
+            </div>
+
+            <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
+                <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4 2xl:col-span-2">
+                    <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+                     Delete Account
+                    </label>
+                  </div>
+
+                  <div class="sm:col-span-8 xl:col-span-6 2xl:col-span-5">
+                   
+                      <button
+                        type="button"
+                        class="py-1.5 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-red-500  hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                        data-hs-overlay="#hs-pro-dasadpm"
+                        onClick={() => handleConfirmDelete()}
+                      >
+                      Delete
+                      </button>
+                  
+                  </div>
+                  
+                </div>
+              </div>
               
-           
-           
-              <Heading size="sm" marginTop="16px">
-                Name
-              </Heading>
-              <Text>{userFirstName}{" "}{lastName}</Text>
-              <Heading size="sm" marginTop="4px">
-                Location
-              </Heading>
-              <Text>{city},{" "}{state}</Text>
-              <Heading size="sm" marginTop="4px">
-                E-mail
-              </Heading>
-              <Text>{userEmail}</Text>
-           
-         
-           
-          
-              <Box  marginTop="16" marginBottom="64px" flexDirection="column" >
-              <Heading size="sm" marginTop="16px">
-                Onboarding
-              </Heading>
-                {privacyAgreement ? (
-                  <Flex direction="row" marginTop="4">
-                    <Text>Privacy Agreement</Text>{" "}
-                    <CheckCircleIcon
-                      color="green"
-                      boxSize={5}
-                      marginLeft="auto"
-                      marginRight="8"
-                      marginTop="0.5"
-                    />
-                  </Flex>
-                ) : (
-                  <Flex direction="row" marginTop="4">
-                    <Text>Privacy Policy Agreement</Text>{" "}
-                    <Button
-                     backgroundColor="white"
-                     borderWidth="1px"
-                     borderColor="#01A2E8"
-                     textColor="#01A2E8"
-                      height="32px"
-                      marginLeft="auto"
-                      // variant="ghost"
-                      onClick={() => navigate("/DoerUserAgreement")}
-                    >
-                      update
-                    </Button>
-                  </Flex>
-                )}
-                {IDVerified ? (
-                  <Flex direction="row" marginTop="4">
-                    <Text>ID Verified</Text>{" "}
-                    <CheckCircleIcon
-                      color="green"
-                      boxSize={5}
-                      marginLeft="auto"
-                      marginRight="8"
-                      marginTop="0.5"
-                    />
-                  </Flex>
-                ) : (
-                  <Flex direction="row" marginTop="4">
-                    <Text>ID Verified</Text>{" "}
-                    <Button
-                     backgroundColor="white"
-                     borderWidth="1px"
-                     borderColor="#01A2E8"
-                     textColor="#01A2E8"
-                      height="32px"
-                      marginLeft="auto"
-                      onClick={() => navigate("/DoerIDVerify")}
-                    >
-                      update
-                    </Button>
-                  </Flex>
-                )}
-                {taxAgreementConfirmed ? (
-                  <Flex direction="row" marginTop="4">
-                    <Text>Tax Agreement</Text>{" "}
-                    <CheckCircleIcon
-                      color="green"
-                      boxSize={5}
-                      marginRight="8"
-                      marginLeft="auto"
-                      marginTop="0.5"
-                    />
-                  </Flex>
-                ) : (
-                  <Flex direction="row" marginTop="4">
-                    <Text>Tax Agreement</Text>{" "}
-                    <Button
-                      backgroundColor="white"
-                      borderWidth="1px"
-                      borderColor="#01A2E8"
-                      textColor="#01A2E8"
-                      height="32px"
-                      marginLeft="auto"
-                      onClick={() => navigate("/DoerTaxAgreement")}
-                    >
-                      update
-                    </Button>
-                  </Flex>
-                )}
-                {paymentsActive ? (
-                  <Flex direction="row" marginTop="4">
-                    <Text>Payments Status</Text>{" "}
-                    <CheckCircleIcon
-                      color="green"
-                      boxSize={5}
-                      marginLeft="auto"
-                      marginRight="8"
-                      marginTop="0.5"
-                    />
-                  </Flex>
-                ) : paymentsLoading ? (
-                  <Flex direction="row" marginTop="4">
-                    <Text>Payments Status</Text>{" "}
-                    <Spinner
-                      thickness="4px"
-                      speed="0.65s"
-                      emptyColor="gray.200"
-                      color="blue"
-                      size="lg"
-                      marginLeft="auto"
-                      marginRight="8"
-                    />
-                  </Flex>
-                ) : (
-                  <Flex direction="row" marginTop="4">
-                    <Text>Payments Status</Text>{" "}
-                    <Button
-                     backgroundColor="white"
-                     borderWidth="1px"
-                     borderColor="#01A2E8"
-                     textColor="#01A2E8"
-                      height="32px"
-                      marginLeft="auto"
-                      onClick={() => initializeOnboarding()}
-                    >
-                      Set up payments
-                    </Button>
-                  </Flex>
-                )}
-              </Box>
+
             
 
-            <Center>
-              <Button
-                colorScheme="red"
-                variant="ghost"
-                position="absolute"
-                bottom="8"
-                onClick={() => handleConfirmDelete()}
-              >
-                Delete Account
-              </Button>
-            </Center>
-          </Box>
-          </Center>
-          </Box>
-        ) : (
-          <Center>
-            {" "}
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              emptyColor="gray.200"
-              color="blue.500"
-              size="xl"
-              marginTop="240px"
-            />
-          </Center>
-        )}
-      </Flex>
-      </Box>
+     
+
+
+            
+
+             
+            </form>
+          </div>
+        </div>
+      </main>
+
+    
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -534,14 +599,16 @@ const DoerAccountManager = () => {
           <ModalHeader>Are You Sure?</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <Text>Are you sure you want to delete your account?</Text>
-         <Text>Once deleted, this can not be undone.</Text>
+            <Text>Are you sure you want to delete your account?</Text>
+            <Text>Once deleted, this can not be undone.</Text>
           </ModalBody>
 
           <ModalFooter>
-          <Button variant='ghost' onClick={onClose}>Nevermind</Button>
-          <Button colorScheme='red' mr={3} onClick={() => handleLogOut()}>
-             Delete my Account
+            <Button variant="ghost" onClick={onClose}>
+              Nevermind
+            </Button>
+            <Button colorScheme="red" mr={3} onClick={() => handleLogOut()}>
+              Delete my Account
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -553,15 +620,18 @@ const DoerAccountManager = () => {
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-           <Text> Sorry to see you go! </Text> 
-            <Text>We need to double check a few things. You will receive a confirmation email in 2-3 days stating your account has been deleted.</Text>
+            <Text> Sorry to see you go! </Text>
+            <Text>
+              We need to double check a few things. You will receive a
+              confirmation email in 2-3 days stating your account has been
+              deleted.
+            </Text>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onCloseLogOut}>
+            <Button colorScheme="blue" mr={3} onClick={onCloseLogOut}>
               Close
             </Button>
-          
           </ModalFooter>
         </ModalContent>
       </Modal>

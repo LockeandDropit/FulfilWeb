@@ -1208,7 +1208,7 @@ const DoerMapScreen = () => {
         {process.env.REACT_APP_GOOGLE_API_KEY ? (
           <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
             <Box
-              h={{ base: "90vh", lg: "94vh" }}
+              h={{ base: "100vh", lg: "94vh" }}
               w={{ base: "100vw", lg: "100vw" }}
               mt={10}
             >
@@ -1231,9 +1231,11 @@ const DoerMapScreen = () => {
                     border="1px"
                     borderColor="gray.400"
                     borderWidth="1.5px"
-                    width="auto"
+                    width={{base: "full", md: "auto"}}
                     boxShadow="lg"
                     flexDirection="row"
+                    mr={{base: "80px", md: "0"}}
+                    ml={{base: "0px", md: "80px"}}
                   >
                     <select
                     className="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "

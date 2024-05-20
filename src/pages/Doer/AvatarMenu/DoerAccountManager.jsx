@@ -307,78 +307,9 @@ const DoerAccountManager = () => {
 
       <Dashboard />
       <main id="content" class="lg:ps-[260px] pt-[59px]">
-        <ol class="md:hidden py-3 px-2 sm:px-5 flex items-center whitespace-nowrap">
-          <li class="flex items-center text-sm text-gray-600 ">
-            Account
-            <svg
-              class="flex-shrink-0 mx-1 overflow-visible size-4 text-gray-400 "
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="m9 18 6-6-6-6" />
-            </svg>
-          </li>
-
-          <li
-            class="text-sm font-semibold text-gray-800 truncate "
-            aria-current="page"
-          >
-            Preferences
-          </li>
-        </ol>
-
+       
         <div class="p-2 sm:p-5 sm:py-0 md:pt-5 space-y-3">
-          <div class="w-full flex flex-row whitespace-nowrap overflow-x-auto overflow-y-hidden pb-1 [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
-            <a
-              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500  "
-              href="../../pro/dashboard/account-profile.html"
-            >
-              Profile
-            </a>
-            <a
-              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500  "
-              href="../../pro/dashboard/account-notifications.html"
-            >
-              Notifications
-            </a>
-            <a
-              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500 "
-              href="../../pro/dashboard/account-integrations.html"
-            >
-              Integrations
-            </a>
-            <a
-              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500 active-link bg-white !border-gray-200 focus:text-gray-800 shadow-sm  "
-              href="../../pro/dashboard/account-preferences.html"
-            >
-              Preferences
-            </a>
-            <a
-              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500  "
-              href="../../pro/dashboard/account-workspace.html"
-            >
-              Workspace
-            </a>
-            <a
-              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500 "
-              href="../../pro/dashboard/account-plan-and-billing.html"
-            >
-              Plan &amp; Billing
-            </a>
-            <a
-              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm whitespace-nowrap border border-transparent text-gray-800 hover:text-gray-500 rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:text-gray-500 "
-              href="../../pro/dashboard/account-members.html"
-            >
-              Members
-            </a>
-          </div>
+         
 
           <div class="p-5 md:p-8 bg-white border border-gray-200 shadow-sm rounded-xl ">
           <div class="mb-4 xl:mb-8">

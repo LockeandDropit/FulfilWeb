@@ -89,9 +89,14 @@ import star_filled from "../../images/star_filled.png";
 
 import { useChatContext } from "stream-chat-react";
 
+import { useMediaQuery } from "@chakra-ui/react";
+
 const UserProfile = () => {
   const [rating, setRating] = useState(null); //make dynamic, pull from Backend
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+
+
+  const [isDesktop] = useMediaQuery("(min-width: 500px)");
 
   const starImgFilled =
     "https://github.com/tranhonghan/images/blob/main/star_filled.png?raw=true";
@@ -1071,32 +1076,7 @@ const UserProfile = () => {
       </Box>
       <main id="content" class="lg:ps-[260px] pt-[59px]">
         <div class="max-w-6xl mx-auto">
-          <ol class="md:hidden py-3 px-2 sm:px-5 flex items-center whitespace-nowrap">
-            <li class="flex items-center text-sm ">
-              User Profile
-              <svg
-                class="flex-shrink-0 mx-1 overflow-visible size-4 text-gray-400 "
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="m9 18 6-6-6-6" />
-              </svg>
-            </li>
-
-            <li
-              class="text-sm font-semibold text-gray-800 truncate "
-              aria-current="page"
-            >
-              Profile
-            </li>
-          </ol>
+        
 
           <div class="p-2 sm:p-5 sm:py-0 md:pt-5 space-y-5">
             <div class="p-5 pb-0 bg-white border border-gray-200 shadow-sm rounded-xl ">
@@ -1400,146 +1380,379 @@ const UserProfile = () => {
                 </div>
               </div>
 
-              <div class="mt-7 py-0.5 flex flex-row justify-between items-center gap-x-2 whitespace-nowrap overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-                {/* <nav class="flex space-x-1">
-                  <a
-                    class="px-2.5 py-1.5 relative inline-flex items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-sm whitespace-nowrap rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-[11px] after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  active"
-                    href="../../pro/dashboard/user-profile-my-profile.html"
-                  >
-                    <svg
-                      class="flex-shrink-0 size-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <circle cx="18" cy="15" r="3" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M10 15H6a4 4 0 0 0-4 4v2" />
-                      <path d="m21.7 16.4-.9-.3" />
-                      <path d="m15.2 13.9-.9-.3" />
-                      <path d="m16.6 18.7.3-.9" />
-                      <path d="m19.1 12.2.3-.9" />
-                      <path d="m19.6 18.7-.4-1" />
-                      <path d="m16.8 12.3-.4-1" />
-                      <path d="m14.3 16.6 1-.4" />
-                      <path d="m20.7 13.8 1-.4" />
-                    </svg>
-                    My Profile
-                  </a>
-                  <a
-                    class="px-2.5 py-1.5 relative inline-flex items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-sm whitespace-nowrap rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-[11px] after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none "
-                    href="../../pro/dashboard/user-profile-teams.html"
-                  >
-                    <svg
-                      class="flex-shrink-0 size-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
-                    Teams
-                  </a>
-                  <a
-                    class="px-2.5 py-1.5 relative inline-flex items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-sm whitespace-nowrap rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-[11px] after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  "
-                    href="../../pro/dashboard/user-profile-files.html"
-                  >
-                    <svg
-                      class="flex-shrink-0 size-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M15.5 2H8.6c-.4 0-.8.2-1.1.5-.3.3-.5.7-.5 1.1v12.8c0 .4.2.8.5 1.1.3.3.7.5 1.1.5h9.8c.4 0 .8-.2 1.1-.5.3-.3.5-.7.5-1.1V6.5L15.5 2z" />
-                      <path d="M3 7.6v12.8c0 .4.2.8.5 1.1.3.3.7.5 1.1.5h9.8" />
-                      <path d="M15 2v5h5" />
-                    </svg>
-                    Files
-                  </a>
-                  <a
-                    class="px-2.5 py-1.5 relative inline-flex items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-sm whitespace-nowrap rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-[11px] after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  "
-                    href="../../pro/dashboard/user-profile-connections.html"
-                  >
-                    <svg
-                      class="flex-shrink-0 size-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M8 3 4 7l4 4" />
-                      <path d="M4 7h16" />
-                      <path d="m16 21 4-4-4-4" />
-                      <path d="M20 17H4" />
-                    </svg>
-                    Connections
-                  </a>
-                </nav> */}
-
-                <div class="pb-3">
-                  {/* <a
-                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
-                    href="../../pro/dashboard/account-profile.html"
-                  >
-                    Edit
-                  </a> */}
-                </div>
-              </div>
+              
             </div>
 
-            <div class="xl:hidden flex justify-end">
-              <button
-                type="button"
-                class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
-                data-hs-overlay="#hs-pro-dupsd"
-                aria-controls="hs-pro-dupsd"
-                aria-label="Sidebar Toggle"
-              >
-                <svg
-                  class="flex-shrink-0 size-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+
+            {isDesktop ? (null) : (  <> <div class="xl:ps-5 grow space-y-5">
+                  <div class="flex flex-col bg-white  rounded-xl shadow-sm xl:shadow-none ">
+                    {/* Start about */}
+                    <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
+                <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
+                    <div class="pt-4 first:pt-0">
+                      <h2 class="text-sm font-semibold text-gray-800 ">
+                        Details
+                      </h2>
+
+                      <ul class="mt-3 space-y-2">
+                        {businessName ? (
+                          <li>
+                            <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                              <svg
+                                class="flex-shrink-0 size-4 text-gray-600 "
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
+                                <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
+                                <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
+                                <path d="M10 6h4" />
+                                <path d="M10 10h4" />
+                                <path d="M10 14h4" />
+                                <path d="M10 18h4" />
+                              </svg>
+                            </div>
+                          </li>
+                        ) : null}
+
+                        <li>
+                          <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                            <svg
+                              class="flex-shrink-0 size-4 text-gray-600 "
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                              <circle cx="12" cy="10" r="3" />
+                            </svg>
+                            {userCity}, {userState}
+                          </div>
+                        </li>
+                        <li>
+                          <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                            {numberOfRatings ? (
+                              <Flex>
+                                {maxRating.map((item, key) => {
+                                  return (
+                                    <Box
+                                      activeopacity={0.7}
+                                      key={item}
+                                      marginTop="4px"
+                                    >
+                                      <Image
+                                        boxSize="16px"
+                                        src={
+                                          item <= rating
+                                            ? star_filled
+                                            : star_corner
+                                        }
+                                      ></Image>
+                                    </Box>
+                                  );
+                                })}
+
+                                <Text marginTop="4px" marginLeft="4px">
+                                  ({numberOfRatings} reviews)
+                                </Text>
+                              </Flex>
+                            ) : (
+                              <>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  class="flex-shrink-0 size-4 text-gray-600 "
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                                  />
+                                </svg>
+                                <Text>No reviews yet</Text>
+                              </>
+                            )}
+                          </div>
+                        </li>
+                        <li>
+                          <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                            <svg
+                              class="flex-shrink-0 size-4 text-gray-600 "
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <rect width="20" height="16" x="2" y="4" rx="2" />
+                              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                            </svg>
+                            {email}
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  </div>
+                  </div>
+                  
+                  </div>
+
+<div class="w-full">
+<div class="pt-4 first:pt-0 flex flex-row ">
+  <h2 class="mb-2  mt-2 text-sm font-semibold text-gray-800 ">
+    Specialties
+  </h2>
+  <button onClick={onOpenCategories}>
+    <svg
+      type="button"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="#5D5D5D"
+      class="w-4 h-4 ml-2 mb-2 hover:text-gray-700"
+    >
+      <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+      <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+    </svg>
+  </button>
+</div>
+<div>
+  {isPremium ? (
+    <ul class="space-y-2 items-center">
+      {!userInfo.premiumCategoryOne &&
+      !userInfo.premiumCategoryTwo &&
+      !userInfo.premiumCategoryThree ? (
+        <button
+          type="button"
+          class="p-2 w-1/2 text-center items-center gap-x-1.5 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+          data-hs-overlay="#hs-pro-dasadpm"
+          onClick={onOpenCategories}
+        >
+          Add Specialty
+        </button>
+      ) : (
+        <>
+          {userInfo.premiumCategoryOne ? (
+            <>
+              <li>
+                <a
+                  class="p-2.5 flex items-center gap-x-3 bg-white  text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
+                  href="#"
                 >
-                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                  <line x1="15" x2="15" y1="3" y2="21" />
-                  <path d="m8 9 3 3-3 3" />
-                </svg>
-                Open Sidebar
-              </button>
-            </div>
+                  <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white rounded-lg ">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="#38bdf8"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                  <div class="grow">
+                    <p>{userInfo.premiumCategoryOne}</p>
+                  </div>
+                </a>
+              </li>
+
+              {userInfo.premiumCategoryTwo ? null : (
+                <button
+                  type="button"
+                  class="p-2 w-1/2 text-center gap-x-1.5 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                  data-hs-overlay="#hs-pro-dasadpm"
+                  onClick={onOpenCategories}
+                >
+                  Add 
+                </button>
+              )}
+            </>
+          ) : null}
+
+          {userInfo.premiumCategoryTwo ? (
+            <>
+              <li>
+                <a
+                  class="p-2.5 flex items-center gap-x-3 bg-white  text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
+                  href="#"
+                >
+                  <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white rounded-lg ">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="#38bdf8"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                  <div class="grow">
+                    <p>{userInfo.premiumCategoryTwo}</p>
+                  </div>
+                </a>
+              </li>
+              {userInfo.premiumCategoryThree ? null : (
+                <button
+                  type="button"
+                  class="p-2 w-1/2  text-center items-center gap-x-1.5 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                  onClick={onOpenCategories}
+                >
+                  Add
+                </button>
+              )}
+            </>
+          ) : null}
+          {userInfo.premiumCategoryThree ? (
+            <>
+              <li>
+                <a
+                  class="p-2.5 flex items-center gap-x-3 bg-white text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
+                  href="#"
+                >
+                  <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white  rounded-lg ">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="#38bdf8"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                  <div class="grow">
+                    <p>{userInfo.premiumCategoryThree}</p>
+                  </div>
+                </a>
+              </li>
+              {userInfo.premiumCategoryFour ? null : (
+                <div className="w-full ">
+                <button
+                  type="button"
+                  class="p-2 w-full  justify-end text-center items-center gap-x-1.5 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                  data-hs-overlay="#hs-pro-dasadpm"
+                  onClick={onOpenCategories}
+                >
+                  Add
+                </button>
+                </div>
+              )}
+            </>
+          ) : null}
+          {userInfo.premiumCategoryFour ? (
+            <>
+              <li>
+                <a
+                  class="p-2.5 flex items-center gap-x-3 bg-white  text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
+                  href="#"
+                >
+                  <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white  rounded-lg ">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="#38bdf8"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                  <div class="grow">
+                    <p>{userInfo.premiumCategoryFour}</p>
+                  </div>
+                </a>
+              </li>
+              {userInfo.premiumCategoryFive ? null : (
+                <button
+                  type="button"
+                  class="p-2 w-1/2  text-center items-center gap-x-1.5 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                  data-hs-overlay="#hs-pro-dasadpm"
+                  onClick={onOpenCategories}
+                >
+                  Add
+                </button>
+              )}
+            </>
+          ) : null}
+          {userInfo.premiumCategoryFive ? (
+            <>
+              <li>
+                <a
+                  class="p-2.5 flex items-center gap-x-3 bg-white  text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
+                  href="#"
+                >
+                  <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white  rounded-lg ">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="#38bdf8"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                  <div class="grow">
+                    <p>{userInfo.premiumCategoryFive}</p>
+                  </div>
+                </a>
+              </li>
+            </>
+          ) : null}
+        </>
+      )}
+    </ul>
+  ) : (
+    <button
+      type="button"
+      class="p-2 w-1/2  text-center items-center gap-x-1.5 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none  "
+      data-hs-overlay="#hs-pro-dasadpm"
+      onClick={onOpenCategories}
+    >
+      Add Specialty
+    </button>
+  )}
+</div>
+</div>
+</>
+                  
+)}
 
             <div class="xl:p-5 flex flex-col xl:bg-white xl:border xl:border-gray-200 xl:shadow-sm xl:rounded-xl ">
               <div class="xl:flex">
@@ -1577,7 +1790,7 @@ const UserProfile = () => {
                   <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
                     <div class="pt-4 first:pt-0">
                       <h2 class="text-sm font-semibold text-gray-800 ">
-                        About
+                        Details
                       </h2>
 
                       <ul class="mt-3 space-y-2">
@@ -2407,7 +2620,7 @@ const UserProfile = () => {
                 <div class="xl:ps-5 grow space-y-5">
                   <div class="flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm xl:shadow-none ">
                     {/* Start about */}
-                    <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
+                    <div class="p-5 pb-2  flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
                       <h2 class="inline-block font-semibold text-gray-800 ">
                         About
                       </h2>
@@ -3205,7 +3418,7 @@ const UserProfile = () => {
                           
                         </h2>
 
-                        <div class="flex sm:justify-end items-center gap-x-2">
+                        <div class="flex sm:justify-end justify-end items-center gap-x-2">
                           <button
                             type="button"
                             onClick={() => onOpenProject()}

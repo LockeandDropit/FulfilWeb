@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-
-import useEmblaCarousel from 'embla-carousel-react'
+import useEmblaCarousel from "embla-carousel-react";
 import {
   Input,
   Button,
@@ -87,8 +86,16 @@ import star_filled from "../../images/star_filled.png";
 
 import { useChatContext } from "stream-chat-react";
 import Header from "./Components/Header";
-import Dashboard from "./Components/Dashboard"
+import Dashboard from "./Components/Dashboard";
+import { useMediaQuery } from "@chakra-ui/react";
+
+
 const UserProfileNeeder = () => {
+
+
+  const [isDesktop] = useMediaQuery("(min-width: 500px)");
+
+
   const [rating, setRating] = useState(null); //make dynamic, pull from Backend
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
 
@@ -99,15 +106,15 @@ const UserProfileNeeder = () => {
 
   const [user, setUser] = useState();
 
-  const [emblaRef, emblaApi] = useEmblaCarousel()
+  const [emblaRef, emblaApi] = useEmblaCarousel();
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev()
-  }, [emblaApi])
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
 
   const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext()
-  }, [emblaApi])
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
   // this gets the profile picture
   // const profilePictureURL = useSelector(selectUserProfilePicture);
 
@@ -206,8 +213,6 @@ const UserProfileNeeder = () => {
         if (snapshot.data().businessName) {
           setBusinessName(snapshot.data().businessName);
         }
-
- 
       });
     } else {
     }
@@ -226,7 +231,6 @@ const UserProfileNeeder = () => {
     } else {
     }
   }, [user]);
-
 
   //pulls cumulative reviews
   const [numberOfRatings, setNumberOfRatings] = useState(null);
@@ -359,8 +363,6 @@ const UserProfileNeeder = () => {
   //   }
   // };
 
-
-
   const updateUserProfileFirestore = () => {
     //check if null
 
@@ -380,10 +382,6 @@ const UserProfileNeeder = () => {
     onCloseBio();
   };
 
-
-
-
-
   //alert handling
 
   //avatar image handling
@@ -397,7 +395,6 @@ const UserProfileNeeder = () => {
     setProfilePicture(imageList[0].data_url);
   };
 
-
   //project image handling
 
   const [projectImages, setProjectImages] = React.useState(null);
@@ -409,8 +406,6 @@ const UserProfileNeeder = () => {
     setProjectImages(imageList);
     setNewProjectImage(imageList[0].data_url);
   };
-
-
 
   const uploadToFirebase = async () => {
     const storage = getStorage();
@@ -501,7 +496,7 @@ const UserProfileNeeder = () => {
       <main id="content" class="lg:ps-[260px] pt-[59px]">
         <div class="max-w-6xl mx-auto">
           <ol class="md:hidden py-3 px-2 sm:px-5 flex items-center whitespace-nowrap">
-            <li class="flex items-center text-sm ">
+            {/* <li class="flex items-center text-sm ">
               User Profile
               <svg
                 class="flex-shrink-0 mx-1 overflow-visible size-4 text-gray-400 "
@@ -524,7 +519,7 @@ const UserProfileNeeder = () => {
               aria-current="page"
             >
               Profile
-            </li>
+            </li> */}
           </ol>
 
           <div class="p-2 sm:p-5 sm:py-0 md:pt-5 space-y-5">
@@ -942,34 +937,6 @@ const UserProfileNeeder = () => {
               </div>
             </div>
 
-            <div class="xl:hidden flex justify-end">
-              <button
-                type="button"
-                class="py-1.5 px-2 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
-                data-hs-overlay="#hs-pro-dupsd"
-                aria-controls="hs-pro-dupsd"
-                aria-label="Sidebar Toggle"
-              >
-                <svg
-                  class="flex-shrink-0 size-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                  <line x1="15" x2="15" y1="3" y2="21" />
-                  <path d="m8 9 3 3-3 3" />
-                </svg>
-                Open Sidebar
-              </button>
-            </div>
-
             <div class="xl:p-5 flex flex-col xl:bg-white xl:border xl:border-gray-200 xl:shadow-sm xl:rounded-xl ">
               <div class="xl:flex">
                 <div
@@ -1002,6 +969,8 @@ const UserProfileNeeder = () => {
                       </button>
                     </div>
                   </div>
+
+
 
                   <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
                     <div class="pt-4 first:pt-0">
@@ -1127,20 +1096,158 @@ const UserProfileNeeder = () => {
                         </li>
                       </ul>
                     </div>
-                  
                   </div>
                 </div>
 
                 {/* start specialty modal */}
 
-     
-
                 {/* end specialty modal */}
+
+
+
+
+                {/* test */}
+
+                {isDesktop ? (null) : (   <div class="xl:ps-5 grow space-y-5">
+                  <div class="flex flex-col bg-white  rounded-xl shadow-sm xl:shadow-none ">
+                    {/* Start about */}
+                    <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
+                <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
+                    <div class="pt-4 first:pt-0">
+                      <h2 class="text-sm font-semibold text-gray-800 ">
+                        Details
+                      </h2>
+
+                      <ul class="mt-3 space-y-2">
+                        {businessName ? (
+                          <li>
+                            <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                              <svg
+                                class="flex-shrink-0 size-4 text-gray-600 "
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
+                                <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
+                                <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
+                                <path d="M10 6h4" />
+                                <path d="M10 10h4" />
+                                <path d="M10 14h4" />
+                                <path d="M10 18h4" />
+                              </svg>
+                            </div>
+                          </li>
+                        ) : null}
+
+                        <li>
+                          <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                            <svg
+                              class="flex-shrink-0 size-4 text-gray-600 "
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                              <circle cx="12" cy="10" r="3" />
+                            </svg>
+                            {userCity}, {userState}
+                          </div>
+                        </li>
+                        <li>
+                          <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                            {numberOfRatings ? (
+                              <Flex>
+                                {maxRating.map((item, key) => {
+                                  return (
+                                    <Box
+                                      activeopacity={0.7}
+                                      key={item}
+                                      marginTop="4px"
+                                    >
+                                      <Image
+                                        boxSize="16px"
+                                        src={
+                                          item <= rating
+                                            ? star_filled
+                                            : star_corner
+                                        }
+                                      ></Image>
+                                    </Box>
+                                  );
+                                })}
+
+                                <Text marginTop="4px" marginLeft="4px">
+                                  ({numberOfRatings} reviews)
+                                </Text>
+                              </Flex>
+                            ) : (
+                              <>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  class="flex-shrink-0 size-4 text-gray-600 "
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                                  />
+                                </svg>
+                                <Text>No reviews yet</Text>
+                              </>
+                            )}
+                          </div>
+                        </li>
+                        <li>
+                          <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                            <svg
+                              class="flex-shrink-0 size-4 text-gray-600 "
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <rect width="20" height="16" x="2" y="4" rx="2" />
+                              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                            </svg>
+                            {email}
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
+)}
+             
+                {/* end test */}
 
                 <div class="xl:ps-5 grow space-y-5">
                   <div class="flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm xl:shadow-none ">
                     {/* Start about */}
-                    <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
+                    <div class="p-5 pb-2  flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
                       <h2 class="inline-block font-semibold text-gray-800 ">
                         About
                       </h2>
@@ -1297,12 +1404,11 @@ const UserProfileNeeder = () => {
                     )}
                     {/* end about */}
                   </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
     </>
   );

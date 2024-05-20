@@ -100,13 +100,13 @@ const NeederAllCategories = () => {
             <Dashboard />
        
           <div class="mt-20 max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-      <h1 class="block text-xl font-bold text-gray-800 sm:text-4xl lg:text-4xl lg:leading-tight">
+      <h1 class="block text-xl font-bold text-gray-800 sm:text-center md:text-center sm:text-4xl lg:text-4xl lg:leading-tight">
         Looking for a <span class="text-sky-400">Pro?</span>
       </h1>
-      <p class="mt-3 text-lg text-gray-800">
+      <p class="mt-3 sm:text-center md:text-center text-lg text-gray-800">
         Browse our contractors by category and send them a message!
       </p>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-12">
         <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
           <img
             src="/landingImages/DrivewayAsphalt.jpg"

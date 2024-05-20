@@ -38,6 +38,10 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
+import MobileDashboard from './MobileDashboard';
+import AddJobModal from './AddJobModal';
+
+
 const Header = () => {
     const [user, setUser] = useState();
 
@@ -105,6 +109,28 @@ const Header = () => {
         .catch((e) => console.log(e));
     };
 
+    const handleOpenMobileDAshboard = () => {
+      setShowAddJob(false)
+      onOpenMobileDash()
+    }
+
+useEffect(() => {
+ 
+}, [])
+
+const [showAddJob, setShowAddJob] = useState(false)
+
+
+const handleShowMobileAddJob = () => {
+  setShowAddJob(true)
+
+
+}
+
+
+
+    const { isOpen: isOPenMobileDash, onOpen: onOpenMobileDash, onClose: onCloseMobileDash } = useDisclosure()
+
   return (
     <>
     <header class="lg:ms-[260px] fixed top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-50 bg-white border-b border-gray-200">
@@ -112,7 +138,8 @@ const Header = () => {
       <div class="xl:col-span-1 flex items-center md:gap-x-3">
         <div class="lg:hidden">
         
-          <button type="button" class="w-7 h-[38px] inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-pro-sidebar" aria-controls="hs-pro-sidebar" aria-label="Toggle navigation">
+          <button type="button" onClick={() => handleOpenMobileDAshboard()} class="w-7 h-[38px] inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-pro-sidebar" aria-controls="hs-pro-sidebar" aria-label="Toggle navigation">
+            
             <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
           </button>
          
@@ -120,32 +147,241 @@ const Header = () => {
   
         <div class="hidden lg:block min-w-80 xl:w-full">
         
-          {/* <div class="relative">
-            <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
-              <svg class="flex-shrink-0 size-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            </div>
-            <input type="text" class="py-2 ps-10 pe-16 block w-full bg-white border-gray-200 rounded-lg text-sm focus:outline-none focus:border-gray-200 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none" placeholder="Search Preline" data-hs-overlay="#hs-pro-dnsm" />
-            <div class="absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-3 text-gray-400">
-              <svg class="flex-shrink-0 size-3 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></svg>
-              <span class="mx-1">
-                <svg class="flex-shrink-0 size-3 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-              </span>
-              <span class="text-xs">/</span>
-            </div>
-          </div> */}
+         
      
         </div>
       </div>
+
+
+      <aside
+        id="hs-pro-sidebar"
+        class="hs-overlay [--auto-close:lg]
+      hs-overlay-open:translate-x-0
+      -translate-x-full transition-all duration-300 transform
+      w-[260px]
+      hidden
+      fixed inset-y-0 start-0 z-[60]
+      bg-white border-e border-gray-200
+      lg:block lg:translate-x-0 lg:end-auto lg:bottom-0
+     
+     "
+      >
+        <div class="flex flex-col h-full max-h-full py-3">
+          <header class="h-[46px] px-8">
+            <a
+              class="flex-none text-4xl font-sans font-bold text-sky-400"
+              aria-label="Brand"
+              onClick={() => navigate("/NeederMapScreen")}
+            >
+              Fulfil
+            </a>
+          </header>
+
+          <div class="h-[calc(100%-35px)] lg:h-[calc(100%-93px)] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+            <nav
+              class="hs-accordion-group pb-3  w-full flex flex-col flex-wrap"
+              data-hs-accordion-always-open
+            >
+              <ul>
+                <li class="px-5 mb-1.5">
+                  <button
+                    class="flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
+                    onClick={() => navigate("/NeederMapScreen")}
+                  >
+                    <svg
+                      class="flex-shrink-0 mt-0.5 size-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                      <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    My Jobs
+                  </button>
+                </li>
+
+                <button
+                  type="button"
+                  class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
+                  onClick={() => navigate("/NeederMessageList")}
+                >
+                  <svg
+                    class="flex-shrink-0 mt-0.5 size-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                  Messages
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate("/UserProfileNeeder");
+                  }}
+                  class="hs-accordion-toggle  px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
+                >
+                  <svg
+                    class="flex-shrink-0 mt-0.5 size-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                  </svg>
+                  My Profile
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => navigate("/NeederAccountManager")}
+                  class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
+                >
+                  <svg
+                    class="flex-shrink-0 mt-0.5 size-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="18" cy="15" r="3" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M10 15H6a4 4 0 0 0-4 4v2" />
+                    <path d="m21.7 16.4-.9-.3" />
+                    <path d="m15.2 13.9-.9-.3" />
+                    <path d="m16.6 18.7.3-.9" />
+                    <path d="m19.1 12.2.3-.9" />
+                    <path d="m19.6 18.7-.4-1" />
+                    <path d="m16.8 12.3-.4-1" />
+                    <path d="m14.3 16.6 1-.4" />
+                    <path d="m20.7 13.8 1-.4" />
+                  </svg>
+                  Account Settings
+                </button>
+
+                <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
+                  <span class="block text-xs uppercase text-gray-500">
+                    Actions
+                  </span>
+                </li>
+
+                <li class="px-5 mb-0.5">
+                  <button
+                    class="flex items-center gap-x-2 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                    onClick={() => navigate(`/NeederAllCategories`)}
+                  >
+                    <span class="flex justify-center items-center size-6 bg-sky-400 text-white rounded-md">
+                      <svg
+                        class="flex-shrink-0 size-3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect width="18" height="7" x="3" y="3" rx="1" />
+                        <rect width="9" height="7" x="3" y="14" rx="1" />
+                        <rect width="5" height="7" x="16" y="14" rx="1" />
+                      </svg>
+                    </span>
+                    Find A Pro
+                  </button>
+                </li>
+                <li class="px-8 mb-0.5 mt-10">
+                  <button
+                    type="button"
+                    class="py-2 w-3/4 px-3 inline-flex text-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                    // onClick={() => setShowAddJob(!showAddJob)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-6 h-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+                    Create A Job
+                  </button>
+                 
+                </li>
+
+                
+              
+              </ul>
+            </nav>
+          </div>
+
+          <footer class="lg:block absolute bottom-0 inset-x-0 border-t border-gray-200">
+            <div class="hs-dropdown [--auto-close:inside] relative flex">
+              <div class="p-1 border-t border-gray-200">
+                {loggingOut ? (
+                  <div
+                    class="animate-spin ml-4 inline-block size-6 border-[3px] border-current border-t-transparent text-red-600 rounded-full"
+                    role="status"
+                    aria-label="loading"
+                  >
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    class="w-full flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-red-600 hover:bg-gray-100 disabled:opacity-50 focus:outline-none focus:bg-gray-100"
+                    onClick={() => handleLogOut()}
+                  >
+                    Sign out
+                  </button>
+                )}
+              </div>
+            </div>
+          </footer>
+        </div>
+      </aside>
   
       <div class="xl:col-span-2 flex justify-end items-center gap-x-2">
         <div class="flex items-center">
-          {/* <div class="lg:hidden">
-         
-            <button type="button" class="inline-flex flex-shrink-0 justify-center items-center gap-x-2 size-[38px] rounded-full text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100" data-hs-overlay="#hs-pro-dnsm">
-              <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            </button>
-         
-          </div> */}
+        
   
     
           
@@ -628,6 +864,209 @@ const Header = () => {
        
         </div>
       </div>
+      <Drawer
+        isOpen={isOPenMobileDash}
+        placement='left'
+        onClose={onCloseMobileDash}
+        
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerBody>
+          <div class="flex flex-col h-full max-h-full py-3">
+          <header class="h-[46px] px-8">
+            <a
+              class="flex-none text-4xl font-sans font-bold text-sky-400"
+              aria-label="Brand"
+              onClick={() => navigate("/NeederMapScreen")}
+            >
+              Fulfil
+            </a>
+          </header>
+
+          <div class="h-[calc(100%-35px)] lg:h-[calc(100%-93px)] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+            <nav
+              class="hs-accordion-group pb-3  w-full flex flex-col flex-wrap"
+              data-hs-accordion-always-open
+            >
+              <ul>
+                <li class="px-5 mb-1.5">
+                  <button
+                    class="flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
+                    onClick={() => navigate("/NeederMapScreen")}
+                  >
+                    <svg
+                      class="flex-shrink-0 mt-0.5 size-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                      <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    My Jobs
+                  </button>
+                </li>
+
+                <button
+                  type="button"
+                  class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
+                  onClick={() => navigate("/NeederMessageList")}
+                >
+                  <svg
+                    class="flex-shrink-0 mt-0.5 size-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                  Messages
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate("/UserProfileNeeder");
+                  }}
+                  class="hs-accordion-toggle  px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
+                >
+                  <svg
+                    class="flex-shrink-0 mt-0.5 size-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                  </svg>
+                  My Profile
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => navigate("/NeederAccountManager")}
+                  class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
+                >
+                  <svg
+                    class="flex-shrink-0 mt-0.5 size-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="18" cy="15" r="3" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M10 15H6a4 4 0 0 0-4 4v2" />
+                    <path d="m21.7 16.4-.9-.3" />
+                    <path d="m15.2 13.9-.9-.3" />
+                    <path d="m16.6 18.7.3-.9" />
+                    <path d="m19.1 12.2.3-.9" />
+                    <path d="m19.6 18.7-.4-1" />
+                    <path d="m16.8 12.3-.4-1" />
+                    <path d="m14.3 16.6 1-.4" />
+                    <path d="m20.7 13.8 1-.4" />
+                  </svg>
+                  Account Settings
+                </button>
+
+                <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
+                  <span class="block text-xs uppercase text-gray-500">
+                    Actions
+                  </span>
+                </li>
+
+                <li class="px-5 mb-0.5">
+                  <button
+                    class="flex items-center gap-x-2 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                    onClick={() => navigate(`/NeederAllCategories`)}
+                  >
+                    <span class="flex justify-center items-center size-6 bg-sky-400 text-white rounded-md">
+                      <svg
+                        class="flex-shrink-0 size-3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect width="18" height="7" x="3" y="3" rx="1" />
+                        <rect width="9" height="7" x="3" y="14" rx="1" />
+                        <rect width="5" height="7" x="16" y="14" rx="1" />
+                      </svg>
+                    </span>
+                    Find A Pro
+                  </button>
+                </li>
+                <li class="px-8 mb-0.5 mt-10">
+                  <button
+                    type="button"
+                    class="py-2 w-3/4 px-3 inline-flex text-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                   onClick={() => handleShowMobileAddJob()}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-6 h-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+                    Create A Job
+                  </button>
+                 
+                </li>
+
+                
+              
+              </ul>
+            </nav>
+          </div>
+          </div>
+       {
+        showAddJob ? (<AddJobModal />) : (null)
+       }
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </div>
   </header>
   </>

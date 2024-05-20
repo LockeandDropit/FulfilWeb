@@ -39,7 +39,7 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByPlaceId } from "react-google-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 
-const Dashboard = () => {
+const MobileDashboard = () => {
   const navigate = useNavigate();
   //validate & set current user
   const [user, setUser] = useState();
@@ -910,6 +910,8 @@ const Dashboard = () => {
                  
                 </li>
 
+               
+
                 
               
               </ul>
@@ -1240,4 +1242,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default MobileDashboard;

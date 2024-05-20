@@ -774,7 +774,7 @@ const NeederMapScreen = () => {
 
         <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
           <Box
-            h={{ base: "90vh", lg: "100vh" }}
+            h={{ base: "98vh", lg: "100vh" }}
             w={{ base: "100vw", lg: "100vw" }}
             mt={10}
           >

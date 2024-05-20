@@ -39,7 +39,7 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByPlaceId } from "react-google-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 
-const Dashboard = () => {
+const AddJobModal = () => {
   const navigate = useNavigate();
   //validate & set current user
   const [user, setUser] = useState();
@@ -47,6 +47,14 @@ const Dashboard = () => {
   const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
 
   const [hasRun, setHasRun] = useState(false);
+
+
+
+  useEffect(() => {
+
+        onOpenModal()
+    
+  }, [])
 
   useEffect(() => {
     if (hasRun === false) {
@@ -107,6 +115,7 @@ const Dashboard = () => {
 
        //modal control
        const { isOpen, onOpen, onClose } = useDisclosure()
+       const { isOpen: isOpenModal, onOpen: onOpenModal, onClose: onCloseModal } = useDisclosure()
        const { isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
 
 
@@ -714,234 +723,268 @@ const Dashboard = () => {
   }, 1000);
 
 
+
+  const handleCloseBoth = () => {
+    onClose()
+    onCloseModal()
+  }
+
   return (
     <div>
-      <aside
-        id="hs-pro-sidebar"
-        class="hs-overlay [--auto-close:lg]
-      hs-overlay-open:translate-x-0
-      -translate-x-full transition-all duration-300 transform
-      w-[260px]
-      hidden
-      fixed inset-y-0 start-0 z-[60]
-      bg-white border-e border-gray-200
-      lg:block lg:translate-x-0 lg:end-auto lg:bottom-0
      
-     "
-      >
-        <div class="flex flex-col h-full max-h-full py-3">
-          <header class="h-[46px] px-8">
-            <a
-              class="flex-none text-4xl font-sans font-bold text-sky-400"
-              aria-label="Brand"
-              onClick={() => navigate("/NeederMapScreen")}
-            >
-              Fulfil
-            </a>
-          </header>
+<Modal isOpen={isOpenModal} onClose={onCloseModal}>
+    <ModalOverlay />
 
-          <div class="h-[calc(100%-35px)] lg:h-[calc(100%-93px)] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
-            <nav
-              class="hs-accordion-group pb-3  w-full flex flex-col flex-wrap"
-              data-hs-accordion-always-open
-            >
-              <ul>
-                <li class="px-5 mb-1.5">
-                  <button
-                    class="flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
-                    onClick={() => navigate("/NeederMapScreen")}
-                  >
-                    <svg
-                      class="flex-shrink-0 mt-0.5 size-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                      <polyline points="9 22 9 12 15 12 15 22" />
-                    </svg>
-                    My Jobs
-                  </button>
-                </li>
-
-                <button
-                  type="button"
-                  class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
-                  onClick={() => navigate("/NeederMessageList")}
+    <ModalContent>
+    <div
+          class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
+          tabindex="-1"
+        >
+          <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+            <div class="py-3 px-4 flex justify-between items-center border-b ">
+              <h3 class="font-semibold text-gray-800">Create A Job</h3>
+              <button
+                type="button"
+                class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                data-hs-overlay="#hs-pro-datm"
+                onClick={() => onCloseModal()}
+              >
+                <span class="sr-only">Close</span>
+                <svg
+                  class="flex-shrink-0 size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 >
-                  <svg
-                    class="flex-shrink-0 mt-0.5 size-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                  </svg>
-                  Messages
-                </button>
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+              </button>
+            </div>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigate("/UserProfileNeeder");
-                  }}
-                  class="hs-accordion-toggle  px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
-                >
-                  <svg
-                    class="flex-shrink-0 mt-0.5 size-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+            <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+              <div class="p-4 space-y-5">
+                <div class="space-y-2">
+                  <label
+                    for="hs-pro-dactmt"
+                    class="block mb-2 text-sm font-medium text-gray-800 "
                   >
-                    <circle cx="12" cy="12" r="10" />
-                    <circle cx="12" cy="10" r="3" />
-                    <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
-                  </svg>
-                  My Profile
-                </button>
+                    Title
+                  </label>
 
-                <button
-                  type="button"
-                  onClick={() => navigate("/NeederAccountManager")}
-                  class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
-                >
-                  <svg
-                    class="flex-shrink-0 mt-0.5 size-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <circle cx="18" cy="15" r="3" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M10 15H6a4 4 0 0 0-4 4v2" />
-                    <path d="m21.7 16.4-.9-.3" />
-                    <path d="m15.2 13.9-.9-.3" />
-                    <path d="m16.6 18.7.3-.9" />
-                    <path d="m19.1 12.2.3-.9" />
-                    <path d="m19.6 18.7-.4-1" />
-                    <path d="m16.8 12.3-.4-1" />
-                    <path d="m14.3 16.6 1-.4" />
-                    <path d="m20.7 13.8 1-.4" />
-                  </svg>
-                  Account Settings
-                </button>
-
-                <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
-                  <span class="block text-xs uppercase text-gray-500">
-                    Actions
-                  </span>
-                </li>
-
-                <li class="px-5 mb-0.5">
-                  <button
-                    class="flex items-center gap-x-2 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
-                    onClick={() => navigate(`/NeederAllCategories`)}
-                  >
-                    <span class="flex justify-center items-center size-6 bg-sky-400 text-white rounded-md">
-                      <svg
-                        class="flex-shrink-0 size-3"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <rect width="18" height="7" x="3" y="3" rx="1" />
-                        <rect width="9" height="7" x="3" y="14" rx="1" />
-                        <rect width="5" height="7" x="16" y="14" rx="1" />
-                      </svg>
-                    </span>
-                    Find A Pro
-                  </button>
-                </li>
-                <li class="px-8 mb-0.5 mt-10">
-                  <button
-                    type="button"
-                    class="py-2 w-3/4 px-3 inline-flex text-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    onClick={() => setShowAddJob(!showAddJob)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-6 h-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12 4.5v15m7.5-7.5h-15"
-                      />
-                    </svg>
-                    Create A Job
-                  </button>
+                  <input
+                    id="hs-pro-dactmt"
+                    type="text"
+                    class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                    placeholder="Title goes here"
+                // width="560px"
+                onChange={(e) => setJobTitle(e.target.value)}
                  
-                </li>
+                  />
+                </div>
 
-                
-              
-              </ul>
-            </nav>
-          </div>
-
-          <footer class="lg:block absolute bottom-0 inset-x-0 border-t border-gray-200">
-            <div class="hs-dropdown [--auto-close:inside] relative flex">
-              <div class="p-1 border-t border-gray-200">
-                {loggingOut ? (
-                  <div
-                    class="animate-spin ml-4 inline-block size-6 border-[3px] border-current border-t-transparent text-red-600 rounded-full"
-                    role="status"
-                    aria-label="loading"
+                <div class="space-y-2">
+                  <label
+                    for="dactmi"
+                    
+                    class="block mb-2 text-sm font-medium text-gray-800 "
+                    placeholder="ex: I have a downed tree in my yard and would like someone to remove it."
                   >
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                ) : (
+                    Description
+                  </label>
+
+                  <div class="">
+  <textarea onChange={(e) => setDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="3" placeholder="ex: I have a downed tree in my yard and would like someone to remove it."></textarea>
+</div>
+                </div>
+
+                <div class="space-y-2">
+                  <label
+                    for="dactmd"
+                    class="block mb-2 text-sm font-medium text-gray-800 "
+                  >
+                     Where will this work be located?
+                  </label>
+
+                  <GooglePlacesAutocomplete
+                apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
+                fetchDetails={true}
+                // minLengthAutocomplete={3}
+                autocompletionRequest={{
+                  
+                    types: ["address"],
+                  
+                }}
+                selectProps={{
+                  rawAddress,
+
+                  onChange: setRawAddress,
+                  placeholder: "Type address here",
+                 
+                }}
+              />
+                </div>
+                <div class="space-y-2">
+                  <label
+                    for="dactmi"
+                    onChange={(e) => setDescription(e.target.value)}
+                    class="block mb-2 text-sm font-medium text-gray-800 "
+                    placeholder="ex: I have a downed tree in my yard and would like someone to remove it."
+                  >
+                    What category of work is this? (optional)
+                  </label>
+
+                  <select
+                  class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                placeholder="Select category"
+              
+                onChange={(e) => setJobCategory(e.target.value)}
+              >
+                <option value={false}>Select category</option>
+                <option value="asphalt">Asphalt</option>
+                <option value="carpentry">Carpentry</option>
+                <option value="concrete">Concrete</option>
+                <option value="drywall">Drywall</option>
+                <option value="electrical work">Electrical Work</option>
+                <option value="general handyman">General Handyman</option>
+                <option value="gutter cleaning">Gutter Cleaning</option>
+                <option value="hvac">HVAC</option>
+                <option value="landscaping">Landscaping</option>
+                <option value="painting">Painting</option>
+                <option value="plumbing">Plumbing</option>
+                <option value="pressure washing">Pressure Washing</option>
+                <option value="roofing">Roofing</option>
+                <option value="siding">Siding</option>
+                <option value="snow removal">Snow Removal</option>
+                <option value="window installation">Window Installation</option>
+                <option value="window washing">Window Washing</option>
+                <option value="yard work">Yard Work</option>
+                <option value={false}>Clear Selection</option>
+              </select>
+                </div>
+                <div class="space-y-2">
+                  <label
+                    for="dactmi"
+                   
+                    class="block mb-2 text-sm font-medium text-gray-800 "
+                   
+                  >
+                    Are you offering an hourly rate or a fixed amount
+                  </label>
+
+                  <label  for="dactmi"
+                   
+                   class="block mb-2 text-sm font-medium text-gray-800 ">
+                  (ex: $50 to mow
+              my lawn)
+                  </label>
+
+                  <select
+              placeholder="Select option"
+              class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+              onChange={(e) => setPayType(e.target.value)}
+            >
+              <option>Select option</option>
+              <option value="Hourly">Hourly</option>
+              <option value="Fixed">Fixed Amount</option>
+            </select>
+                </div>
+
+{isHourly ? (
+ <div class="space-y-2 ">
+ <label
+   for="hs-pro-dactmt"
+   class="block mb-2 text-sm font-medium text-gray-800 "
+ >
+    Enter your desired pay range
+ </label>
+
+<div class="flex align-items-center">
+  <p className="mt-2 mr-1 text-sm font-medium">$</p>
+ <input
+   id="hs-pro-dactmt"
+   type="text"
+   class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+   placeholder="lower rate"
+ 
+   onChange={(e) => lowerRateValidate(e.target.value)}
+
+ />
+ <p className="mt-2 text-sm font-medium mr-1 ml-1">/hour - $</p>
+ <input
+   id="hs-pro-dactmt"
+   type="text"
+   class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+   placeholder="upper rate"
+                    onChange={(e) => upperRateValidate(e.target.value)}
+
+ />
+ <p className="mt-2 text-sm font-medium">/hour</p>
+   {lowerRateValidationBegun === true ? (
+    <p color="red">{lowerRateValidationMessage}</p>
+  ) : null}
+  {upperRateValidationBegun === true ? (
+    <p color="red">{upperRateValidationMessage}</p>
+  ) : null}
+  </div>
+</div>
+
+) : (
+  null
+)}
+
+{isFlatRate ? (<div class="space-y-2">
+  <label
+    for="hs-pro-dactmt"
+    class="block mb-2 text-sm font-medium text-gray-800 "
+  >
+    Enter your desired budget
+  </label>
+  <div className="flex">
+  <p className="mt-2 mr-1 text-sm font-medium">$</p>
+  <input
+    id="hs-pro-dactmt"
+    type="text"
+    class="py-2 px-3 block w-2/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+    placeholder="Enter budget here"
+    onChange={(e) => flatRateValidate(e.target.value)}
+ 
+  />
+   <p className="mt-2 ml-1 text-sm font-medium">total</p>
+   </div>
+</div>) : (null)}
+                
+              </div>
+
+              <div class="p-4 flex justify-between gap-x-2">
+                <div class="w-full flex justify-end items-center gap-x-2">
+                  
+
                   <button
                     type="button"
-                    class="w-full flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-red-600 hover:bg-gray-100 disabled:opacity-50 focus:outline-none focus:bg-gray-100"
-                    onClick={() => handleLogOut()}
+                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                    data-hs-overlay="#hs-pro-datm"
+                    onClick={() => checkLength()}
                   >
-                    Sign out
+                    Post Job
                   </button>
-                )}
+                </div>
               </div>
             </div>
-          </footer>
+          </div>
         </div>
-      </aside>
+      
 
+
+        
+    </ModalContent>
+</Modal>
       {showAddJob ? (
         <div
           class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
@@ -1202,7 +1245,7 @@ const Dashboard = () => {
                     type="button"
                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                     data-hs-overlay="#hs-pro-datm"
-                    onClick={() => onClose()}
+                    onClick={() => handleCloseBoth()}
                   >
               Close
             </button>
@@ -1240,4 +1283,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AddJobModal;

@@ -62,6 +62,8 @@ import NeederAllCategories from "./pages/Needer/NeederAllCategories";
 import Test from "./pages/Needer/Test";
 import UserProfileNeeder from "./pages/Needer/UserProfileNeeder";
 
+import ChatWindow from "./pages/Doer/Messaging/ChatWindow";
+
 
 
 //Stream Chat
@@ -95,7 +97,7 @@ import Landing from "./Landing";
 import SelectedCategory from "./components/SelectedCategory";
 import DoerSubscriptionComplete from "./pages/Doer/DoerSubscriptionComplete";
 import NeederSelectedCategory from "./pages/Needer/NeederSelectedCategory";
-
+import ChatEntry from "./pages/Doer/Chat/ChatEntry";
 
 
 
@@ -380,6 +382,17 @@ const router = createBrowserRouter([
     path: "/UserProfileNeeder",
     element: <UserProfileNeeder />,
   },
+  {
+    path: "/ChatWindow",
+    element: <ChatWindow />,
+  },
+
+  {
+    path: "/ChatEntry",
+    element: <ChatEntry/>,
+  },
+ 
+
 
 ]);
 

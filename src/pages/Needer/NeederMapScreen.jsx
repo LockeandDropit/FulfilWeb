@@ -1106,8 +1106,8 @@ const NeederMapScreen = () => {
                                         <button
                                           type="button"
                                           onClick={() =>
-                                            // handleDelete(allJobs)
-                                            handleEditJob(allJobs)
+                                            handleDelete(allJobs)
+                                          
                                           }
                                           class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-red-600 border hover:bg-red-700 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                                           data-hs-overlay="#hs-pro-datm"

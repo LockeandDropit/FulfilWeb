@@ -98,6 +98,7 @@ import SelectedCategory from "./components/SelectedCategory";
 import DoerSubscriptionComplete from "./pages/Doer/DoerSubscriptionComplete";
 import NeederSelectedCategory from "./pages/Needer/NeederSelectedCategory";
 import ChatEntry from "./pages/Doer/Chat/ChatEntry";
+import NeederChatEntry from "./pages/Needer/Chat/NeederChatEntry";
 
 
 
@@ -390,6 +391,10 @@ const router = createBrowserRouter([
   {
     path: "/ChatEntry",
     element: <ChatEntry/>,
+  },
+  {
+    path: "/NeederChatEntry",
+    element: <NeederChatEntry/>,
   },
  
 

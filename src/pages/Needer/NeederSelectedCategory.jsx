@@ -73,6 +73,8 @@ import {
   addDoc,
   setDoc,
   deleteDoc,
+  serverTimestamp,
+  arrayUnion,
 } from "firebase/firestore";
 import star_corner from "../../images/star_corner.png";
 import star_filled from "../../images/star_filled.png";
@@ -521,66 +523,85 @@ const NeederSelectedCategory = () => {
     // image: `https://getstream.io/random_png/?id=${userId}&name=${userName}`,
   };
 
+ 
+
   const testNewChannel = async (premiumUser) => {
     setIsLoading(true);
-    client.connectUser(userInfo, client.devToken(userID));
+    // client.connectUser(userInfo, client.devToken(userID));
 
-    const channel = client.channel("messaging", jobID, {
-      members: [premiumUser.streamChatID, user.uid],
-      name: "Request",
-    });
+    // const channel = client.channel("messaging", jobID, {
+    //   members: [premiumUser.streamChatID, user.uid],
+    //   name: "Request",
+    // });
 
-    await channel.create();
-    // setNewChannel(newChannel);
+    // await channel.create();
+    // // setNewChannel(newChannel);
 
-    // trying to see if this will return access to "unread" message count
-    const startWatching = channel.watch();
-    console.log(startWatching);
+    // // trying to see if this will return access to "unread" message count
+    // const startWatching = channel.watch();
+    // console.log(startWatching);
 
-    setTimeout(() => {
-      updateDoc(doc(db, "users", premiumUser.streamChatID, "Requests", jobID), {
-        hasUnreadMessage: true,
-        interviewStarted: true,
-        channelID: channel.cid,
-      })
-        .then(() => {
-          // console.log("new message updated in Applied")
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
+    const chatRef = collection(db, "chats");
+    const userChatsRef = collection(db, "User Messages");
 
-      updateDoc(doc(db, "employers", userID, "Requests", jobID), {
-        channelID: channel.cid,
-      })
-        .then(() => {
-          console.log("new message updated in Applied");
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
+    try {
+      const newChatRef = doc(chatRef);
 
-      updateDoc(doc(db, "Messages", jobID), {
-        channelID: channel.cid,
-      })
-        .then(() => {
-          console.log("new message updated in Applied");
-        })
-        .catch((error) => {
-          // no bueno
-          console.log(error);
-        });
-      setTimeout(() => {}, 1000);
-      navigate("/NeederMessageList", {
-        state: {
-          selectedChannel: channel.cid,
-        },
+      await setDoc(newChatRef, {
+        createdAt: serverTimestamp(),
+        messages: [],
+        id: newChatRef.id,
+        jobID: jobID,
       });
 
+      await updateDoc(doc(userChatsRef, premiumUser.streamChatID), {
+        chats: arrayUnion({
+          chatId: newChatRef.id,
+          lastMessage: "",
+          receiverId: userID,
+          updatedAt: Date.now(),
+        }),
+      });
+
+      await updateDoc(doc(userChatsRef, userID), {
+        chats: arrayUnion({
+          chatId: newChatRef.id,
+          lastMessage: "",
+          receiverId: premiumUser.uid,
+          updatedAt: Date.now(),
+        }),
+      });
+
+      await updateDoc(
+        doc(db, "users", premiumUser.streamChatID, "Requests", jobID),
+        {
+          hasUnreadMessage: true,
+          interviewStarted: true,
+          channelID: newChatRef.id,
+        }
+      );
+
+      await updateDoc(doc(db, "employers", userID, "Requests", jobID), {
+        channelID: newChatRef.id,
+      }).then(() => {
+        setTimeout(() => {
+          navigate("/NeederChatEntry", {
+            state: {
+              selectedChannel: newChatRef.id,
+            },
+          });
+        }, 500);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+    setTimeout(() => {
+     
       setIsLoading(false);
     }, 1000);
+
+   
   };
 
   //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
@@ -944,9 +965,7 @@ const NeederSelectedCategory = () => {
                                         </button>
                                       </div>
                                     </div>
-                            
 
-                                  
                                     <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
                                       <div class="pt-4 first:pt-0">
                                         <h2 class="text-sm font-semibold text-gray-800 ">
@@ -1084,6 +1103,7 @@ const NeederSelectedCategory = () => {
                                                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                                               </svg>
                                               {premiumUser.email}
+                                             
                                             </div>
                                           </li>
                                         </ul>
@@ -1306,44 +1326,18 @@ const NeederSelectedCategory = () => {
 
                                   {/* end specialty modal */}
                                   {isDesktop ? null : (
-                                      <div class="xl:ps-5 grow space-y-5">
-                                        <div class="flex flex-col bg-white  rounded-xl shadow-sm xl:shadow-none ">
-                                          {/* Start about */}
-                                          <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
-                                            <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
-                                              <div class="pt-4 first:pt-0">
-                                                <h2 class="text-sm font-semibold text-gray-800 ">
-                                                  Details
-                                                </h2>
+                                    <div class="xl:ps-5 grow space-y-5">
+                                      <div class="flex flex-col bg-white  rounded-xl shadow-sm xl:shadow-none ">
+                                        {/* Start about */}
+                                        <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
+                                          <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
+                                            <div class="pt-4 first:pt-0">
+                                              <h2 class="text-sm font-semibold text-gray-800 ">
+                                                Details
+                                              </h2>
 
-                                                <ul class="mt-3 space-y-2">
-                                                  {premiumUser.businessName ? (
-                                                    <li>
-                                                      <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
-                                                        <svg
-                                                          class="flex-shrink-0 size-4 text-gray-600 "
-                                                          xmlns="http://www.w3.org/2000/svg"
-                                                          width="24"
-                                                          height="24"
-                                                          viewBox="0 0 24 24"
-                                                          fill="none"
-                                                          stroke="currentColor"
-                                                          stroke-width="2"
-                                                          stroke-linecap="round"
-                                                          stroke-linejoin="round"
-                                                        >
-                                                          <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
-                                                          <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
-                                                          <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
-                                                          <path d="M10 6h4" />
-                                                          <path d="M10 10h4" />
-                                                          <path d="M10 14h4" />
-                                                          <path d="M10 18h4" />
-                                                        </svg>
-                                                      </div>
-                                                    </li>
-                                                  ) : null}
-
+                                              <ul class="mt-3 space-y-2">
+                                                {premiumUser.businessName ? (
                                                   <li>
                                                     <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
                                                       <svg
@@ -1358,325 +1352,349 @@ const NeederSelectedCategory = () => {
                                                         stroke-linecap="round"
                                                         stroke-linejoin="round"
                                                       >
-                                                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                                                        <circle
-                                                          cx="12"
-                                                          cy="10"
-                                                          r="3"
-                                                        />
+                                                        <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
+                                                        <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
+                                                        <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
+                                                        <path d="M10 6h4" />
+                                                        <path d="M10 10h4" />
+                                                        <path d="M10 14h4" />
+                                                        <path d="M10 18h4" />
                                                       </svg>
-                                                      {premiumUser.city},{" "}
-                                                      {premiumUser.state}
                                                     </div>
                                                   </li>
-                                                  <li>
-                                                    <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
-                                                      {premiumUser.numberOfRatings ? (
-                                                        <Flex>
-                                                          {maxRating.map(
-                                                            (item, key) => {
-                                                              return (
-                                                                <Box
-                                                                  activeopacity={
-                                                                    0.7
+                                                ) : null}
+
+                                                <li>
+                                                  <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                                                    <svg
+                                                      class="flex-shrink-0 size-4 text-gray-600 "
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      width="24"
+                                                      height="24"
+                                                      viewBox="0 0 24 24"
+                                                      fill="none"
+                                                      stroke="currentColor"
+                                                      stroke-width="2"
+                                                      stroke-linecap="round"
+                                                      stroke-linejoin="round"
+                                                    >
+                                                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                                                      <circle
+                                                        cx="12"
+                                                        cy="10"
+                                                        r="3"
+                                                      />
+                                                    </svg>
+                                                    {premiumUser.city},{" "}
+                                                    {premiumUser.state}
+                                                  </div>
+                                                </li>
+                                                <li>
+                                                  <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                                                    {premiumUser.numberOfRatings ? (
+                                                      <Flex>
+                                                        {maxRating.map(
+                                                          (item, key) => {
+                                                            return (
+                                                              <Box
+                                                                activeopacity={
+                                                                  0.7
+                                                                }
+                                                                key={item}
+                                                                marginTop="4px"
+                                                              >
+                                                                <Image
+                                                                  boxSize="16px"
+                                                                  src={
+                                                                    item <=
+                                                                    premiumUser.rating
+                                                                      ? star_filled
+                                                                      : star_corner
                                                                   }
-                                                                  key={item}
-                                                                  marginTop="4px"
-                                                                >
-                                                                  <Image
-                                                                    boxSize="16px"
-                                                                    src={
-                                                                      item <=
-                                                                      premiumUser.rating
-                                                                        ? star_filled
-                                                                        : star_corner
-                                                                    }
-                                                                  ></Image>
-                                                                </Box>
-                                                              );
-                                                            }
-                                                          )}
+                                                                ></Image>
+                                                              </Box>
+                                                            );
+                                                          }
+                                                        )}
 
-                                                          <Text
-                                                            marginTop="4px"
-                                                            marginLeft="4px"
-                                                          >
-                                                            (
-                                                            {
-                                                              premiumUser.numberOfRatings
-                                                            }{" "}
-                                                            reviews)
-                                                          </Text>
-                                                        </Flex>
-                                                      ) : (
-                                                        <>
-                                                          <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            fill="none"
-                                                            viewBox="0 0 24 24"
-                                                            stroke-width="1.5"
-                                                            stroke="currentColor"
-                                                            class="flex-shrink-0 size-4 text-gray-600 "
-                                                          >
-                                                            <path
-                                                              stroke-linecap="round"
-                                                              stroke-linejoin="round"
-                                                              d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
-                                                            />
-                                                          </svg>
-                                                          <Text>
-                                                            No reviews yet
-                                                          </Text>
-                                                        </>
-                                                      )}
-                                                    </div>
-                                                  </li>
-                                                  <li>
-                                                    <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
-                                                      <svg
-                                                        class="flex-shrink-0 size-4 text-gray-600 "
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        width="24"
-                                                        height="24"
-                                                        viewBox="0 0 24 24"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        stroke-width="2"
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                      >
-                                                        <rect
-                                                          width="20"
-                                                          height="16"
-                                                          x="2"
-                                                          y="4"
-                                                          rx="2"
-                                                        />
-                                                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                                                      </svg>
-                                                      {premiumUser.email}
-                                                    </div>
-                                                  </li>
-                                                </ul>
-                                                <div className="mt-2">
-                                                  <button
-                                                    onClick={() =>
-                                                      initiateRequest(
-                                                        premiumUser
-                                                      )
-                                                    }
-                                                    class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none "
-                                                  >
-                                                    Message
-                                                  </button>
-                                                </div>
-                                              </div>
-                                              <div class="w-full">
-                                                <div class="pt-4 first:pt-0 flex flex-row ">
-                                                  <h2 class="mb-2  mt-2 text-sm font-semibold text-gray-800 ">
-                                                    Specialties
-                                                  </h2>
-                                                </div>
-                                                <div>
-                                                  {premiumUser.isPremium ? (
-                                                    <ul class="space-y-2 items-center">
-                                                      {!premiumUser.premiumCategoryOne &&
-                                                      !premiumUser.premiumCategoryTwo &&
-                                                      !premiumUser.premiumCategoryThree ? (
-                                                        <button
-                                                          type="button"
-                                                          class="p-2 w-1/2  text-center items-center gap-x-1.5 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
-                                                          data-hs-overlay="#hs-pro-dasadpm"
+                                                        <Text
+                                                          marginTop="4px"
+                                                          marginLeft="4px"
                                                         >
-                                                          More
-                                                        </button>
-                                                      ) : (
-                                                        <>
-                                                          {premiumUser.premiumCategoryOne ? (
-                                                            <>
-                                                              <li>
-                                                                <a
-                                                                  class="p-2.5 flex items-center gap-x-3 bg-white  text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
-                                                                  href="#"
-                                                                >
-                                                                  <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white rounded-lg ">
-                                                                    <svg
-                                                                      xmlns="http://www.w3.org/2000/svg"
-                                                                      viewBox="0 0 24 24"
-                                                                      fill="#38bdf8"
-                                                                      className="w-6 h-6"
-                                                                    >
-                                                                      <path
-                                                                        fillRule="evenodd"
-                                                                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                                        clipRule="evenodd"
-                                                                      />
-                                                                    </svg>
-                                                                  </span>
-                                                                  <div class="grow">
-                                                                    <p>
-                                                                      {
-                                                                        premiumUser.premiumCategoryOne
-                                                                      }
-                                                                    </p>
-                                                                  </div>
-                                                                </a>
-                                                              </li>
+                                                          (
+                                                          {
+                                                            premiumUser.numberOfRatings
+                                                          }{" "}
+                                                          reviews)
+                                                        </Text>
+                                                      </Flex>
+                                                    ) : (
+                                                      <>
+                                                        <svg
+                                                          xmlns="http://www.w3.org/2000/svg"
+                                                          fill="none"
+                                                          viewBox="0 0 24 24"
+                                                          stroke-width="1.5"
+                                                          stroke="currentColor"
+                                                          class="flex-shrink-0 size-4 text-gray-600 "
+                                                        >
+                                                          <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                                                          />
+                                                        </svg>
+                                                        <Text>
+                                                          No reviews yet
+                                                        </Text>
+                                                      </>
+                                                    )}
+                                                  </div>
+                                                </li>
+                                                <li>
+                                                  <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                                                    <svg
+                                                      class="flex-shrink-0 size-4 text-gray-600 "
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      width="24"
+                                                      height="24"
+                                                      viewBox="0 0 24 24"
+                                                      fill="none"
+                                                      stroke="currentColor"
+                                                      stroke-width="2"
+                                                      stroke-linecap="round"
+                                                      stroke-linejoin="round"
+                                                    >
+                                                      <rect
+                                                        width="20"
+                                                        height="16"
+                                                        x="2"
+                                                        y="4"
+                                                        rx="2"
+                                                      />
+                                                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                                                    </svg>
+                                                    {premiumUser.email}
+                                                  </div>
+                                                </li>
+                                              </ul>
+                                              <div className="mt-2">
+                                                <button
+                                                  onClick={() =>
+                                                    initiateRequest(premiumUser)
+                                                  }
+                                                  class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none "
+                                                >
+                                                  Message
+                                                </button>
+                                              </div>
+                                            </div>
+                                            <div class="w-full">
+                                              <div class="pt-4 first:pt-0 flex flex-row ">
+                                                <h2 class="mb-2  mt-2 text-sm font-semibold text-gray-800 ">
+                                                  Specialties
+                                                </h2>
+                                              </div>
+                                              <div>
+                                                {premiumUser.isPremium ? (
+                                                  <ul class="space-y-2 items-center">
+                                                    {!premiumUser.premiumCategoryOne &&
+                                                    !premiumUser.premiumCategoryTwo &&
+                                                    !premiumUser.premiumCategoryThree ? (
+                                                      <button
+                                                        type="button"
+                                                        class="p-2 w-1/2  text-center items-center gap-x-1.5 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                                        data-hs-overlay="#hs-pro-dasadpm"
+                                                      >
+                                                        More
+                                                      </button>
+                                                    ) : (
+                                                      <>
+                                                        {premiumUser.premiumCategoryOne ? (
+                                                          <>
+                                                            <li>
+                                                              <a
+                                                                class="p-2.5 flex items-center gap-x-3 bg-white  text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
+                                                                href="#"
+                                                              >
+                                                                <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white rounded-lg ">
+                                                                  <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="#38bdf8"
+                                                                    className="w-6 h-6"
+                                                                  >
+                                                                    <path
+                                                                      fillRule="evenodd"
+                                                                      d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                                                                      clipRule="evenodd"
+                                                                    />
+                                                                  </svg>
+                                                                </span>
+                                                                <div class="grow">
+                                                                  <p>
+                                                                    {
+                                                                      premiumUser.premiumCategoryOne
+                                                                    }
+                                                                  </p>
+                                                                </div>
+                                                              </a>
+                                                            </li>
 
-                                                              {premiumUser.premiumCategoryTwo
-                                                                ? null
-                                                                : null}
-                                                            </>
-                                                          ) : null}
+                                                            {premiumUser.premiumCategoryTwo
+                                                              ? null
+                                                              : null}
+                                                          </>
+                                                        ) : null}
 
-                                                          {premiumUser.premiumCategoryTwo ? (
-                                                            <>
-                                                              <li>
-                                                                <a
-                                                                  class="p-2.5 flex items-center gap-x-3 bg-white  text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
-                                                                  href="#"
-                                                                >
-                                                                  <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white rounded-lg ">
-                                                                    <svg
-                                                                      xmlns="http://www.w3.org/2000/svg"
-                                                                      viewBox="0 0 24 24"
-                                                                      fill="#38bdf8"
-                                                                      className="w-6 h-6"
-                                                                    >
-                                                                      <path
-                                                                        fillRule="evenodd"
-                                                                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                                        clipRule="evenodd"
-                                                                      />
-                                                                    </svg>
-                                                                  </span>
-                                                                  <div class="grow">
-                                                                    <p>
-                                                                      {
-                                                                        premiumUser.premiumCategoryTwo
-                                                                      }
-                                                                    </p>
-                                                                  </div>
-                                                                </a>
-                                                              </li>
-                                                              {premiumUser.premiumCategoryThree
-                                                                ? null
-                                                                : null}
-                                                            </>
-                                                          ) : null}
-                                                          {premiumUser.premiumCategoryThree ? (
-                                                            <>
-                                                              <li>
-                                                                <a
-                                                                  class="p-2.5 flex items-center gap-x-3 bg-white text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
-                                                                  href="#"
-                                                                >
-                                                                  <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white  rounded-lg ">
-                                                                    <svg
-                                                                      xmlns="http://www.w3.org/2000/svg"
-                                                                      viewBox="0 0 24 24"
-                                                                      fill="#38bdf8"
-                                                                      className="w-6 h-6"
-                                                                    >
-                                                                      <path
-                                                                        fillRule="evenodd"
-                                                                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                                        clipRule="evenodd"
-                                                                      />
-                                                                    </svg>
-                                                                  </span>
-                                                                  <div class="grow">
-                                                                    <p>
-                                                                      {
-                                                                        premiumUser.premiumCategoryThree
-                                                                      }
-                                                                    </p>
-                                                                  </div>
-                                                                </a>
-                                                              </li>
-                                                              {premiumUser.premiumCategoryFour
-                                                                ? null
-                                                                : null}
-                                                            </>
-                                                          ) : null}
-                                                          {premiumUser.premiumCategoryFour ? (
-                                                            <>
-                                                              <li>
-                                                                <a
-                                                                  class="p-2.5 flex items-center gap-x-3 bg-white  text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
-                                                                  href="#"
-                                                                >
-                                                                  <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white  rounded-lg ">
-                                                                    <svg
-                                                                      xmlns="http://www.w3.org/2000/svg"
-                                                                      viewBox="0 0 24 24"
-                                                                      fill="#38bdf8"
-                                                                      className="w-6 h-6"
-                                                                    >
-                                                                      <path
-                                                                        fillRule="evenodd"
-                                                                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                                        clipRule="evenodd"
-                                                                      />
-                                                                    </svg>
-                                                                  </span>
-                                                                  <div class="grow">
-                                                                    <p>
-                                                                      {
-                                                                        premiumUser.premiumCategoryFour
-                                                                      }
-                                                                    </p>
-                                                                  </div>
-                                                                </a>
-                                                              </li>
-                                                              {premiumUser.premiumCategoryFive
-                                                                ? null
-                                                                : null}
-                                                            </>
-                                                          ) : null}
-                                                          {premiumUser.premiumCategoryFive ? (
-                                                            <>
-                                                              <li>
-                                                                <a
-                                                                  class="p-2.5 flex items-center gap-x-3 bg-white  text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
-                                                                  href="#"
-                                                                >
-                                                                  <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white  rounded-lg ">
-                                                                    <svg
-                                                                      xmlns="http://www.w3.org/2000/svg"
-                                                                      viewBox="0 0 24 24"
-                                                                      fill="#38bdf8"
-                                                                      className="w-6 h-6"
-                                                                    >
-                                                                      <path
-                                                                        fillRule="evenodd"
-                                                                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                                        clipRule="evenodd"
-                                                                      />
-                                                                    </svg>
-                                                                  </span>
-                                                                  <div class="grow">
-                                                                    <p>
-                                                                      {
-                                                                        premiumUser.premiumCategoryFive
-                                                                      }
-                                                                    </p>
-                                                                  </div>
-                                                                </a>
-                                                              </li>
-                                                            </>
-                                                          ) : null}
-                                                        </>
-                                                      )}
-                                                    </ul>
-                                                  ) : null}
-                                                </div>
+                                                        {premiumUser.premiumCategoryTwo ? (
+                                                          <>
+                                                            <li>
+                                                              <a
+                                                                class="p-2.5 flex items-center gap-x-3 bg-white  text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
+                                                                href="#"
+                                                              >
+                                                                <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white rounded-lg ">
+                                                                  <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="#38bdf8"
+                                                                    className="w-6 h-6"
+                                                                  >
+                                                                    <path
+                                                                      fillRule="evenodd"
+                                                                      d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                                                                      clipRule="evenodd"
+                                                                    />
+                                                                  </svg>
+                                                                </span>
+                                                                <div class="grow">
+                                                                  <p>
+                                                                    {
+                                                                      premiumUser.premiumCategoryTwo
+                                                                    }
+                                                                  </p>
+                                                                </div>
+                                                              </a>
+                                                            </li>
+                                                            {premiumUser.premiumCategoryThree
+                                                              ? null
+                                                              : null}
+                                                          </>
+                                                        ) : null}
+                                                        {premiumUser.premiumCategoryThree ? (
+                                                          <>
+                                                            <li>
+                                                              <a
+                                                                class="p-2.5 flex items-center gap-x-3 bg-white text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
+                                                                href="#"
+                                                              >
+                                                                <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white  rounded-lg ">
+                                                                  <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="#38bdf8"
+                                                                    className="w-6 h-6"
+                                                                  >
+                                                                    <path
+                                                                      fillRule="evenodd"
+                                                                      d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                                                                      clipRule="evenodd"
+                                                                    />
+                                                                  </svg>
+                                                                </span>
+                                                                <div class="grow">
+                                                                  <p>
+                                                                    {
+                                                                      premiumUser.premiumCategoryThree
+                                                                    }
+                                                                  </p>
+                                                                </div>
+                                                              </a>
+                                                            </li>
+                                                            {premiumUser.premiumCategoryFour
+                                                              ? null
+                                                              : null}
+                                                          </>
+                                                        ) : null}
+                                                        {premiumUser.premiumCategoryFour ? (
+                                                          <>
+                                                            <li>
+                                                              <a
+                                                                class="p-2.5 flex items-center gap-x-3 bg-white  text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
+                                                                href="#"
+                                                              >
+                                                                <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white  rounded-lg ">
+                                                                  <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="#38bdf8"
+                                                                    className="w-6 h-6"
+                                                                  >
+                                                                    <path
+                                                                      fillRule="evenodd"
+                                                                      d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                                                                      clipRule="evenodd"
+                                                                    />
+                                                                  </svg>
+                                                                </span>
+                                                                <div class="grow">
+                                                                  <p>
+                                                                    {
+                                                                      premiumUser.premiumCategoryFour
+                                                                    }
+                                                                  </p>
+                                                                </div>
+                                                              </a>
+                                                            </li>
+                                                            {premiumUser.premiumCategoryFive
+                                                              ? null
+                                                              : null}
+                                                          </>
+                                                        ) : null}
+                                                        {premiumUser.premiumCategoryFive ? (
+                                                          <>
+                                                            <li>
+                                                              <a
+                                                                class="p-2.5 flex items-center gap-x-3 bg-white  text-sm font-medium text-gray-800  rounded-xl hover:text-blue-600 focus:outline-none focus:bg-gray-100 "
+                                                                href="#"
+                                                              >
+                                                                <span class="flex flex-shrink-0 justify-center items-center size-7 bg-white  rounded-lg ">
+                                                                  <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="#38bdf8"
+                                                                    className="w-6 h-6"
+                                                                  >
+                                                                    <path
+                                                                      fillRule="evenodd"
+                                                                      d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                                                                      clipRule="evenodd"
+                                                                    />
+                                                                  </svg>
+                                                                </span>
+                                                                <div class="grow">
+                                                                  <p>
+                                                                    {
+                                                                      premiumUser.premiumCategoryFive
+                                                                    }
+                                                                  </p>
+                                                                </div>
+                                                              </a>
+                                                            </li>
+                                                          </>
+                                                        ) : null}
+                                                      </>
+                                                    )}
+                                                  </ul>
+                                                ) : null}
                                               </div>
                                             </div>
                                           </div>
                                         </div>
                                       </div>
-                                    )}
+                                    </div>
+                                  )}
                                   <div class="xl:ps-5 grow space-y-5">
                                     <div class="flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm xl:shadow-none ">
                                       {/* Start about */}
@@ -2097,387 +2115,6 @@ const NeederSelectedCategory = () => {
           </div>
         </div>
       </main>
-
-      {/* <Flex flex={2}>
-          <Box w="60vw" h="90vh" padding="8">
-         
-            <Heading size="md" marginBottom="24px">
-              {selectedCategory} Pros
-            </Heading>
-            {premiumUsers ? (
-              premiumUsers.map((premiumUser) => (
-                <>
-                  <Box
-                    ml={2}
-                    mr={2}
-                    maxW={"320px"}
-                    w={"full"}
-                
-                    boxShadow={"lg"}
-                    rounded={"lg"}
-                    p={5}
-                    textAlign={"center"}
-                    key={premiumUsers.id}
-                  >
-                    <Avatar
-                      size={"xl"}
-                      src={premiumUser.profilePictureResponse}
-                      mb={4}
-                      pos={"relative"}
-                      _after={{
-                        content: '""',
-                        w: 4,
-                        h: 4,
-                        bg: "green.300",
-                        border: "2px solid white",
-                        rounded: "full",
-                        pos: "absolute",
-                        bottom: 0,
-                        right: 3,
-                      }}
-                    />
-                    <Heading fontSize={"2xl"} fontFamily={"body"}>
-                      {premiumUser.firstName}
-                    </Heading>
-                    <Center>
-                      {premiumUser.numberOfRatings ? (
-                        <Flex>
-                          {maxRating.map((item, key) => {
-                            return (
-                              <Box
-                                activeopacity={0.7}
-                                key={item}
-                                marginTop="5px"
-                              >
-                                <Image
-                                  boxSize="16px"
-                                  src={
-                                    item <= premiumUser.rating
-                                      ? star_filled
-                                      : star_corner
-                                  }
-                                ></Image>
-                              </Box>
-                            );
-                          })}
-                          <Text marginLeft="4px">
-                            ({premiumUser.numberOfRatings} reviews)
-                          </Text>
-                        </Flex>
-                      ) : (
-                        <Text marginTop="4px">No reviews yet!</Text>
-                      )}
-                    </Center>
-                    <Box minHeight="72px">
-                      <Text
-                        textAlign={"center"}
-                       
-                        px={3}
-                        noOfLines={3}
-                      >
-                        {premiumUser.bio}
-                      </Text>
-                    </Box>
-                    <Heading size="xs" mt={4} mb={2}>
-                      Specializes in:
-                    </Heading>
-                    <Stack
-                      align={"center"}
-                      justify={"center"}
-                      direction={"row"}
-                    >
-                      {premiumUser.premiumCategoryOne ? (
-                        <Tag
-                          sz="sm"
-                          variant="outline"
-                          colorScheme="blue"
-                          px={2}
-                          py={1}
-                        >
-                          <TagLabel> {premiumUser.premiumCategoryOne}</TagLabel>
-                        </Tag>
-                      ) : (
-                        <Tag sz="sm" backgroundColor="white" px={2} py={1}>
-                          <TagLabel> {premiumUser.premiumCategoryOne}</TagLabel>
-                        </Tag>
-                      )}
-
-                      {premiumUser.premiumCategoryTwo ? (
-                        <Tag
-                          sz="sm"
-                          variant="outline"
-                          colorScheme="blue"
-                          px={2}
-                          py={1}
-                        >
-                          <TagLabel> {premiumUser.premiumCategoryTwo}</TagLabel>
-                        </Tag>
-                      ) : null}
-                      {premiumUser.premiumCategoryThree ? (
-                        <Tag
-                          sz="sm"
-                          variant="outline"
-                          colorScheme="blue"
-                          px={2}
-                          py={1}
-                        >
-                          <TagLabel>
-                            {" "}
-                            {premiumUser.premiumCategoryThree}
-                          </TagLabel>
-                        </Tag>
-                      ) : null}
-                    </Stack>
-
-                    <Stack mt={8} direction={"row"} spacing={4}>
-                     
-                      <Button
-                        flex={1}
-                        fontSize={"sm"}
-                      
-                        backgroundColor="#01A2E8"
-                        color="white"
-                        _hover={{ bg: "#018ecb", textColor: "white" }}
-                       
-                      
-                        
-                        onClick={() => handleOpenModal(premiumUser)}
-                      >
-                        See Profile
-                      </Button>
-                    </Stack>
-                  </Box>
-                  <Modal isOpen={isOpen} onClose={onClose} size="xl">
-                    <ModalOverlay />
-                    <ModalContent>
-                      <ModalHeader></ModalHeader>
-                      <ModalCloseButton />
-                      <ModalBody>
-                        <Center flexDirection="column">
-                          <Avatar
-                            bg="#01A2E8"
-                            size="2xl"
-                            src={
-                              premiumUser.profilePictureResponse ? (
-                                premiumUser.profilePictureResponse
-                              ) : (
-                                <Avatar />
-                              )
-                            }
-                          />
-
-                          <Heading size="lg"> {premiumUser.firstName}</Heading>
-                          <Heading size="md">
-                            {" "}
-                            {premiumUser.city}, {premiumUser.state}
-                          </Heading>
-
-                          {premiumUser.numberOfRatings ? (
-                            <Flex>
-                              {maxRating.map((item, key) => {
-                                return (
-                                  <Box
-                                    activeopacity={0.7}
-                                    key={item}
-                                    marginTop="8px"
-                                  >
-                                    <Image
-                                      boxSize="24px"
-                                      src={
-                                        item <= premiumUser.rating
-                                          ? star_filled
-                                          : star_corner
-                                      }
-                                    ></Image>
-                                  </Box>
-                                );
-                              })}
-
-                              <Text marginTop="8px" marginLeft="4px">
-                                ({premiumUser.numberOfRatings} reviews)
-                              </Text>
-                            </Flex>
-                          ) : (
-                            <Text marginTop="8px" marginLeft="4px">
-                              No reviews yet
-                            </Text>
-                          )}
-
-                          <Stack
-                            align={"center"}
-                            justify={"center"}
-                            direction={"row"}
-                            mt={2}
-                          >
-                            {premiumUser.premiumCategoryOne ? (
-                              <Tag
-                                sz="sm"
-                                variant="outline"
-                                colorScheme="blue"
-                                px={2}
-                                py={1}
-                              >
-                                <TagLabel>
-                                  {" "}
-                                  {premiumUser.premiumCategoryOne}
-                                </TagLabel>
-                              </Tag>
-                            ) : (
-                              <Tag
-                                sz="sm"
-                                backgroundColor="white"
-                                px={2}
-                                py={1}
-                              >
-                                <TagLabel>
-                                  {" "}
-                                  {premiumUser.premiumCategoryOne}
-                                </TagLabel>
-                              </Tag>
-                            )}
-
-                            {premiumUser.premiumCategoryTwo ? (
-                              <Tag
-                                sz="sm"
-                                variant="outline"
-                                colorScheme="blue"
-                                px={2}
-                                py={1}
-                              >
-                                <TagLabel>
-                                  {" "}
-                                  {premiumUser.premiumCategoryTwo}
-                                </TagLabel>
-                              </Tag>
-                            ) : null}
-                            {premiumUser.premiumCategoryThree ? (
-                              <Tag
-                                sz="sm"
-                                variant="outline"
-                                colorScheme="blue"
-                                px={2}
-                                py={1}
-                              >
-                                <TagLabel>
-                                  {" "}
-                                  {premiumUser.premiumCategoryThree}
-                                </TagLabel>
-                              </Tag>
-                            ) : null}
-                          </Stack>
-                        </Center>
-
-                        <Heading size="md" mt={8}>
-                          About Me
-                        </Heading>
-
-                        <Text
-                          aria-multiline="true"
-                          textAlign="flex-start"
-                          height="auto"
-                        >
-                          {premiumUser.bio}
-                        </Text>
-
-                        <Heading size="md" marginTop="16px">
-                          Experience
-                        </Heading>
-                        {!userExperience ? (
-                          <Text>No experience to show</Text>
-                        ) : (
-                          userExperience.map((userExperience) => (
-                            <>
-                              <Box key={userExperience.id}>
-                               
-                                <Box marginLeft={5} mt={2}>
-                                  <Heading size="md">
-                                    {userExperience.Title}
-                                  </Heading>
-
-                                  <Text>{userExperience.Years} Years</Text>
-                                  <Text>{userExperience.Description}</Text>
-                                </Box>
-                              </Box>
-                            </>
-                          ))
-                        )}
-
-                        <Box></Box>
-
-                        <Heading size="md" marginTop="16px">
-                          Qualifications
-                        </Heading>
-                        {!userSkills ? (
-                          <Text>No experience to show</Text>
-                        ) : (
-                          userSkills.map((userSkills) => (
-                            <>
-                              <Box key={userSkills.id}>
-                                <Box marginLeft={5} marginTop="4px">
-                                  <Heading size="md">
-                                    {userSkills.Title}
-                                  </Heading>
-
-                                  <Text> {userSkills.Description}</Text>
-                                </Box>
-                              </Box>
-                            </>
-                          ))
-                        )}
-                      </ModalBody>
-
-                      <ModalFooter>
-                      
-                        {isLoading ? (<Spinner
-                      thickness="4px"
-                      speed="0.65s"
-                      emptyColor="gray.200"
-                      color="#01A2E8"
-                      size="lg"
-                      marginTop="24px"
-                    
-                    />) : (<>
-                      <Button variant="ghost" marginRight="8px">
-                      Close
-                    </Button>
-<Button
-                          backgroundColor="#01A2E8"
-                          color="white"
-                          _hover={{ bg: "#018ecb", textColor: "white" }}
-                          onClick={() => initiateRequest(premiumUser)}
-                        >
-                          Contact
-                        </Button>
-                        </>
-                    )}
-                        
-                      </ModalFooter>
-                    </ModalContent>
-                  </Modal>
-                </>
-              ))
-            ) : (
-              <>
-              <Text>Sorry! No {selectedCategory} pros in your area.</Text>
-              <Text>Try posting your project for contractors to see instead.</Text>
-              <Button
-          backgroundColor="#01A2E8"
-          color="white"
-          _hover={{ bg: "#018ecb", textColor: "white" }}
-          marginTop="16px"
-          marginRight="24px"
-          height="36px"
-          onClick={() => navigate("/AddJobStart")}
-        >
-          Post A Job
-        </Button>
-              </>
-            )}
-          
-         
-           
-          </Box>
-        </Flex> */}
     </>
   );
 };

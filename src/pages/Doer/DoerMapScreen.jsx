@@ -283,8 +283,9 @@ const DoerMapScreen = () => {
   };
 
   const handleToggleAppliedOpen = (x) => {
-    setOpenInfoWindowMarkerID(x.jobID);
-    getData(x.jobID);
+    setOpenInfoWindowMarkerID(x);
+    console.log(x)
+    getData(x);
   };
 
   useEffect(() => {}, [openInfoWindowMarkerID]);
@@ -503,7 +504,9 @@ const DoerMapScreen = () => {
   const getData = async (openInfoWindowMarkerID) => {
     const docRef = doc(db, "Map Jobs", openInfoWindowMarkerID);
 
+console.log("??",openInfoWindowMarkerID)
     await getDoc(docRef).then((snapshot) => {
+      console.log(snapshot.data())
       setFlatRate(snapshot.data().flatRate);
       setJobTitle(snapshot.data().jobTitle);
       setLowerRate(snapshot.data().lowerRate);
@@ -1456,7 +1459,7 @@ const DoerMapScreen = () => {
                             ? appliedJobs.locationLng
                             : -93.26177106829272,
                         }}
-                        onClick={() => handleToggleAppliedOpen(appliedJobs)}
+                        onClick={() => handleToggleOpen(appliedJobs.jobID)}
                       >
                         <div>
                           {appliedJobs.hasUnreadMessage ? (

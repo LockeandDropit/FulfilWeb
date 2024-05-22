@@ -12,19 +12,32 @@ import {
 import { db } from "../../../firebaseConfig";
 import { useChatStore } from "./lib/chatStore";
 import { useUserStore } from "./lib/userStore";
-
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { Text, Box, Flex, Image } from "@chakra-ui/react";
 import star_corner from "../../../images/star_corner.png"
 import star_filled from "../../../images/star_filled.png"
 import { format } from "timeago.js";
+import CreateOfferModal from "../NeederComponents/CreateOfferModal";
+import { useMediaQuery } from "@chakra-ui/react";
+
+
 
 const Chat = () => {
 
     
   const [rating, setRating] = useState(null); //make dynamic, pull from Backend
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
-
-
+  const { resetChat } = useChatStore()
+  const [isDesktop] = useMediaQuery("(min-width: 500px)");
 
     //pulls cumulative reviews
     const [numberOfRatings, setNumberOfRatings] = useState(null);
@@ -173,10 +186,57 @@ const Chat = () => {
       setText("");
       }
     };
+
+  //offer handling
+
+
+  //this one is for requests
+  const [offerModalOpen, setOfferModalOpen] = useState(false);
+
+  const handleOfferOpen = () => {
+    setOfferModalOpen(true);
+  };
+
+
+  //this one is for already created job posts
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenFlatRate,
+    onOpen: onOpenFlatRate,
+    onClose: onCloseFlatRate,
+  } = useDisclosure();
+
+  // const handleModalOpen = () => {
+  //   if (isHourly === true) {
+  //     onOpen();
+  //   } else {
+  //   }
+  //   if (isFlatRate === true) {
+  //     onOpenFlatRate();
+  //   } else {
+  //   }
+  // };
+
+
+
+  //this is for mobile so you can navigate from selected chat back to the list.
+const handleClearChat = () => {
+resetChat()
+}
+
+
   return (
     <div className='flex-[2_2_0%] h-full flex flex-col'>
-
-<div  class="block w-full py-2 px-1 sm:p-4 group bg-white  border-b border-gray-300 " >
+{chat ? (<div  class="block w-full py-2 px-1 sm:p-4 group bg-white  border-b border-gray-300 " >
+  
+  
+  {isDesktop ? (null) : ( <button onClick={() => handleClearChat()} className="mb-2 font-semibold text-sm text-gray-500 flex"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mt-.5">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+</svg>
+Back
+</button>)}
+ 
   <div class="flex gap-x-2 sm:gap-x-4">
 
     <img src={user.profilePictureResponse} className="w-12 h-12 rounded-full object-cover"></img>
@@ -185,9 +245,10 @@ const Chat = () => {
       <p class="font-semibold text-lg text-gray-800 ">
       {user.firstName}
       </p>
+      <p class="font-semibold text-sm text-gray-500  ">Job: {chat.jobTitle}</p>
      
 
-      <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+      <div class="inline-flex items-center gap-x-3 text-sm text-gray-800">
                             {numberOfRatings ? (
                               <Flex>
                                 {maxRating.map((item, key) => {
@@ -221,7 +282,7 @@ const Chat = () => {
                                   viewBox="0 0 24 24"
                                   stroke-width="1.5"
                                   stroke="currentColor"
-                                  class="flex-shrink-0 size-4 text-gray-600 "
+                                  class="flex-shrink-0 size-4 text-gray-600"
                                 >
                                   <path
                                     stroke-linecap="round"
@@ -233,10 +294,26 @@ const Chat = () => {
                               </>
                             )}
                           </div>
+                          {/* <p class="font-semibold text-sm text-gray-500  ">Job: {chat.jobTitle}</p> */}
+            {isDesktop ? (null) : ( <div className="flex flex-col"><button className='bg-sky-400 hover:bg-sky-500 px-3 py-2 h-10  rounded-lg text-white border-none outline-none cursor-pointer' onClick={() => setOfferModalOpen(true)}>Send an offer</button>
+   
+   <button type="button" class="py-3 px-4  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none ">
+ See Job Details
+</button></div>)}
+   
+   
     </div>
-
+    
+    {isDesktop ? ( <div className="flex flex-col"><button className='bg-sky-400 hover:bg-sky-500 px-3 py-2 h-10  rounded-lg text-white border-none outline-none cursor-pointer' onClick={() => setOfferModalOpen(true)}>Send an offer</button>
+   
+   <button type="button" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none ">
+ See Job Details
+</button></div>) : (null)}
+   
+    
   </div>
-</div>
+</div>) : (null)}
+
     
 
 
@@ -246,21 +323,7 @@ const Chat = () => {
     [&::-webkit-scrollbar-thumb]:bg-gray-300
     [&::-webkit-scrollbar-track]:rounded-full'>
 
-    {/* {chat?.messages?.map((message) => (
-        message.senderId === currentUser?.uid ? ( <div className='max-w-full flex flex-row-reverse gap-5'>
-           
-        <div className='bg-sky-500 text-white rounded-md p-4 gap-1'>
-                <p className='font-sm'> {message.text}</p>
-                <span>{format(message.createdAt.toDate())}</span>
-        </div>
-    </div>) : (<div className='max-w-[30rem] flex gap-5 rounded-md bg-gray-700 text-white p-4'>
-            <img className=' rounded-full w-8 h-8 object-cover '></img>
-            <div className='flex flex-1 flex-col gap-1'>
-            <p className='font-sm'> {message.text}</p>
-                <span>{format(message.createdAt.toDate())}</span>
-            </div>
-        </div>)
-    ))} */}
+
 
 {chat?.messages?.map((message) => (
         message.senderId === currentUser?.uid ? (   <li class="max-w-2xl ms-auto flex justify-end mb-2   ">
@@ -273,24 +336,10 @@ const Chat = () => {
           </div>
           <p class="text-sm font-medium text-gray-400 leading-none">{format(message.createdAt.toDate())}</p>
         </div>
-
-        
-          
-        
       </li>
       
       
     ) : (
-    
-    
-    
-    // <div className='max-w-[30rem] flex gap-5 rounded-md bg-gray-700 text-white p-4'>
-    //         <img className=' rounded-full w-8 h-8 object-cover '></img>
-    //         <div className='flex flex-1 flex-col gap-1'>
-    //         <p className='font-sm'> {message.text}</p>
-    //             <span>{format(message.createdAt.toDate())}</span>
-    //         </div>
-    //     </div>
         
         <li class="flex max-w-2xl gap-x-2 sm:gap-x-4 mb-4 ">
           <img src={user.profilePictureResponse} className="w-10 h-10 rounded-full object-cover"></img>
@@ -317,12 +366,20 @@ const Chat = () => {
     <div className='flex items-center justify-between p-5 gap-5 border-t border-gray-300 mt-auto'>
         <input type='text' placeholder='Type your mesage here' className='flex w-full bg-none border-non outline-none p-3 rounded-md text-sm'   value={text}
           onChange={(e) => setText(e.target.value)} />
-        <button className='bg-sky-400 px-3 py-2 w-1/6 rounded-lg text-white border-none outline-none cursor-pointer'  onClick={handleSend} >Send</button>
+        <button className='bg-sky-400 px-3 py-2 sm:w-1/6 rounded-lg text-white border-none outline-none cursor-pointer'  onClick={handleSend} >Send</button>
     </div>
-    
-    
+     
+
+
+     {/* offer modal */}
+     {/* {offerModalOpen === true ? (
+        <CreateOfferModal
+          props={{ applicantID: user.uid, jobID: chat.jobID, channel: chat.channelId }}
+        />
+      ) : null} */}
     </div>
   )
+  
 }
 
 export default Chat

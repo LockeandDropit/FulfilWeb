@@ -281,7 +281,7 @@ const ChastList = () => {
 <div onClick={() => handleSelect(chat)} class="block sm:w-full py-2 px-1 sm:p-4 group bg-gray-100 rounded-2xl hover:bg-gray-200 focus:outline-none focus:bg-gray-200 " key={chat.chatID}>
   <div class="flex gap-x-2 sm:gap-x-4">
 
-    <img src={chat.user.profilePictureResponse} className="w-10 h-10 rounded-full object-cover"></img>
+    <img src={chat.user.profilePictureResponse} className="w-14 h-14 rounded-full object-cover"></img>
 
     <div class="grow">
       <p class="font-semibold text-lg text-gray-800 ">

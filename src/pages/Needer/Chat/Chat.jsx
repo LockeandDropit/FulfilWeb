@@ -28,6 +28,7 @@ import star_filled from "../../../images/star_filled.png"
 import { format } from "timeago.js";
 import CreateOfferModal from "../NeederComponents/CreateOfferModal";
 import { useMediaQuery } from "@chakra-ui/react";
+import Detail from "./Detail";
 
 
 
@@ -38,7 +39,7 @@ const Chat = () => {
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
   const { resetChat } = useChatStore()
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
-
+  const { isOpen: isOpenDetails, onOpen: onOpenDetails, onClose: onCloseDetails } = useDisclosure()
     //pulls cumulative reviews
     const [numberOfRatings, setNumberOfRatings] = useState(null);
 
@@ -225,8 +226,15 @@ const handleClearChat = () => {
 resetChat()
 }
 
+const [detailsVisible, setDetailsVisible] = useState(false)
+
+const handleDetailsVisible = () => {
+ setDetailsVisible(!detailsVisible)
+}
+
 
   return (
+    <>
     <div className='flex-[2_2_0%] h-full flex flex-col'>
 {chat ? (<div  class="block w-full py-2 px-1 sm:p-4 group bg-white  border-b border-gray-300 " >
   
@@ -297,7 +305,7 @@ Back
                           {/* <p class="font-semibold text-sm text-gray-500  ">Job: {chat.jobTitle}</p> */}
             {isDesktop ? (null) : ( <div className="flex flex-col"><button className='bg-sky-400 hover:bg-sky-500 px-3 py-2 h-10  rounded-lg text-white border-none outline-none cursor-pointer' onClick={() => setOfferModalOpen(true)}>Send an offer</button>
    
-   <button type="button" class="py-3 px-4  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none ">
+   <button onClick={() => handleDetailsVisible()} type="button" class="py-3 px-4  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none ">
  See Job Details
 </button></div>)}
    
@@ -306,7 +314,7 @@ Back
     
     {isDesktop ? ( <div className="flex flex-col"><button className='bg-sky-400 hover:bg-sky-500 px-3 py-2 h-10  rounded-lg text-white border-none outline-none cursor-pointer' onClick={() => setOfferModalOpen(true)}>Send an offer</button>
    
-   <button type="button" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none ">
+   <button type="button"  onClick={() => handleDetailsVisible()} class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none ">
  See Job Details
 </button></div>) : (null)}
    
@@ -377,7 +385,15 @@ Back
           props={{ applicantID: user.uid, jobID: chat.jobID, channel: chat.channelId }}
         />
       ) : null} */}
+
+
+
+
+       
     </div>
+    {detailsVisible ? (<Detail />) : (null)}
+ 
+    </>
   )
   
 }

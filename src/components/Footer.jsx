@@ -98,7 +98,7 @@ useEffect(() => {
             setIssueSubmitted(true);
           })
           .catch((error) => {
-            // no bueno
+            console.log(error)
           });
 
           setIssueSubmitted(true);
@@ -143,7 +143,7 @@ const handleOpenFBPage = () => {
             </Stack>
 
             <Stack align={"flex-start"}>
-              <ListHeader>Support</ListHeader>
+              <ListHeader >Support</ListHeader>
               <Box as="button" onClick={() => onOpenContact()}>
                 Contact Us
               </Box>

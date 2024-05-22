@@ -796,7 +796,7 @@ const handleShowMobileAddJob = () => {
                     />
                   ) : (
                     <svg
-                      class="size-full text-gray-500"
+                      class="w-12 h-12 rounded-full object-cover text-gray-500"
                       width="16"
                       height="16"
                       viewBox="0 0 16 16"

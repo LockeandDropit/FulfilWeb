@@ -40,6 +40,7 @@ import {
   updateDoc,
   addDoc,
   setDoc,
+  arrayUnion
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -135,6 +136,15 @@ const DoerAddProfileInfo = () => {
     );
   };
 
+  const createChatSlotInDB = async () => {
+    const userChatsRef = collection(db, "User Messages");
+ await updateDoc(doc(userChatsRef, user.uid), {
+        chats: arrayUnion({
+          placeholder: null
+        }),
+      });
+  }
+
   const [dateJoined, setDateJoined] = useState(null);
 
   useEffect(() => {
@@ -166,6 +176,7 @@ const DoerAddProfileInfo = () => {
       city: city,
       state: state,
       test: test,
+      uid: user.uid,
       idStreamChat: user.uid,
       isPremium: false,
       isEmployer: true,
@@ -180,6 +191,11 @@ const DoerAddProfileInfo = () => {
       taxAgreementConfirmed: taxAgreementConfirmed,
       profilePictureResponse: profilePicture ? profilePicture : null
     });
+    // IN USE
+  createChatSlotInDB()
+
+  
+    //depreciated, remove when able
     createNewChatUser()
       .then(() => {
         //all good

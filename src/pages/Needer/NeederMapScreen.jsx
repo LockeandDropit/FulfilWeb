@@ -652,7 +652,8 @@ const NeederMapScreen = () => {
   };
 
   const navigateToChannel = (x) => {
-    navigate("/NeederMessageList", { state: { selectedChannel: x.channelID } });
+    console.log("this is what youre passing",x)
+    navigate("/NeederChatEntry", { state: { selectedChannel: x.channelID, applicant: x } });
     // console.log("mesage channel",x);
   };
 

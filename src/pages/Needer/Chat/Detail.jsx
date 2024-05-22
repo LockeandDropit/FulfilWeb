@@ -1,8 +1,106 @@
+import {useState, useEffect}  from 'react'
 import React from 'react'
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure
+} from '@chakra-ui/react'
+import { useChatStore } from "./lib/chatStore";
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+  query,
+  collection
+} from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
+const Detail = (props) => {
 
-const Detail = () => {
+  const [data, setData] = useState(null)
+  const [userID, setUserID] = useState();
+  const [requirements, setRequirements] = useState(null);
+  const [requirements2, setRequirements2] = useState(null);
+  const [requirements3, setRequirements3] = useState(null);
+  const [niceToHave, setNiceToHave] = useState(null);
+  const [jobTitle, setJobTitle] = useState(null);
+  const [hourlyRate, setHourlyRate] = useState(null);
+  const [streetAddress, setStreetAddress] = useState(null);
+  const [city, setCity] = useState(null);
+  const [state, setState] = useState(null);
+  const [zipCode, setZipCode] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [addressNumber, setAddressNumber] = useState(null);
+  const [addressName, setAddressName] = useState(null);
+  const [lowerRate, setLowerRate] = useState(null);
+  const [upperRate, setUpperRate] = useState(null);
+  const [addressSuffix, setAddressSuffix] = useState(null);
+  const [locationLat, setLocationLat] = useState(null);
+  const [locationLng, setLocationLng] = useState(null);
+  const [businessName, setBusinessName] = useState(null);
+  const [employerID, setEmployerID] = useState(null);
+  const [isOnboarded, setIsOnboarded] = useState(false);
+  const [employerFirstName, setEmployerFirstName] = useState(null);
+  const [flatRate, setFlatRate] = useState(null);
+  const [isFlatRate, setIsFlatRate] = useState(null)
+  const [isHourly, setIsHourly] = useState(null)
+  const [jobID, setJobID] = useState(null)
+  const [jobData, setJobData] = useState(null)
+
+
+  const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
+  useChatStore();
+  useEffect(() => {
+    const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
+      setData(res.data());
+      console.log(res.data())
+      setJobTitle(res.data().jobTitle)
+    });
+
+    return () => {
+      unSub();
+    };
+  }, [chatId]);
+
+
+
+  useEffect(() => {
+    if (jobTitle) {
+      getData()
+
+      
+    }
+  }, [jobTitle])
+
+
+
+  const getData = async () => {
+    const docRef = doc(
+      db,
+      "employers",
+      user.uid,
+      "Posted Jobs",
+      jobTitle
+    );
+
+    await getDoc(docRef).then((snapshot) => {
+      setJobData(snapshot.data())
+      console.log(snapshot.data())
+    })
+
+  }
+  console.log("details", jobData)
   return (
+
     <div className="flex flex-1">
+
+{jobData ? (
     <div class="w-full max-h-full flex flex-col  bg-white rounded-lg pointer-events-auto  ">
     <div class="py-3 px-4 flex justify-between items-center  ">
                                 <div class="w-100 max-h-full   bg-white rounded-xl  ">
@@ -16,19 +114,19 @@ const Detail = () => {
                                             for="hs-pro-dactmt"
                                             class="block mb-2 text-xl font-medium text-gray-800 "
                                           >
-                                          gdsfgsdf
+                                         {jobData.jobTitle}
                                           </label>
-                                          <p> Minnesota</p>
+                                          <p>{jobData.city} Minnesota</p>
                                         </div>
 
                                         <div class=" flex-row  items-center  ">
                                       
-                                            <div className="flex flex-row items-center">
+                                            {/* <div className="flex flex-row items-center">
                                               <p>
                                                
                                                 Offer: $
                                               </p>
-                                            </div>
+                                            </div> */}
                                        
                                         </div>
                                       </div>
@@ -41,7 +139,7 @@ const Detail = () => {
                                           Description
                                         </label>
 
-                                        <p  class=" text-md  ">sdvsd</p>
+                                        <p  class=" text-md  ">{jobData.description}</p>
                                       </div>
 
                                       {/* <div class="space-y-1 ">
@@ -55,30 +153,14 @@ const Detail = () => {
                                       </div> */}
                                     </div>
 
-                                    <div class="p-4 flex justify-between gap-x-2   ">
-                                      <div class="w-full flex justify-end items-center gap-x-2">
-                                        <button
-                                          type="button"
-                                    
-                                          class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-white  hover:bg-gray-200 text-black text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                          data-hs-overlay="#hs-pro-datm"
-                                        >
-                                          Save Job
-                                        </button>
-                                        <button
-                                
-                                          class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                          data-hs-overlay="#hs-pro-datm"
-                                        >
-                                          Apply
-                                        </button>
-                                      </div>
-                                    </div>
+                                 
                                   </div>
                                 </div>
                               </div>
     </div>
+    ) : (null)}
   </div>
+
   )
 }
 

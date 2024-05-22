@@ -39,6 +39,7 @@ import {
   updateDoc,
   addDoc,
   setDoc,
+  arrayUnion
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
@@ -130,6 +131,16 @@ const AddProfileInfo = () => {
     );
   };
 
+
+  const createChatSlotInDB = async () => {
+    const userChatsRef = collection(db, "User Messages");
+ await updateDoc(doc(userChatsRef, user.uid), {
+        chats: arrayUnion({
+          placeholder: null
+        }),
+      });
+  }
+
   //yeah baby it WORKS. The below connects the user's auth ID with the firebase user document ID.. hopefully this helps in persistant auth and redux.
 
   //firestore help came from https://www.youtube.com/@NetNinja
@@ -149,6 +160,8 @@ useEffect(() => {
         idStreamChat: user.uid,
         isEmployer: true ,
         email: user.email,
+        isPremium: false,
+        uid: user.uid,
         streamChatID: user.uid,
         isOnboarded: false,
         emailVerified: false,
@@ -158,7 +171,11 @@ useEffect(() => {
         termsOfService: termsOfService,
         profilePictureResponse: profilePicture ? profilePicture : null
       });
+
+      //depreciated, remove when able
       createNewChatUser()
+      //in use
+      createChatSlotInDB()
         .then(() => {
           //all good
   
@@ -193,7 +210,10 @@ useEffect(() => {
       termsOfService: termsOfService, 
       profilePictureResponse: profilePicture ? profilePicture : null
     });
-    createNewChatUser()
+      //depreciated, remove when able
+      createNewChatUser()
+      //in use
+      createChatSlotInDB()
       .then(() => {
         //all good
 

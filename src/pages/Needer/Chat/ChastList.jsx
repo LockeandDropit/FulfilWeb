@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { useChatStore } from "./lib/chatStore";
 import { filter } from "@chakra-ui/react";
+import { useLocation } from "react-router-dom";
 
 const ChastList = () => {
   const [chats, setChats] = useState([]);
@@ -48,6 +49,9 @@ const ChastList = () => {
       unSub();
     };
   }, [currentUser.uid]);
+
+
+
 
   //Check channel Id's from "Category" and run them against "User MEssages" (? The one with user ID), then set those to chat
 

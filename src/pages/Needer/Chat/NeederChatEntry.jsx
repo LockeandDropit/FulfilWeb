@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Header from "../Components/Header";
 import Dashboard from "../Components/Dashboard";
 import List from "./List";
@@ -10,11 +10,34 @@ import { useChatStore } from "./lib/chatStore";
 import { auth } from "../../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { useMediaQuery } from "@chakra-ui/react";
+import { useLocation } from "react-router-dom";
+
 
 //95% of the chat portion of this application is due to https://github.com/safak/react-firebase-chat. He stated in his youtube video that this was free for use https://www.youtube.com/watch?v=domt_Sx-wTY&t=3034s around the 3:40 mark
 const NeederChatEntry = () => {
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
-  const { chatId } = useChatStore();
+  const { chatId, changeChat } = useChatStore();
+
+  //bring in location props from map screen here, if no null setChat in chatStore from here...
+
+
+  const location = useLocation();
+
+  const [passedChannel, setPasseChannel] = useState(null);
+
+  useEffect(() => {
+    if (location.state === null) {
+      console.log("no channel passed");
+      // setSelectedChannel(null);
+    } else {
+  
+        if (location.state.selectedChannel && location.state.applicant) {
+          setPasseChannel(location.state.selectedChannel);
+          changeChat(location.state.selectedChannel, location.state.applicant)
+          console.log("passed props",location.state.selectedChannel, location.state.applicant)
+        } 
+    }
+  }, []);
 
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (user) => {

@@ -14,6 +14,8 @@ import { useChatStore } from "./lib/chatStore";
 import { filter } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 
+import { useJobStore  } from "./lib/jobsStore";
+
 const ChastList = () => {
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
@@ -21,7 +23,7 @@ const ChastList = () => {
 
   const { currentUser } = useUserStore();
   const { chatId, changeChat } = useChatStore();
-
+  const { fetchJobInfo } = useJobStore()
   console.log(currentUser);
 
   useEffect(() => {
@@ -264,6 +266,15 @@ const ChastList = () => {
 
   console.log(chats);
 
+
+  //handle job fetching here
+
+const handleJobFetch = async (chat) => {
+
+      fetchJobInfo(currentUser.uid, chat.jobID, chat.jobType, chat.jobTitle);
+
+}
+
   const handleSelect = async (chat) => {
     const userChats = chats.map((item) => {
       const { user, ...rest } = item;
@@ -293,6 +304,7 @@ const ChastList = () => {
         chats: userChats,
       });
       changeChat(chat.chatId, chat.user);
+      handleJobFetch(chat)
     } catch (err) {
       console.log(err);
     }
@@ -328,13 +340,13 @@ const ChastList = () => {
       {chats ? chats.map((chat) => (
         <div
           onClick={() => handleSelect(chat)}
-          class="block sm:w-full py-2 px-1 sm:p-4 group bg-gray-100 rounded-2xl mb-2 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 "
+          class="block cursor-pointer sm:w-full py-2 px-2  group bg-gray-100 rounded-2xl mb-2 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 "
           key={chat.chatID}
         >
           <div class="flex gap-x-2 sm:gap-x-4">
             <img
               src={chat.user.profilePictureResponse}
-              className="w-10 h-10 rounded-full object-cover"
+              className="w-14 h-14 mt-2.5 rounded-full object-cover"
             ></img>
 
             <div class="grow">

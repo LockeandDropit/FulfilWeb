@@ -58,7 +58,7 @@ const DoerFirstVisitModal = (props) => {
             </Button>
             <Button  backgroundColor="#01A2E8"
           color="white"
-          _hover={{ bg: "#018ecb", textColor: "white" }} width="160px" onClick={() => navigate("/DoerProfile")}>
+          _hover={{ bg: "#018ecb", textColor: "white" }} width="160px" onClick={() => navigate("/UserProfile")}>
               Edit My Profile
             </Button>
           </ModalFooter>

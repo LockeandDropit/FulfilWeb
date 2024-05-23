@@ -320,8 +320,18 @@ const Dashboard = () => {
   const [datePosted, setDatePosted] = useState(null);
 
   useEffect(() => {
-    //credit https://stackoverflow.com/questions/37271356/how-to-get-the-current-date-in-reactnative Irfan wani
-    setDatePosted(new Date().toLocaleString());
+    //credit https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript?rq=3 mohshbool & Samuel Meddows
+    let initialDate = new Date()
+    var dd = String(initialDate.getDate()).padStart(2, '0');
+    var mm = String(initialDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = initialDate.getFullYear();
+
+    var today = mm + '/' + dd + '/' + yyyy;
+
+
+   
+   
+    setDatePosted(today);
   }, []);
 
   const addNewJob = () => {

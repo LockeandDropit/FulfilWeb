@@ -29,6 +29,7 @@ import { format } from "timeago.js";
 import CreateOfferModal from "../NeederComponents/CreateOfferModal";
 import { useMediaQuery } from "@chakra-ui/react";
 import Detail from "./Detail";
+import DoerProfileModal from "../Components/DoerProfileModal";
 
 
 
@@ -233,6 +234,16 @@ const handleDetailsVisible = () => {
 }
 
 
+const [doerModalVisbile, setDoerModalVisible] = useState(false)
+
+
+const handleDoerModalVisbile = () => {
+  setDoerModalVisible(!doerModalVisbile)
+
+}
+
+console.log("what do i have?",user)
+
   return (
     <>
     <div className='flex-[2_2_0%] h-full flex flex-col'>
@@ -245,18 +256,19 @@ const handleDetailsVisible = () => {
 Back
 </button>)}
  
-  <div class="flex gap-x-2 sm:gap-x-4">
+  <div class="flex gap-x-2 sm:gap-x-4 ">
 
-    <img src={user.profilePictureResponse} className="w-12 h-12 rounded-full object-cover"></img>
+    <img onClick={() => handleDoerModalVisbile()} src={user.profilePictureResponse} className="w-16 h-16 rounded-full object-cover mt-2 cursor-pointer"></img>
 
-    <div class="grow">
-      <p class="font-semibold text-lg text-gray-800 ">
+    <div class="grow cursor-default" onClick={() => handleDoerModalVisbile()}>
+      <div onClick={() => handleDoerModalVisbile()}>
+      <p onClick={() => handleDoerModalVisbile()} class="font-semibold text-lg text-gray-800 cursor-pointer w-fit">
       {user.firstName}
       </p>
-      <p class="font-semibold text-sm text-gray-500  ">Job: {chat.jobTitle}</p>
+      
      
 
-      <div class="inline-flex items-center gap-x-3 text-sm text-gray-800">
+      <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 cursor-pointer">
                             {numberOfRatings ? (
                               <Flex>
                                 {maxRating.map((item, key) => {
@@ -302,21 +314,37 @@ Back
                               </>
                             )}
                           </div>
+                          <p class="font-semibold text-sm text-gray-500  cursor-pointer w-fit">Job: {chat.jobTitle}</p>
+                          </div>
                           {/* <p class="font-semibold text-sm text-gray-500  ">Job: {chat.jobTitle}</p> */}
             {isDesktop ? (null) : ( <div className="flex flex-col"><button className='bg-sky-400 hover:bg-sky-500 px-3 py-2 h-10  rounded-lg text-white border-none outline-none cursor-pointer' onClick={() => setOfferModalOpen(true)}>Send an offer</button>
    
    <button onClick={() => handleDetailsVisible()} type="button" class="py-3 px-4  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none ">
- See Job Details
+   
+See Job Details
 </button></div>)}
    
    
     </div>
     
     {isDesktop ? ( <div className="flex flex-col"><button className='bg-sky-400 hover:bg-sky-500 px-3 py-2 h-10  rounded-lg text-white border-none outline-none cursor-pointer' onClick={() => setOfferModalOpen(true)}>Send an offer</button>
+    {detailsVisible === true ? ( <button type="button"  onClick={() => handleDetailsVisible()} class="py-3  inline-flex justify-end gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none ">
    
-   <button type="button"  onClick={() => handleDetailsVisible()} class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none ">
- See Job Details
-</button></div>) : (null)}
+   See less
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mt-0.5">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+</svg>
+
+
+</button>) : ( <button type="button"  onClick={() => handleDetailsVisible()} class="py-3  inline-flex justify-end gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none ">
+   
+   
+   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mt-0.5">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+</svg>
+ Job Details
+</button>)}
+  </div>) : (null)}
    
     
   </div>
@@ -392,6 +420,8 @@ Back
        
     </div>
     {detailsVisible ? (<Detail />) : (null)}
+
+    {doerModalVisbile ? (<DoerProfileModal />) : (null)}
  
     </>
   )

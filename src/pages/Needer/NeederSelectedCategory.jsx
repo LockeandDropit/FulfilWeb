@@ -552,6 +552,9 @@ const NeederSelectedCategory = () => {
         messages: [],
         id: newChatRef.id,
         jobID: jobID,
+        jobTitle: "Request",
+        isRequest: true,
+        jobType: "Interview"
       });
 
       await updateDoc(doc(userChatsRef, premiumUser.streamChatID), {
@@ -560,6 +563,10 @@ const NeederSelectedCategory = () => {
           lastMessage: "",
           receiverId: userID,
           updatedAt: Date.now(),
+          jobTitle: "Request",
+          isRequest: true,
+          jobType: "Interview",
+          
         }),
       });
 
@@ -569,6 +576,9 @@ const NeederSelectedCategory = () => {
           lastMessage: "",
           receiverId: premiumUser.uid,
           updatedAt: Date.now(),
+          jobTitle: "Request",
+          isRequest: true,
+          jobType: "Interview"
         }),
       });
 

@@ -14,7 +14,7 @@ import { useChatStore } from "./lib/chatStore";
 import { filter } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 
-import { useJobStore  } from "./lib/jobsStore";
+import { useJobStore } from "./lib/jobsStore";
 
 const ChastList = () => {
   const [chats, setChats] = useState([]);
@@ -23,8 +23,7 @@ const ChastList = () => {
 
   const { currentUser } = useUserStore();
   const { chatId, changeChat } = useChatStore();
-  const { fetchJobInfo } = useJobStore()
-  console.log(currentUser);
+  const { fetchJobInfo, setJobHiringState } = useJobStore();
 
   useEffect(() => {
     const unSub = onSnapshot(
@@ -52,9 +51,6 @@ const ChastList = () => {
     };
   }, [currentUser.uid]);
 
-
-
-
   //Check channel Id's from "Category" and run them against "User MEssages" (? The one with user ID), then set those to chat
 
   // [] channelID's from SelectedCategory
@@ -65,6 +61,9 @@ const ChastList = () => {
     useState(null);
 
   ///uhh
+
+console.log("am i here>>>")
+
 
   useEffect(() => {
     if (selectedCategory === "Posted Jobs") {
@@ -89,12 +88,7 @@ const ChastList = () => {
       });
     } else if (selectedCategory === "Jobs In Progress") {
       const chatIdQuery = query(
-        collection(
-          db,
-          "employers",
-          currentUser.uid,
-          "Jobs In Progress",
-        )
+        collection(db, "employers", currentUser.uid, "Jobs In Progress")
       );
 
       onSnapshot(chatIdQuery, (snapshot) => {
@@ -107,20 +101,13 @@ const ChastList = () => {
 
         if (!channelIDs || !channelIDs.length) {
           //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
-        
         } else {
           setSelectedCategoryChannelIDs(channelIDs);
         }
       });
-
     } else if (selectedCategory === "In Review") {
       const chatIdQuery = query(
-        collection(
-          db,
-          "employers",
-          currentUser.uid,
-          "In Review",
-        )
+        collection(db, "employers", currentUser.uid, "In Review")
       );
 
       onSnapshot(chatIdQuery, (snapshot) => {
@@ -133,20 +120,13 @@ const ChastList = () => {
 
         if (!channelIDs || !channelIDs.length) {
           //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
-        
         } else {
           setSelectedCategoryChannelIDs(channelIDs);
         }
       });
-
     } else if (selectedCategory === "Requests") {
       const chatIdQuery = query(
-        collection(
-          db,
-          "employers",
-          currentUser.uid,
-          "Requests",
-        )
+        collection(db, "employers", currentUser.uid, "Requests")
       );
 
       onSnapshot(chatIdQuery, (snapshot) => {
@@ -159,12 +139,10 @@ const ChastList = () => {
 
         if (!channelIDs || !channelIDs.length) {
           //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
-        
         } else {
           setSelectedCategoryChannelIDs(channelIDs);
         }
       });
-
     }
   }, [selectedCategory]);
 
@@ -241,18 +219,16 @@ const ChastList = () => {
             chatData.forEach((chatData) => {
               if (filteredChat === chatData.chatId) {
                 selectedChats.push(chatData);
+                console.log("chat data", chatData);
               }
             });
           });
 
           if (!selectedChats || !selectedChats.length) {
-          
-            setChats(null)
+            setChats(null);
           } else {
             setChats(selectedChats.sort((a, b) => b.updatedAt - a.updatedAt));
           }
-
-        
         }
       );
 
@@ -266,25 +242,20 @@ const ChastList = () => {
 
   console.log(chats);
 
-
   //handle job fetching here
 
-const handleJobFetch = async (chat) => {
-
-      fetchJobInfo(currentUser.uid, chat.jobID, chat.jobType, chat.jobTitle);
-
-}
+  const handleJobFetch = async (chat) => {
+    fetchJobInfo(currentUser.uid, chat.jobID, chat.jobType, chat.jobTitle);
+  };
 
   const handleSelect = async (chat) => {
     const userChats = chats.map((item) => {
       const { user, ...rest } = item;
 
-      console.log("tyhis it?", item);
-      console.log("or this", chat);
-
       return rest;
     });
 
+    setJobHiringState(chat);
     const chatIndex = userChats.findIndex(
       (item) => item.chatId === chat.chatId
     );
@@ -304,7 +275,7 @@ const handleJobFetch = async (chat) => {
         chats: userChats,
       });
       changeChat(chat.chatId, chat.user);
-      handleJobFetch(chat)
+      handleJobFetch(chat);
     } catch (err) {
       console.log(err);
     }
@@ -314,7 +285,6 @@ const handleJobFetch = async (chat) => {
   //   c.user.username.toLowerCase().includes(input.toLowerCase())
   // );
 
-  
   return (
     <div
       className="p-5 flex flex-col overflow-y-scroll max-w-96  [&::-webkit-scrollbar]:w-2
@@ -335,58 +305,51 @@ const handleJobFetch = async (chat) => {
         <option value="Jobs In Progress">In Progress</option>
         <option value="Requests">Requests</option>
         <option value="In Review">Ready to Pay</option>
-        
       </select>
-      {chats ? chats.map((chat) => (
-        <div
-          onClick={() => handleSelect(chat)}
-          class="block cursor-pointer sm:w-full py-2 px-2  group bg-gray-100 rounded-2xl mb-2 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 "
-          key={chat.chatID}
-        >
-          <div class="flex gap-x-2 sm:gap-x-4">
-            <img
-              src={chat.user.profilePictureResponse}
-              className="w-14 h-14 mt-2.5 rounded-full object-cover"
-            ></img>
+      {chats ? (
+        chats.map((chat) => (
+          <div
+            onClick={() => handleSelect(chat)}
+            class="block cursor-pointer sm:w-full py-2 px-2  group bg-gray-100 rounded-2xl mb-2 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 "
+            key={chat.chatID}
+          >
+            <div class="flex gap-x-2 sm:gap-x-4">
+              <img
+                src={chat.user.profilePictureResponse}
+                className="w-14 h-14 mt-2.5 rounded-full object-cover"
+              ></img>
 
+              <div class="grow">
+                <p class="font-semibold text-lg text-gray-800 ">
+                  {chat.user.firstName}
+                </p>
+
+                <p class="font-semibold text-sm text-gray-600 ">
+                  Job: {chat.jobTitle}
+                </p>
+
+                <p class="text-sm text-gray-500 dark:text-neutral-500 line-clamp-1">
+                  {chat.lastMessage}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))
+      ) : (
+        <div class="block w-full py-2 px-1 sm:p-4 group bg-white rounded-2xl mb-2  focus:outline-none focus:bg-gray-200 ">
+          <div class="flex gap-x-2 sm:gap-x-4">
             <div class="grow">
               <p class="font-semibold text-lg text-gray-800 ">
-                {chat.user.firstName}
+                No Messages here
               </p>
 
-              <p class="font-semibold text-sm text-gray-600 ">
-                Job: {chat.jobTitle}
-              </p>
+              <p class="font-semibold text-sm text-gray-600 "></p>
 
-              <p class="text-sm text-gray-500 dark:text-neutral-500 line-clamp-1">
-                {chat.lastMessage}
-              </p>
+              <p class="text-sm text-gray-500 dark:text-neutral-500 line-clamp-1"></p>
             </div>
           </div>
         </div>
-      )) : (<div
-       
-        class="block w-full py-2 px-1 sm:p-4 group bg-white rounded-2xl mb-2  focus:outline-none focus:bg-gray-200 "
-  
-      >
-        <div class="flex gap-x-2 sm:gap-x-4">
-         
-
-          <div class="grow">
-            <p class="font-semibold text-lg text-gray-800 ">
-         No Messages here
-            </p>
-
-            <p class="font-semibold text-sm text-gray-600 ">
-           
-            </p>
-
-            <p class="text-sm text-gray-500 dark:text-neutral-500 line-clamp-1">
-            
-            </p>
-          </div>
-        </div>
-      </div>)}
+      )}
     </div>
   );
 };

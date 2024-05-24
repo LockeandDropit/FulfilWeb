@@ -1,85 +1,149 @@
-import React from 'react'
+import { useState, useEffect } from "react";
+import React from "react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { useChatStore } from "./lib/chatStore";
+import { useUserStore } from "./lib/userStore";
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+  query,
+  collection,
+} from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
+import { useJobStore } from "./lib/jobsStore";
+import { useCloseDetail } from "./lib/closeDetail";
 
-const Detail = () => {
-  return (
-    <div className="flex flex-1">
-    <div class="w-full max-h-full flex flex-col  bg-white rounded-lg pointer-events-auto  ">
-    <div class="py-3 px-4 flex justify-between items-center  ">
-                                <div class="w-100 max-h-full   bg-white rounded-xl  ">
-                                  
 
-                                  <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-                                    <div class="p-4 space-y-2">
-                                      <div class="">
-                                        <div class="py-3  flex-column  items-center  ">
-                                          <label
-                                            for="hs-pro-dactmt"
-                                            class="block mb-2 text-xl font-medium text-gray-800 "
-                                          >
-                                          gdsfgsdf
-                                          </label>
-                                          <p> Minnesota</p>
-                                        </div>
 
-                                        <div class=" flex-row  items-center  ">
-                                      
-                                            <div className="flex flex-row items-center">
-                                              <p>
-                                               
-                                                Offer: $
-                                              </p>
-                                            </div>
-                                       
-                                        </div>
-                                      </div>
+const Detail = (props) => {
+  const [data, setData] = useState(null);
 
-                                      <div class="">
-                                        <label
-                                          for="dactmi"
-                                          class=" text-lg font-medium text-gray-800 "
-                                        >
-                                          Description
-                                        </label>
+  const [jobTitle, setJobTitle] = useState(null);
 
-                                        <p  class=" text-md  ">sdvsd</p>
-                                      </div>
+  const [jobData, setJobData] = useState(null);
+  const { currentUser } = useUserStore();
+  const {job, jobHiringState} = useJobStore()
 
-                                      {/* <div class="space-y-1 ">
-                                        <label
-                                          for="dactmm"
-                                          class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
-                                        >
-                                          Applicants
-                                        </label>
-                                        
-                                      </div> */}
-                                    </div>
+  const { setDetailClose, setDetailOpen } = useCloseDetail()
 
-                                    <div class="p-4 flex justify-between gap-x-2   ">
-                                      <div class="w-full flex justify-end items-center gap-x-2">
-                                        <button
-                                          type="button"
-                                    
-                                          class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-white  hover:bg-gray-200 text-black text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                          data-hs-overlay="#hs-pro-datm"
-                                        >
-                                          Save Job
-                                        </button>
-                                        <button
-                                
-                                          class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                          data-hs-overlay="#hs-pro-datm"
-                                        >
-                                          Apply
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-    </div>
-  </div>
-  )
+  const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
+    useChatStore();
+  useEffect(() => {
+    const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
+      setData(res.data());
+      setJobTitle(res.data().jobTitle);
+    });
+
+    return () => {
+      unSub();
+    };
+  }, [chatId]);
+
+
+  useEffect(() => {
+    setDetailOpen()
+  }, [])
+
+const handleClose = () => {
+  setDetailClose()
 }
 
-export default Detail
+console.log(job)
+
+
+  return (
+    <div className="flex flex-1">
+      
+      {job ? (
+        
+        <div class="w-full max-h-full flex flex-col border-l boredr-gray-300 bg-white rounded-lg pointer-events-auto  ">
+          <div className=" ml-auto">
+                 <button  onClick={() => handleClose()}class="mt-1 size-8  inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none ">
+                 <span class="sr-only">Close</span>
+                                      <svg
+                                        class="flex-shrink-0 size-4"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                      >
+                                        <path d="M18 6 6 18" />
+                                        <path d="m6 6 12 12" />
+                                      </svg>
+                 </button>
+                    </div>
+          <div class="py-3 px-4 flex justify-between items-center  ">
+            
+            <div class="w-100 max-h-full   bg-white rounded-xl  ">
+            <div className="w-full " >
+            
+                                    </div>
+              <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+              
+                <div class="p-x-4 space-y-2">
+                  <div class="">
+                    <div className=" w-full flex ">
+                    <p class="font-semibold text-lg text-gray-800 ">
+                      {job.jobTitle}
+                    </p>
+                 
+                    </div>
+                    {job.isHourly ? (
+                      jobHiringState.isHired ? (  <p class="font-semibold text-sm text-gray-500  ">${jobHiringState.confirmedRate}/hr </p>) : (  <p class="font-semibold text-sm text-gray-500  ">${jobHiringState.lowerRate}/hr - ${jobHiringState.upperRate}/hr</p>)
+                      
+                    ) : (  <p class="font-semibold text-sm text-gray-500  ">${jobHiringState.confirmedRate} total</p>)
+
+                    }
+                    <p class="font-semibold text-sm text-gray-500  ">
+                      {job.city}, Minnesota
+                    </p>
+
+                    <p class="font-semibold text-sm text-gray-500  ">
+                      Posted {job.datePosted} 
+                    </p>
+                   
+
+                    <div class=" flex-row  items-center  ">
+              
+                    </div>
+                  </div>
+
+                  <div class="">
+                    <p class="font-semibold text-lg text-gray-800 ">
+                      Description
+                    </p>
+
+                    <p class=" font-semibold text-md text-gray-500  ">
+                      {job.description}
+                    </p>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        
+        </div>
+      ) : null}
+    </div>
+  );
+};
+
+export default Detail;

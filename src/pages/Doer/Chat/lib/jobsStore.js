@@ -15,12 +15,12 @@ jobHiringState: null,
 
     if (jobType === "Interview") {
         try {
-            const docRef = doc(db, "employers", uid, "Posted Jobs", jobTitle );
+            const docRef = doc(db, "users", uid, "Applied", jobTitle );
             const docSnap = await getDoc(docRef);
       //add code to check that jobID === JobID
             if (docSnap.exists() && docSnap.data().jobID === jobID) {
               set({ job: docSnap.data() });
-      
+              console.log("jobstore",docSnap.data())
             } else {
               set({job: null });
             }
@@ -30,11 +30,12 @@ jobHiringState: null,
           }
     } else {
       try {
-        const docRef = doc(db, "employers", uid, jobType, jobTitle );
+        const docRef = doc(db, "users", uid, jobType, jobTitle );
         const docSnap = await getDoc(docRef);
   
         if (docSnap.exists() && docSnap.data().jobID === jobID) {
           set({ job: docSnap.data() });
+          console.log("jobstore",docSnap.data())
         } else {
           set({job: null });
         }
@@ -47,3 +48,8 @@ jobHiringState: null,
    
   },
 }));
+
+
+
+
+/// ensure the data you just collected is good, console.log it o check then put it in it's respective areas.

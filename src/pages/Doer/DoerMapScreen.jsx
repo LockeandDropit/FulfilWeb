@@ -668,7 +668,7 @@ console.log("??",openInfoWindowMarkerID)
 
   //chat channel navigation
   const navigateToChannel = (x) => {
-    navigate("/DoerMessageList", { state: { selectedChannel: x.channelID } });
+    navigate("/ChatEntry", { state: { selectedChannel: x.channelID } });
     // console.log("mesage channel",x);
   };
 

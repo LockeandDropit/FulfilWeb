@@ -665,7 +665,8 @@ const handleAdd = async () => {
       messages: [],
       id: newChatRef.id,
       jobID: jobID,
-      jobTitle: jobTitle
+      jobTitle: jobTitle,
+      
     });
 
     await updateDoc(doc(userChatsRef, applicant.uid), {
@@ -675,7 +676,11 @@ const handleAdd = async () => {
         receiverId: user.uid,
         updatedAt: Date.now(),
         jobID: jobID,
-        jobTitle: jobTitle
+        jobTitle: jobTitle,
+        jobType: "Interview",
+      isRequest: false,
+      jobOfferd: false,
+      isHired: false
       }),
     });
 
@@ -686,7 +691,11 @@ const handleAdd = async () => {
         receiverId: applicant.uid,
         updatedAt: Date.now(),
         jobID: jobID,
-        jobTitle: jobTitle
+        jobTitle: jobTitle,
+        jobType: "Interview",
+        isRequest: false,
+        jobOfferd: false,
+        isHired: false
       }),
     });
 

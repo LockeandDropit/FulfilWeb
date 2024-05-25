@@ -22,6 +22,7 @@ import {
   collection,
 } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
+import { useJobStore } from "./lib/jobsStore";
 const Detail = (props) => {
   const [data, setData] = useState(null);
 
@@ -29,6 +30,7 @@ const Detail = (props) => {
 
   const [jobData, setJobData] = useState(null);
   const { currentUser } = useUserStore();
+  const {job, jobHiringState} = useJobStore()
 
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
     useChatStore();
@@ -43,43 +45,14 @@ const Detail = (props) => {
     };
   }, [chatId]);
 
-  useEffect(() => {
-    if (jobTitle) {
-      getData();
-    }
-  }, [jobTitle]);
-
-  const getData = async () => {
-    const docRef = doc(
-      db,
-      "employers",
-      currentUser.uid,
-      "Posted Jobs",
-      jobTitle
-    );
-
-    await getDoc(docRef).then((snapshot) => {
-      setJobData(snapshot.data());
-      console.log("is this working", snapshot.data());
-    });
-  };
 
 
-  useEffect(() => {
-    let initialDate = new Date()
-    var dd = String(initialDate.getDate()).padStart(2, '0');
-    var mm = String(initialDate.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = initialDate.getFullYear();
+console.log("job", job)
 
-    var today = mm + '/' + dd + '/' + yyyy;
-
-
-    console.log(today)
-  }, [])
 
   return (
     <div className="flex flex-1">
-      {jobData ? (
+      {job ? (
         <div class="w-full max-h-full flex flex-col border-l boredr-gray-300 bg-white rounded-lg pointer-events-auto  ">
           <div class="py-3 px-4 flex justify-between items-center  ">
             <div class="w-100 max-h-full   bg-white rounded-xl  ">
@@ -87,19 +60,21 @@ const Detail = (props) => {
                 <div class="p-4 space-y-2">
                   <div class="">
                     <p class="font-semibold text-lg text-gray-800 ">
-                      {jobData.jobTitle}
+                      {job.jobTitle}
                     </p>
-                    {jobData.isHourly ? (
-                        <p class="font-semibold text-sm text-gray-500  ">${jobData.lowerRate}/hr - ${jobData.upperRate}/hr</p>
-                    ) : (  <p class="font-semibold text-sm text-gray-500  ">${jobData.flatRate} total</p>)
+                    {job.isHourly ? (
+                      jobHiringState.isHired ? (  <p class="font-semibold text-sm text-gray-500  ">${jobHiringState.confirmedRate}/hr </p>) : (  <p class="font-semibold text-sm text-gray-500  ">${job.lowerRate}/hr - ${job.upperRate}/hr</p>)
+                      
+                    ) : 
+                      jobHiringState.isHired ? (<p class="font-semibold text-sm text-gray-500  ">${jobHiringState.confirmedRate} total</p>) : (<p class="font-semibold text-sm text-gray-500  ">${job.flatRate} total</p>)
 
                     }
                     <p class="font-semibold text-sm text-gray-500  ">
-                      {jobData.city}, Minnesota
+                      {job.city}, Minnesota
                     </p>
 
                     <p class="font-semibold text-sm text-gray-500  ">
-                      Posted {jobData.datePosted} 
+                      Posted {job.datePosted} 
                     </p>
                    
 
@@ -114,7 +89,7 @@ const Detail = (props) => {
                     </p>
 
                     <p class=" font-semibold text-md text-gray-500  ">
-                      {jobData.description}
+                      {job.description}
                     </p>
                   </div>
 

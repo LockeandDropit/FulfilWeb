@@ -587,12 +587,12 @@ const NeederSelectedCategory = () => {
         {
           hasUnreadMessage: true,
           interviewStarted: true,
-          channelID: newChatRef.id,
+          channelId: newChatRef.id,
         }
       );
 
       await updateDoc(doc(db, "employers", userID, "Requests", jobID), {
-        channelID: newChatRef.id,
+        channelId: newChatRef.id,
       }).then(() => {
         setTimeout(() => {
           navigate("/NeederChatEntry", {

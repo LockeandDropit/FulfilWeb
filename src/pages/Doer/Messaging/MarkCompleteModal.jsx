@@ -69,33 +69,31 @@ import {
 
 import star_corner from "../../../images/star_corner.png";
 import star_filled from "../../../images/star_filled.png";
-function MarkCompleteModal(props) {
-  console.log("props", props);
+import { useJobStore } from "../Chat/lib/jobsStore";
+import { useChatStore } from "../Chat/lib/chatStore";
+import { useUserStore } from "../Chat/lib/userStore";
+
+function MarkCompleteModal() {
+
 
   const [hasRun, setHasRun] = useState(false);
-  const [user, setUser] = useState(null);
+
+  const { user, chatId} = useChatStore()
+  const { currentUser } = useUserStore();
+  const {job, jobHiringState, setJobHiringState} = useJobStore()
  
   const navigate = useNavigate();
 
   const [userHasRun, setUserHasRun] = useState(false);
 
   useEffect(() => {
-    if (hasRun) {
-    } else {
+  
       onOpenMarkComplete();
-      setHasRun(true);
-    }
+
+    
   }, []);
 
-  useEffect(() => {
-    if (userHasRun === false) {
-      onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser);
-      });
-      setUserHasRun(true);
-    } else {
-    }
-  }, []);
+
 
   //logic for marking job complete
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
@@ -116,6 +114,11 @@ function MarkCompleteModal(props) {
     isOpen: isOpenHourly,
     onOpen: onOpenHourly,
     onClose: onCloseHourly,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenFlatRate,
+    onOpen: onOpenFlatRate,
+    onClose: onCloseFlatRate,
   } = useDisclosure();
 
   const handleCloseRatingModal = () => {
@@ -166,6 +169,7 @@ function MarkCompleteModal(props) {
     } else {
       onCloseMarkComplete();
       addWithNoRating();
+    
     }
   };
 
@@ -208,44 +212,87 @@ function MarkCompleteModal(props) {
     }
   };
 
-  useEffect(() => {
-    if (props && user) {
-      getDoc(doc(db, "users", user.uid, "Jobs In Progress", props.props.jobTitle))
-        .then((snapshot) => {
-            console.log(snapshot.data())
-            setConfirmedRate(snapshot.data().confirmedRate)
-            setJobID(snapshot.data().jobID)
-          setFlatRate(snapshot.data().flatRate);
-          setChannelID(snapshot.data().channelID)
-          setJobTitle(snapshot.data().jobTitle);
-          setLowerRate(snapshot.data().lowerRate);
-          setUpperRate(snapshot.data().upperRate);
-          setCity(snapshot.data().city);
-          setIsOneTime(snapshot.data().isOneTime);
-          setLowerCaseJobTitle(snapshot.data().lowerCaseJobTitle);
-          setEmployerID(snapshot.data().employerID);
-          setEmployerFirstName(snapshot.data().firstName);
-          setZipCode(snapshot.data().zipCode);
-          setDescription(snapshot.data().description);
-          setIsHourly(snapshot.data().isHourly);
-          setIsFlatRate(snapshot.data().isFlatRate);
-          setLocationLat(snapshot.data().locationLat);
-          setLocationLng(snapshot.data().locationLng);
-          setCategory(snapshot.data().category);
-          setState(snapshot.data().state);
-          setBusinessName(snapshot.data().businessName);
-          setStreetAddress(snapshot.data().streetAddress);
-          setRequirements(snapshot.data().requirements);
-          setBusinessName(snapshot.data().businessName);
-          setNiceToHave(snapshot.data().niceToHave);
-          setRequirements2(snapshot.data().requirements2);
-          setRequirements3(snapshot.data().requirements3);
-        })
-        .catch((error) => {
-          // no bueno
+// function to update FBMessage store
+
+const updateJobState = () => {
+  //update type of job,
+  //mark hired true
+  //set marked complete === false
+
+
+  try {
+ 
+    const userIDs = [currentUser.uid, user.uid];
+
+    userIDs.forEach(async (id) => {
+      const userChatsRef = doc(db, "User Messages", id);
+      const userChatsSnapshot = await getDoc(userChatsRef);
+
+      if (userChatsSnapshot.exists()) {
+        const userChatsData = userChatsSnapshot.data();
+
+        const chatIndex = userChatsData.chats.findIndex(
+          (c) => c.chatId === chatId
+        );
+        userChatsData.chats[chatIndex].isMarkedCompleteDoer = true
+        userChatsData.chats[chatIndex].jobType = "In Review" 
+        userChatsData.chats[chatIndex].isSeen =
+          id === currentUser.id ? true : false;
+        userChatsData.chats[chatIndex].updatedAt = Date.now();
+
+        await updateDoc(userChatsRef, {
+          chats: userChatsData.chats,
         });
-    }
-  }, [props, user]);
+
+        setJobHiringState(userChatsData.chats)
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
+}
+
+
+console.log("job",job)
+  // useEffect(() => {
+  //   if ( props && user) {
+  //     getDoc(doc(db, "users", user.uid, "Jobs In Progress", props.props.jobTitle))
+  //       .then((snapshot) => {
+  //           console.log(snapshot.data())
+  //           setConfirmedRate(snapshot.data().confirmedRate)
+  //           setJobID(snapshot.data().jobID)
+  //         setFlatRate(snapshot.data().flatRate);
+  //         setChannelID(snapshot.data().channelID)
+  //         setJobTitle(snapshot.data().jobTitle);
+  //         setLowerRate(snapshot.data().lowerRate);
+  //         setUpperRate(snapshot.data().upperRate);
+  //         setCity(snapshot.data().city);
+  //         setIsOneTime(snapshot.data().isOneTime);
+  //         setLowerCaseJobTitle(snapshot.data().lowerCaseJobTitle);
+  //         setEmployerID(snapshot.data().employerID);
+  //         setEmployerFirstName(snapshot.data().firstName);
+  //         setZipCode(snapshot.data().zipCode);
+  //         setDescription(snapshot.data().description);
+  //         setIsHourly(snapshot.data().isHourly);
+  //         setIsFlatRate(snapshot.data().isFlatRate);
+  //         setLocationLat(snapshot.data().locationLat);
+  //         setLocationLng(snapshot.data().locationLng);
+  //         setCategory(snapshot.data().category);
+  //         setState(snapshot.data().state);
+  //         setBusinessName(snapshot.data().businessName);
+  //         setStreetAddress(snapshot.data().streetAddress);
+  //         setRequirements(snapshot.data().requirements);
+  //         setBusinessName(snapshot.data().businessName);
+  //         setNiceToHave(snapshot.data().niceToHave);
+  //         setRequirements2(snapshot.data().requirements2);
+  //         setRequirements3(snapshot.data().requirements3);
+  //       })
+  //       .catch((error) => {
+  //         // no bueno
+  //       });
+  //   }
+  // }, [props, user]);
 
 
   const addHoursWorkedNavigate = () => {
@@ -253,35 +300,38 @@ function MarkCompleteModal(props) {
 
     setIsLoading(true)
 
+
+    updateJobState()
+
     //set hasbeenRated to false so employer can check if they have been rated yet
 
-    setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
+    setDoc(doc(db, "users", currentUser.uid, "Ratings", job.jobTitle), {
       ratingComplete: false,
     });
 
-    setDoc(doc(db, "users", user.uid, "In Review", jobTitle), {
-      confirmedRate: confirmedRate,
+    setDoc(doc(db, "users", currentUser.uid, "In Review", job.jobTitle), {
+      confirmedRate: job.confirmedRate,
       confirmHours: confirmHours,
-      employerID: employerID,
-      isHourly: isHourly,
-      jobTitle: jobTitle,
-      jobID: jobID,
-      description: description,
-      city: city,
-      lowerRate: lowerRate,
-      upperRate: upperRate,
-      channelID: channelID,
-      isOneTime: isOneTime,
-      streetAddress: streetAddress,
-      state: state,
-      zipCode: zipCode,
-      requirements: requirements,
-      requirements2: requirements2,
-      requirements3: requirements3,
-      niceToHave: niceToHave,
-      locationLat: locationLat,
-      locationLng: locationLng,
-      hiredApplicant: user.uid,
+      employerID: user.uid,
+      isHourly: job.isHourly,
+      jobTitle: job.jobTitle,
+      jobID: job.jobID,
+      description: job.description,
+      city: job.city,
+      lowerRate: job.lowerRate,
+      upperRate: job.upperRate,
+      channelId: job.channelId,
+      isOneTime: job.isOneTime,
+      streetAddress: job.streetAddress,
+      state: job.state,
+      zipCode: job.zipCode,
+      requirements: job.requirements,
+      requirements2: job.requirements2,
+      requirements3: job.requirements3,
+      niceToHave: job.niceToHave,
+      locationLat: job.locationLat,
+      locationLng: job.locationLng,
+      hiredApplicant: currentUser.uid,
       jobCompleteApplicant: true,
       jobCompleteEmployer: false,
     })
@@ -292,29 +342,29 @@ function MarkCompleteModal(props) {
        
       });
 
-    setDoc(doc(db, "employers", employerID, "In Review", jobTitle), {
-      confirmedRate: confirmedRate,
+    setDoc(doc(db, "employers", user.uid, "In Review", job.jobTitle), {
+      confirmedRate: job.confirmedRate,
       confirmHours: confirmHours,
-      employerID: employerID,
-      jobTitle: jobTitle,
-      jobID: jobID,
-      isHourly: isHourly,
-      description: description,
-      city: city,
-      channelID: channelID,
-      lowerRate: lowerRate,
-      upperRate: upperRate,
-      isOneTime: isOneTime,
-      streetAddress: streetAddress,
-      state: state,
-      zipCode: zipCode,
-      requirements: requirements,
-      requirements2: requirements2,
-      requirements3: requirements3,
-      niceToHave: niceToHave,
-      locationLat: locationLat,
-      locationLng: locationLng,
-      hiredApplicant: user.uid,
+      employerID: user.uid,
+      jobTitle: job.jobTitle,
+      jobID: job.jobID,
+      isHourly: job.isHourly,
+      description: job.description,
+      city: job.city,
+      channelId: job.channelId,
+      lowerRate: job.lowerRate,
+      upperRate: job.upperRate,
+      isOneTime: job.isOneTime,
+      streetAddress: job.streetAddress,
+      state: job.state,
+      zipCode: job.zipCode,
+      requirements: job.requirements,
+      requirements2: job.requirements2,
+      requirements3: job.requirements3,
+      niceToHave: job.niceToHave,
+      locationLat: job.locationLat,
+      locationLng: job.locationLng,
+      hiredApplicant: currentUser.uid,
       jobCompleteApplicant: true,
       jobCompleteEmployer: false,
     })
@@ -325,7 +375,7 @@ function MarkCompleteModal(props) {
     
       });
 
-    deleteDoc(doc(db, "users", user.uid, "Jobs In Progress", jobTitle))
+    deleteDoc(doc(db, "users", currentUser.uid, "Jobs In Progress", job.jobTitle))
       .then(() => {
         //all good
       
@@ -335,7 +385,7 @@ function MarkCompleteModal(props) {
       
       });
 
-    deleteDoc(doc(db, "employers", employerID, "Jobs In Progress", jobTitle))
+    deleteDoc(doc(db, "employers", user.uid, "Jobs In Progress", job.jobTitle))
       .then(() => {
         //all good
        
@@ -346,7 +396,7 @@ function MarkCompleteModal(props) {
       });
 
     //submit data
-    setDoc(doc(db, "employers", employerID, "Ratings", jobTitle), {
+    setDoc(doc(db, "employers", user.uid, "Ratings", job.jobTitle), {
       rating: defaultRating,
     })
       .then(() => {
@@ -358,7 +408,7 @@ function MarkCompleteModal(props) {
      
       });
 
-    setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
+    setDoc(doc(db, "users", currentUser.uid, "Ratings", job.jobTitle), {
       ratingComplete: false,
     })
       .then(() => {})
@@ -385,31 +435,34 @@ function MarkCompleteModal(props) {
 
       setIsLoading(true);
 
+      
+    updateJobState()
+
       //submitted if flat rate
 
-      setDoc(doc(db, "users", user.uid, "In Review", jobTitle), {
-        confirmedRate: confirmedRate,
-        employerID: employerID,
-        jobTitle: jobTitle,
-        isHourly: isHourly,
-        jobID: jobID,
-        description: description,
-        locationLat: locationLat,
-        locationLng: locationLng,
-        city: city,
-        channelID: channelID,
-        lowerRate: lowerRate,
-        upperRate: upperRate,
+      setDoc(doc(db, "users", currentUser.uid, "In Review", job.jobTitle), {
+        confirmedRate: job.confirmedRate,
+        employerID: user.uid,
+        jobTitle: job.jobTitle,
+        isHourly: job.isHourly,
+        jobID: job.jobID,
+        description: job.description,
+        locationLat: job.locationLat,
+        locationLng: job.locationLng,
+        city: job.city,
+        channelId: job.channelId,
+        lowerRate: job.lowerRate,
+        upperRate: job.upperRate,
         isVolunteer: false,
-        isOneTime: isOneTime,
-        streetAddress: streetAddress,
-        state: state,
-        zipCode: zipCode,
-        requirements: requirements,
-        requirements2: requirements2,
-        requirements3: requirements3,
-        niceToHave: niceToHave,
-        hiredApplicant: user.uid,
+        isOneTime: job.isOneTime,
+        streetAddress: job.streetAddress,
+        state: job.state,
+        zipCode: job.zipCode,
+        requirements: job.requirements,
+        requirements2: job.requirements2,
+        requirements3: job.requirements3,
+        niceToHave: job.niceToHave,
+        hiredApplicant: currentUser.uid,
         jobCompleteApplicant: true,
         jobCompleteEmployer: false,
       })
@@ -420,30 +473,30 @@ function MarkCompleteModal(props) {
           
         });
 
-      setDoc(doc(db, "employers", employerID, "In Review", jobTitle), {
-        confirmedRate: confirmedRate,
-        employerID: employerID,
-        jobTitle: jobTitle,
-        isHourly: isHourly,
-        jobID: jobID,
-        description: description,
-        locationLat: locationLat,
-        locationLng: locationLng,
-        channelID: channelID,
-        city: city,
-        lowerRate: lowerRate,
-        upperRate: upperRate,
+      setDoc(doc(db, "employers", user.uid, "In Review", job.jobTitle), {
+        confirmedRate: job.confirmedRate,
+        employerID: user.uid,
+        jobTitle: job.jobTitle,
+        isHourly: job.isHourly,
+        jobID: job.jobID,
+        description: job.description,
+        locationLat: job.locationLat,
+        locationLng: job.locationLng,
+        channelId: job.channelId,
+        city: job.city,
+        lowerRate: job.lowerRate,
+        upperRate: job.upperRate,
         isVolunteer: false,
-        isOneTime: isOneTime,
-        streetAddress: streetAddress,
-        state: state,
-        zipCode: zipCode,
-        requirements: requirements,
-        requirements2: requirements2,
-        requirements3: requirements3,
-        niceToHave: niceToHave,
+        isOneTime: job.isOneTime,
+        streetAddress: job.streetAddress,
+        state: job.state,
+        zipCode: job.zipCode,
+        requirements: job.requirements,
+        requirements2: job.requirements2,
+        requirements3: job.requirements3,
+        niceToHave: job.niceToHave,
 
-        hiredApplicant: user.uid,
+        hiredApplicant: currentUser.uid,
         jobCompleteApplicant: true,
         jobCompleteEmployer: false,
       })
@@ -455,7 +508,7 @@ function MarkCompleteModal(props) {
         });
 
       deleteDoc(
-        doc(db, "users", user.uid, "Jobs In Progress", jobTitle)
+        doc(db, "users", currentUser.uid, "Jobs In Progress", job.jobTitle)
       )
         .then(() => {
           //all good
@@ -470,9 +523,9 @@ function MarkCompleteModal(props) {
         doc(
           db,
           "employers",
-          employerID,
+          user.uid,
           "Jobs In Progress",
-          jobTitle
+          job.jobTitle
         )
       )
         .then(() => {
@@ -483,7 +536,7 @@ function MarkCompleteModal(props) {
          
         });
 
-      setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
+      setDoc(doc(db, "users", currentUser.uid, "Ratings", job.jobTitle), {
         ratingComplete: false,
       })
         .then(() => {
@@ -498,7 +551,7 @@ function MarkCompleteModal(props) {
         
         onCloseMarkComplete();
         onOpenSuccess()
-        navigate("/DoerMessageList");
+      
       }, 2500);
     }
   };
@@ -513,31 +566,33 @@ function MarkCompleteModal(props) {
 
         setIsLoading(true)
 
+        updateJobState()
+
         //submitted if flat rate
 
-        setDoc(doc(db, "users", user.uid, "In Review", jobTitle), {
-          confirmedRate: confirmedRate,
-          employerID: employerID,
-          jobTitle: jobTitle,
-          isHourly: isHourly,
-          jobID: jobID,
-          description: description,
-          locationLat: locationLat,
-          locationLng: locationLng,
-          channelID: channelID,
-          city: city,
-          lowerRate: lowerRate,
-          upperRate: upperRate,
+        setDoc(doc(db, "users", currentUser.uid, "In Review", job.jobTitle), {
+          confirmedRate: job.confirmedRate,
+          employerID: user.uid,
+          jobTitle: job.jobTitle,
+          isHourly: job.isHourly,
+          jobID: job.jobID,
+          description: job.description,
+          locationLat: job.locationLat,
+          locationLng: job.locationLng,
+          channelId: job.channelId,
+          city: job.city,
+          lowerRate: job.lowerRate,
+          upperRate: job.upperRate,
           isVolunteer: false,
-          isOneTime: isOneTime,
-          streetAddress: streetAddress,
-          state: state,
-          zipCode: zipCode,
-          requirements: requirements,
-          requirements2: requirements2,
-          requirements3: requirements3,
-          niceToHave: niceToHave,
-          hiredApplicant: user.uid,
+          isOneTime: job.isOneTime,
+          streetAddress: job.streetAddress,
+          state: job.state,
+          zipCode: job.zipCode,
+          requirements: job.requirements,
+          requirements2: job.requirements2,
+          requirements3: job.requirements3,
+          niceToHave: job.niceToHave,
+          hiredApplicant: currentUser.uid,
           jobCompleteApplicant: true,
           jobCompleteEmployer: false,
         })
@@ -548,29 +603,29 @@ function MarkCompleteModal(props) {
 
           });
 
-        setDoc(doc(db, "employers", employerID, "In Review", jobTitle), {
-          confirmedRate: confirmedRate,
-          employerID: employerID,
-          jobTitle: jobTitle,
-          isHourly: isHourly,
-          jobID: jobID,
-          description: description,
-          locationLat: locationLat,
-          locationLng: locationLng,
-          channelID: channelID,
-          city: city,
-          lowerRate: lowerRate,
-          upperRate: upperRate,
+        setDoc(doc(db, "employers", user.uid, "In Review", job.jobTitle), {
+          confirmedRate: job.confirmedRate,
+          employerID: user.uid,
+          jobTitle: job.jobTitle,
+          isHourly: job.isHourly,
+          jobID: job.jobID,
+          description: job.description,
+          locationLat: job.locationLat,
+          locationLng: job.locationLng,
+          channelId: job.channelId,
+          city: job.city,
+          lowerRate: job.lowerRate,
+          upperRate: job.upperRate,
           isVolunteer: false,
-          isOneTime: isOneTime,
-          streetAddress: streetAddress,
-          state: state,
-          zipCode: zipCode,
-          requirements: requirements,
-          requirements2: requirements2,
-          requirements3: requirements3,
-          niceToHave: niceToHave,
-          hiredApplicant: user.uid,
+          isOneTime: job.isOneTime,
+          streetAddress: job.streetAddress,
+          state: job.state,
+          zipCode: job.zipCode,
+          requirements: job.requirements,
+          requirements2: job.requirements2,
+          requirements3: job.requirements3,
+          niceToHave: job.niceToHave,
+          hiredApplicant: currentUser.uid,
           jobCompleteApplicant: true,
           jobCompleteEmployer: false,
         })
@@ -581,7 +636,7 @@ function MarkCompleteModal(props) {
 
           });
 
-        deleteDoc(doc(db, "users", user.uid, "Jobs In Progress", jobTitle))
+        deleteDoc(doc(db, "users", currentUser.uid, "Jobs In Progress", job.jobTitle))
           .then(() => {
             //all good
 
@@ -591,7 +646,7 @@ function MarkCompleteModal(props) {
 
           });
 
-        deleteDoc(doc(db, "employers", employerID, "Jobs In Progress", jobTitle))
+        deleteDoc(doc(db, "employers", user.uid, "Jobs In Progress", job.jobTitle))
           .then(() => {
             //all good
 
@@ -603,7 +658,7 @@ function MarkCompleteModal(props) {
 
         //submit data
 
-        setDoc(doc(db, "employers", employerID, "Ratings", jobTitle), {
+        setDoc(doc(db, "employers", user.uid, "Ratings", job.jobTitle), {
           rating: defaultRating,
         })
           .then(() => {
@@ -615,7 +670,7 @@ function MarkCompleteModal(props) {
 
           });
 
-        setDoc(doc(db, "users", user.uid, "Ratings", jobTitle), {
+        setDoc(doc(db, "users", currentUser.uid, "Ratings", job.jobTitle), {
           ratingComplete: false,
         })
           .then(() => {})
@@ -628,7 +683,7 @@ function MarkCompleteModal(props) {
 
           onCloseMarkComplete();
           onOpenSuccess()
-          navigate("/DoerMessageList");
+          // navigate("/DoerMessageList");
         }, 2500);
       }
     };

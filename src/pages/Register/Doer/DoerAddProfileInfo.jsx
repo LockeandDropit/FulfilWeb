@@ -124,23 +124,13 @@ const DoerAddProfileInfo = () => {
 
 
   // create new Chat User
-  const client = StreamChat.getInstance(process.env.REACT_APP_STREAM_CHAT_API_KEY);
 
-  const createNewChatUser = async () => {
-    await client.connectUser(
-      {
-        id: user.uid,
-        name: firstName,
-      },
-      client.devToken(user.uid)
-    );
-  };
 
   const createChatSlotInDB = async () => {
     const userChatsRef = collection(db, "User Messages");
- await updateDoc(doc(userChatsRef, user.uid), {
+ await setDoc(doc(userChatsRef, user.uid), {
         chats: arrayUnion({
-          placeholder: null
+         
         }),
       });
   }
@@ -196,7 +186,7 @@ const DoerAddProfileInfo = () => {
 
   
     //depreciated, remove when able
-    createNewChatUser()
+
       .then(() => {
         //all good
 

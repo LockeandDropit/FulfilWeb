@@ -45,19 +45,17 @@ const NewVisitModal = (props) => {
               Welcome to Fulfil!
             </Heading>
            
-            <Text marginTop="16px">The easiest way to get started is to post your first job.</Text>
+            <Text marginTop="16px">The easiest way to get started is to post your first job. (Look at the left side of your screen)</Text>
             <Text marginTop="8px">Once posted, contractors can apply to that job and you'll be able choose the one you want.</Text>
             <Text marginTop= "8px">If you'd like to browse our list of contractors, you can click the "Find A Pro" tab on the left hand side of your screen.</Text>
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onClose}>
-              Close
-            </Button>
+           
             <Button  backgroundColor="#01A2E8"
           color="white"
-          _hover={{ bg: "#018ecb", textColor: "white" }} width="160px" onClick={() => navigate("/AddJobStart")}>
-              Post my job
+          _hover={{ bg: "#018ecb", textColor: "white" }} width="160px" onClick={() => onClose()}>
+              Got it!
             </Button>
           </ModalFooter>
         </ModalContent>

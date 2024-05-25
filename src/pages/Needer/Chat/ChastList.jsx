@@ -62,7 +62,7 @@ const ChastList = () => {
 
   ///uhh
 
-console.log("am i here>>>")
+
 
 
   useEffect(() => {
@@ -82,8 +82,10 @@ console.log("am i here>>>")
         if (!jobData || !jobData.length) {
           //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
           // setInterviewNewMessageLength(null);
+          setSelectedCategoryChannelIDs(null)
         } else {
           setInterviewMessageData(jobData);
+          console.log("1")
         }
       });
     } else if (selectedCategory === "Jobs In Progress") {
@@ -94,12 +96,14 @@ console.log("am i here>>>")
       onSnapshot(chatIdQuery, (snapshot) => {
         let channelIDs = [];
         snapshot.docs.forEach((doc) => {
-          if (doc.data().channelID) {
-            channelIDs.push(doc.data().channelID);
+          if (doc.data().channelId) {
+            channelIDs.push(doc.data().channelId);
           }
         });
 
         if (!channelIDs || !channelIDs.length) {
+          setChats(null)
+          setSelectedCategoryChannelIDs(null)
           //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
         } else {
           setSelectedCategoryChannelIDs(channelIDs);
@@ -111,17 +115,19 @@ console.log("am i here>>>")
       );
 
       onSnapshot(chatIdQuery, (snapshot) => {
-        let channelIDs = [];
+        let channelIds = [];
         snapshot.docs.forEach((doc) => {
-          if (doc.data().channelID) {
-            channelIDs.push(doc.data().channelID);
+          if (doc.data().channelId) {
+            channelIds.push(doc.data().channelId);
           }
         });
 
-        if (!channelIDs || !channelIDs.length) {
+        if (!channelIds || !channelIds.length) {
+          setChats(null)
+          setSelectedCategoryChannelIDs(null)
           //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
         } else {
-          setSelectedCategoryChannelIDs(channelIDs);
+          setSelectedCategoryChannelIDs(channelIds);
         }
       });
     } else if (selectedCategory === "Requests") {
@@ -130,17 +136,19 @@ console.log("am i here>>>")
       );
 
       onSnapshot(chatIdQuery, (snapshot) => {
-        let channelIDs = [];
+        let channelIds = [];
         snapshot.docs.forEach((doc) => {
-          if (doc.data().channelID) {
-            channelIDs.push(doc.data().channelID);
+          if (doc.data().channelId) {
+            channelIds.push(doc.data().channelId);
           }
         });
 
-        if (!channelIDs || !channelIDs.length) {
+        if (!channelIds || !channelIds.length) {
+          setChats(null)
+          setSelectedCategoryChannelIDs(null)
           //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
         } else {
-          setSelectedCategoryChannelIDs(channelIDs);
+          setSelectedCategoryChannelIDs(channelIds);
         }
       });
     }
@@ -160,19 +168,24 @@ console.log("am i here>>>")
           )
         );
 
+
+        console.log("2")
         onSnapshot(applicantQuery, (snapshot) => {
-          let channelIDs = [];
+          let channelIds = [];
           snapshot.docs.forEach((doc) => {
-            if (doc.data().channelID) {
-              channelIDs.push(doc.data().channelID);
+            if (doc.data().channelId) {
+              channelIds.push(doc.data().channelId);
+              console.log("3")
             }
           });
 
-          if (!channelIDs || !channelIDs.length) {
+          if (!channelIds || !channelIds.length) {
+            setChats(null)
             //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
             // setInterviewNewMessageLength(null);
           } else {
-            setSelectedCategoryChannelIDs(channelIDs);
+            console.log("4")
+            setSelectedCategoryChannelIDs(channelIds);
           }
         });
       });
@@ -194,41 +207,49 @@ console.log("am i here>>>")
           let selectedChats = [];
           const items = res.data().chats;
 
+          console.log("res data",res.data().chats)
+
           items.map(async (item) => {
             fetchedIds.push(item.chatId);
+            console.log("fetchedIDs", item.chatId)
           });
 
-          const promises = items.map(async (item) => {
-            const userDocRef = doc(db, "users", item.receiverId);
-            const userDocSnap = await getDoc(userDocRef);
 
-            const user = userDocSnap.data();
-
-            return { ...item, user };
-          });
-
-          const chatData = await Promise.all(promises);
-
-          //credit https://stackoverflow.com/questions/12433604/how-can-i-find-matching-values-in-two-arrays
-          let filteredChats = fetchedIds.filter((id) =>
-            selectedCategoryChannelIDs.includes(id)
-          );
-          console.log("filtered chats", filteredChats);
-
-          filteredChats.forEach((filteredChat) => {
-            chatData.forEach((chatData) => {
-              if (filteredChat === chatData.chatId) {
-                selectedChats.push(chatData);
-                console.log("chat data", chatData);
-              }
+          
+            const promises = items.map(async (item) => {
+              const userDocRef = doc(db, "users", item.receiverId);
+              const userDocSnap = await getDoc(userDocRef);
+  
+              const user = userDocSnap.data();
+  
+              return { ...item, user };
             });
-          });
+  
+            const chatData = await Promise.all(promises);
+  
+            //credit https://stackoverflow.com/questions/12433604/how-can-i-find-matching-values-in-two-arrays
+            let filteredChats = fetchedIds.filter((id) =>
+              selectedCategoryChannelIDs.includes(id)
+            );
+            console.log("filtered chats", filteredChats);
+  
+            filteredChats.forEach((filteredChat) => {
+              chatData.forEach((chatData) => {
+                if (filteredChat === chatData.chatId) {
+                  selectedChats.push(chatData);
+                  console.log("chat data", chatData);
+                }
+              });
+            });
+  
+            if (!selectedChats || !selectedChats.length) {
+              setChats(null);
+            } else {
+              setChats(selectedChats.sort((a, b) => b.updatedAt - a.updatedAt));
+            }
+      
 
-          if (!selectedChats || !selectedChats.length) {
-            setChats(null);
-          } else {
-            setChats(selectedChats.sort((a, b) => b.updatedAt - a.updatedAt));
-          }
+        
         }
       );
 
@@ -310,14 +331,39 @@ console.log("am i here>>>")
         chats.map((chat) => (
           <div
             onClick={() => handleSelect(chat)}
-            class="block cursor-pointer sm:w-full py-2 px-2  group bg-gray-100 rounded-2xl mb-2 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 "
+            class="block cursor-pointer sm:w-full py-2 px-2  group  rounded-2xl mb-2 hover:bg-gray-100 focus:outline-none focus:bg-gray-200 "
             key={chat.chatID}
           >
             <div class="flex gap-x-2 sm:gap-x-4">
-              <img
+              {chat.user.profilePictureResponse ? ( <img
                 src={chat.user.profilePictureResponse}
                 className="w-14 h-14 mt-2.5 rounded-full object-cover"
-              ></img>
+              ></img>) : ( <svg
+                class="w-14 h-14 rounded-full object-cover text-gray-500"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  x="0.62854"
+                  y="0.359985"
+                  width="15"
+                  height="15"
+                  rx="7.5"
+                  fill="white"
+                ></rect>
+                <path
+                  d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                  fill="currentColor"
+                ></path>
+              </svg>)}
+             
 
               <div class="grow">
                 <p class="font-semibold text-lg text-gray-800 ">

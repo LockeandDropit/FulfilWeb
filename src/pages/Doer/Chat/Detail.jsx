@@ -70,7 +70,7 @@ console.log(job)
         
         <div class="w-full max-h-full flex flex-col border-l boredr-gray-300 bg-white rounded-lg pointer-events-auto  ">
           <div className=" ml-auto">
-                 <button  onClick={() => handleClose()}class="mt-1 size-8  inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none ">
+                 <button  onClick={() => handleClose()}class="mt-1 size-8  inline-flex justify-center items-center  rounded-full border border-transparent  text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none ">
                  <span class="sr-only">Close</span>
                                       <svg
                                         class="flex-shrink-0 size-4"
@@ -108,7 +108,8 @@ console.log(job)
                     {job.isHourly ? (
                       jobHiringState.isHired ? (  <p class="font-semibold text-sm text-gray-500  ">${jobHiringState.confirmedRate}/hr </p>) : (  <p class="font-semibold text-sm text-gray-500  ">${jobHiringState.lowerRate}/hr - ${jobHiringState.upperRate}/hr</p>)
                       
-                    ) : (  <p class="font-semibold text-sm text-gray-500  ">${jobHiringState.confirmedRate} total</p>)
+                    ) : 
+                    jobHiringState.isHired ?(  <p class="font-semibold text-sm text-gray-500  ">${jobHiringState.confirmedRate} total</p>) : (<p class="font-semibold text-sm text-gray-500  ">${job.flatRate} total</p>)
 
                     }
                     <p class="font-semibold text-sm text-gray-500  ">

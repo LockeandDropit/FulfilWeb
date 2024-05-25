@@ -208,23 +208,7 @@ const ApplicantProfile = () => {
 
   const [profilePicture, setProfilePicture] = useState(null);
 
-  useEffect(() => {
-    if (applicant) {
-      getProfilePicture();
-    } else {
-    }
-  }, [applicant]);
 
-  const getProfilePicture = async () => {
-    const storage = getStorage();
-    const reference = ref(
-      storage,
-      "users/" + applicant.streamChatID + "/profilePicture.jpg"
-    );
-    await getDownloadURL(reference).then((response) => {
-      setProfilePicture(response);
-    });
-  };
 
   //redux store
   // const firstName = useSelector(selectUserFirstName);
@@ -702,7 +686,7 @@ const handleAdd = async () => {
     await updateDoc(doc(db, "users", applicant.streamChatID, "Applied", jobTitle), {
       hasUnreadMessage: true,
       interviewStarted: true,
-      channelID: newChatRef.id,
+      channelId: newChatRef.id,
     })
 
     await updateDoc(
@@ -716,7 +700,7 @@ const handleAdd = async () => {
         applicant.streamChatID
       ),
       {
-        channelID: newChatRef.id,
+        channelId: newChatRef.id,
       }
     )
     .then(() => {
@@ -726,7 +710,7 @@ const handleAdd = async () => {
             selectedChannel: newChatRef.id,
           },
         });
-      }, 500)
+      }, 2000)
     })
   } catch (err) {
     console.log(err);

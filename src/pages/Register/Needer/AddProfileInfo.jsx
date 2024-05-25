@@ -119,24 +119,13 @@ const AddProfileInfo = () => {
 
 
   // create new Chat User
-  const client = StreamChat.getInstance(process.env.REACT_APP_STREAM_CHAT_API_KEY);
-
-  const createNewChatUser = async () => {
-    await client.connectUser(
-      {
-        id: user.uid,
-        name: firstName,
-      },
-      client.devToken(user.uid)
-    );
-  };
 
 
   const createChatSlotInDB = async () => {
     const userChatsRef = collection(db, "User Messages");
- await updateDoc(doc(userChatsRef, user.uid), {
+ await setDoc(doc(userChatsRef, user.uid), {
         chats: arrayUnion({
-          placeholder: null
+   
         }),
       });
   }
@@ -173,7 +162,7 @@ useEffect(() => {
       });
 
       //depreciated, remove when able
-      createNewChatUser()
+    
       //in use
       createChatSlotInDB()
         .then(() => {
@@ -203,6 +192,7 @@ useEffect(() => {
       streamChatID: user.uid,
       phoneNumber: phoneNumber ? phoneNumber : null,
       isOnboarded: false,
+      uid: user.uid,
       emailVerified: false,
       stripeOnboarded: false,
       PrivacyPolicyAgree: privacyPolicy, 
@@ -211,7 +201,7 @@ useEffect(() => {
       profilePictureResponse: profilePicture ? profilePicture : null
     });
       //depreciated, remove when able
-      createNewChatUser()
+    
       //in use
       createChatSlotInDB()
       .then(() => {

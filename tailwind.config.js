@@ -1,3 +1,5 @@
+const { px } = require('framer-motion');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 
@@ -8,6 +10,7 @@ module.exports = {
   ],
   theme: {
     extend: {},
+  
   },
   plugins: [
     require('@tailwindcss/forms'),

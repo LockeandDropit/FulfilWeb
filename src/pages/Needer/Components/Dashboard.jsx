@@ -46,7 +46,7 @@ const Dashboard = () => {
 
   //this is the same user, rewritten to accomidate the f(x) that grabs the users unread messages
   const [currentUser, setCurrentUser] = useState(null)
-  const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
+
 
   const [hasRun, setHasRun] = useState(false);
 
@@ -68,7 +68,7 @@ const Dashboard = () => {
 
   const handleLogOut = async () => {
     setLoggingOut(true);
-    await chatClient.disconnectUser();
+
     await signOut(auth)
       .then(
         setTimeout(() => {
@@ -758,33 +758,6 @@ const Dashboard = () => {
           if (unreadMessages > 0) {
            setUnseenMessages(unreadMessages) 
           }
-
-
- 
-  
-            //credit https://stackoverflow.com/questions/12433604/how-can-i-find-matching-values-in-two-arrays
-            // let filteredChats = fetchedIds.filter((id) =>
-            //   selectedCategoryChannelIDs.includes(id)
-            // );
-            // console.log("filtered chats", filteredChats);
-  
-            // filteredChats.forEach((filteredChat) => {
-            //   chatData.forEach((chatData) => {
-            //     if (filteredChat === chatData.chatId) {
-            //       selectedChats.push(chatData);
-            //       console.log("chat data", chatData);
-            //     }
-            //   });
-            // });
-  
-            // if (!selectedChats || !selectedChats.length) {
-            //   setChats(null);
-            // } else {
-            //   setChats(selectedChats.sort((a, b) => b.updatedAt - a.updatedAt));
-            // }
-      
-
-        
         }
       );
 
@@ -875,7 +848,7 @@ const Dashboard = () => {
                     <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                   </svg>
                   Messages
-                  <span class="ml-auto inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium bg-red-500 text-white">{unseenMessages}</span>
+                  <span class=" ml-auto inline-flex items-center  px-2 rounded-full text-[10px] font-medium bg-red-500 text-white">{unseenMessages}</span>
                   
                 </button>) : (   <button
                   type="button"

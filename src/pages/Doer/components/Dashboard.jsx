@@ -54,15 +54,20 @@ const Dashboard = () => {
   const navigate = useNavigate();
   //validate & set current user
   const [user, setUser] = useState(null);
+  const [unseenMessages, setUnseenMessages] = useState(0)
 
-  const chatClient = new StreamChat(process.env.REACT_APP_STREAM_CHAT_API_KEY);
 
+
+
+    //this is the same user, rewritten to accomidate the f(x) that grabs the users unread messages
+    const [currentUser, setCurrentUser] = useState(null)
   const [hasRun, setHasRun] = useState(false);
 
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
+        setCurrentUser(currentUser)
         console.log(currentUser.uid);
       });
       setHasRun(true);
@@ -76,7 +81,7 @@ const Dashboard = () => {
 
   const handleLogOut = async () => {
     setLoggingOut(true);
-    await chatClient.disconnectUser();
+
     await signOut(auth)
       .then(
         setTimeout(() => {
@@ -217,6 +222,46 @@ const Dashboard = () => {
   }, [subscriptionID]);
 
 
+    //get number of unread messages
+
+    useEffect(() => {
+      if (currentUser) {
+         let allChats = [];
+   
+         const unSub = onSnapshot(
+           doc(db, "User Messages", currentUser.uid),
+           async (res) => {
+             let unreadMessages = 0;
+       
+             const items = res.data().chats;
+   
+             console.log("res data",res.data().chats)
+   
+             items.map(async (item) => {
+              
+               console.log("fetchedIDs", item.chatId)
+   
+               if (item.isSeen === false) {
+                   unreadMessages++
+               }
+             });
+   
+   
+             console.log(unreadMessages)
+   
+             if (unreadMessages > 0) {
+              setUnseenMessages(unreadMessages) 
+             }
+           }
+         );
+   
+         return () => {
+           unSub();
+         };
+      }
+     }, [currentUser]);
+
+
   return (
     <div>
       <aside
@@ -273,10 +318,10 @@ const Dashboard = () => {
                   </button>
                 </li>
 
-                <button
+                {unseenMessages > 0 ? (   <button
                   type="button"
                   class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
-                  onClick={() => navigate("/ChatEntry")}
+             onClick={() => navigate("/ChatEntry")}
                 >
                   <svg
                     class="flex-shrink-0 mt-0.5 size-4"
@@ -296,7 +341,34 @@ const Dashboard = () => {
                     <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                   </svg>
                   Messages
-                </button>
+                  <span class=" ml-auto inline-flex items-center  px-2 rounded-full text-[10px] font-medium bg-red-500 text-white">{unseenMessages}</span>
+                  
+                </button>) : (   <button
+                  type="button"
+                  class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
+             onClick={() => navigate("/ChatEntry")}
+                >
+                  <svg
+                    class="flex-shrink-0 mt-0.5 size-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                  Messages
+                </button>)}
+
+              
 
                 <button
                   type="button"

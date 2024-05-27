@@ -317,9 +317,14 @@ const ChastList = () => {
               </svg>)}
 
               <div class="grow">
+              <div className="flex w-full ">
                 <p class="font-semibold text-lg text-gray-800 ">
                   {chat.user.firstName}
                 </p>
+                {chat.isSeen ? (null) :(  <div className="w-full flex  h-1/2 mt-1">
+                <span class="ml-auto justify-end inline-flex items-center  px-1.5 rounded-full text-[10px] font-medium bg-red-500 text-white">1</span>
+                </div>)}
+                </div>
                 <p class="font-semibold text-sm text-gray-600 ">
                   Job: {chat.jobTitle}
                 </p>

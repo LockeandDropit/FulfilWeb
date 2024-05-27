@@ -23,6 +23,7 @@ import OfferModal from "../components/OfferModal";
 import { useCloseDetail } from "./lib/closeDetail";
 import MarkCompleteModal from "../Messaging/MarkCompleteModal";
 
+
 const Chat = () => {
   const [rating, setRating] = useState(null); //make dynamic, pull from Backend
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
@@ -553,6 +554,8 @@ const Chat = () => {
       {offerVisible ? <OfferModal /> : null}
 
       {markCompleteVisible ? <MarkCompleteModal /> : null}
+
+
     </>
   );
 };

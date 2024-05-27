@@ -32,6 +32,7 @@ import Detail from "./Detail";
 import DoerProfileModal from "../Components/DoerProfileModal";
 import { useJobStore } from "./lib/jobsStore";
 import OfferPostedJobModal from "../Components/OfferPostedJobModal";
+import EmbeddedPaymentsMessaging from "../Components/EmbeddedPaymentsMessaging";
 
 const Chat = () => {
   const [rating, setRating] = useState(null); //make dynamic, pull from Backend
@@ -225,6 +226,12 @@ const Chat = () => {
 
   const handleDetailsVisible = () => {
     setDetailsVisible(!detailsVisible);
+  };
+
+  const [paymentVisible, setPaymentVisible] = useState(false);
+
+  const handlePaymentVisible = () => {
+    setPaymentVisible(!paymentVisible);
   };
 
   const [doerModalVisbile, setDoerModalVisible] = useState(false);
@@ -480,7 +487,7 @@ const Chat = () => {
                 </span>
                  <button
                  className="bg-sky-400 mt-2 font-semibold hover:bg-sky-500 px-3 py-2 h-10  rounded-lg text-white border-none outline-none cursor-pointer"
-                //  onClick={() => handleModalOpen()}
+                 onClick={() => handlePaymentVisible()}
                >
                  Pay Now
                </button></div>) : (
@@ -635,6 +642,8 @@ const Chat = () => {
       {doerModalVisbile ? <DoerProfileModal /> : null}
 
       {offerPostedJobVisible ? <OfferPostedJobModal /> : null}
+
+      {paymentVisible ? <EmbeddedPaymentsMessaging props={job}/> : null}
     </>
   );
 };

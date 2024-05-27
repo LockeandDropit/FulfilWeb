@@ -899,6 +899,7 @@ const handleAdd = async () => {
                                       {userFirstName}{" "}
                                       {userLastName}
                                     </h1>
+                                 
                                   </div>
                                 </div>
 
@@ -1088,17 +1089,23 @@ const handleAdd = async () => {
                                               {email}
                                             </div> */}
                                           </li>
+                                          <div className="mt-2">
+                                       
+                                        </div>
                                         </ul>
-                                        <div className="mt-2">
-                                          <button
+                                        <div class="pt-4 first:pt-0 ">
+                                                    <h2 class="mb-2  mt-2 text-sm font-semibold text-gray-800 ">
+                                                     Contact
+                                                    </h2>
+                                                    <button
                                             onClick={() =>
                                             createInterviewChat()
                                             }
-                                            class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none "
+                                            class="w-3/4 mt-2 py-2 px-4 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none "
                                           >
-                                            Message
+                                           Send Message
                                           </button>
-                                        </div>
+                                                  </div>
                                       </div>
                                       <div class="w-full">
                                         <div class="pt-4 first:pt-0 flex flex-row ">
@@ -1112,13 +1119,16 @@ const handleAdd = async () => {
                                               {!applicant.premiumCategoryOne &&
                                               !applicant.premiumCategoryTwo &&
                                               !applicant.premiumCategoryThree ? (
-                                                <button
-                                                  type="button"
-                                                  class="p-2 w-1/2  text-center items-center gap-x-1.5 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
-                                                  data-hs-overlay="#hs-pro-dasadpm"
-                                                >
-                                                  More
-                                                </button>
+                                                // <button
+                                                //   type="button"
+                                                //   class="p-2 w-1/2  text-center items-center gap-x-1.5 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                                //   data-hs-overlay="#hs-pro-dasadpm"
+                                                // >
+                                                //   More
+                                                // </button>
+
+                                                <p className="text-sm tfont-semibold text-gray-500">No specialties listed.</p>
+                                                
                                               ) : (
                                                 <>
                                                   {applicant.premiumCategoryOne ? (
@@ -1461,37 +1471,40 @@ const handleAdd = async () => {
                                                   </li>
                                                 </ul>
                                                 <div className="mt-2">
-                                                  {/* <button
-                                                    onClick={() =>
-                                                      initiateRequest(
-                                                        applicant
-                                                      )
-                                                    }
-                                                    class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none "
-                                                  >
-                                                    Message
-                                                  </button> */}
+                                             
                                                 </div>
                                               </div>
                                               <div class="w-full">
+
+                                                {isDesktop ? (null) : (
+                                                    <div class="pt-4 first:pt-0 ">
+                                                    <h2 class="mb-2  mt-2 text-sm font-semibold text-gray-800 ">
+                                                     Contact
+                                                    </h2>
+                                                    <button
+                                            onClick={() =>
+                                            createInterviewChat()
+                                            }
+                                            class="w-1/2 mt-2 py-2 px-4 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none "
+                                          >
+                                           Send Message
+                                          </button>
+                                                  </div>
+                                                )}
+                                              {applicant.isPremium && applicant.premiumCategoryOne ? (
+                                                <>
                                                 <div class="pt-4 first:pt-0 flex flex-row ">
                                                   <h2 class="mb-2  mt-2 text-sm font-semibold text-gray-800 ">
                                                     Specialties
                                                   </h2>
                                                 </div>
                                                 <div>
-                                                  {applicant.isPremium ? (
+                                                 
                                                     <ul class="space-y-2 items-center">
                                                       {!applicant.premiumCategoryOne &&
                                                       !applicant.premiumCategoryTwo &&
                                                       !applicant.premiumCategoryThree ? (
-                                                        <button
-                                                          type="button"
-                                                          class="p-2 w-1/2  text-center items-center gap-x-1.5 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
-                                                          data-hs-overlay="#hs-pro-dasadpm"
-                                                        >
-                                                          More
-                                                        </button>
+                                                     <p className=" text-sm font-semibold text-gray-400">No specialties listed.</p>
                                                       ) : (
                                                         <>
                                                           {applicant.premiumCategoryOne ? (
@@ -1671,9 +1684,12 @@ const handleAdd = async () => {
                                                         </>
                                                       )}
                                                     </ul>
-                                                  ) : null}
+                                                  {/* ) : null} */}
                                                 </div>
+                                                </>
+                                                  ) : null}
                                               </div>
+                                              
                                             </div>
                                           </div>
                                         </div>
@@ -1950,7 +1966,7 @@ const handleAdd = async () => {
                                         </div>
                                       )}
 
-                                      <div class="flex flex-col bg-white  rounded-xl shadow-sm xl:shadow-none ">
+                                      <div class="flex flex-col bg-white  rounded-xl shadow-sm xl:shadow-none  mb-4">
                                         <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
                                           <h2 class="inline-block font-semibold text-gray-800 ">
                                             Projects

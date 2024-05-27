@@ -652,8 +652,10 @@ const NeederMapScreen = () => {
   };
 
   const navigateToChannel = (x) => {
-    console.log("this is what youre passing",x)
-    navigate("/NeederChatEntry", { state: { selectedChannel: x.channelID, applicant: x } });
+    console.log("this is what youre passing", x);
+    navigate("/NeederChatEntry", {
+      state: { selectedChannel: x.channelID, applicant: x },
+    });
     // console.log("mesage channel",x);
   };
 
@@ -852,208 +854,271 @@ const NeederMapScreen = () => {
                             class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
                             tabindex="-1"
                           >
-                            <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
-                              <div class="py-3 px-4 flex justify-between items-center border-b ">
-                                <div class="w-100 max-h-full   bg-white rounded-xl  ">
-                                  <div class="py-3 px-4 flex justify-between items-center">
-                                    <button
-                                      type="button"
-                                      onClick={() => handleCloseInfoWindow()}
-                                      class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
-                                    >
-                                      <span class="sr-only">Close</span>
-                                      <svg
-                                        class="flex-shrink-0 size-4"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                      >
-                                        <path d="M18 6 6 18" />
-                                        <path d="m6 6 12 12" />
-                                      </svg>
-                                    </button>
-                                  </div>
-
-                                  <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-                                    <div class="p-4 space-y-2">
+                            <div class="w-full max-h-full flex flex-col border-l boredr-gray-300 bg-white rounded-lg pointer-events-auto  ">
+                              <div className=" ml-auto mt-4">
+                                <button
+                                  onClick={() => handleCloseInfoWindow()}
+                                  class="mt-1 size-8  inline-flex justify-center items-center  rounded-full border border-transparent  text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                                >
+                                  <span class="sr-only">Close</span>
+                                  <svg
+                                    class="flex-shrink-0 size-4"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path d="M18 6 6 18" />
+                                    <path d="m6 6 12 12" />
+                                  </svg>
+                                </button>
+                              </div>
+                              <div class="py-3 px-4 flex justify-between items-center  ">
+                                <div class="w-100 max-h-full  w-full  bg-white rounded-xl  ">
+                                  <div className="w-full "></div>
+                                  <div class="overflow-y-auto w-full [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                                    <div class="p-x-4 space-y-2  w-full ">
                                       <div class="">
-                                        <div class="py-3  flex-column  items-center  ">
-                                          <label
-                                            for="hs-pro-dactmt"
-                                            class="block mb-2 text-xl font-medium text-gray-800 "
-                                          >
+                                        <div className=" w-full flex ">
+                                          <p class="font-semibold text-lg text-gray-800 ">
                                             {allJobs.jobTitle}
-                                          </label>
-                                          <p>{allJobs.city}, Minnesota</p>
-                                          {allJobs.isHourly ? (
-                                            <p>
-                                              ${allJobs.lowerRate}/hr-$
-                                              {allJobs.upperRate}
-                                              /hr
-                                            </p>
-                                          ) : (
-                                            <p>${allJobs.flatRate}</p>
-                                          )}
+                                          </p>
                                         </div>
+                                        {allJobs.isHourly ? (
+                                          <p class="font-semibold text-sm text-gray-500  ">
+                                            ${allJobs.lowerRate}/hr - $
+                                            {allJobs.upperRate}/hr
+                                          </p>
+                                        ) : (
+                                          <p class="font-semibold text-sm text-gray-500  ">
+                                            ${allJobs.flatRate} total
+                                          </p>
+                                        )}
+                                        <p class="font-semibold text-sm text-gray-500  ">
+                                          {allJobs.city}, Minnesota
+                                        </p>
+
+                                        <p class="font-semibold text-sm text-gray-500  ">
+                                          Posted {allJobs.datePosted} 
+                                        </p>
+
+                                        <div class=" flex-row  items-center  "></div>
                                       </div>
 
                                       <div class="">
-                                        <label
-                                          for="dactmi"
-                                          class=" text-lg font-medium text-gray-800 "
-                                        >
+                                        <p class="font-semibold text-lg text-gray-800 ">
                                           Description
-                                        </label>
+                                        </p>
 
-                                        <p>{allJobs.description}</p>
+                                        <p class=" text-md  ">
+                                          {allJobs.description}
+                                        </p>
                                       </div>
-
-                                      <div class="space-y-1 ">
-                                        <label
-                                          for="dactmm"
-                                          class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
-                                        >
-                                          Applicants
-                                        </label>
-                                        {isLoading ? (
-                                          <Center marginTop="32px">
-                                            <Spinner
-                                              thickness="4px"
-                                              speed="0.65s"
-                                              emptyColor="gray.200"
-                                              color="#01A2E8"
-                                              size="lg"
-                                            />
-                                          </Center>
-                                        ) : applicant ? (
-                                          applicant.map((applicant) => (
-                                            <>
-                                              <div className="mt-2 ">
-                                                {" "}
-                                                <li className="flex justify-between gap-x-6 py-1 ">
-                                                  <div className="flex min-w-0 gap-x-4">
-                                                    {applicant.profilePictureResponse ? (
-                                                      <img
-                                                        className="h-12 w-12 flex-none rounded-full bg-gray-50"
-                                                        src={
-                                                          applicant.profilePictureResponse
-                                                        }
-                                                        alt=""
-                                                      />
-                                                    ) : ( <span class="inline-block size-[46px] bg-gray-100 rounded-full overflow-hidden">
-                                                    <svg class="size-full text-gray-300" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                      <rect x="0.62854" y="0.359985" width="15" height="15" rx="7.5" fill="white"></rect>
-                                                      <path d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z" fill="currentColor"></path>
-                                                      <path d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z" fill="currentColor"></path>
-                                                    </svg>
-                                                  </span>)}
-
-                                                    <div className="min-w-0 flex-auto">
-                                                      <p className="text-md font-semibold leading-6 text-gray-900">
-                                                        {applicant.firstName}
-                                                      </p>
-
-                                                      <p className="mt-1 truncate text-xs leading-5 text-gray-500"></p>
-                                                      {applicant.numberOfRatings ? (
-                                                        <Flex>
-                                                          {maxRating.map(
-                                                            (item, key) => {
-                                                              return (
-                                                                <Box
-                                                                  activeopacity={
-                                                                    0.7
-                                                                  }
-                                                                  key={item}
-                                                                  marginTop="5px"
-                                                                >
-                                                                  <Image
-                                                                    boxSize="16px"
-                                                                    src={
-                                                                      item <=
-                                                                      applicant.rating
-                                                                        ? star_filled
-                                                                        : star_corner
-                                                                    }
-                                                                  ></Image>
-                                                                </Box>
-                                                              );
-                                                            }
-                                                          )}
-                                                          <p marginLeft="4px">
-                                                            (
-                                                            {
-                                                              applicant.numberOfRatings
-                                                            }{" "}
-                                                            reviews)
-                                                          </p>
-                                                        </Flex>
+                                      <div>
+                                        <div class="space-y-1 ">
+                                          <label
+                                            for="dactmm"
+                                            class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
+                                          >
+                                            Applicants
+                                          </label>
+                                          {isLoading ? (
+                                            <Center marginTop="32px">
+                                              <Spinner
+                                                thickness="4px"
+                                                speed="0.65s"
+                                                emptyColor="gray.200"
+                                                color="#01A2E8"
+                                                size="lg"
+                                              />
+                                            </Center>
+                                          ) : applicant ? (
+                                            applicant.map((applicant) => (
+                                              <>
+                                                <div class="p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
+                                                  <div class="flex justify-between">
+                                                    <div class="flex flex-col justify-center items-center size-[56px]  ">
+                                                      {applicant.profilePictureRespone ? (
+                                                        <img
+                                                          src={
+                                                            applicant.profilePictureRespone
+                                                          }
+                                                          class="flex-shrink-0 size-[38px] rounded-full"
+                                                        />
                                                       ) : (
-                                                        <p marginTop="2px">
-                                                          No reviews yet!
-                                                        </p>
+                                                        <svg
+                                                          class="size-full text-gray-500"
+                                                          width="36"
+                                                          height="36"
+                                                          viewBox="0 0 12 12"
+                                                          fill="none"
+                                                          xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                          <rect
+                                                            x="0.62854"
+                                                            y="0.359985"
+                                                            width="15"
+                                                            height="15"
+                                                            rx="7.5"
+                                                            fill="white"
+                                                          ></rect>
+                                                          <path
+                                                            d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                                                            fill="currentColor"
+                                                          ></path>
+                                                          <path
+                                                            d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                                                            fill="currentColor"
+                                                          ></path>
+                                                        </svg>
                                                       )}
+                                                    </div>
+
+                                                    <div>
+                                                      <label
+                                                        for="hs-pro-daicn1"
+                                                        class="relative cursor-default py-2 px-2.5 w-full sm:w-auto block text-center sm:text-start rounded-lg  text-xs font-medium focus:outline-none text-sky-500 bg-blue-100"
+                                                      >
+                                                        <span class="relative z-10 peer-checked:hidden text-sky-500 ">
+                                                          Pro
+                                                        </span>
+                                                        <span class="relative z-10 justify-center items-center gap-x-1.5 hidden peer-checked:flex peer-checked:text-gray-800 text-sky-500 ">
+                                                          <svg
+                                                            class="flex-shrink-0 size-3.5 mt-0.5"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="24"
+                                                            height="24"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            stroke-width="3"
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                          >
+                                                            <polyline points="20 6 9 17 4 12" />
+                                                          </svg>
+                                                          Pro
+                                                        </span>
+                                                      </label>
                                                     </div>
                                                   </div>
 
-                                                  <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                                                    {applicant.isPremium ? (
-                                                      <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium bg-green-100 text-green-500 ">
-                                                        Premium Contractor
-                                                      </span>
-                                                    ) : null}
-                                                  </div>
-                                                </li>
-                                                <div className="flex-column min-w-0 gap-x-4 mb-16">
-                                                  {applicant.isPremium ? (
-                                                    <>
+                                                  <div >
+                                                    <h3 class="font-medium text-gray-800 cursor-default ">
+                                                      {applicant.firstName}{" "}
+                                                      {applicant.lastName}
+                                                    </h3>
+                                                    <p class="mt-1 text-sm text-gray-500 ">
+                                                      <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 cursor-default ">
+                                                        {applicant.numberOfRatings ? (
+                                                          <Flex>
+                                                            {maxRating.map(
+                                                              (item, key) => {
+                                                                return (
+                                                                  <Box
+                                                                    activeopacity={
+                                                                      0.7
+                                                                    }
+                                                                    key={item}
+                                                                    marginTop="1px"
+                                                                  >
+                                                                    <Image
+                                                                      boxSize="16px"
+                                                                      src={
+                                                                        item <=
+                                                                        applicant.rating
+                                                                          ? star_filled
+                                                                          : star_corner
+                                                                      }
+                                                                    ></Image>
+                                                                  </Box>
+                                                                );
+                                                              }
+                                                            )}
+                                                            <Text marginLeft="4px">
+                                                              (
+                                                              {
+                                                                applicant.numberOfRatings
+                                                              }{" "}
+                                                              reviews)
+                                                            </Text>
+                                                          </Flex>
+                                                        ) : (
+                                                          <>
+                                                            <svg
+                                                              xmlns="http://www.w3.org/2000/svg"
+                                                              fill="none"
+                                                              viewBox="0 0 24 24"
+                                                              stroke-width="1.5"
+                                                              stroke="currentColor"
+                                                              class="flex-shrink-0 size-4 text-gray-600 "
+                                                            >
+                                                              <path
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                                                              />
+                                                            </svg>
+                                                            <Text>
+                                                              No reviews yet
+                                                            </Text>
+                                                          </>
+                                                        )}
+                                                      </div>
+                                                    </p>
+                                                    <Stack direction={"row"}>
                                                       {applicant.premiumCategoryOne ? (
-                                                        <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
+                                                        <span class="inline-flex items-center gap-x-1.5 py-1.5   px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
                                                           {
                                                             applicant.premiumCategoryOne
                                                           }
                                                         </span>
-                                                      ) : null}
+                                                      ) : (
+                                                        null
+                                                      )}
 
                                                       {applicant.premiumCategoryTwo ? (
-                                                        <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                        <span class="inline-flex items-center gap-x-1.5 py-1.5  ml-1 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
                                                           {
                                                             applicant.premiumCategoryTwo
                                                           }
                                                         </span>
                                                       ) : null}
                                                       {applicant.premiumCategoryThree ? (
-                                                        <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium rounded-md bg-blue-100 text-sky-500  m-1">
+                                                        <span class="inline-flex items-center gap-x-1.5 py-1.5  ml-1 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
                                                           {
                                                             applicant.premiumCategoryThree
                                                           }
                                                         </span>
                                                       ) : null}
-                                                    </>
-                                                  ) : null}
-                                                  <div className="mt-2">
-                                                    <p>{applicant.bio}</p>
+                                                    </Stack>
+
+                                                    <p class="mt-1 text-sm text-gray-500 ">
+                                                      {applicant.bio}
+                                                    </p>
                                                   </div>
+
                                                   {applicant.hasUnreadMessage ||
                                                   applicant.channelID ? (
                                                     <>
                                                       {" "}
                                                       <button
-                                                        class="w-auto  py-2 px-2 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500  "
-                                                        onClick={() =>
-                                                          navigateApplicantProfile(
-                                                            applicant,
-                                                            allJobs
-                                                          )
-                                                        }
-                                                      >
-                                                        See Profile
-                                                      </button>
+                                                    type="button"
+                                                    onClick={() =>
+                                                      navigateApplicantProfile(
+                                                        applicant,
+                                                        allJobs
+                                                      )
+                                                    }
+                                                    class="py-2 px-2  inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500  "
+                                                  >
+                                                    View profile
+                                                  </button>
                                                       <button
                                                         class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
                                                         onClick={() =>
@@ -1070,28 +1135,32 @@ const NeederMapScreen = () => {
                                                     </>
                                                   ) : (
                                                     <button
-                                                      class="w-auto py-2 px-2 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500  "
-                                                      onClick={() =>
-                                                        navigateApplicantProfile(
-                                                          applicant,
-                                                          allJobs
-                                                        )
-                                                      }
-                                                    >
-                                                      See Profile
-                                                    </button>
+                                                    type="button"
+                                                    onClick={() =>
+                                                      navigateApplicantProfile(
+                                                        applicant,
+                                                        allJobs
+                                                      )
+                                                    }
+                                                    class="py-2 px-2  inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500  "
+                                                  >
+                                                    View profile
+                                                  </button>
                                                   )}
-                                                </div>
-                                              </div>
-                                            </>
-                                          ))
-                                        ) : (
-                                          <p>No applicants yet</p>
-                                        )}
-                                      </div>
-                                    </div>
 
-                                    <div class="p-4 flex justify-between gap-x-2  absolute right-0 bottom-12">
+
+
+                                                  
+                                                
+                                                </div>
+                                              </>
+                                            ))
+                                          ) : (
+                                            <p className="text-sm font-semibold text-gray-500">No applicants yet </p>
+                                          )}
+                                        </div>
+                                      </div>
+                                      <div class="p-4 flex justify-between gap-x-2  absolute right-0 bottom-12">
                                       <div class="w-full flex justify-end items-center gap-x-2">
                                         <button
                                           type="button"
@@ -1116,6 +1185,7 @@ const NeederMapScreen = () => {
                                           Cancel Job
                                         </button>
                                       </div>
+                                    </div>
                                     </div>
                                   </div>
                                 </div>
@@ -1251,7 +1321,9 @@ const NeederMapScreen = () => {
                                             class="block mb-2 text-xl font-medium text-gray-800 "
                                           >
                                             {jobsInProgressMap.jobTitle}
-                                            <span class="inline-flex items-center gap-x-1.5 py-1.5  ml-2 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">In Progress</span>
+                                            <span class="inline-flex items-center gap-x-1.5 py-1.5  ml-2 px-3 r text-xs rounded-md font-medium bg-blue-100 text-sky-500 ">
+                                              In Progress
+                                            </span>
                                           </label>
                                           <p>
                                             {jobsInProgressMap.city}, Minnesota
@@ -1311,13 +1383,35 @@ const NeederMapScreen = () => {
                                                       }
                                                       alt=""
                                                     />
-                                                  ) : ( <span class="inline-block size-[46px] bg-gray-100 rounded-full overflow-hidden">
-                                                  <svg class="size-full text-gray-300" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <rect x="0.62854" y="0.359985" width="15" height="15" rx="7.5" fill="white"></rect>
-                                                    <path d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z" fill="currentColor"></path>
-                                                    <path d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z" fill="currentColor"></path>
-                                                  </svg>
-                                                </span>)}
+                                                  ) : (
+                                                    <span class="inline-block size-[46px] bg-gray-100 rounded-full overflow-hidden">
+                                                      <svg
+                                                        class="size-full text-gray-300"
+                                                        width="16"
+                                                        height="16"
+                                                        viewBox="0 0 16 16"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                      >
+                                                        <rect
+                                                          x="0.62854"
+                                                          y="0.359985"
+                                                          width="15"
+                                                          height="15"
+                                                          rx="7.5"
+                                                          fill="white"
+                                                        ></rect>
+                                                        <path
+                                                          d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                                                          fill="currentColor"
+                                                        ></path>
+                                                        <path
+                                                          d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                                                          fill="currentColor"
+                                                        ></path>
+                                                      </svg>
+                                                    </span>
+                                                  )}
 
                                                   <div className="min-w-0 flex-auto">
                                                     <p className="text-md font-semibold leading-6 text-gray-900">
@@ -1562,10 +1656,10 @@ const NeederMapScreen = () => {
                                           >
                                             {jobsInReviewMap.jobTitle}
                                             <span class=" ml-2 inline-flex items-center gap-x-1.5 py-1.5 px-3 r text-xs font-medium bg-green-100 text-green-500 ">
-                                                     Ready To Pay
-                                                    </span>
+                                              Ready To Pay
+                                            </span>
                                           </label>
-                                          
+
                                           <p>
                                             {jobsInReviewMap.city}, Minnesota
                                           </p>
@@ -1623,13 +1717,35 @@ const NeederMapScreen = () => {
                                                       }
                                                       alt=""
                                                     />
-                                                  ) : ( <span class="inline-block size-[46px] bg-gray-100 rounded-full overflow-hidden">
-                                                  <svg class="size-full text-gray-300" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <rect x="0.62854" y="0.359985" width="15" height="15" rx="7.5" fill="white"></rect>
-                                                    <path d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z" fill="currentColor"></path>
-                                                    <path d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z" fill="currentColor"></path>
-                                                  </svg>
-                                                </span>)}
+                                                  ) : (
+                                                    <span class="inline-block size-[46px] bg-gray-100 rounded-full overflow-hidden">
+                                                      <svg
+                                                        class="size-full text-gray-300"
+                                                        width="16"
+                                                        height="16"
+                                                        viewBox="0 0 16 16"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                      >
+                                                        <rect
+                                                          x="0.62854"
+                                                          y="0.359985"
+                                                          width="15"
+                                                          height="15"
+                                                          rx="7.5"
+                                                          fill="white"
+                                                        ></rect>
+                                                        <path
+                                                          d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                                                          fill="currentColor"
+                                                        ></path>
+                                                        <path
+                                                          d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                                                          fill="currentColor"
+                                                        ></path>
+                                                      </svg>
+                                                    </span>
+                                                  )}
 
                                                   <div className="min-w-0 flex-auto">
                                                     <p className="text-md font-semibold leading-6 text-gray-900">
@@ -1757,7 +1873,6 @@ const NeederMapScreen = () => {
                                                     data-hs-overlay="#hs-pro-datm"
                                                   >
                                                     Pay Now
-                                                   
                                                   </button>
                                                 </div>
                                               </div>

@@ -17,7 +17,7 @@ const ChastList = () => {
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
   const [input, setInput] = useState("");
-
+  const [allChats, setAllChats] = useState(null)
   const { currentUser } = useUserStore();
   const { chatId, changeChat } = useChatStore();
   const { fetchJobInfo, setJobHiringState } = useJobStore();
@@ -42,6 +42,8 @@ const ChastList = () => {
         });
 
         const chatData = await Promise.all(promises);
+
+        setAllChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt))
 
         setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
       }
@@ -153,6 +155,8 @@ const ChastList = () => {
           setSelectedCategoryChannelIDs(channelIds);
         }
       });
+    } else if (selectedCategory === "All") {
+      setChats(allChats)
     }
   }, [selectedCategory]);
 
@@ -272,7 +276,7 @@ const ChastList = () => {
         id="hs-select-label"
         class="py-3 mb-1 px-4 sm:pe-9 block sm:w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
       >
-        <option selected="">Filter by category</option>
+        <option selected="All">See All</option>
         <option value="Applied">Interviewing</option>
         <option value="Jobs In Progress">In Progress</option>
         <option value="Requests">Requests</option>

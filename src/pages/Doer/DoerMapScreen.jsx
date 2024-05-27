@@ -278,13 +278,17 @@ const DoerMapScreen = () => {
   const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState(null);
 
   const handleToggleOpen = (x) => {
+    console.log("here", x)
     setOpenInfoWindowMarkerID(x);
-    getData(x);
+
+
+    //this (getData(x)) was throwing an error. Idk whatit was even for tbh. 
+    // getData(x);
   };
 
   const handleToggleAppliedOpen = (x) => {
     setOpenInfoWindowMarkerID(x);
-    console.log(x)
+    console.log(x);
     getData(x);
   };
 
@@ -404,9 +408,11 @@ const DoerMapScreen = () => {
   };
 
   //apply logic
-  const applyAndNavigate = () => {
+  const applyAndNavigate = (x) => {
+    //If anything is going wring in the application or saved job flow it's because I changed this on 5/27/24 at 2:30. Revert to previous if any issues
+
     if (isOnboarded === true) {
-      updateDoc(doc(db, "employers", employerID, "Posted Jobs", jobTitle), {
+      updateDoc(doc(db, "employers", x.employerID, "Posted Jobs", x.jobTitle), {
         hasNewApplicant: true,
       })
         .then(() => {
@@ -420,9 +426,9 @@ const DoerMapScreen = () => {
         doc(
           db,
           "employers",
-          employerID,
+          x.employerID,
           "Posted Jobs",
-          jobTitle,
+          x.jobTitle,
           "Applicants",
           user.uid
         ),
@@ -439,35 +445,35 @@ const DoerMapScreen = () => {
           //uh oh
         });
 
-      setDoc(doc(db, "users", user.uid, "Applied", jobTitle), {
-        requirements: requirements ? requirements : null,
-        requirements2: requirements2 ? requirements2 : null,
-        requirements3: requirements3 ? requirements3 : null,
-        isFlatRate: isFlatRate ? isFlatRate : null,
-        niceToHave: niceToHave ? niceToHave : null,
-        jobID: openInfoWindowMarkerID,
-        jobTitle: jobTitle ? jobTitle : null,
-        hourlyRate: hourlyRate ? hourlyRate : null,
-        streetAddress: streetAddress ? streetAddress : null,
-        city: city ? city : null,
-        state: state ? state : null,
-        zipCode: zipCode ? zipCode : null,
-        description: description ? description : null,
-        addressNumber: addressNumber ? addressNumber : null,
-        addressName: addressName ? addressName : null,
-        lowerRate: lowerRate ? lowerRate : null,
-        upperRate: upperRate ? upperRate : null,
-        addressSuffix: addressSuffix ? addressSuffix : null,
-        locationLat: locationLat ? locationLat : null,
-        locationLng: locationLng ? locationLng : null,
-        businessName: businessName ? businessName : null,
-        employerID: employerID ? employerID : null,
-        employerFirstName: employerFirstName ? employerFirstName : null,
-        flatRate: flatRate ? flatRate : null,
-        isHourly: isHourly ? isHourly : null,
-        category: category ? category : null,
-        isOneTime: isOneTime ? isOneTime : null,
-        lowerCaseJobTitle: lowerCaseJobTitle ? lowerCaseJobTitle : null,
+      setDoc(doc(db, "users", user.uid, "Applied", x.jobTitle), {
+        requirements: x.requirements ? x.requirements : null,
+        requirements2: x.requirements2 ? x.requirements2 : null,
+        requirements3: x.requirements3 ? x.requirements3 : null,
+        isFlatRate: x.isFlatRate ? x.isFlatRate : null,
+        niceToHave: x.niceToHave ? x.niceToHave : null,
+        jobID: x.jobID,
+        jobTitle: x.jobTitle ? x.jobTitle : null,
+        hourlyRate: x.hourlyRate ? x.hourlyRate : null,
+        streetAddress: x.streetAddress ? x.streetAddress : null,
+        city: x.city ? x.city : null,
+        state: x.state ? x.state : null,
+        zipCode: x.zipCode ? x.zipCode : null,
+        description: x.description ? x.description : null,
+        addressNumber: x.addressNumber ? x.addressNumber : null,
+        addressName: x.addressName ? x.addressName : null,
+        lowerRate: x.lowerRate ? x.lowerRate : null,
+        upperRate: x.upperRate ? x.upperRate : null,
+        addressSuffix: x.addressSuffix ? x.addressSuffix : null,
+        locationLat: x.locationLat ? x.locationLat : null,
+        locationLng: x.locationLng ? x.locationLng : null,
+        businessName: x.businessName ? x.businessName : null,
+        employerID: x.employerID ? x.employerID : null,
+        employerFirstName: x.employerFirstName ? x.employerFirstName : null,
+        flatRate: x.flatRate ? x.flatRate : null,
+        isHourly: x.isHourly ? x.isHourly : null,
+        category: x.category ? x.category : null,
+        isOneTime: x.isOneTime ? x.isOneTime : null,
+        lowerCaseJobTitle: x.lowerCaseJobTitle ? x.lowerCaseJobTitle : null,
       })
         .then(() => {
           onOpen();
@@ -504,9 +510,9 @@ const DoerMapScreen = () => {
   const getData = async (openInfoWindowMarkerID) => {
     const docRef = doc(db, "Map Jobs", openInfoWindowMarkerID);
 
-console.log("??",openInfoWindowMarkerID)
+    console.log( openInfoWindowMarkerID);
     await getDoc(docRef).then((snapshot) => {
-      console.log(snapshot.data())
+      console.log(snapshot.data());
       setFlatRate(snapshot.data().flatRate);
       setJobTitle(snapshot.data().jobTitle);
       setLowerRate(snapshot.data().lowerRate);
@@ -572,41 +578,42 @@ console.log("??",openInfoWindowMarkerID)
     });
   };
 
-  const saveJob = () => {
-    setDoc(doc(db, "users", user.uid, "Saved Jobs", openInfoWindowMarkerID), {
-      requirements: requirements ? requirements : null,
-      requirements2: requirements2 ? requirements2 : null,
-      requirements3: requirements3 ? requirements3 : null,
-      jobID: openInfoWindowMarkerID,
-      niceToHave: niceToHave ? niceToHave : null,
-      jobTitle: jobTitle ? jobTitle : null,
-      hourlyRate: hourlyRate ? hourlyRate : null,
-      streetAddress: streetAddress ? streetAddress : null,
-      city: city ? city : null,
-      state: state ? state : null,
-      zipCode: zipCode ? zipCode : null,
-      description: description ? description : null,
-      addressNumber: addressNumber ? addressNumber : null,
-      addressName: addressName ? addressName : null,
-      lowerRate: lowerRate ? lowerRate : null,
-      upperRate: upperRate ? upperRate : null,
-      addressSuffix: addressSuffix ? addressSuffix : null,
-      locationLat: locationLat ? locationLat : null,
-      locationLng: locationLng ? locationLng : null,
-      businessName: businessName ? businessName : null,
-      employerID: employerID ? employerID : null,
-      employerFirstName: employerFirstName ? employerFirstName : null,
-      flatRate: flatRate ? flatRate : null,
-      isHourly: isHourly ? isHourly : null,
-      category: category ? category : null,
-      isOneTime: isOneTime ? isOneTime : null,
-      lowerCaseJobTitle: lowerCaseJobTitle ? lowerCaseJobTitle : null,
+  const saveJob = (x) => {
+    setDoc(doc(db, "users", user.uid, "Saved Jobs", x.jobID), {
+      requirements: x.requirements ? x.requirements : null,
+      requirements2: x.requirements2 ? x.requirements2 : null,
+      requirements3: x.requirements3 ? x.requirements3 : null,
+      isFlatRate: x.isFlatRate ? x.isFlatRate : null,
+      niceToHave: x.niceToHave ? x.niceToHave : null,
+      jobID: x.jobID,
+      jobTitle: x.jobTitle ? x.jobTitle : null,
+      hourlyRate: x.hourlyRate ? x.hourlyRate : null,
+      streetAddress: x.streetAddress ? x.streetAddress : null,
+      city: x.city ? x.city : null,
+      state: x.state ? x.state : null,
+      zipCode: x.zipCode ? x.zipCode : null,
+      description: x.description ? x.description : null,
+      addressNumber: x.addressNumber ? x.addressNumber : null,
+      addressName: x.addressName ? x.addressName : null,
+      lowerRate: x.lowerRate ? x.lowerRate : null,
+      upperRate: x.upperRate ? x.upperRate : null,
+      addressSuffix: x.addressSuffix ? x.addressSuffix : null,
+      locationLat: x.locationLat ? x.locationLat : null,
+      locationLng: x.locationLng ? x.locationLng : null,
+      businessName: x.businessName ? x.businessName : null,
+      employerID: x.employerID ? x.employerID : null,
+      employerFirstName: x.employerFirstName ? x.employerFirstName : null,
+      flatRate: x.flatRate ? x.flatRate : null,
+      isHourly: x.isHourly ? x.isHourly : null,
+      category: x.category ? x.category : null,
+      isOneTime: x.isOneTime ? x.isOneTime : null,
+      lowerCaseJobTitle: x.lowerCaseJobTitle ? x.lowerCaseJobTitle : null,
     })
       .then(() => {
         //all good
 
         // navigation.navigate("BottomUserTab");
-        onOpenSaved()
+        onOpenSaved();
       })
       .catch((error) => {
         // no bueno
@@ -1234,14 +1241,14 @@ console.log("??",openInfoWindowMarkerID)
                     border="1px"
                     borderColor="gray.400"
                     borderWidth="1.5px"
-                    width={{base: "full", md: "auto"}}
+                    width={{ base: "full", md: "auto" }}
                     boxShadow="lg"
                     flexDirection="row"
-                    mr={{base: "80px", md: "0"}}
-                    ml={{base: "0px", md: "80px"}}
+                    mr={{ base: "80px", md: "0" }}
+                    ml={{ base: "0px", md: "80px" }}
                   >
                     <select
-                    className="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                      className="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                       placeholder="Search"
                       width="360px"
                       onChange={(e) => setSearchJobCategory(e.target.value)}
@@ -1315,106 +1322,93 @@ console.log("??",openInfoWindowMarkerID)
                             tabindex="-1"
                           >
                             <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+                              <div className=" ml-auto mt-4">
+                                <button
+                                  onClick={() =>
+                                    setOpenInfoWindowMarkerID(null)
+                                  }
+                                  class="mt-1 size-8  inline-flex justify-center items-center  rounded-full border border-transparent  text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                                >
+                                  <span class="sr-only">Close</span>
+                                  <svg
+                                    class="flex-shrink-0 size-4"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path d="M18 6 6 18" />
+                                    <path d="m6 6 12 12" />
+                                  </svg>
+                                </button>
+                              </div>
                               <div class="py-3 px-4 flex justify-between items-center  ">
                                 <div class="w-100 max-h-full   bg-white rounded-xl  ">
-                                  <div class="py-3 px-4 flex justify-between items-center">
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        setOpenInfoWindowMarkerID(null)
-                                      }
-                                      class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
-                                    >
-                                      <span class="sr-only">Close</span>
-                                      <svg
-                                        class="flex-shrink-0 size-4"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                      >
-                                        <path d="M18 6 6 18" />
-                                        <path d="m6 6 12 12" />
-                                      </svg>
-                                    </button>
-                                  </div>
-
+                                  <div className="w-full "></div>
                                   <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-                                    <div class="p-4 space-y-2">
+                                    <div class="p-x-4 space-y-2">
                                       <div class="">
-                                        <div class="py-3  flex-column  items-center  ">
-                                          <label
-                                            for="hs-pro-dactmt"
-                                            class="block mb-2 text-xl font-medium text-gray-800 "
-                                          >
+                                        <div className=" w-full flex ">
+                                          <p class="font-semibold text-lg text-gray-800 ">
                                             {allJobs.jobTitle}
-                                          </label>
-                                          <p>{allJobs.city}, Minnesota</p>
+                                          </p>
                                         </div>
+                                        {allJobs.isHourly ? (
+                                          <p class="font-semibold text-sm text-gray-500  ">
+                                            ${allJobs.lowerRate}/hr - $
+                                            {allJobs.upperRate}/hr
+                                          </p>
+                                        ) : (
+                                          <p class="font-semibold text-sm text-gray-500  ">
+                                            ${allJobs.flatRate} total
+                                          </p>
+                                        )}
+                                        <p class="font-semibold text-sm text-gray-500  ">
+                                          {allJobs.city}, Minnesota
+                                        </p>
 
-                                        <div class=" flex-row  items-center  ">
-                                          {allJobs.isHourly ? (
-                                            <p>
-                                              ${allJobs.lowerRate}/hr-$
-                                              {allJobs.upperRate}
-                                              /hr
-                                            </p>
-                                          ) : (
-                                            <div className="flex flex-row items-center">
-                                              <p>
-                                               
-                                                Offer: ${allJobs.flatRate}
-                                              </p>
-                                            </div>
-                                          )}
-                                        </div>
+                                        <p class="font-semibold text-sm text-gray-500  ">
+                                          Posted {allJobs.datePosted}
+                                        </p>
+
+                                        <div class=" flex-row  items-center  "></div>
                                       </div>
 
                                       <div class="">
-                                        <label
-                                          for="dactmi"
-                                          class=" text-lg font-medium text-gray-800 "
-                                        >
+                                        <p class="font-semibold text-lg text-gray-800 ">
                                           Description
-                                        </label>
+                                        </p>
 
-                                        <p  class=" text-md  ">{allJobs.description}</p>
+                                        <p class=" text-md  ">
+                                          {allJobs.description}
+                                        </p>
                                       </div>
-
-                                      {/* <div class="space-y-1 ">
-                                        <label
-                                          for="dactmm"
-                                          class="block mb-2 mt-10 text-lg font-medium text-gray-800 "
-                                        >
-                                          Applicants
-                                        </label>
-                                        
-                                      </div> */}
-                                    </div>
-
-                                    <div class="p-4 flex justify-between gap-x-2  absolute right-0 ">
-                                      <div class="w-full flex justify-end items-center gap-x-2">
-                                        <button
-                                          type="button"
-                                          onClick={() => saveJob()}
-                                          class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-white  hover:bg-gray-200 text-black text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                          data-hs-overlay="#hs-pro-datm"
-                                        >
-                                          Save Job
-                                        </button>
-                                        <button
-                                          type="button"
-                                          onClick={() => applyAndNavigate()}
-                                          class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                          data-hs-overlay="#hs-pro-datm"
-                                        >
-                                          Apply
-                                        </button>
+                                      <div>
+                                        <div class="p-4 flex justify-between gap-x-2  absolute right-0 ">
+                                          <div class="w-full flex justify-end items-center gap-x-2">
+                                            <button
+                                              type="button"
+                                              onClick={() => saveJob(allJobs)}
+                                              class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-white  hover:bg-gray-200 text-black text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                              data-hs-overlay="#hs-pro-datm"
+                                            >
+                                              Save Job
+                                            </button>
+                                            <button
+                                              type="button"
+                                              onClick={() => applyAndNavigate(allJobs)}
+                                              class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                              data-hs-overlay="#hs-pro-datm"
+                                            >
+                                              Apply
+                                            </button>
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -1422,7 +1416,6 @@ console.log("??",openInfoWindowMarkerID)
                               </div>
                             </div>
                           </div>
-                        
                         </Flex>
                       ) : null}
                     </>
@@ -1463,189 +1456,185 @@ console.log("??",openInfoWindowMarkerID)
                       >
                         <div>
                           {appliedJobs.hasUnreadMessage ? (
-                             <button
-                             type="button"
-                             class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                           >
-                             {appliedJobs.isVolunteer ? (
-                               <p>Volunteer!</p>
-                             ) : appliedJobs.isFlatRate ? (
-                               <p>${appliedJobs.flatRate}</p>
-                             ) : (
-                               <p>
-                                 ${appliedJobs.lowerRate} - ${appliedJobs.upperRate}/hr
-                               </p>
-                             )}
-   
-                             <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                               New
-                             </span>
-                           </button>
-                         ) : (
-                           <button
-                             type="button"
-                             class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                           >
+                            <button
+                              type="button"
+                              class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                            >
                               {appliedJobs.isVolunteer ? (
-                               <p>Volunteer!</p>
-                             ) : appliedJobs.isFlatRate ? (
-                               <p>${appliedJobs.flatRate}</p>
-                             ) : (
-                               <p>
-                                 ${appliedJobs.lowerRate} - ${appliedJobs.upperRate}/hr
-                               </p>
-                             )}
-                           </button> )}
-                            
+                                <p>Volunteer!</p>
+                              ) : appliedJobs.isFlatRate ? (
+                                <p>${appliedJobs.flatRate}</p>
+                              ) : (
+                                <p>
+                                  ${appliedJobs.lowerRate} - $
+                                  {appliedJobs.upperRate}/hr
+                                </p>
+                              )}
+
+                              <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                New
+                              </span>
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                            >
+                              {appliedJobs.isVolunteer ? (
+                                <p>Volunteer!</p>
+                              ) : appliedJobs.isFlatRate ? (
+                                <p>${appliedJobs.flatRate}</p>
+                              ) : (
+                                <p>
+                                  ${appliedJobs.lowerRate} - $
+                                  {appliedJobs.upperRate}/hr
+                                </p>
+                              )}
+                            </button>
+                          )}
                         </div>
                         /
                       </AdvancedMarker>
                       {openInfoWindowMarkerID === appliedJobs.jobID ? (
                         <Flex direction="row-reverse">
-
-<div
+                          <div
                             class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
                             tabindex="-1"
                           >
-                            <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+                              <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+                              <div className=" ml-auto mt-4">
+                                <button
+                                  onClick={() =>
+                                    setOpenInfoWindowMarkerID(null)
+                                  }
+                                  class="mt-1 size-8  inline-flex justify-center items-center  rounded-full border border-transparent  text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                                >
+                                  <span class="sr-only">Close</span>
+                                  <svg
+                                    class="flex-shrink-0 size-4"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path d="M18 6 6 18" />
+                                    <path d="m6 6 12 12" />
+                                  </svg>
+                                </button>
+                              </div>
                               <div class="py-3 px-4 flex justify-between items-center  ">
                                 <div class="w-100 max-h-full   bg-white rounded-xl  ">
-                                  <div class="py-3 px-4 flex justify-between items-center">
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        setOpenInfoWindowMarkerID(null)
-                                      }
-                                      class="mt-8 size-8 absolute right-0 inline-flex justify-center items-center  rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
-                                    >
-                                      <span class="sr-only">Close</span>
-                                      <svg
-                                        class="flex-shrink-0 size-4"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                      >
-                                        <path d="M18 6 6 18" />
-                                        <path d="m6 6 12 12" />
-                                      </svg>
-                                    </button>
-                                  </div>
-
+                                  <div className="w-full "></div>
                                   <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-                                    <div class="p-4 space-y-2">
+                                    <div class="p-x-4 space-y-2">
                                       <div class="">
-                                        <div class="py-3  flex-column  items-center  ">
-                                          <label
-                                            for="hs-pro-dactmt"
-                                            class="block mb-2 text-xl font-medium text-gray-800 "
-                                          >
+                                        <div className=" w-full flex ">
+                                          <p class="font-semibold text-lg text-gray-800 ">
                                             {appliedJobs.jobTitle}
-                                          </label>
-                                          <p>{appliedJobs.city}, Minnesota</p>
+                                          </p>
                                         </div>
+                                        {appliedJobs.isHourly ? (
+                                          <p class="font-semibold text-sm text-gray-500  ">
+                                            ${appliedJobs.lowerRate}/hr - $
+                                            {appliedJobs.upperRate}/hr
+                                          </p>
+                                        ) : (
+                                          <p class="font-semibold text-sm text-gray-500  ">
+                                            ${appliedJobs.flatRate} total
+                                          </p>
+                                        )}
+                                        <p class="font-semibold text-sm text-gray-500  ">
+                                          {appliedJobs.city}, Minnesota
+                                        </p>
 
-                                        <div class=" flex-row  items-center  ">
-                                          {appliedJobs.isHourly ? (
-                                            <p>
-                                              ${appliedJobs.lowerRate}/hr-$
-                                              {appliedJobs.upperRate}
-                                              /hr
-                                            </p>
-                                          ) : (
-                                            <div className="flex flex-row items-center">
-                                              <p>
-                                               
-                                                Offer: ${appliedJobs.flatRate}
-                                              </p>
-                                            </div>
-                                          )}
-                                        </div>
+                                        <p class="font-semibold text-sm text-gray-500  ">
+                                          Posted {appliedJobs.datePosted}
+                                        </p>
+
+                                        <div class=" flex-row  items-center  "></div>
                                       </div>
 
                                       <div class="">
-                                        <label
-                                          for="dactmi"
-                                          class=" text-lg font-medium text-gray-800 "
-                                        >
+                                        <p class="font-semibold text-lg text-gray-800 ">
                                           Description
-                                        </label>
+                                        </p>
 
-                                        <p  class=" text-md  ">{appliedJobs.description}</p>
+                                        <p class=" text-md  ">
+                                          {appliedJobs.description}
+                                        </p>
                                       </div>
 
                                       {appliedJobs.interviewStarted ? (
-                                  <>
-                                   <div class="py-3  flex-column  items-center  ">
-                                          <label
-                                            for="hs-pro-dactmt"
-                                            class="block  text-xl font-medium text-gray-800 "
-                                          >
-                                            Interview Started
-                                          </label>
-                                          <p  class="block mb-2 text-sm font-medium text-gray-500 ">Continue to your messages to respond to messages</p>
-                                        </div>
+                                        <>
+                                          <div class="py-3  flex-column  items-center  ">
+                                            <label
+                                              for="hs-pro-dactmt"
+                                              class="block  text-xl font-medium text-gray-800 "
+                                            >
+                                              Interview Started
+                                            </label>
+                                            <p class="block mb-2 text-sm font-medium text-gray-500 ">
+                                              Continue to your messages to
+                                              respond to messages
+                                            </p>
+                                          </div>
 
-                                    {appliedJobs.hasUnreadMessage ? (
-                                       <button
-                                       type="button"
-                                       onClick={() =>
-                                        navigateToChannel(appliedJobs)
-                                      }
-                                       class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                                     >
-                                       See Messages
-             
-                                       <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                                         New
-                                       </span>
-                                     </button>
-                                    
-                                    ) : (
-                                      <button
-                                      type="button"
-                                      onClick={() =>
-                                       navigateToChannel(appliedJobs)
-                                     }
-                                      class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                                    >
-                                      See Messages
-            
-                                    
-                                    </button>
-                                    )}
-                                  </>
-                                ) : (
-                                  <>
-
-<div class="py-3  flex-column  items-center  ">
-                                          <label
-                                            for="hs-pro-dactmt"
-                                            class="block  text-xl font-medium text-gray-800 "
-                                          >
-                                           Application pending
-                                          </label>
-                                          <p  class="block mb-2 text-sm font-medium text-gray-500 "> Message notifications will appear here if
-                                      the person who posted this job contacts
-                                      you.</p>
-                                        </div>
-                                  
-                                  </>
-                                )}
-                                    </div>
-
+                                          {appliedJobs.hasUnreadMessage ? (
+                                            <button
+                                              type="button"
+                                              onClick={() =>
+                                                navigateToChannel(appliedJobs)
+                                              }
+                                              class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                            >
+                                              See Messages
+                                              <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                                New
+                                              </span>
+                                            </button>
+                                          ) : (
+                                            <button
+                                              type="button"
+                                              onClick={() =>
+                                                navigateToChannel(appliedJobs)
+                                              }
+                                              class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                            >
+                                              See Messages
+                                            </button>
+                                          )}
+                                        </>
+                                      ) : (
+                                        <>
+                                          <div class="py-3  flex-column  items-center  ">
+                                            <label
+                                              for="hs-pro-dactmt"
+                                              class="block  text-xl font-medium text-gray-800 "
+                                            >
+                                              Application pending
+                                            </label>
+                                            <p class="block mb-2 text-sm font-medium text-gray-500 ">
+                                              {" "}
+                                              Message notifications will appear
+                                              here if the person who posted this
+                                              job contacts you.
+                                            </p>
+                                          </div>
+                                        </>
+                                      )}
                                    
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
+                          
                           </div>
-                         
                         </Flex>
                       ) : null}
                     </>
@@ -1673,33 +1662,28 @@ console.log("??",openInfoWindowMarkerID)
                           {jobsInProgress.hasUnreadMessage ||
                           jobsInProgress.firstHiredNotification ? (
                             <button
-                             type="button"
-                             class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
-                           >
-                             In Progress
-   
-                             <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                               New
-                             </span>
-                           </button>
-                           
+                              type="button"
+                              class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                            >
+                              In Progress
+                              <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                New
+                              </span>
+                            </button>
                           ) : (
-                            
                             <button
-                             type="button"
-                             class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
-                           >
-                             In Progress
-   
-                            
-                           </button>
+                              type="button"
+                              class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                            >
+                              In Progress
+                            </button>
                           )}
                         </div>
                         /
                       </AdvancedMarker>
                       {openInfoWindowMarkerID === jobsInProgress.jobID ? (
                         <Flex direction="row-reverse">
-                           <div
+                          <div
                             class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
                             tabindex="-1"
                           >
@@ -1743,7 +1727,9 @@ console.log("??",openInfoWindowMarkerID)
                                           >
                                             {jobsInProgress.jobTitle}
                                           </label>
-                                          <p>{jobsInProgress.city}, Minnesota</p>
+                                          <p>
+                                            {jobsInProgress.city}, Minnesota
+                                          </p>
                                         </div>
 
                                         <div class=" flex-row  items-center  ">
@@ -1756,8 +1742,8 @@ console.log("??",openInfoWindowMarkerID)
                                           ) : (
                                             <div className="flex flex-row items-center">
                                               <p>
-                                               
-                                                Offer: ${jobsInProgress.flatRate}
+                                                Offer: $
+                                                {jobsInProgress.flatRate}
                                               </p>
                                             </div>
                                           )}
@@ -1772,7 +1758,9 @@ console.log("??",openInfoWindowMarkerID)
                                           Description
                                         </label>
 
-                                        <p  class=" text-md  ">{jobsInProgress.description}</p>
+                                        <p class=" text-md  ">
+                                          {jobsInProgress.description}
+                                        </p>
                                       </div>
 
                                       <div class="space-y-1 ">
@@ -1782,47 +1770,45 @@ console.log("??",openInfoWindowMarkerID)
                                         >
                                           You've been hired for this position!
                                         </label>
-                                        
                                       </div>
                                       {jobsInProgress.hasUnreadMessage ? (
                                         <button
-                                        type="button"
-                                        onClick={() =>
-                                          handleInProgressNavigate(jobsInProgress)
-                                        }
-                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                                      >
-                                        See Messages
-              
-                                        <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                                          New
-                                        </span>
-                                      </button>
-                                  
-                                  ) : (
-                                    <button
-                                    type="button"
-                                    onClick={() =>
-                                      handleInProgressNavigate(jobsInProgress)
-                                    }
-                                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                                  >
-                                    See Messages
-          
-                                   
-                                  </button>
-                                  )}
-                                    </div>
-                                   
-
-
-                                    <div class="p-4 flex justify-between gap-x-2  w-full absolute bottom-12 right-0 ">
-                                      <div class="w-full flex justify-center items-center gap-x-2">
-                                       
+                                          type="button"
+                                          onClick={() =>
+                                            handleInProgressNavigate(
+                                              jobsInProgress
+                                            )
+                                          }
+                                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                        >
+                                          See Messages
+                                          <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                            New
+                                          </span>
+                                        </button>
+                                      ) : (
                                         <button
                                           type="button"
                                           onClick={() =>
-                                            handleCompleteModalOpen(jobsInProgress)
+                                            handleInProgressNavigate(
+                                              jobsInProgress
+                                            )
+                                          }
+                                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                        >
+                                          See Messages
+                                        </button>
+                                      )}
+                                    </div>
+
+                                    <div class="p-4 flex justify-between gap-x-2  w-full absolute bottom-12 right-0 ">
+                                      <div class="w-full flex justify-center items-center gap-x-2">
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            handleCompleteModalOpen(
+                                              jobsInProgress
+                                            )
                                           }
                                           class="py-2 px-3 w-3/4 inline-flex  justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                                           data-hs-overlay="#hs-pro-datm"
@@ -1836,8 +1822,6 @@ console.log("??",openInfoWindowMarkerID)
                               </div>
                             </div>
                           </div>
-
-                         
                         </Flex>
                       ) : null}
                     </>
@@ -1863,34 +1847,28 @@ console.log("??",openInfoWindowMarkerID)
                           {jobsInReview.hasUnreadMessage ||
                           jobsInReview.firstHiredNotification ? (
                             <button
-                             type="button"
-                             class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
-                           >
-                             Awaiting Payment
-   
-                             <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                               New
-                             </span>
-                           </button>
-                           
+                              type="button"
+                              class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                            >
+                              Awaiting Payment
+                              <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                New
+                              </span>
+                            </button>
                           ) : (
-                            
                             <button
-                             type="button"
-                             class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
-                           >
-                             Awaiting Payment
-   
-                            
-                           </button>
+                              type="button"
+                              class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:pointer-events-none"
+                            >
+                              Awaiting Payment
+                            </button>
                           )}
                         </div>
                         /
                       </AdvancedMarker>
                       {openInfoWindowMarkerID === jobsInReview.jobID ? (
                         <Flex direction="row-reverse">
-
-<div
+                          <div
                             class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
                             tabindex="-1"
                           >
@@ -1940,14 +1918,15 @@ console.log("??",openInfoWindowMarkerID)
                                         <div class=" flex-row  items-center  ">
                                           {jobsInReview.isHourly ? (
                                             <p>
-                                              {jobsInReview.confirmHours} hours worked at $
-                                  {jobsInReview.confirmedRate}/hour
+                                              {jobsInReview.confirmHours} hours
+                                              worked at $
+                                              {jobsInReview.confirmedRate}/hour
                                             </p>
                                           ) : (
                                             <div className="flex flex-row items-center">
                                               <p>
-                                               
-                                              Pending payment: ${jobsInReview.confirmedRate}
+                                                Pending payment: $
+                                                {jobsInReview.confirmedRate}
                                               </p>
                                             </div>
                                           )}
@@ -1962,7 +1941,9 @@ console.log("??",openInfoWindowMarkerID)
                                           Description
                                         </label>
 
-                                        <p  class=" text-md  ">{jobsInReview.description}</p>
+                                        <p class=" text-md  ">
+                                          {jobsInReview.description}
+                                        </p>
                                       </div>
 
                                       <div class=" ">
@@ -1970,50 +1951,46 @@ console.log("??",openInfoWindowMarkerID)
                                           for="dactmm"
                                           class="block  mt-10 text-lg font-medium text-gray-800 "
                                         >
-                                           You've completed this job
+                                          You've completed this job
                                         </label>
-                                        <p className="text-md mb-2 text-gray-500">Payment pending confirmation</p>
-                                        
+                                        <p className="text-md mb-2 text-gray-500">
+                                          Payment pending confirmation
+                                        </p>
                                       </div>
                                       {jobsInReview.hasUnreadMessage ? (
                                         <button
-                                        type="button"
-                                        onClick={() =>
-                                          navigateToChannel(jobsInReview)
-                                        }
-                                        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                                      >
-                                        See Messages
-              
-                                        <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                                          New
-                                        </span>
-                                      </button>
-                                  
-                                  ) : (
-                                    <button
-                                    type="button"
-                                    onClick={() =>
-                                      navigateToChannel(jobsInReview)
-                                    }
-                                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                                  >
-                                    See Messages
-          
-                                   
-                                  </button>
-                                  )}
-                                    </div>
-                                   
-
-
-                                    <div class="p-4 flex justify-between gap-x-2  w-full absolute bottom-12 right-0 ">
-                                      <div class="w-full flex justify-center items-center gap-x-2">
-                                       
+                                          type="button"
+                                          onClick={() =>
+                                            navigateToChannel(jobsInReview)
+                                          }
+                                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                        >
+                                          See Messages
+                                          <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                            New
+                                          </span>
+                                        </button>
+                                      ) : (
                                         <button
                                           type="button"
                                           onClick={() =>
-                                            handleCompleteModalOpen(jobsInReview)
+                                            navigateToChannel(jobsInReview)
+                                          }
+                                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                        >
+                                          See Messages
+                                        </button>
+                                      )}
+                                    </div>
+
+                                    <div class="p-4 flex justify-between gap-x-2  w-full absolute bottom-12 right-0 ">
+                                      <div class="w-full flex justify-center items-center gap-x-2">
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            handleCompleteModalOpen(
+                                              jobsInReview
+                                            )
                                           }
                                           class="py-2 px-3 w-3/4 inline-flex  justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                                           data-hs-overlay="#hs-pro-datm"
@@ -2627,41 +2604,46 @@ console.log("??",openInfoWindowMarkerID)
                 </Modal>
 
                 <Modal isOpen={isOpenApplied} onClose={onCloseApplied}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Success!</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>Your job has been posted.</Text>
-          </ModalBody>
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Success!</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      <Text>Your job has been posted.</Text>
+                    </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3}  onClick={() => onCloseApplied}>
-              Close
-            </Button>
-          
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+                    <ModalFooter>
+                      <Button
+                        colorScheme="blue"
+                        mr={3}
+                        onClick={() => onCloseApplied}
+                      >
+                        Close
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
 
-      <Modal isOpen={isOpenSaved} onClose={onCloseSaved}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Success!</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>You've saved this job</Text>
-          </ModalBody>
+                <Modal isOpen={isOpenSaved} onClose={onCloseSaved}>
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Success!</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      <Text>You've saved this job</Text>
+                    </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3}  onClick={() => onCloseSaved()}>
-              Close
-            </Button>
-          
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-      
+                    <ModalFooter>
+                      <Button
+                        colorScheme="blue"
+                        mr={3}
+                        onClick={() => onCloseSaved()}
+                      >
+                        Close
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
               </Map>
             </Box>
             {firstVisitModalVisible ? <DoerFirstVisitModal /> : null}

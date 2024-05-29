@@ -812,7 +812,7 @@ const Dashboard = () => {
                 <li class="px-5 mb-1.5">
                   <button
                     class="flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
-                    onClick={() => navigate("/NeederMapScreen")}
+                    onClick={() => navigate("/Homepage")}
                   >
                     <svg
                       class="flex-shrink-0 mt-0.5 size-4"

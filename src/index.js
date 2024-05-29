@@ -61,7 +61,7 @@ import EditJobInfo from "./pages/Needer/Jobs/EditJobInfo";
 import NeederAllCategories from "./pages/Needer/NeederAllCategories";
 import Test from "./pages/Needer/Test";
 import UserProfileNeeder from "./pages/Needer/UserProfileNeeder";
-
+import Homepage from "./pages/Needer/HomePage/Homepage";
 import ChatWindow from "./pages/Doer/Messaging/ChatWindow";
 
 
@@ -395,6 +395,11 @@ const router = createBrowserRouter([
   {
     path: "/NeederChatEntry",
     element: <NeederChatEntry/>,
+  },
+
+  {
+    path: "/Homepage",
+    element: <Homepage/>,
   },
  
 

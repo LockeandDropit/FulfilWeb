@@ -96,6 +96,30 @@ const Chat = () => {
 
   // }, [chat]);
 
+
+
+
+
+  //this sends an email to the receiving use notifying them of their new message
+  const handleSendEmail = async () => {
+    const response = await fetch(
+    
+      "https://emailapi-qi7k.onrender.com/sendNewMessageEmail",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email: user.email}),
+      }
+    );
+
+    const { data, error } = await response.json();
+    console.log("Any issues?", error)
+  }
+
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
       setChat(res.data());
@@ -154,6 +178,9 @@ const Chat = () => {
           // ...(imgUrl && { img: imgUrl }),
         }),
       });
+
+
+      handleSendEmail()
 
       const userIDs = [currentUser.uid, user.uid];
 

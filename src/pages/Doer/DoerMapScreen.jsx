@@ -407,6 +407,27 @@ const DoerMapScreen = () => {
     navigate("/DoerAccountManager");
   };
 
+  
+  //this sends an email to the receiving use notifying them of their new message
+  const handleSendEmail = async (x) => {
+    const response = await fetch(
+    
+      "https://emailapi-qi7k.onrender.com/sendNewApplicantEmail",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email: x.employerEmail}),
+      }
+    );
+
+    const { data, error } = await response.json();
+    console.log("Any issues?", error)
+  }
+
   //apply logic
   const applyAndNavigate = (x) => {
     //If anything is going wring in the application or saved job flow it's because I changed this on 5/27/24 at 2:30. Revert to previous if any issues
@@ -481,6 +502,9 @@ const DoerMapScreen = () => {
         .catch((error) => {
           //uh oh
         });
+
+        handleSendEmail(x)
+        console.log(x.employerEmail)
     } else {
       onOpenNotOnboarded();
     }
@@ -1402,6 +1426,7 @@ const DoerMapScreen = () => {
                                             <button
                                               type="button"
                                               onClick={() => applyAndNavigate(allJobs)}
+                                          //  onClick={() =>    console.log(allJobs)}
                                               class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                                               data-hs-overlay="#hs-pro-datm"
                                             >

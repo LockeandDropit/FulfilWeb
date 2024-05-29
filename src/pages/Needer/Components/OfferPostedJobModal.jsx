@@ -73,7 +73,25 @@ const OfferPostedJobModal = () => {
   //this is going to handle the db management, updating the that the job has beem offered
 
   
+  const handleSendNewOfferEmail = async () => {
+    const response = await fetch(
+    
+      "https://emailapi-qi7k.onrender.com/sendPaymentCompleteEmail",
 
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email: user.email}),
+      }
+    );
+
+    const { data, error } = await response.json();
+
+    console.log("Any issues?", error)
+  }
 
 
   const sendOffer = () => {
@@ -81,6 +99,8 @@ const OfferPostedJobModal = () => {
     // it will give a pop-up that allows them to solidify the amouint being paid. DONE.
     //this will also trigger the same header to accept the amount in the user's chat. INFO SENT
     //cue push notification to user (TO DO)//
+
+    handleSendNewOfferEmail()
 
 
     handleJobState()

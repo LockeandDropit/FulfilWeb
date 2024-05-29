@@ -75,6 +75,26 @@ const OfferModal = () => {
       }
     }, [job]);
 
+    
+    const handleSendOfferAcceptedEmail = async () => {
+      const response = await fetch(
+      
+        "https://emailapi-qi7k.onrender.com/sendOfferAcceptedEmail",
+  
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({email: user.email}),
+        }
+      );
+  
+      const { data, error } = await response.json();
+      console.log("Any issues?", error)
+    }
+
 
 
     //brought in from previous set up
@@ -83,6 +103,8 @@ const OfferModal = () => {
         // employer
     
         //convert to int
+
+        handleSendOfferAcceptedEmail()
 
     
         setDoc(doc(db, "employers", user.uid, "Jobs In Progress", job.jobTitle), {

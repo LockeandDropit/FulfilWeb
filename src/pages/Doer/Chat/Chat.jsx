@@ -107,6 +107,29 @@ const Chat = () => {
     }
   };
 
+  
+  //this sends an email to the receiving use notifying them of their new message
+  const handleSendEmail = async () => {
+    const response = await fetch(
+    
+      "https://emailapi-qi7k.onrender.com/sendNewMessageEmail",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email: user.email}),
+      }
+    );
+
+    const { data, error } = await response.json();
+    console.log("Any issues?", error)
+  }
+
+
+
   //listener credit https://www.youtube.com/watch?v=D5SdvGMTEaU
 
   // useEffect(() => {
@@ -141,6 +164,8 @@ const Chat = () => {
         }),
       });
 
+      handleSendEmail()
+      
       const userIDs = [currentUser.uid, user.uid];
 
       userIDs.forEach(async (id) => {

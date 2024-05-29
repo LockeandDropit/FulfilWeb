@@ -93,6 +93,25 @@ function MarkCompleteModal() {
     
   }, []);
 
+  const handleSendJobCompleteEmail = async () => {
+    const response = await fetch(
+    
+      "https://emailapi-qi7k.onrender.com/sendJobCompleteEmail",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email: user.email}),
+      }
+    );
+
+    const { data, error } = await response.json();
+    console.log("Any issues?", error)
+  }
+
 
 
   //logic for marking job complete
@@ -208,6 +227,7 @@ function MarkCompleteModal() {
     ) {
       alert("Please enter valid rate");
     } else {
+     
       addHoursWorkedNavigate();
     }
   };
@@ -219,6 +239,7 @@ const updateJobState = () => {
   //mark hired true
   //set marked complete === false
 
+  handleSendJobCompleteEmail()
 
   try {
  

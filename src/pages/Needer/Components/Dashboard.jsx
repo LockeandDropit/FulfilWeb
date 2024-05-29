@@ -353,6 +353,7 @@ const Dashboard = () => {
     //submit data
     setDoc(doc(db, "employers", user.uid, "Posted Jobs", jobTitle), {
       employerID: employerID,
+      employerEmail: user.email,
       jobTitle: jobTitle,
       jobID: jobID,
       firstName: firstName,
@@ -392,6 +393,7 @@ const Dashboard = () => {
     //submit data
     setDoc(doc(db, "Map Jobs", jobID), {
       employerID: employerID,
+      employerEmail: user.email,
       jobTitle: jobTitle,
       jobID: jobID,
       firstName: firstName,
@@ -431,6 +433,7 @@ const Dashboard = () => {
       //adds to volunteer only db for map
       setDoc(doc(db, "Map Jobs Volunteer", jobID), {
         employerID: employerID,
+        employerEmail: user.email,
         jobTitle: jobTitle,
         jobID: jobID,
         firstName: firstName,
@@ -467,6 +470,7 @@ const Dashboard = () => {
     } else {
       setDoc(doc(db, "Map Jobs Paid", jobID), {
         employerID: employerID,
+        employerEmail: user.email,
         jobTitle: jobTitle,
         jobID: jobID,
         firstName: firstName,
@@ -509,6 +513,7 @@ const Dashboard = () => {
     //submit data
     setDoc(doc(db, "Jobs", user.uid, "Posted Jobs", jobTitle), {
       employerID: employerID,
+      employerEmail: user.email,
       jobTitle: jobTitle,
       jobID: jobID,
       firstName: firstName,
@@ -546,6 +551,7 @@ const Dashboard = () => {
     //submit data
     setDoc(doc(db, "All Jobs", jobID), {
       employerID: employerID,
+      employerEmail: user.email,
       jobTitle: jobTitle,
       jobID: jobID,
       firstName: firstName,

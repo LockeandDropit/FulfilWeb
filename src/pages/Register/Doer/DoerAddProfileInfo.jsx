@@ -121,6 +121,25 @@ const DoerAddProfileInfo = () => {
 
   const navigate = useNavigate();
 
+  const handleSendEmail = async () => {
+    const response = await fetch(
+    
+      "https://emailapi-qi7k.onrender.com/sendDoerWelcomeEmail",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email: user.email}),
+      }
+    );
+
+    const { data, error } = await response.json();
+    console.log("Any issues?", error)
+  }
+
 
 
   // create new Chat User
@@ -183,7 +202,7 @@ const DoerAddProfileInfo = () => {
     });
     // IN USE
   createChatSlotInDB()
-
+ handleSendEmail()
   
     //depreciated, remove when able
 

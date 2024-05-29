@@ -118,6 +118,27 @@ const AddProfileInfo = () => {
 
 
 
+  const handleSendEmail = async () => {
+    const response = await fetch(
+    
+      "https://emailapi-qi7k.onrender.com/sendNeederWelcomeEmail",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email: user.email}),
+      }
+    );
+
+    const { data, error } = await response.json();
+    console.log("Any issues?", error)
+  }
+
+
+
   // create new Chat User
 
 
@@ -165,6 +186,7 @@ useEffect(() => {
     
       //in use
       createChatSlotInDB()
+      
         .then(() => {
           //all good
   
@@ -204,6 +226,7 @@ useEffect(() => {
     
       //in use
       createChatSlotInDB()
+      handleSendEmail()
       .then(() => {
         //all good
 

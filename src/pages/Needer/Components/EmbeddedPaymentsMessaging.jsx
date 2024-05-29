@@ -74,7 +74,6 @@ import star_filled from "../../../images/star_filled.png";
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const EmbeddedPaymentsMessaging = (props) => {
-
   const [propsHasSet, setPropsHasSet] = useState(false);
 
   const [postedJobs, setPostedJobs] = useState(null);
@@ -84,19 +83,16 @@ const EmbeddedPaymentsMessaging = (props) => {
   // const [userID, setUserID] = useState(null);
   const [hasRun, setHasRun] = useState(false);
 
-
-const { currentUser, user} = useUserStore()
-const {chatId} = useChatStore()
-const { setJobHiringState} = useJobStore()
-
-
+  const { currentUser, user } = useUserStore();
+  const { chatId } = useChatStore();
+  const { setJobHiringState } = useJobStore();
 
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (x) => {
         // setUser(x);
         // setUserID(x.uid);
-        console.log("still got it", x)
+        console.log("still got it", x);
       });
       setHasRun(true);
     } else {
@@ -105,10 +101,8 @@ const { setJobHiringState} = useJobStore()
 
   useEffect(() => {
     if (currentUser) {
-      console.log(currentUser.uid)
-      setTimeout((  handleModalOpen(props)
-    ), 300)
-
+      console.log(currentUser.uid);
+      setTimeout(handleModalOpen(props), 300);
     } else {
     }
   }, [currentUser]);
@@ -139,7 +133,6 @@ const { setJobHiringState} = useJobStore()
   const [hiredApplicantID, setHiredApplicantID] = useState(null);
 
   const getSelectedData = (props) => {
-  
     const docRef = doc(
       db,
       "employers",
@@ -150,7 +143,6 @@ const { setJobHiringState} = useJobStore()
 
     getDoc(docRef)
       .then((snapshot) => {
-  
         setHiredApplicantID(snapshot.data().hiredApplicant);
         setJobTitle(snapshot.data().jobTitle);
         setJobID(snapshot.data().jobID);
@@ -210,7 +202,6 @@ const { setJobHiringState} = useJobStore()
   }, [confirmedRate, confirmHours]);
 
   const handleModalOpen = (props) => {
-
     getSelectedData(props);
     retrieveConfirmedPaymentAmount(props);
     // pushToJobInfo(postedJobs);
@@ -227,7 +218,6 @@ const { setJobHiringState} = useJobStore()
     const docRef = doc(db, "users", props.props.hiredApplicant);
 
     getDoc(docRef).then((snapshot) => {
-      
       setHiredApplicantStripeID(snapshot.data().stripeID);
     });
   };
@@ -269,11 +259,7 @@ const { setJobHiringState} = useJobStore()
         setConfirmedPrice(snapshot.data().confirmedRate * 100);
       });
     }
-
-  
   };
-
-  
 
   const [stripeOpen, setStripeOpen] = useState(false);
 
@@ -293,45 +279,40 @@ const { setJobHiringState} = useJobStore()
   const [paymentComplete, setPaymentComplete] = useState(null);
 
   const handleJobState = async () => {
+    //first pull all data... do I already have it?
 
-    //first pull all data... do I already have it?  
-
-    
     const confirmedRateInt = parseInt(confirmedRate, 10);
 
-        try {
-       
-          const userIDs = [currentUser.uid, user.uid];
-    
-          userIDs.forEach(async (id) => {
-            const userChatsRef = doc(db, "User Messages", id);
-            const userChatsSnapshot = await getDoc(userChatsRef);
-    
-            if (userChatsSnapshot.exists()) {
-              const userChatsData = userChatsSnapshot.data();
-    
-              const chatIndex = userChatsData.chats.findIndex(
-                (c) => c.chatId === chatId
-              );
-    
+    try {
+      const userIDs = [currentUser.uid, user.uid];
 
-              userChatsData.chats[chatIndex].isPaid = true;
+      userIDs.forEach(async (id) => {
+        const userChatsRef = doc(db, "User Messages", id);
+        const userChatsSnapshot = await getDoc(userChatsRef);
 
-              userChatsData.chats[chatIndex].isSeen =
-                id === currentUser.id ? true : false;
-              userChatsData.chats[chatIndex].updatedAt = Date.now();
-    
-              await updateDoc(userChatsRef, {
-                chats: userChatsData.chats,
-              });
+        if (userChatsSnapshot.exists()) {
+          const userChatsData = userChatsSnapshot.data();
 
-              setJobHiringState(userChatsData.chats)
-            }
+          const chatIndex = userChatsData.chats.findIndex(
+            (c) => c.chatId === chatId
+          );
+
+          userChatsData.chats[chatIndex].isPaid = true;
+
+          userChatsData.chats[chatIndex].isSeen =
+            id === currentUser.id ? true : false;
+          userChatsData.chats[chatIndex].updatedAt = Date.now();
+
+          await updateDoc(userChatsRef, {
+            chats: userChatsData.chats,
           });
-        } catch (err) {
-          console.log(err);
+
+          setJobHiringState(userChatsData.chats);
         }
-   
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   //fires and holds spot in associated job file in "employers" db
@@ -364,7 +345,6 @@ const { setJobHiringState} = useJobStore()
 
   const fetchClientSecret = useCallback(() => {
     // Create a Checkout Session
-  
 
     return (
       fetch(
@@ -394,8 +374,6 @@ const { setJobHiringState} = useJobStore()
   const options = { fetchClientSecret };
 
   const paymentForm = async () => {
-   
-
     const response = await fetch(
       //this one is the live one
       // "https://fulfil-api.onrender.com/create-checkout-web",
@@ -415,15 +393,12 @@ const { setJobHiringState} = useJobStore()
 
     const { session } = await response.json();
 
-
-
     if (!session) {
       alert(
         "There was an issue starting your payment. Please try again later. If this issue persists please contact us at fulfilhelp@gmail.com"
       );
     } else {
       if (session.payment_status === "succeeded") {
-   
       }
     }
 
@@ -485,7 +460,6 @@ const { setJobHiringState} = useJobStore()
       snapshot.docs.forEach((doc) => {
         //review what this does
         if (isNaN(doc.data().rating)) {
-        
         } else {
           ratingResults.push(doc.data().rating);
         }
@@ -543,7 +517,6 @@ const { setJobHiringState} = useJobStore()
 
     getDoc(docRef)
       .then((snapshot) => {
-       
         setHiredApplicantID(snapshot.data().hiredApplicant);
         setJobTitle(snapshot.data().jobTitle);
         setJobID(snapshot.data().jobID);
@@ -588,8 +561,6 @@ const { setJobHiringState} = useJobStore()
     const urlParams = new URLSearchParams(queryString);
     const sessionId = urlParams.get("session_id");
 
-  
-
     if (sessionId) {
       setHasRun(false);
       fetch(
@@ -602,7 +573,7 @@ const { setJobHiringState} = useJobStore()
           setJobTitle(data.jobTitle);
           // setUserID(data.userID);
           setConfirmedPriceUI(data.confirmedPrice * 0.1);
-        
+
           if (data.status === "complete" && data.jobTitle) {
             setIsLoading(true);
             getJobDataAgain(data);
@@ -683,27 +654,22 @@ const { setJobHiringState} = useJobStore()
 
   const moveAllData = () => {
     //this was all taken from ReviewWorker (in case something doesnt work and it needs to be moved back)
- 
 
     //delete from In Review
     deleteDoc(doc(db, "employers", currentUser.uid, "In Review", jobTitle))
       .then(() => {
         //all good
-   
       })
       .catch((error) => {
         // no bueno
-
       });
 
     deleteDoc(doc(db, "users", hiredApplicantID, "In Review", jobTitle))
       .then(() => {
         //all good
-
       })
       .catch((error) => {
         // no bueno
-    
       });
 
     // //  //add to Jobs Completed
@@ -738,12 +704,8 @@ const { setJobHiringState} = useJobStore()
       jobCompleteEmployer: false,
       paymentCompletedAndPending: true,
     })
-      .then(() => {
-      
-      })
-      .catch((error) => {
-       
-      });
+      .then(() => {})
+      .catch((error) => {});
 
     setDoc(doc(db, "employers", currentUser.uid, "Past Jobs", jobTitle), {
       employerID: currentUser ? currentUser.uid : null,
@@ -774,12 +736,8 @@ const { setJobHiringState} = useJobStore()
       jobCompleteEmployer: false,
       paymentCompletedAndPending: true,
     })
-      .then(() => {
-     
-      })
-      .catch((error) => {
-  
-      });
+      .then(() => {})
+      .catch((error) => {});
 
     setIsLoading(false);
     setPaymentAlertShow(true);
@@ -831,21 +789,23 @@ const { setJobHiringState} = useJobStore()
 
         <Modal>
           <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Success!</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>Your payment was successful.</Text>
-            <Text>If you'd like to review this job, go to "Completed Jobs" to see all details.</Text>
-          </ModalBody>
+          <ModalContent>
+            <ModalHeader>Success!</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text>Your payment was successful.</Text>
+              <Text>
+                If you'd like to review this job, go to "Completed Jobs" to see
+                all details.
+              </Text>
+            </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme="blue" onClick={onClose}>
-              Continue
-            </Button>
-      
-          </ModalFooter>
-        </ModalContent>
+            <ModalFooter>
+              <Button colorScheme="blue" onClick={onClose}>
+                Continue
+              </Button>
+            </ModalFooter>
+          </ModalContent>
         </Modal>
       )}
 

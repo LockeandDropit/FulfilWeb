@@ -121,6 +121,8 @@ const NeederEmailRegister = () => {
     }
   };
 
+
+
   const [passwordValidationMessage, setPasswordValidationMessage] = useState();
 
   //credit https://www.sitepoint.com/using-regular-expressions-to-check-string-length/

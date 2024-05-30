@@ -360,7 +360,7 @@ const NeederMapScreen = () => {
             );
 
             setIsLoading(false);
-          }, 500);
+          }, 200);
 
           const ratingsQuery = query(
             collection(db, "users", finalResults[0].streamChatID, "Ratings")

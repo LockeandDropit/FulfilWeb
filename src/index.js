@@ -99,7 +99,7 @@ import DoerSubscriptionComplete from "./pages/Doer/DoerSubscriptionComplete";
 import NeederSelectedCategory from "./pages/Needer/NeederSelectedCategory";
 import ChatEntry from "./pages/Doer/Chat/ChatEntry";
 import NeederChatEntry from "./pages/Needer/Chat/NeederChatEntry";
-
+import JobDetails from "./pages/Needer/HomePage/JobDetails";
 
 
 import { onAuthStateChanged } from "firebase/auth";
@@ -400,6 +400,11 @@ const router = createBrowserRouter([
   {
     path: "/Homepage",
     element: <Homepage/>,
+  },
+
+  {
+    path: "/JobDetails",
+    element: <JobDetails/>,
   },
  
 

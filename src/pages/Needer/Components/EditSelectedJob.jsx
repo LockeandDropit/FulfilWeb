@@ -498,7 +498,7 @@ const EditSelectedJob = (props) => {
 
 
  onOpenSuccess()
- navigate("/NeederMapScreen", {state: {editReset: true}})
+ navigate("/JobDetails", {state: {editReset: true}})
  setIsVisible(false)
     
   };
@@ -597,7 +597,7 @@ const [isVisible, setIsVisible] = useState(true)
 
 const handleCloseButton = () => {
     setIsVisible(false)
-    navigate("/NeederMapScreen", {state: {editReset: true}})
+    navigate("/JobDetails", {state: {editReset: true}})
   
 }
 

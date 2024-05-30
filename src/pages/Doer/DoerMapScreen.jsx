@@ -51,6 +51,7 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
+  increment
 } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { auth } from "../../firebaseConfig";
@@ -278,11 +279,10 @@ const DoerMapScreen = () => {
   const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState(null);
 
   const handleToggleOpen = (x) => {
-    console.log("here", x)
+    console.log("here", x);
     setOpenInfoWindowMarkerID(x);
 
-
-    //this (getData(x)) was throwing an error. Idk whatit was even for tbh. 
+    //this (getData(x)) was throwing an error. Idk whatit was even for tbh.
     // getData(x);
   };
 
@@ -407,11 +407,9 @@ const DoerMapScreen = () => {
     navigate("/DoerAccountManager");
   };
 
-  
   //this sends an email to the receiving use notifying them of their new message
   const handleSendEmail = async (x) => {
     const response = await fetch(
-    
       "https://emailapi-qi7k.onrender.com/sendNewApplicantEmail",
 
       {
@@ -420,13 +418,13 @@ const DoerMapScreen = () => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({email: x.employerEmail}),
+        body: JSON.stringify({ email: x.employerEmail }),
       }
     );
 
     const { data, error } = await response.json();
-    console.log("Any issues?", error)
-  }
+    console.log("Any issues?", error);
+  };
 
   //apply logic
   const applyAndNavigate = (x) => {
@@ -466,6 +464,16 @@ const DoerMapScreen = () => {
           //uh oh
         });
 
+      const docRef = doc(
+        db,
+        "employers",
+        x.employerID,
+        "Posted Jobs",
+        x.jobTitle
+      );
+
+      updateDoc(docRef, {totalApplicants: increment(1)})
+
       setDoc(doc(db, "users", user.uid, "Applied", x.jobTitle), {
         requirements: x.requirements ? x.requirements : null,
         requirements2: x.requirements2 ? x.requirements2 : null,
@@ -503,8 +511,8 @@ const DoerMapScreen = () => {
           //uh oh
         });
 
-        handleSendEmail(x)
-        console.log(x.employerEmail)
+      handleSendEmail(x);
+      console.log(x.employerEmail);
     } else {
       onOpenNotOnboarded();
     }
@@ -534,7 +542,7 @@ const DoerMapScreen = () => {
   const getData = async (openInfoWindowMarkerID) => {
     const docRef = doc(db, "Map Jobs", openInfoWindowMarkerID);
 
-    console.log( openInfoWindowMarkerID);
+    console.log(openInfoWindowMarkerID);
     await getDoc(docRef).then((snapshot) => {
       console.log(snapshot.data());
       setFlatRate(snapshot.data().flatRate);
@@ -1425,8 +1433,10 @@ const DoerMapScreen = () => {
                                             </button>
                                             <button
                                               type="button"
-                                              onClick={() => applyAndNavigate(allJobs)}
-                                          //  onClick={() =>    console.log(allJobs)}
+                                              onClick={() =>
+                                                applyAndNavigate(allJobs)
+                                              }
+                                              //  onClick={() =>    console.log(allJobs)}
                                               class="py-2 px-3 inline-flex  justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                                               data-hs-overlay="#hs-pro-datm"
                                             >
@@ -1526,7 +1536,7 @@ const DoerMapScreen = () => {
                             class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
                             tabindex="-1"
                           >
-                              <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+                            <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
                               <div className=" ml-auto mt-4">
                                 <button
                                   onClick={() =>
@@ -1652,13 +1662,11 @@ const DoerMapScreen = () => {
                                           </div>
                                         </>
                                       )}
-                                   
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          
                           </div>
                         </Flex>
                       ) : null}

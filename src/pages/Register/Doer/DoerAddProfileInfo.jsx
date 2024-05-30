@@ -188,7 +188,7 @@ const DoerAddProfileInfo = () => {
       uid: user.uid,
       idStreamChat: user.uid,
       isPremium: false,
-      isEmployer: true,
+      isEmployer: false,
       email: user.email,
       streamChatID: user.uid,
       isOnboarded: false,

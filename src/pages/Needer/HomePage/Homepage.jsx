@@ -17,12 +17,15 @@ import {
 import { db } from "../../../firebaseConfig";
 import { auth } from "../../../firebaseConfig";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useJobStore } from "./lib/jobsStoreDashboard";
 
 const Homepage = () => {
   const [user, setUser] = useState(null);
   const [postedJobs, setPostedJobs] = useState([]);
   const [hasRun, setHasRun] = useState(false);
-
+  const navigate = useNavigate();
+  const { fetchJobInfo, setJobHiringState } = useJobStore();
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
@@ -110,7 +113,30 @@ const Homepage = () => {
     }
   }, [user]);
 
-  console.log(postedJobs);
+//   console.log(jobsInReview);
+
+
+const handleStoreAndNavigatePosted = (x) => {
+    console.log(x.jobTitle, x.jobID, )
+
+fetchJobInfo(user.uid, x.jobID, "Posted Jobs", x.jobTitle)
+setTimeout(() => (
+    navigate("/JobDetails")
+),500)
+
+}
+
+const handleStoreAndNavigateHired = (x) => {
+    console.log(x.jobTitle, x.jobID, )
+
+
+    //set store info... uid, jobTitle, jobID,.
+
+
+    navigate("/JobDetails")
+}
+
+
   return (
     <>
       <Header />
@@ -566,8 +592,7 @@ const Homepage = () => {
               >
                 <div class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
                   <div class="min-w-full inline-block align-middle">
-                  {postedJobs.map((job) => (
-                    <table class="min-w-full divide-y divide-gray-200 ">
+                  <table class="min-w-full divide-y divide-gray-200 ">
                       <thead>
                         <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
                           <th scope="col" class="px-3 py-2.5 text-start">
@@ -582,7 +607,7 @@ const Homepage = () => {
                               <button
                                 id="hs-pro-dutnms"
                                 type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                                class="px-4 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
                               >
                                 Post Title
                               
@@ -591,7 +616,6 @@ const Homepage = () => {
                              
                             </div>
                           </th>
-
                           <th scope="col" class="min-w-24">
                             <div class="hs-dropdown relative inline-flex w-full cursor-default">
                               <button
@@ -599,7 +623,19 @@ const Homepage = () => {
                                 type="button"
                                 class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
                               >
-                                # of Applicants
+                               Hired
+                              </button>
+                            </div>
+                          </th>
+
+                          <th scope="col" class="min-w-24">
+                            <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                              <button
+                                id="hs-pro-dutads"
+                                type="button"
+                                class="px-3 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                              >
+                               Applicants
                               </button>
                             </div>
                           </th>
@@ -643,361 +679,238 @@ const Homepage = () => {
                           {/* <th scope="col"></th> */}
                         </tr>
                       </thead>
-                    
-                        <tbody class="divide-y divide-gray-200 ">
-                          <tr class="divide-x divide-gray-200 ">
-                            <td class="size-px whitespace-nowrap px-3 py-4">
-                              <input
-                                type="checkbox"
-                                class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                              />
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer">
-                              <div class="w-full flex items-center gap-x-3">
-                                <div class="grow">
-                                  <span class="text-sm font-medium text-gray-800 ">
-                                    {job.jobTitle}
-                                  </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="text-sm text-gray-600 ">4</span>
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
-                                <svg
-                                  class="flex-shrink-0 size-3.5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <polyline points="20 6 9 17 4 12" />
-                                </svg>
-                                posted
-                              </span>
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="text-sm text-gray-600 ">
-                                {job.datePosted}
-                              </span>
-                            </td>
-                            <td class="size-px py-1 space-x-2">
-                                <div className=" flex  w-full ">
-                              {/* <button
-                                type="button"
-                                class="py-2 px-3  mx-1 text-start bg-white border hover:bg-gray-200 text-black text-sm font-medium rounded-lg shadow-sm align-middle  "
-                                data-hs-overlay="#hs-pro-datm"
-                              >
-                                Edit Post
-                              </button> */}
-                              <button className="py-2 px-3   text-sm font-semibold rounded-md border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
-                                View applicants
-                              </button>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
+                  
+                        
                       
 
 
-                    </table>
+                    
+                  {postedJobs.map((job) => (
+                       <tbody class="divide-y divide-gray-200 ">
+                       <tr class="divide-x divide-gray-200 ">
+                         <td class="size-px whitespace-nowrap px-3 py-4">
+                           <input
+                             type="checkbox"
+                             class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                           />
+                         </td>
+                         <td class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer" onClick={() => handleStoreAndNavigatePosted(job)}>
+                           <div class="w-full flex items-center gap-x-3">
+                             <div class="grow">
+                               <span class="text-sm font-medium text-gray-800 ">
+                                 {job.jobTitle}
+                               </span>
+                             </div>
+                           </div>
+                         </td>
+                         <td class="size-px whitespace-nowrap px-4 py-1">
+                        <span class="text-sm text-gray-600 font-semibold">n/a</span>
+                      </td>
+                         <td class="size-px whitespace-nowrap px-4 py-1">
+                           <span class="text-sm text-gray-600 ">{job.totalApplicants}</span>
+                         </td>
+                         <td class="size-px whitespace-nowrap px-4 py-1">
+                           <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                             <svg
+                               class="flex-shrink-0 size-3.5"
+                               xmlns="http://www.w3.org/2000/svg"
+                               width="24"
+                               height="24"
+                               viewBox="0 0 24 24"
+                               fill="none"
+                               stroke="currentColor"
+                               stroke-width="2"
+                               stroke-linecap="round"
+                               stroke-linejoin="round"
+                             >
+                               <polyline points="20 6 9 17 4 12" />
+                             </svg>
+                             posted
+                           </span>
+                         </td>
+                         <td class="size-px whitespace-nowrap px-4 py-1">
+                           <span class="text-sm text-gray-600 ">
+                             {job.datePosted}
+                           </span>
+                         </td>
+                         <td class="size-px py-1 space-x-2">
+                             <div className=" flex  w-full ">
+                           {/* <button
+                             type="button"
+                             class="py-2 px-3  mx-1 text-start bg-white border hover:bg-gray-200 text-black text-sm font-medium rounded-lg shadow-sm align-middle  "
+                             data-hs-overlay="#hs-pro-datm"
+                           >
+                             Edit Post
+                           </button> */}
+                           <button className="py-2 px-3   text-sm font-semibold rounded-md border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                             View applicants
+                           </button>
+                           </div>
+                         </td>
+                       </tr>
+                     </tbody>
                 ))}
 
 {jobsInProgressMap.map((job) => (
-                    <table class="min-w-full divide-y divide-gray-200 ">
-                      <thead>
-                        <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
-                          <th scope="col" class="px-3 py-2.5 text-start">
-                            <input
-                              type="checkbox"
-                              class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                            />
-                          </th>
-
-                          <th scope="col" class="min-w-[250px]">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                              <button
-                                id="hs-pro-dutnms"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
-                              >
-                                Post Title
-                              
-                              </button>
-
-                             
-                            </div>
-                          </th>
-
-                          <th scope="col" class="min-w-24">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-default">
-                              <button
-                                id="hs-pro-dutads"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
-                              >
-                               Hired
-                              </button>
-                            </div>
-                          </th>
-
-                          <th scope="col" class="min-w-36">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                              <button
-                                id="hs-pro-dutsgs"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
-                              >
-                                Status
-                              </button>
-                            </div>
-                          </th>
-
-                          <th scope="col">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                              <button
-                                id="hs-pro-dutems"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100"
-                              >
-                                Date Posted
-                              </button>
-                            </div>
-                          </th>
-
-                          <th scope="col">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                              <button
-                                id="hs-pro-dutphs"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
-                              >
-                                Actions
-                              </button>
-                            </div>
-                          </th>
-
-                          {/* <th scope="col"></th> */}
-                        </tr>
-                      </thead>
-                    
-                        <tbody class="divide-y divide-gray-200 ">
-                          <tr class="divide-x divide-gray-200 ">
-                            <td class="size-px whitespace-nowrap px-3 py-4">
-                              <input
-                                type="checkbox"
-                                class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                              />
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer">
-                              <div class="w-full flex items-center gap-x-3">
-                                <div class="grow">
-                                  <span class="text-sm font-medium text-gray-800 ">
-                                    {job.jobTitle}
-                                  </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="text-sm text-gray-600 ">Name Here</span>
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
-                                <svg
-                                  class="flex-shrink-0 size-3.5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <polyline points="20 6 9 17 4 12" />
-                                </svg>
-                                In Progress
-                              </span>
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="text-sm text-gray-600 ">
-                                {job.datePosted}
-                              </span>
-                            </td>
-                            <td class="size-px py-1 space-x-2">
-                                <div className=" flex  w-full ">
-                              {/* <button
-                                type="button"
-                                class="py-2 px-3  mx-1 text-start bg-white border hover:bg-gray-200 text-black text-sm font-medium rounded-lg shadow-sm align-middle  "
-                                data-hs-overlay="#hs-pro-datm"
-                              >
-                                Edit Post
-                              </button> */}
-                              <button className="py-2 px-3   text-sm font-semibold rounded-md border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
-                                Message
-                              </button>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      
-
-
-                    </table>
+                    <tbody class="divide-y divide-gray-200 ">
+                    <tr class="divide-x divide-gray-200 ">
+                      <td class="size-px whitespace-nowrap px-3 py-4">
+                        <input
+                          type="checkbox"
+                          class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                        />
+                      </td>
+                      <td class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer">
+                        <div class="w-full flex items-center gap-x-3">
+                          <div class="grow">
+                            <span class="text-sm font-medium text-gray-800 ">
+                              {job.jobTitle}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="size-px whitespace-nowrap px-4 py-1">
+                      <div class="w-full flex items-center gap-x-3">
+                        {job.hiredApplicantProfilePicture ? ( <img class="flex-shrink-0 size-[38px] rounded-full" src={job.hiredApplicantProfilePicture} alt="Image Description" />) : ( <svg
+                      class="w-12 h-12 rounded-full object-cover text-gray-500"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect
+                        x="0.62854"
+                        y="0.359985"
+                        width="15"
+                        height="15"
+                        rx="7.5"
+                        fill="white"
+                      ></rect>
+                      <path
+                        d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                        fill="currentColor"
+                      ></path>
+                      <path
+                        d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>)}
+                     
+                        <span class="text-sm font-medium text-gray-800 ">{job.hiredApplicantFirstName} {job.hiredApplicantLastName}</span>
+                        </div>
+                      </td>
+                      <td class="size-px whitespace-nowrap px-4 py-1">
+                        <span class="text-sm text-gray-600 font-semibold">n/a</span>
+                      </td>
+                      <td class="size-px whitespace-nowrap px-4 py-1">
+                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                          <svg
+                            class="flex-shrink-0 size-3.5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                          In Progress
+                        </span>
+                      </td>
+                      <td class="size-px whitespace-nowrap px-4 py-1">
+                        <span class="text-sm text-gray-600 ">
+                          {job.datePosted}
+                        </span>
+                      </td>
+                      <td class="size-px py-1 space-x-2">
+                          <div className=" flex  w-full ">
+                        {/* <button
+                          type="button"
+                          class="py-2 px-3  mx-1 text-start bg-white border hover:bg-gray-200 text-black text-sm font-medium rounded-lg shadow-sm align-middle  "
+                          data-hs-overlay="#hs-pro-datm"
+                        >
+                          Edit Post
+                        </button> */}
+                        <button className="py-2 px-3   text-sm font-semibold rounded-md border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                          Message
+                        </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
                 ))}
                 {jobsInReviewMap.map((job) => (
-                    <table class="min-w-full divide-y divide-gray-200 ">
-                      <thead>
-                        <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
-                          <th scope="col" class="px-3 py-2.5 text-start">
-                            <input
-                              type="checkbox"
-                              class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                            />
-                          </th>
-
-                          <th scope="col" class="min-w-[250px]">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                              <button
-                                id="hs-pro-dutnms"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
-                              >
-                                Post Title
-                              
-                              </button>
-
-                             
-                            </div>
-                          </th>
-
-                          <th scope="col" class="min-w-24">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-default">
-                              <button
-                                id="hs-pro-dutads"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
-                              >
-                               Hired
-                              </button>
-                            </div>
-                          </th>
-
-                          <th scope="col" class="min-w-36">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                              <button
-                                id="hs-pro-dutsgs"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
-                              >
-                                Status
-                              </button>
-                            </div>
-                          </th>
-
-                          <th scope="col">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                              <button
-                                id="hs-pro-dutems"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100"
-                              >
-                                Date Posted
-                              </button>
-                            </div>
-                          </th>
-
-                          <th scope="col">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                              <button
-                                id="hs-pro-dutphs"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
-                              >
-                                Actions
-                              </button>
-                            </div>
-                          </th>
-
-                          {/* <th scope="col"></th> */}
-                        </tr>
-                      </thead>
-                    
-                        <tbody class="divide-y divide-gray-200 ">
-                          <tr class="divide-x divide-gray-200 ">
-                            <td class="size-px whitespace-nowrap px-3 py-4">
-                              <input
-                                type="checkbox"
-                                class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                              />
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer">
-                              <div class="w-full flex items-center gap-x-3">
-                                <div class="grow">
-                                  <span class="text-sm font-medium text-gray-800 ">
-                                    {job.jobTitle}
-                                  </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="text-sm text-gray-600 ">4</span>
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
-                                <svg
-                                  class="flex-shrink-0 size-3.5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <polyline points="20 6 9 17 4 12" />
-                                </svg>
-                                Ready to pay
-                              </span>
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="text-sm text-gray-600 ">
-                                {job.datePosted}
-                              </span>
-                            </td>
-                          
-                            <td class="size-px py-1 space-x-2">
-                                <div className=" flex  w-full ">
-                              {/* <button
-                                type="button"
-                                class="py-2 px-3  mx-1 text-start bg-white border hover:bg-gray-200 text-black text-sm font-medium rounded-lg shadow-sm align-middle  "
-                                data-hs-overlay="#hs-pro-datm"
-                              >
-                                Edit Post
-                              </button> */}
-                              
-                              <button className="py-2 px-3   text-sm font-semibold rounded-md border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
-                                Pay
-                              </button>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      
-
-
-                    </table>
+                    <tbody class="divide-y divide-gray-200 ">
+                    <tr class="divide-x divide-gray-200 ">
+                      <td class="size-px whitespace-nowrap px-3 py-4">
+                        <input
+                          type="checkbox"
+                          class="shrink-0 border-gray-300 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                        />
+                      </td>
+                      <td class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer">
+                        <div class="w-full flex items-center gap-x-3">
+                          <div class="grow">
+                            <span class="text-sm font-medium text-gray-800 ">
+                              {job.jobTitle}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="size-px whitespace-nowrap px-4 py-1">
+                        <span class="text-sm text-gray-600 ">{job.hiredApplicant}</span>
+                      </td>
+                      <td class="size-px whitespace-nowrap px-4 py-1">
+                        <span class="text-sm text-gray-600  font-semibold ">n/a</span>
+                      </td>
+                      <td class="size-px whitespace-nowrap px-4 py-1">
+                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                          <svg
+                            class="flex-shrink-0 size-3.5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                          Ready To Pay
+                        </span>
+                      </td>
+                      <td class="size-px whitespace-nowrap px-4 py-1">
+                        <span class="text-sm text-gray-600 ">
+                          {job.datePosted}
+                        </span>
+                      </td>
+                      <td class="size-px py-1 space-x-2">
+                          <div className=" flex  w-full ">
+                        {/* <button
+                          type="button"
+                          class="py-2 px-3  mx-1 text-start bg-white border hover:bg-gray-200 text-black text-sm font-medium rounded-lg shadow-sm align-middle  "
+                          data-hs-overlay="#hs-pro-datm"
+                        >
+                          Edit Post
+                        </button> */}
+                        <button className="py-2 px-3   text-sm font-semibold rounded-md border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                          Pay
+                        </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
                 ))}
+                </table>
+             
                   </div>
                 </div>
               </div>

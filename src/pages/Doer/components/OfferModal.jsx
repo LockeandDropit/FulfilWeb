@@ -95,7 +95,7 @@ const OfferModal = () => {
       console.log("Any issues?", error)
     }
 
-
+console.log("what info do I have from current user?", currentUser)
 
     //brought in from previous set up
 
@@ -132,6 +132,9 @@ const OfferModal = () => {
           locationLat: job.locationLat,
           locationLng: job.locationLng,
           hiredApplicant: currentUser.uid,
+          hiredApplicantFirstName: currentUser.firstName,
+          hiredApplicantLastName: currentUser.lastName,
+          hiredApplicantProfilePicture: currentUser.profilePictureResponse,
           jobCompleteApplicant: false,
           jobCompleteEmployer: false,
           employerFirstName: job.employerFirstName,

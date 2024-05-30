@@ -29,6 +29,7 @@ import {
   Box,
   Stack,
 } from "@chakra-ui/react";
+import ApplicantModal from "./ApplicantModal";
 
 const JobDetails = () => {
   const { job } = useJobStore();
@@ -164,6 +165,13 @@ const JobDetails = () => {
       }
     }
   }, [location]);
+
+  const [applicantVisible, setApplicantVisible] = useState(false)
+  
+  const handleApplicantVisible = () => {
+    setApplicantVisible(true)
+    //also pass job info so chat can be started.
+  }
   return (
     <>
       <Header />
@@ -171,31 +179,7 @@ const JobDetails = () => {
       {job ? (
         <main id="content" class="lg:ps-[260px] pt-[59px]">
           <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
-            <ol class="lg:hidden pt-5 flex items-center whitespace-nowrap">
-              <li class="flex items-center text-sm text-stone-600 ">
-                Products
-                <svg
-                  class="flex-shrink-0 mx-1 overflow-visible size-4 text-stone-400 "
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="m9 18 6-6-6-6" />
-                </svg>
-              </li>
-              <li
-                class="text-sm font-semibold text-stone-800 truncate "
-                aria-current="page"
-              >
-                Product Details
-              </li>
-            </ol>
+           
 
             <div class="py-2 sm:pb-0 sm:pt-5 space-y-5">
               <div class="grid sm:flex sm:justify-between sm:items-center gap-3 sm:gap-5">
@@ -203,13 +187,13 @@ const JobDetails = () => {
                   <div>
                     <p class="inline-flex justify-between items-center gap-x-1">
                       <a
-                        class="text-sm text-sky-400 decoration-2 hover:underline font-medium focus:outline-none focus:underline "
-                        href="#"
+                        class="text-sm text-sky-400 decoration-2  font-medium cursor-default "
+                      
                       >
                         Posted
                       </a>
                     </p>
-                    <h1 class="text-lg md:text-xl font-semibold text-stone-800 ">
+                    <h1 class="text-lg md:text-xl font-semibold text-stone-800 cursor-default">
                       {job.jobTitle}
                     </h1>
                   </div>
@@ -246,12 +230,14 @@ const JobDetails = () => {
                 <div class="lg:col-span-4 space-y-4">
                   <div class="flex flex-col bg-white border border-stone-200 overflow-hidden rounded-xl shadow-sm ">
                     <div class="py-3 px-5 flex justify-between items-center gap-x-5 border-b border-stone-200 ">
-                      <h2 class="inline-block font-semibold text-stone-800 ">
+                      <h2 class="inline-block font-semibold text-stone-800  cursor-default ">
                         Post Info
                       </h2>
+                      <p>Posted</p>
                     </div>
 
                     <div class="p-5 space-y-4">
+                    <div class="grid sm:grid-cols-2 gap-3 sm:gap-5">
                       <div>
                         <label
                           for="hs-pro-epdnm"
@@ -259,11 +245,23 @@ const JobDetails = () => {
                         >
                           Name
                         </label>
-                        <p>{job.jobTitle}</p>
-                      </div>
-
+                        <p className="cursor-default ">{job.jobTitle}</p>
+                      </div> 
+                      <div className="ml-20">
+                        <label
+                          for="hs-pro-epdnm"
+                          class="block mb-2 text-sm font-medium text-stone-800 "
+                        >
+                          Views by Doers
+                        </label>
+                        <p className="cursor-default ">2</p>
+                      </div> 
+                   
+                        
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-3 sm:gap-5">
                       <div>
-                        <div>
+                        <div className="cursor-default ">
                           <label
                             for="hs-pro-epdsku"
                             class="block mb-2 text-sm font-medium text-stone-800 "
@@ -274,6 +272,18 @@ const JobDetails = () => {
                         </div>
                       </div>
                       <div>
+                        {/* <div className="cursor-default ml-20">
+                          <label
+                            for="hs-pro-epdsku"
+                            class=" block mb-2 text-sm font-medium text-stone-800 "
+                          >
+                            Status
+                          </label>
+                        Posted
+                        </div> */}
+                      </div>
+                      </div>
+                      <div className="cursor-default ">
                         <label
                           for="hs-pro-epdsku"
                           class="block mb-2 text-sm font-medium text-stone-800 "
@@ -283,7 +293,7 @@ const JobDetails = () => {
                         {job.isFlatRate ? <p>Flat Rate</p> : <p>Hourly</p>}
                       </div>
 
-                      <div>
+                      <div className="cursor-default ">
                         <label
                           for="hs-pro-epdsku"
                           class="block mb-2 text-sm font-medium text-stone-800 "
@@ -298,7 +308,7 @@ const JobDetails = () => {
                           </p>
                         )}
                       </div>
-                      <div>
+                      <div className="cursor-default ">
                         <label class="block mb-2 text-sm font-medium text-stone-800 ">
                           Description
                         </label>
@@ -442,7 +452,7 @@ const JobDetails = () => {
                   <div class="lg:sticky lg:top-5 space-y-4">
                     <div class="flex flex-col bg-white border border-stone-200 overflow-hidden rounded-xl shadow-sm ">
                       <div class="py-3 px-5  justify-between items-center gap-x-5 border-b border-stone-200 ">
-                        <h2 class="inline-block font-semibold text-stone-800 ">
+                        <h2 class="inline-block font-semibold text-stone-800 cursor-default">
                           Applicants
                         </h2>
                         {isLoading ? (
@@ -623,6 +633,7 @@ const JobDetails = () => {
                                       //     applicant
                                       //   )
                                       // }
+                                      onClick={() => handleApplicantVisible()}
                                     >
                                       See Messages
                                       <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
@@ -633,19 +644,23 @@ const JobDetails = () => {
                                 ) : (
                                   <button
                                     type="button"
-                                    // onClick={() =>
+                                    onClick={() =>
                                     //   navigateApplicantProfile(
                                     //     applicant,
                                     //     allJobs
                                     //   )
-                                    // }
+                                    handleApplicantVisible()
+                                    }
                                     class="py-2 px-2  inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500  "
                                   >
                                     View profile
                                   </button>
                                 )}
                               </div>
+                              {applicantVisible ? <ApplicantModal props={applicant} /> : null}
                             </>
+    
+                            //applicantModal here
                           ))
                         ) : (
                           <p className="text-sm font-semibold text-gray-500">

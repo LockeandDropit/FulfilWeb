@@ -115,6 +115,8 @@ const Homepage = () => {
 
 //   console.log(jobsInReview);
 
+const [showAddJob, setShowAddJob] = useState(false);
+
 
 const handleStoreAndNavigatePosted = (x) => {
     console.log(x.jobTitle, x.jobID, )
@@ -178,7 +180,7 @@ const handleStoreAndNavigateHired = (x) => {
             <div class="flex justify-end items-center gap-x-2">
               <a
                 class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                href="../../pro/dashboard/users-add-user.html"
+                onClick={() => setShowAddJob(!showAddJob)}
               >
                 <svg
                   class="hidden sm:block flex-shrink-0 size-3"
@@ -194,7 +196,7 @@ const handleStoreAndNavigateHired = (x) => {
                     d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
                   />
                 </svg>
-                Add user
+                Create Job
               </a>
             </div>
           </div>
@@ -710,7 +712,7 @@ const handleStoreAndNavigateHired = (x) => {
                            <span class="text-sm text-gray-600 ">{job.totalApplicants}</span>
                          </td>
                          <td class="size-px whitespace-nowrap px-4 py-1">
-                           <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                           <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
                              <svg
                                class="flex-shrink-0 size-3.5"
                                xmlns="http://www.w3.org/2000/svg"
@@ -725,7 +727,7 @@ const handleStoreAndNavigateHired = (x) => {
                              >
                                <polyline points="20 6 9 17 4 12" />
                              </svg>
-                             posted
+                             Posted
                            </span>
                          </td>
                          <td class="size-px whitespace-nowrap px-4 py-1">
@@ -742,7 +744,7 @@ const handleStoreAndNavigateHired = (x) => {
                            >
                              Edit Post
                            </button> */}
-                           <button className="py-2 px-3   text-sm font-semibold rounded-md border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                           <button className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
                              View applicants
                            </button>
                            </div>
@@ -804,7 +806,7 @@ const handleStoreAndNavigateHired = (x) => {
                         <span class="text-sm text-gray-600 font-semibold">n/a</span>
                       </td>
                       <td class="size-px whitespace-nowrap px-4 py-1">
-                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-green-100 text-green-700 rounded-full">
                           <svg
                             class="flex-shrink-0 size-3.5"
                             xmlns="http://www.w3.org/2000/svg"
@@ -836,7 +838,7 @@ const handleStoreAndNavigateHired = (x) => {
                         >
                           Edit Post
                         </button> */}
-                        <button className="py-2 px-3   text-sm font-semibold rounded-md border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                        <button className="py-2 px-3  w-full text-sm font-semibold rounded-md border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
                           Message
                         </button>
                         </div>
@@ -869,7 +871,7 @@ const handleStoreAndNavigateHired = (x) => {
                         <span class="text-sm text-gray-600  font-semibold ">n/a</span>
                       </td>
                       <td class="size-px whitespace-nowrap px-4 py-1">
-                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-blue-600 text-white rounded-full">
                           <svg
                             class="flex-shrink-0 size-3.5"
                             xmlns="http://www.w3.org/2000/svg"
@@ -901,7 +903,7 @@ const handleStoreAndNavigateHired = (x) => {
                         >
                           Edit Post
                         </button> */}
-                        <button className="py-2 px-3   text-sm font-semibold rounded-md border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                        <button className="py-2 px-3  w-full text-sm font-semibold rounded-md border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
                           Pay
                         </button>
                         </div>

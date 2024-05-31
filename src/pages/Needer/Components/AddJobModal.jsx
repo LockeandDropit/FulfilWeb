@@ -122,7 +122,9 @@ const AddJobModal = () => {
   const [requirements2, setRequirements2] = useState("");
   const [requirements3, setRequirements3] = useState("");
   const [niceToHave, setNiceToHave] = useState(null);
-
+  const [employerProfilePicture, setEmployerProfilePicture] = useState(null)
+const [employerFirstName, setEmployerFirstName] = useState(null)
+const [employerLastName, setEmployerLastName] = useState(null)
 
 
   useEffect(() => {
@@ -136,6 +138,23 @@ const AddJobModal = () => {
     } else {
     }
   }, [hasRun]);
+
+
+  useEffect(() => {
+    if (user != null) {
+      const docRef = doc(db, "employers", user.uid);
+
+      getDoc(docRef).then((snapshot) => {
+        console.log(snapshot.data());
+        setEmployerFirstName(snapshot.data().firstName);
+        setEmployerLastName(snapshot.data().lastName);
+        setEmployerProfilePicture(snapshot.data().profilePictureResponse)
+        //get profile picture here as well?
+      });
+    } else {
+      console.log("oops!");
+    }
+  }, [user]);
 
   //credit https://www.code-sample.com/2019/12/react-allow-only-numbers-in-textbox.html
   const numberOnlyRegexMinimumCharacterInput = /^[0-9\b]{1,7}$/;
@@ -358,6 +377,9 @@ const AddJobModal = () => {
     setDoc(doc(db, "employers", user.uid, "Posted Jobs", jobTitle), {
       employerID: employerID,
       employerEmail: user.email,
+      employerFirstName: employerFirstName,
+      employerLastName: employerLastName,
+      employerProfilePicture: employerProfilePicture,
       jobTitle: jobTitle,
       jobID: jobID,
       firstName: firstName,
@@ -398,6 +420,9 @@ const AddJobModal = () => {
     setDoc(doc(db, "Map Jobs", jobID), {
       employerID: employerID,
       employerEmail: user.email,
+      employerFirstName: employerFirstName,
+      employerLastName: employerLastName,
+      employerProfilePicture: employerProfilePicture,
       jobTitle: jobTitle,
       jobID: jobID,
       firstName: firstName,
@@ -522,6 +547,9 @@ const AddJobModal = () => {
       jobID: jobID,
       firstName: firstName,
       lowerRate: lowerRate,
+      employerFirstName: employerFirstName,
+      employerLastName: employerLastName,
+      employerProfilePicture: employerProfilePicture,
       upperRate: upperRate,
       isVolunteer: isVolunteer,
       isOneTime: isOneTime,
@@ -562,6 +590,9 @@ const AddJobModal = () => {
       lowerRate: lowerRate,
       upperRate: upperRate,
       isVolunteer: isVolunteer,
+      employerFirstName: employerFirstName,
+      employerLastName: employerLastName,
+      employerProfilePicture: employerProfilePicture,
       isOneTime: isOneTime,
       isFlatRate: isFlatRate,
       flatRate: flatRate,

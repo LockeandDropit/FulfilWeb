@@ -791,13 +791,13 @@ console.log("job",job)
           </ModalBody>
 
           <ModalFooter>
-            <Button
+            {/* <Button
               variant="ghost"
               mr={3}
               onClick={() => handleCloseAndOpen()}
             >
               Skip
-            </Button>
+            </Button> */}
             <Button
               colorScheme="blue"
               onClick={() => addRating()}

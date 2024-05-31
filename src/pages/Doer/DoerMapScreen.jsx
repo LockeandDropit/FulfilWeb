@@ -481,6 +481,7 @@ const DoerMapScreen = () => {
         isFlatRate: x.isFlatRate ? x.isFlatRate : null,
         niceToHave: x.niceToHave ? x.niceToHave : null,
         datePosted: x.datePosted ? x.datePosted : null,
+      
         jobID: x.jobID,
         jobTitle: x.jobTitle ? x.jobTitle : null,
         hourlyRate: x.hourlyRate ? x.hourlyRate : null,

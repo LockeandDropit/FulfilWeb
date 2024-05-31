@@ -146,9 +146,10 @@ const [employerLastName, setEmployerLastName] = useState(null)
 
       getDoc(docRef).then((snapshot) => {
         console.log(snapshot.data());
-        setEmployerFirstName(snapshot.data().firstName);
-        setEmployerLastName(snapshot.data().lastName);
+        setEmployerFirstName(snapshot.data().firstName)
+        setEmployerLastName(snapshot.data().lastName)
         setEmployerProfilePicture(snapshot.data().profilePictureResponse)
+     
         //get profile picture here as well?
       });
     } else {

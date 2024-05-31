@@ -180,7 +180,7 @@ handleModalOpen(props)
       })
       .then(() => {
         setTimeout(() => {
-          getStripeID(props);
+          // getStripeID(props);
         }, 1000);
       });
   };
@@ -229,6 +229,12 @@ handleModalOpen(props)
       setHiredApplicantStripeID(snapshot.data().stripeID);
     });
   };
+
+  useEffect(() => {
+    if (props) {
+    getStripeID(props)  
+    }
+  }, [props])
 
   const [confirmedPrice, setConfirmedPrice] = useState(null);
 
@@ -325,6 +331,12 @@ handleModalOpen(props)
   //   }
   // };
 
+  console.log("confirmedPrice", confirmedPrice )
+  console.log("doerUID", hiredApplicantID )
+  console.log("jobID", jobID )
+  console.log("neederUID", currentUser.uid)
+  console.log("confirmedPrice", confirmedPrice)
+console.log(" job title", jobTitle)
 
 
   const [jobInfo, setJobInfo] = useState([]);
@@ -340,10 +352,20 @@ handleModalOpen(props)
     );
   };
 
+  console.log("job info", jobInfo)
+
   const [clientSecret, setClientSecret] = useState(null);
 
   const fetchClientSecret = useCallback(() => {
     // Create a Checkout Session
+
+    console.log("confirmedPrice", confirmedPrice )
+    console.log("doerUID", hiredApplicantID )
+    console.log("jobID", jobID )
+    console.log("neederUID", currentUser.uid)
+    console.log("confirmedPrice", confirmedPrice)
+  console.log(" job title", jobTitle)
+  
 
     return (
       fetch(
@@ -442,6 +464,7 @@ handleModalOpen(props)
 
     onOpenPayment();
     pushToJobInfo(postedJobs);
+    console.log("",postedJobs)
   };
 
   //total rating calulation and submission to doer profile

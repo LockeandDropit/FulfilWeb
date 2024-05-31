@@ -161,10 +161,14 @@ const JobDetails = () => {
   const [editVisible, setEditVisible] = useState(false);
 
   useEffect(() => {
+    console.log("location", location.state)
     if (location.state === null) {
     } else {
       if (location.state.editReset) {
         setEditVisible(false);
+      } else if (location.state.applicantReset) {
+        console.log("hello",location.state.applicantReset)
+        setApplicantVisible(false)
       }
     }
   }, [location]);
@@ -328,10 +332,10 @@ const JobDetails = () => {
                           Pay Rate
                         </label>
                         {job.isFlatRate ? (
-                          <p>{job.flatRate}</p>
+                          <p>${job.flatRate} total</p>
                         ) : (
                           <p>
-                            {job.lowerRate} {job.upperRate}
+                            ${job.lowerRate}/hour - ${job.upperRate}/hour
                           </p>
                         )}
                       </div>

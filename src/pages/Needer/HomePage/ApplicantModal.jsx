@@ -350,9 +350,15 @@ const ApplicantModal = (props) => {
     testNewChannel();
   };
 
+  const handleOnClose = () =>  {
+    navigate("/JobDetails", {state: {applicantReset: true}})
+
+    onClose()
+  }
+
   //Note: There is no reason for the below to be named premiumuser.xxx. I copied this from another place and didn't want to change it all.
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="6xl">
+    <Modal isOpen={isOpen} onClose={() => handleOnClose()} size="6xl">
       <ModalOverlay />
 
       <ModalContent>
@@ -485,6 +491,15 @@ const ApplicantModal = (props) => {
                     <h1 class="text-xl font-semibold text-gray-800 ">
                       {premiumUser.firstName} {premiumUser.lastName}
                     </h1>
+                    <p className="text-sm font-semibold text-gray-600">Interested in hiring this person? </p>
+                    <p className="text-sm font-semibold text-gray-600">Contact them to see if you two are a good fit.</p>
+                    
+                    <button
+                            onClick={() => createInterviewChat()}
+                            class=" mt-2 py-2 px-4 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none "
+                          >
+                            Contact
+                          </button>
                   </div>
                 </div>
 
@@ -656,12 +671,12 @@ const ApplicantModal = (props) => {
                           </li>
                         </ul>
                         <div className="mt-2">
-                          <button
+                          {/* <button
                             onClick={() => createInterviewChat()}
                             class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none "
                           >
                             Send Message
-                          </button>
+                          </button> */}
                           {/* <button
                             //   onClick={() =>
                             //     createInterviewChat()

@@ -1769,15 +1769,14 @@ const DoerMapScreen = () => {
                                         <div class=" flex-row  items-center  ">
                                           {jobsInProgress.isHourly ? (
                                             <p>
-                                              ${jobsInProgress.lowerRate}/hr-$
-                                              {jobsInProgress.upperRate}
+                                              $ {jobsInProgress.confirmedRate}
                                               /hr
                                             </p>
                                           ) : (
                                             <div className="flex flex-row items-center">
                                               <p>
-                                                Offer: $
-                                                {jobsInProgress.flatRate}
+                                                Confirmed pay: $
+                                                {jobsInProgress.confirmedRate} total
                                               </p>
                                             </div>
                                           )}

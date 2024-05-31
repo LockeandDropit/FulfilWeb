@@ -120,7 +120,11 @@ console.log("what info do I have from current user?", currentUser)
           city: job.city,
           lowerRate: job.lowerRate ? job.lowerRate : null,
           upperRate: job.upperRate ? job.upperRate : null,
-          
+          hiredApplicantFirstName: job.hiredApplicantFirstName,
+          hiredApplicantLastName: job.hiredApplicantLastName,
+          hiredApplicantProfilePicture: job.hiredApplicantProfilePicture,
+          hasNewNotification: true,
+          datePosted: job.datePosted,
           isOneTime: job.isOneTime,
           streetAddress: job.streetAddress,
           state: job.state,

@@ -329,8 +329,18 @@ const AddJobModal = () => {
   const [datePosted, setDatePosted] = useState(null);
 
   useEffect(() => {
-    //credit https://stackoverflow.com/questions/37271356/how-to-get-the-current-date-in-reactnative Irfan wani
-    setDatePosted(new Date().toLocaleString());
+    //credit https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript?rq=3 mohshbool & Samuel Meddows
+    let initialDate = new Date()
+    var dd = String(initialDate.getDate()).padStart(2, '0');
+    var mm = String(initialDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = initialDate.getFullYear();
+
+    var today = mm + '/' + dd + '/' + yyyy;
+
+
+   
+   
+    setDatePosted(today);
   }, []);
 
   const addNewJob = () => {
@@ -743,8 +753,8 @@ const AddJobModal = () => {
 
     <ModalContent>
     <div
-          class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
-          tabindex="-1"
+          class=" "
+         
         >
           <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
             <div class="py-3 px-4 flex justify-between items-center border-b ">
@@ -991,251 +1001,7 @@ const AddJobModal = () => {
         
     </ModalContent>
 </Modal>
-      {showAddJob ? (
-        <div
-          class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
-          tabindex="-1"
-        >
-          <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
-            <div class="py-3 px-4 flex justify-between items-center border-b ">
-              <h3 class="font-semibold text-gray-800">Create A Job</h3>
-              <button
-                type="button"
-                class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
-                data-hs-overlay="#hs-pro-datm"
-                onClick={() => setShowAddJob(!showAddJob)}
-              >
-                <span class="sr-only">Close</span>
-                <svg
-                  class="flex-shrink-0 size-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
-              </button>
-            </div>
 
-            <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-              <div class="p-4 space-y-5">
-                <div class="space-y-2">
-                  <label
-                    for="hs-pro-dactmt"
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                  >
-                    Title
-                  </label>
-
-                  <input
-                    id="hs-pro-dactmt"
-                    type="text"
-                    class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                    placeholder="Title goes here"
-                // width="560px"
-                onChange={(e) => setJobTitle(e.target.value)}
-                 
-                  />
-                </div>
-
-                <div class="space-y-2">
-                  <label
-                    for="dactmi"
-                    
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                    placeholder="ex: I have a downed tree in my yard and would like someone to remove it."
-                  >
-                    Description
-                  </label>
-
-                  <div class="">
-  <textarea onChange={(e) => setDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="3" placeholder="ex: I have a downed tree in my yard and would like someone to remove it."></textarea>
-</div>
-                </div>
-
-                <div class="space-y-2">
-                  <label
-                    for="dactmd"
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                  >
-                     Where will this work be located?
-                  </label>
-
-                  <GooglePlacesAutocomplete
-                apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
-                fetchDetails={true}
-                // minLengthAutocomplete={3}
-                autocompletionRequest={{
-                  
-                    types: ["address"],
-                  
-                }}
-                selectProps={{
-                  rawAddress,
-
-                  onChange: setRawAddress,
-                  placeholder: "Type address here",
-                 
-                }}
-              />
-                </div>
-                <div class="space-y-2">
-                  <label
-                    for="dactmi"
-                    onChange={(e) => setDescription(e.target.value)}
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                    placeholder="ex: I have a downed tree in my yard and would like someone to remove it."
-                  >
-                    What category of work is this? (optional)
-                  </label>
-
-                  <select
-                  class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                placeholder="Select category"
-              
-                onChange={(e) => setJobCategory(e.target.value)}
-              >
-                <option value={false}>Select category</option>
-                <option value="asphalt">Asphalt</option>
-                <option value="carpentry">Carpentry</option>
-                <option value="concrete">Concrete</option>
-                <option value="drywall">Drywall</option>
-                <option value="electrical work">Electrical Work</option>
-                <option value="general handyman">General Handyman</option>
-                <option value="gutter cleaning">Gutter Cleaning</option>
-                <option value="hvac">HVAC</option>
-                <option value="landscaping">Landscaping</option>
-                <option value="painting">Painting</option>
-                <option value="plumbing">Plumbing</option>
-                <option value="pressure washing">Pressure Washing</option>
-                <option value="roofing">Roofing</option>
-                <option value="siding">Siding</option>
-                <option value="snow removal">Snow Removal</option>
-                <option value="window installation">Window Installation</option>
-                <option value="window washing">Window Washing</option>
-                <option value="yard work">Yard Work</option>
-                <option value={false}>Clear Selection</option>
-              </select>
-                </div>
-                <div class="space-y-2">
-                  <label
-                    for="dactmi"
-                   
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                   
-                  >
-                    Are you offering an hourly rate or a fixed amount
-                  </label>
-
-                  <label  for="dactmi"
-                   
-                   class="block mb-2 text-sm font-medium text-gray-800 ">
-                  (ex: $50 to mow
-              my lawn)
-                  </label>
-
-                  <select
-              placeholder="Select option"
-              class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-              onChange={(e) => setPayType(e.target.value)}
-            >
-              <option>Select option</option>
-              <option value="Hourly">Hourly</option>
-              <option value="Fixed">Fixed Amount</option>
-            </select>
-                </div>
-
-{isHourly ? (
- <div class="space-y-2 ">
- <label
-   for="hs-pro-dactmt"
-   class="block mb-2 text-sm font-medium text-gray-800 "
- >
-    Enter your desired pay range
- </label>
-
-<div class="flex align-items-center">
-  <p className="mt-2 mr-1 text-sm font-medium">$</p>
- <input
-   id="hs-pro-dactmt"
-   type="text"
-   class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-   placeholder="lower rate"
- 
-   onChange={(e) => lowerRateValidate(e.target.value)}
-
- />
- <p className="mt-2 text-sm font-medium mr-1 ml-1">/hour - $</p>
- <input
-   id="hs-pro-dactmt"
-   type="text"
-   class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-   placeholder="upper rate"
-                    onChange={(e) => upperRateValidate(e.target.value)}
-
- />
- <p className="mt-2 text-sm font-medium">/hour</p>
-   {lowerRateValidationBegun === true ? (
-    <p color="red">{lowerRateValidationMessage}</p>
-  ) : null}
-  {upperRateValidationBegun === true ? (
-    <p color="red">{upperRateValidationMessage}</p>
-  ) : null}
-  </div>
-</div>
-
-) : (
-  null
-)}
-
-{isFlatRate ? (<div class="space-y-2">
-  <label
-    for="hs-pro-dactmt"
-    class="block mb-2 text-sm font-medium text-gray-800 "
-  >
-    Enter your desired budget
-  </label>
-  <div className="flex">
-  <p className="mt-2 mr-1 text-sm font-medium">$</p>
-  <input
-    id="hs-pro-dactmt"
-    type="text"
-    class="py-2 px-3 block w-2/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-    placeholder="Enter budget here"
-    onChange={(e) => flatRateValidate(e.target.value)}
- 
-  />
-   <p className="mt-2 ml-1 text-sm font-medium">total</p>
-   </div>
-</div>) : (null)}
-                
-              </div>
-
-              <div class="p-4 flex justify-between gap-x-2">
-                <div class="w-full flex justify-end items-center gap-x-2">
-                  
-
-                  <button
-                    type="button"
-                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                    data-hs-overlay="#hs-pro-datm"
-                    onClick={() => checkLength()}
-                  >
-                    Post Job
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : null}
         <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

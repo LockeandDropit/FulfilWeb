@@ -82,7 +82,7 @@ const Dashboard = () => {
     setAddJobVisible(true);
   };
 
-  const [showAddJob, setShowAddJob] = useState(false);
+  const [showAddJobLeftNav, setShowAddJobLeftNav] = useState(false);
 
 
   const { isOpen: isOPenMobileDash, onOpen: onOpenMobileDash, onClose: onCloseMobileDash } = useDisclosure()
@@ -588,7 +588,7 @@ const Dashboard = () => {
         console.log(error);
       });
 
-      setShowAddJob(!showAddJob)
+      setShowAddJobLeftNav(!showAddJobLeftNav)
 
     onOpen()
 
@@ -811,7 +811,7 @@ const Dashboard = () => {
               <ul>
                 <li class="px-5 mb-1.5">
                   <button
-                    class="flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
+                    class="flex w-full gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
                     onClick={() => navigate("/Homepage")}
                   >
                     <svg
@@ -975,7 +975,7 @@ const Dashboard = () => {
                     Find A Pro
                   </button>
                 </li>
-                <li class="px-8 mb-0.5 mt-10">
+                {/* <li class="px-8 mb-0.5 mt-10">
                   <button
                     type="button"
                     class="py-2 w-3/4 px-3 inline-flex text-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
@@ -998,7 +998,7 @@ const Dashboard = () => {
                     Create A Job
                   </button>
                  
-                </li>
+                </li> */}
 
                 
                 
@@ -1033,7 +1033,7 @@ const Dashboard = () => {
         </div>
       </aside>
 
-      {showAddJob ? (
+      {/* {showAddJobLeftNav ? (
         <div
           class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
           tabindex="-1"
@@ -1045,7 +1045,7 @@ const Dashboard = () => {
                 type="button"
                 class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
                 data-hs-overlay="#hs-pro-datm"
-                onClick={() => setShowAddJob(!showAddJob)}
+                onClick={() => setShowAddJobLeftNav(!showAddJobLeftNav)}
               >
                 <span class="sr-only">Close</span>
                 <svg
@@ -1081,7 +1081,7 @@ const Dashboard = () => {
                     type="text"
                     class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                     placeholder="Title goes here"
-                // width="560px"
+       
                 onChange={(e) => setJobTitle(e.target.value)}
                  
                   />
@@ -1113,7 +1113,7 @@ const Dashboard = () => {
                   <GooglePlacesAutocomplete
                 apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
                 fetchDetails={true}
-                // minLengthAutocomplete={3}
+             
                 autocompletionRequest={{
                   
                     types: ["address"],
@@ -1277,7 +1277,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      ) : null}
+      ) : null} */}
         <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

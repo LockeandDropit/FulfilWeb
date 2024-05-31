@@ -53,6 +53,7 @@ const ApplicantModal = (props) => {
   const [userID, setUserID] = useState(null);
   const [employerFirstName, setEmployerFirstName] = useState(null);
   const [employerLastName, setEmployerLastName] = useState(null);
+  const [isLoading, setIsLoading] = useState(false)
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
@@ -253,6 +254,7 @@ const ApplicantModal = (props) => {
         }
       ).then(() => {
         setTimeout(() => {
+          setIsLoading(false)
           navigate("/NeederChatEntry", {
             state: {
               selectedChannel: newChatRef.id,
@@ -270,6 +272,7 @@ const ApplicantModal = (props) => {
   };
 
   const createInterviewChat = () => {
+    setIsLoading(true)
     setDoc(doc(db, "Messages", "intermediate", job.jobID, "Info"), {
       jobTitle: job.jobTitle,
       applicantFirstName: premiumUser.firstName,
@@ -354,6 +357,15 @@ const ApplicantModal = (props) => {
 
       <ModalContent>
         <ModalCloseButton />
+        {isLoading ? (   <div class="w-full h-dvh ">
+  <div class="flex  flex-col justify-center items-center p-4 md:p-5">
+    <div class="flex justify-center items-center">
+      <div class="mt-80 animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500" role="status" aria-label="loading">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </div>
+</div>) : (
         <main id="content" class=" pt-[24px]">
           <div class="max-w-full mx-auto">
             <ol class="md:hidden py-3 px-2 sm:px-5 flex items-center whitespace-nowrap">
@@ -650,14 +662,14 @@ const ApplicantModal = (props) => {
                           >
                             Send Message
                           </button>
-                          <button
+                          {/* <button
                             //   onClick={() =>
                             //     createInterviewChat()
                             //   }
                             class="w-full py-2 px-4 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none "
                           >
                             Delete
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                       <div class="w-full">
@@ -1602,6 +1614,7 @@ const ApplicantModal = (props) => {
             </div>
           </div>
         </main>
+        )}
       </ModalContent>
     </Modal>
   );

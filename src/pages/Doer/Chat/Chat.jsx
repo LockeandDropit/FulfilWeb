@@ -181,7 +181,7 @@ const Chat = () => {
 
           userChatsData.chats[chatIndex].lastMessage = text;
           userChatsData.chats[chatIndex].isSeen =
-            id === currentUser.id ? true : false;
+            id === currentUser.uid ? true : false;
           userChatsData.chats[chatIndex].updatedAt = Date.now();
 
           await updateDoc(userChatsRef, {

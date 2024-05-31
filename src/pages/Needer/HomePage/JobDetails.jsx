@@ -30,6 +30,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import ApplicantModal from "./ApplicantModal";
+import { useNavigate } from "react-router-dom";
 
 const JobDetails = () => {
   const { job } = useJobStore();
@@ -39,6 +40,8 @@ const JobDetails = () => {
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
   const [numberOfRatings, setNumberOfRatings] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (job) {
@@ -172,6 +175,14 @@ const JobDetails = () => {
     setApplicantVisible(true)
     //also pass job info so chat can be started.
   }
+
+  const navigateToChannel = (x) => {
+    console.log("this is what youre passing", x);
+    navigate("/NeederChatEntry", {
+      state: { selectedChannel: x.channelID, applicant: x },
+    });
+    // console.log("mesage channel",x);
+  };
   return (
     <>
       <Header />
@@ -626,36 +637,45 @@ const JobDetails = () => {
                                   </p>
                                 </div>
 
-                                {applicant.hasUnreadMessage ||
-                                applicant.channelID ? (
+                                {
+                                applicant.channelId ? (
                                   <>
                                     {" "}
                                     <button
                                       type="button"
-                                      // onClick={() =>
-                                      //   navigateApplicantProfile(
-                                      //     applicant,
-                                      //     allJobs
-                                      //   )
-                                      // }
+                                      onClick={() => handleApplicantVisible()}
                                       class="py-2 px-2  inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500  "
                                     >
                                       View profile
                                     </button>
-                                    <button
-                                      class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
-                                      // onClick={() =>
-                                      //   navigateToChannel(
-                                      //     applicant
-                                      //   )
-                                      // }
-                                      onClick={() => handleApplicantVisible()}
-                                    >
-                                      See Messages
-                                      <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
-                                        New
-                                      </span>
-                                    </button>
+                                    {applicant.hasUnreadMessage ? (
+                                          <button
+                                          class=" w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
+                                          onClick={() =>
+                                            navigateToChannel(
+                                              applicant
+                                            )
+                                          }
+                            
+                                        >
+                                          See Messages
+                                          <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
+                                            New
+                                          </span>
+                                        </button>
+                                    ) : (   <button
+                                        class="  w-auto py-2 px-2 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
+                                        onClick={() =>
+                                          navigateToChannel(
+                                            applicant
+                                          )
+                                        }
+                                      
+                                      >
+                                        See Messages
+                                      
+                                      </button>)}
+                                  
                                   </>
                                 ) : (
                                   <button

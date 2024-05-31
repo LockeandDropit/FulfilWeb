@@ -111,6 +111,7 @@ console.log("what info do I have from current user?", currentUser)
           employerID: job.employerID,
           jobTitle: job.jobTitle,
           jobID: job.jobID,
+          isFlatRate: job.isFlatRate,
           isHourly: job.isHourly,
           channelId: job.channelId,
           category: job.category,
@@ -123,6 +124,7 @@ console.log("what info do I have from current user?", currentUser)
           hiredApplicantFirstName: job.hiredApplicantFirstName,
           hiredApplicantLastName: job.hiredApplicantLastName,
           hiredApplicantProfilePicture: job.hiredApplicantProfilePicture,
+          acceptedOfferNotification: true,
           hasNewNotification: true,
           datePosted: job.datePosted,
           isOneTime: job.isOneTime,
@@ -170,6 +172,7 @@ console.log("what info do I have from current user?", currentUser)
           jobTitle: job.jobTitle,
           jobID: job.jobID,
           isHourly: job.isHourly,
+          isFlatRate: job.isFlatRate,
           category: job.category,
           // businessName: businessName,
           channelId: job.channelId,
@@ -178,7 +181,7 @@ console.log("what info do I have from current user?", currentUser)
           confirmedRate: jobHiringState.confirmedRate,
           lowerRate: job.lowerRate ? job.lowerRate : null,
           upperRate: job.upperRate ? job.upperRate : null,
-      
+          datePosted: job.datePosted,
           isOneTime: job.isOneTime,
           streetAddress: job.streetAddress,
           state: job.state,
@@ -370,6 +373,8 @@ console.log("what info do I have from current user?", currentUser)
 
 
         onClose()
+
+        onCloseFlatRate()
     
         //delete from global jobs/maps
     
@@ -384,7 +389,7 @@ console.log("what info do I have from current user?", currentUser)
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>her it is</ModalHeader>
+        <ModalHeader></ModalHeader>
         <ModalCloseButton />
         <ModalBody>
          

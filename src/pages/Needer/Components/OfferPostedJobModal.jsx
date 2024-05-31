@@ -114,6 +114,7 @@ const OfferPostedJobModal = () => {
       jobOffered: true,
       confirmedRate: confirmedRateInt,
       isHourly: job.isHourly,
+      isFlatRate: job.isFlatRate,
       applicationSent: true,
       isHired: false,
     })
@@ -209,7 +210,7 @@ const OfferPostedJobModal = () => {
               userChatsData.chats[chatIndex].isHourly = job.isHourly;
               userChatsData.chats[chatIndex].isHired = false
               userChatsData.chats[chatIndex].isSeen =
-                id === currentUser.id ? true : false;
+                id === currentUser.uid ? true : false;
               userChatsData.chats[chatIndex].updatedAt = Date.now();
     
               await updateDoc(userChatsRef, {

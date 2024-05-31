@@ -25,6 +25,7 @@ import {
   CardFooter,
   Divider,
   Stack,
+  
 } from "@chakra-ui/react";
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -606,11 +607,13 @@ const handleCloseButton = () => {
     <>
     {isVisible ? (
         <>
+       
     <div
-      class=" fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
+      class=" bg-blend-overlay fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
       tabindex="-1"
     >
-      <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+      
+      <div class="bg-blend-overlay w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
         <div class="py-3 px-4 flex justify-between items-center  ">
           <h3 class="mt-4 font-semibold text-gray-800">Edit This Job</h3>
 

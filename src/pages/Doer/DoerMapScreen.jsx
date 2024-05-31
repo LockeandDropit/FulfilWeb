@@ -278,6 +278,12 @@ const DoerMapScreen = () => {
 
   const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState(null);
 
+  const handlePostedToggleOpen = (x) => {
+    setOpenInfoWindowMarkerID(x.jobID);
+updateJobListingViews(x)
+    
+  }
+
   const handleToggleOpen = (x) => {
     console.log("here", x);
     setOpenInfoWindowMarkerID(x);
@@ -657,6 +663,20 @@ const DoerMapScreen = () => {
   };
 
   //category search
+
+  //update total view count for needer
+  const updateJobListingViews = (x) => {
+    console.log("this is it", x)
+    const docRef = doc(
+      db,
+      "employers",
+      x.employerID,
+      "Posted Jobs",
+      x.jobTitle
+    );
+
+    updateDoc(docRef, {totalViews: increment(1)})
+  }
 
   const [searchJobCategory, setSearchJobCategory] = useState(null);
 
@@ -1331,7 +1351,7 @@ const DoerMapScreen = () => {
                             ? allJobs.locationLng
                             : -93.26177106829272,
                         }}
-                        onClick={() => handleToggleOpen(allJobs.jobID)}
+                        onClick={() => handlePostedToggleOpen(allJobs)}
                       >
                         <button
                           type="button"
@@ -1470,7 +1490,7 @@ const DoerMapScreen = () => {
                                         </p>
                                       </div>
                                       <div>
-                                        <div class="p-4 flex justify-between gap-x-2  absolute right-0 ">
+                                        <div class=" mt-10 p-4 flex justify-between gap-x-2  absolute right-0 ">
                                           <div class="w-full flex justify-end items-center gap-x-2">
                                             <button
                                               type="button"

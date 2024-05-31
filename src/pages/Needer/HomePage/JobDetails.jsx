@@ -278,15 +278,15 @@ const JobDetails = () => {
                         </label>
                         <p className="cursor-default ">{job.jobTitle}</p>
                       </div> 
-                      {/* <div className="ml-20">
+                      <div className="ml-20">
                         <label
                           for="hs-pro-epdnm"
                           class="block mb-2 text-sm font-medium text-stone-800 "
                         >
-                          Views by Doers
+                          Total Views
                         </label>
-                        <p className="cursor-default ">2</p>
-                      </div>  */}
+                        <p className="cursor-default ">{job.totalViews}</p>
+                      </div> 
                    
                         
                         </div>

@@ -666,13 +666,13 @@ const handleShowMobileAddJob = () => {
           <DrawerBody>
           <div class="flex flex-col h-full max-h-full py-3">
           <header class="h-[46px] px-8">
-            <a
-              class="flex-none text-4xl font-sans font-bold text-sky-400"
+            <button
+              class="flex-none text-4xl font-sans font-bold text-sky-400 cursor-pointer"
               aria-label="Brand"
               onClick={() => navigate("/Homepage")}
             >
               Fulfil
-            </a>
+            </button>
           </header>
 
           <div class="h-[calc(100%-35px)] lg:h-[calc(100%-93px)] overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">

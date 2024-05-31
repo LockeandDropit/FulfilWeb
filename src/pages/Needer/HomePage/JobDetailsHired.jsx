@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Header from "../Components/Header";
 import Dashboard from "../Components/Dashboard";
 import { useJobStore } from "./lib/jobsStoreDashboard";
-import { db } from "../../../firebaseConfig";
+import { db, auth } from "../../../firebaseConfig";
 import star_corner from "../../../images/star_corner.png";
 import star_filled from "../../../images/star_filled.png";
 import {
@@ -31,6 +31,8 @@ import {
 } from "@chakra-ui/react";
 import ApplicantModal from "./ApplicantModal";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+
 
 const JobDetailsHired = () => {
   const { job } = useJobStore();
@@ -41,6 +43,19 @@ const JobDetailsHired = () => {
   const [numberOfRatings, setNumberOfRatings] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const [user, setUser] = useState(null);
+  const [hasRun, setHasRun] = useState(false);
+  useEffect(() => {
+    if (hasRun === false) {
+      onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+        console.log(currentUser.uid);
+      });
+      setHasRun(true);
+    } else {
+    }
+  }, []);
 
 useEffect(() => {
   const secondQuery = doc(db, "users", job.hiredApplicant);
@@ -96,8 +111,50 @@ useEffect(() => {
     });
 }, [])
 
-  console.log("job", job);
+
   console.log("applicant", applicant);
+
+const [hasUnreadMessage, setHasUnreadMessage] = useState(null)
+
+useEffect(() => {
+  if (user) {
+  let allChats = [];
+
+  const unSub = onSnapshot(
+    doc(db, "User Messages", user.uid),
+    async (res) => {
+      let unreadMessages = 0;
+
+      const items = res.data().chats;
+
+      console.log("res data",res.data().chats)
+
+      items.map(async (item) => {
+       
+        console.log("fetchedIDs", item.chatId)
+
+        if (item.isSeen === false) {
+            unreadMessages++
+        }
+      });
+
+
+      console.log(unreadMessages)
+
+      if (unreadMessages > 0) {
+       setHasUnreadMessage(unreadMessages) 
+      }
+    }
+  );
+
+  return () => {
+    unSub();
+  };
+}
+
+}, [user])
+
+
 
   const location = useLocation();
 
@@ -122,10 +179,13 @@ useEffect(() => {
   const navigateToChannel = (x) => {
     console.log("this is what youre passing", x);
     navigate("/NeederChatEntry", {
-      state: { selectedChannel: x.channelID, applicant: x },
+      state: { selectedChannel: x.channelId, applicant: x },
     });
     // console.log("mesage channel",x);
   };
+
+
+  
   return (
     <>
       <Header />
@@ -294,10 +354,10 @@ useEffect(() => {
                               <div class="mt-2 p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                                 <div class="flex justify-between">
                                   <div class="flex flex-col justify-center items-center size-[56px]  ">
-                                    {applicant.profilePictureRespone ? (
+                                    {applicant.profilePictureResponse ? (
                                       <img
-                                        src={applicant.profilePictureRespone}
-                                        class="flex-shrink-0 size-[38px] rounded-full"
+                                        src={applicant.profilePictureResponse}
+                                        class="flex-shrink-0 size-[64px] rounded-full"
                                       />
                                     ) : (
                                       <svg
@@ -433,7 +493,7 @@ useEffect(() => {
                                   </p>
                                 </div>
 
-                                {applicant.hasUnreadMessage ||
+                                {hasUnreadMessage ||
                                 applicant.channelID ? (
                                   <>
                                     {" "}
@@ -444,33 +504,24 @@ useEffect(() => {
                                     >
                                       View profile
                                     </button> */}
-                                    <button
-                                      class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
-                                      onClick={() =>
-                                        navigateToChannel(
-                                          applicant
-                                        )
-                                      }
-                                      // onClick={() => handleApplicantVisible()}
-                                    >
-                                      Messages
-                                      <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
-                                        New
-                                      </span>
-                                    </button>
+                                     <button
+                                    onClick={() =>
+                                      navigateToChannel(
+                                        applicant
+                                      )
+                                    }
+                                    className="py-2 px-3  w-full relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                  >
+                                    Messages
+                                    <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                      1
+                                    </span>
+                                  </button>
+                                
                                   </>
                                 ) : (
                                   <>
-                                  {/* <button
-                                    type="button"
-                                    onClick={() =>
-                                  
-                                    handleApplicantVisible()
-                                    }
-                                    class="py-2 px-2  inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500  "
-                                  >
-                                    View profile
-                                  </button> */}
+                                 
                                    <button
                                    type="button"
                                  
@@ -481,7 +532,7 @@ useEffect(() => {
                                     }
                            
                              
-                                   class="py-2 px-2  inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-blue-600 text-white shadow-sm hover:bg-blue-700  "
+                                    className="py-2 px-3  w-full relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
                                  >
                                    Messages
                                  </button>

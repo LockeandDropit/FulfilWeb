@@ -78,30 +78,39 @@ const EmbeddedPaymentsJobDetails = (props) => {
 
   const [postedJobs, setPostedJobs] = useState(null);
 
+  const {job} = useJobStore()
+
   //validate & set current user
   // const [user, setUser] = useState(null);
   // const [userID, setUserID] = useState(null);
   const [hasRun, setHasRun] = useState(false);
 
-  const [currentUser, setCurrentUser] = useState(null)
+
   const { setJobHiringState } = useJobStore();
 
-  useEffect(() => {
-    if (hasRun === false) {
-      onAuthStateChanged(auth, (x) => {
-        setCurrentUser(x.uid)
-        // setUserID(x.uid);
-        console.log("still got it", x);
-      });
-      setHasRun(true);
-    } else {
-    }
-  }, [hasRun]);
+  console.log("props", props)
+
+  // useEffect(() => {
+  //   if (hasRun === false) {
+  //     onAuthStateChanged(auth, (x) => {
+  //       setCurrentUser(x.uid)
+  //       // setUserID(x.uid);
+  //       console.log("still got it", x);
+  //     });
+  //     setHasRun(true);
+  //   } else {
+  //   }
+  // }, [hasRun]);
+
+  const currentUser = props.props.currentUser
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser !== null) {
       console.log(currentUser.uid);
-      setTimeout(handleModalOpen(props), 300);
+ 
+      setTimeout(() => {
+handleModalOpen(props)
+      }, 500)
     } else {
     }
   }, [currentUser]);
@@ -137,7 +146,7 @@ const EmbeddedPaymentsJobDetails = (props) => {
       "employers",
       currentUser.uid,
       "In Review",
-      props.props.jobTitle
+      props.props.job.jobTitle
     );
 
     getDoc(docRef)
@@ -214,7 +223,7 @@ const EmbeddedPaymentsJobDetails = (props) => {
   const [hiredApplicantStripeID, setHiredApplicantStripeID] = useState(null);
 
   const getStripeID = (props) => {
-    const docRef = doc(db, "users", props.props.hiredApplicant);
+    const docRef = doc(db, "users", props.props.job.hiredApplicant);
 
     getDoc(docRef).then((snapshot) => {
       setHiredApplicantStripeID(snapshot.data().stripeID);
@@ -224,13 +233,13 @@ const EmbeddedPaymentsJobDetails = (props) => {
   const [confirmedPrice, setConfirmedPrice] = useState(null);
 
   const retrieveConfirmedPaymentAmount = (props) => {
-    if (props.props.isHourly == true) {
+    if (props.props.job.isHourly == true) {
       const docRef = doc(
         db,
         "employers",
         currentUser.uid,
         "In Review",
-        props.props.jobTitle
+        props.props.job.jobTitle
       );
 
       getDoc(docRef).then((snapshot) => {
@@ -250,7 +259,7 @@ const EmbeddedPaymentsJobDetails = (props) => {
         "employers",
         currentUser.uid,
         "In Review",
-        props.props.jobTitle
+        props.props.job.jobTitle
       );
 
       getDoc(docRef).then((snapshot) => {

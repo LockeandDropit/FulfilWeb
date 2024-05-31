@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Header from "../Components/Header";
 import Dashboard from "../Components/Dashboard";
 import { useJobStore } from "./lib/jobsStoreDashboard";
-import { db } from "../../../firebaseConfig";
+import { db, auth } from "../../../firebaseConfig";
 import star_corner from "../../../images/star_corner.png";
 import star_filled from "../../../images/star_filled.png";
 import {
@@ -32,7 +32,7 @@ import {
 import ApplicantModal from "./ApplicantModal";
 import { useNavigate } from "react-router-dom";
 import EmbeddedPaymentsJobDetails from "../Components/EmbeddedPaymentsJobDetails";
-
+import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 const JobDetailsReadyToPay = () => {
   const { job } = useJobStore();
   console.log(job);
@@ -43,6 +43,18 @@ const JobDetailsReadyToPay = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const [user, setUser] = useState(null);
+  const [hasRun, setHasRun] = useState(false);
+  useEffect(() => {
+    if (hasRun === false) {
+      onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+        console.log(currentUser.uid);
+      });
+      setHasRun(true);
+    } else {
+    }
+  }, []);
 useEffect(() => {
   const secondQuery = doc(db, "users", job.hiredApplicant);
     let finalResults = [];
@@ -100,6 +112,46 @@ useEffect(() => {
   console.log("job", job);
   console.log("applicant", applicant);
 
+
+  const [hasUnreadMessage, setHasUnreadMessage] = useState(null)
+
+useEffect(() => {
+  if (user) {
+  let allChats = [];
+
+  const unSub = onSnapshot(
+    doc(db, "User Messages", user.uid),
+    async (res) => {
+      let unreadMessages = 0;
+
+      const items = res.data().chats;
+
+      console.log("res data",res.data().chats)
+
+      items.map(async (item) => {
+       
+        console.log("fetchedIDs", item.chatId)
+
+        if (item.isSeen === false) {
+            unreadMessages++
+        }
+      });
+
+
+      console.log(unreadMessages)
+
+      if (unreadMessages > 0) {
+       setHasUnreadMessage(unreadMessages) 
+      }
+    }
+  );
+
+  return () => {
+    unSub();
+  };
+}
+
+}, [user])
   const location = useLocation();
 
   const [editVisible, setEditVisible] = useState(false);
@@ -148,10 +200,10 @@ useEffect(() => {
                   <div>
                     <p class="inline-flex justify-between items-center gap-x-1">
                       <a
-                        class="text-sm bg-green-100 px-2 text-green-700  decoration-2  font-medium cursor-default "
+                        class="text-sm bg-blue-700 px-2 text-white  decoration-2  font-medium cursor-default "
                       
                       >
-                        In Progress
+                        Ready to pay
                       </a>
                     </p>
                     <h1 class="text-lg md:text-xl font-semibold text-stone-800 cursor-default">
@@ -181,7 +233,7 @@ useEffect(() => {
                       <h2 class="inline-block font-semibold text-stone-800  cursor-default ">
                         Post Info
                       </h2>
-                      <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-green-100 text-green-700  rounded-full cursor-default">
+                      <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-blue-700 text-white rounded-full cursor-default">
                              <svg
                                class="flex-shrink-0 size-3.5"
                                xmlns="http://www.w3.org/2000/svg"
@@ -196,7 +248,7 @@ useEffect(() => {
                              >
                                <polyline points="20 6 9 17 4 12" />
                              </svg>
-                             In Progress
+                            Ready to pay
                            </span>
                     </div>
 
@@ -301,10 +353,10 @@ useEffect(() => {
                               <div class="mt-2 p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                                 <div class="flex justify-between">
                                   <div class="flex flex-col justify-center items-center size-[56px]  ">
-                                    {applicant.profilePictureRespone ? (
+                                    {applicant.profilePictureResponse ? (
                                       <img
-                                        src={applicant.profilePictureRespone}
-                                        class="flex-shrink-0 size-[38px] rounded-full"
+                                        src={applicant.profilePictureResponse}
+                                        class="flex-shrink-0 size-[60px] rounded-full"
                                       />
                                     ) : (
                                       <svg
@@ -440,27 +492,26 @@ useEffect(() => {
                                   </p>
                                 </div>
 
-                                {applicant.hasUnreadMessage ||
-                                applicant.channelID ? (
+                                {hasUnreadMessage ? (
                                   <>
                                     {" "}
                                    
                                     <button
-                                      class=" mr-2 w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
-                                      onClick={() =>
-                                        navigateToChannel(
-                                          applicant
-                                        )
-                                      }
-                                      // onClick={() => handleApplicantVisible()}
-                                    >
-                                      Messages
-                                      <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
-                                        New
-                                      </span>
-                                    </button>
-                                    <button   onClick={() => handlePaymentVisible()} className="py-2 px-3  w-full text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                                    onClick={() =>
+                                      navigateToChannel(
+                                        applicant
+                                      )
+                                    }
+                                    className="py-2 px-3  w-full relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                  >
+                                    Messages
+                                    <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                      1
+                                    </span>
+                                  </button>
+                                    <button   onClick={() => handlePaymentVisible()} className="py-2 px-3  w-full relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
                           Pay
+                          
                         </button>
                                   </>
                                 ) : (
@@ -486,7 +537,7 @@ useEffect(() => {
                                  </>
                                 )}
                               </div>
-                              {paymentVisible ? <EmbeddedPaymentsJobDetails props={job}/> : null}
+                              {paymentVisible ? <EmbeddedPaymentsJobDetails props={{job: job, currentUser: user}}/> : null}
                               {applicantVisible ? <ApplicantModal props={applicant} /> : null}
                             </>
     

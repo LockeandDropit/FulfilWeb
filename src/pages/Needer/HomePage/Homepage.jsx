@@ -187,7 +187,7 @@ const Homepage = () => {
       <main id="content" class="lg:ps-[260px] pt-[59px]">
         <ol class="md:hidden py-3 px-2 sm:px-5 flex items-center whitespace-nowrap">
           <li class="flex items-center text-sm text-gray-600 ">
-            Welcome, User
+            My Dashboard
             <svg
               class="flex-shrink-0 mx-1 overflow-visible size-4 text-gray-400 "
               xmlns="http://www.w3.org/2000/svg"
@@ -215,7 +215,7 @@ const Homepage = () => {
         <div class="p-2 sm:p-5 sm:py-0 md:pt-5 space-y-5">
           <div class="flex justify-between items-center gap-x-5">
             <h2 class="inline-block text-lg font-semibold text-gray-800 ">
-              Welcome, User
+            My Dashboard
             </h2>
 
             <div class="flex justify-end items-center gap-x-2">
@@ -565,18 +565,18 @@ const Homepage = () => {
                                 {job.datePosted}
                               </span>
                             </td>
-                            <td class="size-px p-2 space-x-2">
+                            <td class="size-px py-2 px-3 space-x-2">
                               <div className=" flex  w-full ">
                                 {job.hasNewNotification ? (
                                   <button
                                     onClick={() =>
                                       handleStoreAndNavigateHired(job)
                                     }
-                                    className="py-2 px-3  w-full text-sm font-semibold rounded-md border border-transparent bg-green-100 text-green-700 hover:bg-green-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                    className="py-2 px-3  w-full relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-green-100 text-green-700 hover:bg-green-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
                                   >
-                                    Message
+                                    Messages
                                     <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                                      !
+                                      1
                                     </span>
                                   </button>
                                 ) : (
@@ -647,14 +647,14 @@ const Homepage = () => {
                                 {job.datePosted}
                               </span>
                             </td>
-                            <td class="size-px p-2 space-x-2">
+                            <td class="size-px py-2 px-3 space-x-2">
                               <div className=" flex  w-full ">
                                 {job.hasNewNotification ? (
                                   <button
                                     onClick={() =>
                                       handleStoreAndNavigateInReview(job)
                                     }
-                                    className="py-2 px-3  w-full text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                    className="py-2 px-3  w-full relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
                                   >
                                     Pay
                                     <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">

@@ -498,10 +498,10 @@ const JobDetails = () => {
                               <div class="mt-2 p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                                 <div class="flex justify-between">
                                   <div class="flex flex-col justify-center items-center size-[56px]  ">
-                                    {applicant.profilePictureRespone ? (
+                                    {applicant.profilePictureResponse ? (
                                       <img
-                                        src={applicant.profilePictureRespone}
-                                        class="flex-shrink-0 size-[38px] rounded-full"
+                                        src={applicant.profilePictureResponse}
+                                        class="flex-shrink-0 size-[64px] rounded-full"
                                       />
                                     ) : (
                                       <svg

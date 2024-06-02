@@ -7,7 +7,7 @@ const List = () => {
     <div className='flex-1 flex flex-col bg-white'>
   
         <UserInfo />
-        {/* <AddUser /> */}
+     
         <ChastList />
     </div>
   )

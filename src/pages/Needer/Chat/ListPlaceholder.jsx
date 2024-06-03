@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import { format } from "timeago.js";
 import { db } from "../../../firebaseConfig";
 import { useUserStore } from "./lib/userStore";
 import {
@@ -15,6 +15,7 @@ import { filter } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 
 import { useJobStore } from "./lib/jobsStore";
+import Header from "../Components/Header";
 
 const ListPlaceholder = () => {
     const [chats, setChats] = useState([]);
@@ -312,17 +313,22 @@ const ListPlaceholder = () => {
     // );
   
   return (
-    <aside class="relative">
+  
+    <aside class="relative ">
+       
     <div id="hs-pro-sidebar" class="hs-overlay [--auto-close:xl]
       hs-overlay-open:translate-x-0
       -translate-x-full transition-all duration-300 transform
       sm:w-72 size-full
+      h-[calc(100vh-70px)] mt-16
       hidden
-      fixed inset-y-0 start-0 xl:start-64 z-[60]
-      bg-gray-100
+      z-50
+      fixed inset-y-0 start-0 xl:start-64 
+      bg-white
       lg:block lg:translate-x-0 lg:end-auto lg:bottom-0]xl:block xl:translate-x-0 xl:end-auto xl:bottom-0
      ">
-      <div class="h-full flex">
+     
+      <div class="h-full flex ">
   
       
         <div class="sm:w-72 size-full truncate bg-white border-x border-gray-200">
@@ -741,7 +747,7 @@ const ListPlaceholder = () => {
               </div>
               <div class="grow truncate">
                 <div class="flex justify-between items-center gap-x-1">
-                  <p class="truncate font-semibold text-[13px] text-gray-800">{chat.user.firstName}</p>
+                  <p class="truncate font-semibold text-[13px] text-gray-800">{chat.user.firstName}   </p>
                   <div>
                   {chat.isSeen ? (null) :( <span class="relative min-w-[18px] min-h-[18px] inline-flex justify-center items-center text-[10px] bg-blue-500 text-white rounded-full px-1">
                     1

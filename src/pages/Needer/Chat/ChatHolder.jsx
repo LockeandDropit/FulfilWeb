@@ -56,23 +56,29 @@ const ChatHolder = () => {
     <>
     <Header />
     <Dashboard />
+   
+
+
+
     {isDesktop ? ( currentUser ? (
-
-
 
 
 <>
 
 
-
   <ListPlaceholder />
   {chatId ? (
+    <>
+ 
     <ChatPlaceholder />
+    </>
   ) : (
+    <div className="flex h-screen items-center justify-center">
+
     <div className="flex-[2_2_0%] h-full flex flex-col items-center justify-center">
-      <div class="p-5 min-h-[328px] flex flex-col justify-center items-center text-center">
+      <div class="ml-60 p-5 min-h-[328px] flex flex-col justify-center items-center text-center">
         <svg
-          class="w-48 mx-auto mb-4"
+          class="w-48  mb-4 "
           width="178"
           height="90"
           viewBox="0 0 178 90"
@@ -270,6 +276,7 @@ const ChatHolder = () => {
         </div>
       </div>
     </div>
+    </div>
   )}
   {/* {chatId && <Detail />} */}
 </>
@@ -281,9 +288,11 @@ const ChatHolder = () => {
 )}
 
 
+   
 
+     
     </>
-  )
-}
+  );
+};
 
 export default ChatHolder

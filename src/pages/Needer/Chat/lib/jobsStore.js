@@ -13,6 +13,7 @@ jobHiringState: null,
   fetchJobInfo: async (uid, jobID, jobType, jobTitle) => {
     // if (!uid) return set({ currentUser: null, isLoading: false });
 
+    console.log("hiiting",uid, jobID, jobType, jobTitle )
     if (jobType === "Interview") {
         try {
             const docRef = doc(db, "employers", uid, "Posted Jobs", jobTitle );
@@ -20,6 +21,7 @@ jobHiringState: null,
       //add code to check that jobID === JobID
             if (docSnap.exists() && docSnap.data().jobID === jobID) {
               set({ job: docSnap.data() });
+              console.log("got it interview")
       
             } else {
               set({job: null });
@@ -35,6 +37,7 @@ jobHiringState: null,
   
         if (docSnap.exists() && docSnap.data().jobID === jobID) {
           set({ job: docSnap.data() });
+          console.log("got it all others")
         } else {
           set({job: null });
         }

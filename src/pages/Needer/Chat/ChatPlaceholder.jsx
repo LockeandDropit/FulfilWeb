@@ -90,7 +90,7 @@ const ChatPlaceholder = () => {
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
     useChatStore();
 
-  const { job, jobHiringState } = useJobStore();
+  const { job, jobHiringState, isJobLoading } = useJobStore();
 
   const endRef = useRef(null);
 
@@ -268,6 +268,8 @@ const ChatPlaceholder = () => {
 
   //height calc help credit Ryu-The-Sick https://www.reddit.com/r/tailwindcss/comments/v7jarp/how_do_i_make_the_height_of_a_div_the_height_of/
 
+
+  if (isJobLoading) return <div className="loading">Loading...</div>;
   return (
     <>
       <body class="hs-overlay-body-open ml-auto w-[calc(100vw-272px)] h-[calc(100vh-100px)] mt-16 bg-gray-100">
@@ -319,44 +321,44 @@ const ChatPlaceholder = () => {
                     aria-label="Toggle navigation"
                   >
                     <span class="lg:block hidden relative flex-shrink-0">
-                    {user.profilePictureResponse ? (
-                                <img
-                                  class="flex-shrink-0 size-8 rounded-full"
-                                  src={user.profilePictureResponse}
-                                />
-                              ) : (
-                                <svg
-                                  class="w-12 h-12  rounded-full object-cover text-gray-500"
-                                  width="12"
-                                  height="12"
-                                  viewBox="0 0 16 16"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <rect
-                                    x="0.62854"
-                                    y="0.359985"
-                                    width="15"
-                                    height="15"
-                                    rx="7.5"
-                                    fill="white"
-                                  ></rect>
-                                  <path
-                                    d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
-                                    fill="currentColor"
-                                  ></path>
-                                  <path
-                                    d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
-                                    fill="currentColor"
-                                  ></path>
-                                </svg>
-                              )}
-                    
+                      {user.profilePictureResponse ? (
+                        <img
+                          class="flex-shrink-0 size-8 rounded-full"
+                          src={user.profilePictureResponse}
+                        />
+                      ) : (
+                        <svg
+                          class="w-12 h-12  rounded-full object-cover text-gray-500"
+                          width="12"
+                          height="12"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect
+                            x="0.62854"
+                            y="0.359985"
+                            width="15"
+                            height="15"
+                            rx="7.5"
+                            fill="white"
+                          ></rect>
+                          <path
+                            d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                            fill="currentColor"
+                          ></path>
+                          <path
+                            d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
+                      )}
+
                       <span class="absolute -bottom-0 -end-0 block size-2 rounded-full ring-2 ring-white bg-green-500"></span>
                     </span>
                     <span class="grow text-center lg:text-start truncate">
                       <span class="truncate block font-semibold text-sm leading-4 text-gray-800">
-                       {user.firstName} {user.lastName}
+                        {user.firstName} {user.lastName}
                       </span>
                       <span class="truncate block text-xs text-blue-600 leading-4">
                         Online
@@ -366,10 +368,11 @@ const ChatPlaceholder = () => {
                 </div>
 
                 <div class="w-20 sm:w-auto flex justify-end items-center gap-x-0.5">
-                {/* add here if you want anything in the end of the internal header */}
-
-
-          
+                  {/* add here if you want anything in the end of the internal header */}
+                  <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                
+                                Interviewing
+                              </span>
                 </div>
               </header>
 
@@ -378,7 +381,7 @@ const ChatPlaceholder = () => {
                   <div class="relative">
                     <div class="sticky top-0 inset-x-0 z-10 max-w-lg mx-auto text-center">
                       <span class="py-0.5 px-1.5 bg-gray-100 text-xs text-gray-500 rounded-full">
-                      {chat?.messages ? (<p>Today</p>) : (null)}
+                        {chat?.messages ? <p>Today</p> : null}
                       </span>
                     </div>
 
@@ -398,15 +401,11 @@ const ChatPlaceholder = () => {
                                   <div class="order-2 text-start bg-blue-100 inline-block rounded-xl pt-2 pb-1.5 px-2.5">
                                     <div class="text-sm text-gray-800">
                                       {message.text}
-
-                                  
-                                       
-                                      
                                     </div>
                                     <span class="text-[11px] text-end text-blue-600 italic">
-                                          {" "}
-                                          {format(message.createdAt.toDate())}
-                                        </span>
+                                      {" "}
+                                      {format(message.createdAt.toDate())}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -534,7 +533,7 @@ const ChatPlaceholder = () => {
 
                     <div class="flex items-center gap-x-1">
                       <button
-                          onClick={handleSend}
+                        onClick={handleSend}
                         type="button"
                         class="inline-flex flex-shrink-0 justify-center items-center size-8 text-sm font-medium rounded-full text-white bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:pointer-events-none focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
@@ -605,21 +604,83 @@ const ChatPlaceholder = () => {
                 </div>
 
                 <div class="p-5 flex flex-col justify-center items-center text-center border-b border-gray-100">
-                  <img
-                    class="flex-shrink-0 size-16 rounded-full"
-                    src="https://images.unsplash.com/photo-1601935111741-ae98b2b230b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2.5&w=320&h=320&q=80"
-                    alt="Avatar"
-                  />
+                {user.profilePictureResponse ? (
+                        <img
+                          class="flex-shrink-0 size-16 rounded-full"
+                          src={user.profilePictureResponse}
+                        />
+                      ) : (
+                        <svg
+                          class="w-16 h-16  rounded-full object-cover text-gray-500"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect
+                            x="0.62854"
+                            y="0.359985"
+                            width="15"
+                            height="15"
+                            rx="7.5"
+                            fill="white"
+                          ></rect>
+                          <path
+                            d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                            fill="currentColor"
+                          ></path>
+                          <path
+                            d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
+                      )}
                   <div class="mt-2 w-full">
                     <h2 class="text-lg font-semibold text-gray-800">
-                    {user.firstName} {user.lastName}
+                      {user.firstName} {user.lastName}
                     </h2>
-                    <p class="mb-2 text-[13px] text-gray-500">Rating</p>
+                    {numberOfRatings ? (
+                      <div className="flex justify-center items-center text-center">
+                        {maxRating.map((item, key) => {
+                          return (
+                            <Box activeopacity={0.7} key={item} marginTop="2px">
+                              <Image
+                                boxSize="16px"
+                                src={item <= rating ? star_filled : star_corner}
+                              ></Image>
+                            </Box>
+                          );
+                        })}
+                        <p class="font-semibold text-sm text-gray-400  ml-2">
+                          ({numberOfRatings} reviews)
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="flex-shrink-0 size-4 text-gray-600"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                          />
+                        </svg>
+                        <Text>No reviews yet</Text>
+                      </>
+                    )}
 
                     <div class="mt-4 flex justify-center items-center gap-x-3">
                       <button
+                        onClick={() => handleDoerModalVisbile()}
                         type="button"
-                        class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50"
+                        class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50"
                       >
                         <svg
                           class="flex-shrink-0 size-3.5"
@@ -642,27 +703,34 @@ const ChatPlaceholder = () => {
                         View profile
                       </button>
 
-                      <button
-                        type="button"
-                        class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50"
-                      >
-                        <svg
-                          class="flex-shrink-0 size-3.5"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                      {jobHiringState.isJobOffered === true &&
+                      jobHiringState.isHired === false ? (
+                        <button
+                          type="button"
+                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md   bg-gray-200 text-gray-800 shadow-sm  disabled:opacity-50 disabled:pointer-events-none focus:outline-none  cursor-default"
                         >
-                          <rect width="20" height="16" x="2" y="4" rx="2" />
-                          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                        </svg>
-                        Next Action Here
-                      </button>
+                          Offer Pending
+                        </button>
+                      ) : jobHiringState.isHired === true &&
+                        jobHiringState.isMarkedCompleteDoer === false ? (
+                        <p>In progress</p>
+                      ) : jobHiringState.isMarkedCompleteDoer === true ? (
+                        <button
+                          onClick={() => handleModalOpen()}
+                          type="button"
+                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
+                        >
+                          Pay
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleModalOpen()}
+                          type="button"
+                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-sky-400 text-white shadow-sm hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
+                        >
+                          Send offer
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -716,7 +784,6 @@ const ChatPlaceholder = () => {
                         aria-labelledby="hs-pro-chdsudc1"
                       >
                         <div class="px-5 pb-5">
-                     
                           <dl class="py-1 grid grid-cols-3 gap-x-4">
                             <dt class="col-span-1">
                               <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
@@ -743,7 +810,7 @@ const ChatPlaceholder = () => {
                                     rx="2"
                                   />
                                 </svg>
-                               Job Title:
+                                Job Title:
                               </p>
                             </dt>
                             <dd class="col-span-2">
@@ -778,15 +845,82 @@ const ChatPlaceholder = () => {
                                     rx="2"
                                   />
                                 </svg>
-                               Status:
+                                Status:
                               </p>
                             </dt>
-                            <dd class="col-span-2">
-                              <p class="font-medium text-[13px] text-gray-800">
-                               Interviewing (color code this)
-                              </p>
-                            </dd>
-                          </dl>
+                          
+                            {jobHiringState.isJobOffered === true &&
+                      jobHiringState.isHired === false ? (
+                        <span class="py-1.5 ps-1.5  px-1 inline-flex items-center  text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                        <svg
+                          class="flex-shrink-0 size-3.5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Offer pending
+                      </span>
+                      ) : jobHiringState.isHired === true &&
+                        jobHiringState.isMarkedCompleteDoer === false ? (
+                        <p>In progress</p>
+                      ) : jobHiringState.isMarkedCompleteDoer === true ? (
+                        <button
+                          onClick={() => handleModalOpen()}
+                          type="button"
+                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
+                        >
+                          Pay
+                        </button>
+                      ) : (
+                    
+                          <dd>
+                         
+                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                        <svg
+                          class="flex-shrink-0 size-3.5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Posted
+                      </span>
+                      <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                        <svg
+                          class="flex-shrink-0 size-3.5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Interviewing
+                      </span>
+                    </dd>
+              
+                      )}
+                  </dl>           
 
                           <dl class="py-1 grid grid-cols-3 gap-x-4">
                             <dt class="col-span-1">
@@ -844,16 +978,19 @@ const ChatPlaceholder = () => {
                               </p>
                             </dt>
 
-                            {job.isHourly ? (  <dd class="col-span-2">
-                              <p class="font-medium text-[13px] text-gray-800">
-                                ${job.lowerRate}/hour - ${job.upperRate}/hour
-                              </p>
-                            </dd>) : (  <dd class="col-span-2">
-                              <p class="font-medium text-[13px] text-gray-800">
-                              ${job.flatRate} total
-                              </p>
-                            </dd>)}
-                          
+                            {job.isHourly ? (
+                              <dd class="col-span-2">
+                                <p class="font-medium text-[13px] text-gray-800">
+                                  ${job.lowerRate}/hour - ${job.upperRate}/hour
+                                </p>
+                              </dd>
+                            ) : (
+                              <dd class="col-span-2">
+                                <p class="font-medium text-[13px] text-gray-800">
+                                  ${job.flatRate} total
+                                </p>
+                              </dd>
+                            )}
                           </dl>
 
                           <dl class="py-1 grid grid-cols-3 gap-x-4">
@@ -882,7 +1019,7 @@ const ChatPlaceholder = () => {
                               </p>
                             </dd>
                           </dl>
-{/* 
+                          {/* 
                           <dl class="py-1 grid grid-cols-3 gap-x-4">
                             <dt class="col-span-1">
                               <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
@@ -6425,6 +6562,9 @@ const ChatPlaceholder = () => {
           </div>
         </main>
       </body>
+      {doerModalVisbile ? <DoerProfileModal /> : null}
+      {offerPostedJobVisible ? <OfferPostedJobModal /> : null}
+      {paymentVisible ? <EmbeddedPaymentsMessaging props={job} /> : null}
     </>
   );
 };

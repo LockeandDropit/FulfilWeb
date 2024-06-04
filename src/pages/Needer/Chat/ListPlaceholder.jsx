@@ -341,7 +341,7 @@ const ListPlaceholder = () => {
   
               <div class="flex items-center">
            
-                <div class="relative inline-block">
+                {/* <div class="relative inline-block">
                   <select id="hs-pro-select-revenue" data-hs-select='{
                       "placeholder": "Select option...",
                       "toggleTag": "<button type=\"button\"></button>",
@@ -358,15 +358,15 @@ const ListPlaceholder = () => {
                   <div class="absolute top-1/2 end-2 -translate-y-1/2">
                     <svg class="flex-shrink-0 size-3.5 text-gray-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                   </div>
-                </div>
+                </div> */}
          
   
                 <div class="relative flex items-center gap-x-1 ps-2 ms-2 before:absolute before:top-1/2 before:start-0 before:w-px before:h-4 before:bg-gray-200 before:-translate-y-1/2">
       
-                  <button type="button" class="flex justify-center items-center gap-x-3 size-8 text-sm text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100" data-hs-overlay="#hs-pro-chhcp">
+                  {/* <button type="button" class="flex justify-center items-center gap-x-3 size-8 text-sm text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100" data-hs-overlay="#hs-pro-chhcp">
                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"/></svg>
                     <span class="sr-only">Compose</span>
-                  </button>
+                  </button> */}
                 
                 </div>
               </div>

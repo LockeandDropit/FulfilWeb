@@ -369,10 +369,58 @@ const ChatPlaceholder = () => {
 
                 <div class="w-20 sm:w-auto flex justify-end items-center gap-x-0.5">
                   {/* add here if you want anything in the end of the internal header */}
-                  <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                  
+                  {jobHiringState.isJobOffered === true &&
+                      jobHiringState.isHired === false ? (
+                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
                 
-                                Interviewing
-                              </span>
+                        Offer pending
+                      </span>
+                      ) : jobHiringState.isHired === true &&
+                        jobHiringState.isMarkedCompleteDoer === false ? (
+                          <span class="py-1.5 ps-1.5  px-1 inline-flex items-center  text-xs font-medium bg-green-100 text-green-700 rounded-full">
+                          <svg
+                            class="flex-shrink-0 size-3.5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                          Job Accepted!
+                        </span>
+                      ) : jobHiringState.isMarkedCompleteDoer === true ? (
+                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-blue-600 text-white rounded-full">
+                 <svg
+                            class="flex-shrink-0 size-3.5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                       Awaiting payment
+                      </span>
+                      ) : (
+                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                
+                        Interviewing
+                      </span>
+                      )}
+                  
+             
                 </div>
               </header>
 
@@ -713,10 +761,10 @@ const ChatPlaceholder = () => {
                         </button>
                       ) : jobHiringState.isHired === true &&
                         jobHiringState.isMarkedCompleteDoer === false ? (
-                        <p>In progress</p>
+                       null
                       ) : jobHiringState.isMarkedCompleteDoer === true ? (
                         <button
-                          onClick={() => handleModalOpen()}
+                          onClick={() => handlePaymentVisible()}
                           type="button"
                           class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
                         >
@@ -870,15 +918,41 @@ const ChatPlaceholder = () => {
                       </span>
                       ) : jobHiringState.isHired === true &&
                         jobHiringState.isMarkedCompleteDoer === false ? (
-                        <p>In progress</p>
+                          <span class="py-1.5 ps-1.5  px-1 inline-flex items-center  text-xs font-medium bg-green-100 text-green-700 rounded-full">
+                          <svg
+                            class="flex-shrink-0 size-3.5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                          Job Accepted!
+                        </span>
                       ) : jobHiringState.isMarkedCompleteDoer === true ? (
-                        <button
-                          onClick={() => handleModalOpen()}
-                          type="button"
-                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
+                        <span class="py-1.5 ps-1.5  inline-flex items-center  text-xs font-medium bg-blue-600 text-white rounded-full">
+                        <svg
+                          class="flex-shrink-0 size-3.5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
                         >
-                          Pay
-                        </button>
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Completed
+                      </span>
                       ) : (
                     
                           <dd>
@@ -977,8 +1051,19 @@ const ChatPlaceholder = () => {
                                 Budget:
                               </p>
                             </dt>
-
-                            {job.isHourly ? (
+{jobHiringState.isHired ? (job.isHourly ? (
+                              <dd class="col-span-2">
+                                <p class="font-medium text-[13px] text-gray-800">
+                                  ${job.confirmedRate}/hour
+                                </p>
+                              </dd>
+                            ) : (
+                              <dd class="col-span-2">
+                                <p class="font-medium text-[13px] text-gray-800">
+                                  ${job.confirmedRate} total
+                                </p>
+                              </dd>
+                            )) : job.isHourly ? (
                               <dd class="col-span-2">
                                 <p class="font-medium text-[13px] text-gray-800">
                                   ${job.lowerRate}/hour - ${job.upperRate}/hour
@@ -991,6 +1076,7 @@ const ChatPlaceholder = () => {
                                 </p>
                               </dd>
                             )}
+                            
                           </dl>
 
                           <dl class="py-1 grid grid-cols-3 gap-x-4">
@@ -1055,7 +1141,7 @@ const ChatPlaceholder = () => {
                       </div>
                     </div>
 
-                    <div class="hs-accordion active" id="hs-pro-chdssmc1">
+                    {/* <div class="hs-accordion active" id="hs-pro-chdssmc1">
                       <button
                         type="button"
                         class="hs-accordion-toggle p-5 w-full flex justify-between items-center gap-x-3 text-gray-800 hover:text-gray-600 focus:outline-none focus:text-gray-600 disabled:opacity-50 disabled:pointer-events-none"
@@ -1104,7 +1190,7 @@ const ChatPlaceholder = () => {
                           </p>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

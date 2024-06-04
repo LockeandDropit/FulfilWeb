@@ -37,10 +37,10 @@ jobHiringState: null,
         const docSnap = await getDoc(docRef);
   
         if (docSnap.exists() && docSnap.data().jobID === jobID) {
-          set({ job: docSnap.data() });
+          set({ job: docSnap.data(), isJobLoading: false  });
           console.log("got it all others")
         } else {
-          set({job: null });
+          set({job: null, isJobLoading: false  });
         }
       } catch (err) {
         console.log(err);

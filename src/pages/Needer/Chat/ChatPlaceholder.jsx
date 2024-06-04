@@ -21,6 +21,13 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
 } from "@chakra-ui/react";
 import { Text, Box, Flex, Image } from "@chakra-ui/react";
 import star_corner from "../../../images/star_corner.png";
@@ -90,7 +97,7 @@ const ChatPlaceholder = () => {
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
     useChatStore();
 
-  const { job, jobHiringState, isJobLoading } = useJobStore();
+  const { job, jobHiringState, isJobLoading, fetchJobInfo } = useJobStore();
 
   const endRef = useRef(null);
 
@@ -269,10 +276,13 @@ const ChatPlaceholder = () => {
   //height calc help credit Ryu-The-Sick https://www.reddit.com/r/tailwindcss/comments/v7jarp/how_do_i_make_the_height_of_a_div_the_height_of/
 
 
+ 
+
   if (isJobLoading) return <div className="loading">Loading...</div>;
   return (
     <>
-      <body class="hs-overlay-body-open ml-auto w-[calc(100vw-272px)] h-[calc(100vh-100px)] mt-16 bg-gray-100">
+  
+      <body class="hs-overlay-body-open sm:ml-auto sm:w-[calc(100vw-282px)] sm:h-[calc(100vh-100px)] mt-16 bg-gray-100">
         <main
           id="content"
           class="2xl:hs-overlay-layout-open:pe-96 lg:ps-72 transition-all duration-300 "
@@ -283,10 +293,11 @@ const ChatPlaceholder = () => {
             aria-labelledby="hs-pro-tabs-chct-item-1"
           >
             <div class="relative h-dvh flex flex-col justify-end">
-              <header class="sticky top-0 inset-x-0  py-2 px-4 flex justify-between gap-x-2 xl:grid xl:grid-cols-2 bg-white border-b border-gray-200">
+              <header class="sticky top-0 inset-x-0 z-50 py-2 px-4 flex justify-between gap-x-2 xl:grid xl:grid-cols-2 bg-white border-b border-gray-200">
                 <div class="lg:hidden w-20 sm:w-auto flex items-center">
                   <div class="-ms-3">
                     <button
+                    onClick={() => resetChat()}
                       type="button"
                       class="flex justify-center items-center gap-x-1 py-1.5 px-2.5 text-sm text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
                       data-hs-overlay="#hs-pro-sidebar"
@@ -313,14 +324,14 @@ const ChatPlaceholder = () => {
                 </div>
 
                 <div>
-                  <button
-                    type="button"
-                    class="truncate flex items-center gap-x-3.5 focus:outline-none"
+                  <div
+                  onClick={() => onOpenDetails()}
+                    class="truncate flex items-center gap-x-3.5 focus:outline-none cursor-default"
                     data-hs-overlay="#hs-pro-chhds1"
                     aria-controls="hs-pro-chhds1"
                     aria-label="Toggle navigation"
                   >
-                    <span class="lg:block hidden relative flex-shrink-0">
+                    <span class="lg:block  relative flex-shrink-0">
                       {user.profilePictureResponse ? (
                         <img
                           class="flex-shrink-0 size-8 rounded-full"
@@ -361,13 +372,12 @@ const ChatPlaceholder = () => {
                         {user.firstName} {user.lastName}
                       </span>
                       <span class="truncate block text-xs text-blue-600 leading-4">
-                        Online
-                      </span>
+                See details
+              </span>
                     </span>
-                  </button>
+                  </div>
                 </div>
-
-                <div class="w-20 sm:w-auto flex justify-end items-center gap-x-0.5">
+                      {isDesktop ? (   <div class="w-20 sm:w-auto flex justify-end items-center gap-x-0.5">
                   {/* add here if you want anything in the end of the internal header */}
                   
                   {jobHiringState.isJobOffered === true &&
@@ -421,7 +431,8 @@ const ChatPlaceholder = () => {
                       )}
                   
              
-                </div>
+                </div>) : (null)}
+             
               </header>
 
               <div class="h-full overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-sm [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
@@ -6651,6 +6662,602 @@ const ChatPlaceholder = () => {
       {doerModalVisbile ? <DoerProfileModal /> : null}
       {offerPostedJobVisible ? <OfferPostedJobModal /> : null}
       {paymentVisible ? <EmbeddedPaymentsMessaging props={job} /> : null}
+      <Drawer 
+          isOpen={isOpenDetails}
+          placement='right'
+          onClose={onCloseDetails}>
+      <DrawerOverlay />
+      <DrawerContent>
+      <DrawerCloseButton />
+                                  <DrawerBody>
+                                  <aside
+              id="hs-pro-chhds1"
+              class="hs-overlay [--body-scroll:true] 2xl:[--overlay-backdrop:false] [--is-layout-affect:true] [--opened:2xl] [--auto-close:2xl]
+         
+          fixed inset-y-0 end-0 z-[0]
+          bg-white 
+         
+         "
+            >
+              <div class="h-full flex flex-col">
+                <div class="py-3 px-4 flex justify-between items-center border-b border-gray-200">
+                  <h3 class="font-semibold text-gray-800">Details</h3>
+
+                  <div class="absolute top-2 end-4 z-10">
+                    <button
+                      type="button"
+                      onClick={() => onCloseDetails()}
+                      class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-white text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none"
+                      data-hs-overlay="#hs-pro-chhds1"
+                    >
+                      <span class="sr-only">Close</span>
+                      <svg
+                        class="flex-shrink-0 size-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="p-5 flex flex-col justify-center items-center text-center border-b border-gray-100">
+                {user.profilePictureResponse ? (
+                        <img
+                          class="flex-shrink-0 size-16 rounded-full"
+                          src={user.profilePictureResponse}
+                        />
+                      ) : (
+                        <svg
+                          class="w-16 h-16  rounded-full object-cover text-gray-500"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <rect
+                            x="0.62854"
+                            y="0.359985"
+                            width="15"
+                            height="15"
+                            rx="7.5"
+                            fill="white"
+                          ></rect>
+                          <path
+                            d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                            fill="currentColor"
+                          ></path>
+                          <path
+                            d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
+                      )}
+                  <div class="mt-2 w-full">
+                    <h2 class="text-lg font-semibold text-gray-800">
+                      {user.firstName} {user.lastName}
+                    </h2>
+                    {numberOfRatings ? (
+                      <div className="flex justify-center items-center text-center">
+                        {maxRating.map((item, key) => {
+                          return (
+                            <Box activeopacity={0.7} key={item} marginTop="2px">
+                              <Image
+                                boxSize="16px"
+                                src={item <= rating ? star_filled : star_corner}
+                              ></Image>
+                            </Box>
+                          );
+                        })}
+                        <p class="font-semibold text-sm text-gray-400  ml-2">
+                          ({numberOfRatings} reviews)
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="flex-shrink-0 size-4 text-gray-600"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                          />
+                        </svg>
+                        <Text>No reviews yet</Text>
+                      </>
+                    )}
+
+                    <div class="mt-4 flex justify-center items-center gap-x-3">
+                      <button
+                        onClick={() => handleDoerModalVisbile()}
+                        type="button"
+                        class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50"
+                      >
+                        <svg
+                          class="flex-shrink-0 size-3.5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2" />
+                          <rect width="18" height="18" x="3" y="4" rx="2" />
+                          <circle cx="12" cy="10" r="2" />
+                          <line x1="8" x2="8" y1="2" y2="4" />
+                          <line x1="16" x2="16" y1="2" y2="4" />
+                        </svg>
+                        View profile
+                      </button>
+
+                      {jobHiringState.isJobOffered === true &&
+                      jobHiringState.isHired === false ? (
+                        <button
+                          type="button"
+                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md   bg-gray-200 text-gray-800 shadow-sm  disabled:opacity-50 disabled:pointer-events-none focus:outline-none  cursor-default"
+                        >
+                          Offer Pending
+                        </button>
+                      ) : jobHiringState.isHired === true &&
+                        jobHiringState.isMarkedCompleteDoer === false ? (
+                       null
+                      ) : jobHiringState.isMarkedCompleteDoer === true ? (
+                        <button
+                          onClick={() => handlePaymentVisible()}
+                          type="button"
+                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
+                        >
+                          Pay
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleModalOpen()}
+                          type="button"
+                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-sky-400 text-white shadow-sm hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
+                        >
+                          Send offer
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-sm [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+                  <div class="hs-accordion-group" data-hs-accordion-always-open>
+                    <div
+                      class="hs-accordion border-b border-gray-100 active"
+                      id="hs-pro-chdsudc1"
+                    >
+                      <button
+                        type="button"
+                        class="hs-accordion-toggle p-5 w-full flex justify-between items-center gap-x-3 text-gray-800 hover:text-gray-600 focus:outline-none focus:text-gray-600 disabled:opacity-50 disabled:pointer-events-none"
+                        aria-controls="hs-pro-chdsudc1-collapse"
+                      >
+                        <span class="text-sm font-medium">Job details</span>
+                        <svg
+                          class="hs-accordion-active:hidden block size-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M5 12h14"></path>
+                          <path d="M12 5v14"></path>
+                        </svg>
+                        <svg
+                          class="hs-accordion-active:block hidden size-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M5 12h14"></path>
+                        </svg>
+                      </button>
+
+                      <div
+                        id="hs-pro-chdsudc1-collapse"
+                        class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
+                        aria-labelledby="hs-pro-chdsudc1"
+                      >
+                        <div class="px-5 pb-5">
+                          <dl class="py-1 grid grid-cols-3 gap-x-4">
+                            <dt class="col-span-1">
+                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
+                                <svg
+                                  class="flex-shrink-0 size-3.5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M12 12h.01" />
+                                  <path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                                  <path d="M22 13a18.15 18.15 0 0 1-20 0" />
+                                  <rect
+                                    width="20"
+                                    height="14"
+                                    x="2"
+                                    y="6"
+                                    rx="2"
+                                  />
+                                </svg>
+                                Job Title:
+                              </p>
+                            </dt>
+                            <dd class="col-span-2">
+                              <p class="font-medium text-[13px] text-gray-800">
+                                {job.jobTitle}
+                              </p>
+                            </dd>
+                          </dl>
+                          <dl class="py-1 grid grid-cols-3 gap-x-4">
+                            <dt class="col-span-1">
+                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
+                                <svg
+                                  class="flex-shrink-0 size-3.5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M12 12h.01" />
+                                  <path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                                  <path d="M22 13a18.15 18.15 0 0 1-20 0" />
+                                  <rect
+                                    width="20"
+                                    height="14"
+                                    x="2"
+                                    y="6"
+                                    rx="2"
+                                  />
+                                </svg>
+                                Status:
+                              </p>
+                            </dt>
+                          
+                            {jobHiringState.isJobOffered === true &&
+                      jobHiringState.isHired === false ? (
+                        <span class="py-1.5 ps-1.5  px-1 inline-flex items-center  text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                        <svg
+                          class="flex-shrink-0 size-3.5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Offer pending
+                      </span>
+                      ) : jobHiringState.isHired === true &&
+                        jobHiringState.isMarkedCompleteDoer === false ? (
+                          <span class="py-1.5 ps-1.5  px-1 inline-flex items-center  text-xs font-medium bg-green-100 text-green-700 rounded-full">
+                          <svg
+                            class="flex-shrink-0 size-3.5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                          Job Accepted!
+                        </span>
+                      ) : jobHiringState.isMarkedCompleteDoer === true ? (
+                        <span class="py-1.5 ps-1.5  inline-flex items-center  text-xs font-medium bg-blue-600 text-white rounded-full">
+                        <svg
+                          class="flex-shrink-0 size-3.5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Completed
+                      </span>
+                      ) : (
+                    
+                          <dd>
+                         
+                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                        <svg
+                          class="flex-shrink-0 size-3.5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Posted
+                      </span>
+                      <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                        <svg
+                          class="flex-shrink-0 size-3.5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Interviewing
+                      </span>
+                    </dd>
+              
+                      )}
+                  </dl>           
+
+                          <dl class="py-1 grid grid-cols-3 gap-x-4">
+                            <dt class="col-span-1">
+                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
+                                <svg
+                                  class="flex-shrink-0 size-3.5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                                  <circle cx="12" cy="10" r="3" />
+                                </svg>
+                                location:
+                              </p>
+                            </dt>
+                            <dd class="col-span-2">
+                              <p class="font-medium text-[13px] text-gray-800">
+                                {job.streetAddress}, {job.city}, MN
+                              </p>
+                            </dd>
+                          </dl>
+
+                          <dl class="py-1 grid grid-cols-3 gap-x-4">
+                            <dt class="col-span-1">
+                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
+                                <svg
+                                  class="flex-shrink-0 size-3.5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <rect
+                                    width="20"
+                                    height="16"
+                                    x="2"
+                                    y="4"
+                                    rx="2"
+                                  />
+                                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                                </svg>
+                                Budget:
+                              </p>
+                            </dt>
+{jobHiringState.isHired ? (job.isHourly ? (
+                              <dd class="col-span-2">
+                                <p class="font-medium text-[13px] text-gray-800">
+                                  ${job.confirmedRate}/hour
+                                </p>
+                              </dd>
+                            ) : (
+                              <dd class="col-span-2">
+                                <p class="font-medium text-[13px] text-gray-800">
+                                  ${job.confirmedRate} total
+                                </p>
+                              </dd>
+                            )) : job.isHourly ? (
+                              <dd class="col-span-2">
+                                <p class="font-medium text-[13px] text-gray-800">
+                                  ${job.lowerRate}/hour - ${job.upperRate}/hour
+                                </p>
+                              </dd>
+                            ) : (
+                              <dd class="col-span-2">
+                                <p class="font-medium text-[13px] text-gray-800">
+                                  ${job.flatRate} total
+                                </p>
+                              </dd>
+                            )}
+                            
+                          </dl>
+
+                          <dl class="py-1 grid grid-cols-3 gap-x-4">
+                            <dt class="col-span-1">
+                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
+                                <svg
+                                  class="flex-shrink-0 size-3.5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                                </svg>
+                                Posted:
+                              </p>
+                            </dt>
+                            <dd class="col-span-2">
+                              <p class="font-medium text-[13px] text-gray-800">
+                                {job.datePosted}
+                              </p>
+                            </dd>
+                          </dl>
+                          {/* 
+                          <dl class="py-1 grid grid-cols-3 gap-x-4">
+                            <dt class="col-span-1">
+                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
+                                <svg
+                                  class="flex-shrink-0 size-3.5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <circle cx="12" cy="12" r="10" />
+                                  <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                                  <path d="M2 12h20" />
+                                </svg>
+                                Site:
+                              </p>
+                            </dt>
+                            <dd class="col-span-2">
+                              <a
+                                class="align-top text-sm text-blue-600 decoration-2 hover:underline font-medium focus:outline-none focus:underline"
+                                href="#"
+                              >
+                                fortex.com
+                              </a>
+                            </dd>
+                          </dl> */}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* <div class="hs-accordion active" id="hs-pro-chdssmc1">
+                      <button
+                        type="button"
+                        class="hs-accordion-toggle p-5 w-full flex justify-between items-center gap-x-3 text-gray-800 hover:text-gray-600 focus:outline-none focus:text-gray-600 disabled:opacity-50 disabled:pointer-events-none"
+                        aria-controls="hs-pro-chdssmc1-collapse"
+                      >
+                        <span class="text-sm font-medium">Shared media</span>
+                        <svg
+                          class="hs-accordion-active:hidden block size-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M5 12h14"></path>
+                          <path d="M12 5v14"></path>
+                        </svg>
+                        <svg
+                          class="hs-accordion-active:block hidden size-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M5 12h14"></path>
+                        </svg>
+                      </button>
+
+                      <div
+                        id="hs-pro-chdssmc1-collapse"
+                        class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
+                        aria-labelledby="hs-pro-chdssmc1"
+                      >
+                        <div class="pb-5 px-5">
+                          <p class="text-sm text-gray-500">
+                            Only shared images appear here
+                          </p>
+                        </div>
+                      </div>
+                    </div> */}
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+      </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 };

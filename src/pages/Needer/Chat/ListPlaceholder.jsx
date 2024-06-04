@@ -316,12 +316,10 @@ const ListPlaceholder = () => {
   
     <aside class="relative ">
        
-    <div id="hs-pro-sidebar" class="hs-overlay [--auto-close:xl]
-      hs-overlay-open:translate-x-0
-      -translate-x-full transition-all duration-300 transform
-      sm:w-72 size-full
+    <div id="hs-pro-sidebar" class="
+      sm:w-76 
       h-[calc(100vh-70px)] mt-16
-      hidden
+   
       z-50
       fixed inset-y-0 start-0 xl:start-64 
       bg-white
@@ -331,7 +329,7 @@ const ListPlaceholder = () => {
       <div class="h-full flex ">
   
       
-        <div class="sm:w-72 size-full truncate bg-white border-x border-gray-200">
+        <div class="sm:w-76  truncate bg-white border-x border-gray-200">
           <div class="h-full flex flex-col">
           
             <div class="ps-4 pe-3 py-2 flex justify-between items-center gap-x-2 border-b border-gray-200">
@@ -700,22 +698,41 @@ const ListPlaceholder = () => {
   
         
             <div class="py-1.5 border-b border-gray-200">
-              <div class="-mb-2.5 px-1.5 overflow-x-auto">
+              <div class="-mb-2.5  overflow-x-auto">
                 <div class="overflow-x-auto [&::-webkit-scrollbar]:h-0">
                   
                   <nav class="flex gap-x-1" aria-label="Tabs" role="tablist">
-                    <button type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none active " id="hs-pro-tabs-chsn-item-all" data-hs-tab="#hs-pro-tabs-chsn-all" aria-controls="hs-pro-tabs-chsn-all" role="tab" >
-                      All
-                    </button>
-                    <button type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-mentions" data-hs-tab="#hs-pro-tabs-chsn-mentions" aria-controls="hs-pro-tabs-chsn-mentions" role="tab" >
-                      Mentions
-                    </button>
-                    <button type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-spammed" data-hs-tab="#hs-pro-tabs-chsn-spammed" aria-controls="hs-pro-tabs-chsn-spammed" role="tab" >
-                      Spammed
-                    </button>
-                    <button type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-blocked" data-hs-tab="#hs-pro-tabs-chsn-blocked" aria-controls="hs-pro-tabs-chsn-blocked" role="tab" >
-                      Blocked
-                    </button>
+
+                    {selectedCategory === "Posted Jobs" ? (  <button 
+                    value="Posted Jobs"
+                       onClick={(e) => setSelectedCategory(e.target.value)}
+                    type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-800 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 " aria-controls="hs-pro-tabs-chsn-all" role="tab" >
+                      Interviews
+                    </button>) : (  <button 
+                    value="Posted Jobs"
+                       onClick={(e) => setSelectedCategory(e.target.value)}
+                    type="button" class="px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none active " id="hs-pro-tabs-chsn-item-all" data-hs-tab="#hs-pro-tabs-chsn-all" aria-controls="hs-pro-tabs-chsn-all" role="tab" >
+                      Interviews
+                    </button>)}
+                 
+                 {selectedCategory === "Jobs In Progress" ? (<button value="Jobs In Progress" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class=" text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 font-medium  hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-mentions" data-hs-tab="#hs-pro-tabs-chsn-mentions" aria-controls="hs-pro-tabs-chsn-mentions" role="tab" >
+                     In Progress
+                    </button>) : (<button value="Jobs In Progress" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="hs-tab-active:after:bg-gray-800 hover:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-mentions" data-hs-tab="#hs-pro-tabs-chsn-mentions" aria-controls="hs-pro-tabs-chsn-mentions" role="tab" >
+                     In Progress
+                    </button>)}
+                    {selectedCategory === "In Review" ? (<button   value="In Review"  onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="text-gray-800 font-medium bg-gray-100 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-spammed" data-hs-tab="#hs-pro-tabs-chsn-spammed" aria-controls="hs-pro-tabs-chsn-spammed" role="tab" >
+                      In Review
+                    </button>) : (<button   value="In Review"  onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none active " id="hs-pro-tabs-chsn-item-all" data-hs-tab="#hs-pro-tabs-chsn-all" aria-controls="hs-pro-tabs-chsn-all" role="tab" >
+                      In Review
+                    </button>)}
+
+                    {selectedCategory === "Requests" ? (<button   value="Requests" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="text-gray-800 font-medium bg-gray-100  px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-blocked" data-hs-tab="#hs-pro-tabs-chsn-blocked" aria-controls="hs-pro-tabs-chsn-blocked" role="tab" >
+                     Requests
+                    </button>) : (<button   value="Requests" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-blocked" data-hs-tab="#hs-pro-tabs-chsn-blocked" aria-controls="hs-pro-tabs-chsn-blocked" role="tab" >
+                     Requests
+                    </button>)}
+                    
+                    
                   </nav>
                
                 </div>

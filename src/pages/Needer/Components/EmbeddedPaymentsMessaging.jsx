@@ -440,8 +440,10 @@ const EmbeddedPaymentsMessaging = (props) => {
         averageAndTotalRating();
       }, 300);
     });
+    onClose()
 
-    onOpenPayment();
+    // onOpenPayment();
+    moveAllData()
     pushToJobInfo(postedJobs);
   };
 
@@ -792,14 +794,20 @@ const EmbeddedPaymentsMessaging = (props) => {
           <ModalContent>
             <ModalHeader>Success!</ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
+            {/* <ModalBody>
               <Text>Your payment was successful.</Text>
               <Text>
                 If you'd like to review this job, go to "Completed Jobs" to see
                 all details.
               </Text>
+            </ModalBody> */}
+<ModalBody>
+              <Text>This job has been marked complete.</Text>
+              <Text>
+                If you'd like to review this job, go to "Completed Jobs" to see
+                all details.
+              </Text>
             </ModalBody>
-
             <ModalFooter>
               <Button colorScheme="blue" onClick={onClose}>
                 Continue

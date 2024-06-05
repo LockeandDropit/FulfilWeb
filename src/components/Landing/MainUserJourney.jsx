@@ -39,7 +39,7 @@ const MainUserJourney = () => {
                 </span>
     
                 <span class="text-sm sm:text-base text-white">
-                 Hire the <span class="font-bold">contractor</span> you want
+                 Hire the <span class="font-bold">Doer</span> you want
                 </span>
               </li>
     

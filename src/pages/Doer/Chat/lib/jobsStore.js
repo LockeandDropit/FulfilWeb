@@ -6,6 +6,7 @@ import { useUserStore } from "./userStore";
 
 export const useJobStore = create((set) => ({
  job: null,
+ isJobLoading: true,
 jobHiringState: null,
   setJobHiringState: (jobState) => {
     set({jobHiringState: jobState})
@@ -19,14 +20,14 @@ jobHiringState: null,
             const docSnap = await getDoc(docRef);
       //add code to check that jobID === JobID
             if (docSnap.exists() && docSnap.data().jobID === jobID) {
-              set({ job: docSnap.data() });
+              set({ job: docSnap.data(), isJobLoading: false });
               console.log("jobstore",docSnap.data())
             } else {
-              set({job: null });
+              set({job: null, isJobLoading: false });
             }
           } catch (err) {
             console.log(err);
-            return set({ job: null});
+            return set({ job: null, isJobLoading: false});
           }
     } else {
       try {
@@ -34,14 +35,14 @@ jobHiringState: null,
         const docSnap = await getDoc(docRef);
   
         if (docSnap.exists() && docSnap.data().jobID === jobID) {
-          set({ job: docSnap.data() });
+          set({ job: docSnap.data(), isJobLoading: false });
           console.log("jobstore",docSnap.data())
         } else {
-          set({job: null });
+          set({job: null, isJobLoading: false });
         }
       } catch (err) {
         console.log(err);
-        return set({ job: null});
+        return set({ job: null, isJobLoading: false});
       }
     }
 

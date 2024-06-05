@@ -12,6 +12,7 @@ import {
 import { db } from "../../../firebaseConfig";
 import { useChatStore } from "./lib/chatStore";
 import { useUserStore } from "./lib/userStore";
+import { useLocation } from "react-router-dom";
 import {
   Modal,
   ModalOverlay,
@@ -33,15 +34,15 @@ import { Text, Box, Flex, Image } from "@chakra-ui/react";
 import star_corner from "../../../images/star_corner.png";
 import star_filled from "../../../images/star_filled.png";
 import { format } from "timeago.js";
-import CreateOfferModal from "../NeederComponents/CreateOfferModal";
+import OfferModal from "../components/OfferModal";
 import { useMediaQuery } from "@chakra-ui/react";
 import Detail from "./Detail";
-import DoerProfileModal from "../Components/DoerProfileModal";
+import NeederProfileModal from "../components/NeederProfileModal"
+import MarkCompleteModal from "../Messaging/MarkCompleteModal"
 import { useJobStore } from "./lib/jobsStore";
-import OfferPostedJobModal from "../Components/OfferPostedJobModal";
-import EmbeddedPaymentsMessaging from "../Components/EmbeddedPaymentsMessaging";
-import Header from "../Components/Header";
-import Dashboard from "../Components/Dashboard";
+
+import Header from "../components/Header"
+import Dashboard from "../components/Dashboard"
 import ListPlaceholder from "./ListPlaceholder";
 
 const ChatPlaceholder = () => {
@@ -60,7 +61,7 @@ const ChatPlaceholder = () => {
   useEffect(() => {
     if (user != null) {
       // should this be done on log ina nd stored in redux store so it's cheaper?
-      const q = query(collection(db, "users", user.uid, "Ratings"));
+      const q = query(collection(db, "employers", user.uid, "Ratings"));
 
       onSnapshot(q, (snapshot) => {
         let ratingResults = [];
@@ -84,6 +85,8 @@ const ChatPlaceholder = () => {
     } else {
     }
   }, []);
+
+  const location = useLocation();
 
   const [chat, setChat] = useState();
   const [open, setOpen] = useState(false);
@@ -276,7 +279,39 @@ const ChatPlaceholder = () => {
   //height calc help credit Ryu-The-Sick https://www.reddit.com/r/tailwindcss/comments/v7jarp/how_do_i_make_the_height_of_a_div_the_height_of/
 
 
- 
+  const [neederProfileVisible, setNeederProfileVisible] = useState(false)
+
+  const handleNeederProfileVisible = () => {
+    setNeederProfileVisible(!neederProfileVisible)
+
+  }
+
+  const [offerVisible, setOfferVisible] = useState(false);
+
+  const handleOfferVisible = () => {
+    setOfferVisible(!offerVisible);
+  };
+
+
+
+  useEffect(() => {
+    console.log("location", location.state)
+    if (location.state === null) {
+    } else {
+      if (location.state.profileModalReset) {
+        setNeederProfileVisible(false);
+      } else if (location.state.offerReset) {
+   
+        setOfferVisible(false)
+      }
+    }
+  }, [location]);
+
+  const [markCompleteVisible, setMarkCompleteVisible] = useState(false)
+
+  const handleMarkCompleteVisible = () => {
+    setMarkCompleteVisible(!markCompleteVisible)  
+  }
 
   if (isJobLoading) return <div className="loading">Loading...</div>;
   return (
@@ -365,15 +400,16 @@ const ChatPlaceholder = () => {
                         </svg>
                       )}
 
-                      <span class="absolute -bottom-0 -end-0 block size-2 rounded-full ring-2 ring-white bg-green-500"></span>
+                 
                     </span>
                     <span class="grow text-center lg:text-start truncate">
                       <span class="truncate block font-semibold text-sm leading-4 text-gray-800">
                         {user.firstName} {user.lastName}
                       </span>
-                      <span class="truncate block text-xs text-blue-600 leading-4">
+                      {isDesktop ? (null) : (    <span class="truncate block text-xs text-blue-600 leading-4">
                 See details
-              </span>
+              </span>)}
+                  
                     </span>
                   </div>
                 </div>
@@ -382,9 +418,12 @@ const ChatPlaceholder = () => {
                   
                   {jobHiringState.isJobOffered === true &&
                       jobHiringState.isHired === false ? (
-                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                        <span    onClick={() => handleOfferVisible()} class=" cursor-pointer py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-green-100 text-green-700 rounded-full">
                 
-                        Offer pending
+                {user.firstName} sent you an offer!
+                <span class="absolute top-5 end-5 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                          
+                        </span>
                       </span>
                       ) : jobHiringState.isHired === true &&
                         jobHiringState.isMarkedCompleteDoer === false ? (
@@ -438,7 +477,7 @@ const ChatPlaceholder = () => {
               <div class="h-full overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-sm [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
                 <div class="p-4 space-y-5">
                   <div class="relative">
-                    <div class="sticky top-16 inset-x-0 z-10 max-w-lg mx-auto text-center">
+                    <div class="sticky top-0 inset-x-0 z-10 max-w-lg mx-auto text-center">
                       <span class="py-0.5 px-1.5 bg-gray-100 text-xs text-gray-500 rounded-full">
                         {chat?.messages ? <p>Today</p> : null}
                       </span>
@@ -737,7 +776,7 @@ const ChatPlaceholder = () => {
 
                     <div class="mt-4 flex justify-center items-center gap-x-3">
                       <button
-                        onClick={() => handleDoerModalVisbile()}
+                         onClick={() => handleNeederProfileVisible()}
                         type="button"
                         class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50"
                       >
@@ -761,42 +800,32 @@ const ChatPlaceholder = () => {
                         </svg>
                         View profile
                       </button>
-
                       {jobHiringState.isJobOffered === true &&
                       jobHiringState.isHired === false ? (
                         <button
+                        onClick={() => handleOfferVisible()}
                           type="button"
-                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md   bg-gray-200 text-gray-800 shadow-sm  disabled:opacity-50 disabled:pointer-events-none focus:outline-none  cursor-default"
+                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md   bg-green-100 text-green-800 shadow-sm  disabled:opacity-50 disabled:pointer-events-none focus:outline-none  "
                         >
-                          Offer Pending
+                          View Offer
+                       
                         </button>
                       ) : jobHiringState.isHired === true &&
                         jobHiringState.isMarkedCompleteDoer === false ? (
-                       null
-                      ) : jobHiringState.isMarkedCompleteDoer === true ? (
-                        // <button
-                        //   onClick={() => handlePaymentVisible()}
-                        //   type="button"
-                        //   class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
-                        // >
-                        //   Pay
-                        // </button>
-                        <button
-                        onClick={() => handlePaymentVisible()}
-                        type="button"
-                        class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
-                      >
-                        Mark Complete
-                      </button>
-                      ) : (
-                        <button
-                          onClick={() => handleModalOpen()}
+                          <button
                           type="button"
-                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-sky-400 text-white shadow-sm hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
+                          onClick={() => handleMarkCompleteVisible()}
+                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md  bg-blue-600 text-white shadow-sm hover:bg-blue-700"
                         >
-                          Send offer
+                          Mark Complete
+                        
                         </button>
+                      ) : jobHiringState.isMarkedCompleteDoer === true ? (
+                       null
+                      ) : (
+                      null
                       )}
+                    
                     </div>
                   </div>
                 </div>
@@ -917,9 +946,9 @@ const ChatPlaceholder = () => {
                           
                             {jobHiringState.isJobOffered === true &&
                       jobHiringState.isHired === false ? (
-                        <span class="py-1.5 ps-1.5  px-1 inline-flex items-center  text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                        <span class="py-1.5 ps-1.5 w-[160px] px-1 inline-flex items-center  text-xs font-medium bg-green-100 text-green-800 rounded-full">
                         <svg
-                          class="flex-shrink-0 size-3.5"
+                          class="flex-shrink-0 size-3.5 mr-2"
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
                           height="24"
@@ -932,7 +961,7 @@ const ChatPlaceholder = () => {
                         >
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
-                        Offer pending
+                        You received an offer!
                       </span>
                       ) : jobHiringState.isHired === true &&
                         jobHiringState.isMarkedCompleteDoer === false ? (
@@ -956,7 +985,7 @@ const ChatPlaceholder = () => {
                       ) : jobHiringState.isMarkedCompleteDoer === true ? (
                         <span class="py-1.5 ps-1.5  inline-flex items-center  text-xs font-medium bg-blue-600 text-white rounded-full">
                         <svg
-                          class="flex-shrink-0 size-3.5"
+                          class="flex-shrink-0 size-3.5 mr-2"
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
                           height="24"
@@ -975,23 +1004,7 @@ const ChatPlaceholder = () => {
                     
                           <dd>
                          
-                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
-                        <svg
-                          class="flex-shrink-0 size-3.5"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                        Posted
-                      </span>
+                       
                       <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
                         <svg
                           class="flex-shrink-0 size-3.5"
@@ -1123,92 +1136,10 @@ const ChatPlaceholder = () => {
                               </p>
                             </dd>
                           </dl>
-                          {/* 
-                          <dl class="py-1 grid grid-cols-3 gap-x-4">
-                            <dt class="col-span-1">
-                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
-                                <svg
-                                  class="flex-shrink-0 size-3.5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <circle cx="12" cy="12" r="10" />
-                                  <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-                                  <path d="M2 12h20" />
-                                </svg>
-                                Site:
-                              </p>
-                            </dt>
-                            <dd class="col-span-2">
-                              <a
-                                class="align-top text-sm text-blue-600 decoration-2 hover:underline font-medium focus:outline-none focus:underline"
-                                href="#"
-                              >
-                                fortex.com
-                              </a>
-                            </dd>
-                          </dl> */}
+                        
                         </div>
                       </div>
                     </div>
-
-                    {/* <div class="hs-accordion active" id="hs-pro-chdssmc1">
-                      <button
-                        type="button"
-                        class="hs-accordion-toggle p-5 w-full flex justify-between items-center gap-x-3 text-gray-800 hover:text-gray-600 focus:outline-none focus:text-gray-600 disabled:opacity-50 disabled:pointer-events-none"
-                        aria-controls="hs-pro-chdssmc1-collapse"
-                      >
-                        <span class="text-sm font-medium">Shared media</span>
-                        <svg
-                          class="hs-accordion-active:hidden block size-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path d="M5 12h14"></path>
-                          <path d="M12 5v14"></path>
-                        </svg>
-                        <svg
-                          class="hs-accordion-active:block hidden size-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path d="M5 12h14"></path>
-                        </svg>
-                      </button>
-
-                      <div
-                        id="hs-pro-chdssmc1-collapse"
-                        class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
-                        aria-labelledby="hs-pro-chdssmc1"
-                      >
-                        <div class="pb-5 px-5">
-                          <p class="text-sm text-gray-500">
-                            Only shared images appear here
-                          </p>
-                        </div>
-                      </div>
-                    </div> */}
                   </div>
                 </div>
               </div>
@@ -6666,9 +6597,13 @@ const ChatPlaceholder = () => {
           </div>
         </main>
       </body>
-      {doerModalVisbile ? <DoerProfileModal /> : null}
-      {offerPostedJobVisible ? <OfferPostedJobModal /> : null}
-      {paymentVisible ? <EmbeddedPaymentsMessaging props={job} /> : null}
+
+{/* Modals live here */}
+      {offerVisible ? <OfferModal /> : null}
+    {neederProfileVisible ? <NeederProfileModal /> : null}
+
+    {markCompleteVisible ? <MarkCompleteModal /> : null}
+ 
       <Drawer 
           isOpen={isOpenDetails}
           placement='right'
@@ -6792,7 +6727,7 @@ const ChatPlaceholder = () => {
 
                     <div class="mt-4 flex justify-center items-center gap-x-3">
                       <button
-                        onClick={() => handleDoerModalVisbile()}
+                        onClick={() => handleNeederProfileVisible()}
                         type="button"
                         class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50"
                       >
@@ -6817,41 +6752,7 @@ const ChatPlaceholder = () => {
                         View profile
                       </button>
 
-                      {jobHiringState.isJobOffered === true &&
-                      jobHiringState.isHired === false ? (
-                        <button
-                          type="button"
-                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md   bg-gray-200 text-gray-800 shadow-sm  disabled:opacity-50 disabled:pointer-events-none focus:outline-none  cursor-default"
-                        >
-                          Offer Pending
-                        </button>
-                      ) : jobHiringState.isHired === true &&
-                        jobHiringState.isMarkedCompleteDoer === false ? (
-                       null
-                      ) : jobHiringState.isMarkedCompleteDoer === true ? (
-                        // <button
-                        //   onClick={() => handlePaymentVisible()}
-                        //   type="button"
-                        //   class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
-                        // >
-                        //   Pay
-                        // </button>
-                        <button
-                          onClick={() => handlePaymentVisible()}
-                          type="button"
-                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
-                        >
-                          Mark Complete
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleModalOpen()}
-                          type="button"
-                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-sky-400 text-white shadow-sm hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
-                        >
-                          Send offer
-                        </button>
-                      )}
+                 
                     </div>
                   </div>
                 </div>
@@ -6972,9 +6873,9 @@ const ChatPlaceholder = () => {
                           
                             {jobHiringState.isJobOffered === true &&
                       jobHiringState.isHired === false ? (
-                        <span class="py-1.5 ps-1.5  px-1 inline-flex items-center  text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                        <span class="py-1.5 ps-1.5 w-[160px] px-1 inline-flex items-center  text-xs font-medium bg-green-100 text-green-800 rounded-full">
                         <svg
-                          class="flex-shrink-0 size-3.5"
+                          class="flex-shrink-0 size-3.5 mr-2"
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
                           height="24"
@@ -6987,13 +6888,13 @@ const ChatPlaceholder = () => {
                         >
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
-                        Offer pending
+                        You received an offer!
                       </span>
                       ) : jobHiringState.isHired === true &&
                         jobHiringState.isMarkedCompleteDoer === false ? (
                           <span class="py-1.5 ps-1.5  px-1 inline-flex items-center  text-xs font-medium bg-green-100 text-green-700 rounded-full">
                           <svg
-                            class="flex-shrink-0 size-3.5"
+                            class="flex-shrink-0 size-3.5 mr-2"
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
                             height="24"
@@ -7011,7 +6912,7 @@ const ChatPlaceholder = () => {
                       ) : jobHiringState.isMarkedCompleteDoer === true ? (
                         <span class="py-1.5 ps-1.5  inline-flex items-center  text-xs font-medium bg-blue-600 text-white rounded-full">
                         <svg
-                          class="flex-shrink-0 size-3.5"
+                          class="flex-shrink-0 size-3.5 mr-2"
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
                           height="24"
@@ -7029,24 +6930,7 @@ const ChatPlaceholder = () => {
                       ) : (
                     
                           <dd>
-                         
-                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
-                        <svg
-                          class="flex-shrink-0 size-3.5"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                        Posted
-                      </span>
+                     
                       <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
                         <svg
                           class="flex-shrink-0 size-3.5"
@@ -7178,92 +7062,12 @@ const ChatPlaceholder = () => {
                               </p>
                             </dd>
                           </dl>
-                          {/* 
-                          <dl class="py-1 grid grid-cols-3 gap-x-4">
-                            <dt class="col-span-1">
-                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
-                                <svg
-                                  class="flex-shrink-0 size-3.5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <circle cx="12" cy="12" r="10" />
-                                  <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-                                  <path d="M2 12h20" />
-                                </svg>
-                                Site:
-                              </p>
-                            </dt>
-                            <dd class="col-span-2">
-                              <a
-                                class="align-top text-sm text-blue-600 decoration-2 hover:underline font-medium focus:outline-none focus:underline"
-                                href="#"
-                              >
-                                fortex.com
-                              </a>
-                            </dd>
-                          </dl> */}
+                    
                         </div>
                       </div>
                     </div>
 
-                    {/* <div class="hs-accordion active" id="hs-pro-chdssmc1">
-                      <button
-                        type="button"
-                        class="hs-accordion-toggle p-5 w-full flex justify-between items-center gap-x-3 text-gray-800 hover:text-gray-600 focus:outline-none focus:text-gray-600 disabled:opacity-50 disabled:pointer-events-none"
-                        aria-controls="hs-pro-chdssmc1-collapse"
-                      >
-                        <span class="text-sm font-medium">Shared media</span>
-                        <svg
-                          class="hs-accordion-active:hidden block size-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path d="M5 12h14"></path>
-                          <path d="M12 5v14"></path>
-                        </svg>
-                        <svg
-                          class="hs-accordion-active:block hidden size-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path d="M5 12h14"></path>
-                        </svg>
-                      </button>
-
-                      <div
-                        id="hs-pro-chdssmc1-collapse"
-                        class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
-                        aria-labelledby="hs-pro-chdssmc1"
-                      >
-                        <div class="pb-5 px-5">
-                          <p class="text-sm text-gray-500">
-                            Only shared images appear here
-                          </p>
-                        </div>
-                      </div>
-                    </div> */}
+                   
                   </div>
                 </div>
               </div>

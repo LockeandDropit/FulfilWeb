@@ -32,13 +32,14 @@ import {
   snapshotEqual,
   arrayUnion,
 } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 import { db } from "../../../firebaseConfig";
 
 import { job, jobHiringState} from "../Chat/lib/jobsStore"
 
 const OfferModal = () => {
 
-
+  const navigate = useNavigate();
     const { job, jobHiringState, setJobHiringState } = useJobStore() 
 
 
@@ -349,6 +350,8 @@ console.log("what info do I have from current user?", currentUser)
    
       }
 
+      
+
     const confirmJobAccept = () => {
         // hire code here.
         // post under in progress for employer and applicant
@@ -375,6 +378,8 @@ console.log("what info do I have from current user?", currentUser)
         onClose()
 
         onCloseFlatRate()
+
+        navigate("/DoerChatHolder", {state: {profileModalReset: true}})
     
         //delete from global jobs/maps
     

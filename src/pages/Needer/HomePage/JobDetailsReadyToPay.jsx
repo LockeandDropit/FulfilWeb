@@ -174,7 +174,7 @@ useEffect(() => {
 
   const navigateToChannel = (x) => {
     console.log("this is what youre passing", x);
-    navigate("/NeederChatEntry", {
+    navigate("/ChatHolder", {
       state: { selectedChannel: x.channelID, applicant: x },
     });
     // console.log("mesage channel",x);
@@ -509,10 +509,18 @@ useEffect(() => {
                                       1
                                     </span>
                                   </button>
-                                    <button   onClick={() => handlePaymentVisible()} className="py-2 px-3  w-full relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
-                          Pay
+                                   <button     onClick={() =>
+                                      navigateToChannel(
+                                        applicant
+                                      )
+                                    } className="py-2 px-3  w-full relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                          Mark Complete
                           
                         </button>
+                                    {/* <button   onClick={() => handlePaymentVisible()} className="py-2 px-3  w-full relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                          Pay
+                          
+                        </button> */}
                                   </>
                                 ) : (
                                   <>
@@ -531,9 +539,17 @@ useEffect(() => {
                                  >
                                    Messages
                                  </button>
-                                 <button   onClick={() => handlePaymentVisible()} className="py-2 px-3  w-full text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
-                          Pay
+                                 <button     onClick={() =>
+                                      navigateToChannel(
+                                        applicant
+                                      )
+                                    } className="py-2 px-3  w-full relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                          Mark Complete
+                          
                         </button>
+                                 {/* <button   onClick={() => handlePaymentVisible()} className="py-2 px-3  w-full text-sm font-semibold rounded-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                          Pay
+                        </button> */}
                                  </>
                                 )}
                               </div>

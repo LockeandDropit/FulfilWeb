@@ -182,7 +182,7 @@ const JobDetails = () => {
 
   const navigateToChannel = (x) => {
     console.log("this is what youre passing", x);
-    navigate("/NeederChatEntry", {
+    navigate("/ChatHolder", {
       state: { selectedChannel: x.channelID, applicant: x },
     });
     // console.log("mesage channel",x);

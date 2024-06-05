@@ -15,7 +15,7 @@ import { filter } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 
 import { useJobStore } from "./lib/jobsStore";
-import Header from "../Components/Header";
+
 
 const ListPlaceholder = () => {
     const [chats, setChats] = useState([]);
@@ -28,27 +28,33 @@ const ListPlaceholder = () => {
     
   
     useEffect(() => {
-      const jobQuery = query(
-        collection(db, "employers", currentUser.uid, "Posted Jobs")
+   
+
+
+      const chatIdQuery = query(
+        collection(db, "users", currentUser.uid, "Applied")
       );
 
-      onSnapshot(jobQuery, (snapshot) => {
-        let jobData = [];
+      onSnapshot(chatIdQuery, (snapshot) => {
+        let channelIds = [];
         snapshot.docs.forEach((doc) => {
-          //review what this does
-          // console.log("test",doc.data())
-          jobData.push({ jobTitle: doc.data().jobTitle, id: doc.data().jobID });
+          if (doc.data().channelId) {
+            channelIds.push(doc.data().channelId);
+          }
         });
 
-        if (!jobData || !jobData.length) {
-          //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
-          // setInterviewNewMessageLength(null);
+        if (!channelIds || !channelIds.length) {
+          setChats(null)
           setSelectedCategoryChannelIDs(null)
+          console.log("why no null?")
+          //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
         } else {
-          setInterviewMessageData(jobData);
-          console.log("1")
+          console.log("HERES WHY")
+          setSelectedCategoryChannelIDs(channelIds);
         }
       });
+  
+      
     }, [currentUser.uid]);
   
     //Check channel Id's from "Category" and run them against "User MEssages" (? The one with user ID), then set those to chat
@@ -67,30 +73,31 @@ const ListPlaceholder = () => {
   
     useEffect(() => {
       if (selectedCategory === "Posted Jobs") {
-        const jobQuery = query(
-          collection(db, "employers", currentUser.uid, "Posted Jobs")
+        const chatIdQuery = query(
+          collection(db, "users", currentUser.uid, "Applied")
         );
   
-        onSnapshot(jobQuery, (snapshot) => {
-          let jobData = [];
+        onSnapshot(chatIdQuery, (snapshot) => {
+          let channelIds = [];
           snapshot.docs.forEach((doc) => {
-            //review what this does
-            // console.log("test",doc.data())
-            jobData.push({ jobTitle: doc.data().jobTitle, id: doc.data().jobID });
+            if (doc.data().channelId) {
+              channelIds.push(doc.data().channelId);
+            }
           });
   
-          if (!jobData || !jobData.length) {
-            //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
-            // setInterviewNewMessageLength(null);
+          if (!channelIds || !channelIds.length) {
+            setChats(null)
             setSelectedCategoryChannelIDs(null)
+            console.log("why no null?")
+            //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
           } else {
-            setInterviewMessageData(jobData);
-            console.log("1")
+            console.log("HERES WHY")
+            setSelectedCategoryChannelIDs(channelIds);
           }
         });
-      } else if (selectedCategory === "Jobs In Progress") {
+      }else if (selectedCategory === "Jobs In Progress") {
         const chatIdQuery = query(
-          collection(db, "employers", currentUser.uid, "Jobs In Progress")
+          collection(db, "users", currentUser.uid, "Jobs In Progress")
         );
   
         onSnapshot(chatIdQuery, (snapshot) => {
@@ -111,7 +118,7 @@ const ListPlaceholder = () => {
         });
       } else if (selectedCategory === "In Review") {
         const chatIdQuery = query(
-          collection(db, "employers", currentUser.uid, "In Review")
+          collection(db, "users", currentUser.uid, "In Review")
         );
   
         onSnapshot(chatIdQuery, (snapshot) => {
@@ -132,7 +139,7 @@ const ListPlaceholder = () => {
         });
       } else if (selectedCategory === "Requests") {
         const chatIdQuery = query(
-          collection(db, "employers", currentUser.uid, "Requests")
+          collection(db, "users", currentUser.uid, "Requests")
         );
   
         onSnapshot(chatIdQuery, (snapshot) => {
@@ -219,7 +226,7 @@ const ListPlaceholder = () => {
   
             
               const promises = items.map(async (item) => {
-                const userDocRef = doc(db, "users", item.receiverId);
+                const userDocRef = doc(db, "employers", item.receiverId);
                 const userDocSnap = await getDoc(userDocRef);
     
                 const user = userDocSnap.data();
@@ -287,11 +294,7 @@ const ListPlaceholder = () => {
   
       const userChatsRef = doc(db, "User Messages", currentUser.uid);
   
-      //add field that keeps track of type of chat: Accepted, Request, Interviewing, Completed
-      //originally show all.
-      // filter between each via drop down? or toggle. idk
-      // mvp tho? add jobTitle to job title
-      //so on create add JobID and Job Title (and title: request if Needer contacting Doer)to User Messages sub-collection
+
   
       try {
         await updateDoc(userChatsRef, {
@@ -304,9 +307,7 @@ const ListPlaceholder = () => {
       }
     };
   
-    // const filteredChats = chats.filter((c) =>
-    //   c.user.username.toLowerCase().includes(input.toLowerCase())
-    // );
+   
   
   return (
   
@@ -750,8 +751,8 @@ const ListPlaceholder = () => {
             <div class="py-4 px-3 flex items-center gap-x-3 border-b border-b-gray-100">
               <div class="flex-shrink-0">
                 <div class="relative size-8">
-                  <span class="flex flex-shrink-0 justify-center items-center size-8 text-xs font-medium uppercase  text-white rounded-full">
-                  {chat.user.profilePictureResponse ? (<img
+                  <span class="flex flex-shrink-0 justify-center items-center size-10 text-xs font-medium uppercase  text-white rounded-full">
+                 {chat.user.profilePictureResponse ? (<img
                 src={chat.user.profilePictureResponse}
                 className="w-8 h-8 mt-2.5 rounded-full object-cover"
                  />) : (<svg

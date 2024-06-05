@@ -63,7 +63,7 @@ import Test from "./pages/Needer/Test";
 import UserProfileNeeder from "./pages/Needer/UserProfileNeeder";
 import Homepage from "./pages/Needer/HomePage/Homepage";
 import ChatWindow from "./pages/Doer/Messaging/ChatWindow";
-
+import DoerChatHolder from "./pages/Doer/Chat/DoerChatHolder";
 
 
 //Stream Chat
@@ -426,6 +426,10 @@ const router = createBrowserRouter([
   {
     path: "/ChatHolder",
     element: <ChatHolder/>,
+  },
+  {
+    path: "/DoerChatHolder",
+    element: <DoerChatHolder/>,
   },
 
 

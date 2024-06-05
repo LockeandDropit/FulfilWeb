@@ -14,7 +14,7 @@ const MainCategories = () => {
         Looking for a <span class="text-sky-400">Pro?</span>
       </h1>
       <p class="mt-3 text-lg text-gray-800">
-        Browse our contractors by category and send them a message!
+        Browse our Doers by category and send them a message!
       </p>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
         <div class="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">

@@ -50,6 +50,75 @@ const ListPlaceholder = () => {
         }
       });
     }, [currentUser.uid]);
+
+
+
+
+    const [postedUnread, setPostedUnread] = useState(false)
+    const [jobsInProgressUnread, setJobsInProgressUnread] = useState(false)
+    const [inReviewUnread, setInReviewUnread] = useState(false)
+    const [requestsUnread, setRequestsUnread] = useState(false)
+
+
+
+    useEffect(() => {
+      if (currentUser) {
+         let allChats = [];
+   
+         const unSub = onSnapshot(
+           doc(db, "User Messages", currentUser.uid),
+           async (res) => {
+             let postedJobsUnread = 0;
+             let progressUnread = 0;
+             let reviewUnread = 0;
+             let requestUnread = 0;
+       
+             const items = res.data().chats;
+   
+             console.log("res data",res.data().chats)
+   
+             items.map(async (item) => {
+              
+               console.log("fetchedIDs", item)
+   
+               if (item.isSeen === false && item.jobType === "Interview") {
+                  postedJobsUnread++
+                  console.log("got one")
+
+               }
+               if (item.isSeen === false && item.jobType === "Jobs In Progress") {
+                progressUnread++
+               }
+               if (item.isSeen === false && item.jobType === "In Review") {
+                reviewUnread++
+              }
+               if (item.isSeen === false && item.jobType === "Requests") {
+                 requestUnread++
+               }
+             });
+        
+   
+             if (postedJobsUnread > 0) {
+              setPostedUnread(true) 
+             }
+             if (progressUnread > 0) {
+              setJobsInProgressUnread(true) 
+             }
+             if (reviewUnread > 0) {
+              setInReviewUnread(true) 
+             }
+             if (requestUnread > 0) {
+              setRequestsUnread(true) 
+             }
+           }
+         );
+   
+         return () => {
+           unSub();
+         };
+      }
+     }, [currentUser]);
+   
   
     //Check channel Id's from "Category" and run them against "User MEssages" (? The one with user ID), then set those to chat
   
@@ -698,34 +767,60 @@ const ListPlaceholder = () => {
                 <div class="overflow-x-auto [&::-webkit-scrollbar]:h-0">
                   
                   <nav class="flex gap-x-1" aria-label="Tabs" role="tablist">
-
+                
                     {selectedCategory === "Posted Jobs" ? (  <button 
                     value="Posted Jobs"
                        onClick={(e) => setSelectedCategory(e.target.value)}
-                    type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-800 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 " aria-controls="hs-pro-tabs-chsn-all" role="tab" >
+                    type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100 text-gray-800 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 " aria-controls="hs-pro-tabs-chsn-all" role="tab" >
+                      
                       Interviews
+                      {postedUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                          
+                          </span>) : (null)}
+                      
                     </button>) : (  <button 
                     value="Posted Jobs"
                        onClick={(e) => setSelectedCategory(e.target.value)}
-                    type="button" class="px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none active " id="hs-pro-tabs-chsn-item-all" data-hs-tab="#hs-pro-tabs-chsn-all" aria-controls="hs-pro-tabs-chsn-all" role="tab" >
+                    type="button" class="px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100 text-gray-500 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none active " id="hs-pro-tabs-chsn-item-all" data-hs-tab="#hs-pro-tabs-chsn-all" aria-controls="hs-pro-tabs-chsn-all" role="tab" >
                       Interviews
+                      {postedUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                          
+                          </span>) : (null)}
                     </button>)}
                  
-                 {selectedCategory === "Jobs In Progress" ? (<button value="Jobs In Progress" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class=" text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 font-medium  hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-mentions" data-hs-tab="#hs-pro-tabs-chsn-mentions" aria-controls="hs-pro-tabs-chsn-mentions" role="tab" >
+                 {selectedCategory === "Jobs In Progress" ? (<button value="Jobs In Progress" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class=" text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  font-medium  hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-mentions" data-hs-tab="#hs-pro-tabs-chsn-mentions" aria-controls="hs-pro-tabs-chsn-mentions" role="tab" >
                      In Progress
-                    </button>) : (<button value="Jobs In Progress" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="hs-tab-active:after:bg-gray-800 hover:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-mentions" data-hs-tab="#hs-pro-tabs-chsn-mentions" aria-controls="hs-pro-tabs-chsn-mentions" role="tab" >
+                     {jobsInProgressUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                          
+                          </span>) : (null)}
+                    </button>) : (<button value="Jobs In Progress" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="hs-tab-active:after:bg-gray-800 hover:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100 text-gray-500 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-mentions" data-hs-tab="#hs-pro-tabs-chsn-mentions" aria-controls="hs-pro-tabs-chsn-mentions" role="tab" >
                      In Progress
+                     {jobsInProgressUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                          
+                          </span>) : (null)}
                     </button>)}
-                    {selectedCategory === "In Review" ? (<button   value="In Review"  onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="text-gray-800 font-medium bg-gray-100 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-spammed" data-hs-tab="#hs-pro-tabs-chsn-spammed" aria-controls="hs-pro-tabs-chsn-spammed" role="tab" >
+                    {selectedCategory === "In Review" ? (<button   value="In Review"  onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="text-gray-800 font-medium bg-gray-100 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-spammed" data-hs-tab="#hs-pro-tabs-chsn-spammed" aria-controls="hs-pro-tabs-chsn-spammed" role="tab" >
                       In Review
+                      {inReviewUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                          
+                          </span>) : (null)}
                     </button>) : (<button   value="In Review"  onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none active " id="hs-pro-tabs-chsn-item-all" data-hs-tab="#hs-pro-tabs-chsn-all" aria-controls="hs-pro-tabs-chsn-all" role="tab" >
                       In Review
+                      {inReviewUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                          
+                          </span>) : (null)}
                     </button>)}
 
-                    {selectedCategory === "Requests" ? (<button   value="Requests" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="text-gray-800 font-medium bg-gray-100  px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-blocked" data-hs-tab="#hs-pro-tabs-chsn-blocked" aria-controls="hs-pro-tabs-chsn-blocked" role="tab" >
+                    {selectedCategory === "Requests" ? (<button   value="Requests" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="text-gray-800 font-medium bg-gray-100  px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-blocked" data-hs-tab="#hs-pro-tabs-chsn-blocked" aria-controls="hs-pro-tabs-chsn-blocked" role="tab" >
                      Requests
-                    </button>) : (<button   value="Requests" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-blocked" data-hs-tab="#hs-pro-tabs-chsn-blocked" aria-controls="hs-pro-tabs-chsn-blocked" role="tab" >
+                     {requestsUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                          
+                          </span>) : (null)}
+                    </button>) : (<button   value="Requests" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-blocked" data-hs-tab="#hs-pro-tabs-chsn-blocked" aria-controls="hs-pro-tabs-chsn-blocked" role="tab" >
                      Requests
+                     {requestsUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                          
+                          </span>) : (null)}
                     </button>)}
                     
                     

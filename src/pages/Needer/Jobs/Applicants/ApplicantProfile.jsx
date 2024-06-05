@@ -705,7 +705,7 @@ const handleAdd = async () => {
     )
     .then(() => {
       setTimeout(() => {
-        navigate("/NeederChatEntry", {
+        navigate("/ChatHolder", {
           state: {
             selectedChannel: newChatRef.id,
           },

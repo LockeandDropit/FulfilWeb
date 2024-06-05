@@ -460,7 +460,7 @@ const ChatPlaceholder = () => {
                           >
                             <polyline points="20 6 9 17 4 12" />
                           </svg>
-                       Awaiting payment
+                       Awaiting confirmation
                       </span>
                       ) : (
                         <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
@@ -983,7 +983,7 @@ const ChatPlaceholder = () => {
                           Job Accepted!
                         </span>
                       ) : jobHiringState.isMarkedCompleteDoer === true ? (
-                        <span class="py-1.5 ps-1.5  inline-flex items-center  text-xs font-medium bg-blue-600 text-white rounded-full">
+                        <span class="py-1.5 ps-1.5 w-[160px] inline-flex items-center  text-xs font-medium bg-blue-600 text-white rounded-full">
                         <svg
                           class="flex-shrink-0 size-3.5 mr-2"
                           xmlns="http://www.w3.org/2000/svg"
@@ -998,7 +998,7 @@ const ChatPlaceholder = () => {
                         >
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
-                        Completed
+                        Awaiting confirmation
                       </span>
                       ) : (
                     
@@ -6910,7 +6910,7 @@ const ChatPlaceholder = () => {
                           Job Accepted!
                         </span>
                       ) : jobHiringState.isMarkedCompleteDoer === true ? (
-                        <span class="py-1.5 ps-1.5  inline-flex items-center  text-xs font-medium bg-blue-600 text-white rounded-full">
+                        <span class="py-1.5 ps-1.5 w-[160px] inline-flex items-center  text-xs font-medium bg-blue-600 text-white rounded-full">
                         <svg
                           class="flex-shrink-0 size-3.5 mr-2"
                           xmlns="http://www.w3.org/2000/svg"
@@ -6925,7 +6925,7 @@ const ChatPlaceholder = () => {
                         >
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
-                        Completed
+                        Awaiting confirmation
                       </span>
                       ) : (
                     

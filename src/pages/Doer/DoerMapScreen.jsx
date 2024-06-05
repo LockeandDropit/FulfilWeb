@@ -729,7 +729,7 @@ updateJobListingViews(x)
 
   //chat channel navigation
   const navigateToChannel = (x) => {
-    navigate("/ChatEntry", { state: { selectedChannel: x.channelID } });
+    navigate("/DoerChatHolder", { state: { selectedChannel: x.channelID } });
     // console.log("mesage channel",x);
   };
 

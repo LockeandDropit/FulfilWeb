@@ -64,7 +64,10 @@ import UserProfileNeeder from "./pages/Needer/UserProfileNeeder";
 import Homepage from "./pages/Needer/HomePage/Homepage";
 import ChatWindow from "./pages/Doer/Messaging/ChatWindow";
 import DoerChatHolder from "./pages/Doer/Chat/DoerChatHolder";
-
+import OnboardingOne from "./pages/Register/Needer/OnboardingOne"
+import BusinessEmailRegister from "./pages/Register/Needer/BusinessEmailRegister";
+import AddBusinessProfileInfo from "./pages/Register/Needer/BusinessOnboarding/AddBusinessProfileInfo";
+import AddLogoAbout from "./pages/Register/Needer/BusinessOnboarding/AddLogoAbout";
 
 //Stream Chat
 import {
@@ -431,7 +434,24 @@ const router = createBrowserRouter([
     path: "/DoerChatHolder",
     element: <DoerChatHolder/>,
   },
+  {
+    path: "/OnboardingOne",
+    element: <OnboardingOne/>,
+  },
+  {
+    path: "/BusinessEmailRegister",
+    element: <BusinessEmailRegister/>,
+  },
+  {
+    path: "/AddBusinessProfileInfo",
+    element: <AddBusinessProfileInfo/>,
+  },
+  {
+    path: "/AddLogoAbout",
+    element: <AddLogoAbout/>,
+  },
 
+  
 
 ]);
 

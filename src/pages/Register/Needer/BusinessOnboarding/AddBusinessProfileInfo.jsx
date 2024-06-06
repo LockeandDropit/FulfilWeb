@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../../components/Header";
+import Header from "../../../Needer/Components/Header";
 
 import {
   Input,
@@ -29,7 +29,7 @@ import {
 } from "@chakra-ui/react";
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "../../../firebaseConfig";
+import { auth, db } from "../../../../firebaseConfig";
 import {
   doc,
   getDoc,
@@ -72,7 +72,7 @@ import {
   AlertDescription,
   CloseButton,
 } from "@chakra-ui/react";
-import LoggedOutHeader from "../../../components/Landing/LoggedOutHeader";
+import LoggedOutHeader from "../../../../components/Landing/LoggedOutHeader";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
@@ -80,7 +80,7 @@ import { geocodeByPlaceId } from "react-google-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 import { StreamChat } from "stream-chat";
 
-const AddProfileInfo = () => {
+const AddBusinessProfileInfo = () => {
   const [user, setUser] = useState(null);
   const [userID, setUserID] = useState(null);
   const [firstName, setFirstName] = useState(null);
@@ -91,6 +91,8 @@ const AddProfileInfo = () => {
   const [isEmployer, setIsEmployer] = useState(true);
   const [profilePicture, setProfilePicture] = useState(null)
   const [phoneNumber, setPhoneNumber] = useState(null)
+  const [companyName, setCompanyName] = useState(null)
+  const [website, setWebsite] = useState(null)
 
   const [hasRun, setHasRun] = useState(false);
   useEffect(() => {
@@ -162,9 +164,11 @@ const AddProfileInfo = () => {
 useEffect(() => {
     if (user) {
       setDoc(doc(db, "employers", user.uid), {
-        isBusiness: false,
+        isBusiness: true,
         firstName: firstName ? firstName : null,
         lastName: lastName ? lastName : null,
+        website: website,
+        companyName: companyName,
         city: city ? city : null,
         state: state ? state : null,
         test: test ? test : null,
@@ -204,7 +208,9 @@ useEffect(() => {
   const updateUserProfileFirestore = () => {
     //submit data
     setDoc(doc(db, "employers", user.uid), {
-      isBusiness: false,
+      isBusiness: true,
+      website: website ? website : null,
+      companyName: companyName ? companyName : null,
       firstName: firstName ? firstName : null,
       lastName: lastName ? lastName : null,
       city: city ? city : null,
@@ -228,7 +234,7 @@ useEffect(() => {
     
       //in use
       createChatSlotInDB()
-      handleSendEmail()
+      handleSendEmail() 
       .then(() => {
         //all good
 
@@ -239,7 +245,8 @@ useEffect(() => {
         console.log(error);
       });
 
-  navigate("/NeederMapScreen", { state: {firstVisit: true}});
+  // navigate("/Homepage", { state: {firstVisit: true}});
+  navigate("/AddLogoAbout");
   };
 
   const [dateJoined, setDateJoined] = useState(null);
@@ -255,7 +262,7 @@ useEffect(() => {
       lastName: lastName ? lastName : null,
       isNeeder: true,
       isDoer: false,
-      isBusiness: false,
+      isBusiness: true,
       email: user.email,
       dateJoined: dateJoined
     })
@@ -264,6 +271,10 @@ useEffect(() => {
   //phone regex credit https://ihateregex.io/expr/phone/
   const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
   const [phoneValidationMessage, setPhoneValidationMessage] = useState();
+
+  //credit Sagar V https://stackoverflow.com/questions/42618872/regex-for-website-or-url-validation
+  const websiteRegex = /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/
+  const [websiteValidationMessage, setWebsiteValidationMessage] = useState()
 
 
   // big ty man regex https://www.sitepoint.com/using-regular-expressions-to-check-string-length/
@@ -277,8 +288,9 @@ useEffect(() => {
     const stateValid = minLengthRegEx.test(state);
 
     const phoneNumberValid = phoneRegex.test(phoneNumber)
+    const websiteValid = websiteRegex.test(website)
 
-    if (!firstName || !lastName || !city || !state || privacyPolicy !== true || ageAgreement !== true || termsOfService !== true) {
+    if (!firstName || !lastName || !city || !state || !companyName || privacyPolicy !== true || ageAgreement !== true || termsOfService !== true ) {
      
       onOpenIncomplete()
     } else if (phoneNumber ? !phoneNumberValid : null){
@@ -288,7 +300,10 @@ useEffect(() => {
       );
       //set red letter warning on phone number 
       
-    } else {
+    } else if (website ? !websiteValid : null) {
+
+setWebsiteValidationMessage("Please enter a valid website")
+    } else{
       sendTylerEmail()
       updateUserProfileFirestore();
       //send tyler email
@@ -324,17 +339,17 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
 
 
     <form>
-      <div className="space-y-12">
+      <div className="">
        
 
         <div className=" border-gray-900/10 pb-0">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
+          <h2 className="text-base font-semibold leading-7 text-gray-900">Company Information</h2>
           <p className="mt-1 text-sm leading-6 text-gray-600"> We just need a few pieces of information to get started</p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="sm:col-span-3">
+          <div className="sm:col-span-5">
               <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-                First name
+               Company Name
               </label>
               <div className="mt-2">
                 <input
@@ -342,28 +357,29 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                   name="first-name"
                   id="first-name"
                   autoComplete="given-name"
-                  onChange={(e) => setFirstName(e.target.value)}
+                  onChange={(e) => setCompanyName(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
-
-            <div className="sm:col-span-3">
-              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">
-                Last name
+            <div className="sm:col-span-5">
+              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+               Company Website (optional)
               </label>
               <div className="mt-2">
                 <input
                   type="text"
-                  name="last-name"
-                  id="last-name"
-                  onChange={(e) => setLastName(e.target.value)}
-                  autoComplete="family-name"
+                  name="first-name"
+                  id="first-name"
+                  autoComplete="given-name"
+                  onChange={(e) => setWebsite(e.target.value)}
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                 />
+                 {websiteValidationMessage ? (<span class=" block text-sm text-red-500 ">
+                   Please enter a valid website
+                  </span>) : (null)}
               </div>
             </div>
-
             <div className="sm:col-span-4">
               <label  className="block text-sm font-medium leading-6 text-gray-900">
                 Phone Number (optional)
@@ -377,14 +393,12 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                 />
+                {phoneValidationMessage ? (<span class=" block text-sm text-red-500 ">
+                   Please enter a valid phone number
+                  </span>) : (null)}
               </div>
             </div>
             
-
-            
-
-            
-
             <div className="sm:col-span-2 sm:col-start-1">
               <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
                 City
@@ -416,7 +430,42 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                 />
               </div>
             </div>
+         <div className="sm:col-span-6">
+         <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
+          <p className="mt-1 text-sm leading-6 text-gray-600"> This information is so we can help you manage your account</p>
 
+         </div>
+            <div className="sm:col-span-3">
+              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+                First name
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="first-name"
+                  id="first-name"
+                  autoComplete="given-name"
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div className="sm:col-span-3">
+              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">
+                Last name
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="last-name"
+                  id="last-name"
+                  onChange={(e) => setLastName(e.target.value)}
+                  autoComplete="family-name"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
             
           </div>
         </div>
@@ -952,4 +1001,4 @@ You give your consent to receive any agreements, notifications, disclosures, and
   );
 };
 
-export default AddProfileInfo;
+export default AddBusinessProfileInfo;

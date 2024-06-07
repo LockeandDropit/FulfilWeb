@@ -244,6 +244,13 @@ const [employerLastName, setEmployerLastName] = useState(null)
   //credit https://stackoverflow.com/questions/11511154/regex-for-maximum-length-in-javascript
   const minLengthRegEx = /^.{1,}$/;
 
+
+  const isThisValid = () => {
+
+
+    console.log("what now", applicantDescription)
+  }
+
   const checkLength = () => {
     //check to see if everything is entered
     const descriptionValid = minLengthRegEx.test(description)
@@ -255,8 +262,9 @@ const [employerLastName, setEmployerLastName] = useState(null)
 
     //check for null values https://stackoverflow.com/questions/6003884/how-do-i-check-for-null-values-in-javascript user578895
 
-    if (!jobTitleValid || isOneTime === null ||  isFullTimePosition === null || !applicantDescription || !isSalaried ) {
-      console.log("1");
+    if (!jobTitleValid || isOneTime === null ||  isFullTimePosition === null || applicantDescription === null || isSalaried === null ) {
+      console.log("error here", jobTitleValid, isOneTime, isFullTimePosition, applicantDescription, isSalaried);
+      
       onOpenError()
       console.log("1");
     } else {
@@ -282,12 +290,13 @@ const [employerLastName, setEmployerLastName] = useState(null)
               console.log("5");
               onOpenError()
             } else {
+              checkAddress();
             }
           }
         }
       }
     }
-    checkAddress();
+    // checkAddress();
   };
 
   const checkAddress = () => {
@@ -954,7 +963,7 @@ isFullTimePosition : isFullTimePosition,
    onChange={(e) => lowerRateValidate(e.target.value)}
 
  />
- <p className="mt-2 text-sm font-medium mr-1 ml-1">/hour - $</p>
+ <p className="mt-2 text-sm font-medium mr-1 ml-1"> yearly - $</p>
  <input
    id="hs-pro-dactmt"
    type="text"
@@ -963,7 +972,7 @@ isFullTimePosition : isFullTimePosition,
                     onChange={(e) => upperRateValidate(e.target.value)}
 
  />
-   <p className="mt-2 ml-1 text-sm font-medium">total</p>
+   <p className="mt-2 ml-1 text-sm font-medium">yearly</p>
    </div>
 </div>) : (null)}
 

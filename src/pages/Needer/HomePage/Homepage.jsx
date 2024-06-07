@@ -353,13 +353,20 @@ const Homepage = () => {
                           </th>
                           <th scope="col" class="min-w-24">
                             <div class="hs-dropdown relative inline-flex w-full cursor-default">
-                              <button
+                            {currentUser ? (currentUser.isBusiness ? ( <button
                                 id="hs-pro-dutads"
                                 type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 cursor-default"
+                              >
+                                Views
+                              </button>) : ( <button
+                                id="hs-pro-dutads"
+                                type="button"
+                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 cursor-default"
                               >
                                 Hired
-                              </button>
+                              </button>)) : (null)}
+                             
                             </div>
                           </th>
 
@@ -431,11 +438,17 @@ const Homepage = () => {
                                 </div>
                               </div>
                             </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="text-sm text-gray-600 font-semibold">
+                         
+                            {currentUser ? (currentUser.isBusiness ? (<td class="size-px whitespace-nowrap px-4 py-1">
+                              <span class="text-sm text-gray-600 ">
+                              {job.totalViews ? (<p>{job.totalViews}</p>) : (<p>0</p>)}
+                              </span>
+                            </td>) : (<td class="size-px whitespace-nowrap px-4 py-1">
+                              <span class="text-sm text-gray-600 ">
                                 n/a
                               </span>
-                            </td>
+                            </td>)) : (null)}
+                            
                             <td class="size-px whitespace-nowrap px-4 py-1">
                               {job.totalApplicants ? (
                                 <span class="text-sm text-gray-600 ">
@@ -896,27 +909,51 @@ const Homepage = () => {
                               Nothing here
                             </p>
                             <p class="mb-5 text-sm text-gray-500 "></p>
-                            <a
-                          
-                              class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                              onClick={() => setShowAddJob(!showAddJob)}
-                            >
-                              <svg
-                                class="hidden sm:block flex-shrink-0 size-3"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
-                                />
-                              </svg>
-                              Create Job
-                            </a>
+                            {currentUser ? (currentUser.isBusiness ? ( <a
+                class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => setShowAddJobBusiness(!showAddJobBusiness)}
+              >
+                <svg
+                  class="hidden sm:block flex-shrink-0 size-3"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
+                  />
+                </svg>
+                Create Post
+              </a>) : ( <a
+                class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => setShowAddJob(!showAddJob)}
+              >
+                <svg
+                  class="hidden sm:block flex-shrink-0 size-3"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
+                  />
+                </svg>
+                Create Job
+              </a>)) : <div class="flex animate-pulse">
+  <div class="flex-shrink-0">
+    <span class="py-2 px-3 w-[120px] h-[40px] rounded-md items-cente block bg-gray-200  "></span>
+  </div>
+
+  
+</div>}
                           </div>
                         </div>
                          ) : null}
@@ -1557,27 +1594,51 @@ const Homepage = () => {
                               Nothing here
                             </p>
                             <p class="mb-5 text-sm text-gray-500 "></p>
-                            <a
-                          
-                              class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                              onClick={() => setShowAddJob(!showAddJob)}
-                            >
-                              <svg
-                                class="hidden sm:block flex-shrink-0 size-3"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                fill="currentColor"
-                                viewBox="0 0 16 16"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
-                                />
-                              </svg>
-                              Create Job
-                            </a>
+                            {currentUser ? (currentUser.isBusiness ? ( <a
+                class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => setShowAddJobBusiness(!showAddJobBusiness)}
+              >
+                <svg
+                  class="hidden sm:block flex-shrink-0 size-3"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
+                  />
+                </svg>
+                Create Post
+              </a>) : ( <a
+                class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => setShowAddJob(!showAddJob)}
+              >
+                <svg
+                  class="hidden sm:block flex-shrink-0 size-3"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
+                  />
+                </svg>
+                Create Job
+              </a>)) : <div class="flex animate-pulse">
+  <div class="flex-shrink-0">
+    <span class="py-2 px-3 w-[120px] h-[40px] rounded-md items-cente block bg-gray-200  "></span>
+  </div>
+
+  
+</div>}
                           </div>
                         </div>
                          ) : null}

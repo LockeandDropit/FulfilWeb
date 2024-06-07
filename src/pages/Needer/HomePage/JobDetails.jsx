@@ -31,6 +31,7 @@ import {
 } from "@chakra-ui/react";
 import ApplicantModal from "./ApplicantModal";
 import { useNavigate } from "react-router-dom";
+import {useUserStore} from "../Chat/lib/userStore"
 
 const JobDetails = () => {
   const { job } = useJobStore();
@@ -40,6 +41,8 @@ const JobDetails = () => {
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
   const [numberOfRatings, setNumberOfRatings] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const {currentUser} = useUserStore()
 
   const navigate = useNavigate()
 
@@ -194,7 +197,7 @@ const JobDetails = () => {
       {job ? (
         <main id="content" class="lg:ps-[260px] pt-[59px]">
           <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
-           
+           {currentUser ? (currentUser.isBusiness ? (null) : (null)) : (null)}
 
             <div class="py-2 sm:pb-0 sm:pt-5 space-y-5">
               <div class="grid sm:flex sm:justify-between sm:items-center gap-3 sm:gap-5">
@@ -242,7 +245,7 @@ const JobDetails = () => {
               </div>
 
               <div class="grid grid-cols-1 lg:grid-cols-6 gap-5">
-                <div class="lg:col-span-4 space-y-4">
+                <div class="lg:col-span-5 space-y-4">
                   <div class="flex flex-col bg-white border border-stone-200 overflow-hidden rounded-xl shadow-sm ">
                     <div class="py-3 px-5 flex justify-between items-center gap-x-5 border-b border-stone-200 ">
                       <h2 class="inline-block font-semibold text-stone-800  cursor-default ">
@@ -313,18 +316,54 @@ const JobDetails = () => {
                         Posted
                         </div> */}
                       </div>
+                     
                       </div>
-                      <div className="cursor-default ">
+                      {currentUser ? (currentUser.isBusiness ? (<div className="cursor-default ">
+                        <label
+                          for="hs-pro-epdsku"
+                          class="block mb-2 text-sm font-medium text-stone-800 "
+                        >
+                          Position Type
+                        </label>
+                        
+                        {job.isFullTimePosition ? (<p>Full-time</p>) : (<p>Part-time</p>)}
+                      </div>) : (null)) : (null)}
+
+                      {currentUser ? (currentUser.isBusiness ? (     <div className="cursor-default ">
                         <label
                           for="hs-pro-epdsku"
                           class="block mb-2 text-sm font-medium text-stone-800 "
                         >
                           Pay Type
                         </label>
+                        
+                        {job.isSalaried ? <p>Salary</p> : <p>Hourly</p>}
+                      </div>) : (     <div className="cursor-default ">
+                        <label
+                          for="hs-pro-epdsku"
+                          class="block mb-2 text-sm font-medium text-stone-800 "
+                        >
+                          Pay Type
+                        </label>
+                        
                         {job.isFlatRate ? <p>Flat Rate</p> : <p>Hourly</p>}
-                      </div>
-
-                      <div className="cursor-default ">
+                      </div>)) : (null)}
+                      
+                 
+                      {currentUser ? (currentUser.isBusiness ? (     <div className="cursor-default ">
+                        <label
+                          for="hs-pro-epdsku"
+                          class="block mb-2 text-sm font-medium text-stone-800 "
+                        >
+                          Pay Rate
+                        </label>
+                        {job.isSalaried ? ( <p>
+                            ${job.lowerRate}/year - ${job.upperRate}/year
+                          </p>) : ( <p>
+                            ${job.lowerRate}/hour - ${job.upperRate}/hour
+                          </p>)}
+                       
+                      </div>) : (     <div className="cursor-default ">
                         <label
                           for="hs-pro-epdsku"
                           class="block mb-2 text-sm font-medium text-stone-800 "
@@ -338,13 +377,30 @@ const JobDetails = () => {
                             ${job.lowerRate}/hour - ${job.upperRate}/hour
                           </p>
                         )}
-                      </div>
+                      </div>)) : (null)}
+                     
+
+
                       <div className="cursor-default ">
                         <label class="block mb-2 text-sm font-medium text-stone-800 ">
                           Description
                         </label>
                         {job.description}
                       </div>
+
+                      {currentUser ? (currentUser.isBusiness ? (<div className="cursor-default ">
+                        <label class="block mb-2 text-sm font-medium text-stone-800 ">
+                          Applicant Description
+                        </label>
+                        {job.applicantDescription}
+                      </div>) : (null)) : (null)}
+
+                      {currentUser ? (currentUser.isBusiness && job.benefitsDescription ? (<div className="cursor-default ">
+                        <label class="block mb-2 text-sm font-medium text-stone-800 ">
+                          Benefits Description
+                        </label>
+                        {job.benefitsDescription}
+                      </div>) : (null)) : (null)}
                     </div>
                   </div>
 
@@ -477,9 +533,321 @@ const JobDetails = () => {
               </div>
           
             </div> */}
+
+<div class="p-5 space-y-4 w-full flex flex-col bg-white border border-gray-200 shadow-sm rounded-xl ">
+            <nav
+              class="relative  flex space-x-1 after:absolute after:bottom-0 after:inset-x-0 after:border-b-2 after:border-gray-200 "
+              aria-label="Tabs"
+              role="tablist"
+            >
+              <button
+                type="button"
+                class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2  hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-sm rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none  active"
+                id="hs-pro-tabs-dut-item-all"
+                data-hs-tab="#hs-pro-tabs-dut-all"
+                aria-controls="hs-pro-tabs-dut-all"
+                role="tab"
+              >
+                Applicants
+              </button>
+             
+            </nav>
+
+           
+
+            <div>
+              <div
+                id="hs-pro-tabs-dut-all"
+                role="tabpanel"
+                aria-labelledby="hs-pro-tabs-dut-item-all"
+              >
+                <div class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                  <div class="min-w-full inline-block align-middle">
+                    <table class="min-w-full divide-y divide-gray-200 ">
+                      <thead>
+                        <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
+                          <th scope="col" class="px-3 py-2.5 text-start"></th>
+
+                          <th scope="col" class="min-w-[250px]">
+                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                              <button
+                                id="hs-pro-dutnms"
+                                type="button"
+                                class="px-4 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                              >
+                                Name
+                              </button>
+                            </div>
+                          </th>
+                          <th scope="col" class="min-w-12">
+                            <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                            <button
+                                id="hs-pro-dutads"
+                                type="button"
+                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 cursor-default"
+                              >
+                                Rating
+                              </button>
+                             
+                            </div>
+                          </th>
+
+                        
+
+                          <th scope="col" class="min-w-36">
+                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                              <button
+                                id="hs-pro-dutsgs"
+                                type="button"
+                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                              >
+                                Status
+                              </button>
+                            </div>
+                          </th>
+
+                          <th scope="col " class="min-w-36">
+                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                              <button
+                                id="hs-pro-dutems"
+                                type="button"
+                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100"
+                              >
+                                Date Applied
+                              </button>
+                            </div>
+                          </th>
+
+                          <th scope="col" class="min-w-36">
+                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                              <button
+                                id="hs-pro-dutphs"
+                                type="button"
+                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                              >
+                                Next Step
+                              </button>
+                            </div>
+                          </th>
+
+                          {/* <th scope="col"></th> */}
+                        </tr>
+                      </thead>
+
+                      {currentUser ? (currentUser.isBusiness ? (   applicant ? applicant.map((applicant) => (
+                        <tbody class="divide-y divide-gray-200 ">
+                          <tr class="divide-x divide-gray-200 ">
+                            <td class="size-px whitespace-nowrap px-3 py-4"></td>
+                            <td
+                              class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
+                              // onClick={() => handleStoreAndNavigatePosted(job)}
+                            >
+                              <div class="w-full flex items-center gap-x-3">
+                              {applicant.profilePictureResponse ? (
+                                  <img
+                                    class="flex-shrink-0 size-[38px] rounded-full"
+                                    src={applicant.profilePictureResponse}
+                                    alt="Image Description"
+                                  />
+                                ) : (
+                                  <svg
+                                    class="w-12 h-12 rounded-full object-cover text-gray-500"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 16 16"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <rect
+                                      x="0.62854"
+                                      y="0.359985"
+                                      width="15"
+                                      height="15"
+                                      rx="7.5"
+                                      fill="white"
+                                    ></rect>
+                                    <path
+                                      d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                                      fill="currentColor"
+                                    ></path>
+                                    <path
+                                      d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                                      fill="currentColor"
+                                    ></path>
+                                  </svg>
+                                )}
+                                <p  class="text-sm text-gray-800">{applicant.firstName} {applicant.lastName}</p>
+                              </div>
+                            </td>
+                         
+                            <p class="flex flex-col items-center mt-6 text-sm text-gray-500 ">
+                                    <div class=" text-center items-center gap-x-3 text-sm text-gray-800 cursor-default ">
+                                      {applicant.numberOfRatings ? (
+                                        <>
+                                        <Flex>
+                                          {maxRating.map((item, key) => {
+                                            return (
+                                              <Box
+                                                activeopacity={0.7}
+                                                key={item}
+                                                marginTop="1px"
+                                              >
+                                                <Image
+                                                  boxSize="16px"
+                                                  src={
+                                                    item <= applicant.rating
+                                                      ? star_filled
+                                                      : star_corner
+                                                  }
+                                                ></Image>
+                                              </Box>
+                                            );
+                                          })}
+                                         
+                                        </Flex>
+
+                                        <Text marginLeft="4px">
+                                            ({applicant.numberOfRatings}{" "}
+                                            reviews)
+                                          </Text>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="1.5"
+                                            stroke="currentColor"
+                                            class="flex-shrink-0 size-4 text-gray-600 "
+                                          >
+                                            <path
+                                              stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                                            />
+                                          </svg>
+                                          <Text>No reviews yet</Text>
+                                        </>
+                                      )}
+                                    </div>
+                                  </p>
+                            
+                      
+                            <td class="size-px whitespace-nowrap px-4 py-1">
+                              {applicant.channelId ? (  <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                                <svg
+                                  class="flex-shrink-0 size-3.5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Interviewing
+                              </span>) : (  <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                                <svg
+                                  class="flex-shrink-0 size-3.5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                              Applied
+                              </span>)}
+                            
+                            </td>
+                            <td class="size-px whitespace-nowrap px-4 py-1">
+                              <span class="text-sm text-gray-600 ">
+                                {job.datePosted}
+                              </span>
+                            </td>
+                            <td class="size-px py-2 px-3 space-x-2">
+                              <div className=" flex  w-full ">
+                              {
+                                applicant.channelId ? (
+                                  <>
+                                    {" "}
+                                    <button
+                                      type="button"
+                                      onClick={() => handleApplicantVisible()}
+                                      class="py-2 px-2  inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500  "
+                                    >
+                                      View profile
+                                    </button>
+                                    {applicant.hasUnreadMessage ? (
+                                          <button
+                                          class=" w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
+                                          onClick={() =>
+                                            navigateToChannel(
+                                              applicant
+                                            )
+                                          }
+                                        >
+                                          See Messages
+                                          <span class=" top-0 inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2  bg-red-500 text-white">
+                                            New
+                                          </span>
+                                        </button>
+                                    ) : (   <button
+                                        class="  w-auto py-2 px-2 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
+                                        onClick={() =>
+                                          navigateToChannel(
+                                            applicant
+                                          )
+                                        }
+                                      >
+                                        See Messages
+                                      
+                                      </button>)}
+                                  
+                                  </>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                  
+                                    handleApplicantVisible()
+                                    }
+                                    class="py-2 px-2  inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500  "
+                                  >
+                                    View profile
+                                  </button>
+                                )}
+                              </div>
+                              {applicantVisible ? <ApplicantModal props={applicant} /> : null}
+                            </td>
+                          </tr>
+                        </tbody>
+                      )): (null) ) : (null)) : (null)}
+                    </table>
+                   
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          
+          
                 </div>
 
-                <div class="lg:col-span-2">
+                
+                {currentUser ? (currentUser.isBusiness ? (null) : ( <div class="lg:col-span-2">
                   <div class="lg:sticky lg:top-5 space-y-4">
                     <div class="flex flex-col bg-white border border-stone-200 overflow-hidden rounded-xl shadow-sm ">
                       <div class="py-3 px-5  justify-between items-center gap-x-5 border-b border-stone-200 ">
@@ -710,7 +1078,8 @@ const JobDetails = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div>)) : (null)}
+               
               </div>
             </div>
           </div>

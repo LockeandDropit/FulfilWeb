@@ -1,8 +1,8 @@
 import { doc, getDoc } from "firebase/firestore";
 import { create } from "zustand";
 import { db } from "../../../../firebaseConfig";
-
-
+import { persist, createJSONStorage } from 'zustand/middleware'
+//add this later https://docs.pmnd.rs/zustand/integrations/persisting-store-data
 
 export const useJobStore = create((set) => ({
  job: null,

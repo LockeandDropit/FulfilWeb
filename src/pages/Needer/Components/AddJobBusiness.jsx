@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { StreamChat } from "stream-chat";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
@@ -25,6 +25,8 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Center,
+  Spinner
 } from "@chakra-ui/react";
 import {
   Drawer,
@@ -38,6 +40,13 @@ import {
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByPlaceId } from "react-google-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout,
+} from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const AddJobBusiness = () => {
   const navigate = useNavigate();
@@ -128,6 +137,7 @@ const AddJobBusiness = () => {
   const [employerProfilePicture, setEmployerProfilePicture] = useState(null)
 const [employerFirstName, setEmployerFirstName] = useState(null)
 const [employerLastName, setEmployerLastName] = useState(null)
+const [companyName, setCompanyName] = useState(null)
 
 
   useEffect(() => {
@@ -149,6 +159,7 @@ const [employerLastName, setEmployerLastName] = useState(null)
 
       getDoc(docRef).then((snapshot) => {
         console.log(snapshot.data());
+        setCompanyName(snapshot.data().companyName)
         setEmployerFirstName(snapshot.data().firstName)
         setEmployerLastName(snapshot.data().lastName)
         setEmployerProfilePicture(snapshot.data().profilePictureResponse)
@@ -305,7 +316,10 @@ const [employerLastName, setEmployerLastName] = useState(null)
       onOpenError()
       console.log("6");
     } else {
-      submitJob();
+      // submitJob();
+      onOpenStripe();
+      setStripeOpen(true);
+      console.log("setting stripe open")
     }
   };
 
@@ -389,6 +403,7 @@ const [employerLastName, setEmployerLastName] = useState(null)
 
     //submit data
     setDoc(doc(db, "employers", user.uid, "Posted Jobs", jobTitle), {
+      companyName: companyName,
       isSalaried :  isSalaried,
 applicantDescription: applicantDescription,
 benefitsDescription : benefitsDescription ? benefitsDescription : null,
@@ -436,6 +451,8 @@ isFullTimePosition : isFullTimePosition,
   const addJobMap = () => {
     //submit data
     setDoc(doc(db, "Map Jobs", jobID), {
+      companyName: companyName,
+      isPostedByBusiness: true,
       isSalaried :  isSalaried,
       applicantDescription: applicantDescription,
       benefitsDescription : benefitsDescription ? benefitsDescription : null,
@@ -483,6 +500,8 @@ isFullTimePosition : isFullTimePosition,
     if (isVolunteer == true) {
       //adds to volunteer only db for map
       setDoc(doc(db, "Map Jobs Volunteer", jobID), {
+        companyName: companyName,
+        isPostedByBusiness: true,
         employerID: employerID,
         employerEmail: user.email,
         jobTitle: jobTitle,
@@ -520,6 +539,8 @@ isFullTimePosition : isFullTimePosition,
         });
     } else {
       setDoc(doc(db, "Map Jobs Paid", jobID), {
+        companyName: companyName,
+        isPostedByBusiness: true,
         isSalaried :  isSalaried,
         applicantDescription: applicantDescription,
         benefitsDescription : benefitsDescription ? benefitsDescription : null,
@@ -567,6 +588,8 @@ isFullTimePosition : isFullTimePosition,
   const addJobGlobal = () => {
     //submit data
     setDoc(doc(db, "Jobs", user.uid, "Posted Jobs", jobTitle), {
+      companyName: companyName,
+      isPostedByBusiness: true,
       isSalaried :  isSalaried,
       applicantDescription: applicantDescription,
       benefitsDescription : benefitsDescription ? benefitsDescription : null,
@@ -612,6 +635,8 @@ isFullTimePosition : isFullTimePosition,
 
     //submit data
     setDoc(doc(db, "All Jobs", jobID), {
+      companyName: companyName,
+      isPostedByBusiness: true,
       isSalaried :  isSalaried,
       applicantDescription: applicantDescription,
       benefitsDescription : benefitsDescription ? benefitsDescription : null,
@@ -810,6 +835,96 @@ isFullTimePosition : isFullTimePosition,
     onCloseModal()
   }
 
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [stripeOpen, setStripeOpen] = useState(false);
+
+  const {
+    isOpen: isOpenStripe,
+    onOpen: onOpenStripe,
+    onClose: onCloseStripe,
+  } = useDisclosure();
+
+
+
+  const fetchClientSecret = useCallback(() => {
+    // Create a Checkout Session
+
+    return (
+      fetch(
+        "https://fulfil-api.onrender.com/create-checkout-single-post",
+
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        
+        }
+      )
+        .then((res) => res.json())
+        //   .then((data) => console.log(data))
+        .then((data) => data.clientSecret)
+    );
+
+    //pass data or data.clientSecret?
+    // const { client_secret } = await response.json()
+    // setClientSecret(data.clientSecret)
+    // console.log("session", client_secret);
+    // onOpenStripe()
+  }, []);
+
+  const options = { fetchClientSecret };
+
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const sessionId = urlParams.get("session_id");
+
+    if (sessionId) {
+      setHasRun(false);
+      fetch(
+        `https://fulfil-api.onrender.com/single-postsession-status?session_id=${sessionId}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "complete") {
+            setIsLoading(true);
+            // getJobDataAgain(data);
+            // submitJob() goes here
+            setTimeout(() => {
+      console.log("we got your payment", companyName, lowerRate)
+            }, 2000);
+          } else {
+            alert(
+              "There was an error processing your payment. Please try again later."
+            );
+          }
+        });
+    } else {
+
+    }
+  }, []);
+
+  
+  if (isLoading === true) {
+    return (
+      <>
+        <Center>
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        </Center>
+      </>
+    );
+  }
+
   return (
     <div>
      
@@ -819,10 +934,7 @@ isFullTimePosition : isFullTimePosition,
           <DrawerCloseButton />
           <DrawerHeader>Create Post</DrawerHeader>
           <DrawerBody>
-    <div
-          class=" "
-         
-        >
+    <div class=" ">
           <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
             {/* <div class="py-3 px-4 flex justify-between items-center border-b ">
               <h3 class="font-semibold text-gray-800">Create A Job</h3>
@@ -1155,6 +1267,26 @@ isFullTimePosition : isFullTimePosition,
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      {stripeOpen && (
+            <Modal
+              isOpen={isOpenStripe}
+              onClose={() => setStripeOpen(false)}
+              size="xl"
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalCloseButton />
+
+                <EmbeddedCheckoutProvider
+                  stripe={stripePromise}
+                  options={options}
+                >
+                  <EmbeddedCheckout />
+                </EmbeddedCheckoutProvider>
+              </ModalContent>
+            </Modal>
+          )}
     </div>
 
     

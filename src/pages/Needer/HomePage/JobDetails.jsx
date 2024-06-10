@@ -18,6 +18,7 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
+import EditSelectedBusinessJob from "../Components/EditSelectedBusinessJob";
 import EditSelectedJob from "../Components/EditSelectedJob";
 import { useLocation } from "react-router-dom";
 import {
@@ -162,6 +163,7 @@ const JobDetails = () => {
   const location = useLocation();
 
   const [editVisible, setEditVisible] = useState(false);
+  const [editBusinessVisible, setEditBusinessVisible] = useState(false);
 
   useEffect(() => {
     console.log("location", location.state)
@@ -219,7 +221,27 @@ const JobDetails = () => {
 
                 <div class="inline-flex sm:justify-end items-center gap-x-3">
                   <div class="flex justify-end items-center gap-x-2">
-                    <button
+                  {currentUser ? (currentUser.isBusiness ? ( <button
+                      type="button"
+                      onClick={() => setEditBusinessVisible(!editBusinessVisible)}
+                      class="py-2 px-2.5 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border border-stone-200 bg-white text-stone-800 shadow-sm hover:bg-stone-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-stone-50 "
+                    >
+                      Edit
+                      <svg
+                        class="flex-shrink-0 size-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="m9 18 6-6-6-6" />
+                      </svg>
+                    </button>) : ( <button
                       type="button"
                       onClick={() => setEditVisible(true)}
                       class="py-2 px-2.5 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border border-stone-200 bg-white text-stone-800 shadow-sm hover:bg-stone-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-stone-50 "
@@ -239,7 +261,8 @@ const JobDetails = () => {
                       >
                         <path d="m9 18 6-6-6-6" />
                       </svg>
-                    </button>
+                    </button>)) : (null)}
+                   
                   </div>
                 </div>
               </div>
@@ -405,6 +428,11 @@ const JobDetails = () => {
                   </div>
 
                   {editVisible ? <EditSelectedJob props={job} /> : null}
+                  {editBusinessVisible ? <EditSelectedBusinessJob props={job} /> : null}
+                  
+                  
+
+
 
                   {/* 
             

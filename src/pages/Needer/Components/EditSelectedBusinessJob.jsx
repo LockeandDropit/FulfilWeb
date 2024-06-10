@@ -25,7 +25,6 @@ import {
   CardFooter,
   Divider,
   Stack,
-  
 } from "@chakra-ui/react";
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -67,6 +66,15 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+} from "@chakra-ui/react";
+import {
   Alert,
   AlertIcon,
   AlertTitle,
@@ -80,10 +88,18 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByPlaceId } from "react-google-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 import { useLocation } from "react-router-dom";
-const EditSelectedJob = (props) => {
+import {useJobStore} from "../HomePage/lib/jobsStoreDashboard"
+const EditSelectedBusinessJob = (props) => {
   console.log("edit selected job", props);
 
-  const [isFlatRate, setIsFlatRate] = useState();
+  const { job } = useJobStore()
+
+
+  const [isSalaried, setIsSalaried] = useState(null);
+  const [applicantDescription, setApplicantDescription] = useState(null)
+  const [benefitsDescription, setBenefitsDescription] = useState(null)
+  const [isFullTimePosition, setIsFullTimePosition] = useState(null)
+  const [isFlatRate, setIsFlatRate] = useState(false);
   const [flatRate, setFlatRate] = useState(0);
   const [isHourly, setIsHourly] = useState();
   const [lowerRate, setLowerRate] = useState(0);
@@ -110,6 +126,8 @@ const EditSelectedJob = (props) => {
     onClose: onCloseSuccess,
   } = useDisclosure();
 
+  const {isOpen : isOpen, onOpen: onOpen, onClose: onClose} = useDisclosure()
+
   const [hasRun, setHasRun] = useState(false);
 
   useEffect(() => {
@@ -123,6 +141,11 @@ const EditSelectedJob = (props) => {
     } else {
     }
   }, [hasRun]);
+
+
+  useEffect(() => {
+onOpen()
+  }, [props])
 
   const location = useLocation();
 
@@ -153,7 +176,7 @@ const EditSelectedJob = (props) => {
         setUpperRate(snapshot.data().upperRate);
         setIsHourly(snapshot.data().isHourly);
         setPayType(snapshot.data().isHourly);
-        setIsFlatRate(snapshot.data().isFlatRate);
+
         setIsOneTime(snapshot.data().isOneTime);
         setFlatRate(snapshot.data().flatRate);
         setBusinessName(snapshot.data().businessName);
@@ -306,27 +329,27 @@ const EditSelectedJob = (props) => {
   const [payType, setPayType] = useState(null);
 
   // credit help Michael with setting state from select component https://stackoverflow.com/questions/70353397/how-to-update-the-state-if-dropdown-has-selected-value-with-hooks-and-usestate
-  const handleIsHourly = () => {
-    setIsHourly(true);
-    setIsFlatRate(false);
-    setFlatRate(0);
-  };
+  // const handleIsHourly = () => {
+  //   setIsHourly(true);
+  //   setIsFlatRate(false);
+  //   setFlatRate(0);
+  // };
 
-  const handleIsFixed = () => {
-    setIsFlatRate(true);
-    setIsHourly(false);
-    setUpperRate(0);
-    setLowerRate(0);
-  };
+  // const handleIsFixed = () => {
+  //   setIsFlatRate(true);
+  //   setIsHourly(false);
+  //   setUpperRate(0);
+  //   setLowerRate(0);
+  // };
 
-  useEffect(() => {
-    if (payType === "Hourly") {
-      handleIsHourly();
-    } else if (payType === "Fixed") {
-      handleIsFixed();
-    } else {
-    }
-  }, [payType]);
+  // useEffect(() => {
+  //   if (payType === "Hourly") {
+  //     handleIsHourly();
+  //   } else if (payType === "Fixed") {
+  //     handleIsFixed();
+  //   } else {
+  //   }
+  // }, [payType]);
 
   const [jobFrequency, setJobFrequency] = useState(null);
 
@@ -334,14 +357,14 @@ const EditSelectedJob = (props) => {
   const [locationLat, setLocationLat] = useState(null);
   const [locationLng, setLocationLng] = useState(null);
 
-  useEffect(() => {
-    if (jobFrequency === "One Time") {
-      setIsOneTime(true);
-    } else if (jobFrequency === "Regular Need") {
-      setIsOneTime(false);
-    } else {
-    }
-  }, [jobFrequency]);
+  // useEffect(() => {
+  //   if (jobFrequency === "One Time") {
+  //     setIsOneTime(true);
+  //   } else if (jobFrequency === "Regular Need") {
+  //     setIsOneTime(false);
+  //   } else {
+  //   }
+  // }, [jobFrequency]);
 
   console.log(
     "Info",
@@ -497,12 +520,15 @@ const EditSelectedJob = (props) => {
         console.log(error);
       });
 
-
- onOpenSuccess()
- navigate("/JobDetails", {state: {editReset: true}})
- setIsVisible(false)
-    
+    onOpenSuccess();
+   
   };
+
+  const handleCloseSuccessModal = () => {
+    onCloseSuccess()
+ navigate("/JobDetails", { state: { editReset: true } });
+    setIsVisible(false);
+  }
 
   const testButtonNavigate = () => {
     navigate("/AddJobInfo", {
@@ -556,7 +582,7 @@ const EditSelectedJob = (props) => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log("is hourly",props.props.isHourly)
+  console.log("is hourly", props.props.isHourly);
   setTimeout(() => {
     setIsLoading(false);
   }, 500);
@@ -594,315 +620,365 @@ const EditSelectedJob = (props) => {
       });
   };
 
-const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(true);
 
-const handleCloseButton = () => {
-    setIsVisible(false)
-    navigate("/JobDetails", {state: {editReset: true}})
-  
-}
+  const handleCloseButton = () => {
+    setIsVisible(false);
+    navigate("/JobDetails", { state: { editReset: true } });
+  };
 
   return (
-
     <>
-    {isVisible ? (
+      {isVisible ? (
         <>
-       
-    <div
-      class=" bg-blend-overlay fixed top-12 end-0 transition-all duration-300 transform h-full max-w-lg w-full z-[80] bg-white border-s "
-      tabindex="-1"
-    >
+          <Drawer
+          size={'xl'}
+        isOpen={isOpen}
+        placement='right'
+        onClose={onClose}
       
-      <div class="bg-blend-overlay w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
-        <div class="py-3 px-4 flex justify-between items-center  ">
-          <h3 class="mt-4 font-semibold text-gray-800">Edit This Job</h3>
-
-          
-          <button
-            type="button"
-            class="size-8 mt-3 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
-            data-hs-overlay="#hs-pro-datm"
-              onClick={() => handleCloseButton()}
-          >
-            <span class="sr-only">Close</span>
-            <svg
-              class="flex-shrink-0 size-4"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-          </button>
-        </div>
-        {isLoading ? (<div class="flex animate-pulse">
-
-
-  <div class="ms-4 mt-2 w-full">
-  <ul class="mt-5 space-y-3">
-      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
-      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
-    
-    </ul>
-
-    <ul class="mt-5 space-y-3">
-      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
-      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
-    
-    </ul>
-    <ul class="mt-5 space-y-3">
-      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
-      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
-      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
-      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
-      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
-      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
-      <li class="w-full h-4 bg-gray-300 rounded-full"></li>
-    </ul>
-    <ul class="mt-5 space-y-3">
-      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
-      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
-      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
-      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
-      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
-      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
-      <li class="w-full h-4 bg-gray-300 rounded-full"></li>
-    </ul>
-  </div>
-</div>) : (
-
-        <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-          <div class="p-4 space-y-5">
-            <div class="space-y-2">
-              <label
-                for="hs-pro-dactmt"
-                class="block mb-2 text-sm font-medium text-gray-800 "
-              >
-                Title (can not be edited)
-              </label>
-
-              {/* <input
-              id="hs-pro-dactmt"
-              type="text"
-              class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-              placeholder="Title goes here"
-          // width="560px"
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+        <DrawerCloseButton />
+          <DrawerHeader>Edit Post</DrawerHeader>
+          <DrawerBody>
          
-           
-            /> */}
-              <p>{props.props.jobTitle}</p>
-            </div>
+            <div class="bg-blend-overlay w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+              
+              {isLoading ? (
+                <div class="flex animate-pulse">
+                  <div class="ms-4 mt-2 w-full">
+                    <ul class="mt-5 space-y-3">
+                      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
+                      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
+                    </ul>
 
-            <div class="space-y-2">
-              <label
-                for="dactmd"
-                class="block mb-2 text-sm font-medium text-gray-800 "
+                    <ul class="mt-5 space-y-3">
+                      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
+                      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
+                    </ul>
+                    <ul class="mt-5 space-y-3">
+                      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
+                      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
+                      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
+                      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
+                      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
+                      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
+                      <li class="w-full h-4 bg-gray-300 rounded-full"></li>
+                    </ul>
+                    <ul class="mt-5 space-y-3">
+                      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
+                      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
+                      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
+                      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
+                      <li class="w-full h-4 bg-gray-300 rounded-full "></li>
+                      <li class="w-1/4 h-4 bg-gray-300 rounded-full mt-10"></li>
+                      <li class="w-full h-4 bg-gray-300 rounded-full"></li>
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                <div class="p-4 space-y-5">
+                  <div class="space-y-2">
+                    <label
+                      for="hs-pro-dactmt"
+                      class="block mb-2 text-sm font-medium text-gray-800 "
+                    >
+                      Post Title (can not be edited)
+                    </label>
+  
+                    <p>{props.props.jobTitle}</p>
+                  </div>
+                  <div class="space-y-2">
+                    <label
+                      for="dactmi"                 
+                      class="block mb-2 text-sm font-medium text-gray-800 "
+                    >
+                      Is this a full-time or part-time position?
+                    </label>
+  
+                    <label  for="dactmi"                   
+                     class="block mb-2 text-sm font-medium text-gray-800 ">
+                    </label>
+  {job.isFullTimePosition ? ( <select
+                placeholder="Select option"
+                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                defaultValue="true"
+                
+                onChange={(e) => setIsFullTimePosition(e.target.value)}
               >
-                Location (can not be edited)
-              </label>
+                <option>Select option</option>
+                <option value="true">Full-time</option>
+                <option value="false">Part-time</option>
+              </select>) : ( <select
+                placeholder="Select option"
+                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                defaultValue="false"
+                
+                onChange={(e) => setIsFullTimePosition(e.target.value)}
+              >
+                <option>Select option</option>
+                <option value="true">Full-time</option>
+                <option value="false">Part-time</option>
+              </select>)}
+                   
+                  </div>
+                  <div class="space-y-2">
+                    <label
+                      for="dactmi"
+                     
+                      class="block mb-2 text-sm font-medium text-gray-800 "
+                     
+                    >
+                      Is this an hourly or salaried position?
+                    </label>
+  
+                    <label  for="dactmi"
+                     
+                     class="block mb-2 text-sm font-medium text-gray-800 ">
+                    
+                    </label>
 
-              <p>
+                    {job.isHourly ? ( <select
+                placeholder="Select option"
+                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                defaultValue="Hourly"
+                onChange={(e) => setPayType(e.target.value)}
+              >
+                <option>Select option</option>
+                <option value="Hourly">Hourly</option>
+                <option value="Salaried">Salaried</option>
+              </select>) : (null)}
+
+              
+              {job.isSalaried ? ( <select
+                placeholder="Select option"
+                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                defaultValue="Salaried"
+                onChange={(e) => setPayType(e.target.value)}
+              >
+                <option>Select option</option>
+                <option value="Hourly">Hourly</option>
+                <option value="Salaried">Salaried</option>
+              </select>) : (null)}
+  
+                   
+                  </div>
+  
+  {isHourly ? (
+   <div class="space-y-2 ">
+   <label
+     for="hs-pro-dactmt"
+     class="block mb-2 text-sm font-medium text-gray-800">
+      Enter the hourly pay range
+   </label>
+  
+  <div class="flex align-items-center">
+    <p className="mt-2 mr-1 text-sm font-medium">$</p>
+   <input
+     id="hs-pro-dactmt"
+     type="text"
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     defaultValue={lowerRate}
+   
+     onChange={(e) => lowerRateValidate(e.target.value)}
+  
+   />
+   <p className="mt-2 text-sm font-medium mr-1 ml-1">/hour - $</p>
+   <input
+     id="hs-pro-dactmt"
+     type="text"
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     defaultValue={upperRate}
+                      onChange={(e) => upperRateValidate(e.target.value)}
+  
+   />
+   <p className="mt-2 text-sm font-medium">/hour</p>
+     {lowerRateValidationBegun === true ? (
+      <p color="red">{lowerRateValidationMessage}</p>
+    ) : null}
+    {upperRateValidationBegun === true ? (
+      <p color="red">{upperRateValidationMessage}</p>
+    ) : null}
+    </div>
+  </div>
+  
+  ) : (
+    null
+  )}
+  
+  {isSalaried ? (<div class="space-y-2">
+    <label
+      for="hs-pro-dactmt"
+      class="block mb-2 text-sm font-medium text-gray-800 "
+    >
+      Enter the salary range (yearly)
+    </label>
+    <div className="flex">
+    <p className="mt-2 mr-1 text-sm font-medium">$</p>
+    <input
+     id="hs-pro-dactmt"
+     type="text"
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     defaultValue={lowerRate}
+   
+     onChange={(e) => lowerRateValidate(e.target.value)}
+  
+   />
+   <p className="mt-2 text-sm font-medium mr-1 ml-1"> yearly - $</p>
+   <input
+     id="hs-pro-dactmt"
+     type="text"
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     defaultValue={upperRate}
+     onChange={(e) => upperRateValidate(e.target.value)}
+  
+   />
+     <p className="mt-2 ml-1 text-sm font-medium">yearly</p>
+     </div>
+  </div>) : (null)}
+  
+  <div class="space-y-2">
+                    <label
+                      for="dactmd"
+                      class="block mb-2 text-sm font-medium text-gray-800 "
+                    >
+                       What is the address? (can not be edited)
+                    </label>
+  
+                    <p>
                 {" "}
                 {streetAddress}, {city}, {state}
               </p>
-            </div>
-            <div class="space-y-2">
-              <label
-                for="dactmi"
-                class="block mb-2 text-sm font-medium text-gray-800 "
-                placeholder="ex: I have a downed tree in my yard and would like someone to remove it."
-              >
-                Description
-              </label>
-
-              <div class="">
-                <textarea
-                  onChange={(e) => setDescription(e.target.value)}
-                  class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                  rows="3"
-                  defaultValue={description}
-                ></textarea>
-              </div>
-            </div>
-            <div class="space-y-2">
-              <label
-                for="dactmi"
-                class="block mb-2 text-sm font-medium text-gray-800 "
-                placeholder="ex: I have a downed tree in my yard and would like someone to remove it."
-              >
-                What category of work is this? (optional)
-              </label>
-
-              <select
-                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                defaultValue={jobCategory ? jobCategory : "null"}
-                onChange={(e) => setJobCategory(e.target.value)}
-              >
-                <option value="null">Choose a category</option>
-                <option value="asphalt">Asphalt</option>
-                <option value="carpentry">Carpentry</option>
-                <option value="concrete">Concrete</option>
-                <option value="drywall">Drywall</option>
-                <option value="electrical work">Electrical Work</option>
-                <option value="general handyman">General Handyman</option>
-                <option value="gutter cleaning">Gutter Cleaning</option>
-                <option value="hvac">HVAC</option>
-                <option value="landscaping">Landscaping</option>
-                <option value="painting">Painting</option>
-                <option value="plumbing">Plumbing</option>
-                <option value="pressure washing">Pressure Washing</option>
-                <option value="roofing">Roofing</option>
-                <option value="siding">Siding</option>
-                <option value="snow removal">Snow Removal</option>
-                <option value="window installation">Window Installation</option>
-                <option value="window washing">Window Washing</option>
-                <option value="yard work">Yard Work</option>
-                <option value={false}>Clear Selection</option>
-              </select>
-            </div>
-            <div class="space-y-2">
-              <label
-                for="dactmi"
-                class="block mb-2 text-sm font-medium text-gray-800 "
-              >
-                Are you offering an hourly rate or a fixed amount?
-              </label>
-
-              <label
-                for="dactmi"
-                class="block mb-2 text-sm font-medium text-gray-600 "
-              >
-                ex: $50 to mow my lawn
-              </label>
-
-              {isHourly ? (
-                <select
-                defaultValue="Hourly"
-                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                onChange={(e) => setPayType(e.target.value)}
-              >
-                <option value="Hourly">Hourly</option>
-                <option value="Fixed">Fixed Amount</option>
-              </select>
-              ) : (
-<select
-                defaultValue="Fixed"
-                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                onChange={(e) => setPayType(e.target.value)}
-              >
-                <option value="Hourly">Hourly</option>
-                <option value="Fixed">Fixed Amount</option>
-              </select>
-              )}
-
-              
-            </div>
-
-            {isHourly ? (
-              <div class="space-y-2 ">
-                <label
-                  for="hs-pro-dactmt"
-                  class="block mb-2 text-sm font-medium text-gray-800 "
+                    <div class="space-y-2">
+                    <label
+                      for="dactmi"
+                      onChange={(e) => setDescription(e.target.value)}
+                      class="block mb-2 mt-4 text-sm font-medium text-gray-800 "
+                      placeholder="ex: I have a downed tree in my yard and would like someone to remove it."
+                    >
+                      What category of work is this? (optional)
+                    </label>
+  
+                    <select
+                    class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                    defaultValue={jobCategory ? jobCategory : false}
+                
+                  onChange={(e) => setJobCategory(e.target.value)}
                 >
-                  Enter your desired pay range
-                </label>
-
-                <div class="flex align-items-center">
-                  <p className="mt-2 mr-1 text-sm font-medium">$</p>
-                  <input
-                    id="hs-pro-dactmt"
-                    type="text"
-                    class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                    defaultValue={lowerRate}
-                    onChange={(e) => lowerRateValidate(e.target.value)}
-                  />
-                  <p className="mt-2 text-sm font-medium mr-1 ml-1">
-                    /hour - $
-                  </p>
-                  <input
-                    id="hs-pro-dactmt"
-                    type="text"
-                    class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                    defaultValue={upperRate}
-                    onChange={(e) => upperRateValidate(e.target.value)}
-                  />
-                  <p className="mt-2 text-sm font-medium">/hour</p>
-                  {lowerRateValidationBegun === true ? (
-                    <p color="red">{lowerRateValidationMessage}</p>
-                  ) : null}
-                  {upperRateValidationBegun === true ? (
-                    <p color="red">{upperRateValidationMessage}</p>
-                  ) : null}
+                  <option value={false}>Select category</option>
+                  <option value="asphalt">Asphalt</option>
+                  <option value="carpentry">Carpentry</option>
+                  <option value="concrete">Concrete</option>
+                  <option value="drywall">Drywall</option>
+                  <option value="electrical work">Electrical Work</option>
+                  <option value="general handyman">General Handyman</option>
+                  <option value="gutter cleaning">Gutter Cleaning</option>
+                  <option value="hvac">HVAC</option>
+                  <option value="landscaping">Landscaping</option>
+                  <option value="painting">Painting</option>
+                  <option value="plumbing">Plumbing</option>
+                  <option value="pressure washing">Pressure Washing</option>
+                  <option value="roofing">Roofing</option>
+                  <option value="siding">Siding</option>
+                  <option value="snow removal">Snow Removal</option>
+                  <option value="window installation">Window Installation</option>
+                  <option value="window washing">Window Washing</option>
+                  <option value="yard work">Yard Work</option>
+                  <option value={false}>Clear Selection</option>
+                </select>
+                  </div>
+                  </div>
+                  <div class="space-y-2">
+                    <label
+                      for="dactmi"
+                      class="block mb-2 text-sm font-medium text-gray-800 "
+                    >
+                     Job Description 
+                    </label>
+  
+                    <div class="">
+    <textarea onChange={(e) => setDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" defaultValue={job.description}></textarea>
+  </div>
+                  </div>
+  
+                  <div class="space-y-2">
+                    <label
+                      for="dactmi"
+                      class="block mb-2 text-sm font-medium text-gray-800 "
+                    >
+                    Tell applicants what you're looking for
+                    </label>
+  
+                    <div class="">
+    <textarea onChange={(e) => setApplicantDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" defaultValue={job.applicantDescription}></textarea>
+  </div>
+                  </div>
+                  <div class="space-y-2">
+                    <label
+                      for="dactmi"
+                      class="block mb-2 text-sm font-medium text-gray-800 "
+                    >
+                    List employment benefits here (optional)
+                    </label>
+  
+                    <div class="">
+    <textarea onChange={(e) => setBenefitsDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" defaultValue={job.benefitsDescription ? job.benefitsDescription : null}></textarea>
+  </div>
+                  </div>
+               
+              
+                
+                  
+                </div>
+  
+                <div class="p-4 flex justify-between gap-x-2">
+                  <div class="w-full flex justify-end items-center gap-x-2">
+                    
+  
+                    <button
+                      type="button"
+                      class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                      data-hs-overlay="#hs-pro-datm"
+                      onClick={() => checkLength()}
+                    >
+                      Update Post
+                    </button>
+                  </div>
                 </div>
               </div>
-            ) : null}
-
-            {isFlatRate ? (
-              <div class="space-y-2">
-                <label
-                  for="hs-pro-dactmt"
-                  class="block mb-2 text-sm font-medium text-gray-800">
-                  Enter your desired budget
-                </label>
-                <div className="flex">
-                  <p className="mt-2 mr-1 text-sm font-medium">$</p>
-                  <input
-                    id="hs-pro-dactmt"
-                    type="text"
-                    class="py-2 px-3 block w-2/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                    defaultValue={flatRate}
-                    onChange={(e) => flatRateValidate(e.target.value)}
-                  />
-                  <p className="mt-2 ml-1 text-sm font-medium">total</p>
-                </div>
-              </div>
-            ) : null}
-          </div>
-
-          <div class="p-4 flex justify-between gap-x-2">
-            <div class="w-full flex justify-end items-center gap-x-2">
-              <button
-                type="button"
-                class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                data-hs-overlay="#hs-pro-datm"
-                onClick={() => checkLength()}
-              >
-                Update Post
-              </button>
+            
+              )}
             </div>
-          </div>
-        
-        </div>
-        )}
-      </div>
-    </div>
-    <Modal isOpen={isOpenSuccess} onClose={onCloseSuccess}>
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Success!</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                      <Text>This post has been updated.</Text>
-                    </ModalBody>
+       
 
-                    <ModalFooter>
-                      <Button colorScheme="blue" mr={3} onClick={onCloseSuccess}>
-                        Continue
-                      </Button>
-                    </ModalFooter>
-                  </ModalContent>
-                </Modal>
-                </>
-                ) : (null)}
-                </>
+          <Modal isOpen={isOpenSuccess} onClose={() => handleCloseSuccessModal()}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Success!</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Text>This post has been updated.</Text>
+                <Text>The changes may take a few minutes to update.</Text>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3} onClick={() => handleCloseSuccessModal()}>
+                  Continue
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+          </DrawerBody>
+          </DrawerContent>
+      </Drawer>
+        </>
+        
+      ) : null}
+    </>
   );
 };
 
-export default EditSelectedJob;
+export default EditSelectedBusinessJob;

@@ -896,6 +896,8 @@ isFullTimePosition : isFullTimePosition,
             // submitJob() goes here
             setTimeout(() => {
       console.log("we got your payment", companyName, lowerRate)
+      submitJob()
+      setLoading(false)
             }, 2000);
           } else {
             alert(

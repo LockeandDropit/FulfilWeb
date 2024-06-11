@@ -482,7 +482,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
     const urlParams = new URLSearchParams(queryString);
     const sessionId = urlParams.get("session_id");
 
-    if (sessionId) {
+    if (sessionId && user !== null) {
       setHasRun(false);
       fetch(
         `https://fulfil-api.onrender.com/single-post-session-status?session_id=${sessionId}`
@@ -491,7 +491,8 @@ isFullTimePosition : jobHeld.isFullTimePosition,
         .then((res) => res.json())
         .then((data) => {
           if (data.status === "complete") {
-         
+         console.log(data)
+         console.log(data.status)
             submitJob()
             onOpen()
             setTimeout(() => {
@@ -508,7 +509,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
     } else {
 
     }
-  }, []);
+  }, [user]);
 
 
   //business logic

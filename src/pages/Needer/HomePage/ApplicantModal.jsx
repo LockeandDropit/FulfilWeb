@@ -255,12 +255,12 @@ const ApplicantModal = (props) => {
       ).then(() => {
         setTimeout(() => {
           setIsLoading(false)
-          navigate("/NeederChatEntry", {
+          navigate("/ChatHolder", {
             state: {
               selectedChannel: newChatRef.id,
             },
           });
-        }, 2000);
+        }, 1000);
       });
     } catch (err) {
       console.log(err);
@@ -283,7 +283,7 @@ const ApplicantModal = (props) => {
       employerID: user.uid,
       isHired: false,
       isHourly: job.isHourly,
-      isFlatRate: job.isFlatRate,
+      // isFlatRate: job.isFlatRate,
       isVolunteer: false,
       needsDeposit: false,
       // applicantAvatar: profilePictureURL,
@@ -307,7 +307,7 @@ const ApplicantModal = (props) => {
       employerID: user.uid,
       isHired: false,
       isHourly: job.isHourly,
-      isFlatRate: job.isFlatRate,
+      // isFlatRate: job.isFlatRate,
       confirmedRate: 0,
       jobOffered: false,
       applicationSent: false,

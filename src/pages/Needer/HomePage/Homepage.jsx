@@ -137,9 +137,9 @@ isFullTimePosition : jobHeld.isFullTimePosition,
     setDoc(doc(db, "Jobs", jobHeld.employerID, "Posted Jobs", jobHeld.jobTitle), {
       companyName: jobHeld.companyName,
       isSalaried :  jobHeld.isSalaried,
-applicantDescription:jobHeld. applicantDescription,
-benefitsDescription : jobHeld.benefitsDescription ? jobHeld.benefitsDescription : null,
-isFullTimePosition : jobHeld.isFullTimePosition,
+      applicantDescription:jobHeld. applicantDescription,
+      benefitsDescription : jobHeld.benefitsDescription ? jobHeld.benefitsDescription : null,
+      isFullTimePosition : jobHeld.isFullTimePosition,
       employerID: jobHeld.employerID,
       employerEmail: jobHeld.employerEmail,
       employerFirstName: jobHeld.employerFirstName,
@@ -494,9 +494,9 @@ isFullTimePosition : jobHeld.isFullTimePosition,
          console.log(data)
          console.log(data.status)
             submitJob()
-            onOpen()
+           
             setTimeout(() => {
-   
+              onOpen()
       addJobInfo(null)
             }, 500);
           } else {

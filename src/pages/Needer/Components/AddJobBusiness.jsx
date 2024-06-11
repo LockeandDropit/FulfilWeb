@@ -1004,7 +1004,7 @@ isFullTimePosition : isFullTimePosition,
                     id="hs-pro-dactmt"
                     type="text"
                     class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                    placeholder="Ex: Welder, foreman"
+                    placeholder="Ex: Assembler, Hostess, Welder"
                 // width="560px"
                 onChange={(e) => setJobTitle(e.target.value)}
                  
@@ -1162,7 +1162,7 @@ isFullTimePosition : isFullTimePosition,
                  
                 }}
               />
-                  <div class="space-y-2">
+                  {/* <div class="space-y-2">
                   <label
                     for="dactmi"
                     onChange={(e) => setDescription(e.target.value)}
@@ -1199,7 +1199,7 @@ isFullTimePosition : isFullTimePosition,
                 <option value="yard work">Yard Work</option>
                 <option value={false}>Clear Selection</option>
               </select>
-                </div>
+                </div> */}
                 </div>
                 <div class="space-y-2">
                   <label
@@ -1219,11 +1219,11 @@ isFullTimePosition : isFullTimePosition,
                     for="dactmi"
                     class="block mb-2 text-sm font-medium text-gray-800 "
                   >
-                  Tell applicants what you're looking for
+                    Job Qualifications
                   </label>
 
                   <div class="">
-  <textarea onChange={(e) => setApplicantDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" placeholder="ex: You should have several years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "></textarea>
+  <textarea onChange={(e) => setApplicantDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" placeholder="ex: 3+ years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "></textarea>
 </div>
                 </div>
                 <div class="space-y-2">
@@ -1235,7 +1235,7 @@ isFullTimePosition : isFullTimePosition,
                   </label>
 
                   <div class="">
-  <textarea onChange={(e) => setBenefitsDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" placeholder="ex: You should have several years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "></textarea>
+  <textarea onChange={(e) => setBenefitsDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" placeholder="ex: Company-covered health insurance, PTO, 4% 401k match"></textarea>
 </div>
                 </div>
              
@@ -1255,7 +1255,7 @@ isFullTimePosition : isFullTimePosition,
                     onClick={() => checkLength()}
                     // onClick={() => testJobStore()}
                   >
-                    Post Job
+                    Post Job - $19
                   </button>
                 </div>
               </div>

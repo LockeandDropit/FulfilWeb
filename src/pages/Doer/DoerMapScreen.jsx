@@ -1482,7 +1482,7 @@ const DoerMapScreen = () => {
                                           {allJobs.datePosted}
                                         </p>
                                         <p class="font-semibold text-sm text-slate-700  mt-2 cursor-pointer">
-                                          Posted by:
+                                          Employer:
                                         </p>
                                         <div className="flex">
                                           <div class="flex flex-col justify-center items-center size-[56px]  ">
@@ -1606,8 +1606,10 @@ const DoerMapScreen = () => {
                         >
                           {businessPostedJobs.isVolunteer ? (
                             <p>Volunteer!</p>
-                          ) : businessPostedJobs.isFlatRate ? (
-                            <p>${businessPostedJobs.flatRate}</p>
+                          ) : businessPostedJobs.isSalaried ? (
+                            <p>
+                              ${businessPostedJobs.lowerRate} yearly - ${businessPostedJobs.upperRate} yearly
+                            </p>
                           ) : (
                             <p>
                               ${businessPostedJobs.lowerRate} - $
@@ -1723,7 +1725,7 @@ const DoerMapScreen = () => {
                                           {businessPostedJobs.datePosted}
                                         </p>
                                         <p class="font-semibold text-sm text-slate-700  mt-2 cursor-pointer">
-                                          Posted by:
+                                          Employer:
                                         </p>
                                         <div className="flex">
                                         {businessPostedJobs.employerProfilePicture ? (
@@ -1774,6 +1776,21 @@ const DoerMapScreen = () => {
                                           <p>{businessPostedJobs.description}</p>
                                         </div>
                                       </div>
+                                                {businessPostedJobs.bio ? (
+                                                   <div class="space-y-2 mt-10 mb-4">
+                                                   <label
+                                                     for="dactmi"
+                                                     class="block mb-2 text-md font-medium text-gray-800 "
+                                                   >
+                                                   About {businessPostedJobs.companyName}
+                                                   </label>
+           
+                                                   <div class="mb-4">
+                                                     <p>{businessPostedJobs.bio}</p>
+                                                   </div>
+                                                 </div>
+                                                ) : (null)}
+                                     
 
                                       <div class="space-y-2 mb-4">
                                         <label

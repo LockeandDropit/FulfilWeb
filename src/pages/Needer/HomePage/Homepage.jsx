@@ -78,7 +78,7 @@ const Homepage = () => {
     const dbRef = collection(
       db,
       "employers",
-      user.uid,
+      jobHeld.employerID,
       "Posted Jobs",
       jobHeld.jobTitle,
       "Applicants"
@@ -86,7 +86,7 @@ const Homepage = () => {
     const placeholderApplicant = { placeholder: "applicant" };
 
     //submit data
-    setDoc(doc(db, "employers", user.uid, "Posted Jobs", jobHeld.jobTitle), {
+    setDoc(doc(db, "employers", jobHeld.employerID, "Posted Jobs", jobHeld.jobTitle), {
       companyName: jobHeld.companyName,
       isSalaried :  jobHeld.isSalaried,
 applicantDescription:jobHeld. applicantDescription,
@@ -134,7 +134,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
 
   const addJobGlobal = () => {
     //submit data
-    setDoc(doc(db, "Jobs", user.uid, "Posted Jobs", jobHeld.jobTitle), {
+    setDoc(doc(db, "Jobs", jobHeld.employerID, "Posted Jobs", jobHeld.jobTitle), {
       companyName: jobHeld.companyName,
       isSalaried :  jobHeld.isSalaried,
 applicantDescription:jobHeld. applicantDescription,

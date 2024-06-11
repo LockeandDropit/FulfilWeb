@@ -46,6 +46,8 @@ import {
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
 
+import { addJobStore } from "../HomePage/lib/addJobStore";
+
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const AddJobBusiness = () => {
@@ -57,7 +59,7 @@ const AddJobBusiness = () => {
 
   const [hasRun, setHasRun] = useState(false);
 
-
+const { addJobInfo } = addJobStore()
 
   useEffect(() => {
 
@@ -316,10 +318,11 @@ const [companyName, setCompanyName] = useState(null)
       onOpenError()
       console.log("6");
     } else {
+      testJobStore()
       // submitJob();
       onOpenStripe();
       setStripeOpen(true);
-      console.log("setting stripe open")
+      // console.log("setting stripe open")
     }
   };
 
@@ -886,7 +889,8 @@ isFullTimePosition : isFullTimePosition,
     if (sessionId) {
       setHasRun(false);
       fetch(
-        `https://fulfil-api.onrender.com/single-postsession-status?session_id=${sessionId}`
+        // `https://fulfil-api.onrender.com/single-post-session-status?session_id=${sessionId}`
+        `https://localhost:80/single-post-session-status?session_id=${sessionId}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -909,6 +913,49 @@ isFullTimePosition : isFullTimePosition,
 
     }
   }, []);
+
+
+
+
+  const testJobStore = () => {
+addJobInfo({
+  companyName: companyName,
+  isSalaried :  isSalaried,
+applicantDescription: applicantDescription,
+benefitsDescription : benefitsDescription ? benefitsDescription : null,
+isFullTimePosition : isFullTimePosition,
+  employerID: employerID,
+  employerEmail: user.email,
+  employerFirstName: employerFirstName,
+  employerLastName: employerLastName,
+  employerProfilePicture: employerProfilePicture,
+  jobTitle: jobTitle,
+  jobID: jobID,
+  firstName: firstName,
+  lowerRate: lowerRate,
+  upperRate: upperRate,
+  isVolunteer: isVolunteer,
+  isOneTime: isOneTime,
+  isSalaried: isSalaried,
+  flatRate: flatRate,
+  isHourly: isHourly,
+  lowerCaseJobTitle: lowerCaseJobTitle,
+  datePosted: datePosted,
+  category: jobCategory,
+  city: city,
+  streetAddress: streetAddress,
+  state: state,
+  zipCode: zipCode,
+  locationLat: locationLat,
+  locationLng: locationLng,
+  description: description,
+  requirements: requirements,
+  requirements2: requirements2,
+  requirements3: requirements3,
+  niceToHave: niceToHave,
+})
+  }
+
 
   
   if (isLoading === true) {
@@ -1131,7 +1178,7 @@ isFullTimePosition : isFullTimePosition,
               
                 onChange={(e) => setJobCategory(e.target.value)}
               >
-                <option value={false}>Select category</option>
+                <option value={false} >Select category</option>
                 <option value="asphalt">Asphalt</option>
                 <option value="carpentry">Carpentry</option>
                 <option value="concrete">Concrete</option>
@@ -1206,6 +1253,7 @@ isFullTimePosition : isFullTimePosition,
                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                     data-hs-overlay="#hs-pro-datm"
                     onClick={() => checkLength()}
+                    // onClick={() => testJobStore()}
                   >
                     Post Job
                   </button>

@@ -12,6 +12,7 @@ import {
   collection,
   onSnapshot,
   setDoc,
+  addDoc,
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
@@ -23,6 +24,20 @@ import { useJobStore } from "./lib/jobsStoreDashboard";
 import { useMediaQuery } from "@chakra-ui/react";
 import {useUserStore} from "../Chat/lib/userStore"
 import AddJobBusiness from "../Components/AddJobBusiness";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Center,
+  Spinner
+} from "@chakra-ui/react";
+
+import { addJobStore } from "./lib/addJobStore";
 
 const Homepage = () => {
   const [user, setUser] = useState(null);
@@ -31,6 +46,10 @@ const Homepage = () => {
   const navigate = useNavigate();
   const { fetchJobInfo, setJobHiringState } = useJobStore();
   const {fetchUserInfo, currentUser} = useUserStore()
+  const {jobHeld, addJobInfo} = addJobStore()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  console.log("here is job held", jobHeld)
 
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
 
@@ -48,7 +67,271 @@ const Homepage = () => {
 
 
 
+  const submitJob = () => {
+   
+    addNewJob();
+    addJobMap();
+    addJobGlobal();
+  };
 
+  const addNewJob = () => {
+    const dbRef = collection(
+      db,
+      "employers",
+      user.uid,
+      "Posted Jobs",
+      jobHeld.jobTitle,
+      "Applicants"
+    );
+    const placeholderApplicant = { placeholder: "applicant" };
+
+    //submit data
+    setDoc(doc(db, "employers", user.uid, "Posted Jobs", jobHeld.jobTitle), {
+      companyName: jobHeld.companyName,
+      isSalaried :  jobHeld.isSalaried,
+applicantDescription:jobHeld. applicantDescription,
+benefitsDescription : jobHeld.benefitsDescription ? jobHeld.benefitsDescription : null,
+isFullTimePosition : jobHeld.isFullTimePosition,
+      employerID: jobHeld.employerID,
+      employerEmail: jobHeld.employerEmail,
+      employerFirstName: jobHeld.employerFirstName,
+      employerLastName: jobHeld.employerLastName,
+      employerProfilePicture: jobHeld.employerProfilePicture,
+      jobTitle: jobHeld.jobTitle,
+      jobID: jobHeld.jobID,
+      firstName: jobHeld.firstName,
+      lowerRate: jobHeld.lowerRate,
+      upperRate: jobHeld.upperRate,
+      isVolunteer: jobHeld.isVolunteer,
+      isOneTime: jobHeld.isOneTime,
+      isSalaried: jobHeld.isSalaried,
+      flatRate: jobHeld.flatRate,
+      isHourly: jobHeld.isHourly,
+      lowerCaseJobTitle: jobHeld.lowerCaseJobTitle,
+      datePosted: jobHeld.datePosted,
+      category: jobHeld.category,
+      city: jobHeld.city,
+      streetAddress: jobHeld.streetAddress,
+      state: jobHeld.state,
+      zipCode: jobHeld.zipCode,
+      locationLat: jobHeld.locationLat,
+      locationLng: jobHeld.locationLng,
+      description: jobHeld.description,
+      requirements: jobHeld.requirements,
+      requirements2: jobHeld.requirements2,
+      requirements3: jobHeld.requirements3,
+      niceToHave: jobHeld.niceToHave,
+    })
+      .then(() => {
+        addDoc(dbRef, placeholderApplicant);
+        console.log("data submitted employers");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+  };
+
+  const addJobGlobal = () => {
+    //submit data
+    setDoc(doc(db, "Jobs", user.uid, "Posted Jobs", jobHeld.jobTitle), {
+      companyName: jobHeld.companyName,
+      isSalaried :  jobHeld.isSalaried,
+applicantDescription:jobHeld. applicantDescription,
+benefitsDescription : jobHeld.benefitsDescription ? jobHeld.benefitsDescription : null,
+isFullTimePosition : jobHeld.isFullTimePosition,
+      employerID: jobHeld.employerID,
+      employerEmail: jobHeld.employerEmail,
+      employerFirstName: jobHeld.employerFirstName,
+      employerLastName: jobHeld.employerLastName,
+      employerProfilePicture: jobHeld.employerProfilePicture,
+      jobTitle: jobHeld.jobTitle,
+      jobID: jobHeld.jobID,
+      firstName: jobHeld.firstName,
+      lowerRate: jobHeld.lowerRate,
+      upperRate: jobHeld.upperRate,
+      isVolunteer: jobHeld.isVolunteer,
+      isOneTime: jobHeld.isOneTime,
+      isSalaried: jobHeld.isSalaried,
+      flatRate: jobHeld.flatRate,
+      isHourly: jobHeld.isHourly,
+      lowerCaseJobTitle: jobHeld.lowerCaseJobTitle,
+      datePosted: jobHeld.datePosted,
+      category: jobHeld.category,
+      city: jobHeld.city,
+      streetAddress: jobHeld.streetAddress,
+      state: jobHeld.state,
+      zipCode: jobHeld.zipCode,
+      locationLat: jobHeld.locationLat,
+      locationLng: jobHeld.locationLng,
+      description: jobHeld.description,
+      requirements: jobHeld.requirements,
+      requirements2: jobHeld.requirements2,
+      requirements3: jobHeld.requirements3,
+      niceToHave: jobHeld.niceToHave,
+    })
+      .then(() => {
+        //all good
+        console.log("data submitted global");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+
+    //submit data
+    setDoc(doc(db, "All Jobs", jobHeld.jobID), {
+      companyName: jobHeld.companyName,
+      isSalaried :  jobHeld.isSalaried,
+applicantDescription:jobHeld. applicantDescription,
+benefitsDescription : jobHeld.benefitsDescription ? jobHeld.benefitsDescription : null,
+isFullTimePosition : jobHeld.isFullTimePosition,
+      employerID: jobHeld.employerID,
+      employerEmail: jobHeld.employerEmail,
+      employerFirstName: jobHeld.employerFirstName,
+      employerLastName: jobHeld.employerLastName,
+      employerProfilePicture: jobHeld.employerProfilePicture,
+      jobTitle: jobHeld.jobTitle,
+      jobID: jobHeld.jobID,
+      firstName: jobHeld.firstName,
+      lowerRate: jobHeld.lowerRate,
+      upperRate: jobHeld.upperRate,
+      isVolunteer: jobHeld.isVolunteer,
+      isOneTime: jobHeld.isOneTime,
+      isSalaried: jobHeld.isSalaried,
+      flatRate: jobHeld.flatRate,
+      isHourly: jobHeld.isHourly,
+      lowerCaseJobTitle: jobHeld.lowerCaseJobTitle,
+      datePosted: jobHeld.datePosted,
+      category: jobHeld.category,
+      city: jobHeld.city,
+      streetAddress: jobHeld.streetAddress,
+      state: jobHeld.state,
+      zipCode: jobHeld.zipCode,
+      locationLat: jobHeld.locationLat,
+      locationLng: jobHeld.locationLng,
+      description: jobHeld.description,
+      requirements: jobHeld.requirements,
+      requirements2: jobHeld.requirements2,
+      requirements3: jobHeld.requirements3,
+      niceToHave: jobHeld.niceToHave,
+    })
+      .then(() => {
+        //all good
+        console.log("submitted");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+
+      // setShowAddJob(!showAddJob)
+
+  };
+
+  const addJobMap = () => {
+    //submit data
+    setDoc(doc(db, "Map Jobs", jobHeld.jobID), {
+      companyName: jobHeld.companyName,
+      isPostedByBusiness: true,
+      isSalaried :  jobHeld.isSalaried,
+      applicantDescription: jobHeld.applicantDescription,
+      benefitsDescription : jobHeld.benefitsDescription ? jobHeld.benefitsDescription : null,
+      isFullTimePosition : jobHeld.isFullTimePosition,
+      employerID: jobHeld.employerID,
+      employerEmail: jobHeld.employerEmail,
+      employerFirstName: jobHeld.employerFirstName,
+      employerLastName: jobHeld.employerLastName,
+      employerProfilePicture: jobHeld.employerProfilePicture,
+      jobTitle: jobHeld.jobTitle,
+      jobID: jobHeld.jobID,
+      firstName: jobHeld.firstName,
+      lowerRate: jobHeld.lowerRate,
+      upperRate: jobHeld.upperRate,
+      isVolunteer: jobHeld.isVolunteer,
+      isOneTime: jobHeld.isOneTime,
+      // isOneTime: isOneTime,
+
+      flatRate: jobHeld.flatRate,
+      isHourly: jobHeld.isHourly,
+      lowerCaseJobTitle: jobHeld.lowerCaseJobTitle,
+      datePosted: jobHeld.datePosted,
+      category: jobHeld.category,
+      city: jobHeld.city,
+      streetAddress: jobHeld.streetAddress,
+      state: jobHeld.state,
+      zipCode: jobHeld.zipCode,
+      locationLat: jobHeld.locationLat,
+      locationLng: jobHeld.locationLng,
+      description: jobHeld.description,
+      requirements: jobHeld.requirements,
+      requirements2: jobHeld.requirements2,
+      requirements3: jobHeld.requirements3,
+      niceToHave: jobHeld.niceToHave,
+    })
+      .then(() => {
+        //all good
+        console.log("data submitted for Maps");
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+ 
+      setDoc(doc(db, "Map Jobs Paid", jobHeld.jobID), {
+        companyName: jobHeld.companyName,
+        isPostedByBusiness: true,
+        isSalaried :  jobHeld.isSalaried,
+        applicantDescription: jobHeld.applicantDescription,
+        benefitsDescription : jobHeld.benefitsDescription ? jobHeld.benefitsDescription : null,
+        isFullTimePosition : jobHeld.isFullTimePosition,
+        employerID: jobHeld.employerID,
+        employerEmail: jobHeld.employerEmail,
+        jobTitle: jobHeld.jobTitle,
+        jobID: jobHeld.jobID,
+        firstName: jobHeld.firstName,
+        lowerRate: jobHeld.lowerRate,
+        upperRate: jobHeld.upperRate,
+        isVolunteer: jobHeld.isVolunteer,
+        isOneTime: jobHeld.isOneTime,
+        // isOneTime: isOneTime,
+        isSalaried: jobHeld.isSalaried,
+        flatRate: jobHeld.flatRate,
+        isHourly: jobHeld.isHourly,
+        lowerCaseJobTitle: jobHeld.lowerCaseJobTitle,
+        datePosted: jobHeld.datePosted,
+        category: jobHeld.category,
+        city: jobHeld.city,
+        streetAddress: jobHeld.streetAddress,
+        state: jobHeld.state,
+        zipCode: jobHeld.zipCode,
+        locationLat: jobHeld.locationLat,
+        locationLng: jobHeld.locationLng,
+        description: jobHeld.description,
+        requirements: jobHeld.requirements,
+        requirements2: jobHeld.requirements2,
+        requirements3: jobHeld.requirements3,
+        niceToHave: jobHeld.niceToHave,
+      })
+        .then(() => {
+          //all good
+          console.log("data submitted for Maps");
+        })
+        .catch((error) => {
+          // no bueno
+          console.log(error);
+        });
+      //adds to paid only db for map
+    
+  };
+
+// useEffect(() => {
+//   if (jobHeld !== null && user !== null) {
+//     submitJob()
+//     onOpen()
+//   }
+//   addJobInfo(null)
+// },[jobHeld, user])
 
   useEffect(() => {
     if (user != null) {
@@ -192,13 +475,64 @@ const Homepage = () => {
     setTimeout(() => navigate("/JobDetailsReadyToPay"), 500);
   };
 
+  const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const sessionId = urlParams.get("session_id");
 
+    if (sessionId) {
+      setHasRun(false);
+      fetch(
+        `https://fulfil-api.onrender.com/single-post-session-status?session_id=${sessionId}`
+        // `https://localhost:80/single-post-session-status?session_id=${sessionId}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "complete") {
+            setIsLoading(true);
+            submitJob()
+            onOpen()
+            setTimeout(() => {
+      console.log("we got your payment",  )
+      // submitJob()
+      setIsLoading(false)
+      addJobInfo(null)
+            }, 2000);
+          } else {
+            alert(
+              "There was an error processing your payment. Please try again later."
+            );
+            addJobInfo(null)
+          }
+        });
+    } else {
+
+    }
+  }, []);
 
 
   //business logic
 
   const [showAddJobBusiness, setShowAddJobBusiness] = useState(false);
+
+    
+  if (isLoading === true) {
+    return (
+      <>
+        <Center>
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />
+        </Center>
+      </>
+    );
+  }
 
   return (
     <>
@@ -1652,6 +1986,30 @@ const Homepage = () => {
       </main>
       {showAddJob ? <AddJobModal /> : null}
       {showAddJobBusiness ? <AddJobBusiness /> : null}
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p>Your job has been posted.</p>
+          </ModalBody>
+
+          <ModalFooter>
+            
+          <button
+                    type="button"
+                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                    data-hs-overlay="#hs-pro-datm"
+                    onClick={onClose}
+                  >
+              Close
+            </button>
+          
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

@@ -789,13 +789,14 @@ const ChatPlaceholder = () => {
                         Mark Complete
                       </button>
                       ) : (
-                        <button
+                        currentUser.isBusiness ? (null) : (<button
                           onClick={() => handleModalOpen()}
                           type="button"
                           class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-sky-400 text-white shadow-sm hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
                         >
                           Send offer
-                        </button>
+                        </button>)
+                        
                       )}
                     </div>
                   </div>
@@ -1087,12 +1088,16 @@ const ChatPlaceholder = () => {
                                   ${job.lowerRate}/hour - ${job.upperRate}/hour
                                 </p>
                               </dd>
-                            ) : (
-                              <dd class="col-span-2">
-                                <p class="font-medium text-[13px] text-gray-800">
-                                  ${job.flatRate} total
-                                </p>
-                              </dd>
+                            ) : ( currentUser.isBusiness  ? (  <dd class="col-span-2">
+                            <p class="font-medium text-[13px] text-gray-800">
+                              ${job.lowerRate} yearly -  ${job.upperRate} yearly
+                            </p>
+                          </dd>) : (<dd class="col-span-2">
+                            <p class="font-medium text-[13px] text-gray-800">
+                              ${job.flatRate} total
+                            </p>
+                          </dd>)
+                            
                             )}
                             
                           </dl>
@@ -6844,13 +6849,14 @@ const ChatPlaceholder = () => {
                           Mark Complete
                         </button>
                       ) : (
-                        <button
+
+                        currentUser.isBusiness ? (null) : (<button
                           onClick={() => handleModalOpen()}
                           type="button"
                           class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-sky-400 text-white shadow-sm hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-sky-500"
                         >
                           Send offer
-                        </button>
+                        </button>)
                       )}
                     </div>
                   </div>

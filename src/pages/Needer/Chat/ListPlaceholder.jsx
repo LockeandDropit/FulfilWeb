@@ -383,6 +383,7 @@ const ListPlaceholder = () => {
        
     <div id="hs-pro-sidebar" class="
       sm:w-76 
+     
       h-[calc(100vh-70px)] mt-16
    
       z-50
@@ -394,7 +395,7 @@ const ListPlaceholder = () => {
       <div class="h-full flex ">
   
       
-        <div class="sm:w-76  truncate bg-white border-x border-gray-200">
+        <div class="sm:w-76 md:w-[300px] truncate bg-white border-x border-gray-200">
           <div class="h-full flex flex-col">
           
             <div class="ps-4 pe-3 py-2 flex justify-between items-center gap-x-2 border-b border-gray-200">
@@ -404,24 +405,7 @@ const ListPlaceholder = () => {
   
               <div class="flex items-center">
            
-                {/* <div class="relative inline-block">
-                  <select id="hs-pro-select-revenue" data-hs-select='{
-                      "placeholder": "Select option...",
-                      "toggleTag": "<button type=\"button\"></button>",
-                      "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-2 ps-2.5 pe-6 inline-flex flex-shrink-0 justify-center items-center gap-x-1.5 text-xs text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 before:absolute before:inset-0 before:z-[1]",
-                      "dropdownClasses": "mt-2 z-50 w-32 p-1 space-y-0.5 bg-white rounded-xl shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)]",
-                      "optionClasses": "hs-selected:bg-gray-100 py-1.5 px-2 w-full text-[13px] text-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100",
-                      "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><svg class=\"flex-shrink-0 size-3.5 text-gray-800" xmlns=\"http:.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></span></div>"
-                    }' class="hidden">
-                    <option value="">Choose</option>
-                    <option selected>Newest</option>
-                    <option>Oldest</option>
-                  </select>
-  
-                  <div class="absolute top-1/2 end-2 -translate-y-1/2">
-                    <svg class="flex-shrink-0 size-3.5 text-gray-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                  </div>
-                </div> */}
+               
          
   
                 <div class="relative flex items-center gap-x-1 ps-2 ms-2 before:absolute before:top-1/2 before:start-0 before:w-px before:h-4 before:bg-gray-200 before:-translate-y-1/2">
@@ -762,7 +746,7 @@ const ListPlaceholder = () => {
        
   
         
-            <div class="py-1.5 border-b border-gray-200">
+            {/* <div class="py-1.5 border-b border-gray-200">
               <div class="-mb-2.5  overflow-x-auto">
                 <div class="overflow-x-auto [&::-webkit-scrollbar]:h-0">
                   
@@ -828,7 +812,7 @@ const ListPlaceholder = () => {
                
                 </div>
               </div>
-            </div>
+            </div> */}
           
   
             <div class="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-sm [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">

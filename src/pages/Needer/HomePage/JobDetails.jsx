@@ -809,16 +809,16 @@ const JobDetails = () => {
                                 applicant.channelId ? (
                                   <>
                                     {" "}
-                                    <button
+                                    {/* <button
                                       type="button"
                                       onClick={() => handleApplicantVisible()}
                                       class="py-2 px-2  inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500  "
                                     >
                                       View profile
-                                    </button>
+                                    </button> */}
                                     {applicant.hasUnreadMessage ? (
                                           <button
-                                          class=" w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
+                                          class=" w-auto py-2 px-0 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white shadow-sm hover:bg-sky-500"
                                           onClick={() =>
                                             navigateToChannel(
                                               applicant
@@ -831,7 +831,7 @@ const JobDetails = () => {
                                           </span>
                                         </button>
                                     ) : (   <button
-                                        class="  w-auto py-2 px-2 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:bg-white hover:text-sky-600  "
+                                        class="  w-auto py-2 px-2 float-right mb-6 mt-2 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white shadow-sm hover:bg-sky-500 "
                                         onClick={() =>
                                           navigateToChannel(
                                             applicant

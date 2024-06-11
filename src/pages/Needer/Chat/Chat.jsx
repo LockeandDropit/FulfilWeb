@@ -152,7 +152,6 @@ const Chat = () => {
   // }, [])
 
   // const handleKeyDown = (e) => {
-
   //     console.log(e.key)
   //     if (e.key === "Enter") {
   //        handleSend()

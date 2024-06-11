@@ -1701,7 +1701,7 @@ const DoerMapScreen = () => {
                                              >
                                                {businessPostedJobs.lowerRate}
                                              </label>
-                                             <p className=" text-sm font-medium ">
+                                             <p className="ml-1 text-sm font-medium ">
                                                 yearly - $
                                              </p>
                                              <label
@@ -1710,7 +1710,7 @@ const DoerMapScreen = () => {
                                              >
                                                {businessPostedJobs.upperRate}
                                              </label>
-                                             <p className=" text-sm font-medium">
+                                             <p className=" ml-1 text-sm font-medium">
                                                 yearly
                                              </p>
                                            </div>
@@ -1797,7 +1797,7 @@ const DoerMapScreen = () => {
                                           for="dactmi"
                                           class="block mb-2 text-md font-medium text-gray-800 "
                                         >
-                                         Who you are
+                                         Job Requirements
                                         </label>
 
                                         <div class="mb-4">

@@ -174,7 +174,7 @@ const [companyName, setCompanyName] = useState(null)
   }, [user]);
 
   //credit https://www.code-sample.com/2019/12/react-allow-only-numbers-in-textbox.html
-  const numberOnlyRegexMinimumCharacterInput = /^[0-9\b]{1,7}$/;
+  const numberOnlyRegexMinimumCharacterInput = /^[0-9.\b]{1,7}$/;
 
   const [flatRateValidationMessage, setFlatRateValidationMessage] = useState();
 
@@ -1252,8 +1252,8 @@ isFullTimePosition : isFullTimePosition,
                     type="button"
                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                     data-hs-overlay="#hs-pro-datm"
-                    onClick={() => checkLength()}
-                    // onClick={() => testJobStore()}
+                    // onClick={() => checkLength()}
+                    onClick={() => testJobStore()}
                   >
                     Post Job - $19
                   </button>

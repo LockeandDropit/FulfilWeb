@@ -36,6 +36,7 @@ import {
   Center,
   Spinner
 } from "@chakra-ui/react";
+import SubscriptionModal from "../Components/SubscriptionModal";
 
 import { addJobStore } from "./lib/addJobStore";
 
@@ -325,13 +326,13 @@ isFullTimePosition : jobHeld.isFullTimePosition,
     
   };
 
-// useEffect(() => {
-//   if (jobHeld !== null && user !== null) {
-//     submitJob()
-//     onOpen()
-//   }
-//   addJobInfo(null)
-// },[jobHeld, user])
+useEffect(() => {
+  if (jobHeld !== null && user !== null) {
+    submitJob()
+    onOpen()
+  }
+  addJobInfo(null)
+},[jobHeld, user])
 
   useEffect(() => {
     if (user != null) {
@@ -477,6 +478,48 @@ isFullTimePosition : jobHeld.isFullTimePosition,
 
   const [isLoading, setIsLoading] = useState(false);
 
+  // useEffect(() => {
+  //   const queryString = window.location.search;
+  //   const urlParams = new URLSearchParams(queryString);
+  //   const sessionId = urlParams.get("session_id");
+
+  //   if (sessionId && user !== null) {
+  //     setHasRun(false);
+  //     fetch(
+  //       `https://fulfil-api.onrender.com/single-post-session-status?session_id=${sessionId}`
+     
+  //     )
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         if (data.status === "complete") {
+  //        console.log(data)
+  //        console.log(data.status)
+  //           submitJob()
+           
+  //           setTimeout(() => {
+  //             onOpen()
+  //     addJobInfo(null)
+  //           }, 500);
+  //         } else {
+  //           alert(
+  //             "There was an error processing your payment. Please try again later."
+  //           );
+  //           addJobInfo(null)
+  //         }
+  //       });
+  //   } else {
+
+  //   }
+  // }, [user]);
+
+
+  const updateBusinessAsPremium = () => {
+    updateDoc(doc(db, "employers", currentUser.uid), {
+      isPremium : true
+    })
+  }
+
+
   useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -485,7 +528,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
     if (sessionId && user !== null) {
       setHasRun(false);
       fetch(
-        `https://fulfil-api.onrender.com/single-post-session-status?session_id=${sessionId}`
+        `https://fulfil-api.onrender.com/business-subscription-session-status?session_id=${sessionId}`
         // `https://localhost:80/single-post-session-status?session_id=${sessionId}`
       )
         .then((res) => res.json())
@@ -493,12 +536,10 @@ isFullTimePosition : jobHeld.isFullTimePosition,
           if (data.status === "complete") {
          console.log(data)
          console.log(data.status)
-            submitJob()
-           
-            setTimeout(() => {
               onOpen()
-      addJobInfo(null)
-            }, 500);
+              addJobInfo(null)
+              //set user as premium
+              updateBusinessAsPremium()
           } else {
             alert(
               "There was an error processing your payment. Please try again later."
@@ -511,10 +552,24 @@ isFullTimePosition : jobHeld.isFullTimePosition,
     }
   }, [user]);
 
+  
+
+
 
   //business logic
 
   const [showAddJobBusiness, setShowAddJobBusiness] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+
+  const checkIfPremium = () => {
+    console.log("current user", currentUser) 
+    if (currentUser.isPremium === true) {
+      setShowAddJobBusiness(!showAddJobBusiness)
+    } else {
+      setShowSubscriptionModal(!showSubscriptionModal)
+    }
+
+  }
 
     
   if (isLoading === true) {
@@ -549,7 +604,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
             <div class="flex justify-end items-center gap-x-2">
              {currentUser ? (currentUser.isBusiness ? ( <a
                 class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onClick={() => setShowAddJobBusiness(!showAddJobBusiness)}
+                onClick={() => checkIfPremium()}
               >
                 <svg
                   class="hidden sm:block flex-shrink-0 size-3"
@@ -1244,7 +1299,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
                             <p class="mb-5 text-sm text-gray-500 "></p>
                             {currentUser ? (currentUser.isBusiness ? ( <a
                 class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onClick={() => setShowAddJobBusiness(!showAddJobBusiness)}
+                onClick={() => checkIfPremium()}
               >
                 <svg
                   class="hidden sm:block flex-shrink-0 size-3"
@@ -1985,6 +2040,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
       </main>
       {showAddJob ? <AddJobModal /> : null}
       {showAddJobBusiness ? <AddJobBusiness /> : null}
+      {showSubscriptionModal ? <SubscriptionModal /> : null}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -1992,7 +2048,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
           <ModalHeader>Success!</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p>Your job has been posted.</p>
+            <p>You now have access to unlimited, indefinite job listings!</p>
           </ModalBody>
 
           <ModalFooter>
@@ -2001,9 +2057,9 @@ isFullTimePosition : jobHeld.isFullTimePosition,
                     type="button"
                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                     data-hs-overlay="#hs-pro-datm"
-                    onClick={onClose}
+                    onClick={() => setShowAddJobBusiness(!showAddJobBusiness)}
                   >
-              Close
+              Create a Post
             </button>
           
           </ModalFooter>

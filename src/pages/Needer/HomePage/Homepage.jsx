@@ -491,15 +491,13 @@ isFullTimePosition : jobHeld.isFullTimePosition,
         .then((res) => res.json())
         .then((data) => {
           if (data.status === "complete") {
-            setIsLoading(true);
+         
             submitJob()
             onOpen()
             setTimeout(() => {
-      console.log("we got your payment",  )
-      // submitJob()
-      setIsLoading(false)
+   
       addJobInfo(null)
-            }, 2000);
+            }, 500);
           } else {
             alert(
               "There was an error processing your payment. Please try again later."

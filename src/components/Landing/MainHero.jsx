@@ -8,13 +8,12 @@ const MainHero = () => {
     <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
         <div>
-          <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-6xl lg:leading-tight">
-            Find a Doer who will put you at{" "}
-            <span class="text-sky-400">ease.</span>
+          <h1 class="block text-2xl font-bold text-gray-800 sm:text-4xl lg:text-6xl lg:leading-tight">
+            Get hired without the headache.
+            {/* <span class="text-sky-400">ease.</span> */}
           </h1>
           <p class="mt-3 text-lg text-gray-800">
-            Whatever you need done, Fulfil is the place to get connected with
-            professionals who care about their craft.
+            Apply to job listings close to home without having to submit a new resume over, and over, and over <span class="text-gray-500">and over</span>  <span class="text-gray-400">and over</span>  <span class="text-gray-300">and over</span> <span class="text-gray-200">and over</span> <span class="text-gray-100">and over</span>
           </p>
 
           <div class="mt-7 grid gap-3 w-full sm:inline-flex">
@@ -22,7 +21,7 @@ const MainHero = () => {
               class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-600 disabled:opacity-50 disabled:pointer-events-none"
               onClick={() => navigate("/OnboardingOne")}
             >
-              Post A Job
+              Browse Jobs
               <svg
                 class="flex-shrink-0 size-4"
                 xmlns="http://www.w3.org/2000/svg"

@@ -527,7 +527,8 @@ isFullTimePosition : jobHeld.isFullTimePosition,
     const urlParams = new URLSearchParams(queryString);
     const sessionId = urlParams.get("session_id");
 
-    if (sessionId && user !== null) {
+    if (sessionId && user !== null && currentUser.isPremium === false) {
+      
       setHasRun(false);
       fetch(
         `https://fulfil-api.onrender.com/business-subscription-session-status?session_id=${sessionId}`

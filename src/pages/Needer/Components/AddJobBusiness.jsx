@@ -318,10 +318,10 @@ const [companyName, setCompanyName] = useState(null)
       onOpenError()
       console.log("6");
     } else {
-      testJobStore()
-      // submitJob();
-      onOpenStripe();
-      setStripeOpen(true);
+      // testJobStore()
+      submitJob();
+      // onOpenStripe();
+      // setStripeOpen(true);
       // console.log("setting stripe open")
     }
   };

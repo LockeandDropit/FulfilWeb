@@ -46,7 +46,7 @@ import { StreamChat } from "stream-chat";
 import { FcGoogle } from "react-icons/fc";
 import { useMediaQuery } from "@chakra-ui/react";
 
-const LoggedOutHeader = (props) => {
+const LoggedOutHeaderNoGap = (props) => {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -87,19 +87,19 @@ const LoggedOutHeader = (props) => {
           // setLoggingIn(true);
 
           //stream chat log in
-          const chatClient = new StreamChat(
-            process.env.REACT_APP_STREAM_CHAT_API_KEY
-          );
+          // const chatClient = new StreamChat(
+          //   process.env.REACT_APP_STREAM_CHAT_API_KEY
+          // );
 
           // Signed in
           // setCurrentUser(response.user.uid)
           setIsSignedIn(true);
           const currentUser = response.user.uid;
 
-          chatClient.connectUser(
-            { id: response.user.uid },
-            chatClient.devToken(response.user.uid)
-          );
+          // chatClient.connectUser(
+          //   { id: response.user.uid },
+          //   chatClient.devToken(response.user.uid)
+          // );
 
           // const docRefUsers = doc(db, "users", response.user.uid);
           // const docRefEmployers = doc(db, "employers", response.user.uid);
@@ -169,7 +169,6 @@ const LoggedOutHeader = (props) => {
           )
           .catch();
 
-          
         //check if user is already in DB
         //if so, navigate accordingly
         //if not, navigate to new profile register
@@ -261,12 +260,12 @@ const LoggedOutHeader = (props) => {
         <>
           <header class="flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm ">
             <nav
-              class="mt-6 relative max-w-[85rem] w-full bg-white  mx-2 py-3 px-4 md:flex md:items-center md:justify-between md:py-0 md:px-6 lg:px-8 xl:mx-auto"
+              class="mt-2 relative  w-full bg-white border-bottom shadow-md border-gray-800 mx-2 py-3 px-4 md:flex md:items-center md:justify-between md:py-0 md:px-6 lg:px-8 xl:mx-auto"
               aria-label="Global"
             >
               <div class="flex items-center justify-between">
                 <a
-                  class="flex-none text-4xl font-sans font-bold text-sky-400"
+                  class="flex-none text-4xl font-sans font-bold text-sky-400 cursor-pointer"
                   aria-label="Brand"
                   onClick={() => navigate("/")}
                 >
@@ -350,7 +349,7 @@ const LoggedOutHeader = (props) => {
                       <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                       <circle cx="12" cy="7" r="4" />
                     </svg>
-                    Employer/Post job
+                    Employers/Post Job
                   </button>
                 </div>
               </div>
@@ -402,9 +401,7 @@ const LoggedOutHeader = (props) => {
         </>
       )}
 
-      <main id="content">
-        <div class="max-w-[85rem] mx-auto pt-12 pb-10 px-4 sm:px-6 lg:px-8 md:pt-24"></div>
-      </main>
+     
       <Modal
         isOpen={isOpen}
         onClose={() => handleClose()}
@@ -553,4 +550,4 @@ const LoggedOutHeader = (props) => {
   );
 };
 
-export default LoggedOutHeader;
+export default LoggedOutHeaderNoGap;

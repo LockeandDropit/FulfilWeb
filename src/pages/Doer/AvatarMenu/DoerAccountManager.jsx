@@ -179,8 +179,8 @@ const DoerAccountManager = () => {
       user !== null &&
       privacyAgreement === true &&
       // IDVerified === true &&
-      taxAgreementConfirmed === true &&
-      paymentsActive === true
+      taxAgreementConfirmed === true
+      // paymentsActive === true
     ) {
       updateDoc(doc(db, "users", user.uid), {
         isOnboarded: true,

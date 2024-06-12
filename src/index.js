@@ -68,6 +68,7 @@ import OnboardingOne from "./pages/Register/Needer/OnboardingOne"
 import BusinessEmailRegister from "./pages/Register/Needer/BusinessEmailRegister";
 import AddBusinessProfileInfo from "./pages/Register/Needer/BusinessOnboarding/AddBusinessProfileInfo";
 import AddLogoAbout from "./pages/Register/Needer/BusinessOnboarding/AddLogoAbout";
+import DoerMapLoggedOut from "./components/DoerMapLoggedOut";
 
 //Stream Chat
 import {
@@ -449,6 +450,10 @@ const router = createBrowserRouter([
   {
     path: "/AddLogoAbout",
     element: <AddLogoAbout/>,
+  },
+  {
+    path: "/DoerMapLoggedOut",
+    element: <DoerMapLoggedOut/>,
   },
 
   

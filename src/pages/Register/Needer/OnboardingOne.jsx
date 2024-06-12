@@ -274,15 +274,15 @@ const OnboardingOne = () => {
       {/* <Header props={openModal} /> */}
       <LoggedOutHeader props={openModal} />
 
-<div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 flex">
+<div class="max-w-[85rem] mt-10 mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
 <div class="grow px-5">
         <div class="h-full sm:w-[480px] flex flex-col justify-center mx-auto space-y-5">
  
           <div>
-            <h1 class="text-xl sm:text-2xl font-semibold text-gray-800">
+            <h1 class="text-xl sm:text-2xl font-semibold text-gray-800 text-center">
               Tell us about yourself!
             </h1>
-            <p class="mt-1 text-sm text-gray-500 ">
+            <p class="mt-1 text-sm text-gray-500 text-center ">
               We'll make sure you get the perfect set up to meet your needs
             </p>
           </div>
@@ -355,25 +355,25 @@ const OnboardingOne = () => {
       </div>
   
  
-
+{/* 
     {isDesktop ? ( <div class="w-full rounded-lg ml-6">
-    {/* <Flex flex={1}> */}
+  
 
     <NeederRegisterMapScreen props={closeInfoWindow} />
          
       
-    </div>) : (null)}
+    </div>) : (null)} */}
   
  
 </div>
 
-{isDesktop ? ( null) : (<div class="w-full rounded-lg mt-10">
+{/* {isDesktop ? ( null) : (<div class="w-full rounded-lg mt-10">
    
 
 <NeederRegisterMapScreen props={closeInfoWindow} />
          
       
-    </div>)}
+    </div>)} */}
 
       {/* <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>

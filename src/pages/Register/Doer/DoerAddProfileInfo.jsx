@@ -216,7 +216,8 @@ const DoerAddProfileInfo = () => {
         console.log(error);
       });
 
-  navigate("/StripeSetUp");
+  // navigate("/StripeSetUp");
+ navigate("/DoerMapScreen", {state: {firstVisit: true}})
   };
 
   const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/

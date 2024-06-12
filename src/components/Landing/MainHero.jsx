@@ -19,7 +19,7 @@ const MainHero = () => {
           <div class="mt-7 grid gap-3 w-full sm:inline-flex">
             <button
               class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-600 disabled:opacity-50 disabled:pointer-events-none"
-              onClick={() => navigate("/OnboardingOne")}
+              onClick={() => navigate("/DoerMapLoggedOut")}
             >
               Browse Jobs
               <svg

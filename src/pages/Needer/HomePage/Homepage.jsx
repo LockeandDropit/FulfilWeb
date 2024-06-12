@@ -528,7 +528,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
     const sessionId = urlParams.get("session_id");
 
     console.log("new update outer")
-    if (sessionId && user !== null ) {
+    if (sessionId && user !== null && currentUser !== null ) {
       if (currentUser.isPremium === false) {
       console.log("new update inner")
       setHasRun(false);
@@ -564,7 +564,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
     } else {
 
     }
-  }, [user]);
+  }, [user, currentUser]);
 
   
 

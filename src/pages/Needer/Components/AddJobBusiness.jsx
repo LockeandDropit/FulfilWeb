@@ -1255,7 +1255,7 @@ isFullTimePosition : isFullTimePosition,
                     // onClick={() => checkLength()}
                     onClick={() => testJobStore()}
                   >
-                    Post Job - $19
+                    Post Job 
                   </button>
                 </div>
               </div>

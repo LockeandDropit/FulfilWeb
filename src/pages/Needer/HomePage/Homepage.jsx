@@ -542,14 +542,9 @@ isFullTimePosition : jobHeld.isFullTimePosition,
          updateDoc(doc(db, "employers", user.uid), {
           isPremium : true
         })
-       
-    
-        
         .catch((error) => console.log(error))
-
-        setTimeout(() => {
-          fetchUserInfo(currentUser.uid)
-        }, 400)
+          fetchUserInfo(user.uid)
+       
               onOpen()
               
               //set user as premium

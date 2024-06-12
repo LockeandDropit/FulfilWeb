@@ -527,8 +527,10 @@ isFullTimePosition : jobHeld.isFullTimePosition,
     const urlParams = new URLSearchParams(queryString);
     const sessionId = urlParams.get("session_id");
 
-    if (sessionId && user !== null && currentUser.isPremium === false) {
-      
+    console.log("new update outer")
+    if (sessionId && user !== null ) {
+      if (currentUser.isPremium === false) {
+      console.log("new update inner")
       setHasRun(false);
       fetch(
         `https://fulfil-api.onrender.com/business-subscription-session-status?session_id=${sessionId}`
@@ -549,14 +551,16 @@ isFullTimePosition : jobHeld.isFullTimePosition,
               onOpen()
               
               //set user as premium
-             
+    
           } else {
             alert(
               "There was an error processing your payment. Please try again later."
             );
             // addJobInfo(null)
           }
+          
         });
+      } else {}
     } else {
 
     }

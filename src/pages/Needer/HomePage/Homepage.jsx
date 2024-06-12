@@ -516,7 +516,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
 
   const updateBusinessAsPremium = () => {
     console.log("updated as premium")
-    updateDoc(doc(db, "employers", currentUser.uid), {
+    updateDoc(doc(db, "employers", user.uid), {
       isPremium : true
     })
   }
@@ -575,6 +575,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
   }
 
   const handleOpenFirstJobBusiness = () => {
+    console.log("This is updated", )
     onClose()
     setShowAddJobBusiness(!showAddJobBusiness)
   }

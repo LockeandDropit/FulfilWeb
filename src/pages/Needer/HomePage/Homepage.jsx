@@ -543,7 +543,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
           isPremium : true
         })
         .catch((error) => console.log(error))
-          fetchUserInfo(user.uid)
+          // fetchUserInfo(user.uid)
        
               onOpen()
               

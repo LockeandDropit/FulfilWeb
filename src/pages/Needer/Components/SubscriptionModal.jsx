@@ -67,7 +67,7 @@ useEffect(() => {
   const fetchClientSecret = useCallback(() => {
     // Create a Checkout Session
 
- 
+ console.log("fetch client secret called")
 
     return (
      
@@ -107,9 +107,11 @@ useEffect(() => {
   const [stripeOpen, setStripeOpen] = useState(false);
 
   const handleStripeOpen = () => {
+    console.log("handle stripe open pressed")
     onClose()
-    onOpenStripe();
-    setStripeOpen(true);
+    onOpenStripe()
+    setStripeOpen(true)
+    console.log("stripe open?", stripeOpen)
   }
 
 

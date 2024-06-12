@@ -326,13 +326,14 @@ isFullTimePosition : jobHeld.isFullTimePosition,
     
   };
 
-useEffect(() => {
-  if (jobHeld !== null && user !== null) {
-    submitJob()
-    onOpen()
-  }
-  addJobInfo(null)
-},[jobHeld, user])
+// useEffect(() => {
+//   if (jobHeld !== null && user !== null) {
+//     submitJob()
+//     onOpen()
+//     addJobInfo(null)
+//   }
+
+// },[jobHeld, user])
 
   useEffect(() => {
     if (user != null) {

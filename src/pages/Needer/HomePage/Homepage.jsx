@@ -543,7 +543,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
           isPremium : true
         })
         .catch((error) => console.log(error))
-          // fetchUserInfo(user.uid)
+          fetchUserInfo(user.uid)
        
               onOpen()
               
@@ -586,7 +586,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
           setShowSubscriptionModal(!showSubscriptionModal)
         }
         setCheckIfPremiumLoading(false)
-      }, 500)
+      }, 1000)
      
     }
 

@@ -544,7 +544,7 @@ isFullTimePosition : jobHeld.isFullTimePosition,
         })
         setTimeout(() => {
           fetchUserInfo(currentUser.uid)
-        }, 500)
+        }, 1000)
     
         
         .catch((error) => console.log(error))
@@ -574,13 +574,25 @@ isFullTimePosition : jobHeld.isFullTimePosition,
 
   const [showAddJobBusiness, setShowAddJobBusiness] = useState(false);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
 
   const checkIfPremium = () => {
-    console.log("current user", currentUser) 
+  
+
     if (currentUser.isPremium === true) {
       setShowAddJobBusiness(!showAddJobBusiness)
     } else {
-      setShowSubscriptionModal(!showSubscriptionModal)
+      setCheckIfPremiumLoading(true)
+      fetchUserInfo(currentUser.uid)
+      setTimeout(() => {
+        if (currentUser.isPremium === true) {
+          setShowAddJobBusiness(!showAddJobBusiness)
+        } else {
+          setShowSubscriptionModal(!showSubscriptionModal)
+        }
+        setCheckIfPremiumLoading(false)
+      }, 500)
+     
     }
 
   }
@@ -626,7 +638,9 @@ isFullTimePosition : jobHeld.isFullTimePosition,
                 class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => checkIfPremium()}
               >
-                <svg
+                {checkIfPremiumLoading ? (<div class="animate-spin inline-block size-5 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading">
+  <span class="sr-only">Loading...</span>
+</div>) : ( <><svg
                   class="hidden sm:block flex-shrink-0 size-3"
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -640,7 +654,10 @@ isFullTimePosition : jobHeld.isFullTimePosition,
                     d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
                   />
                 </svg>
-                Create Post
+              Create Post
+              </>)}
+               
+                
               </a>) : ( <a
                 class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => setShowAddJob(!showAddJob)}

@@ -536,13 +536,18 @@ isFullTimePosition : jobHeld.isFullTimePosition,
         .then((res) => res.json())
         .then((data) => {
           if (data.status === "complete") {
-         console.log(data)
+        
          console.log(data.status)
-         updateBusinessAsPremium()
+         updateDoc(doc(db, "employers", user.uid), {
+          isPremium : true
+        })
+        .catch((error) => console.log(error))
+
+        
               onOpen()
-              // addJobInfo(null)
+              
               //set user as premium
-              // updateBusinessAsPremium()
+             
           } else {
             alert(
               "There was an error processing your payment. Please try again later."

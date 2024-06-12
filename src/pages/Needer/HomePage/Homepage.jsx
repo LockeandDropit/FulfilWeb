@@ -542,6 +542,11 @@ isFullTimePosition : jobHeld.isFullTimePosition,
          updateDoc(doc(db, "employers", user.uid), {
           isPremium : true
         })
+        setTimeout(() => {
+          fetchUserInfo(currentUser.uid)
+        }, 500)
+    
+        
         .catch((error) => console.log(error))
 
 

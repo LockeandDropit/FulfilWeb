@@ -531,19 +531,20 @@ isFullTimePosition : jobHeld.isFullTimePosition,
       setHasRun(false);
       fetch(
         `https://fulfil-api.onrender.com/business-subscription-session-status?session_id=${sessionId}`
-        // `https://localhost:80/single-post-session-status?session_id=${sessionId}`
+
       )
         .then((res) => res.json())
         .then((data) => {
           if (data.status === "complete") {
         
          console.log(data.status)
+         console.log(user.uid)
          updateDoc(doc(db, "employers", user.uid), {
           isPremium : true
         })
         .catch((error) => console.log(error))
 
-        
+
               onOpen()
               
               //set user as premium

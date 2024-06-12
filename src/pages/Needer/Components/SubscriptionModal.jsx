@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   doc,
@@ -32,6 +32,14 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useUserStore } from "../Chat/lib/userStore";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout,
+} from "@stripe/react-stripe-js";
+
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const SubscriptionModal = () => {
 
@@ -44,29 +52,41 @@ useEffect(() => {
 }, []);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenStripe,
+    onOpen: onOpenStripe,
+    onClose: onCloseStripe,
+  } = useDisclosure();
+
 
   const {fetchUserInfo, currentUser} = useUserStore()
   const [subscriptionID, setSubscriptionID] = useState(null);
 
-  const initializeSubscription = () => {
-    //credit and help from https://github.com/pagecow/stripe-subscribe-payments
-    fetch("https://fulfil-api.onrender.com/create-business-subscription-session", {
-      method: "POST",
-    })
-      .then((res) => res.json())
-      .then(({ session }) => {
-        setSubscriptionID(session.id);
-        window.open(session.url, "_blank");
-      })
-      // .then(({ url }) => {
-      //   // window.location = url
-      //   window.open(url, "_blank")
-      // })
-      .catch((e) => {
-        console.error(e.error);
-      });
-  };
 
+
+  const fetchClientSecret = useCallback(() => {
+    // Create a Checkout Session
+
+ 
+
+    return (
+     
+  fetch("https://fulfil-api.onrender.com/create-business-subscription-session",
+
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((res) => res.json())
+        //   .then((data) => console.log(data))
+        .then((data) => data.clientSecret)
+    );
+  }, []);
+  
   useEffect(() => {
     if (subscriptionID) {
       updateDoc(doc(db, "employers", currentUser.uid), {
@@ -82,8 +102,13 @@ useEffect(() => {
     }
   }, [subscriptionID]);
 
+  const options = { fetchClientSecret };
+
+  const [stripeOpen, setStripeOpen] = useState(false);
+
 
   return (
+    <>
     <Modal isOpen={isOpen} onClose={onClose} >
       <ModalOverlay />
       <ModalContent>
@@ -121,7 +146,7 @@ useEffect(() => {
         </li>
       </ul>
 
-      <a  onClick={() => initializeSubscription()} class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" href="#">
+      <a  onClick={() => onOpenStripe()} class="mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" href="#">
         Sign up
       </a>
     </div>
@@ -131,6 +156,27 @@ useEffect(() => {
         </div>
       </ModalContent>
     </Modal>
+      
+    {stripeOpen && (
+            <Modal
+              isOpen={isOpenStripe}
+              onClose={() => setStripeOpen(false)}
+              size="xl"
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalCloseButton />
+
+                <EmbeddedCheckoutProvider
+                  stripe={stripePromise}
+                  options={options}
+                >
+                  <EmbeddedCheckout />
+                </EmbeddedCheckoutProvider>
+              </ModalContent>
+            </Modal>
+          )}
+       </>
   );
 };
 

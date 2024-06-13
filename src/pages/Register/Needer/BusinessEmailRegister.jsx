@@ -242,8 +242,8 @@ const BusinessEmailRegister = () => {
       {/* <Header props={openModal} /> */}
       <LoggedOutHeader props={openModal} />
 
-<div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 flex">
-  <div class="w-full md:items-center ">
+<div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+  <div class=" md:items-center ">
     <div class=" bg-white  mt-4 rounded-xl shadow-sm ">
       <div class="p-4 sm:p-7">
         <div class="text-center">
@@ -418,24 +418,24 @@ const BusinessEmailRegister = () => {
   </div>
  
 
-    {isDesktop ? ( <div class="w-full rounded-lg ml-6">
-    {/* <Flex flex={1}> */}
+    {/* {isDesktop ? ( <div class="w-full rounded-lg ml-6">
+   
 
     <NeederRegisterMapScreen props={closeInfoWindow} />
          
       
-    </div>) : (null)}
+    </div>) : (null)} */}
   
  
 </div>
 
-{isDesktop ? ( null) : (<div class="w-full rounded-lg mt-10">
+{/* {isDesktop ? ( null) : (<div class="w-full rounded-lg mt-10">
    
 
 <NeederRegisterMapScreen props={closeInfoWindow} />
          
       
-    </div>)}
+    </div>)} */}
 
       {/* <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
         <Flex p={8} flex={1} align={"center"} justify={"center"}>

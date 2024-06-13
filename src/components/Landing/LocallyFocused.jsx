@@ -8,7 +8,7 @@ const LocallyFocused = () => {
     
       <div class="md:grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32">
        
-        <div class="mt-5 sm:mt-10 lg:mt-0">
+        <div class="mt-5 sm:mt-10 lg:mt-0 mb-12 sm:mb-0 ">
           <div class="space-y-6 sm:space-y-8">
         
             <div class="space-y-2 md:space-y-4">
@@ -28,7 +28,7 @@ const LocallyFocused = () => {
           </div>
         </div>
         <div>
-          <img class="rounded-xl max-h-[560px] ml-20" src="https://images.unsplash.com/photo-1664574654529-b60630f33fdb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80" alt="Image Description" />
+          <img class="rounded-xl max-h-[560px] md:ml-20 " src="https://images.unsplash.com/photo-1664574654529-b60630f33fdb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80" alt="Image Description" />
         </div>
     
         {/* <div class="mt-5 sm:mt-10 lg:mt-0">

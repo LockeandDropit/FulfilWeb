@@ -248,13 +248,13 @@ const handleOpenFBPage = () => {
   </div>
 </footer>
 
-      <Modal isOpen={isOpenContact} onClose={onCloseContact} size="xl">
+      <Modal isOpen={isOpenContact} onClose={onCloseContact} >
         <ModalOverlay />
-        <ModalContent height="66vh">
+        <ModalContent >
           <ModalHeader fontSize="16px">Contact Us</ModalHeader>
           <ModalCloseButton />
-          <ModalBody overflowY="scroll">
-            {issueSubmitted ? (
+          <ModalBody >
+            {/* {issueSubmitted ? (
               <Center>
                 <Text>
                   Your message has been sent! We will contact you in the next 48
@@ -293,15 +293,16 @@ const handleOpenFBPage = () => {
                   onChange={(e) => setMessage(e.target.value)}
                 ></Textarea>
               </>
-            )}
+            )} */}
+             <h4 class="font-semibold text-gray-800">Please email us at tyler@getfulfil.com if you have any questions, comments, or concerns</h4>
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onCloseContact}>
+            {/* <Button variant="ghost" mr={3} onClick={onCloseContact}>
               Close
-            </Button>
-            <Button colorScheme="blue" mr={3} onClick={() => validate()}>
-              Submit
+            </Button> */}
+            <Button colorScheme="blue" mr={3} onClick={onCloseContact}>
+              Close
             </Button>
           </ModalFooter>
         </ModalContent>

@@ -41,6 +41,8 @@ import LocallyFocused from "./components/Landing/LocallyFocused.jsx";
 import MobileDoerCTA from "./components/Landing/MobileDoerCTA.jsx";
 import { useMediaQuery } from "@chakra-ui/react";
 import FAQ from "./components/Landing/FAQ.jsx";
+import EmployerCTAMobileOnly from "./components/Landing/EmployerCTAMobileOnly.jsx";
+
 
 const Landing = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -57,6 +59,7 @@ const Landing = () => {
 {/* <MapHero /> */}
 
 <MainUserJourney />
+<EmployerCTAMobileOnly />
 <LocallyFocused />
 <FAQ />
 {/* <MainCategories /> */}

@@ -117,7 +117,7 @@ import { useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 
 
-
+import { PostHogProvider} from 'posthog-js/react'
 
 
 
@@ -461,21 +461,27 @@ const router = createBrowserRouter([
 ]);
 
 
+const options = {
+  api_host: "https://us.i.posthog.com",
+}
 
 
-const client = StreamChat.getInstance(process.env.STREAM_CHAT_API_KEY);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
     <ChakraProvider>
   
-      <Chat client={client}>
+  
+    <PostHogProvider 
+      apiKey={process.env.REACT_APP_POSTHOG_API}
+      options={options}
+    >
      
       <RouterProvider router={router} />
   
-      
-      </Chat>
+      </PostHogProvider>
+     
    
     </ChakraProvider>
   </>

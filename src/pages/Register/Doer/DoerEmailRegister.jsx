@@ -227,7 +227,7 @@ setCloseInfoWindow(false)
       <LoggedOutHeader props={openModal} />
 
 <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-  <div class="w-1/3 md:items-center ">
+  <div class="sm:w-1/3 md:items-center ">
     <div class=" bg-white  mt-4 rounded-xl shadow-sm ">
       <div class="p-4 sm:p-7">
         <div class="text-center">
@@ -411,13 +411,13 @@ setCloseInfoWindow(false)
  
 </div>
 
-{isDesktop ? ( null) : (<div class="w-full rounded-lg mt-10">
+{/* {isDesktop ? ( null) : (<div class="w-full rounded-lg mt-10">
    
 
               <MapScreen props={closeInfoWindow} />
          
       
-    </div>)}
+    </div>)} */}
  
       
     </>

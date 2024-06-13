@@ -266,7 +266,7 @@ const LoggedOutHeader = (props) => {
             >
               <div class="flex items-center justify-between">
                 <a
-                  class="flex-none text-4xl font-sans font-bold text-sky-400"
+                  class="flex-none text-4xl font-sans font-bold text-sky-400 cursor-default"
                   aria-label="Brand"
                   onClick={() => navigate("/")}
                 >

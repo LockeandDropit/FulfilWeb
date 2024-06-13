@@ -328,6 +328,7 @@ const DoerMapScreen = () => {
             for (var i = allJobs.length - 1; i >= 0; --i) {
               if (allJobs[i].jobID == postedJob.jobID) {
                 allJobs.splice(i, 1);
+                console.log("is this one firing")
               }
             }
           } else {
@@ -347,21 +348,22 @@ const DoerMapScreen = () => {
         businessPostedJobs.forEach((businessPostedJobs) => {
           if (appliedJob.jobID === businessPostedJobs.jobID ) {
             //credit user1438038 & Niet the Dark Absol https://stackoverflow.com/questions/15287865/remove-array-element-based-on-object-property
-
-            for (var i = allJobs.length - 1; i >= 0; --i) {
-              if (allJobs[i].jobID == businessPostedJobs.jobID) {
-                allJobs.splice(i, 1);
-              }
-            }
+      
           } else {
           }
         });
-      });
 
-      //if sop, remove it from posted jobs locally
+        // I do not know why this works, but it does
+        // This removes the business post marker if the user has applied to it.
+        //this incluses having "all jobs" as a dependency 
+        const index = businessPostedJobs.map(e => e.jobID).indexOf(businessPostedJobs.jobID)
+            
+        businessPostedJobs.splice(index, 1);
+        
+      });
     }
 
-    //add all jobs to this to get stuff removed?
+
   }, [appliedJobs, businessPostedJobs, allJobs]);
 
   //passing props credit Cory House & Treycos https://stackoverflow.com/questions/42173786/react-router-pass-data-when-navigating-programmatically

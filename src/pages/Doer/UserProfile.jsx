@@ -1518,7 +1518,7 @@ const UserProfile = () => {
                   
                   </div>
 
-<div class="w-full">
+{/* <div class="w-full">
 <div class="pt-4 first:pt-0 flex flex-row ">
   <h2 class="mb-2  mt-2 text-sm font-semibold text-gray-800 ">
     Specialties
@@ -1749,7 +1749,7 @@ const UserProfile = () => {
     </button>
   )}
 </div>
-</div>
+</div> */}
 </>
                   
 )}
@@ -1911,7 +1911,7 @@ const UserProfile = () => {
                         </li>
                       </ul>
                     </div>
-                    <div class="w-full">
+                    {/* <div class="w-full">
                       <div class="pt-4 first:pt-0 flex flex-row ">
                         <h2 class="mb-2  mt-2 text-sm font-semibold text-gray-800 ">
                           Specialties
@@ -2140,7 +2140,7 @@ const UserProfile = () => {
                           </button>
                         )}
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
@@ -3204,7 +3204,7 @@ const UserProfile = () => {
                       </div>
                     )}
 
-{userExperienceLength < 3 ? (
+{userExperienceLength < 3 & userExperienceLength !== 0 ? (
                             <div class="p-5 min-h-[80px] flex flex-col justify-end items-end text-center">
                               <button
                                 type="button"

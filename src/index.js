@@ -116,7 +116,7 @@ import { auth, db } from "./firebaseConfig"
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 
-
+import posthog from 'posthog-js';
 import { PostHogProvider} from 'posthog-js/react'
 
 
@@ -455,34 +455,25 @@ const router = createBrowserRouter([
     path: "/DoerMapLoggedOut",
     element: <DoerMapLoggedOut/>,
   },
-
-  
-
 ]);
 
 
-const options = {
-  api_host: "https://us.i.posthog.com",
+if (!window.location.host.includes('127.0.0.1') && !window.location.host.includes('localhost')) {
+  posthog.init(
+    process.env.REACT_APP_POSTHOG_API, {api_host: "https://us.i.posthog.com"}
+    
+  );
 }
-
-
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
     <ChakraProvider>
-  
-  
     <PostHogProvider 
-      apiKey={process.env.REACT_APP_POSTHOG_API}
-      options={options}
+      client={posthog}
     >
-     
       <RouterProvider router={router} />
-  
       </PostHogProvider>
-     
-   
     </ChakraProvider>
   </>
 );

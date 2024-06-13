@@ -73,6 +73,7 @@ import { useChatContext } from "stream-chat-react";
 import { useMediaQuery } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import DoerFirstVisitModal from "./components/DoerFirstVisitModal";
+import JobFilter from "./components/JobFilter";
 
 import Dashboard from "./components/Dashboard";
 import Header from "./components/Header";
@@ -356,6 +357,8 @@ const DoerMapScreen = () => {
         // I do not know why this works, but it does
         // This removes the business post marker if the user has applied to it.
         //this incluses having "all jobs" as a dependency 
+
+        // ty my friend leonheess and Pablo Francisco Perez Hidalgo https://stackoverflow.com/questions/8668174/indexof-method-in-an-object-array
         const index = businessPostedJobs.map(e => e.jobID).indexOf(businessPostedJobs.jobID)
             
         businessPostedJobs.splice(index, 1);
@@ -1338,51 +1341,22 @@ const DoerMapScreen = () => {
                 mapId="6cc03a62d60ca935"
                 onClick={() => setOpenInfoWindowMarkerID(null)}
               >
-                <Center marginTop="8px" ml={24}>
+                {/* <div className="items-center justify-center z-30">
+                <JobFilter />
+                </div> */}
+                <Center  ml={24}>
+                  
                   <Card
                     align="center"
-                    border="1px"
-                    borderColor="gray.400"
-                    borderWidth="1.5px"
+                
                     width={{ base: "full", md: "auto" }}
-                    boxShadow="lg"
-                    flexDirection="row"
+                    
+                 
                     mr={{ base: "80px", md: "0" }}
                     ml={{ base: "0px", md: "80px" }}
                   >
-                    <select
-                      className="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                      placeholder="Search"
-                      width="360px"
-                      onChange={(e) => setSearchJobCategory(e.target.value)}
-                    >
-                      <option>Search</option>
-                      <option value="all">See All</option>
-                      <option>--------------------------------</option>
-                      <option value="asphalt">Asphalt</option>
-                      <option value="carpentry">Carpentry</option>
-                      <option value="concrete">Concrete</option>
-                      <option value="drywall">Drywall</option>
-                      <option value="electrical work">Electrical Work</option>
-                      <option value="general handyman">General Handyman</option>
-                      <option value="gutter cleaning">Gutter Cleaning</option>
-                      <option value="hvac">HVAC</option>
-                      <option value="landscaping">Landscaping</option>
-                      <option value="painting">Painting</option>
-                      <option value="plumbing">Plumbing</option>
-                      <option value="pressure washing">Pressure Washing</option>
-                      <option value="roofing">Roofing</option>
-                      <option value="siding">Siding</option>
-                      <option value="snow removal">Snow Removal</option>
-                      <option value="window installation">
-                        Window Installation
-                      </option>
-                      <option value="window washing">Window Washing</option>
-                      <option value="yard work">Yard Work</option>
-                    </select>
-                    {/* <Button colorScheme="blue" width="240px">
-                    Search
-                  </Button> */}
+                      <JobFilter />
+                    
                   </Card>
                 </Center>
 

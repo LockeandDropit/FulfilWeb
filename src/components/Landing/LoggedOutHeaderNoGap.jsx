@@ -418,7 +418,7 @@ const LoggedOutHeaderNoGap = (props) => {
                   Don't have an account yet?
                   <button
                     class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
-                    onClick={() => navigate("/OnboardingOne")}
+                    onClick={() => navigate("/DoerEmailRegister")}
                   >
                     Sign up here
                   </button>
@@ -539,6 +539,15 @@ const LoggedOutHeaderNoGap = (props) => {
                     >
                    
                     </input>
+                    <p class="mt-2 text-sm text-center text-gray-600">
+                  Are you looking to post a job?
+                  <button
+                    class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
+                    onClick={() => navigate("/OnboardingOne")}
+                  >
+                    Sign up here
+                  </button>
+                </p>
                   </div>
                 </form>
               </div>

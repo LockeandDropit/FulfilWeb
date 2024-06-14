@@ -13,7 +13,7 @@ const MainHero = () => {
             {/* <span class="text-sky-400">ease.</span> */}
           </h1>
           <p class="mt-3 text-lg text-gray-800">
-            Apply to job listings close to home without having to submit a new resume over, and over, and over <span class="text-gray-500">and over</span>  <span class="text-gray-400">and over</span>  <span class="text-gray-300">and over</span> <span class="text-gray-200">and over</span> <span class="text-gray-100">and over</span>
+            Apply to job listings close to home without having to submit a new resume over, and over and over <span class="text-gray-800 text-base">and over</span>  <span class="text-gray-800 text-sm">and over</span>  <span class="text-gray-800 text-xs">and over</span> <span class="text-gray-800 text-xs">and over.</span> 
           </p>
 
           <div class="mt-7 grid gap-3 w-full sm:inline-flex">

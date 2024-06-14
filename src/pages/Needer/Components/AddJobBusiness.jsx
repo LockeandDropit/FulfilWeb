@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { StreamChat } from "stream-chat";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
@@ -47,14 +47,17 @@ import {
 } from "@stripe/react-stripe-js";
 
 import { addJobStore } from "../HomePage/lib/addJobStore";
-
-
+import  JobDescriptionInput  from "./Editors/JobDescriptionInput"
+import Quill from "quill";
 
 
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
+const Delta = Quill.import('delta');
 const AddJobBusiness = () => {
+
+  const quillRef = useRef();
   const navigate = useNavigate();
   //validate & set current user
   const [user, setUser] = useState();
@@ -1175,7 +1178,15 @@ isFullTimePosition : isFullTimePosition,
                     class="block mb-2 text-sm font-medium text-gray-800 "
                   >
                    Text editor test
-                  </label> */}
+                  </label>
+                  <JobDescriptionInput 
+                   ref={quillRef}
+                  
+                   defaultValue={new Delta()
+                    }
+                 
+              
+                   /> */}
                
                 </div>
                 <div class="space-y-2">

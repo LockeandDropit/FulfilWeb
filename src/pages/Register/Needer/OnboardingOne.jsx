@@ -45,7 +45,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import Plausible from 'plausible-tracker'
 import LoggedOutHeader from "../../../components/Landing/LoggedOutHeader.jsx";
-
+import posthog from "posthog-js"
 import { useMediaQuery } from "@chakra-ui/react";
 
 const OnboardingOne = () => {
@@ -242,12 +242,14 @@ const OnboardingOne = () => {
 
   useEffect(() => {
     if (isBusiness === true) {
+      posthog.capture('user_clicked_isBusiness')
       setIsIndividual(false) 
     } 
   }, [isBusiness])
 
   useEffect(() => {
     if (isIndividual === true) {
+      posthog.capture('user_clicked_isIndividual')
       setIsBusiness(false)
     }
   }, [isIndividual])

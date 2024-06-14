@@ -591,7 +591,7 @@ renderAllJobs()
                       >
                         <button
                           type="button"
-                          class="py-1 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
+                          class="py-1 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
                         >
                           {businessPostedJobs.isVolunteer ? (
                             <p>Volunteer!</p>
@@ -599,11 +599,12 @@ renderAllJobs()
                             <p>
                               ${businessPostedJobs.lowerRate} yearly - ${businessPostedJobs.upperRate} yearly
                             </p>
-                          ) : (
-                            <p>
-                              ${businessPostedJobs.lowerRate} - $
-                              {businessPostedJobs.upperRate}/hr
-                            </p>
+                          ) : ( businessPostedJobs.upperRate > businessPostedJobs.lowerRate ?  (<p>
+                            ${businessPostedJobs.lowerRate}/hr + 
+                          </p>) : ( <p>
+                              ${businessPostedJobs.lowerRate}/hr
+                            </p>)
+                           
                           )}
                         </button>
                         /
@@ -637,7 +638,7 @@ renderAllJobs()
                                           {businessPostedJobs.jobTitle}
                                         </label>
 
-                                {businessPostedJobs.isFullTimePosition ? ( <label
+                                {businessPostedJobs.isFullTimePosition === true ? ( <label
                                           for="hs-pro-dactmt"
                                           class="block  text-md font-medium text-gray-800"
                                         >

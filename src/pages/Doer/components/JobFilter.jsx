@@ -142,13 +142,18 @@ const JobFilter = () => {
         }
       });
 
-      if (!results || !results.length) {
-        onOpen()
-      
-      } else {
+
+
+
+        if (!results || !results.length) {
+            onOpen()
+          
+          } else {
+         
+            setSearchResults(results)
+          }
      
-        setSearchResults(results)
-      }
+    
     })
 }
 
@@ -172,12 +177,14 @@ const resetSearch = () => {
 
 useEffect(() => {
     const handleKeyDown = (e) => {
-        e.preventDefault()
-       console.log("key pressed",e.key)
-       if ( e.key === "Enter") {
-search()
-       }
         
+     
+       if ( e.key === "Enter") {
+  
+        // search()
+        e.preventDefault()
+       
+       }
    };
    document.addEventListener('keydown', handleKeyDown, true);
 
@@ -185,6 +192,7 @@ search()
         document.removeEventListener('keydown', handleKeyDown);
     };
 }, [])
+
 
 
 
@@ -200,7 +208,7 @@ search()
         <div class=" flex flex-col items-center gap-2 sm:flex-row sm:gap-3 ">
           <div class="max-w-[560px] min-w-[320px]">
           <label for="hs-select-label" class="block text-sm font-medium mb-1 ml-1">Job Title</label>
-            <input onChange={e => setJobTitle(e.target.value)} type="text" id="hero-input" name="hero-input" class=" mb-2 py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Ex: Landscaping, Hostess, Construction" />
+            <input onChange={(e) => setJobTitle(e.target.value)} type="text" id="hero-input" name="hero-input" class=" mb-2 py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Ex: Landscaping, Hostess, Construction" />
           </div>
           {/* <div className=" w-[560px]">
           <label for="hs-select-label" class="block text-sm font-medium  ">Pay Type</label>

@@ -127,15 +127,15 @@ useEffect(() => {
       <h4 class="font-medium text-lg text-gray-800 ">All-Access</h4>
       <span class="mt-5 font-bold text-5xl text-gray-800">
         <span class="font-bold text-2xl ">$</span>
-        29
+        1
       </span>
-      <p class="mt-2 text-sm text-gray-500 ">Get unlimited everything for one monthly price.</p>
-
+      <p class="mt-2 text-sm text-gray-500 ">Access everything for a 1-month trial period</p>
+      <p class="mt-2 text-sm text-gray-500 ">Plan increases to $29/month after trial period ends</p>
       <ul class="mt-7 space-y-2.5 text-sm">
         <li class="flex space-x-2">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="text-gray-800 ">
-           Unlimited active job listings
+           Post up to 3 active job listings at once
           </span>
         </li>
 

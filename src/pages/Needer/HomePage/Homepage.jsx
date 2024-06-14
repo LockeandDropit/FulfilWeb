@@ -2088,7 +2088,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
           <ModalHeader>Success!</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p>You now have access to unlimited, indefinite job listings!</p>
+            <p>You can now post your open positions and interview candidates.</p>
           </ModalBody>
 
           <ModalFooter>

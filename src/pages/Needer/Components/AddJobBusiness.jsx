@@ -48,6 +48,10 @@ import {
 
 import { addJobStore } from "../HomePage/lib/addJobStore";
 
+
+
+
+
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const AddJobBusiness = () => {
@@ -957,6 +961,9 @@ isFullTimePosition : isFullTimePosition,
   }
 
 
+
+
+
   
   if (isLoading === true) {
     return (
@@ -1162,44 +1169,14 @@ isFullTimePosition : isFullTimePosition,
                  
                 }}
               />
-                  {/* <div class="space-y-2">
-                  <label
-                    for="dactmi"
-                    onChange={(e) => setDescription(e.target.value)}
-                    class="block mb-2 mt-4 text-sm font-medium text-gray-800 "
-                    placeholder="ex: I have a downed tree in my yard and would like someone to remove it."
-                  >
-                    What category of work is this? (optional)
-                  </label>
 
-                  <select
-                  class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                placeholder="Select category"
-              
-                onChange={(e) => setJobCategory(e.target.value)}
-              >
-                <option value={false} >Select category</option>
-                <option value="asphalt">Asphalt</option>
-                <option value="carpentry">Carpentry</option>
-                <option value="concrete">Concrete</option>
-                <option value="drywall">Drywall</option>
-                <option value="electrical work">Electrical Work</option>
-                <option value="general handyman">General Handyman</option>
-                <option value="gutter cleaning">Gutter Cleaning</option>
-                <option value="hvac">HVAC</option>
-                <option value="landscaping">Landscaping</option>
-                <option value="painting">Painting</option>
-                <option value="plumbing">Plumbing</option>
-                <option value="pressure washing">Pressure Washing</option>
-                <option value="roofing">Roofing</option>
-                <option value="siding">Siding</option>
-                <option value="snow removal">Snow Removal</option>
-                <option value="window installation">Window Installation</option>
-                <option value="window washing">Window Washing</option>
-                <option value="yard work">Yard Work</option>
-                <option value={false}>Clear Selection</option>
-              </select>
-                </div> */}
+{/* <label
+                    for="dactmi"
+                    class="block mb-2 text-sm font-medium text-gray-800 "
+                  >
+                   Text editor test
+                  </label> */}
+               
                 </div>
                 <div class="space-y-2">
                   <label

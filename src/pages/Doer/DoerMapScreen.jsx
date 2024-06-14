@@ -46,6 +46,14 @@ import {
   Badge,
   Image,
   Spinner,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
 } from "@chakra-ui/react";
 import {
   doc,
@@ -74,6 +82,7 @@ import { useMediaQuery } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import DoerFirstVisitModal from "./components/DoerFirstVisitModal";
 import JobFilter from "./components/JobFilter";
+import { useSearchResults } from "./Chat/lib/searchResults"
 
 import Dashboard from "./components/Dashboard";
 import Header from "./components/Header";
@@ -82,6 +91,8 @@ const DoerMapScreen = () => {
   const [postedJobs, setPostedJobs] = useState([]);
   const [businessPostedJobs, setBusinessPostedJobs] = useState([]);
   const navigate = useNavigate();
+
+  const { searchResults } = useSearchResults()
 
   const [hasRun, setHasRun] = useState(false);
 
@@ -111,9 +122,21 @@ const DoerMapScreen = () => {
     }
   }, []);
 
-  //Pulls in Posted Job info from DB.. initial rendering
+
+
   useEffect(() => {
-    // should this be done on log ina nd stored in redux store so it's cheaper?
+    if (searchResults === null) {
+ //normal render
+renderAllJobs()
+ //initial render with all f(x)
+    } else {
+     setBusinessPostedJobs(searchResults)
+     console.log("search results map screen",searchResults)
+    }
+  }, [searchResults])
+
+
+  const renderAllJobs = () => {
     const q = query(collection(db, "Map Jobs"));
 
     onSnapshot(q, (snapshot) => {
@@ -134,10 +157,33 @@ const DoerMapScreen = () => {
       setPostedJobs(results);
       setBusinessPostedJobs(postedByBusiness);
     });
-    // } else {
-    //   console.log("oops!");
-    // }
-  }, []);
+  }
+
+  //Pulls in Posted Job info from DB.. initial rendering
+  // useEffect(() => {
+ 
+  //   const q = query(collection(db, "Map Jobs"));
+
+  //   onSnapshot(q, (snapshot) => {
+  //     let results = [];
+  //     let postedByBusiness = [];
+  //     snapshot.docs.forEach((doc) => {
+   
+  //       if (doc.id === "0a9fb80c-8dc5-4ec0-9316-7335f7fc0058") {
+  
+  //       } else if (doc.data().isPostedByBusiness) {
+  //         postedByBusiness.push({ ...doc.data(), id: doc.id });
+  //       } else {
+  //         results.push({ ...doc.data(), id: doc.id });
+  //         console.log("this is from results",doc.data())
+  //       }
+  //     });
+
+  //     setPostedJobs(results);
+  //     setBusinessPostedJobs(postedByBusiness);
+  //   });
+
+  // }, []);
 
   const [appliedJobs, setAppliedJobs] = useState([]);
 
@@ -1344,7 +1390,7 @@ const DoerMapScreen = () => {
                 {/* <div className="items-center justify-center z-30">
                 <JobFilter />
                 </div> */}
-                <Center  ml={24}>
+                {isDesktop ? (  <Center ml={24} >
                   
                   <Card
                     align="center"
@@ -1352,13 +1398,44 @@ const DoerMapScreen = () => {
                     width={{ base: "full", md: "auto" }}
                     
                  
-                    mr={{ base: "80px", md: "0" }}
+                    // mr={{ base: "80px", md: "0" }}
                     ml={{ base: "0px", md: "80px" }}
                   >
                       <JobFilter />
                     
                   </Card>
-                </Center>
+                </Center>) : (  <Center  >
+                  
+                  <Card
+                    align="center"
+                
+                 
+                    
+                 width={{base: "100vw"}}
+                    // mr={{ base: "80px", md: "0" }}
+                    // ml={{ base: "0px", md: "80px" }}
+                  >
+                    <div className="w-3/4 mt-4 mb-2">
+               
+          <Menu >
+  <MenuButton width={{base: "100%"}}>
+  <a class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 cursor-pointer" >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+</svg>
+
+            Search
+          </a>
+
+  </MenuButton>
+  <MenuList  width={{base: "100vw"}}>
+<JobFilter />
+  </MenuList>
+</Menu>
+          </div>
+                  </Card>
+                </Center>)}
+              
 
                 {allJobs !== null &&
                   allJobs.map((allJobs) => (

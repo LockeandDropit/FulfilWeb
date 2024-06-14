@@ -889,11 +889,11 @@ renderAllJobs()
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
-          <div class="mt-7 bg-white rounded-xl ">
+          <div class="mt-5 bg-white rounded-xl ">
             <div class="p-4 sm:p-7">
               <div class="text-center">
                 <h1 class="block text-2xl font-bold text-gray-800">Sign in</h1>
-                <p class="mt-2 text-sm text-gray-600">
+                {/* <p class="mt-2 text-sm text-gray-600">
                   Don't have an account yet?
                   <button
                     class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
@@ -901,10 +901,10 @@ renderAllJobs()
                   >
                     Sign up here
                   </button>
-                </p>
+                </p> */}
               </div>
 
-              <div class="mt-5">
+              <div class="mt-3">
                 <button
                   type="button"
                   class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
@@ -934,7 +934,7 @@ renderAllJobs()
                       fill="#EB4335"
                     />
                   </svg>
-                  Sign in with Google
+                  Sign up with Google
                 </button>
 
                 <div class="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6">
@@ -1018,6 +1018,15 @@ renderAllJobs()
                     >
                    
                     </input>
+                    <p class="mt-2 text-center text-sm text-gray-600">
+                  Don't have an account yet?
+                  <button
+                    class="text-sky-400  decoration-2 hover:underline ml-1 font-medium"
+                    onClick={() => navigate("/DoerEmailRegister")}
+                  >
+                    Sign up here
+                  </button>
+                </p>
                   </div>
                 </form>
               </div>

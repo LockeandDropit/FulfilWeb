@@ -159,31 +159,7 @@ renderAllJobs()
     });
   }
 
-  //Pulls in Posted Job info from DB.. initial rendering
-  // useEffect(() => {
  
-  //   const q = query(collection(db, "Map Jobs"));
-
-  //   onSnapshot(q, (snapshot) => {
-  //     let results = [];
-  //     let postedByBusiness = [];
-  //     snapshot.docs.forEach((doc) => {
-   
-  //       if (doc.id === "0a9fb80c-8dc5-4ec0-9316-7335f7fc0058") {
-  
-  //       } else if (doc.data().isPostedByBusiness) {
-  //         postedByBusiness.push({ ...doc.data(), id: doc.id });
-  //       } else {
-  //         results.push({ ...doc.data(), id: doc.id });
-  //         console.log("this is from results",doc.data())
-  //       }
-  //     });
-
-  //     setPostedJobs(results);
-  //     setBusinessPostedJobs(postedByBusiness);
-  //   });
-
-  // }, []);
 
   const [appliedJobs, setAppliedJobs] = useState([]);
 
@@ -389,6 +365,8 @@ renderAllJobs()
     //add all jobs to this to get stuff removed?
   }, [appliedJobs, postedJobs, allJobs]);
 
+
+  //THIS IS THE CODE CAUSING SOME JOBS THAT HAVE NOT BEEN APPLIED TO TO BE DELETED
   useEffect(() => {
     if (appliedJobs.length !== 0 && businessPostedJobs.length !== 0) {
       appliedJobs.forEach((appliedJob) => {
@@ -1394,7 +1372,7 @@ renderAllJobs()
                   
                   <Card
                     align="center"
-                
+                mt={2}
                     width={{ base: "full", md: "auto" }}
                     
                  

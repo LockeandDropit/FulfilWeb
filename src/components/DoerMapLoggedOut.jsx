@@ -33,6 +33,9 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Modal,
+  Menu,
+  MenuButton,
+  MenuList,
     ModalOverlay,
     ModalContent,
     ModalHeader,
@@ -40,6 +43,8 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure, } from "@chakra-ui/react";
+    import JobFilter from "../pages/Doer/components/JobFilter.jsx"
+    import { useSearchResults } from "../pages/Doer/Chat/lib/searchResults"
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
 import {
   FormControl,
@@ -91,7 +96,7 @@ const DoerMapLoggedOut = (props) => {
   const [postedJobs, setPostedJobs] = useState([]);
   const [businessPostedJobs, setBusinessPostedJobs] = useState([]);
 
-
+  const { searchResults } = useSearchResults()
 
   const closeInfoWindow = props.props
 
@@ -104,34 +109,42 @@ console.log(closeInfoWindow)
 
   }, [closeInfoWindow])
 
-
-
-  //Pulls in Posted Job info from DB.. initial rendering
   useEffect(() => {
-    // should this be done on log ina nd stored in redux store so it's cheaper?
+    if (searchResults === null) {
+ //normal render
+renderAllJobs()
+ //initial render with all f(x)
+    } else {
+     setBusinessPostedJobs(searchResults)
+     console.log("search results map screen",searchResults)
+    }
+  }, [searchResults])
+
+
+  const renderAllJobs = () => {
     const q = query(collection(db, "Map Jobs"));
 
     onSnapshot(q, (snapshot) => {
       let results = [];
       let postedByBusiness = [];
       snapshot.docs.forEach((doc) => {
+        //review what thiss does
         if (doc.id === "0a9fb80c-8dc5-4ec0-9316-7335f7fc0058") {
-        //ignore, this is for display on landingNeederMap only
+          //ignore this job is for Needer map screen
         } else if (doc.data().isPostedByBusiness) {
           postedByBusiness.push({ ...doc.data(), id: doc.id });
         } else {
-        //review what thiss does
-        results.push({ ...doc.data(), id: doc.id });
+          results.push({ ...doc.data(), id: doc.id });
+          console.log("this is from results",doc.data())
         }
       });
- 
+
       setPostedJobs(results);
       setBusinessPostedJobs(postedByBusiness);
     });
-    // } else {
-    //   console.log("oops!");
-    // }
-  }, []);
+  }
+
+
 
   const [allJobs, setAllJobs] = useState([]);
 
@@ -470,44 +483,51 @@ console.log(closeInfoWindow)
             mapId="6cc03a62d60ca935"
             onClick={() => handleCloseInfoWindow()}
           >
-            {/* <Center marginTop="8px">
-            <Card
-                  align="center"
-                  border="1px"
-                  borderColor="gray.400"
-                  borderWidth="1.5px"
-                  width="auto"
-                  boxShadow="lg"
-                  flexDirection="row"
-                >
-                
-                
-                  <Select placeholder="Looking for something specific?" width="360px"  onChange={(e) => setSearchJobCategory(e.target.value)}>
-                  <option value="all">Clear Selection</option>
-                  <option >--------------------------------</option>
-                  <option value="asphalt">Asphalt</option>
-                <option value="carpentry">Carpentry</option>
-                <option value="concrete">Concrete</option>
-                <option value="drywall">Drywall</option>
-                <option value="electrical work">Electrical Work</option>
-                <option value="general handyman">General Handyman</option>
-                <option value="gutter cleaning">Gutter Cleaning</option>
-                <option value="hvac">HVAC</option>
-                <option value="landscaping">Landscaping</option>
-                <option value="painting">Painting</option>
-                <option value="plumbing">Plumbing</option>
-                <option value="pressure washing">Pressure Washing</option>
-                <option value="roofing">Roofing</option>
-                <option value="siding">Siding</option>
-                <option value="snow removal">Snow Removal</option>
-                <option value="window installation">Window Installation</option>
-                <option value="window washing">Window Washing</option>
-                <option value="yard work">Yard Work</option>
-              
-                  </Select>
+             {isDesktop ? (  <Center >
+                  
+                  <Card
+                    align="center"
+                    mt={2}
+                    width={{ base: "full", md: "auto" }}
+                    
                  
-                </Card>
-            </Center> */}
+                    // mr={{ base: "80px", md: "0" }}
+                    ml={{ base: "0px", md: "80px" }}
+                  >
+                      <JobFilter />
+                    
+                  </Card>
+                </Center>) : (  <Center  >
+                  
+                  <Card
+                    align="center"
+                
+                 
+                    
+                 width={{base: "100vw"}}
+                    // mr={{ base: "80px", md: "0" }}
+                    // ml={{ base: "0px", md: "80px" }}
+                  >
+                    <div className="w-3/4 mt-4 mb-2">
+               
+          <Menu >
+  <MenuButton width={{base: "100%"}}>
+  <a class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 cursor-pointer" >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+</svg>
+
+            Search
+          </a>
+
+  </MenuButton>
+  <MenuList  width={{base: "100vw"}}>
+<JobFilter />
+  </MenuList>
+</Menu>
+          </div>
+                  </Card>
+                </Center>)}
             {businessPostedJobs !== null &&
                   businessPostedJobs.map((businessPostedJobs) => (
                     //credit https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN

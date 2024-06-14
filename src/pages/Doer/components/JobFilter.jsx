@@ -57,6 +57,7 @@ const JobFilter = () => {
   const [positionType, setPositionType] = useState(null);
 
   const search = () => {
+   
     const q = query(collection(db, "Map Jobs"));
 
     onSnapshot(q, (snapshot) => {
@@ -374,7 +375,10 @@ const JobFilter = () => {
                   </select>
                 </div>
 
-                <button
+             
+              </div>
+            </form>
+            <button
                   class="w-full sm:w-auto whitespace-nowrap py-3 px-4  mt-2 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                   onClick={() => search()}
                 >
@@ -400,8 +404,6 @@ const JobFilter = () => {
                 >
                   Clear search
                 </a>
-              </div>
-            </form>
           </div>
         </div>
       )}

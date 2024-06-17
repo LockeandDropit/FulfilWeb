@@ -696,34 +696,43 @@ renderAllJobs()
 
   const saveJob = (x) => {
     setDoc(doc(db, "users", user.uid, "Saved Jobs", x.jobID), {
-      requirements: x.requirements ? x.requirements : null,
-      requirements2: x.requirements2 ? x.requirements2 : null,
-      requirements3: x.requirements3 ? x.requirements3 : null,
-      isFlatRate: x.isFlatRate ? x.isFlatRate : null,
-      niceToHave: x.niceToHave ? x.niceToHave : null,
+      companyName: x.companyName,
+      isPostedByBusiness: true,
+      isSalaried :  x.isSalaried,
+      applicantDescription: x.applicantDescription,
+      benefitsDescription : x.benefitsDescription ? x.benefitsDescription : null,
+      isFullTimePosition : x.isFullTimePosition,
+      employerID: x.employerID,
+      // employerEmail: user.email,
+      employerFirstName: x.employerFirstName,
+      employerLastName: x.employerLastName,
+      employerProfilePicture: x.employerProfilePicture,
+      jobTitle: x.jobTitle,
       jobID: x.jobID,
-      jobTitle: x.jobTitle ? x.jobTitle : null,
-      hourlyRate: x.hourlyRate ? x.hourlyRate : null,
-      streetAddress: x.streetAddress ? x.streetAddress : null,
-      city: x.city ? x.city : null,
-      state: x.state ? x.state : null,
-      zipCode: x.zipCode ? x.zipCode : null,
-      description: x.description ? x.description : null,
-      addressNumber: x.addressNumber ? x.addressNumber : null,
-      addressName: x.addressName ? x.addressName : null,
-      lowerRate: x.lowerRate ? x.lowerRate : null,
-      upperRate: x.upperRate ? x.upperRate : null,
-      addressSuffix: x.addressSuffix ? x.addressSuffix : null,
-      locationLat: x.locationLat ? x.locationLat : null,
-      locationLng: x.locationLng ? x.locationLng : null,
-      businessName: x.businessName ? x.businessName : null,
-      employerID: x.employerID ? x.employerID : null,
-      employerFirstName: x.employerFirstName ? x.employerFirstName : null,
-      flatRate: x.flatRate ? x.flatRate : null,
-      isHourly: x.isHourly ? x.isHourly : null,
-      category: x.category ? x.category : null,
-      isOneTime: x.isOneTime ? x.isOneTime : null,
-      lowerCaseJobTitle: x.lowerCaseJobTitle ? x.lowerCaseJobTitle : null,
+      firstName: x.firstName,
+      lowerRate: x.lowerRate,
+      upperRate: x.upperRate,
+      isVolunteer: x.isVolunteer,
+      isOneTime: x.isOneTime,
+     
+
+      flatRate: x.flatRate,
+      isHourly: x.isHourly,
+      lowerCaseJobTitle: x.lowerCaseJobTitle,
+      datePosted: x.datePosted,
+      category: x.category,
+      city: x.city,
+      streetAddress: x.streetAddress,
+      state: x.state,
+      zipCode: x.zipCode,
+      locationLat: x.locationLat,
+      locationLng: x.locationLng,
+      description: x.description,
+      requirements: x.requirements,
+      requirements2: x.requirements2,
+      requirements3: x.requirements3,
+      niceToHave: x.niceToHave,
+  
     })
       .then(() => {
         //all good
@@ -1339,6 +1348,9 @@ renderAllJobs()
   const handleRemoveFromMap = (x) => {
     deleteDoc(doc(db, "users", user.uid, "Past Jobs Map", x.jobTitle), {});
   };
+
+
+
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
   return (
     <div>
@@ -1851,6 +1863,18 @@ renderAllJobs()
 
                                     <div class="p-4 flex justify-between gap-x-2">
                                       <div class="w-full flex justify-end items-center gap-x-2">
+                                      <button
+                                          type="button"
+                                          class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                          data-hs-overlay="#hs-pro-datm"
+                                          onClick={() => saveJob(businessPostedJobs)}
+                                        >
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+</svg>
+
+                                          Save
+                                        </button>
                                         <button
                                           type="button"
                                           class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "

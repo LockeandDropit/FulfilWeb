@@ -260,6 +260,7 @@ const JobFilter = () => {
                     <option value={null}>Select position type</option>
                     <option value="true">Full-time</option>
                     <option value="false">Part-time</option>
+                    <option value="gigwork">Gig-work</option>
                   </select>
                 </div>
 

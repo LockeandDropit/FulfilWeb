@@ -136,28 +136,17 @@ const DoerSavedJobs = () => {
 
   const [showAddJob, setShowAddJob] = useState(false);
 
-  const handleStoreAndNavigatePosted = (x) => {
+  const handleStoreAndNavigateSaved = (x) => {
     console.log(x.jobTitle, x.jobID);
 
-    fetchJobInfo(user.uid, x.jobID, "Posted Jobs", x.jobTitle);
-    if (x.hasNewApplicant === true) {
-      updateDoc(doc(db, "employers", user.uid, "Posted Jobs", x.jobTitle), {
-        hasNewApplicant: false,
-      })
-        .then(() => {
-          //user info submitted to Job applicant file
-        })
-        .catch((error) => {
-          //uh oh
-          console.log(error);
-        });
-    }
-    setTimeout(() => navigate("/JobDetails"), 500);
+    fetchJobInfo(user.uid, x.jobID, "Saved Jobs", x.jobTitle);
+ 
+    setTimeout(() => navigate("/SavedJobDetails"), 500);
   };
 
   const handleStoreAndNavigateHired = (x) => {
     console.log(x.jobTitle, x.jobID);
-    fetchJobInfo(user.uid, x.jobID, "Jobs In Progress", x.jobTitle);
+    fetchJobInfo(user.uid, x.jobID, "Saved Jobs", x.jobTitle);
     if (x.hasNewNotification === true) {
       updateDoc(
         doc(db, "employers", user.uid, "Jobs In Progress", x.jobTitle),
@@ -512,7 +501,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                             <td class="size-px whitespace-nowrap px-3 py-4"></td>
                             <td class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer">
                               <div
-                                onClick={() => handleStoreAndNavigateHired(job)}
+                                onClick={() => handleStoreAndNavigateSaved(job)}
                                 class="w-full flex items-center gap-x-3"
                               >
                                 <div class="grow">
@@ -594,7 +583,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                               
                                   <button
                                     onClick={() =>
-                                      handleStoreAndNavigateHired(job)
+                                      handleStoreAndNavigateSaved(job)
                                     }
                                     className="py-2 px-3  w-full text-sm font-semibold rounded-md border border-transparent bg-sky-400 hover:bg-sky-500 text-white disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
                                   >
@@ -970,7 +959,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                             <td class="size-px whitespace-nowrap px-3 py-4"></td>
                             <td
                               class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
-                              onClick={() => handleStoreAndNavigatePosted(job)}
+                              onClick={() =>handleStoreAndNavigateSaved(job)}
                             >
                               <div class="w-full flex items-center gap-x-3">
                                 <div class="grow">
@@ -1023,7 +1012,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                                 {job.hasNewApplicant || job.hasUnreadMessage ? (
                                   <button
                                     onClick={() =>
-                                      handleStoreAndNavigatePosted(job)
+                                      handleStoreAndNavigateSaved(job)
                                     }
                                     className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
                                   >
@@ -1035,7 +1024,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                                 ) : (
                                   <button
                                     onClick={() =>
-                                      handleStoreAndNavigatePosted(job)
+                                      handleStoreAndNavigateSaved(job)
                                     }
                                     className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
                                   >
@@ -1054,7 +1043,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                             <td class="size-px whitespace-nowrap px-3 py-4"></td>
                             <td class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer">
                               <div
-                                onClick={() => handleStoreAndNavigateHired(job)}
+                                onClick={() => handleStoreAndNavigateSaved(job)}
                                 class="w-full flex items-center gap-x-3"
                               >
                                 <div class="grow">
@@ -1140,7 +1129,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                                 {job.hasNewNotification ? (
                                   <button
                                     onClick={() =>
-                                      handleStoreAndNavigateHired(job)
+                                      handleStoreAndNavigateSaved(job)
                                     }
                                     className="py-2 px-3  w-full relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-green-100 text-green-700 hover:bg-green-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
                                   >
@@ -1152,7 +1141,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                                 ) : (
                                   <button
                                     onClick={() =>
-                                      handleStoreAndNavigateHired(job)
+                                      handleStoreAndNavigateSaved(job)
                                     }
                                     className="py-2 px-3  w-full text-sm font-semibold rounded-md border border-transparent bg-green-100 text-green-700 hover:bg-green-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
                                   >

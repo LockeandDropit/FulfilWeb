@@ -109,7 +109,7 @@ import JobDetailsReadyToPay from "./pages/Needer/HomePage/JobDetailsReadyToPay";
 import ChatPlaceholder from "./pages/Needer/Chat/ChatPlaceholder";
 import ChatHolder from "./pages/Needer/Chat/ChatHolder";
 import DoerSavedJobs from "./pages/Doer/DoerSavedJobs";
-
+import SavedJobDetails from "./pages/Doer/SavedJobDetails";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebaseConfig"
@@ -458,6 +458,10 @@ const router = createBrowserRouter([
   {
     path: "/DoerSavedJobs",
     element: <DoerSavedJobs/>,
+  },
+  {
+    path: "/SavedJobDetails",
+    element: <SavedJobDetails/>,
   },
 ]);
 

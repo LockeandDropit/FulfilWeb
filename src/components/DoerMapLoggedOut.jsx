@@ -569,9 +569,12 @@ console.log("session id ", sessionId)
   }
   }, [])
 
+  const [urlCopied, setUrlCopied] = useState(false)
 
-  const handleShare = () => {
 
+  const handleCopiedURL = (businessPostedJobs) => {
+    setUrlCopied(true)
+    navigator.clipboard.writeText(`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`)
   }
 
 
@@ -713,16 +716,23 @@ console.log("session id ", sessionId)
                                   <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
                                     <div class="p-4 ">
                                       <div class="">
+                                        <div className="flex">
                                         <label
                                           for="hs-pro-dactmt"
                                           class="block mb-2 text-lg font-medium text-gray-800">
                                           {businessPostedJobs.jobTitle}
                                         </label>
-                                        <label onClick={() => {navigator.clipboard.writeText(`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`)}}>
-                                          share
-                                        </label>
 
+                                        {urlCopied ? (<span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">Copied!</span>) : (<label onClick={() => handleCopiedURL(businessPostedJobs)}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4 ml-1 cursor-pointer">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+</svg>
 
+                                         
+                                        </label>)}
+                                        
+
+                                        </div>
                                 {businessPostedJobs.isFullTimePosition === true ? ( <label
                                           for="hs-pro-dactmt"
                                           class="block  text-md font-medium text-gray-800"

@@ -181,6 +181,11 @@ const NeederAccountManager = () => {
     }
   }, [privacyAgreement, taxAgreementConfirmed, paymentsActive]);
 
+  //link to account management billing.stripe.com/p/login/dR6eX2bAJ2qzaIM000
+  const manageSubscription = () => {
+    window.open("billing.stripe.com/p/login/dR6eX2bAJ2qzaIM000", "_blank");
+  }
+
 
   //text flex end credit (margin-left: auto) https://www.glennstovall.com/flex-row-end-position/
   return (
@@ -333,6 +338,30 @@ const NeederAccountManager = () => {
             </div>
 
             <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
+                <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
+                  <div class="sm:col-span-4 2xl:col-span-2">
+                    <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
+                     Delete Account
+                    </label>
+                  </div>
+
+                  <div class="sm:col-span-8 xl:col-span-6 2xl:col-span-5">
+                   
+                      <button
+                        type="button"
+                        class="py-1.5 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                        data-hs-overlay="#hs-pro-dasadpm"
+                        onClick={() => manageSubscription()}
+                      >
+                      Manage subscription
+                      </button>
+                  
+                  </div>
+                  
+                </div>
+              </div>
+
+              <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
                 <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
                   <div class="sm:col-span-4 2xl:col-span-2">
                     <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">

@@ -997,7 +997,8 @@ console.log("session id ", sessionId)
 
                                   <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
                                     <div class="p-4 ">
-                                      <div class="flex">
+                                      <div class="">
+                                        <div className="flex">
                                         <label
                                           for="hs-pro-dactmt"
                                           class="block mb-2 text-lg font-medium text-gray-800">
@@ -1010,7 +1011,7 @@ console.log("session id ", sessionId)
 
                                          
                                         </label>)}
-
+                                        </div>
                                  <label
                                           for="hs-pro-dactmt"
                                           class="block  text-md font-medium text-gray-800"

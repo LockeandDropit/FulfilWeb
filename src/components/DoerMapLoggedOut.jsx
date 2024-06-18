@@ -56,7 +56,28 @@ import {
 } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { ViewIcon } from "@chakra-ui/icons";
-
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  GabShareButton,
+  HatenaShareButton,
+  InstapaperShareButton,
+  LineShareButton,
+  LinkedinShareButton,
+  LivejournalShareButton,
+  MailruShareButton,
+  OKShareButton,
+  PinterestShareButton,
+  PocketShareButton,
+  RedditShareButton,
+  TelegramShareButton,
+  TumblrShareButton,
+  TwitterShareButton,
+  ViberShareButton,
+  VKShareButton,
+  WhatsappShareButton,
+  WorkplaceShareButton,
+} from "react-share";
 
 import {
   onAuthStateChanged,
@@ -504,7 +525,60 @@ renderAllJobs()
     onOpenSignIn()
   }
 
-  console.log(searchIsMobile)
+
+
+  //this is to receive jobs
+  //will have to eventually makew this so that it checks if the user is logged in... 
+  //like if user ? && isDoer navigate("DoerMapScreen/sessionid={blah}")
+  // else (stay here and render it on the logged out map)
+
+ 
+  //"https://getfulfil.com/DoerLoggedOut/?session_id=CHECKOUT_SESSION_ID",
+//test http://localhost:3000/DoerMapLoggedOut/?session_id=CHECKOUT_SESSION_ID
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const sessionId = urlParams.get("session_id");
+
+  if (sessionId) {
+    const q = query(collection(db, "Map Jobs"));
+console.log("session id ", sessionId)
+    onSnapshot(q, (snapshot) => {
+      let results = [];
+      let postedByBusiness = [];
+      snapshot.docs.forEach((doc) => {
+        //review what thiss does
+        if (doc.data().jobID === sessionId) {
+            if (doc.data().isPostedByBusiness === true) {
+              // postedByBusiness.push({ ...doc.data(), id: doc.id });
+              // setPostedJobs([])
+              handlePostedByBusinessToggleOpen(doc.data())
+              console.log("business result inner", doc.data())
+            } else if (doc.data().isFullTimePosition === "gigwork") {
+              handlePostedByBusinessToggleOpen(doc.data())
+              console.log("gig link", doc.data())
+            }
+        } else {
+
+        }
+      });
+
+      // setPostedJobs(results);
+      // setBusinessPostedJobs(postedByBusiness);
+    });
+  }
+  }, [])
+
+
+  const handleShare = () => {
+
+  }
+
+
+
+
+
+
  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
@@ -629,7 +703,7 @@ renderAllJobs()
                               {businessPostedJobs.jobTitle}
                             </DrawerHeader>
                             <DrawerBody>
-                              <div class=" ">
+                              <div class="">
                                 <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
                                   {/* <div class="py-3 px-4 flex justify-between items-center border-b ">
                                   <h3 class="font-semibold text-gray-800">Create A Job</h3>
@@ -644,6 +718,10 @@ renderAllJobs()
                                           class="block mb-2 text-lg font-medium text-gray-800">
                                           {businessPostedJobs.jobTitle}
                                         </label>
+                                        <label onClick={() => {navigator.clipboard.writeText(`https://getfulfil.com/DoerLoggedOut/?session_id=${businessPostedJobs.jobID}`)}}>
+                                          share
+                                        </label>
+
 
                                 {businessPostedJobs.isFullTimePosition === true ? ( <label
                                           for="hs-pro-dactmt"

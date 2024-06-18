@@ -126,8 +126,8 @@ useEffect(() => {
       <p class="mb-3"><span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-blue-100 text-blue-800 ">Premium Subscription</span></p>
       <h4 class="font-medium text-lg text-gray-800 ">All-Access</h4>
       <span class="mt-5 font-bold text-5xl text-gray-800">
-        <span class="font-bold text-2xl ">$</span>
-        1
+        {/* <span class="font-bold text-2xl ">$</span> */}
+        Free!
       </span>
       <p class="mt-2 text-sm text-gray-500 ">Access everything for a 1-month trial period</p>
       <p class="mt-2 text-sm text-gray-500 ">Plan increases to $29/month after trial period ends</p>

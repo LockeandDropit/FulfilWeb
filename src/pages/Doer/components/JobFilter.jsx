@@ -22,6 +22,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Menu, MenuButton, MenuList, MenuItem,
   FormLabel,
   Input,
   Button,
@@ -40,7 +41,7 @@ const JobFilter = () => {
   const [hasRun, setHasRun] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
-  const { setSearchResults } = useSearchResults();
+  const { setSearchResults, searchIsMobile } = useSearchResults();
 
   useEffect(() => {
     if (hasRun === false) {
@@ -307,6 +308,20 @@ const JobFilter = () => {
           </div>
         </div>
       ) : (
+        <Menu closeOnSelect={true}>
+        <MenuButton width={{base: "100%"}}>
+        <a class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 cursor-pointer" >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+        <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+      </svg>
+      
+                  Search
+                </a>
+      
+        </MenuButton>
+        <MenuList  width={{base: "100vw"}}>
+    
+      
         <div class="w-full bg-white  px-4 sm:px-6 lg:px-8  mx-auto">
           <div class="text-center mx-auto mb-4 mt-4">
             <form id="search-form">
@@ -379,7 +394,7 @@ const JobFilter = () => {
              
               </div>
             </form>
-            <button
+            <MenuItem>            <button
                   class="w-full sm:w-auto whitespace-nowrap py-3 px-4  mt-2 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                   onClick={() => search()}
                 >
@@ -399,6 +414,8 @@ const JobFilter = () => {
                   </svg>
                   Search
                 </button>
+                </MenuItem>
+
                 <a
                   class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                   onClick={() => clearSearch()}
@@ -407,6 +424,8 @@ const JobFilter = () => {
                 </a>
           </div>
         </div>
+        </MenuList>
+        </Menu>
       )}
 
       <Modal isOpen={isOpen} onClose={onClose} size="xl">

@@ -6,9 +6,12 @@ import { useUserStore } from "./userStore";
 
 export const useSearchResults = create((set) => ({
  searchResults: null,
+ searchIsMobile: false,
  isSearchLoading: true,
+ setSearchIsMobile: () => {set({searchIsMobile: false})},
   setSearchResults: (results) => {
-    set({searchResults: results, isSearchLoading: false})
+    set({searchResults: results, isSearchLoading: false, searchIsMobile: true})
+    
     console.log("results from store", results)
   },
 

@@ -96,7 +96,7 @@ const DoerMapLoggedOut = (props) => {
   const [postedJobs, setPostedJobs] = useState([]);
   const [businessPostedJobs, setBusinessPostedJobs] = useState([]);
 
-  const { searchResults } = useSearchResults()
+  const { searchResults, searchIsMobile, setSearchIsMobile } = useSearchResults()
 
   const closeInfoWindow = props.props
 
@@ -117,6 +117,7 @@ renderAllJobs()
     } else if (searchResults !== null && searchResults[0].isFullTimePosition === "gigwork" ) {
         setPostedJobs(searchResults)
         setBusinessPostedJobs(null)
+
     }
     else {
      setBusinessPostedJobs(searchResults)
@@ -503,6 +504,7 @@ renderAllJobs()
     onOpenSignIn()
   }
 
+  console.log(searchIsMobile)
  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
@@ -539,13 +541,13 @@ renderAllJobs()
                     width={{ base: "full", md: "auto" }}
                     
                  
-                    // mr={{ base: "80px", md: "0" }}
+                 
                     ml={{ base: "0px", md: "80px" }}
                   >
                       <JobFilter />
                     
                   </Card>
-                </Center>) : (  <Center  >
+                </Center>) : (<Center>
                   
                   <Card
                     align="center"
@@ -553,12 +555,11 @@ renderAllJobs()
                  
                     
                  width={{base: "100vw"}}
-                    // mr={{ base: "80px", md: "0" }}
-                    // ml={{ base: "0px", md: "80px" }}
+                 
                   >
                     <div className="w-3/4 mt-4 mb-2">
                
-          <Menu >
+          {/* <Menu closeOnSelect={true}>
   <MenuButton width={{base: "100%"}}>
   <a class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 cursor-pointer" >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
@@ -572,7 +573,8 @@ renderAllJobs()
   <MenuList  width={{base: "100vw"}}>
 <JobFilter />
   </MenuList>
-</Menu>
+</Menu> */}
+<JobFilter /> 
           </div>
                   </Card>
                 </Center>)}

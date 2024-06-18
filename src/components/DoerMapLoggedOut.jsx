@@ -533,7 +533,7 @@ renderAllJobs()
   // else (stay here and render it on the logged out map)
 
  
-  //"https://getfulfil.com/DoerLoggedOut/?session_id=CHECKOUT_SESSION_ID",
+  //"https://getfulfil.com/DoerMapLoggedOut/?session_id=CHECKOUT_SESSION_ID",
 //test http://localhost:3000/DoerMapLoggedOut/?session_id=CHECKOUT_SESSION_ID
   useEffect(() => {
     const queryString = window.location.search;
@@ -718,7 +718,7 @@ console.log("session id ", sessionId)
                                           class="block mb-2 text-lg font-medium text-gray-800">
                                           {businessPostedJobs.jobTitle}
                                         </label>
-                                        <label onClick={() => {navigator.clipboard.writeText(`https://getfulfil.com/DoerLoggedOut/?session_id=${businessPostedJobs.jobID}`)}}>
+                                        <label onClick={() => {navigator.clipboard.writeText(`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`)}}>
                                           share
                                         </label>
 

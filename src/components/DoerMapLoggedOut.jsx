@@ -318,7 +318,7 @@ renderAllJobs()
 
   const handleCloseInfoWindow = () => {
     setOpenInfoWindowMarkerID(null)
-    
+    setUrlCopied(false)
   }
 
   const [openModal, setOpenModal] = useState(null);
@@ -1528,6 +1528,31 @@ console.log("session id ", sessionId)
         
         </ModalContent>
       </Modal>
+      {/* <div id="cookies-simple-with-icon-and-dismiss-button" class="fixed bottom-0 end-0 z-[60] w-auto items-center justify-center mx-auto p-6">
+
+  <div class="p-4 bg-white border border-gray-200 rounded-xl shadow-sm ">
+    <div class=" gap-x-4">
+    
+
+      <p class="text-sm text-gray-800">
+        Not seeing a job that suites you? Enter your email to get updates about new jobs <a class="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline font-medium " >near you.</a>
+      </p>
+
+      <div>
+        <div className="flex">
+      <div class="max-w-sm space-y-3">
+  <input type="text" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="Enter your email here" />
+</div>
+        <button type="button" class=" ml-2 p-2 inline-flex items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none " data-hs-remove-element="#cookies-simple-with-icon-and-dismiss-button">
+          <span >Stay Notified</span>
+         
+        </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div> */}
           </Map>
         </Box>
       </APIProvider>

@@ -250,6 +250,14 @@ const DoerAddProfileInfo = () => {
     }
   };
 
+  const handleAgreeAll = () => {
+    setTaxAgreementConfirmed(true)
+    setTermsOfService(true)
+    setPrivacyPolicy(true)
+    //this is depreciated, only kept for now so I dont need to fiddle with all that other code
+    setAgeAgreement(true)
+  }
+
     //handle check agreements
     const [termsOfService, setTermsOfService] = useState(false)
     const [privacyPolicy, setPrivacyPolicy] = useState(false)
@@ -314,36 +322,6 @@ const DoerAddProfileInfo = () => {
               </div>
             </div>
 
-            <div className="sm:col-span-4">
-              <label  className="block text-sm font-medium leading-6 text-gray-900">
-                Phone Number (optional)
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-            <div className="sm:col-span-4">
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                Business Name (optional)
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  onChange={(e) => setBusinessName(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
 
             
 
@@ -382,6 +360,38 @@ const DoerAddProfileInfo = () => {
             </div>
 
             
+            <div className="sm:col-span-4">
+              <label  className="block text-sm font-medium leading-6 text-gray-900">
+                Phone Number (optional)
+              </label>
+              <div className="mt-2">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div className="sm:col-span-4">
+              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                Business Name (optional)
+              </label>
+              <div className="mt-2">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  onChange={(e) => setBusinessName(e.target.value)}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            
           </div>
         </div>
 
@@ -390,9 +400,9 @@ const DoerAddProfileInfo = () => {
 
           <div className="mt-10 space-y-10">
             <fieldset>
-              <legend className="text-sm font-semibold leading-6 text-gray-900">Agreements</legend>
+              <legend className="text-sm font-semibold leading-6 text-gray-900">User Agreements</legend>
               <div className="mt-6 space-y-6">
-                <div className="relative flex gap-x-3">
+                {/* <div className="relative flex gap-x-3">
                   <div className="flex h-6 items-center">
                     <input
                       id="comments"
@@ -408,25 +418,27 @@ const DoerAddProfileInfo = () => {
                     </label>
                    
                   </div>
-                </div>
+                </div> */}
                 <div className="relative flex gap-x-3">
                   <div className="flex h-6 items-center">
                     <input
                       id="candidates"
                       name="candidates"
-                      onChange={(e) => setPrivacyPolicy(e.target.checked)}
+                      // onChange={(e) => setPrivacyPolicy(e.target.checked)}
+                       onChange={(e) => handleAgreeAll(e.target.checked)}
+                      
                       type="checkbox"
                       className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
                     />
                   </div>
                   <div className="text-sm leading-6">
                     <label  className="font-medium text-gray-900" >
-                    I have read and agree to the  <span class="text-sky-400" onClick={() => onOpen()} > Privacy Policy.</span>
+                    I have read and agree to the  <span class="text-sky-400" onClick={() => onOpen()} > Privacy Policy,</span>, <span class="text-sky-400" onClick={() => onOpenTOS()}>Terms of Service.</span>, and by continuing I agree and understand that I am an independent contractor and not an employee of Fulfil.
                     </label>
                    
                   </div>
                 </div>
-                <div className="relative flex gap-x-3">
+                {/* <div className="relative flex gap-x-3">
                   <div className="flex h-6 items-center">
                     <input
                       id="offers"
@@ -442,8 +454,8 @@ const DoerAddProfileInfo = () => {
                     </label>
                     
                   </div>
-                </div>
-                <div className="relative flex gap-x-3">
+                </div> */}
+                {/* <div className="relative flex gap-x-3">
                   <div className="flex h-6 items-center">
                     <input
                       id="offers"
@@ -459,7 +471,7 @@ const DoerAddProfileInfo = () => {
                     </label>
                     
                   </div>
-                </div>
+                </div> */}
               </div>
             </fieldset>
            

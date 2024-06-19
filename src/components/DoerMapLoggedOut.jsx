@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import Header from "./Header.jsx";
-
+import {Helmet} from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { Input, Button, Text, Box, Container, Image } from "@chakra-ui/react";
 import { Center, Flex } from "@chakra-ui/react";
@@ -59,6 +59,8 @@ import { ViewIcon } from "@chakra-ui/icons";
 import {
   EmailShareButton,
   FacebookShareButton,
+  FacebookIcon,
+  RedditIcon,
   GabShareButton,
   HatenaShareButton,
   InstapaperShareButton,
@@ -246,6 +248,11 @@ renderAllJobs()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isOpen: isOpenSignIn, onOpen: onOpenSignIn, onClose: onCloseSignIn } = useDisclosure()
+  const {
+    isOpen: isOpenShare,
+    onOpen: onOpenShare,
+    onClose: onCloseShare,
+  } = useDisclosure();
   const {
     isOpen: isOpenDrawer,
     onOpen: onOpenDrawer,
@@ -596,7 +603,7 @@ console.log("session id ", sessionId)
       <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
         
         <Box
-              h={{ base: "100vh", lg: "90vh" }}
+              h={{ base: "100vh", lg: "92vh" }}
               w={{ base: "100vw", lg: "100vw" }}
               
             >
@@ -694,6 +701,7 @@ console.log("session id ", sessionId)
                         /
                       </AdvancedMarker>
                       {openInfoWindowMarkerID === businessPostedJobs.jobID ? (
+                        
                         <Drawer
                           onClose={onCloseDrawer}
                           isOpen={isOpenDrawer}
@@ -707,6 +715,12 @@ console.log("session id ", sessionId)
                             </DrawerHeader>
                             <DrawerBody>
                               <div class="">
+                              <Helmet>
+                <meta charSet="utf-8" />
+                <title>{businessPostedJobs.jobTitle}</title>
+                <meta name="description" content={businessPostedJobs.description} />
+                {/* <link rel="canonical" href=`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}` /> */}
+            </Helmet>
                                 <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
                                   {/* <div class="py-3 px-4 flex justify-between items-center border-b ">
                                   <h3 class="font-semibold text-gray-800">Create A Job</h3>
@@ -723,15 +737,22 @@ console.log("session id ", sessionId)
                                           {businessPostedJobs.jobTitle}
                                         </label>
 
-                                        {urlCopied ? (<span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">Copied!</span>) : (<label onClick={() => handleCopiedURL(businessPostedJobs)}>
+                                        {/* {urlCopied ? (<span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">Copied!</span>) : (<label onClick={() => handleCopiedURL(businessPostedJobs)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4 ml-1 cursor-pointer">
   <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
 </svg>
 
                                          
-                                        </label>)}
-                                        
+                                        </label>)} */}
+                                        <label onClick={() => onOpenShare()}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4 ml-1 cursor-pointer">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+</svg>
 
+                                         
+                                        </label>
+                                       
+                                      
                                         </div>
                                 {businessPostedJobs.isFullTimePosition === true ? ( <label
                                           for="hs-pro-dactmt"
@@ -934,6 +955,31 @@ console.log("session id ", sessionId)
                           </DrawerContent>
                         </Drawer>
                       ) : null}
+                       <Modal isOpen={isOpenShare} onClose={onCloseShare}>
+     
+        <ModalContent>
+       
+          <ModalCloseButton />
+          <ModalBody>
+          <div class="mt-5 bg-white rounded-xl ">
+            <div class="p-4 sm:p-7 text-center">
+              <div class="text-center mb-5">
+                <h1 class="block text-2xl font-bold text-gray-800">Share to</h1>
+                
+              </div>
+
+              <FacebookShareButton url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`}>
+                                        <FacebookIcon size={32} round={true}/>
+                                        </FacebookShareButton>
+                                        
+       
+            </div>
+          </div>
+          </ModalBody>
+
+        
+        </ModalContent>
+      </Modal>
                     </>
                   ))}
 
@@ -1379,6 +1425,7 @@ console.log("session id ", sessionId)
       </ModalFooter>
     </ModalContent>
   </Modal> */}
+
   <Modal isOpen={isOpenSignIn} onClose={onCloseSignIn}>
         <ModalOverlay />
         <ModalContent>
@@ -1531,21 +1578,17 @@ console.log("session id ", sessionId)
       {/* <div id="cookies-simple-with-icon-and-dismiss-button" class="fixed bottom-0 end-0 z-[60] w-auto items-center justify-center mx-auto p-6">
 
   <div class="p-4 bg-white border border-gray-200 rounded-xl shadow-sm ">
-    <div class=" gap-x-4">
-    
-
-      <p class="text-sm text-gray-800">
-        Not seeing a job that suites you? Enter your email to get updates about new jobs <a class="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline font-medium " >near you.</a>
+    <div class="gap-x-4">
+      <p class="text-sm font-semibold text-gray-800">
+        Not seeing a job that suites you? Enter your email to get updates about new jobs <a class="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline font-medium ">near you.</a>
       </p>
-
       <div>
-        <div className="flex">
-      <div class="max-w-sm space-y-3">
+        <div className="flex mt-2">
+      <div class="w-full space-y-3">
   <input type="text" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="Enter your email here" />
 </div>
-        <button type="button" class=" ml-2 p-2 inline-flex items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none " data-hs-remove-element="#cookies-simple-with-icon-and-dismiss-button">
+        <button type="button"   class="w-1/4 ml-1 py-1 px-2  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none">
           <span >Stay Notified</span>
-         
         </button>
         </div>
       </div>

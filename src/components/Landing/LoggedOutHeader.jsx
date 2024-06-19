@@ -418,13 +418,8 @@ const LoggedOutHeader = (props) => {
               <div class="text-center">
                 <h1 class="block text-2xl font-bold text-gray-800">Sign in</h1>
                 <p class="mt-2 text-sm text-gray-600">
-                  Don't have an account yet?
-                  <button
-                    class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
-                    onClick={() => navigate("/OnboardingOne")}
-                  >
-                    Sign up here
-                  </button>
+                  It's fast and free
+                 
                 </p>
               </div>
 
@@ -542,6 +537,15 @@ const LoggedOutHeader = (props) => {
                     >
                    
                     </input>
+                    <p class="mt-2 text-sm text-gray-600">
+                  Don't have an account yet?
+                  <button
+                    class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
+                    onClick={() => navigate("/DoerEmailRegister")}
+                  >
+                    Sign up here
+                  </button>
+                </p>
                   </div>
                 </form>
               </div>

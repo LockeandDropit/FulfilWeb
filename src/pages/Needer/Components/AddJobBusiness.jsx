@@ -288,18 +288,20 @@ const [companyName, setCompanyName] = useState(null)
       onOpenError()
       console.log("1");
     } else {
-      if (isOneTime === true && isSalaried === true && !flatRateValid || !descriptionValid) {
+      // if (isOneTime === true && isSalaried === true && !flatRateValid || !descriptionValid this was throwing invalid idk why but hopefully fixed) {
+        if (isOneTime === true && isSalaried === true && !flatRateValid ) {
         onOpenError()
-        console.log("2");
+        console.log("2", isOneTime, isSalaried, flatRateValid, minLengthRegEx.test(description) );
+
       } else {
         if (
-          (isOneTime === true && isHourly === true && !upperRateValid || !descriptionValid) ||
+          (isOneTime === true && isHourly === true && !upperRateValid ) ||
           !lowerRateValid
         ) {
           console.log("3");
           onOpenError()
         } else {
-          if (isOneTime === false && isSalaried === true && !flatRateValid || !descriptionValid) {
+          if (isOneTime === false && isSalaried === true && !flatRateValid ) {
             console.log("4");
             onOpenError()
           } else {

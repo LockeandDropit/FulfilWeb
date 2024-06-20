@@ -254,6 +254,16 @@ renderAllJobs()
     onClose: onCloseShare,
   } = useDisclosure();
   const {
+    isOpen: isOpenEmailSignUp,
+    onOpen: onOpenEmailSignUp,
+    onClose: onCloseEmailSignUp,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenEmailSignUpSuccess,
+    onOpen: onOpenEmailSignUpSuccess,
+    onClose: onCloseEmailSignUpSuccess,
+  } = useDisclosure();
+  const {
     isOpen: isOpenDrawer,
     onOpen: onOpenDrawer,
     onClose: onCloseDrawer,
@@ -590,7 +600,8 @@ console.log("session id ", sessionId)
   const handleNewEmailSignUp = async () => {
 
    // insert email regex, if then
-
+   onCloseEmailSignUp()
+   onOpenEmailSignUpSuccess()
 
    console.log("subscriberEmail", subscriberEmail)
 
@@ -610,7 +621,16 @@ console.log("session id ", sessionId)
 
     const { data, error } = await response.json();
     console.log("Any issues?", error)
+
+    onCloseEmailSignUp()
+    onOpenEmailSignUpSuccess()
   }
+
+
+setTimeout(() => {
+onOpenEmailSignUp()
+}, 30000
+)
 
 
  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
@@ -1633,8 +1653,13 @@ console.log("session id ", sessionId)
         
         </ModalContent>
       </Modal>
-      <div id="cookies-simple-with-icon-and-dismiss-button" class="fixed bottom-0 end-0 z-[60] w-auto items-center justify-center mx-auto p-6">
-
+      {/* <Modal isOpen={isOpenEmailSignUp} onClose={onCloseEmailSignUp} >
+   
+        <ModalContent    pointerEvents="all"
+    containerProps={{ pointerEvents: "none" }}>
+        
+          <ModalBody>      
+            <div id="cookies-simple-with-icon-and-dismiss-button" class="fixed bottom-0 end-0 z-[60] w-auto items-center justify-center mx-auto p-6">
   <div class="p-4 bg-white border border-gray-200 rounded-xl shadow-sm ">
     <div class="gap-x-4">
       <p class="text-sm font-semibold text-gray-800">
@@ -1654,6 +1679,95 @@ console.log("session id ", sessionId)
   </div>
 
 </div>
+</ModalBody>
+</ModalContent>
+</Modal> */}
+
+<Modal  isCentered isOpen={isOpenEmailSignUp} onClose={onCloseEmailSignUp} size={"md"} >
+   <ModalOverlay />
+   <ModalContent >
+   
+     <ModalBody>      
+    
+  <div class="  mt-0   sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+    <div class=" ">
+      <div class="p-4 sm:p-7">
+        <div class="text-center">
+          <h2 class="block text-2xl font-bold text-gray-800 ">Not seeing a job that suites you?</h2>
+          <p class="mt-2 text-sm text-gray-600">
+          Enter your email to get updates about new jobs <a class="inline-flex items-center gap-x-1.5 text-blue-600 decoration-2 hover:underline font-medium ">near you.</a>
+          
+          </p>
+        </div>
+
+        <div class="mt-5">
+ 
+          
+            <div class="grid gap-y-4">
+          
+              <div>
+                <label for="email" class="block text-sm mb-2 ">Email address</label>
+                <div class="relative">
+                  <input type="email" id="email" name="email" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" onChange={(e) => setSubscriberEmail(e.target.value)}/>
+                  <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
+                    <svg class="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                    </svg>
+                  </div>
+                </div>
+                <p class="hidden text-xs text-red-600 mt-2" id="email-error">Please include a valid email address so we can get back to you</p>
+              </div>
+            
+
+              <button type="submit" onClick={() => handleNewEmailSignUp()} class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 ">Keep me updated!</button>
+            </div>
+        
+    
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ModalBody>
+</ModalContent>
+</Modal>
+<Modal isOpen={isOpenEmailSignUpSuccess} onClose={onCloseEmailSignUpSuccess} isCentered >
+   <ModalOverlay />
+   <ModalContent >
+   
+     <ModalBody>      
+    
+  <div class="  mt-0   sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+    <div class=" ">
+      <div class="p-4 sm:p-7">
+        <div class="text-center">
+          <h2 class="block text-2xl font-bold text-gray-800 ">We'll keep you updated!</h2>
+          <p class="mt-2 text-sm text-gray-600">
+        Check your inbox regularly for job opprotunities near you
+          
+          </p>
+        </div>
+
+        <div class="mt-5">
+ 
+       
+            <div class="grid gap-y-4">
+          
+             
+            
+
+              <button type="submit" onClick={() => onCloseEmailSignUpSuccess()} class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 ">Continue browsing</button>
+            </div>
+      
+    
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ModalBody>
+</ModalContent>
+</Modal>
           </Map>
         </Box>
       </APIProvider>

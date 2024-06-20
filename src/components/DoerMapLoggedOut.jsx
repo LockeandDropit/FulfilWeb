@@ -626,11 +626,13 @@ console.log("session id ", sessionId)
     onOpenEmailSignUpSuccess()
   }
 
+useEffect(() => {
+  setTimeout(() => {
+    onOpenEmailSignUp()
+    }, 30000
+    )
+}, [])
 
-setTimeout(() => {
-onOpenEmailSignUp()
-}, 30000
-)
 
 
  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication

@@ -585,8 +585,31 @@ console.log("session id ", sessionId)
   }
 
 
+  const [subscriberEmail, setSubscriberEmail] = useState(null)
+
+  const handleNewEmailSignUp = async () => {
+
+   // insert email regex, if then
 
 
+
+    const response = await fetch(
+    
+      "https://emailapi-qi7k.onrender.com/newEmailSignUp",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email: subscriberEmail}),
+      }
+    );
+
+    const { data, error } = await response.json();
+    console.log("Any issues?", error)
+  }
 
 
  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
@@ -701,7 +724,7 @@ console.log("session id ", sessionId)
                         /
                       </AdvancedMarker>
                       {openInfoWindowMarkerID === businessPostedJobs.jobID ? (
-                        
+                        <>
                         <Drawer
                           onClose={onCloseDrawer}
                           isOpen={isOpenDrawer}
@@ -948,8 +971,41 @@ console.log("session id ", sessionId)
                             </DrawerBody>
                           </DrawerContent>
                         </Drawer>
+
+                        <Modal isOpen={isOpenShare} onClose={onCloseShare}>
+                            <ModalContent>
+       
+                            <ModalCloseButton />
+                            <ModalBody>
+                            <div class="mt-5 bg-white rounded-xl ">
+                              <div class="p-4 sm:p-7 text-center align-center items-center justify-center">
+                                <div class="text-center align-center items-center justify-center mb-5">
+                                  <h1 class="block text-2xl font-bold text-gray-800">Share to</h1>
+                                  
+                                </div>
+                  
+                                <FacebookShareButton url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`}>
+                                                          <FacebookIcon size={32} round={true}/>
+                                                          {businessPostedJobs.jobID}
+                                                          </FacebookShareButton>
+                                                          <h1 class="block text-2xl font-bold text-gray-800">Copy Link:</h1>
+                          {urlCopied ? (<span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">Copied!</span>) : (<label onClick={() => handleCopiedURL(businessPostedJobs)} className=" inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium mt-2 ">
+                                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 ml-1 items-center cursor-pointer">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+                  </svg>
+                  
+                                                           
+                                                          </label>)}
+                              </div>
+                            </div>
+                            </ModalBody>
+                  
+                          
+                          </ModalContent>
+                        </Modal>
+                        </>
                       ) : null}
-                       <Modal isOpen={isOpenShare} onClose={onCloseShare}>
+                       {/* <Modal isOpen={isOpenShare} onClose={onCloseShare}>
      
         <ModalContent>
        
@@ -964,6 +1020,7 @@ console.log("session id ", sessionId)
 
               <FacebookShareButton url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`}>
                                         <FacebookIcon size={32} round={true}/>
+                                        {businessPostedJobs.jobID}
                                         </FacebookShareButton>
                                         <h1 class="block text-2xl font-bold text-gray-800">Copy Link:</h1>
         {urlCopied ? (<span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">Copied!</span>) : (<label onClick={() => handleCopiedURL(businessPostedJobs)} className=" inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium mt-2 ">
@@ -979,7 +1036,7 @@ console.log("session id ", sessionId)
 
         
         </ModalContent>
-      </Modal>
+      </Modal> */}
                     </>
                   ))}
 
@@ -1112,7 +1169,7 @@ console.log("session id ", sessionId)
                                         </p>
                                       </div>}
 
-                                        {postedJobs.isFla ? (
+                                        {postedJobs.isFlatRate ? (
                                            <div class="space-y-2 ">
                                            <div class="flex align-items-center">
                                              <p className=" text-sm font-medium">
@@ -1125,7 +1182,7 @@ console.log("session id ", sessionId)
                                                {postedJobs.lowerRate}
                                              </label>
                                              <p className="ml-1 text-sm font-medium ">
-                                                yearly - $
+                                                /yr - $
                                              </p>
                                              <label
                                                for="hs-pro-dactmt"
@@ -1134,7 +1191,7 @@ console.log("session id ", sessionId)
                                                {postedJobs.upperRate}
                                              </label>
                                              <p className=" ml-1 text-sm font-medium">
-                                                yearly
+                                                /yr
                                              </p>
                                            </div>
                                          </div>
@@ -1585,7 +1642,7 @@ console.log("session id ", sessionId)
       <div>
         <div className="flex mt-2">
       <div class="w-full space-y-3">
-  <input type="text" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="Enter your email here" />
+  <input type="text" onChange={(e) => setSubscriberEmail(e.traget.event)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="Enter your email here" />
 </div>
         <button type="button"   class="w-1/4 ml-1 py-1 px-2  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none">
           <span >Stay Notified</span>

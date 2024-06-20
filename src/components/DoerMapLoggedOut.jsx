@@ -986,7 +986,7 @@ console.log("session id ", sessionId)
                   
                                 <FacebookShareButton url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`}>
                                                           <FacebookIcon size={32} round={true}/>
-                                                          {businessPostedJobs.jobID}
+                                                    
                                                           </FacebookShareButton>
                                                           <h1 class="block text-2xl font-bold text-gray-800">Copy Link:</h1>
                           {urlCopied ? (<span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">Copied!</span>) : (<label onClick={() => handleCopiedURL(businessPostedJobs)} className=" inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium mt-2 ">
@@ -1632,7 +1632,7 @@ console.log("session id ", sessionId)
         
         </ModalContent>
       </Modal>
-      {/* <div id="cookies-simple-with-icon-and-dismiss-button" class="fixed bottom-0 end-0 z-[60] w-auto items-center justify-center mx-auto p-6">
+      <div id="cookies-simple-with-icon-and-dismiss-button" class="fixed bottom-0 end-0 z-[60] w-auto items-center justify-center mx-auto p-6">
 
   <div class="p-4 bg-white border border-gray-200 rounded-xl shadow-sm ">
     <div class="gap-x-4">
@@ -1652,7 +1652,7 @@ console.log("session id ", sessionId)
     </div>
   </div>
 
-</div> */}
+</div>
           </Map>
         </Box>
       </APIProvider>

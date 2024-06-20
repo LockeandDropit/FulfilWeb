@@ -1644,7 +1644,7 @@ console.log("session id ", sessionId)
       <div class="w-full space-y-3">
   <input type="text" onChange={(e) => setSubscriberEmail(e.traget.event)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="Enter your email here" />
 </div>
-        <button type="button"   class="w-1/4 ml-1 py-1 px-2  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none">
+        <button type="button"   class="w-1/4 ml-1 py-1 px-2  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none" onClick={() => handleNewEmailSignUp()}>
           <span >Stay Notified</span>
         </button>
         </div>

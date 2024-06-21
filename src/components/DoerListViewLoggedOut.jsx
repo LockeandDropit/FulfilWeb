@@ -821,7 +821,7 @@ console.log("session id ", sessionId)
       <button 
                           onClick={() => onOpen()}
                          type="button" class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm  rounded-lg border  bg-sky-400 text-white shadow-sm hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 ">
-  Quick Apply
+  Apply
   </button>
       </label>
      

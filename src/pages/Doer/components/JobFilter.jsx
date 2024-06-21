@@ -138,6 +138,7 @@ const JobFilter = () => {
           }
         } else if (positionType && !minimumPay && !jobTitle) {
           console.log("type", positionType, doc.data().isFullTimePosition);
+          //from https://stackoverflow.com/questions/263965/how-can-i-convert-a-string-to-boolean-in-javascript credit guinaps
           var isTrueSet = /^true$/i.test(positionType);
           if (
            

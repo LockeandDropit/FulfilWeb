@@ -938,7 +938,7 @@ console.log("session id ", sessionId)
                                                 ) : (null)}
                                      
 
-                                      <div class="space-y-2 mb-4">
+                                      <div class="space-y-2 mb-4 ">
                                         <label
                                           for="dactmi"
                                           class="block mb-2 text-md font-medium text-gray-800 "
@@ -950,7 +950,7 @@ console.log("session id ", sessionId)
                                           <p>{businessPostedJobs.applicantDescription}</p>
                                         </div>
                                       </div>
-                                      <div class="space-y-2 mb-4">
+                                      <div class="space-y-2 md:mb-4 lg:mb-4 mb-20">
                                         <label
                                           for="dactmi"
                                           class="block mb-2 text-md font-medium text-gray-800 "
@@ -959,12 +959,14 @@ console.log("session id ", sessionId)
                                         </label>
 
                                         <div class="mb-4">
-                                          <p>{businessPostedJobs.benefitsDescription}</p>
+                                        {businessPostedJobs.benefitsDescription ? (  <p>{businessPostedJobs.benefitsDescription}</p>) : (  <p>Nothing listed</p>)}
+                                          
                                         </div>
                                       </div>
                                     </div>
 
-                                    <div class="p-4 flex justify-between gap-x-2">
+                                    {isDesktop ? (<div class="p-4 flex justify-between gap-x-2">
+                                      
                                       <div class="w-full flex justify-end items-center gap-x-2">
                                         <button
                                           type="button"
@@ -987,7 +989,35 @@ console.log("session id ", sessionId)
                                           Apply
                                         </button>
                                       </div>
+                                    </div>) : (
+                                      <div id="cookies-simple-with-dismiss-button" class="fixed bottom-0 start-1/2 transform -translate-x-1/2 z-[60] sm:max-w-4xl w-full mx-auto px-2">
+                                         <div class="p-2 bg-white border border-gray-200 rounded-sm shadow-sm ">
+                                        <div class="p-2 flex justify-between gap-x-2">
+                                      <div class="w-full flex justify-center items-center gap-x-2">
+                                        <button
+                                          type="button"
+                                          class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                          data-hs-overlay="#hs-pro-datm"
+                                          onClick={() => onOpen()}
+                                        >
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+</svg>
+
+                                          Save
+                                        </button>
+                                        <button
+                                          type="button"
+                                          class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                          data-hs-overlay="#hs-pro-datm"
+                                          onClick={() => onOpen()}
+                                        >
+                                          Apply
+                                        </button>
+                                      </div>
                                     </div>
+                                    </div>
+                                    </div>)}
                                   </div>
                                 </div>
                               </div>
@@ -1304,6 +1334,8 @@ console.log("session id ", sessionId)
                                      
                                     </div>
 
+
+                                       
                                     <div class="p-4 flex justify-between gap-x-2">
                                       <div class="w-full flex justify-end items-center gap-x-2">
                                         <button
@@ -1771,7 +1803,30 @@ console.log("session id ", sessionId)
 </ModalContent>
 </Modal>
 
-<div id="cookies-simple-with-dismiss-button" class="fixed bottom-0 start-1/2  z-[60] sm:max-w-4xl w-auto mx-auto p-6">
+
+ <div id="cookies-simple-with-dismiss-button" class="fixed bottom-0 start-1/2 transform -translate-x-1/2 z-[60] sm:max-w-4xl w-auto mx-auto px-2">
+                                         <div class="p-2 bg-transparent rounded-sm shadow-sm ">
+                                        <div class="p-2 flex justify-between gap-x-2">
+                                      <div class="w-full flex justify-center items-center gap-x-2">
+                                        <button
+                                          type="button"
+                                          class="border shadow-sm border-slate-800 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                          data-hs-overlay="#hs-pro-datm"
+                                          onClick={() => navigate("/DoerListViewLoggedOut")}
+                                        >
+                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+</svg>
+
+
+                                         List View
+                                        </button>
+                                      
+                                      </div>
+                                    </div>
+                                    </div>
+                                    </div>
+{/* <div id="cookies-simple-with-dismiss-button" class="  fixed bottom-0 flex justify-end  z-[60] sm:max-w-4xl w-auto  p-6">
  
   <div class="p-4 bg-white border border-gray-200 rounded-xl shadow-sm ">
     <div class="flex justify-between items-center gap-x-5 sm:gap-x-10" onClick={() => navigate("/DoerListViewLoggedOut")}>
@@ -1781,7 +1836,8 @@ console.log("session id ", sessionId)
     
     </div>
   </div>
-</div>
+</div> */}
+
           </Map>
         </Box>
       </APIProvider>

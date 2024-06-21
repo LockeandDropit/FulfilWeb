@@ -626,12 +626,12 @@ console.log("session id ", sessionId)
     onOpenEmailSignUpSuccess()
   }
 
-useEffect(() => {
-  setTimeout(() => {
-    onOpenEmailSignUp()
-    }, 120000
-    )
-}, [])
+// useEffect(() => {
+//   setTimeout(() => {
+//     onOpenEmailSignUp()
+//     }, 120000
+//     )
+// }, [])
 
 
 
@@ -1770,6 +1770,18 @@ useEffect(() => {
 </ModalBody>
 </ModalContent>
 </Modal>
+
+<div id="cookies-simple-with-dismiss-button" class="fixed bottom-0 start-1/2  z-[60] sm:max-w-4xl w-auto mx-auto p-6">
+ 
+  <div class="p-4 bg-white border border-gray-200 rounded-xl shadow-sm ">
+    <div class="flex justify-between items-center gap-x-5 sm:gap-x-10" onClick={() => navigate("/DoerListViewLoggedOut")}>
+      <h2 class="text-md font-semibold text-slate-800 cursor-pointer ">
+        List View 
+      </h2>
+    
+    </div>
+  </div>
+</div>
           </Map>
         </Box>
       </APIProvider>

@@ -1044,8 +1044,8 @@ isFullTimePosition : isFullTimePosition,
               onChange={(e) => setIsFullTimePosition(e.target.value)}
             >
               <option>Select option</option>
-              <option value="true">Full-time</option>
-              <option value="false">Part-time</option>
+              <option value={true}>Full-time</option>
+              <option value={false}>Part-time</option>
             </select>
                 </div>
                 <div class="space-y-2">

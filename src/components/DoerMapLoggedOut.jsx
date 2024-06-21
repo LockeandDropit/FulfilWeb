@@ -629,7 +629,7 @@ console.log("session id ", sessionId)
 useEffect(() => {
   setTimeout(() => {
     onOpenEmailSignUp()
-    }, 30000
+    }, 120000
     )
 }, [])
 

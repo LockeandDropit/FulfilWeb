@@ -251,7 +251,7 @@ const JobFilter = () => {
                     for="hs-select-label"
                     class="block text-sm font-medium mb-1  ml-1"
                   >
-                    Position Type
+                        Full-time/Part-time
                   </label>
                   <select
                     onChange={(e) => setPositionType(e.target.value)}

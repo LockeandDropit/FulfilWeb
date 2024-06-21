@@ -642,7 +642,7 @@ console.log("session id ", sessionId)
 
       <LoggedOutHeaderNoGap props={openModal} />
      
-      <div id="cookies-simple-with-dismiss-button" class=" top-10 lg:start-[19vw] items-center  justify-center z-[60]  w-full mx-auto p-6">
+      {/* <div id="cookies-simple-with-dismiss-button" class=" top-10 lg:start-[19vw] items-center  justify-center z-[60]  w-full mx-auto p-6">
  
  <div class="p-4  rounded-xl m ">
    <div class="flex justify-between items-center gap-x-5 sm:gap-x-10" onClick={() => navigate("/DoerListViewLoggedOut")}>
@@ -650,7 +650,52 @@ console.log("session id ", sessionId)
    
    </div>
  </div>
-</div>
+</div> */}
+  {isDesktop ? (  <Center >
+                  
+                  <Card
+                    align="center"
+                    mt={2}
+                    width={{ base: "full", md: "auto" }}
+                    
+                 
+                 
+                    ml={{ base: "0px", md: "80px" }}
+                  >
+                      <JobFilter />
+                    
+                  </Card>
+                </Center>) : (<Center>
+                  
+                  <Card
+                    align="center"
+                
+                 
+                    
+                 width={{base: "100vw"}}
+                 
+                  >
+                    <div className="w-3/4 mt-4 mb-2">
+               
+          {/* <Menu closeOnSelect={true}>
+  <MenuButton width={{base: "100%"}}>
+  <a class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 cursor-pointer" >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+</svg>
+
+            Search
+          </a>
+
+  </MenuButton>
+  <MenuList  width={{base: "100vw"}}>
+<JobFilter />
+  </MenuList>
+</Menu> */}
+<JobFilter /> 
+          </div>
+                  </Card>
+                </Center>)}
 
 
 <div id="cookies-simple-with-dismiss-button" class=" items-center justify-center overflow-y-auto h-80vh z-[60] sm:max-w-4xl w-auto mx-auto p-6 ">

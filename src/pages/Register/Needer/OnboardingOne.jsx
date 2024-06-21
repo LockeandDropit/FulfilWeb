@@ -290,7 +290,7 @@ const OnboardingOne = () => {
           </div>
        
           <form>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 gap-3">
             
               <label for="hs-pro-gpromf" class="relative py-3 px-4 flex border border-transparent rounded-xl cursor-pointer focus:outline-none">
                 <input  onChange={(e) => setIsBusiness(e.target.checked)} type="radio" id="hs-pro-gpromf" class="peer absolute top-0 start-0 size-full bg-transparent border border-gray-200 rounded-xl cursor-pointer appearance-none focus:ring-white checked:border-2 checked:border-sky-500 checked:hover:border-sky-500 checked:focus:border-sky-500 checked:bg-none checked:text-transparent disabled:opacity-50 disabled:pointer-events-none 
@@ -311,12 +311,12 @@ const OnboardingOne = () => {
                     Business
                   </span>
                   <span class="block text-sm text-gray-500 ">
-                    I am a company looking to hire someone for a full-time or part-time role
+                    I am a company looking to hire someone for a full-time or a part-time role
                   </span>
                 </span>
               </label>
           
-              <label for="hs-pro-gproms" class="relative py-3 px-4 flex border border-transparent rounded-xl cursor-pointer focus:outline-none">
+              {/* <label for="hs-pro-gproms" class="relative py-3 px-4 flex border border-transparent rounded-xl cursor-pointer focus:outline-none">
                 <input  onChange={(e) => setIsIndividual(e.target.checked)} type="radio" id="hs-pro-gproms" class="peer absolute top-0 start-0 size-full bg-transparent border border-gray-200 rounded-xl cursor-pointer appearance-none focus:ring-white checked:border-2 checked:border-sky-500 checked:hover:border-sky-500 checked:focus:border-sky-500 checked:bg-none checked:text-transparent disabled:opacity-50 disabled:pointer-events-none 
 
                 before:absolute before:top-3.5 before:end-3.5 before:border before:border-gray-200 before:size-5 before:rounded-full " value="Startup" name="hs-pro-gpromn" />
@@ -337,7 +337,7 @@ const OnboardingOne = () => {
                     I'm an individual who needs a general task completed (i.e. landscaping, general repairs)
                   </span>
                 </span>
-              </label>
+              </label> */}
             
               
           

@@ -89,9 +89,10 @@ const JobFilter = () => {
           }
         } else if (jobTitle && !minimumPay && positionType) {
           console.log("title and type");
+          var isTrueSet = /^true$/i.test(positionType);
           if (
             doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) &&
-            doc.data().lowerRate >= minimumPay
+            doc.data().isFullTimePosition === isTrueSet
           ) {
             console.log("heres your match with pay", doc.data());
             results.push(doc.data());
@@ -101,10 +102,11 @@ const JobFilter = () => {
           }
         } else if (jobTitle && minimumPay && positionType) {
           console.log("title, minimum, type");
+          var isTrueSet = /^true$/i.test(positionType);
           if (
             doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) &&
             doc.data().lowerRate >= minimumPay &&
-            doc.data().isFullTimePosition === positionType
+            doc.data().isFullTimePosition === isTrueSet
           ) {
             console.log("heres your match with pay", doc.data());
             results.push(doc.data());
@@ -123,9 +125,10 @@ const JobFilter = () => {
           }
         } else if (minimumPay && !jobTitle && positionType) {
           console.log("minimum & type");
+          var isTrueSet = /^true$/i.test(positionType);
           if (
             doc.data().lowerRate >= minimumPay &&
-            doc.data().isFullTimePosition === positionType
+            doc.data().isFullTimePosition === isTrueSet
           ) {
             console.log("heres your match with pay", doc.data());
             results.push(doc.data());
@@ -134,16 +137,21 @@ const JobFilter = () => {
             console.log("6");
           }
         } else if (positionType && !minimumPay && !jobTitle) {
-          console.log("type");
+          console.log("type", positionType, doc.data().isFullTimePosition);
+          var isTrueSet = /^true$/i.test(positionType);
           if (
+           
             doc.data().lowerRate >= minimumPay &&
-            doc.data().isFullTimePosition === positionType
+            doc.data().isFullTimePosition === isTrueSet
           ) {
             console.log("heres your match with pay", doc.data());
             results.push(doc.data());
           } else {
             // onOpen()
-            console.log("7");
+            console.log(typeof positionType);
+            console.log(typeof doc.data().isFullTimePosition);
+          
+          
           }
         } else {
           // onOpen()
@@ -259,9 +267,10 @@ const JobFilter = () => {
                     class="mb-2 py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                   >
                     <option value={null}>Select position type</option>
-                    <option value="true">Full-time</option>
-                    <option value="false">Part-time</option>
-                    <option value="gigwork">Gig-work</option>
+                
+                    <option value={true}>Full-time</option>
+                    <option value={false}>Part-time</option>
+                    {/* <option value="gigwork">Gig-work</option> */}
                   </select>
                 </div>
 
@@ -384,8 +393,9 @@ const JobFilter = () => {
                     class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                   >
                     <option value={null}>Select position type</option>
-                    <option value="true">Full-time</option>
-                    <option value="false">Part-time</option>
+                    <option value={true}>Full-time</option>
+                    <option value={false}>Part-time</option>
+                    {/* <option value="gigwork">Gig-work</option> */}
                   </select>
                 </div>
 

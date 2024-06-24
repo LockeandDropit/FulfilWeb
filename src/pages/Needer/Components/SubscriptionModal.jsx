@@ -37,13 +37,14 @@ import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
+import StarterPricingSubscriptionModal from "./StarterPricingSubscriptionModal";
 
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const SubscriptionModal = () => {
 
-
+const [type, setType] = useState(null)
 
 useEffect(() => {
 
@@ -69,29 +70,6 @@ useEffect(() => {
 
 
 
-  const fetchClientSecret = useCallback(() => {
-    // Create a Checkout Session
-
- console.log("fetch client secret called")
-
-    return (
-     
-  fetch("https://fulfil-api.onrender.com/create-business-subscription-session",
-
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((res) => res.json())
-        //   .then((data) => console.log(data))
-        .then((data) => data.clientSecret)
-    );
-  }, []);
-  const options = { fetchClientSecret };
 
   useEffect(() => {
     if (subscriptionID) {
@@ -109,50 +87,63 @@ useEffect(() => {
   }, [subscriptionID]);
 
 
-  //starter 
-  const fetchClientSecretStarter = useCallback(() => {
-    // Create a Checkout Session
-
- console.log("fetch client secret called")
-
-    return (
-     
-  fetch("https://fulfil-api.onrender.com/create-business-subscription-session-starter",
-
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((res) => res.json())
-        //   .then((data) => console.log(data))
-        .then((data) => data.clientSecret)
-    );
-  }, []);
-
-  const optionsStarter = { fetchClientSecretStarter };
 
   const [stripeOpen, setStripeOpen] = useState(false);
   const [stripeOpenStarter, setStripeOpenStarter] = useState(false);
 
-  const handleStripeOpen = () => {
-    console.log("handle stripe open pressed")
-    onClose()
-    onOpenStripe()
-    setStripeOpen(true)
-    console.log("stripe open?", stripeOpen)
+  const handleStripeOpen = (type) => {
+
+
+      if (type === "starter") {
+        onClose()
+        onOpenStripe()
+        setStripeOpenStarter(true)
+      } else {
+        console.log("handle stripe open pressed")
+        onClose()
+          onOpenStripe()
+          setStripeOpen(true)
+          console.log("stripe open?", stripeOpen)
+      
+      }
+
+
+
+
   }
 
-  const handleStripeOpenStarter = () => {
-    console.log("handle stripe open pressed")
-    onClose()
-    onOpenStripeStarter()
-    setStripeOpenStarter(true)
-    console.log("stripe open?", stripeOpen)
-  }
+
+  const fetchClientSecret = useCallback(() => {
+    // Create a Checkout Session
+
+    //do i need a callback function or can I pass something here?
+    //I could try storing it in a store and pullling from there?
+    // also change the dollar amount on the stripe card entering field.
+ console.log("fetch client secret called $29")
+
+
+  return (
+     
+    fetch("https://fulfil-api.onrender.com/create-business-subscription-session",
+  
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((res) => res.json())
+          //   .then((data) => console.log(data))
+          .then((data) => data.clientSecret)
+      );
+ 
+
+  }, []);
+
+
+  const options = { fetchClientSecret };
 
 
   return (
@@ -218,7 +209,7 @@ useEffect(() => {
         </li>
       </ul>
 
-      <a onClick={() => handleStripeOpenStarter()} class="cursor-pointer mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-gray-200 text-gray-500 hover:border-blue-600 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none " >
+      <a onClick={() => handleStripeOpen("starter")} class="cursor-pointer mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-gray-200 text-gray-500 hover:border-blue-600 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none " >
         Sign up
       </a>
     </div>
@@ -255,7 +246,7 @@ useEffect(() => {
         </li>
       </ul>
 
-      <a onClick={() => handleStripeOpen()} class=" mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" href="#">
+      <a onClick={() => handleStripeOpen("$29 one")} class=" mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" href="#">
         Sign up
       </a>
     </div>
@@ -328,23 +319,7 @@ useEffect(() => {
           )}
 
 {stripeOpenStarter && (
-            <Modal
-              isOpen={isOpenStripeStarter}
-              onClose={() => setStripeOpenStarter(false)}
-              size="xl"
-            >
-              <ModalOverlay />
-              <ModalContent>
-                <ModalCloseButton />
-
-                <EmbeddedCheckoutProvider
-                  stripe={stripePromise}
-                  options={optionsStarter}
-                >
-                  <EmbeddedCheckout />
-                </EmbeddedCheckoutProvider>
-              </ModalContent>
-            </Modal>
+           <StarterPricingSubscriptionModal />
           )}
        </>
   );

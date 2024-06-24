@@ -291,10 +291,8 @@ const OnboardingOne = () => {
        
           <form>
             <div class="grid grid-cols-1 gap-3">
-            
               <label for="hs-pro-gpromf" class="relative py-3 px-4 flex border border-transparent rounded-xl cursor-pointer focus:outline-none">
                 <input  onChange={(e) => setIsBusiness(e.target.checked)} type="radio" id="hs-pro-gpromf" class="peer absolute top-0 start-0 size-full bg-transparent border border-gray-200 rounded-xl cursor-pointer appearance-none focus:ring-white checked:border-2 checked:border-sky-500 checked:hover:border-sky-500 checked:focus:border-sky-500 checked:bg-none checked:text-transparent disabled:opacity-50 disabled:pointer-events-none 
-
                 before:absolute before:top-3.5 before:end-3.5 before:border before:border-gray-200 before:size-5 before:rounded-full " value="Free" name="hs-pro-gpromn"  />
                 <span class="peer-checked:flex hidden absolute top-4 end-4">
                   <span class="block size-5 flex justify-center items-center rounded-full bg-sky-400">

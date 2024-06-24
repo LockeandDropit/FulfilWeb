@@ -626,12 +626,18 @@ console.log("session id ", sessionId)
     onOpenEmailSignUpSuccess()
   }
 
-// useEffect(() => {
-//   setTimeout(() => {
-//     onOpenEmailSignUp()
-//     }, 120000
-//     )
-// }, [])
+
+  //bettter useEffect than I write https://www.youtube.com/watch?v=QQYeipc_cik&t=788s
+useEffect(() => {
+  const openEmail = setTimeout(() => {
+    onOpenEmailSignUp()
+    }, 90000
+    );
+
+    return () => {
+      openEmail()
+    };
+}, [])
 
 
 

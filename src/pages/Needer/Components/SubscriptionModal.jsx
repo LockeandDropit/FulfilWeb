@@ -59,6 +59,11 @@ useEffect(() => {
     onClose: onCloseStripe,
   } = useDisclosure();
   const {
+    isOpen: isOpenSupportEmail,
+    onOpen: onOpenSupportEmail,
+    onClose: onCloseSupportEmail,
+  } = useDisclosure();
+  const {
     isOpen: isOpenStripeStarter,
     onOpen: onOpenStripeStarter,
     onClose: onCloseStripeStarter,
@@ -183,8 +188,8 @@ useEffect(() => {
 
     <div class="flex flex-col border border-gray-200 text-center rounded-xl p-8 ">
       <h4 class="font-medium text-lg text-gray-800 ">Starter</h4>
-      <span class="mt-7 font-bold text-5xl text-gray-800 ">$0</span>
-      <p class="mt-2 text-sm text-gray-500 ">Renews at $14/month</p>
+      <span class="mt-7 font-bold text-3xl text-gray-800 ">   Free trial</span>
+      <p class="mt-2 text-sm text-gray-500 ">Renews at <span className="font-semibold text-slate-700">$14/month</span></p>
 
       <ul class="mt-7 space-y-2.5 text-sm">
         <li class="flex space-x-2">
@@ -217,11 +222,12 @@ useEffect(() => {
     <div class="flex flex-col border-2 border-blue-600 text-center shadow-xl rounded-xl p-8">
       <p class="mb-3"><span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs uppercase font-semibold bg-blue-100 text-blue-800 ">Recommended</span></p>
       <h4 class="font-medium text-lg text-gray-800 ">Hiring</h4>
-      <span class="mt-5 font-bold text-5xl text-gray-800 ">
-        <span class="font-bold text-2xl">$</span>
-        29 <span class="font-bold text-2xl ">/mo</span>
+      <span class="mt-5 font-bold text-3xl text-gray-800 ">
+        {/* <span class="font-bold text-2xl">$</span>
+        29 <span class="font-bold text-2xl ">/mo</span> */}
+        Free trial
       </span>
-      <p class="mt-2 text-sm text-gray-500 ">All the basics for starting a new business</p>
+      <p class="mt-2 text-sm text-gray-500 ">Renews at <span className="font-semibold text-slate-700">$29/month</span></p>
 
       <ul class="mt-7 space-y-2.5 text-sm">
         <li class="flex space-x-2">
@@ -259,7 +265,7 @@ useEffect(() => {
       
         Contact support
       </span>
-      <p class="mt-2 text-sm text-gray-500 ">Advanced features for scaling your business</p>
+      <p class="mt-2 text-sm text-gray-500 ">Hiring for large companies </p>
 
       <ul class="mt-7 space-y-2.5 text-sm">
         <li class="flex space-x-2">
@@ -284,7 +290,7 @@ useEffect(() => {
         </li>
       </ul>
 
-      <a class="cursor-pointer mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-gray-200 text-gray-500 hover:border-blue-600 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none " >
+      <a onClick={() => onOpenSupportEmail()}class="cursor-pointer mt-5 py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-gray-200 text-gray-500 hover:border-blue-600 hover:text-blue-600 disabled:opacity-50 disabled:pointer-events-none " >
        Contact
       </a>
     </div>
@@ -321,6 +327,44 @@ useEffect(() => {
 {stripeOpenStarter && (
            <StarterPricingSubscriptionModal />
           )}
+
+
+<Modal
+              isOpen={isOpenSupportEmail}
+              onClose={onCloseSupportEmail}
+              size="xl"
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalCloseButton />
+
+                <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+
+<div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
+  <h2 class="text-2xl font-bold md:text-2xl md:leading-tight ">Contact Us</h2>
+  {/* <p class="mt-1 text-gray-600 ">Whatever your status, our offers evolve according to your needs.</p> */}
+</div>
+
+
+
+
+<div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-1 gap-6 lg:items-center">
+
+  
+
+
+
+<p class=" text-gray-600 ">Send an email to <span className="font-semibold text-slate-700">tyler@getfulfil.com</span> to start an enterprise plan</p>
+
+</div>
+
+
+
+
+</div>
+
+              </ModalContent>
+            </Modal>
        </>
   );
 };

@@ -268,6 +268,12 @@ renderAllJobs()
     onOpen: onOpenDrawer,
     onClose: onCloseDrawer,
   } = useDisclosure();
+
+  const {
+    isOpen: isOpenPlumber,
+    onOpen: onOpenPlumber,
+    onClose: onClosePlumber,
+  } = useDisclosure();
   //category search
 
   const [searchJobCategory, setSearchJobCategory] = useState(null)
@@ -635,7 +641,7 @@ useEffect(() => {
     );
 
       openEmail()
-      
+
 }, [])
 
 
@@ -796,6 +802,14 @@ useEffect(() => {
 
                                          
                                         </label>
+
+                                        {/* {businessPostedJobs.jobTitle.includes("Plumber") ? (  <label onClick={() => onOpenPlumber()}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4 ml-1 cursor-pointer">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+</svg>
+
+                                         
+                                        </label>) : (null) } */}
                                        
                                       
                                         </div>
@@ -1842,6 +1856,66 @@ useEffect(() => {
     </div>
   </div>
 </div> */}
+
+
+<Modal isOpen={isOpenPlumber} onClose={onClosePlumber} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0  sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+            <div class="bg-white  rounded-xl shadow-sm pointer-events-auto ">
+              <div class="p-4 sm:p-7">
+                <div class="text-center">
+                  <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800 ">
+                    Career path
+                  </h2>
+                  <div class="max-w-sm mx-auto">
+                    <p class="mt-2 text-sm text-gray-600 ">
+                      Plumber
+                    </p>
+                    <p class="mt-2 text-sm text-gray-600 ">
+                    Entry level:
+Entry level plumbers include plumbing apprentices, employees with no certifications, and employees fresh out of school.(1)
+ 
+Plumbing Apprentice: $43,680
+Plumber’s Assistant: roughly $56,000 - $74,225
+
+Mid level:
+Mid-Level plumbers typically have 2-3 years of experience and have the certifications necessary to work independently.(1)
+
+Residential Service Technician:  clean all types of drains and sewers using special electromechanical equipment. $55k-$65k (3)
+Commercial Service Technician: Same as residential, but in commercial spaces. 
+Facility Maintenance Technician: 45,277
+
+Senior plumbing positions:
+Senior-level plumbers typically have 7-10 years of experience in the plumbing industry.(1)
+
+Residential Contractor: Installs, maintains, and repairs pipes and fixtures associated with heating, cooling, water distribution, and sanitation systems in residential and commercial structures. Fixes domestic appliances, such as dishwashers and gas cookers. Inspects drainage and other plumbing systems for compliance with local and national regulations. (4) Average pay: $68,763
+Commercial Contractor: same as residential, but in commercial spaces. Average pay: $63,009
+Project Manager $80,281
+
+
+1 https://faradaycareers.com/careers/plumber-career-path
+3 https://www.rotorooter.com/careers/service-tech/
+4https://www.monster.co.uk/advertise-a-job/resources/job-description-templates/construction/plumber-job-description/
+
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end items-center ">
+                <button
+                  onClick={() => onClosePlumber()}
+                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                  href="#"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </ModalContent>
+      </Modal>
 
           </Map>
         </Box>

@@ -22,7 +22,10 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Menu, MenuButton, MenuList, MenuItem,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   FormLabel,
   Input,
   Button,
@@ -56,9 +59,100 @@ const JobFilter = () => {
   const [jobTitle, setJobTitle] = useState(null);
   const [minimumPay, setMinimumPay] = useState(null);
   const [positionType, setPositionType] = useState(null);
+  const [jobTitleSearchResults, setJobTitleSearchResults] = useState(null);
+
+  const [displayedCategory, setDisplayedCategory] = useState(null)
+  const [jobsInCategory, setJobsInCategory] = useState(null)
+  const [viewDropDown, setViewDropDown] = useState(false)
+
+  const handleSearch = (value) => {
+    testSearch(value);
+    setJobTitle(value);
+  };
+
+  const testSearch = (value) => {
+    const q = query(collection(db, "Map Jobs"));
+
+    // is this super expensive and going to cause our FB cost to shoot up?
+    const searchResults = [];
+    onSnapshot(q, (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        if (doc.data().lowerCaseJobTitle.includes(value.toLowerCase())) {
+          searchResults.push(doc.data());
+        }
+      });
+
+
+      console.log("search results to close bar", searchResults)
+      if (!searchResults.length || !searchResults || !value.length) {
+        setViewDropDown(false)
+        setJobTitleSearchResults(null)
+        setViewDropDown(false)
+      } else {
+        setJobTitleSearchResults(searchResults);
+      }
+
+      //if value > 2 (3?)
+      //if a & b contain "main root", show just one of those jobs
+
+      //some code to see if this word appears more than once, if it does, only render it one time in the autocomplete but keep the jobs all stored in the search results
+      
+    });
+
+    console.log("jobtitle search results", jobTitleSearchResults)
+    if (value.length >= 2 && jobTitleSearchResults) {
+      let splitTitle = jobTitleSearchResults[0].lowerCaseJobTitle.split(" ");
+      console.log("split title", splitTitle[0]);
+      let firstWord = splitTitle[0]
+      var categoryTitle = null
+      let allMatchingTitleJobs = [];
+
+      // if (splitTitle.length >= 2) {
+      //   splitTitle.forEach((word) => {
+      //     jobTitleSearchResults.forEach((results) => {
+      //       if (results.lowerCaseJobTitle.includes(word)) {
+      //           categoryTitle = word
+      //           allMatchingTitleJobs.push(results)
+      //           console.log("from inner forEach", results)
+      //         //push word to category tile, push all matching jobs to category array that would be displayed
+      //       }
+      //     });
+      //   });
+      // } else {
+        jobTitleSearchResults.forEach((results) => {
+          if (results.lowerCaseJobTitle.includes(firstWord)) {
+            categoryTitle = firstWord
+            allMatchingTitleJobs.push(results)
+            console.log("from inner forEach", results)
+          }
+        });
+      
+      // }
+
+
+      setDisplayedCategory(categoryTitle)
+      setJobsInCategory(allMatchingTitleJobs)
+      setViewDropDown(true)
+    }
+  };
+
+  const handleRenderJobCategory = () => {
+setViewDropDown(false)
+setSearchResults(jobsInCategory)
+search()
+  }
+
+
+
+  useEffect(() => {
+    if (displayedCategory && jobsInCategory) {
+      console.log("here we gooo", displayedCategory, jobsInCategory)
+    }
+  }, [displayedCategory, jobsInCategory])
+
+  // map over (filter) all jobs on narrowed search (where value >= 2) and look for a word match. If all results contain that word, that is set & displayed as the category
 
   const search = () => {
-   
     const q = query(collection(db, "Map Jobs"));
 
     onSnapshot(q, (snapshot) => {
@@ -141,7 +235,6 @@ const JobFilter = () => {
           //from https://stackoverflow.com/questions/263965/how-can-i-convert-a-string-to-boolean-in-javascript credit guinaps
           var isTrueSet = /^true$/i.test(positionType);
           if (
-           
             doc.data().lowerRate >= minimumPay &&
             doc.data().isFullTimePosition === isTrueSet
           ) {
@@ -151,8 +244,6 @@ const JobFilter = () => {
             // onOpen()
             console.log(typeof positionType);
             console.log(typeof doc.data().isFullTimePosition);
-          
-          
           }
         } else {
           // onOpen()
@@ -173,6 +264,7 @@ const JobFilter = () => {
     setJobTitle(null);
     setMinimumPay(null);
     setPositionType(null);
+    setViewDropDown(false)
   };
 
   //uhh set all of this in context as SearchResultJobs and check w/conditional rendering on primary screen. Set them as business posted jobs. set all other jobs null?
@@ -198,9 +290,6 @@ const JobFilter = () => {
     };
   }, []);
 
-
-
-  
   return (
     <>
       {isDesktop ? (
@@ -216,13 +305,24 @@ const JobFilter = () => {
                     Job Title
                   </label>
                   <input
-                    onChange={(e) => setJobTitle(e.target.value)}
+                    onChange={(e) => handleSearch(e.target.value)}
                     type="text"
                     id="hero-input"
                     name="hero-input"
                     class=" mb-2 py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                     placeholder="Ex: Landscaping, Hostess, Construction"
                   />
+                  {jobsInCategory && viewDropDown ? (
+                    <div class="absolute w-[320px] z-50  mb-2 py-3 px-4 block  bg-white border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                      <p className="font-semibold text-medium cursor-default">Category</p>
+                      <p className="text-medium cursor-pointer mb-2" onClick={() => handleRenderJobCategory()}>{displayedCategory}</p>
+                      
+                      <p  className="font-semibold text-medium cursor-default">Matches</p>
+                      {jobsInCategory.map((results) => (
+                        <p className=" text-medium cursor-pointer mb-1">{results.jobTitle}</p>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
                 {/* <div className=" w-[560px]">
           <label for="hs-select-label" class="block text-sm font-medium  ">Pay Type</label>
@@ -260,7 +360,7 @@ const JobFilter = () => {
                     for="hs-select-label"
                     class="block text-sm font-medium mb-1  ml-1"
                   >
-                        Full-time/Part-time
+                    Full-time/Part-time
                   </label>
                   <select
                     onChange={(e) => setPositionType(e.target.value)}
@@ -268,7 +368,7 @@ const JobFilter = () => {
                     class="mb-2 py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                   >
                     <option value={null}>Select position type</option>
-                
+
                     <option value={true}>Full-time</option>
                     <option value={false}>Part-time</option>
                     {/* <option value="gigwork">Gig-work</option> */}
@@ -319,38 +419,58 @@ const JobFilter = () => {
         </div>
       ) : (
         <Menu closeOnSelect={true}>
-        <MenuButton width={{base: "100%"}}>
-        <a class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 cursor-pointer" >
-                  Filter
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-</svg>
-                </a>
-        </MenuButton>
-        <MenuList  width={{base: "100vw"}}>
-    
-      
-        <div class="w-full bg-white  px-4 sm:px-6 lg:px-8  mx-auto">
-          <div class="text-center mx-auto mb-4 mt-4">
-            <form id="search-form">
-              <div class=" flex flex-col items-center gap-2 sm:flex-row sm:gap-3 mt-2">
-                <div class="w-full">
-                  <label
-                    for="hs-select-label"
-                    class="block text-sm font-medium "
-                  >
-                    Job Title
-                  </label>
-                  <input
-                    onChange={(e) => setJobTitle(e.target.value)}
-                    type="text"
-                    id="hero-input"
-                    name="hero-input"
-                    class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                    placeholder="Ex: Landscaping, Hostess, Construction"
-                  />
-                </div>
-                {/* <div className=" w-[560px]">
+          <MenuButton width={{ base: "100%" }}>
+            <a class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-gray-600 hover:bg-blue-700 cursor-pointer">
+              Filter
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-4"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+                />
+              </svg>
+            </a>
+          </MenuButton>
+          <MenuList width={{ base: "100vw" }}>
+            <div class="w-full bg-white  px-4 sm:px-6 lg:px-8  mx-auto">
+              <div class="text-center mx-auto mb-4 mt-4">
+                <form id="search-form">
+                  <div class=" flex flex-col items-center gap-2 sm:flex-row sm:gap-3 mt-2">
+                    <div class="w-full">
+                      <label
+                        for="hs-select-label"
+                        class="block text-sm font-medium "
+                      >
+                        Job Title
+                      </label>
+                      <input
+                        onChange={(e) =>  handleSearch(e.target.value)}
+                        type="text"
+                        id="hero-input"
+                        name="hero-input"
+                        class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                        placeholder="Ex: Landscaping, Hostess, Construction"
+                      />
+                    </div>
+                    {jobsInCategory && viewDropDown ? (
+                    <div class=" w-full z-60  shadow-md mb-2 pb-3 px-4 block  bg-white border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
+                      <p className="font-semibold text-medium cursor-default">Category</p>
+                      <p className="text-medium cursor-pointer mb-2" onClick={() => handleRenderJobCategory()}>{displayedCategory}</p>
+                      
+                      <p  className="font-semibold text-medium cursor-default">Matches</p>
+                      {jobsInCategory.map((results) => (
+                        <p className=" text-medium cursor-pointer mb-1">{results.jobTitle}</p>
+                      ))}
+                    </div>
+                  ) : null}
+                    {/* <div className=" w-[560px]">
           <label for="hs-select-label" class="block text-sm font-medium  ">Pay Type</label>
 <select id="hs-select-label" class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
   <option selected="">Hourly</option>
@@ -358,71 +478,71 @@ const JobFilter = () => {
  
 </select>
 </div> */}
-                <div class="w-full">
-                  <label
-                    for="hs-select-label"
-                    class="block text-sm font-medium  "
+                    <div class="w-full">
+                      <label
+                        for="hs-select-label"
+                        class="block text-sm font-medium  "
+                      >
+                        Pay Range
+                      </label>
+                      <select
+                        onChange={(e) => setMinimumPay(e.target.value)}
+                        id="hs-select-label"
+                        value={minimumPay}
+                        class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                      >
+                        <option value={null}>Select minimum pay</option>
+                        <option value="10">$10/hour +</option>
+                        <option value="15">$15/hour +</option>
+                        <option value="20">$20/hour +</option>
+                        <option value="25">$25/hour +</option>
+                        <option value="30">$30/hour +</option>
+                        <option value="35">$35/hour +</option>
+                        <option value="40">$40/hour +</option>
+                      </select>
+                    </div>
+                    <div class="w-full">
+                      <label
+                        for="hs-select-label"
+                        class="block text-sm font-medium  "
+                      >
+                        Full-time/Part-time
+                      </label>
+                      <select
+                        onChange={(e) => setPositionType(e.target.value)}
+                        id="hs-select-label"
+                        class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                      >
+                        <option value={null}>Select position type</option>
+                        <option value={true}>Full-time</option>
+                        <option value={false}>Part-time</option>
+                        {/* <option value="gigwork">Gig-work</option> */}
+                      </select>
+                    </div>
+                  </div>
+                </form>
+                <MenuItem>
+                  {" "}
+                  <button
+                    class="w-full sm:w-auto whitespace-nowrap py-3 px-4  mt-2 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                    onClick={() => search()}
                   >
-                    Pay Range
-                  </label>
-                  <select
-                    onChange={(e) => setMinimumPay(e.target.value)}
-                    id="hs-select-label"
-                    value={minimumPay}
-                    class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                  >
-                    <option value={null}>Select minimum pay</option>
-                    <option value="10">$10/hour +</option>
-                    <option value="15">$15/hour +</option>
-                    <option value="20">$20/hour +</option>
-                    <option value="25">$25/hour +</option>
-                    <option value="30">$30/hour +</option>
-                    <option value="35">$35/hour +</option>
-                    <option value="40">$40/hour +</option>
-                  </select>
-                </div>
-                <div class="w-full">
-                  <label
-                    for="hs-select-label"
-                    class="block text-sm font-medium  "
-                  >
-                    Full-time/Part-time
-                  </label>
-                  <select
-                    onChange={(e) => setPositionType(e.target.value)}
-                    id="hs-select-label"
-                    class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                  >
-                    <option value={null}>Select position type</option>
-                    <option value={true}>Full-time</option>
-                    <option value={false}>Part-time</option>
-                    {/* <option value="gigwork">Gig-work</option> */}
-                  </select>
-                </div>
-
-             
-              </div>
-            </form>
-            <MenuItem>            <button
-                  class="w-full sm:w-auto whitespace-nowrap py-3 px-4  mt-2 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-                  onClick={() => search()}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                    />
-                  </svg>
-                  Search
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                      />
+                    </svg>
+                    Search
+                  </button>
                 </MenuItem>
 
                 <a
@@ -431,9 +551,9 @@ const JobFilter = () => {
                 >
                   Clear search
                 </a>
-          </div>
-        </div>
-        </MenuList>
+              </div>
+            </div>
+          </MenuList>
         </Menu>
       )}
 

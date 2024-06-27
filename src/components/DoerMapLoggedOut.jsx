@@ -274,6 +274,17 @@ renderAllJobs()
     onOpen: onOpenPlumber,
     onClose: onClosePlumber,
   } = useDisclosure();
+  const {
+    isOpen: isOpenServer,
+    onOpen: onOpenServer,
+    onClose: onCloseServer,
+  } = useDisclosure();
+
+  const {
+    isOpen: isOpenCNC,
+    onOpen: onOpenCNC,
+    onClose: onCloseCNC,
+  } = useDisclosure();
   //category search
 
   const [searchJobCategory, setSearchJobCategory] = useState(null)
@@ -644,7 +655,7 @@ console.log("session id ", sessionId)
 
 // }, [])
 
-
+const [scrollBehavior, setScrollBehavior] = React.useState('inside')
 
  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
@@ -807,12 +818,16 @@ console.log("session id ", sessionId)
                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
 </svg>
-
-
-                                     
-
-
-                                         
+                                        </label>) : (null) }
+                                        {businessPostedJobs.jobTitle.includes("Server" || "server") ? (  <label onClick={() => onOpenServer()} >
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+</svg>
+                                        </label>) : (null) }
+                                         {businessPostedJobs.jobTitle.includes("Machinist" || "CNC") ? (  <label onClick={() => onOpenCNC()} >
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+</svg>
                                         </label>) : (null) }
                                        
                                       
@@ -1788,6 +1803,7 @@ console.log("session id ", sessionId)
 </ModalBody>
 </ModalContent>
 </Modal>
+
 <Modal isOpen={isOpenEmailSignUpSuccess} onClose={onCloseEmailSignUpSuccess} isCentered >
    <ModalOverlay />
    <ModalContent >
@@ -1861,14 +1877,14 @@ console.log("session id ", sessionId)
   </div>
 </div> */}
 
-<Modal isOpen={isOpenPlumber} onClose={onClosePlumber} size="xl">
+<Modal isOpen={isOpenPlumber} onClose={onClosePlumber} size="xl"  scrollBehavior={scrollBehavior}>
         <ModalOverlay />
-        <ModalContent height="66vh">
-          
+        <ModalContent   >
+       
           <ModalCloseButton />
-          <ModalBody overflowY="scroll">
-          <div class="rounded-xl sm:max-w-lg sm:w-full m-3 sm:mx-auto ">
-            <div class="bg-white  rounded-xl shadow-sm pointer-events-auto ">
+          <ModalBody scrollBehavior={scrollBehavior} >
+          <div class="">
+            <div class="bg-white  rounded-xl shadow-sm  ">
               <div class="p-4 sm:p-7">
                 <div class="text-start">
                   <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
@@ -1938,57 +1954,60 @@ Senior-level plumbers typically have 7-10 years of experience in the plumbing in
         
         </ModalContent>
       </Modal>
-<Modal  >
+
+      
+<Modal isOpen={isOpenServer} onClose={onCloseServer} >
         <ModalOverlay />
-        <ModalContent height="80vh">
-          <ModalBody  overflowY="scroll">
-          <div class=" sm:max-w-lg sm:w-full m-3 sm:mx-auto ">
+        <ModalContent height="100vh">
+          
+          <ModalCloseButton />
+          <ModalBody overflowY="scroll">
+          <div class="rounded-xl sm:max-w-lg sm:w-full m-3 sm:mx-auto ">
             <div class="bg-white  rounded-xl shadow-sm pointer-events-auto ">
               <div class="p-4 sm:p-7">
                 <div class="text-start">
                   <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
-                    Plumber career path
+                  Server career path
                   </h2>
                   <div class=" mx-auto">
                     
                     <p class="mt-2 text-base text-gray-600 ">
-                    <p class="mt-2 text-base text-black "> Entry level:</p>
+                    <p class="mt-4 text-base text-black "> Entry level:</p>
                    
-Entry level plumbers include plumbing apprentices, employees with no certifications, and employees fresh out of school.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
- 
-          <p class="mt-2 text-base text-black "> Plumbing Apprentice: $43,680</p>
-           <p class="mt-2 text-base text-black "> Plumber’s Assistant: roughly $56,000 - $74,225</p>
+ <ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black "> Waiter/Waitress<span class="mt-4 text-xs text-gray-500 ">(1)</span> : $20,000 and $31,000<span class="mt-4 text-xs text-gray-500 ">(2)</span></li>
+          The waiter or waitress is generally delegated an area within the restaurant that he or she attends to. In this area they are responsible for ensuring that guests are properly attended to. 
+
+          
+
+           </ol>
+
+   <p class="mt-4 text-base text-black ">Mid level:</p>
+
+  
 
 
 
-   <p class="mt-2 text-base text-black ">Mid level:</p>
+<ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black ">  FoH Supervisor <span class="mt-4 text-xs text-gray-500 ">(1)</span> : Average salary: $47k-$73k <span class="mt-4 text-xs text-gray-500 ">(3)</span></li>
+          Front of house supervisor is generally responsible for all front of house staff and operations. They oversee all the various duties and responsibilities of other team members and ensure operations are running smoothly. 
+         
+           </ol>
+ <p class="mt-4 text-base text-black ">Senior level:</p>
 
 
 
-Mid-Level plumbers typically have 2-3 years of experience and have the certifications necessary to work independently.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
 
- <p class="mt-2 text-base text-black ">Residential Service Technician: </p>
-Residential Service Technician:  clean all types of drains and sewers using special electromechanical equipment. $55k-$65k <span class="mt-4 text-xs text-gray-500 ">(3)</span>
- <p class="mt-2 text-base text-black ">Commercial Service Technician: </p>
- Same as residential, but in commercial spaces. 
-  <p class="mt-2 text-base text-black ">Facility Maintenance Technician: </p>
- 45,277
-
- <p class="mt-2 text-base text-black ">Senior plumbing positions:</p>
-
-Senior-level plumbers typically have 7-10 years of experience in the plumbing industry.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
-
- <p class="mt-2 text-base text-black ">Residential Contractor:</p>
- Installs, maintains, and repairs pipes and fixtures associated with heating, cooling, water distribution, and sanitation systems in residential and commercial structures. Fixes domestic appliances, such as dishwashers and gas cookers. Inspects drainage and other plumbing systems for compliance with local and national regulations. <span class="mt-4 text-xs text-gray-500 ">(4)</span> Average pay: $68,763
- <p class="mt-2 text-base text-black ">Commercial Contractor:</p>
- same as residential, but in commercial spaces. Average pay: $63,009
-  <p class="mt-2 text-base text-black ">Project Manager:</p>
- $80,281
+<ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black ">General Manager <span class="mt-4 text-xs text-gray-500 ">(1)</span>. Average Salary: $56,521 <span class="mt-4 text-xs text-gray-500 ">(4)</span></li>
+          The general manager has more logistical responsibility and is often responsible for overseeing the functioning of both the Front of House operations and Back of House operations. 
+           </ol>
 
  <p class="mt-4 text-xs text-gray-500 ">Sources:</p>
-  <p class="text-xs text-gray-500 ">1 https://faradaycareers.com/careers/plumber-career-path</p>
-    <p class="text-xs text-gray-500 ">3 https://www.rotorooter.com/careers/service-tech/</p>
-      <p class="text-xs text-gray-500 ">4 https://www.monster.co.uk/advertise-a-job/resources/job-description-templates/construction/plumber-job-description/</p>
+  <p class="text-xs text-gray-500 ">1 https://advice.hosco.com/en/the-career-path-of-a-waiter-waitress-an-exciting-journey/</p>
+  <p class="text-xs text-gray-500 ">2 https://pos.toasttab.com/blog/on-the-line/restaurant-server-salary</p>
+    <p class="text-xs text-gray-500 ">3 https://www.glassdoor.com/Salaries/front-of-house-supervisor-salary-SRCH_KO0,25.htm</p>
+      <p class="text-xs text-gray-500 ">4 https://www.zippia.com/salaries/restaurant-general-manager/</p>
                     </p>
                   </div>
                 </div>
@@ -1996,7 +2015,7 @@ Senior-level plumbers typically have 7-10 years of experience in the plumbing in
 
               <div class="flex justify-end items-center ">
                 <button
-                  onClick={() => onClosePlumber()}
+                  onClick={() => onCloseServer()}
                   class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
                   href="#"
                 >
@@ -2006,8 +2025,90 @@ Senior-level plumbers typically have 7-10 years of experience in the plumbing in
             </div>
           </div>
           </ModalBody>
+
+        
         </ModalContent>
       </Modal>
+
+      <Modal isOpen={isOpenCNC} onClose={onCloseCNC} >
+        <ModalOverlay />
+        <ModalContent height="100vh">
+          
+          <ModalCloseButton />
+          <ModalBody overflowY="scroll">
+          <div class="rounded-xl sm:max-w-lg sm:w-full m-3 sm:mx-auto ">
+            <div class="bg-white  rounded-xl shadow-sm pointer-events-auto ">
+              <div class="p-4 sm:p-7">
+                <div class="text-start">
+                  <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
+                 CNC Machinist career path
+                  </h2>
+                  <div class=" mx-auto">
+                    
+                    <p class="mt-2 text-base text-gray-600 ">
+                    <p class="mt-4 text-base text-black "> Entry level:</p>
+                   
+ <ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black "> Long-term operator . Average salary: $51,703<span class="mt-4 text-xs text-gray-500 ">(2)</span></li>
+          Most entry-level CNC machinists start as machine operators, gaining skills and experience as they progress. 
+
+<span class="mt-4 text-xs text-gray-500 ">(1)</span>
+          
+
+           </ol>
+
+   <p class="mt-4 text-base text-black ">Mid level:</p>
+
+  
+
+
+
+<ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black ">  Set-up machinist. Average Salary: $84,142 <span class="mt-4 text-xs text-gray-500 ">(3)</span> </li>
+From a machine operator, many machinists transition into being put in charge of setting-up CNC machines. This includes understanding GD&T (geometric dimensioning and tolerancing) and making changes at the CNC machine’s controller. <span class="mt-4 text-xs text-gray-500 ">(1)</span>
+           
+           <li class="mt-2 text-base text-black "> CNC programmer – average salary: $77,226 <span class="mt-4 text-xs text-gray-500 ">(5)</span> </li>
+           As a CNC programmer, your job is to create the code that tells the CNC systems how to make the part you need. This includes programming, designing parts and optimizing  performance. Often, you will also be responsible for inspection of your parts. <span class="mt-4 text-xs text-gray-500 ">(1)</span> 
+           </ol>
+ <p class="mt-4 text-base text-black ">Senior level:</p>
+
+
+
+
+<ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black "> Manager – Average pay: $100k  <span class="mt-4 text-xs text-gray-500 ">(4)</span>.</li>
+         As you progress, you can eventually lead and manage others. Managers train employees in the proper use of equipment, enforce safety regulations, assign tasks, and oversee employees' work. They also interpret blueprints and develop plans for how to complete a project. This is as well as upgrading and maintaining machinery, ordering parts, and making sure repair records are kept up to date. (1)
+
+           </ol>
+
+ <p class="mt-4 text-xs text-gray-500 ">Sources:</p>
+  <p class="text-xs text-gray-500 ">1 https://www.trscraftservices.com/blogs/2020-9/what-is-the-career-path-for-a-cnc-machinist</p>
+  <p class="text-xs text-gray-500 ">2 https://www.indeed.com/career/cnc-operator/salaries</p>
+    <p class="text-xs text-gray-500 ">3 https://www.indeed.com/career/machinist/salaries/Minneapolis--MN</p>
+      <p class="text-xs text-gray-500 ">4 https://www.indeed.com/career/cnc-programmer/salaries</p>
+      <p class="text-xs text-gray-500 ">4 https://www.indeed.com/career/cnc-programmer/salaries</p>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end items-center ">
+                <button
+                  onClick={() => onCloseCNC()}
+                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                  href="#"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          </div>
+          </ModalBody>
+
+        
+        </ModalContent>
+      </Modal>
+
 
           </Map>
         </Box>

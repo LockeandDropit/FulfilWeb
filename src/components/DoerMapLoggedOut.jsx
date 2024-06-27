@@ -634,15 +634,15 @@ console.log("session id ", sessionId)
 
 
   //bettter useEffect than I write https://www.youtube.com/watch?v=QQYeipc_cik&t=788s
-useEffect(() => {
-  const openEmail = () => setTimeout(() => {
-    onOpenEmailSignUp()
-    }, 120000
-    );
+// useEffect(() => {
+//   const openEmail = () => setTimeout(() => {
+//     onOpenEmailSignUp()
+//     }, 120000
+//     );
 
-      openEmail()
+//       openEmail()
 
-}, [])
+// }, [])
 
 
 
@@ -794,22 +794,26 @@ useEffect(() => {
                                           {businessPostedJobs.jobTitle}
                                         </label>
 
-                                       
+{/*                                        
                                         <label onClick={() => onOpenShare()}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4 ml-1 cursor-pointer">
   <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
 </svg>
 
                                          
-                                        </label>
+                                        </label> */}
 
-                                        {/* {businessPostedJobs.jobTitle.includes("Plumber") ? (  <label onClick={() => onOpenPlumber()}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4 ml-1 cursor-pointer">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
+                                        {businessPostedJobs.jobTitle.includes("Plumber") ? (  <label onClick={() => onOpenPlumber()} >
+                                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
 </svg>
 
+
+                                     
+
+
                                          
-                                        </label>) : (null) } */}
+                                        </label>) : (null) }
                                        
                                       
                                         </div>
@@ -1857,47 +1861,62 @@ useEffect(() => {
   </div>
 </div> */}
 
-
 <Modal isOpen={isOpenPlumber} onClose={onClosePlumber} size="xl">
         <ModalOverlay />
-        <ModalContent>
-          <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0  sm:max-w-lg sm:w-full m-3 sm:mx-auto">
+        <ModalContent height="66vh">
+          
+          <ModalCloseButton />
+          <ModalBody overflowY="scroll">
+          <div class="rounded-xl sm:max-w-lg sm:w-full m-3 sm:mx-auto ">
             <div class="bg-white  rounded-xl shadow-sm pointer-events-auto ">
               <div class="p-4 sm:p-7">
-                <div class="text-center">
-                  <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800 ">
-                    Career path
+                <div class="text-start">
+                  <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
+                    Plumber career path
                   </h2>
-                  <div class="max-w-sm mx-auto">
-                    <p class="mt-2 text-sm text-gray-600 ">
-                      Plumber
-                    </p>
-                    <p class="mt-2 text-sm text-gray-600 ">
-                    Entry level:
-Entry level plumbers include plumbing apprentices, employees with no certifications, and employees fresh out of school.(1)
- 
-Plumbing Apprentice: $43,680
-Plumber’s Assistant: roughly $56,000 - $74,225
+                  <div class=" mx-auto">
+                    
+                    <p class="mt-2 text-base text-gray-600 ">
+                    <p class="mt-4 text-base text-black "> Entry level:</p>
+                   
+Entry level plumbers include plumbing apprentices, employees with no certifications, and employees fresh out of school.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
+ <ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black "> Plumbing Apprentice: $43,680</li>
+           <li class="mt-2 text-base text-black "> Plumber’s Assistant: roughly $56,000 - $74,225</li>
 
-Mid level:
-Mid-Level plumbers typically have 2-3 years of experience and have the certifications necessary to work independently.(1)
+           </ol>
 
-Residential Service Technician:  clean all types of drains and sewers using special electromechanical equipment. $55k-$65k (3)
-Commercial Service Technician: Same as residential, but in commercial spaces. 
-Facility Maintenance Technician: 45,277
+   <p class="mt-4 text-base text-black ">Mid level:</p>
 
-Senior plumbing positions:
-Senior-level plumbers typically have 7-10 years of experience in the plumbing industry.(1)
+  
 
-Residential Contractor: Installs, maintains, and repairs pipes and fixtures associated with heating, cooling, water distribution, and sanitation systems in residential and commercial structures. Fixes domestic appliances, such as dishwashers and gas cookers. Inspects drainage and other plumbing systems for compliance with local and national regulations. (4) Average pay: $68,763
-Commercial Contractor: same as residential, but in commercial spaces. Average pay: $63,009
-Project Manager $80,281
+Mid-Level plumbers typically have 2-3 years of experience and have the certifications necessary to work independently.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
+
+<ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black "> Residential Service Technician: $55k-$65k <span class="mt-4 text-xs text-gray-500 ">(3)</span></li>
+          Residential Service Technician:  clean all types of drains and sewers using special electromechanical equipment. 
+           <li class="mt-2 text-base text-black "> Commercial Service Technician:</li>
+           Same as residential, but in commercial spaces. 
+           <li class="mt-2 text-base text-black "> Commercial Service Technician:</li>
+           </ol>
+ <p class="mt-4 text-base text-black ">Senior plumbing positions:</p>
+
+Senior-level plumbers typically have 7-10 years of experience in the plumbing industry.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
 
 
-1 https://faradaycareers.com/careers/plumber-career-path
-3 https://www.rotorooter.com/careers/service-tech/
-4https://www.monster.co.uk/advertise-a-job/resources/job-description-templates/construction/plumber-job-description/
+<ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black ">Residential Contractor</li>
+          Installs, maintains, and repairs pipes and fixtures associated with heating, cooling, water distribution, and sanitation systems in residential and commercial structures. Fixes domestic appliances, such as dishwashers and gas cookers. Inspects drainage and other plumbing systems for compliance with local and national regulations. <span class="mt-4 text-xs text-gray-500 ">(4)</span> Average pay: $68,763
+           <li class="mt-2 text-base text-black ">Commercial Contractor:</li>
+           Same as residential, but in commercial spaces. Average pay: $63,009
+           <li class="mt-2 text-base text-black ">Project Manager:</li>
+           $80,281
+           </ol>
 
+ <p class="mt-4 text-xs text-gray-500 ">Sources:</p>
+  <p class="text-xs text-gray-500 ">1 https://faradaycareers.com/careers/plumber-career-path</p>
+    <p class="text-xs text-gray-500 ">3 https://www.rotorooter.com/careers/service-tech/</p>
+      <p class="text-xs text-gray-500 ">4 https://www.monster.co.uk/advertise-a-job/resources/job-description-templates/construction/plumber-job-description/</p>
                     </p>
                   </div>
                 </div>
@@ -1914,6 +1933,79 @@ Project Manager $80,281
               </div>
             </div>
           </div>
+          </ModalBody>
+
+        
+        </ModalContent>
+      </Modal>
+<Modal  >
+        <ModalOverlay />
+        <ModalContent height="80vh">
+          <ModalBody  overflowY="scroll">
+          <div class=" sm:max-w-lg sm:w-full m-3 sm:mx-auto ">
+            <div class="bg-white  rounded-xl shadow-sm pointer-events-auto ">
+              <div class="p-4 sm:p-7">
+                <div class="text-start">
+                  <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
+                    Plumber career path
+                  </h2>
+                  <div class=" mx-auto">
+                    
+                    <p class="mt-2 text-base text-gray-600 ">
+                    <p class="mt-2 text-base text-black "> Entry level:</p>
+                   
+Entry level plumbers include plumbing apprentices, employees with no certifications, and employees fresh out of school.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
+ 
+          <p class="mt-2 text-base text-black "> Plumbing Apprentice: $43,680</p>
+           <p class="mt-2 text-base text-black "> Plumber’s Assistant: roughly $56,000 - $74,225</p>
+
+
+
+   <p class="mt-2 text-base text-black ">Mid level:</p>
+
+
+
+Mid-Level plumbers typically have 2-3 years of experience and have the certifications necessary to work independently.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
+
+ <p class="mt-2 text-base text-black ">Residential Service Technician: </p>
+Residential Service Technician:  clean all types of drains and sewers using special electromechanical equipment. $55k-$65k <span class="mt-4 text-xs text-gray-500 ">(3)</span>
+ <p class="mt-2 text-base text-black ">Commercial Service Technician: </p>
+ Same as residential, but in commercial spaces. 
+  <p class="mt-2 text-base text-black ">Facility Maintenance Technician: </p>
+ 45,277
+
+ <p class="mt-2 text-base text-black ">Senior plumbing positions:</p>
+
+Senior-level plumbers typically have 7-10 years of experience in the plumbing industry.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
+
+ <p class="mt-2 text-base text-black ">Residential Contractor:</p>
+ Installs, maintains, and repairs pipes and fixtures associated with heating, cooling, water distribution, and sanitation systems in residential and commercial structures. Fixes domestic appliances, such as dishwashers and gas cookers. Inspects drainage and other plumbing systems for compliance with local and national regulations. <span class="mt-4 text-xs text-gray-500 ">(4)</span> Average pay: $68,763
+ <p class="mt-2 text-base text-black ">Commercial Contractor:</p>
+ same as residential, but in commercial spaces. Average pay: $63,009
+  <p class="mt-2 text-base text-black ">Project Manager:</p>
+ $80,281
+
+ <p class="mt-4 text-xs text-gray-500 ">Sources:</p>
+  <p class="text-xs text-gray-500 ">1 https://faradaycareers.com/careers/plumber-career-path</p>
+    <p class="text-xs text-gray-500 ">3 https://www.rotorooter.com/careers/service-tech/</p>
+      <p class="text-xs text-gray-500 ">4 https://www.monster.co.uk/advertise-a-job/resources/job-description-templates/construction/plumber-job-description/</p>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end items-center ">
+                <button
+                  onClick={() => onClosePlumber()}
+                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                  href="#"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          </div>
+          </ModalBody>
         </ModalContent>
       </Modal>
 

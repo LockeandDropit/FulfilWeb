@@ -153,7 +153,7 @@ useEffect(() => {
 
   return (
     <>
-    <Modal isOpen={isOpen} onClose={onClose} size={"4xl"}>
+    <Modal isOpen={isOpen} onClose={onClose} size={"6xl"}>
       <ModalOverlay />
       <ModalContent>
       <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
@@ -189,7 +189,7 @@ useEffect(() => {
     <div class="flex flex-col border border-gray-200 text-center rounded-xl p-8 ">
       <h4 class="font-medium text-lg text-gray-800 ">Starter</h4>
       <span class="mt-7 font-bold text-3xl text-gray-800 ">   Free trial</span>
-      <p class="mt-2 text-sm text-gray-500 ">Renews at <span className="font-semibold text-slate-700">$14/month</span></p>
+      <p class="mt-2 text-sm text-gray-500 ">Renews at <span className="font-semibold text-slate-700">$24/month</span></p>
 
       <ul class="mt-7 space-y-2.5 text-sm">
         <li class="flex space-x-2">
@@ -209,7 +209,13 @@ useEffect(() => {
         <li class="flex space-x-2">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="text-gray-800 ">
-            Product support
+          Job posted on the Fulfil Map
+          </span>
+        </li>
+        <li class="flex space-x-2">
+          <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="text-gray-800 text-start">
+          Tools to track, manage, and communicate with candidates directly through Fulfil.
           </span>
         </li>
       </ul>
@@ -227,7 +233,7 @@ useEffect(() => {
         29 <span class="font-bold text-2xl ">/mo</span> */}
         Free trial
       </span>
-      <p class="mt-2 text-sm text-gray-500 ">Renews at <span className="font-semibold text-slate-700">$29/month</span></p>
+      <p class="mt-2 text-sm text-gray-500 ">Renews at <span className="font-semibold text-slate-700">$49/month</span></p>
 
       <ul class="mt-7 space-y-2.5 text-sm">
         <li class="flex space-x-2">
@@ -237,18 +243,22 @@ useEffect(() => {
           </span>
         </li>
 
-        {/* <li class="flex space-x-2">
-          <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span class="text-gray-800 ">
-            Plan features
-          </span>
-        </li> */}
+      
 
         <li class="flex space-x-2">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="text-gray-800 ">
-            Product support
+          Job posted on the Fulfil Map
           </span>
+        </li>
+
+        <li class="flex space-x-2 ">
+          <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="text-gray-800 text-start">
+          Tools to track, manage, and communicate with candidates directly through Fulfil.
+          </span>
+        
+         
         </li>
       </ul>
 
@@ -260,7 +270,7 @@ useEffect(() => {
   
   
     <div class="flex flex-col border border-gray-200 text-center rounded-xl p-8 ">
-      <h4 class="font-medium text-lg text-gray-800 ">Enterprise</h4>
+      <h4 class="font-medium text-lg text-gray-800 mt-4">Enterprise</h4>
       <span class="mt-5 font-bold text-2xl text-gray-800 ">
       
         Contact support
@@ -275,17 +285,17 @@ useEffect(() => {
           </span>
         </li>
 
-        {/* <li class="flex space-x-2">
+        <li class="flex space-x-2">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span class="text-gray-800 ">
-            Plan features
+          <span class="text-gray-800 text-start">
+           We add jobs you have posted elsewhere to our platform so you don't have to 
           </span>
-        </li> */}
+        </li>
 
         <li class="flex space-x-2">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span class="text-gray-800 ">
-            Priority Product support
+          <span class="text-gray-800 text-start">
+          Applicant Screening: Custom questions or tests that candidates must complete before submitting an application.
           </span>
         </li>
       </ul>

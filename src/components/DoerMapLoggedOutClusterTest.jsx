@@ -110,8 +110,10 @@ import {
 import Plausible from 'plausible-tracker'
 import LoggedOutHeaderNoGap from "./Landing/LoggedOutHeaderNoGap.jsx";
 
+import ClusterMap from "./mapComponents/ClusterMap.tsx";
 
-const DoerMapLoggedOut = (props) => {
+
+const DoerMapLoggedOutClusterTest = (props) => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
   const navigate = useNavigate();
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
@@ -675,9 +677,21 @@ const [scrollBehavior, setScrollBehavior] = React.useState('inside')
 
       <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
         
-        <Box
+        {/* <Box
               h={{ base: "100vh", lg: "92vh" }}
               w={{ base: "100vw", lg: "100vw" }}
+            > */}
+
+              <Box
+              h={{ base: "100vh", lg: "92vh" }}
+              w={{ base: "100vw", lg: "100vw" }}
+            > 
+            <ClusterMap />
+            </Box>
+
+<Box
+              h={{ base: "100vh", lg: "9vh" }}
+              w={{ base: "100vw", lg: "10vw" }}
             >
          
           <Map
@@ -2131,10 +2145,7 @@ From a machine operator, many machinists transition into being put in char
 </div>
 
 {isDesktop ? ( null) : (<div class="w-full rounded-lg mt-10">
-   
-
               {/* <MapScreen props={closeInfoWindow} /> */}
-         
       
     </div>)}
  
@@ -2143,4 +2154,4 @@ From a machine operator, many machinists transition into being put in char
   );
 };
 
-export default DoerMapLoggedOut;
+export default DoerMapLoggedOutClusterTest;

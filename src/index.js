@@ -69,6 +69,10 @@ import BusinessEmailRegister from "./pages/Register/Needer/BusinessEmailRegister
 import AddBusinessProfileInfo from "./pages/Register/Needer/BusinessOnboarding/AddBusinessProfileInfo";
 import AddLogoAbout from "./pages/Register/Needer/BusinessOnboarding/AddLogoAbout";
 import DoerMapLoggedOut from "./components/DoerMapLoggedOut";
+import DoerMapLoggedOutClusterTest from "./components/DoerMapLoggedOutClusterTest";
+
+
+
 
 //Stream Chat
 import {
@@ -468,6 +472,10 @@ const router = createBrowserRouter([
   {
     path: "/DoerListViewLoggedOut",
     element: <DoerListViewLoggedOut />,
+  },
+  {
+    path: "/DoerMapLoggedOutClusterTest",
+    element: <DoerMapLoggedOutClusterTest/>,
   },
 ]);
 

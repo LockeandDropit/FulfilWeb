@@ -1,27 +1,42 @@
 import {InfoWindow, useMap} from '@vis.gl/react-google-maps';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {type Marker, MarkerClusterer} from '@googlemaps/markerclusterer';
-import {Tree} from './trees';
+import {
+    doc,
+    getDoc,
+    collectionGroup,
+  
+    query,
+    collection,
+    onSnapshot,
+  } from "firebase/firestore";
+  import { db } from "../../firebaseConfig";
 import {TreeMarker} from './tree-marker.tsx';
 
+import { PostedJob } from './postedJobs';
+
 export type ClusteredTreeMarkersProps = {
-  trees: Tree[];
+  postedJobs: PostedJob[]
 };
+
+
 
 /**
  * The ClusteredTreeMarkers component is responsible for integrating the
  * markers with the markerclusterer.
  */
-export const ClusteredTreeMarkers = ({trees}: ClusteredTreeMarkersProps) => {
+export const ClusteredTreeMarkers = ({postedJobs}: ClusteredTreeMarkersProps) => {
   const [markers, setMarkers] = useState<{[key: string]: Marker}>({});
   const [selectedTreeKey, setSelectedTreeKey] = useState<string | null>(null);
+   
+  
 
   const selectedTree = useMemo(
     () =>
-      trees && selectedTreeKey
-        ? trees.find(t => t.key === selectedTreeKey)!
+        postedJobs && selectedTreeKey
+        ? postedJobs.find(t => t.key === selectedTreeKey)!
         : null,
-    [trees, selectedTreeKey]
+    [postedJobs, selectedTreeKey]
   );
 
   // create the markerClusterer once the map is available and update it when
@@ -61,28 +76,26 @@ export const ClusteredTreeMarkers = ({trees}: ClusteredTreeMarkersProps) => {
     setSelectedTreeKey(null);
   }, []);
 
-  const handleMarkerClick = useCallback((tree: Tree) => {
-    setSelectedTreeKey(tree.key);
+  const handleMarkerClick = useCallback((postedJobs : PostedJob) => {
+    setSelectedTreeKey(postedJobs.key);
   }, []);
+
+
+
+  
 
   return (
     <>
-      {trees.map(tree => (
+      {postedJobs ? postedJobs.map(postedJobs => (
         <TreeMarker
-          key={tree.key}
-          tree={tree}
+          key={postedJobs.key}
+          postedJobs={postedJobs}
           onClick={handleMarkerClick}
           setMarkerRef={setMarkerRef}
         />
-      ))}
+      )): null}
 
-      {selectedTreeKey && (
-        <InfoWindow
-          anchor={markers[selectedTreeKey]}
-          onCloseClick={handleInfoWindowClose}>
-          {selectedTree?.name}
-        </InfoWindow>
-      )}
+      
     </>
   );
 };

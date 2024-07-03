@@ -1,5 +1,7 @@
 // Data source: https://open.toronto.ca/dataset/street-tree-data/
 import trees from './trees.json';
+import { useSearchResults } from "../../pages/Doer/Chat/lib/searchResults"
+
 
 export type Tree = {
   key: string;
@@ -15,14 +17,16 @@ export type CategoryData = {
 };
 
 for (let i = 0; i < trees.length; i++) {
+  
   (trees[i] as Tree).key = `tree-${i}`;
 }
 
-/**
+/** 
  * Simulates async loading of the dataset from an external source.
  * (data is inlined for simplicity in our build process)
  */
 export async function loadTreeDataset(): Promise<Tree[]> {
+
   // simulate loading the trees from an external source
   return new Promise(resolve => {
     setTimeout(() => resolve(trees as Tree[]), 500);

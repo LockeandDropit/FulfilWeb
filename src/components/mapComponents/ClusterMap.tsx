@@ -4,9 +4,9 @@ import {createRoot} from 'react-dom/client';
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
 
 import { ControlPanel } from './control-panel.tsx';
-import {getCategories, loadTreeDataset, Tree} from './trees.ts';
+import {getCategories, loadTreeDataset, Tree} from './trees.tsx';
 import { ClusteredTreeMarkers } from './clustered-tree-markers.tsx';
-
+import { getJobsData, PostedJob } from './postedJobs.tsx';
 
 
 const API_KEY =
@@ -30,51 +30,46 @@ const API_KEY =
 
 
 const App = () => {
-  const [trees, setTrees] = useState<Tree[]>();
+  const [jobs, setJobs] = useState<PostedJob[]>();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   // load data asynchronously
-  useEffect(() => {
-    loadTreeDataset().then(data => setTrees(data));
-  }, []);
+
+
+
 
   // get category information for the filter-dropdown
-  const categories = useMemo(() => getCategories(trees), [trees]);
+  const categories = useMemo(() => getCategories(jobs), [jobs]);
   const filteredTrees = useMemo(() => {
-    if (!trees) return null;
+    if (!jobs) return null;
 
-    return trees.filter(
+    return jobs.filter(
       t => !selectedCategory || t.category === selectedCategory
     );
-  }, [trees, selectedCategory]);
+  }, [jobs, selectedCategory]);
+
+  const defaultLat = 44.96797106363888;
+  const defaultLong = -93.26177106829272;
 
   return (
     <APIProvider apiKey={API_KEY}>
       <Map
         mapId={'bf51a910020fa25a'}
-        defaultCenter={{lat: 43.64, lng: -79.41}}
+        defaultCenter={{lat: defaultLat, lng: defaultLong}}
         defaultZoom={10}
         gestureHandling={'greedy'}
         disableDefaultUI>
-        {filteredTrees && <ClusteredTreeMarkers trees={filteredTrees} />}
+        {/* {filteredTrees && <ClusteredTreeMarkers postedJobs={filteredTrees} />} */}
       </Map>
 
-      <ControlPanel
+      {/* <ControlPanel
         categories={categories}
         onCategoryChange={setSelectedCategory}
-      />
+      /> */}
     </APIProvider>
   );
 };
 
 export default App;
 
-export function renderToDom(container: HTMLElement) {
-  const root = createRoot(container);
 
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-}

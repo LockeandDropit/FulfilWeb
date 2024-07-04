@@ -163,7 +163,7 @@ search()
 
         if (jobTitle && !minimumPay && !positionType) {
           if (doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase())) {
-            results.push(doc.data());
+            results.push({ ...doc.data(), id: doc.id, key: doc.id  });
             console.log("title", doc.data());
           } else {
             // onOpen()
@@ -176,7 +176,7 @@ search()
             doc.data().lowerRate >= minimumPay
           ) {
             console.log("heres your match with pay", doc.data());
-            results.push(doc.data());
+            results.push({ ...doc.data(), id: doc.id, key: doc.id  });
           } else {
             // onOpen()
             console.log("2");
@@ -189,7 +189,7 @@ search()
             doc.data().isFullTimePosition === isTrueSet
           ) {
             console.log("heres your match with pay", doc.data());
-            results.push(doc.data());
+            results.push({ ...doc.data(), id: doc.id, key: doc.id  });
           } else {
             // onOpen()
             console.log("3");
@@ -203,7 +203,7 @@ search()
             doc.data().isFullTimePosition === isTrueSet
           ) {
             console.log("heres your match with pay", doc.data());
-            results.push(doc.data());
+            results.push({ ...doc.data(), id: doc.id, key: doc.id  });
           } else {
             // onOpen()
             console.log("4");
@@ -212,7 +212,7 @@ search()
           console.log("minimum", minimumPay);
           if (doc.data().lowerRate >= minimumPay) {
             console.log("heres your match with pay", doc.data());
-            results.push(doc.data());
+            results.push({ ...doc.data(), id: doc.id, key: doc.id  });
           } else {
             // onOpen()
             console.log("5");
@@ -225,7 +225,7 @@ search()
             doc.data().isFullTimePosition === isTrueSet
           ) {
             console.log("heres your match with pay", doc.data());
-            results.push(doc.data());
+            results.push({ ...doc.data(), id: doc.id, key: doc.id  });
           } else {
             // onOpen()
             console.log("6");
@@ -239,7 +239,7 @@ search()
             doc.data().isFullTimePosition === isTrueSet
           ) {
             console.log("heres your match with pay", doc.data());
-            results.push(doc.data());
+            results.push({ ...doc.data(), id: doc.id, key: doc.id  });
           } else {
             // onOpen()
             console.log(typeof positionType);

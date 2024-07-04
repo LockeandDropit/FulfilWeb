@@ -110,10 +110,10 @@ import {
 import Plausible from 'plausible-tracker'
 import LoggedOutHeaderNoGap from "./Landing/LoggedOutHeaderNoGap.jsx";
 
-import ClusterMap from "./mapComponents/ClusterMap.tsx";
-import { SuperClusterAdapterLoader } from 'supercluster-googlemaps-adapter';
-import NewMapTest from "./mapComponents/NewMapTest.jsx";
 
+import { SuperClusterAdapterLoader } from 'supercluster-googlemaps-adapter';
+
+import ClusterMap from "./MapCluster/ClusterMap.jsx";
 
 const DoerMapLoggedOutClusterTest = (props) => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -689,8 +689,8 @@ const [scrollBehavior, setScrollBehavior] = React.useState('inside')
               h={{ base: "100vh", lg: "92vh" }}
               w={{ base: "100vw", lg: "100vw" }}
             > 
-      <NewMapTest props={businessPostedJobs}/>
-           
+      {/* <NewMapTest props={businessPostedJobs}/> */}
+           <ClusterMap />
             </Box>
 
          

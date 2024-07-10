@@ -22,6 +22,18 @@ export const TreeMarker = (props) => {
     [setMarkerRef, tree.key]
   );
 
+
+
+//Q's: How will it handle thousands of data points?
+// How can it scale constantly calling for thousands of pieces of information from FB everytime someone loads the page?
+// randomly assigning  
+
+
+// on retrieving the info from FB, I could chop the  data up into like 4 different groups, 
+//achieve this by looping vier data once it's collected 
+//onChange of zoom, I could check and see if the zoom level matches the level with the zoom group. 
+// if it does, render the marker.
+
   return (
     <AdvancedMarker  position={{
         lat: tree.locationLat

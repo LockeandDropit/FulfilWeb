@@ -315,12 +315,13 @@ search()
                   {jobsInCategory && viewDropDown ? (
                     <div class="absolute w-[320px] z-50  mb-2 py-3 px-4 block  bg-white border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                       <p className="font-semibold text-medium cursor-default">Category</p>
-                      <p className="text-medium cursor-pointer mb-2" onClick={() => handleRenderJobCategory()}>{displayedCategory}</p>
-                      
-                      <p  className="font-semibold text-medium cursor-default">Matches</p>
+                      <div className="hover:bg-gray-200 rounded-sm p-0.5 ">
+                      <p className="text-lg cursor-pointer mb-2 justify-center items-center mt-0.5" onClick={() => handleRenderJobCategory()}>{displayedCategory}</p>
+                      </div>
+                      {/* <p  className="font-semibold text-medium cursor-default">Matches</p>
                       {jobsInCategory.map((results) => (
-                        <p className=" text-medium cursor-pointer mb-1">{results.jobTitle}</p>
-                      ))}
+                        <p className="text-lg cursor-pointer ">{results.jobTitle}</p>
+                      ))} */}
                     </div>
                   ) : null}
                 </div>
@@ -335,7 +336,7 @@ search()
                 <div className=" w-[320px]">
                   <label
                     for="hs-select-label"
-                    class="block text-sm font-medium mb-1 ml-1"
+                    class="block text-medium font-medium mb-1 ml-1"
                   >
                     Pay Range
                   </label>
@@ -343,7 +344,7 @@ search()
                     onChange={(e) => setMinimumPay(e.target.value)}
                     id="hs-select-label"
                     value={minimumPay}
-                    class=" mb-2 py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                    class=" mb-2 py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-medium focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                   >
                     <option value={null}>Select minimum pay</option>
                     <option value="10">$10/hour +</option>
@@ -358,18 +359,18 @@ search()
                 <div className=" w-[320px]">
                   <label
                     for="hs-select-label"
-                    class="block text-sm font-medium mb-1  ml-1"
+                    class="block text-medium font-medium mb-1  ml-1"
                   >
                     Full-time/Part-time
                   </label>
                   <select
                     onChange={(e) => setPositionType(e.target.value)}
                     id="hs-select-label"
-                    class="mb-2 py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                    class="mb-2 py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-medium focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                   >
                     <option value={null}>Select position type</option>
 
-                    <option value={true}>Full-time</option>
+                    <option value={true} class="text-medium">Full-time</option>
                     <option value={false}>Part-time</option>
                     {/* <option value="gigwork">Gig-work</option> */}
                   </select>
@@ -451,7 +452,7 @@ search()
                         Job Title
                       </label>
                       <input
-                        onChange={(e) =>  handleSearch(e.target.value)}
+                        onChange={(e) => handleSearch(e.target.value)}
                         type="text"
                         id="hero-input"
                         name="hero-input"
@@ -462,8 +463,9 @@ search()
                     {jobsInCategory && viewDropDown ? (
                     <div class=" w-full z-60  shadow-md mb-2 pb-3 px-4 block  bg-white border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                       <p className="font-semibold text-medium cursor-default">Category</p>
-                      <p className="text-medium cursor-pointer mb-2" onClick={() => handleRenderJobCategory()}>{displayedCategory}</p>
-                      
+                  
+                      <p className="text-medium cursor-pointer mb-2  " onClick={() => handleRenderJobCategory()}>{displayedCategory}</p>
+                    
                       <p  className="font-semibold text-medium cursor-default">Matches</p>
                       {jobsInCategory.map((results) => (
                         <p className=" text-medium cursor-pointer mb-1">{results.jobTitle}</p>

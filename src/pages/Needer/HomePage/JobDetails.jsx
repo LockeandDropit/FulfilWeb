@@ -29,10 +29,12 @@ import {
   Image,
   Box,
   Stack,
+  Mark,
 } from "@chakra-ui/react";
 import ApplicantModal from "./ApplicantModal";
 import { useNavigate } from "react-router-dom";
 import {useUserStore} from "../Chat/lib/userStore"
+import Markdown from 'react-markdown'
 
 const JobDetails = () => {
   const { job } = useJobStore();
@@ -408,7 +410,17 @@ const JobDetails = () => {
                         <label class="block mb-2 text-sm font-medium text-stone-800 ">
                           Description
                         </label>
+                        <Markdown>
                         {job.description}
+                        
+                        </Markdown>
+                        
+                      </div>
+                      <div className="prose ">
+                      <Markdown>
+                        {job.description}
+                        
+                        </Markdown>
                       </div>
 
                       {currentUser ? (currentUser.isBusiness ? (<div className="cursor-default ">

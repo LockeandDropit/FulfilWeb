@@ -781,21 +781,7 @@ const [scrollBehavior, setScrollBehavior] = React.useState('inside')
                              
                             </label> */}
      
-                            {businessPostedJobs.jobTitle.includes("Plumber") ? (  <label onClick={() => onOpenPlumber()} >
-                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
-     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-     </svg>
-                            </label>) : (null) }
-                            {businessPostedJobs.jobTitle.includes("Server" || "server") ? (  <label onClick={() => onOpenServer()} >
-                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
-     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-     </svg>
-                            </label>) : (null) }
-                             {businessPostedJobs.jobTitle.includes("Machinist" || "CNC") ? (  <label onClick={() => onOpenCNC()} >
-                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
-     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-     </svg>
-     </label>) : (null) }
+                       
                            
                           
                             </div>
@@ -973,6 +959,41 @@ const [scrollBehavior, setScrollBehavior] = React.useState('inside')
                         {isDesktop ? (<div class="p-4 flex justify-between gap-x-2">
                           
                           <div class="w-full flex justify-end items-center gap-x-2">
+                          {businessPostedJobs.jobTitle.includes("Plumber") ? ( <button
+                              type="button"
+                              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                              data-hs-overlay="#hs-pro-datm"
+                              onClick={() => onOpenPlumber()}
+                            >
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
+     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+     </svg>
+     See career path
+                            </button>) : (null) }
+                            {businessPostedJobs.jobTitle.includes("Server" || "server") ? (  <button
+                              type="button"
+                              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                              data-hs-overlay="#hs-pro-datm"
+                              onClick={() => onOpenServer()}
+                            >
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
+     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+     </svg>
+     See career path
+                            </button>) : (null) }
+                             {businessPostedJobs.jobTitle.includes("Machinist" || "CNC") ? (  <button
+                              type="button"
+                              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                              data-hs-overlay="#hs-pro-datm"
+                              onClick={() => onOpenCNC()}
+                            >
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
+     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+     </svg>
+     See career path
+                            </button>) : (null) }
+
+                            
                             <button
                               type="button"
                               class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
@@ -997,9 +1018,11 @@ const [scrollBehavior, setScrollBehavior] = React.useState('inside')
                         </div>) : (
                           <div id="cookies-simple-with-dismiss-button" class="fixed bottom-0 start-1/2 transform -translate-x-1/2 z-[60] sm:max-w-4xl w-full mx-auto px-2">
                              <div class="p-2 bg-white border border-gray-200 rounded-sm shadow-sm ">
+                              
                             <div class="p-2 flex justify-between gap-x-2">
+                           
                           <div class="w-full flex justify-center items-center gap-x-2">
-                            <button
+                            {/* <button
                               type="button"
                               class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
                               data-hs-overlay="#hs-pro-datm"
@@ -1010,7 +1033,40 @@ const [scrollBehavior, setScrollBehavior] = React.useState('inside')
      </svg>
      
                               Save
-                            </button>
+                            </button> */}
+                               {businessPostedJobs.jobTitle.includes("Plumber") ? ( <button
+                              type="button"
+                              class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200 bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
+                              data-hs-overlay="#hs-pro-datm"
+                              onClick={() => onOpenPlumber()}
+                            >
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
+     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+     </svg>
+     See career path
+                            </button>) : (null) }
+                            {businessPostedJobs.jobTitle.includes("Server" || "server") ? (  <button
+                              type="button"
+                              class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                              data-hs-overlay="#hs-pro-datm"
+                              onClick={() => onOpenServer()}
+                            >
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
+     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+     </svg>
+     See career path
+                            </button>) : (null) }
+                             {businessPostedJobs.jobTitle.includes("Machinist" || "CNC") ? (  <button
+                              type="button"
+                              class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
+                              data-hs-overlay="#hs-pro-datm"
+                              onClick={() => onOpenCNC()}
+                            >
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
+     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+     </svg>
+     See career path
+                            </button>) : (null) }
                             <button
                               type="button"
                               class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
@@ -1025,11 +1081,256 @@ const [scrollBehavior, setScrollBehavior] = React.useState('inside')
                         </div>)}
                       </div>
                     </div>
+                    <Drawer isOpen={isOpenCNC} onClose={onCloseCNC} size={ isDesktop ? "lg" : "full"}>
+        <DrawerOverlay />
+        <DrawerContent>
+          
+          <DrawerCloseButton />
+          <DrawerHeader>
+          CNC Machinist career path
+                </DrawerHeader>
+          <DrawerBody >
+          <div class="rounded-xl sm:max-w-lg sm:w-full m-3  max-h-full ">
+            <div class="bg-white  rounded-xl shadow-sm pointer-events-auto overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+              <div class="p-1 sm:p-2">
+                <div class="text-start">
+                  <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
+                 
+                  </h2>
+                  <div class=" mx-auto">
+                    
+                    <p class="mt-2 text-base text-gray-600 ">
+                    <p class="mt-4 text-base text-black "> Entry level:</p>
+                   
+ <ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black "> Long-term operator . Average salary: $51,703<span class="mt-4 text-xs text-gray-500 ">(2)</span></li>
+          Most entry-level CNC machinists start as machine operators, gaining skills and experience as they progress. 
+
+<span class="mt-4 text-xs text-gray-500 ">(1)</span>
+          
+
+           </ol>
+
+   <p class="mt-4 text-base text-black ">Mid level:</p>
+
+  
+
+
+
+<ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black ">  Set-up machinist. Average Salary: $84,142 <span class="mt-4 text-xs text-gray-500 ">(3)</span> </li>
+From a machine operator, many machinists transition into being put in charge of setting-up CNC machines. This includes understanding GD&T (geometric dimensioning and tolerancing) and making changes at the CNC machine’s controller. <span class="mt-4 text-xs text-gray-500 ">(1)</span>
+           
+           <li class="mt-2 text-base text-black "> CNC programmer – average salary: $77,226 <span class="mt-4 text-xs text-gray-500 ">(5)</span> </li>
+           As a CNC programmer, your job is to create the code that tells the CNC systems how to make the part you need. This includes programming, designing parts and optimizing  performance. Often, you will also be responsible for inspection of your parts. <span class="mt-4 text-xs text-gray-500 ">(1)</span> 
+           </ol>
+ <p class="mt-4 text-base text-black ">Senior level:</p>
+
+
+
+
+<ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black "> Manager – Average pay: $100k  <span class="mt-4 text-xs text-gray-500 ">(4)</span>.</li>
+         As you progress, you can eventually lead and manage others. Managers train employees in the proper use of equipment, enforce safety regulations, assign tasks, and oversee employees' work. They also interpret blueprints and develop plans for how to complete a project. This is as well as upgrading and maintaining machinery, ordering parts, and making sure repair records are kept up to date. (1)
+
+           </ol>
+
+ <p class="mt-4 text-xs text-gray-500 ">Sources:</p>
+  <p class="text-xs text-gray-500 ">1 https://www.trscraftservices.com/blogs/2020-9/what-is-the-career-path-for-a-cnc-machinist</p>
+  <p class="text-xs text-gray-500 ">2 https://www.indeed.com/career/cnc-operator/salaries</p>
+    <p class="text-xs text-gray-500 ">3 https://www.indeed.com/career/machinist/salaries/Minneapolis--MN</p>
+      <p class="text-xs text-gray-500 ">4 https://www.indeed.com/career/cnc-programmer/salaries</p>
+      <p class="text-xs text-gray-500 ">4 https://www.indeed.com/career/cnc-programmer/salaries</p>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end items-center ">
+                <button
+                  onClick={() => onCloseCNC()}
+                  class="py-2 w-full px-3 mt-2 mb-3 items-center text-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                  href="#"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+          </DrawerBody>
+
+        
+        </DrawerContent>
+        </Drawer>
+
+               
+        <Drawer isOpen={isOpenServer} onClose={onCloseServer} size={ isDesktop ? "lg" : "full"}>
+        <DrawerOverlay />
+        <DrawerContent height="100vh">
+          
+          <DrawerCloseButton />
+          <DrawerBody overflowY="scroll">
+          <div class="rounded-xl sm:max-w-lg sm:w-full m-3 sm:mx-auto ">
+            <div class="bg-white  rounded-xl shadow-sm pointer-events-auto ">
+              <div class="p-1 sm:p-2">
+                <div class="text-start">
+                  <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
+                  Server career path
+                  </h2>
+                  <div class=" mx-auto">
+                    
+                    <p class="mt-2 text-base text-gray-600 ">
+                    <p class="mt-4 text-base text-black "> Entry level:</p>
+                   
+ <ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black "> Waiter/Waitress<span class="mt-4 text-xs text-gray-500 ">(1)</span> : $20,000 and $31,000<span class="mt-4 text-xs text-gray-500 ">(2)</span></li>
+          The waiter or waitress is generally delegated an area within the restaurant that he or she attends to. In this area they are responsible for ensuring that guests are properly attended to. 
+
+          
+
+           </ol>
+
+   <p class="mt-4 text-base text-black ">Mid level:</p>
+
+  
+
+
+
+<ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black ">  FoH Supervisor <span class="mt-4 text-xs text-gray-500 ">(1)</span> : Average salary: $47k-$73k <span class="mt-4 text-xs text-gray-500 ">(3)</span></li>
+          Front of house supervisor is generally responsible for all front of house staff and operations. They oversee all the various duties and responsibilities of other team members and ensure operations are running smoothly. 
+         
+           </ol>
+ <p class="mt-4 text-base text-black ">Senior level:</p>
+
+
+
+
+<ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black ">General Manager <span class="mt-4 text-xs text-gray-500 ">(1)</span>. Average Salary: $56,521 <span class="mt-4 text-xs text-gray-500 ">(4)</span></li>
+          The general manager has more logistical responsibility and is often responsible for overseeing the functioning of both the Front of House operations and Back of House operations. 
+           </ol>
+
+ <p class="mt-4 text-xs text-gray-500 ">Sources:</p>
+  <p class="text-xs text-gray-500 ">1 https://advice.hosco.com/en/the-career-path-of-a-waiter-waitress-an-exciting-journey/</p>
+  <p class="text-xs text-gray-500 ">2 https://pos.toasttab.com/blog/on-the-line/restaurant-server-salary</p>
+    <p class="text-xs text-gray-500 ">3 https://www.glassdoor.com/Salaries/front-of-house-supervisor-salary-SRCH_KO0,25.htm</p>
+      <p class="text-xs text-gray-500 ">4 https://www.zippia.com/salaries/restaurant-general-manager/</p>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end items-center ">
+                <button
+                  onClick={() => onCloseServer()}
+                  class="py-2 w-full px-3 mt-2 mb-3 items-center text-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                  href="#"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+          </DrawerBody>
+
+        
+</DrawerContent>
+</Drawer>
+
+<Drawer isOpen={isOpenPlumber} onClose={onClosePlumber}  size={ isDesktop ? "lg" : "full"}>
+        <DrawerOverlay />
+        <DrawerContent >
+          
+          <DrawerCloseButton />
+          <DrawerBody >
+          <div class="">
+            <div class="bg-white  rounded-xl shadow-sm  ">
+              <div class="p-1 sm:p-2">
+                <div class="text-start">
+                  <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
+                    Plumber career path
+                  </h2>
+                  <div class=" mx-auto">
+                    
+                    <p class="mt-2 text-base text-gray-600 ">
+                    <p class="mt-4 text-base text-black "> Entry level:</p>
+                   
+Entry level plumbers include plumbing apprentices, employees with no certifications, and employees fresh out of school.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
+ <ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black "> Plumbing Apprentice: $43,680</li>
+           <li class="mt-2 text-base text-black "> Plumber’s Assistant: roughly $56,000 - $74,225</li>
+
+           </ol>
+
+   <p class="mt-4 text-base text-black ">Mid level:</p>
+
+  
+
+Mid-Level plumbers typically have 2-3 years of experience and have the certifications necessary to work independently.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
+
+<ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black "> Residential Service Technician: $55k-$65k <span class="mt-4 text-xs text-gray-500 ">(3)</span></li>
+          Residential Service Technician:  clean all types of drains and sewers using special electromechanical equipment. 
+           <li class="mt-2 text-base text-black "> Commercial Service Technician:</li>
+           Same as residential, but in commercial spaces. 
+           <li class="mt-2 text-base text-black "> Commercial Service Technician:</li>
+           </ol>
+ <p class="mt-4 text-base text-black ">Senior plumbing positions:</p>
+
+Senior-level plumbers typically have 7-10 years of experience in the plumbing industry.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
+
+
+<ol class="ml-7 list-disc">
+          <li class="mt-2 text-base text-black ">Residential Contractor</li>
+          Installs, maintains, and repairs pipes and fixtures associated with heating, cooling, water distribution, and sanitation systems in residential and commercial structures. Fixes domestic appliances, such as dishwashers and gas cookers. Inspects drainage and other plumbing systems for compliance with local and national regulations. <span class="mt-4 text-xs text-gray-500 ">(4)</span> Average pay: $68,763
+           <li class="mt-2 text-base text-black ">Commercial Contractor:</li>
+           Same as residential, but in commercial spaces. Average pay: $63,009
+           <li class="mt-2 text-base text-black ">Project Manager:</li>
+           $80,281
+           </ol>
+
+ <p class="mt-4 text-xs text-gray-500 ">Sources:</p>
+  <p class="text-xs text-gray-500 ">1 https://faradaycareers.com/careers/plumber-career-path</p>
+    <p class="text-xs text-gray-500 ">3 https://www.rotorooter.com/careers/service-tech/</p>
+      <p class="text-xs text-gray-500 ">4 https://www.monster.co.uk/advertise-a-job/resources/job-description-templates/construction/plumber-job-description/</p>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end items-center ">
+                <button
+                  onClick={() => onClosePlumber()}
+                  class="py-2 w-full px-3 mt-2 mb-3 items-center text-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                  href="#"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+          </DrawerBody>
+
+        
+        </DrawerContent>
+        </Drawer>
                   </div>
                 </DrawerBody>
               </DrawerContent>
             </Drawer>
+
+
+         
+
      
+         
+
+
+
+     
+  
+      
             <Modal isOpen={isOpenShare} onClose={onCloseShare}>
                 <ModalContent>
      

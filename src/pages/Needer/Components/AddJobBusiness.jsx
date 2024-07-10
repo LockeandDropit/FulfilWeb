@@ -49,8 +49,10 @@ import {
 import { addJobStore } from "../HomePage/lib/addJobStore";
 import  JobDescriptionInput  from "./Editors/JobDescriptionInput"
 import Quill from "quill";
-
-
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { draftToMarkdown } from 'markdown-draft-js';
+import RichTextEditor from "./RichTextEditor";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -966,8 +968,15 @@ isFullTimePosition : isFullTimePosition,
   }
 
 
+// const [editorState, setEditorState] = useState(null)
 
 
+
+
+const handleEditorChange = (editorState) => {
+  // (console.log("here it is", draftToMarkdown(editorState)))
+  setDescription(draftToMarkdown(editorState))
+}
 
   
   if (isLoading === true) {
@@ -1199,6 +1208,23 @@ isFullTimePosition : isFullTimePosition,
                    Job Description 
                   </label>
 
+                  <div>
+                  {/* <Editor         
+  editorState={description}
+  toolbarClassName="toolbarClassName"
+  wrapperClassName="wrapperClassName"
+  editorClassName="editorClassName"
+  onEditorStateChange={handleEditorChange}
+  onChange={description => draftToMarkdown(description)}
+/> */}
+      <RichTextEditor
+                      onChange={(description) =>
+                        (handleEditorChange(description))
+                        
+                      }
+                      // ref={field.ref}
+                    />
+                  </div>
                   <div class="">
   <textarea onChange={(e) => setDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" placeholder="ex: This is a position offered at our company in which you will be responsible for overseeing several skilled machinists."></textarea>
 </div>

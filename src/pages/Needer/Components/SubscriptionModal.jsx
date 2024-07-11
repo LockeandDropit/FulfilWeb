@@ -189,13 +189,13 @@ useEffect(() => {
     <div class="flex flex-col border border-gray-200 text-center rounded-xl p-8 ">
       <h4 class="font-medium text-lg text-gray-800 ">Starter</h4>
       <span class="mt-7 font-bold text-3xl text-gray-800 ">   Free trial</span>
-      <p class="mt-2 text-sm text-gray-500 ">Renews at <span className="font-semibold text-slate-700">$24/month</span></p>
+      <p class="mt-2 text-sm text-gray-500 ">Renews at <span className="font-semibold text-slate-700">$49/month</span></p>
 
       <ul class="mt-7 space-y-2.5 text-sm">
         <li class="flex space-x-2">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="text-gray-800 ">
-            1 active listing at a time
+            Up to 3 active listings
           </span>
         </li>
 
@@ -209,14 +209,14 @@ useEffect(() => {
         <li class="flex space-x-2">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="text-gray-800 ">
-          Job posted on the Fulfil Map
+          Visible to all users
           </span>
         </li>
         <li class="flex space-x-2">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="text-gray-800 text-start">
-          Tools to track, manage, and communicate with candidates directly through Fulfil.
-          </span>
+          Link to your website and application process
+                    </span>
         </li>
       </ul>
 
@@ -233,13 +233,13 @@ useEffect(() => {
         29 <span class="font-bold text-2xl ">/mo</span> */}
         Free trial
       </span>
-      <p class="mt-2 text-sm text-gray-500 ">Renews at <span className="font-semibold text-slate-700">$49/month</span></p>
+      <p class="mt-2 text-sm text-gray-500 ">Renews at <span className="font-semibold text-slate-700">$99/month</span></p>
 
       <ul class="mt-7 space-y-2.5 text-sm">
         <li class="flex space-x-2">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="text-gray-800 ">
-            Up to 3  active listings
+          Includes all features from standard
           </span>
         </li>
 
@@ -247,16 +247,15 @@ useEffect(() => {
 
         <li class="flex space-x-2">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          <span class="text-gray-800 ">
-          Job posted on the Fulfil Map
+          <span class="text-gray-800 text-start ">
+          Up to 5 posted positions
           </span>
         </li>
 
         <li class="flex space-x-2 ">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="text-gray-800 text-start">
-          Tools to track, manage, and communicate with candidates directly through Fulfil.
-          </span>
+          Maintains a database of recent users that have shown interest in your company, so when a position opens, it can be filled quickly.          </span>
         
          
         </li>
@@ -275,20 +274,20 @@ useEffect(() => {
       
         Contact support
       </span>
-      <p class="mt-2 text-sm text-gray-500 ">Hiring for large companies </p>
+      <p class="mt-2 text-sm text-gray-500 ">Hiring for large companies</p>
 
       <ul class="mt-7 space-y-2.5 text-sm">
         <li class="flex space-x-2">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="text-gray-800 ">
-            5+ active listings
+            Listings at multiple business locations
           </span>
         </li>
 
         <li class="flex space-x-2">
           <svg class="flex-shrink-0 mt-0.5 size-4 text-blue-600 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           <span class="text-gray-800 text-start">
-           We add jobs you have posted elsewhere to our platform so you don't have to 
+          Active promotion of open positions. 
           </span>
         </li>
 

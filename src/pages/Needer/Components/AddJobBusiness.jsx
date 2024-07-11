@@ -978,6 +978,16 @@ const handleEditorChange = (editorState) => {
   setDescription(draftToMarkdown(editorState))
 }
 
+const handleApplicantEditorChange = (editorState) => {
+  // (console.log("here it is", draftToMarkdown(editorState)))
+  setApplicantDescription(draftToMarkdown(editorState))
+}
+
+const handleBenefitsEditorChange = (editorState) => {
+  // (console.log("here it is", draftToMarkdown(editorState)))
+  setBenefitsDescription(draftToMarkdown(editorState))
+}
+
   
   if (isLoading === true) {
     return (
@@ -1223,11 +1233,11 @@ const handleEditorChange = (editorState) => {
                         
                       }
                       // ref={field.ref}
+                      placeholder="ex: This is a position offered at our company in which you will be responsible for overseeing several skilled machinists."
+                  
                     />
                   </div>
-                  <div class="">
-  <textarea onChange={(e) => setDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" placeholder="ex: This is a position offered at our company in which you will be responsible for overseeing several skilled machinists."></textarea>
-</div>
+                
                 </div>
 
                 <div class="space-y-2">
@@ -1237,10 +1247,18 @@ const handleEditorChange = (editorState) => {
                   >
                     Job Qualifications
                   </label>
-
-                  <div class="">
+                  <RichTextEditor
+                      onChange={(description) =>
+                        (handleApplicantEditorChange(description))
+                        
+                      }
+                      // ref={field.ref}
+                      placeholder="ex: 3+ years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "
+                  
+                    />
+                  {/* <div class="">
   <textarea onChange={(e) => setApplicantDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" placeholder="ex: 3+ years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "></textarea>
-</div>
+</div> */}
                 </div>
                 <div class="space-y-2">
                   <label
@@ -1249,10 +1267,18 @@ const handleEditorChange = (editorState) => {
                   >
                   List employment benefits here (optional)
                   </label>
-
-                  <div class="">
+                  <RichTextEditor
+                      onChange={(description) =>
+                        (handleBenefitsEditorChange(description))
+                        
+                      }
+                      // ref={field.ref}
+                      placeholder="ex: 3+ years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "
+                  
+                    />
+                  {/* <div class="">
   <textarea onChange={(e) => setBenefitsDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" placeholder="ex: Company-covered health insurance, PTO, 4% 401k match"></textarea>
-</div>
+</div> */}
                 </div>
              
             

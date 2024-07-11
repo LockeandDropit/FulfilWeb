@@ -1,26 +1,24 @@
-import {InfoWindow, useMap} from '@vis.gl/react-google-maps';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import { Marker, MarkerClusterer} from '@googlemaps/markerclusterer';
-import {Tree} from './trees';
-import {TreeMarker} from './tree-marker';
+import { InfoWindow, useMap } from "@vis.gl/react-google-maps";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Marker, MarkerClusterer } from "@googlemaps/markerclusterer";
+import { Tree } from "./trees";
+import { TreeMarker } from "./tree-marker";
 import { auth, db } from "../../firebaseConfig.js";
 
-
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { Input, Button, Text, Box, Container, Image } from "@chakra-ui/react";
 import { Center, Flex } from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {
-    doc,
-    getDoc,
-    collectionGroup,
-  
-    query,
-    collection,
-    onSnapshot,
-  } from "firebase/firestore";
+  doc,
+  getDoc,
+  collectionGroup,
+  query,
+  collection,
+  onSnapshot,
+} from "firebase/firestore";
 
 import {
   Card,
@@ -33,7 +31,7 @@ import {
   InputGroup,
   InputRightAddon,
 } from "@chakra-ui/react";
-import { 
+import {
   Drawer,
   DrawerBody,
   DrawerFooter,
@@ -45,15 +43,16 @@ import {
   Menu,
   MenuButton,
   MenuList,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    useDisclosure, } from "@chakra-ui/react";
-    import JobFilter from "../../pages/Doer/components/JobFilter.jsx"
-    import { useSearchResults } from "../../pages/Doer/Chat/lib/searchResults"
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
+import JobFilter from "../../pages/Doer/components/JobFilter.jsx";
+import { useSearchResults } from "../../pages/Doer/Chat/lib/searchResults";
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
 import {
   FormControl,
@@ -61,7 +60,7 @@ import {
   FormErrorMessage,
   FormHelperText,
   InputRightElement,
-  Select
+  Select,
 } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { ViewIcon } from "@chakra-ui/icons";
@@ -98,24 +97,21 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-
-
+import Markdown from "react-markdown";
 
 import { FcGoogle } from "react-icons/fc";
 // import LoggedOutHeader from "./Landing/LoggedOutHeader.jsx";
 import { useMediaQuery } from "@chakra-ui/react";
 
-import Plausible from 'plausible-tracker'
+import Plausible from "plausible-tracker";
 // import LoggedOutHeaderNoGap from "./Landing/LoggedOutHeaderNoGap.jsx";
-
 
 /**
  * The ClusteredTreeMarkers component is responsible for integrating the
  * markers with the markerclusterer.
  */
-export const ClusteredTreeMarkers = ({trees}) => {
-
-    //this is where credited code starts 
+export const ClusteredTreeMarkers = ({ trees }) => {
+  //this is where credited code starts
   //almost all code regarding implementing clustering in this library is from https://github.com/visgl/react-google-maps/tree/main/examples/marker-clustering
   const [markers, setMarkers] = useState({});
   const [selectedTreeKey, setSelectedTreeKey] = useState(null);
@@ -123,7 +119,7 @@ export const ClusteredTreeMarkers = ({trees}) => {
   const selectedTree = useMemo(
     () =>
       trees && selectedTreeKey
-        ? trees.find(t => t.jobID === selectedTreeKey)
+        ? trees.find((t) => t.jobID === selectedTreeKey)
         : null,
     [trees, selectedTreeKey]
   );
@@ -134,7 +130,7 @@ export const ClusteredTreeMarkers = ({trees}) => {
   const clusterer = useMemo(() => {
     if (!map) return null;
 
-    return new MarkerClusterer({map});
+    return new MarkerClusterer({ map });
   }, [map]);
 
   useEffect(() => {
@@ -147,14 +143,14 @@ export const ClusteredTreeMarkers = ({trees}) => {
   // this callback will effectively get passsed as ref to the markers to keep
   // tracks of markers currently on the map
   const setMarkerRef = useCallback((marker, key) => {
-    setMarkers(markers => {
+    setMarkers((markers) => {
       if ((marker && markers[key]) || (!marker && !markers[key]))
         return markers;
 
       if (marker) {
-        return {...markers, [key]: marker};
+        return { ...markers, [key]: marker };
       } else {
-        const {[key]: _, ...newMarkers} = markers;
+        const { [key]: _, ...newMarkers } = markers;
 
         return newMarkers;
       }
@@ -169,11 +165,9 @@ export const ClusteredTreeMarkers = ({trees}) => {
     setSelectedTreeKey(tree.key);
   }, []);
 
+  //   all imported logic from DoerMapLoggedOut
 
-//   all imported logic from DoerMapLoggedOut
-
-
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
   //background image https://www.freecodecamp.org/news/react-background-image-tutorial-how-to-set-backgroundimage-with-inline-css-style/
   //image from Photo by Blue Bird https://www.pexels.com/photo/man-standing-beside-woman-on-a-stepladder-painting-the-wall-7217988/
@@ -182,36 +176,36 @@ const navigate = useNavigate();
   const [postedJobs, setPostedJobs] = useState([]);
   const [businessPostedJobs, setBusinessPostedJobs] = useState([]);
 
-  const { searchResults, searchIsMobile, setSearchIsMobile } = useSearchResults()
+  const { searchResults, searchIsMobile, setSearchIsMobile } =
+    useSearchResults();
 
-//   const closeInfoWindow = props.props
+  //   const closeInfoWindow = props.props
 
-//   useEffect(() => {
-// console.log(closeInfoWindow)
-//     if (closeInfoWindow === true) {
-//       setOpenInfoWindowMarkerID(null)
-//     } 
+  //   useEffect(() => {
+  // console.log(closeInfoWindow)
+  //     if (closeInfoWindow === true) {
+  //       setOpenInfoWindowMarkerID(null)
+  //     }
 
-
-//   }, [closeInfoWindow])
+  //   }, [closeInfoWindow])
 
   useEffect(() => {
     if (searchResults === null) {
- //normal render
-renderAllJobs()
- //initial render with all f(x)
-    } else if (searchResults !== null && searchResults[0].isFullTimePosition === "gigwork" ) {
-        setPostedJobs(searchResults)
-        setBusinessPostedJobs(null)
+      //normal render
+      renderAllJobs();
+      //initial render with all f(x)
+    } else if (
+      searchResults !== null &&
+      searchResults[0].isFullTimePosition === "gigwork"
+    ) {
+      setPostedJobs(searchResults);
+      setBusinessPostedJobs(null);
+    } else {
+      setBusinessPostedJobs(searchResults);
 
+      console.log("search results map screen", searchResults);
     }
-    else {
-     setBusinessPostedJobs(searchResults)
-    
-     console.log("search results map screen",searchResults)
-    }
-  }, [searchResults])
-
+  }, [searchResults]);
 
   const renderAllJobs = () => {
     const q = query(collection(db, "Map Jobs"));
@@ -227,16 +221,14 @@ renderAllJobs()
           postedByBusiness.push({ ...doc.data(), id: doc.id });
         } else {
           results.push({ ...doc.data(), id: doc.id });
-          console.log("this is from results",doc.data())
+          console.log("this is from results", doc.data());
         }
       });
 
       setPostedJobs(results);
       setBusinessPostedJobs(postedByBusiness);
     });
-  }
-
-
+  };
 
   const [allJobs, setAllJobs] = useState([]);
 
@@ -308,9 +300,12 @@ renderAllJobs()
     setOpenInfoWindowMarkerID(x);
   };
 
-
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const { isOpen: isOpenSignIn, onOpen: onOpenSignIn, onClose: onCloseSignIn } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenSignIn,
+    onOpen: onOpenSignIn,
+    onClose: onCloseSignIn,
+  } = useDisclosure();
   const {
     isOpen: isOpenShare,
     onOpen: onOpenShare,
@@ -350,22 +345,20 @@ renderAllJobs()
   } = useDisclosure();
   //category search
 
-  const [searchJobCategory, setSearchJobCategory] = useState(null)
+  const [searchJobCategory, setSearchJobCategory] = useState(null);
 
   useEffect(() => {
     if (searchJobCategory && searchJobCategory !== null) {
-      searchCategory(searchJobCategory)
+      searchCategory(searchJobCategory);
     } else {
-
     }
-  }, [searchJobCategory])
+  }, [searchJobCategory]);
   const handlePostedByBusinessToggleOpen = (x) => {
     setOpenInfoWindowMarkerID(x.jobID);
     // updateJobListingViews(x);
     onOpenDrawer();
-    console.log("from on click",x)
+    console.log("from on click", x);
   };
-
 
   const searchCategory = (value) => {
     console.log(value);
@@ -398,15 +391,12 @@ renderAllJobs()
             console.log("match", results);
           } else {
             // return(<NoCategoryMatchModal props={true}/>)
-            console.log("no match1")
-          
+            console.log("no match1");
           }
         });
 
         if (secondResults.length === 0) {
-         onOpen()
-          
-          
+          onOpen();
         } else {
           setPostedJobs(secondResults);
         }
@@ -415,9 +405,9 @@ renderAllJobs()
   };
 
   const handleCloseInfoWindow = () => {
-    setOpenInfoWindowMarkerID(null)
-    setUrlCopied(false)
-  }
+    setOpenInfoWindowMarkerID(null);
+    setUrlCopied(false);
+  };
 
   const [openModal, setOpenModal] = useState(null);
 
@@ -427,7 +417,6 @@ renderAllJobs()
       setOpenModal(false);
     }, 200);
   };
-
 
   //const handle log in / sign up navigate
   const handleClose = () => {
@@ -487,11 +476,10 @@ renderAllJobs()
       });
   };
 
-
   const logIn = () => {
-    console.log("logging in")
+    console.log("logging in");
     const auth = getAuth();
-    console.log("logging in")
+    console.log("logging in");
     setPersistence(auth, browserLocalPersistence).then(() => {
       // New sign-in will be persisted with local persistence.
       signInWithEmailAndPassword(auth, email, password)
@@ -522,7 +510,6 @@ renderAllJobs()
             getDoc(doc(db, "employers", response.user.uid)),
           ])
             .then((results) =>
-            
               navigate(
                 results[0]._document !== null &&
                   results[0]._document.data.value.mapValue.fields.isEmployer
@@ -547,7 +534,6 @@ renderAllJobs()
   const [password, setPassword] = useState(null);
   const [isSignedIn, setIsSignedIn] = useState(false);
 
-
   const [passwordValidationMessage, setPasswordValidationMessage] = useState();
   const passwordRegex = /[^\>]*/;
   const [passwordValidationBegun, setPasswordValidationBegun] = useState(false);
@@ -565,27 +551,26 @@ renderAllJobs()
     } else {
       setValidationMessage();
       setEmail(email);
-      console.log("email good")
+      console.log("email good");
     }
     setPasswordValidationBegun(true);
     const isValidPassword = passwordRegex.test(password);
     if (!isValidPassword) {
     } else {
       setPasswordValidationMessage();
-      console.log("password good")
+      console.log("password good");
     }
 
     if (isValid && isValidPassword) {
-      logIn()
+      logIn();
     }
   };
 
   const onSignUp = async () => {
     const authentication = getAuth();
-    
+
     await createUserWithEmailAndPassword(authentication, email, password)
       .then(() => {
-       
         navigate("/DoerAddProfileInfo");
       })
       .catch((error) => {
@@ -595,7 +580,7 @@ renderAllJobs()
         console.log(errorMessage);
       });
   };
-  
+
   const validate = () => {
     setEmailValidationBegun(true);
     const isValid = emailRegex.test(email);
@@ -608,7 +593,9 @@ renderAllJobs()
     setPasswordValidationBegun(true);
     const isValidPassword = passwordRegex.test(password);
     if (!isValidPassword) {
-      setPasswordValidationMessage( "Password Invalid. Must be at least 6 characters, have 1 uppercase letter, 1 lowercase letter, and 1 number");
+      setPasswordValidationMessage(
+        "Password Invalid. Must be at least 6 characters, have 1 uppercase letter, 1 lowercase letter, and 1 number"
+      );
     } else {
       setPasswordValidationMessage();
     }
@@ -617,77 +604,70 @@ renderAllJobs()
     }
   };
 
-
   const handleSwitchModals = () => {
-    onClose()
-    onOpenSignIn()
-  }
-
-
+    onClose();
+    onOpenSignIn();
+  };
 
   //this is to receive jobs
-  //will have to eventually makew this so that it checks if the user is logged in... 
+  //will have to eventually makew this so that it checks if the user is logged in...
   //like if user ? && isDoer navigate("DoerMapScreen/sessionid={blah}")
   // else (stay here and render it on the logged out map)
 
- 
   //"https://getfulfil.com/DoerMapLoggedOut/?session_id=CHECKOUT_SESSION_ID",
-//test http://localhost:3000/DoerMapLoggedOut/?session_id=CHECKOUT_SESSION_ID
+  //test http://localhost:3000/DoerMapLoggedOut/?session_id=CHECKOUT_SESSION_ID
   useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const sessionId = urlParams.get("session_id");
 
-  if (sessionId) {
-    const q = query(collection(db, "Map Jobs"));
-console.log("session id ", sessionId)
-    onSnapshot(q, (snapshot) => {
-      let results = [];
-      let postedByBusiness = [];
-      snapshot.docs.forEach((doc) => {
-        //review what thiss does
-        if (doc.data().jobID === sessionId) {
+    if (sessionId) {
+      const q = query(collection(db, "Map Jobs"));
+      console.log("session id ", sessionId);
+      onSnapshot(q, (snapshot) => {
+        let results = [];
+        let postedByBusiness = [];
+        snapshot.docs.forEach((doc) => {
+          //review what thiss does
+          if (doc.data().jobID === sessionId) {
             if (doc.data().isPostedByBusiness === true) {
               // postedByBusiness.push({ ...doc.data(), id: doc.id });
               // setPostedJobs([])
-              handlePostedByBusinessToggleOpen(doc.data())
-              console.log("business result inner", doc.data())
+              handlePostedByBusinessToggleOpen(doc.data());
+              console.log("business result inner", doc.data());
             } else if (doc.data().isFullTimePosition === "gigwork") {
-              handlePostedByBusinessToggleOpen(doc.data())
-              console.log("gig link", doc.data())
+              handlePostedByBusinessToggleOpen(doc.data());
+              console.log("gig link", doc.data());
             }
-        } else {
+          } else {
+          }
+        });
 
-        }
+        // setPostedJobs(results);
+        // setBusinessPostedJobs(postedByBusiness);
       });
+    }
+  }, []);
 
-      // setPostedJobs(results);
-      // setBusinessPostedJobs(postedByBusiness);
-    });
-  }
-  }, [])
-
-  const [urlCopied, setUrlCopied] = useState(false)
-
+  const [urlCopied, setUrlCopied] = useState(false);
 
   const handleCopiedURL = (businessPostedJobs) => {
-    setUrlCopied(true)
-    navigator.clipboard.writeText(`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`)
-  }
+    setUrlCopied(true);
+    navigator.clipboard.writeText(
+      `https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`
+    );
+  };
 
-
-  const [subscriberEmail, setSubscriberEmail] = useState(null)
+  const [subscriberEmail, setSubscriberEmail] = useState(null);
 
   const handleNewEmailSignUp = async () => {
+    // insert email regex, if then
+    onCloseEmailSignUp();
+    onOpenEmailSignUpSuccess();
 
-   // insert email regex, if then
-   onCloseEmailSignUp()
-   onOpenEmailSignUpSuccess()
-
-   console.log("subscriberEmail", subscriberEmail)
+    console.log("subscriberEmail", subscriberEmail);
 
     const response = await fetch(
-    
       "https://emailapi-qi7k.onrender.com/newEmailSignUp",
 
       {
@@ -696,83 +676,78 @@ console.log("session id ", sessionId)
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({email: subscriberEmail}),
+        body: JSON.stringify({ email: subscriberEmail }),
       }
     );
 
     const { data, error } = await response.json();
-    console.log("Any issues?", error)
+    console.log("Any issues?", error);
 
-    onCloseEmailSignUp()
-    onOpenEmailSignUpSuccess()
-  }
-
+    onCloseEmailSignUp();
+    onOpenEmailSignUpSuccess();
+  };
 
   //bettter useEffect than I write https://www.youtube.com/watch?v=QQYeipc_cik&t=788s
-// useEffect(() => {
-//   const openEmail = () => setTimeout(() => {
-//     onOpenEmailSignUp()
-//     }, 120000
-//     );
+  // useEffect(() => {
+  //   const openEmail = () => setTimeout(() => {
+  //     onOpenEmailSignUp()
+  //     }, 120000
+  //     );
 
-//       openEmail()
+  //       openEmail()
 
-// }, [])
+  // }, [])
 
-const [scrollBehavior, setScrollBehavior] = React.useState('inside')
+  const [scrollBehavior, setScrollBehavior] = React.useState("inside");
 
   //almost all code regarding implementing clustering in this library is from https://github.com/visgl/react-google-maps/tree/main/examples/marker-clustering
   return (
     <>
-      {trees.map(businessPostedJobs => (
+      {trees.map((businessPostedJobs) => (
         <>
-        <TreeMarker
-          key={businessPostedJobs.key}
-          tree={businessPostedJobs}
-          onClick={() =>
-            handlePostedByBusinessToggleOpen(businessPostedJobs)
-          }
-          setMarkerRef={setMarkerRef}
-        />
+          <TreeMarker
+            key={businessPostedJobs.key}
+            tree={businessPostedJobs}
+            onClick={() => handlePostedByBusinessToggleOpen(businessPostedJobs)}
+            setMarkerRef={setMarkerRef}
+          />
 
-        {openInfoWindowMarkerID === businessPostedJobs.jobID ? (
+          {openInfoWindowMarkerID === businessPostedJobs.jobID ? (
             <>
-            <Drawer
-              onClose={onCloseDrawer}
-              isOpen={isOpenDrawer}
-              size={"xl"}
-            >
-              <DrawerOverlay />
-              <DrawerContent>
-                <DrawerCloseButton />
-                <DrawerHeader>
-                  {businessPostedJobs.jobTitle}
-                </DrawerHeader>
-                <DrawerBody>
-                  <div class="">
-                  <Helmet>
-     <meta charSet="utf-8" />
-     <title>{businessPostedJobs.jobTitle}</title>
-     <meta name="description" content={businessPostedJobs.description} />
-     {/* <link rel="canonical" href=`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}` /> */}
-     </Helmet>
-                    <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
-                      {/* <div class="py-3 px-4 flex justify-between items-center border-b ">
+              <Drawer onClose={onCloseDrawer} isOpen={isOpenDrawer} size={"xl"}>
+                <DrawerOverlay />
+                <DrawerContent>
+                  <DrawerCloseButton />
+                  <DrawerHeader>{businessPostedJobs.jobTitle}</DrawerHeader>
+                  <DrawerBody>
+                    <div class="">
+                      <Helmet>
+                        <meta charSet="utf-8" />
+                        <title>{businessPostedJobs.jobTitle}</title>
+                        <meta
+                          name="description"
+                          content={businessPostedJobs.description}
+                        />
+                        {/* <link rel="canonical" href=`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}` /> */}
+                      </Helmet>
+                      <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto ">
+                        {/* <div class="py-3 px-4 flex justify-between items-center border-b ">
                       <h3 class="font-semibold text-gray-800">Create A Job</h3>
                   
                     </div> */}
-     
-                      <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-                        <div class="p-4 ">
-                          <div class="">
-                            <div className="flex">
-                            <label
-                              for="hs-pro-dactmt"
-                              class="block mb-2 text-lg font-medium text-gray-800">
-                              {businessPostedJobs.jobTitle}
-                            </label>
-     
-     {/*                                        
+
+                        <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                          <div class="p-4">
+                            <div class=" ">
+                              <div className="flex">
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block mb-2 text-xl font-medium text-gray-900"
+                                >
+                                  {businessPostedJobs.jobTitle}
+                                </label>
+
+                                {/*                                        
                             <label onClick={() => onOpenShare()}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4 ml-1 cursor-pointer">
      <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
@@ -780,249 +755,305 @@ const [scrollBehavior, setScrollBehavior] = React.useState('inside')
      
                              
                             </label> */}
-     
-                       
-                           
-                          
-                            </div>
-                    {businessPostedJobs.isFullTimePosition === true ? ( <label
-                              for="hs-pro-dactmt"
-                              class="block  text-md font-medium text-gray-800"
-                            >
-                              Full-time
-                            </label>) : ( <label
-                              for="hs-pro-dactmt"
-                              class="block  text-md font-medium text-gray-800 "
-                            >
-                              Part-time
-                            </label>)}
-                           
-     
-                            {businessPostedJobs.isHourly ? (
-                              <div class="space-y-1 ">
-                                <div class="flex align-items-center">
-                                  <p className=" text-sm font-medium">
-                                    $
-                                  </p>
-                                  <label
-                                    for="hs-pro-dactmt"
-                                    class="block text-sm font-medium text-gray-800 "
-                                  >
-                                    {businessPostedJobs.lowerRate}
-                                  </label>
-                                  <p className=" text-sm font-medium">
-                                    /hour - $
-                                  </p>
-                                  <label
-                                    for="hs-pro-dactmt"
-                                    class="block  text-sm font-medium text-gray-800 "
-                                  >
-                                  {businessPostedJobs.upperRate}
-                                  </label>
-                                  <p className=" text-sm font-medium">
-                                    /hour
+                              </div>
+                              {businessPostedJobs.isFullTimePosition ===
+                              true ? (
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block  text-md font-medium text-gray-800"
+                                >
+                                  Full-time
+                                </label>
+                              ) : (
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block  text-md font-medium text-gray-800 "
+                                >
+                                  Part-time
+                                </label>
+                              )}
+
+                              {businessPostedJobs.isHourly ? (
+                                <div class="space-y-1 ">
+                                  <div class="flex align-items-center">
+                                    <p className=" text-sm font-medium">$</p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block text-sm font-medium text-gray-800 "
+                                    >
+                                      {businessPostedJobs.lowerRate}
+                                    </label>
+                                    <p className=" text-sm font-medium">
+                                      /hour - $
+                                    </p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block  text-sm font-medium text-gray-800 "
+                                    >
+                                      {businessPostedJobs.upperRate}
+                                    </label>
+                                    <p className=" text-sm font-medium">
+                                      /hour
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : null}
+
+                              {businessPostedJobs.isSalaried ? (
+                                <div class="space-y-2 ">
+                                  <div class="flex align-items-center">
+                                    <p className=" text-sm font-medium">$</p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block  text-sm font-medium text-gray-800 "
+                                    >
+                                      {businessPostedJobs.lowerRate}
+                                    </label>
+                                    <p className="ml-1 text-sm font-medium ">
+                                      yearly - $
+                                    </p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block  text-sm font-medium text-gray-800 "
+                                    >
+                                      {businessPostedJobs.upperRate}
+                                    </label>
+                                    <p className=" ml-1 text-sm font-medium">
+                                      yearly
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : null}
+                              <p class="block  text-sm font-medium text-gray-800 ">
+                                {businessPostedJobs.streetAddress},{" "}
+                                {businessPostedJobs.city},{" "}
+                                {businessPostedJobs.state}
+                              </p>
+                              <p class="font-semibold text-sm text-gray-500  cursor-default">
+                                <span className="font-semibold text-sm text-slate-700">
+                                  {" "}
+                                  Posted:
+                                </span>{" "}
+                                {businessPostedJobs.datePosted}
+                              </p>
+                              <p class="font-semibold text-sm text-slate-700  mt-2 cursor-pointer">
+                                Employer:
+                              </p>
+                              <div className="flex">
+                                {businessPostedJobs.employerProfilePicture ? (
+                                  <>
+                                    <div class="flex flex-col justify-center items-center size-[56px]  ">
+                                      <img
+                                        src={
+                                          businessPostedJobs.employerProfilePicture
+                                        }
+                                        class="flex-shrink-0 size-[64px] rounded-full"
+                                      />
+
+                                      <div className="flex flex-col ml-4">
+                                        <p class="font-semibold text-sm text-gray-500  mt-2 cursor-pointer">
+                                          {businessPostedJobs.businessName}
+                                        </p>
+                                        <p class="font-semibold text-sm text-gray-500 cursor-default ">
+                                          {businessPostedJobs.city}, Minnesota
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </>
+                                ) : null}
+                                <div className="flex flex-col">
+                                  <p class="font-semibold text-sm text-gray-500  mt-1 cursor-pointer">
+                                    {businessPostedJobs.companyName}
                                   </p>
                                 </div>
                               </div>
-                            ) : null}
-     
-                            {businessPostedJobs.isSalaried ? (
-                               <div class="space-y-2 ">
-                               <div class="flex align-items-center">
-                                 <p className=" text-sm font-medium">
-                                   $
-                                 </p>
-                                 <label
-                                   for="hs-pro-dactmt"
-                                   class="block  text-sm font-medium text-gray-800 "
-                                 >
-                                   {businessPostedJobs.lowerRate}
-                                 </label>
-                                 <p className="ml-1 text-sm font-medium ">
-                                    yearly - $
-                                 </p>
-                                 <label
-                                   for="hs-pro-dactmt"
-                                   class="block  text-sm font-medium text-gray-800 "
-                                 >
-                                   {businessPostedJobs.upperRate}
-                                 </label>
-                                 <p className=" ml-1 text-sm font-medium">
-                                    yearly
-                                 </p>
-                               </div>
-                             </div>
-                            ) : null}
-     <p class="block  text-sm font-medium text-gray-800 ">{businessPostedJobs.streetAddress}, {businessPostedJobs.city}, {businessPostedJobs.state}</p>
-     <p class="font-semibold text-sm text-gray-500  cursor-default">
-                              <span className="font-semibold text-sm text-slate-700">
-                                {" "}
-                                Posted:
-                              </span>{" "}
-                              {businessPostedJobs.datePosted}
-                            </p>
-                            <p class="font-semibold text-sm text-slate-700  mt-2 cursor-pointer">
-                              Employer:
-                            </p>
-                            <div className="flex">
-                            {businessPostedJobs.employerProfilePicture ? (
-     <>
-                              <div class="flex flex-col justify-center items-center size-[56px]  ">
-                               
-                                  <img
-                                    src={
-                                      businessPostedJobs.employerProfilePicture
-                                    }
-                                    class="flex-shrink-0 size-[64px] rounded-full"
-                                  />
-                                
-                                <div className="flex flex-col ml-4">
-                                <p class="font-semibold text-sm text-gray-500  mt-2 cursor-pointer">
-                                  {businessPostedJobs.businessName}
-                                </p>
-                                <p class="font-semibold text-sm text-gray-500 cursor-default ">
-                                  {businessPostedJobs.city}, Minnesota
-                                </p>
-                              </div>
-                                
-                              </div>
-                            
-                              </>  ) : (null )}
-                              <div className="flex flex-col">
-                                <p class="font-semibold text-sm text-gray-500  mt-1 cursor-pointer">
-                                  {businessPostedJobs.companyName}
-                                </p>
-                                
-                              </div>
-                           
-                           </div>
-                          </div>
-                         
-     
-     
-                         
-                          <div class="space-y-2 mt-10 mb-4">
-                            <label
-                              for="dactmi"
-                              class="block mb-2 text-md font-medium text-gray-800 "
-                            >
-                             What you'll be doing
-                            </label>
-     
-                            <div class="mb-4">
-                              <p>{businessPostedJobs.description}</p>
                             </div>
-                          </div>
-                                    {businessPostedJobs.bio ? (
-                                       <div class="space-y-2 mt-10 mb-4">
-                                       <label
-                                         for="dactmi"
-                                         class="block mb-2 text-md font-medium text-gray-800 "
-                                       >
-                                       About {businessPostedJobs.companyName}
-                                       </label>
-     
-                                       <div class="mb-4">
-                                         <p>{businessPostedJobs.bio}</p>
-                                       </div>
-                                     </div>
-                                    ) : (null)}
-                         
-     
-                          <div class="space-y-2 mb-4 ">
-                            <label
-                              for="dactmi"
-                              class="block mb-2 text-md font-medium text-gray-800 "
-                            >
-                             Job Requirements
-                            </label>
-     
-                            <div class="mb-4">
-                              <p>{businessPostedJobs.applicantDescription}</p>
-                            </div>
-                          </div>
-                          <div class="space-y-2 md:mb-4 lg:mb-4 mb-20">
-                            <label
-                              for="dactmi"
-                              class="block mb-2 text-md font-medium text-gray-800 "
-                            >
-                              Employment Benefits
-                            </label>
-     
-                            <div class="mb-4">
-                            {businessPostedJobs.benefitsDescription ? (  <p>{businessPostedJobs.benefitsDescription}</p>) : (  <p>Nothing listed</p>)}
-                              
-                            </div>
-                          </div>
-                        </div>
-     
-                        {isDesktop ? (<div class="p-4 flex justify-between gap-x-2">
-                          
-                          <div class="w-full flex justify-end items-center gap-x-2">
-                          {businessPostedJobs.jobTitle.includes("Plumber") ? ( <button
-                              type="button"
-                              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                              data-hs-overlay="#hs-pro-datm"
-                              onClick={() => onOpenPlumber()}
-                            >
-                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
-     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-     </svg>
-     See career path
-                            </button>) : (null) }
-                            {businessPostedJobs.jobTitle.includes("Server" || "server") ? (  <button
-                              type="button"
-                              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                              data-hs-overlay="#hs-pro-datm"
-                              onClick={() => onOpenServer()}
-                            >
-                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
-     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-     </svg>
-     See career path
-                            </button>) : (null) }
-                             {businessPostedJobs.jobTitle.includes("Machinist" || "CNC") ? (  <button
-                              type="button"
-                              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                              data-hs-overlay="#hs-pro-datm"
-                              onClick={() => onOpenCNC()}
-                            >
-                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
-     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-     </svg>
-     See career path
-                            </button>) : (null) }
 
-                            
-                            <button
-                              type="button"
-                              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                              data-hs-overlay="#hs-pro-datm"
-                              onClick={() => onOpen()}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
-     <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-     </svg>
-     
-                              Save
-                            </button>
-                            <button
-                              type="button"
-                              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                              data-hs-overlay="#hs-pro-datm"
-                              onClick={() => onOpen()}
-                            >
-                              Apply
-                            </button>
+                            <div class="space-y-2 mt-10 mb-4 ">
+                              <label
+                                for="dactmi"
+                                class="block mb-2 text-lg font-medium text-gray-900 "
+                              >
+                                What you'll be doing
+                              </label>
+                              <div className="w-full prose prose-li  font-inter marker:text-black mb-4 ">
+                                <Markdown>
+                                  {businessPostedJobs.description}
+                                </Markdown>
+                              </div>
+                            </div>
+                            {businessPostedJobs.bio ? (
+                              <div class="space-y-2 mt-10 mb-4">
+                                <label
+                                  for="dactmi"
+                                  class="block mb-2 text-md font-medium text-gray-800 "
+                                >
+                                  About {businessPostedJobs.companyName}
+                                </label>
+
+                                <div class="mb-4">
+                                  <p>{businessPostedJobs.bio}</p>
+                                </div>
+                              </div>
+                            ) : null}
+
+                            <div class="space-y-2 mb-4 ">
+                              <label
+                                for="dactmi"
+                                class="block mb-2 text-lg font-medium text-gray-900 "
+                              >
+                                Job Requirements
+                              </label>
+
+                              <div className="prose prose-li  font-inter marker:text-black mb-4">
+                                <Markdown>
+                                  {businessPostedJobs.applicantDescription}
+                                </Markdown>
+                              </div>
+                            </div>
+                            <div class="space-y-2 md:mb-4 lg:mb-4 mb-20">
+                              <label
+                                for="dactmi"
+                                class="block mb-2 text-lg font-medium text-gray-900 "
+                              >
+                                Employment Benefits
+                              </label>
+
+                              <div className="prose prose-li  font-inter marker:text-black mb-4">
+                                {businessPostedJobs.benefitsDescription ? (
+                                  <Markdown>
+                                    {businessPostedJobs.benefitsDescription}
+                                  </Markdown>
+                                ) : (
+                                  <p>Nothing listed</p>
+                                )}
+                              </div>
+                            </div>
                           </div>
-                        </div>) : (
-                          <div id="cookies-simple-with-dismiss-button" class="fixed bottom-0 start-1/2 transform -translate-x-1/2 z-[60] sm:max-w-4xl w-full mx-auto px-2">
-                             <div class="p-2 bg-white border border-gray-200 rounded-sm shadow-sm ">
-                              
-                            <div class="p-2 flex justify-between gap-x-2">
-                           
-                          <div class="w-full flex justify-center items-center gap-x-2">
-                            {/* <button
+
+                          {isDesktop ? (
+                            <div class="p-4 flex justify-between gap-x-2">
+                              <div class="w-full flex justify-end items-center gap-x-2">
+                                {businessPostedJobs.jobTitle.includes(
+                                  "Plumber"
+                                ) ? (
+                                  <button
+                                    type="button"
+                                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                    data-hs-overlay="#hs-pro-datm"
+                                    onClick={() => onOpenPlumber()}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke-width="1.5"
+                                      stroke="currentColor"
+                                      class="size-4 ml-1"
+                                    >
+                                      <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                      />
+                                    </svg>
+                                    See career path
+                                  </button>
+                                ) : null}
+                                {businessPostedJobs.jobTitle.includes(
+                                  "Server" || "server"
+                                ) ? (
+                                  <button
+                                    type="button"
+                                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                    data-hs-overlay="#hs-pro-datm"
+                                    onClick={() => onOpenServer()}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke-width="1.5"
+                                      stroke="currentColor"
+                                      class="size-4 ml-1"
+                                    >
+                                      <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                      />
+                                    </svg>
+                                    See career path
+                                  </button>
+                                ) : null}
+                                {businessPostedJobs.jobTitle.includes(
+                                  "Machinist" || "CNC"
+                                ) ? (
+                                  <button
+                                    type="button"
+                                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                    data-hs-overlay="#hs-pro-datm"
+                                    onClick={() => onOpenCNC()}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke-width="1.5"
+                                      stroke="currentColor"
+                                      class="size-4 ml-1"
+                                    >
+                                      <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                      />
+                                    </svg>
+                                    See career path
+                                  </button>
+                                ) : null}
+
+                                <button
+                                  type="button"
+                                  class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                  data-hs-overlay="#hs-pro-datm"
+                                  onClick={() => onOpen()}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="size-4"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                                    />
+                                  </svg>
+                                  Save
+                                </button>
+                                <button
+                                  type="button"
+                                  class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                  data-hs-overlay="#hs-pro-datm"
+                                  onClick={() => onOpen()}
+                                >
+                                  Apply
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div
+                              id="cookies-simple-with-dismiss-button"
+                              class="fixed bottom-0 start-1/2 transform -translate-x-1/2 z-[60] sm:max-w-4xl w-full mx-auto px-2"
+                            >
+                              <div class="p-2 bg-white border border-gray-200 rounded-sm shadow-sm ">
+                                <div class="p-2 flex justify-between gap-x-2">
+                                  <div class="w-full flex justify-center items-center gap-x-2">
+                                    {/* <button
                               type="button"
                               class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
                               data-hs-overlay="#hs-pro-datm"
@@ -1034,340 +1065,582 @@ const [scrollBehavior, setScrollBehavior] = React.useState('inside')
      
                               Save
                             </button> */}
-                               {businessPostedJobs.jobTitle.includes("Plumber") ? ( <button
-                              type="button"
-                              class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200 bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
-                              data-hs-overlay="#hs-pro-datm"
-                              onClick={() => onOpenPlumber()}
-                            >
-                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
-     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-     </svg>
-     See career path
-                            </button>) : (null) }
-                            {businessPostedJobs.jobTitle.includes("Server" || "server") ? (  <button
-                              type="button"
-                              class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                              data-hs-overlay="#hs-pro-datm"
-                              onClick={() => onOpenServer()}
-                            >
-                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
-     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-     </svg>
-     See career path
-                            </button>) : (null) }
-                             {businessPostedJobs.jobTitle.includes("Machinist" || "CNC") ? (  <button
-                              type="button"
-                              class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
-                              data-hs-overlay="#hs-pro-datm"
-                              onClick={() => onOpenCNC()}
-                            >
-                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ml-1">
-     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-     </svg>
-     See career path
-                            </button>) : (null) }
-                            <button
-                              type="button"
-                              class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                              data-hs-overlay="#hs-pro-datm"
-                              onClick={() => onOpen()}
-                            >
-                              Apply
-                            </button>
-                          </div>
+                                    {businessPostedJobs.jobTitle.includes(
+                                      "Plumber"
+                                    ) ? (
+                                      <button
+                                        type="button"
+                                        class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200 bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
+                                        data-hs-overlay="#hs-pro-datm"
+                                        onClick={() => onOpenPlumber()}
+                                      >
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          stroke-width="1.5"
+                                          stroke="currentColor"
+                                          class="size-4 ml-1"
+                                        >
+                                          <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                          />
+                                        </svg>
+                                        See career path
+                                      </button>
+                                    ) : null}
+                                    {businessPostedJobs.jobTitle.includes(
+                                      "Server" || "server"
+                                    ) ? (
+                                      <button
+                                        type="button"
+                                        class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                        data-hs-overlay="#hs-pro-datm"
+                                        onClick={() => onOpenServer()}
+                                      >
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          stroke-width="1.5"
+                                          stroke="currentColor"
+                                          class="size-4 ml-1"
+                                        >
+                                          <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                          />
+                                        </svg>
+                                        See career path
+                                      </button>
+                                    ) : null}
+                                    {businessPostedJobs.jobTitle.includes(
+                                      "Machinist" || "CNC"
+                                    ) ? (
+                                      <button
+                                        type="button"
+                                        class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
+                                        data-hs-overlay="#hs-pro-datm"
+                                        onClick={() => onOpenCNC()}
+                                      >
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          stroke-width="1.5"
+                                          stroke="currentColor"
+                                          class="size-4 ml-1"
+                                        >
+                                          <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                          />
+                                        </svg>
+                                        See career path
+                                      </button>
+                                    ) : null}
+                                    <button
+                                      type="button"
+                                      class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                      data-hs-overlay="#hs-pro-datm"
+                                      onClick={() => onOpen()}
+                                    >
+                                      Apply
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
+                      </div>
+                      <Drawer
+                        isOpen={isOpenCNC}
+                        onClose={onCloseCNC}
+                        size={isDesktop ? "lg" : "full"}
+                      >
+                        <DrawerOverlay />
+                        <DrawerContent>
+                          <DrawerCloseButton />
+                          <DrawerHeader>CNC Machinist career path</DrawerHeader>
+                          <DrawerBody>
+                            <div class="rounded-xl sm:max-w-lg sm:w-full m-3  max-h-full ">
+                              <div class="bg-white  rounded-xl shadow-sm pointer-events-auto overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+                                <div class="p-1 sm:p-2">
+                                  <div class="text-start">
+                                    <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800"></h2>
+                                    <div class=" mx-auto">
+                                      <p class="mt-2 text-base text-gray-600 ">
+                                        <p class="mt-4 text-base text-black ">
+                                          {" "}
+                                          Entry level:
+                                        </p>
+
+                                        <ol class="ml-7 list-disc">
+                                          <li class="mt-2 text-base text-black ">
+                                            {" "}
+                                            Long-term operator . Average salary:
+                                            $51,703
+                                            <span class="mt-4 text-xs text-gray-500 ">
+                                              (2)
+                                            </span>
+                                          </li>
+                                          Most entry-level CNC machinists start
+                                          as machine operators, gaining skills
+                                          and experience as they progress.
+                                          <span class="mt-4 text-xs text-gray-500 ">
+                                            (1)
+                                          </span>
+                                        </ol>
+
+                                        <p class="mt-4 text-base text-black ">
+                                          Mid level:
+                                        </p>
+
+                                        <ol class="ml-7 list-disc">
+                                          <li class="mt-2 text-base text-black ">
+                                            {" "}
+                                            Set-up machinist. Average Salary:
+                                            $84,142{" "}
+                                            <span class="mt-4 text-xs text-gray-500 ">
+                                              (3)
+                                            </span>{" "}
+                                          </li>
+                                          From a machine operator, many
+                                          machinists transition into being put
+                                          in charge of setting-up CNC machines.
+                                          This includes understanding GD&T
+                                          (geometric dimensioning and
+                                          tolerancing) and making changes at
+                                          the CNC machine’s controller.{" "}
+                                          <span class="mt-4 text-xs text-gray-500 ">
+                                            (1)
+                                          </span>
+                                          <li class="mt-2 text-base text-black ">
+                                            {" "}
+                                            CNC programmer – average salary:
+                                            $77,226{" "}
+                                            <span class="mt-4 text-xs text-gray-500 ">
+                                              (5)
+                                            </span>{" "}
+                                          </li>
+                                          As a CNC programmer, your job is to
+                                          create the code that tells the CNC
+                                          systems how to make the part you need.
+                                          This includes programming, designing
+                                          parts and optimizing performance.
+                                          Often, you will also be responsible
+                                          for inspection of your parts.{" "}
+                                          <span class="mt-4 text-xs text-gray-500 ">
+                                            (1)
+                                          </span>
+                                        </ol>
+                                        <p class="mt-4 text-base text-black ">
+                                          Senior level:
+                                        </p>
+
+                                        <ol class="ml-7 list-disc">
+                                          <li class="mt-2 text-base text-black ">
+                                            {" "}
+                                            Manager – Average pay: $100k{" "}
+                                            <span class="mt-4 text-xs text-gray-500 ">
+                                              (4)
+                                            </span>
+                                            .
+                                          </li>
+                                          As you progress, you can eventually
+                                          lead and manage others. Managers train
+                                          employees in the proper use of
+                                          equipment, enforce safety regulations,
+                                          assign tasks, and oversee employees'
+                                          work. They also interpret blueprints
+                                          and develop plans for how to complete
+                                          a project. This is as well as
+                                          upgrading and maintaining machinery,
+                                          ordering parts, and making sure repair
+                                          records are kept up to date. (1)
+                                        </ol>
+
+                                        <p class="mt-4 text-xs text-gray-500 ">
+                                          Sources:
+                                        </p>
+                                        <p class="text-xs text-gray-500 ">
+                                          1
+                                          https://www.trscraftservices.com/blogs/2020-9/what-is-the-career-path-for-a-cnc-machinist
+                                        </p>
+                                        <p class="text-xs text-gray-500 ">
+                                          2
+                                          https://www.indeed.com/career/cnc-operator/salaries
+                                        </p>
+                                        <p class="text-xs text-gray-500 ">
+                                          3
+                                          https://www.indeed.com/career/machinist/salaries/Minneapolis--MN
+                                        </p>
+                                        <p class="text-xs text-gray-500 ">
+                                          4
+                                          https://www.indeed.com/career/cnc-programmer/salaries
+                                        </p>
+                                        <p class="text-xs text-gray-500 ">
+                                          4
+                                          https://www.indeed.com/career/cnc-programmer/salaries
+                                        </p>
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="flex justify-end items-center ">
+                                  <button
+                                    onClick={() => onCloseCNC()}
+                                    class="py-2 w-full px-3 mt-2 mb-3 items-center text-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                    href="#"
+                                  >
+                                    Close
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </DrawerBody>
+                        </DrawerContent>
+                      </Drawer>
+
+                      <Drawer
+                        isOpen={isOpenServer}
+                        onClose={onCloseServer}
+                        size={isDesktop ? "lg" : "full"}
+                      >
+                        <DrawerOverlay />
+                        <DrawerContent height="100vh">
+                          <DrawerCloseButton />
+                          <DrawerBody overflowY="scroll">
+                            <div class="rounded-xl sm:max-w-lg sm:w-full m-3 sm:mx-auto ">
+                              <div class="bg-white  rounded-xl shadow-sm pointer-events-auto ">
+                                <div class="p-1 sm:p-2">
+                                  <div class="text-start">
+                                    <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
+                                      Server career path
+                                    </h2>
+                                    <div class=" mx-auto">
+                                      <p class="mt-2 text-base text-gray-600 ">
+                                        <p class="mt-4 text-base text-black ">
+                                          {" "}
+                                          Entry level:
+                                        </p>
+
+                                        <ol class="ml-7 list-disc">
+                                          <li class="mt-2 text-base text-black ">
+                                            {" "}
+                                            Waiter/Waitress
+                                            <span class="mt-4 text-xs text-gray-500 ">
+                                              (1)
+                                            </span>{" "}
+                                            : $20,000 and $31,000
+                                            <span class="mt-4 text-xs text-gray-500 ">
+                                              (2)
+                                            </span>
+                                          </li>
+                                          The waiter or waitress is generally
+                                          delegated an area within the
+                                          restaurant that he or she attends to.
+                                          In this area they are responsible for
+                                          ensuring that guests are properly
+                                          attended to.
+                                        </ol>
+
+                                        <p class="mt-4 text-base text-black ">
+                                          Mid level:
+                                        </p>
+
+                                        <ol class="ml-7 list-disc">
+                                          <li class="mt-2 text-base text-black ">
+                                            {" "}
+                                            FoH Supervisor{" "}
+                                            <span class="mt-4 text-xs text-gray-500 ">
+                                              (1)
+                                            </span>{" "}
+                                            : Average salary: $47k-$73k{" "}
+                                            <span class="mt-4 text-xs text-gray-500 ">
+                                              (3)
+                                            </span>
+                                          </li>
+                                          Front of house supervisor is generally
+                                          responsible for all front of house
+                                          staff and operations. They oversee all
+                                          the various duties and
+                                          responsibilities of other team members
+                                          and ensure operations are running
+                                          smoothly.
+                                        </ol>
+                                        <p class="mt-4 text-base text-black ">
+                                          Senior level:
+                                        </p>
+
+                                        <ol class="ml-7 list-disc">
+                                          <li class="mt-2 text-base text-black ">
+                                            General Manager{" "}
+                                            <span class="mt-4 text-xs text-gray-500 ">
+                                              (1)
+                                            </span>
+                                            . Average Salary: $56,521{" "}
+                                            <span class="mt-4 text-xs text-gray-500 ">
+                                              (4)
+                                            </span>
+                                          </li>
+                                          The general manager has more
+                                          logistical responsibility and is often
+                                          responsible for overseeing the
+                                          functioning of both the Front of House
+                                          operations and Back of House
+                                          operations.
+                                        </ol>
+
+                                        <p class="mt-4 text-xs text-gray-500 ">
+                                          Sources:
+                                        </p>
+                                        <p class="text-xs text-gray-500 ">
+                                          1
+                                          https://advice.hosco.com/en/the-career-path-of-a-waiter-waitress-an-exciting-journey/
+                                        </p>
+                                        <p class="text-xs text-gray-500 ">
+                                          2
+                                          https://pos.toasttab.com/blog/on-the-line/restaurant-server-salary
+                                        </p>
+                                        <p class="text-xs text-gray-500 ">
+                                          3
+                                          https://www.glassdoor.com/Salaries/front-of-house-supervisor-salary-SRCH_KO0,25.htm
+                                        </p>
+                                        <p class="text-xs text-gray-500 ">
+                                          4
+                                          https://www.zippia.com/salaries/restaurant-general-manager/
+                                        </p>
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="flex justify-end items-center ">
+                                  <button
+                                    onClick={() => onCloseServer()}
+                                    class="py-2 w-full px-3 mt-2 mb-3 items-center text-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                    href="#"
+                                  >
+                                    Close
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </DrawerBody>
+                        </DrawerContent>
+                      </Drawer>
+
+                      <Drawer
+                        isOpen={isOpenPlumber}
+                        onClose={onClosePlumber}
+                        size={isDesktop ? "lg" : "full"}
+                      >
+                        <DrawerOverlay />
+                        <DrawerContent>
+                          <DrawerCloseButton />
+                          <DrawerBody>
+                            <div class="">
+                              <div class="bg-white  rounded-xl shadow-sm  ">
+                                <div class="p-1 sm:p-2">
+                                  <div class="text-start">
+                                    <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
+                                      Plumber career path
+                                    </h2>
+                                    <div class=" mx-auto">
+                                      <p class="mt-2 text-base text-gray-600 ">
+                                        <p class="mt-4 text-base text-black ">
+                                          {" "}
+                                          Entry level:
+                                        </p>
+                                        Entry level plumbers include plumbing
+                                        apprentices, employees with no
+                                        certifications, and employees fresh out
+                                        of school.
+                                        <span class="mt-4 text-xs text-gray-500 ">
+                                          (1)
+                                        </span>
+                                        <ol class="ml-7 list-disc">
+                                          <li class="mt-2 text-base text-black ">
+                                            {" "}
+                                            Plumbing Apprentice: $43,680
+                                          </li>
+                                          <li class="mt-2 text-base text-black ">
+                                            {" "}
+                                            Plumber’s Assistant: roughly $56,000
+                                            - $74,225
+                                          </li>
+                                        </ol>
+                                        <p class="mt-4 text-base text-black ">
+                                          Mid level:
+                                        </p>
+                                        Mid-Level plumbers typically have 2-3
+                                        years of experience and have the
+                                        certifications necessary to work
+                                        independently.
+                                        <span class="mt-4 text-xs text-gray-500 ">
+                                          (1)
+                                        </span>
+                                        <ol class="ml-7 list-disc">
+                                          <li class="mt-2 text-base text-black ">
+                                            {" "}
+                                            Residential Service Technician:
+                                            $55k-$65k{" "}
+                                            <span class="mt-4 text-xs text-gray-500 ">
+                                              (3)
+                                            </span>
+                                          </li>
+                                          Residential Service Technician: clean
+                                          all types of drains and sewers using
+                                          special electromechanical equipment.
+                                          <li class="mt-2 text-base text-black ">
+                                            {" "}
+                                            Commercial Service Technician:
+                                          </li>
+                                          Same as residential, but in commercial
+                                          spaces.
+                                          <li class="mt-2 text-base text-black ">
+                                            {" "}
+                                            Commercial Service Technician:
+                                          </li>
+                                        </ol>
+                                        <p class="mt-4 text-base text-black ">
+                                          Senior plumbing positions:
+                                        </p>
+                                        Senior-level plumbers typically have
+                                        7-10 years of experience in the plumbing
+                                        industry.
+                                        <span class="mt-4 text-xs text-gray-500 ">
+                                          (1)
+                                        </span>
+                                        <ol class="ml-7 list-disc">
+                                          <li class="mt-2 text-base text-black ">
+                                            Residential Contractor
+                                          </li>
+                                          Installs, maintains, and repairs pipes
+                                          and fixtures associated with heating,
+                                          cooling, water distribution, and
+                                          sanitation systems in residential and
+                                          commercial structures. Fixes domestic
+                                          appliances, such as dishwashers and
+                                          gas cookers. Inspects drainage and
+                                          other plumbing systems for compliance
+                                          with local and national regulations.{" "}
+                                          <span class="mt-4 text-xs text-gray-500 ">
+                                            (4)
+                                          </span>{" "}
+                                          Average pay: $68,763
+                                          <li class="mt-2 text-base text-black ">
+                                            Commercial Contractor:
+                                          </li>
+                                          Same as residential, but in commercial
+                                          spaces. Average pay: $63,009
+                                          <li class="mt-2 text-base text-black ">
+                                            Project Manager:
+                                          </li>
+                                          $80,281
+                                        </ol>
+                                        <p class="mt-4 text-xs text-gray-500 ">
+                                          Sources:
+                                        </p>
+                                        <p class="text-xs text-gray-500 ">
+                                          1
+                                          https://faradaycareers.com/careers/plumber-career-path
+                                        </p>
+                                        <p class="text-xs text-gray-500 ">
+                                          3
+                                          https://www.rotorooter.com/careers/service-tech/
+                                        </p>
+                                        <p class="text-xs text-gray-500 ">
+                                          4
+                                          https://www.monster.co.uk/advertise-a-job/resources/job-description-templates/construction/plumber-job-description/
+                                        </p>
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="flex justify-end items-center ">
+                                  <button
+                                    onClick={() => onClosePlumber()}
+                                    class="py-2 w-full px-3 mt-2 mb-3 items-center text-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                                    href="#"
+                                  >
+                                    Close
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </DrawerBody>
+                        </DrawerContent>
+                      </Drawer>
+                    </div>
+                  </DrawerBody>
+                </DrawerContent>
+              </Drawer>
+
+              <Modal isOpen={isOpenShare} onClose={onCloseShare}>
+                <ModalContent>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <div class="mt-5 bg-white rounded-xl ">
+                      <div class="p-4 sm:p-7 text-center align-center items-center justify-center">
+                        <div class="text-center align-center items-center justify-center mb-5">
+                          <h1 class="block text-2xl font-bold text-gray-800">
+                            Share to
+                          </h1>
                         </div>
-                        </div>)}
+
+                        <FacebookShareButton
+                          url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`}
+                        >
+                          <FacebookIcon size={32} round={true} />
+                        </FacebookShareButton>
+                        <h1 class="block text-2xl font-bold text-gray-800">
+                          Copy Link:
+                        </h1>
+                        {urlCopied ? (
+                          <span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">
+                            Copied!
+                          </span>
+                        ) : (
+                          <label
+                            onClick={() => handleCopiedURL(businessPostedJobs)}
+                            className=" inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium mt-2 "
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6 ml-1 items-center cursor-pointer"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
+                              />
+                            </svg>
+                          </label>
+                        )}
                       </div>
                     </div>
-                    <Drawer isOpen={isOpenCNC} onClose={onCloseCNC} size={ isDesktop ? "lg" : "full"}>
-        <DrawerOverlay />
-        <DrawerContent>
-          
-          <DrawerCloseButton />
-          <DrawerHeader>
-          CNC Machinist career path
-                </DrawerHeader>
-          <DrawerBody >
-          <div class="rounded-xl sm:max-w-lg sm:w-full m-3  max-h-full ">
-            <div class="bg-white  rounded-xl shadow-sm pointer-events-auto overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
-              <div class="p-1 sm:p-2">
-                <div class="text-start">
-                  <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
-                 
-                  </h2>
-                  <div class=" mx-auto">
-                    
-                    <p class="mt-2 text-base text-gray-600 ">
-                    <p class="mt-4 text-base text-black "> Entry level:</p>
-                   
- <ol class="ml-7 list-disc">
-          <li class="mt-2 text-base text-black "> Long-term operator . Average salary: $51,703<span class="mt-4 text-xs text-gray-500 ">(2)</span></li>
-          Most entry-level CNC machinists start as machine operators, gaining skills and experience as they progress. 
-
-<span class="mt-4 text-xs text-gray-500 ">(1)</span>
-          
-
-           </ol>
-
-   <p class="mt-4 text-base text-black ">Mid level:</p>
-
-  
-
-
-
-<ol class="ml-7 list-disc">
-          <li class="mt-2 text-base text-black ">  Set-up machinist. Average Salary: $84,142 <span class="mt-4 text-xs text-gray-500 ">(3)</span> </li>
-From a machine operator, many machinists transition into being put in charge of setting-up CNC machines. This includes understanding GD&T (geometric dimensioning and tolerancing) and making changes at the CNC machine’s controller. <span class="mt-4 text-xs text-gray-500 ">(1)</span>
-           
-           <li class="mt-2 text-base text-black "> CNC programmer – average salary: $77,226 <span class="mt-4 text-xs text-gray-500 ">(5)</span> </li>
-           As a CNC programmer, your job is to create the code that tells the CNC systems how to make the part you need. This includes programming, designing parts and optimizing  performance. Often, you will also be responsible for inspection of your parts. <span class="mt-4 text-xs text-gray-500 ">(1)</span> 
-           </ol>
- <p class="mt-4 text-base text-black ">Senior level:</p>
-
-
-
-
-<ol class="ml-7 list-disc">
-          <li class="mt-2 text-base text-black "> Manager – Average pay: $100k  <span class="mt-4 text-xs text-gray-500 ">(4)</span>.</li>
-         As you progress, you can eventually lead and manage others. Managers train employees in the proper use of equipment, enforce safety regulations, assign tasks, and oversee employees' work. They also interpret blueprints and develop plans for how to complete a project. This is as well as upgrading and maintaining machinery, ordering parts, and making sure repair records are kept up to date. (1)
-
-           </ol>
-
- <p class="mt-4 text-xs text-gray-500 ">Sources:</p>
-  <p class="text-xs text-gray-500 ">1 https://www.trscraftservices.com/blogs/2020-9/what-is-the-career-path-for-a-cnc-machinist</p>
-  <p class="text-xs text-gray-500 ">2 https://www.indeed.com/career/cnc-operator/salaries</p>
-    <p class="text-xs text-gray-500 ">3 https://www.indeed.com/career/machinist/salaries/Minneapolis--MN</p>
-      <p class="text-xs text-gray-500 ">4 https://www.indeed.com/career/cnc-programmer/salaries</p>
-      <p class="text-xs text-gray-500 ">4 https://www.indeed.com/career/cnc-programmer/salaries</p>
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex justify-end items-center ">
-                <button
-                  onClick={() => onCloseCNC()}
-                  class="py-2 w-full px-3 mt-2 mb-3 items-center text-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                  href="#"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-          </DrawerBody>
-
-        
-        </DrawerContent>
-        </Drawer>
-
-               
-        <Drawer isOpen={isOpenServer} onClose={onCloseServer} size={ isDesktop ? "lg" : "full"}>
-        <DrawerOverlay />
-        <DrawerContent height="100vh">
-          
-          <DrawerCloseButton />
-          <DrawerBody overflowY="scroll">
-          <div class="rounded-xl sm:max-w-lg sm:w-full m-3 sm:mx-auto ">
-            <div class="bg-white  rounded-xl shadow-sm pointer-events-auto ">
-              <div class="p-1 sm:p-2">
-                <div class="text-start">
-                  <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
-                  Server career path
-                  </h2>
-                  <div class=" mx-auto">
-                    
-                    <p class="mt-2 text-base text-gray-600 ">
-                    <p class="mt-4 text-base text-black "> Entry level:</p>
-                   
- <ol class="ml-7 list-disc">
-          <li class="mt-2 text-base text-black "> Waiter/Waitress<span class="mt-4 text-xs text-gray-500 ">(1)</span> : $20,000 and $31,000<span class="mt-4 text-xs text-gray-500 ">(2)</span></li>
-          The waiter or waitress is generally delegated an area within the restaurant that he or she attends to. In this area they are responsible for ensuring that guests are properly attended to. 
-
-          
-
-           </ol>
-
-   <p class="mt-4 text-base text-black ">Mid level:</p>
-
-  
-
-
-
-<ol class="ml-7 list-disc">
-          <li class="mt-2 text-base text-black ">  FoH Supervisor <span class="mt-4 text-xs text-gray-500 ">(1)</span> : Average salary: $47k-$73k <span class="mt-4 text-xs text-gray-500 ">(3)</span></li>
-          Front of house supervisor is generally responsible for all front of house staff and operations. They oversee all the various duties and responsibilities of other team members and ensure operations are running smoothly. 
-         
-           </ol>
- <p class="mt-4 text-base text-black ">Senior level:</p>
-
-
-
-
-<ol class="ml-7 list-disc">
-          <li class="mt-2 text-base text-black ">General Manager <span class="mt-4 text-xs text-gray-500 ">(1)</span>. Average Salary: $56,521 <span class="mt-4 text-xs text-gray-500 ">(4)</span></li>
-          The general manager has more logistical responsibility and is often responsible for overseeing the functioning of both the Front of House operations and Back of House operations. 
-           </ol>
-
- <p class="mt-4 text-xs text-gray-500 ">Sources:</p>
-  <p class="text-xs text-gray-500 ">1 https://advice.hosco.com/en/the-career-path-of-a-waiter-waitress-an-exciting-journey/</p>
-  <p class="text-xs text-gray-500 ">2 https://pos.toasttab.com/blog/on-the-line/restaurant-server-salary</p>
-    <p class="text-xs text-gray-500 ">3 https://www.glassdoor.com/Salaries/front-of-house-supervisor-salary-SRCH_KO0,25.htm</p>
-      <p class="text-xs text-gray-500 ">4 https://www.zippia.com/salaries/restaurant-general-manager/</p>
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex justify-end items-center ">
-                <button
-                  onClick={() => onCloseServer()}
-                  class="py-2 w-full px-3 mt-2 mb-3 items-center text-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                  href="#"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-          </DrawerBody>
-
-        
-</DrawerContent>
-</Drawer>
-
-<Drawer isOpen={isOpenPlumber} onClose={onClosePlumber}  size={ isDesktop ? "lg" : "full"}>
-        <DrawerOverlay />
-        <DrawerContent >
-          
-          <DrawerCloseButton />
-          <DrawerBody >
-          <div class="">
-            <div class="bg-white  rounded-xl shadow-sm  ">
-              <div class="p-1 sm:p-2">
-                <div class="text-start">
-                  <h2 class="block text-xl sm:text-2xl font-semibold text-gray-800">
-                    Plumber career path
-                  </h2>
-                  <div class=" mx-auto">
-                    
-                    <p class="mt-2 text-base text-gray-600 ">
-                    <p class="mt-4 text-base text-black "> Entry level:</p>
-                   
-Entry level plumbers include plumbing apprentices, employees with no certifications, and employees fresh out of school.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
- <ol class="ml-7 list-disc">
-          <li class="mt-2 text-base text-black "> Plumbing Apprentice: $43,680</li>
-           <li class="mt-2 text-base text-black "> Plumber’s Assistant: roughly $56,000 - $74,225</li>
-
-           </ol>
-
-   <p class="mt-4 text-base text-black ">Mid level:</p>
-
-  
-
-Mid-Level plumbers typically have 2-3 years of experience and have the certifications necessary to work independently.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
-
-<ol class="ml-7 list-disc">
-          <li class="mt-2 text-base text-black "> Residential Service Technician: $55k-$65k <span class="mt-4 text-xs text-gray-500 ">(3)</span></li>
-          Residential Service Technician:  clean all types of drains and sewers using special electromechanical equipment. 
-           <li class="mt-2 text-base text-black "> Commercial Service Technician:</li>
-           Same as residential, but in commercial spaces. 
-           <li class="mt-2 text-base text-black "> Commercial Service Technician:</li>
-           </ol>
- <p class="mt-4 text-base text-black ">Senior plumbing positions:</p>
-
-Senior-level plumbers typically have 7-10 years of experience in the plumbing industry.<span class="mt-4 text-xs text-gray-500 ">(1)</span>
-
-
-<ol class="ml-7 list-disc">
-          <li class="mt-2 text-base text-black ">Residential Contractor</li>
-          Installs, maintains, and repairs pipes and fixtures associated with heating, cooling, water distribution, and sanitation systems in residential and commercial structures. Fixes domestic appliances, such as dishwashers and gas cookers. Inspects drainage and other plumbing systems for compliance with local and national regulations. <span class="mt-4 text-xs text-gray-500 ">(4)</span> Average pay: $68,763
-           <li class="mt-2 text-base text-black ">Commercial Contractor:</li>
-           Same as residential, but in commercial spaces. Average pay: $63,009
-           <li class="mt-2 text-base text-black ">Project Manager:</li>
-           $80,281
-           </ol>
-
- <p class="mt-4 text-xs text-gray-500 ">Sources:</p>
-  <p class="text-xs text-gray-500 ">1 https://faradaycareers.com/careers/plumber-career-path</p>
-    <p class="text-xs text-gray-500 ">3 https://www.rotorooter.com/careers/service-tech/</p>
-      <p class="text-xs text-gray-500 ">4 https://www.monster.co.uk/advertise-a-job/resources/job-description-templates/construction/plumber-job-description/</p>
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex justify-end items-center ">
-                <button
-                  onClick={() => onClosePlumber()}
-                  class="py-2 w-full px-3 mt-2 mb-3 items-center text-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                  href="#"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-          </DrawerBody>
-
-        
-        </DrawerContent>
-        </Drawer>
-                  </div>
-                </DrawerBody>
-              </DrawerContent>
-            </Drawer>
-
-
-         
-
-     
-         
-
-
-
-     
-  
-      
-            <Modal isOpen={isOpenShare} onClose={onCloseShare}>
-                <ModalContent>
-     
-                <ModalCloseButton />
-                <ModalBody>
-                <div class="mt-5 bg-white rounded-xl ">
-                  <div class="p-4 sm:p-7 text-center align-center items-center justify-center">
-                    <div class="text-center align-center items-center justify-center mb-5">
-                      <h1 class="block text-2xl font-bold text-gray-800">Share to</h1>
-                      
-                    </div>
-      
-                    <FacebookShareButton url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`}>
-                                              <FacebookIcon size={32} round={true}/>
-                                        
-                                              </FacebookShareButton>
-                                              <h1 class="block text-2xl font-bold text-gray-800">Copy Link:</h1>
-              {urlCopied ? (<span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">Copied!</span>) : (<label onClick={() => handleCopiedURL(businessPostedJobs)} className=" inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium mt-2 ">
-                                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 ml-1 items-center cursor-pointer">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15" />
-      </svg>
-      
-                                               
-                                              </label>)}
-                  </div>
-                </div>
-                </ModalBody>
-      
-              
-              </ModalContent>
-            </Modal>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
             </>
-           ): (null)}
-           </>
+          ) : null}
+        </>
       ))}
 
-<Modal
+      <Modal
         isOpen={isOpen}
         onClose={() => handleClose()}
         size={{ base: "full", lg: "md" }}
@@ -1379,10 +1652,7 @@ Senior-level plumbers typically have 7-10 years of experience in the plumbing in
             <div class="p-4 sm:p-7">
               <div class="text-center">
                 <h1 class="block text-2xl font-bold text-gray-800">Sign up</h1>
-                <p class="mt-2 text-sm text-gray-600">
-                  It's fast and free
-                  
-                </p>
+                <p class="mt-2 text-sm text-gray-600">It's fast and free</p>
               </div>
 
               <div class="mt-3">
@@ -1439,11 +1709,12 @@ Senior-level plumbers typically have 7-10 years of experience in the plumbing in
                           required
                           aria-describedby="email-error"
                         />
-                         {emailValidationBegun === true ? (
-                <p class="block text-sm mb-2 text-red-500">{validationMessage}</p>
-              ) : null}
+                        {emailValidationBegun === true ? (
+                          <p class="block text-sm mb-2 text-red-500">
+                            {validationMessage}
+                          </p>
+                        ) : null}
                       </div>
-                      
                     </div>
 
                     <div>
@@ -1459,14 +1730,16 @@ Senior-level plumbers typically have 7-10 years of experience in the plumbing in
                           id="password"
                           name="password"
                           value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                          onChange={(e) => setPassword(e.target.value)}
+                          className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                           required
                           aria-describedby="password-error"
                         />
-                         {passwordValidationBegun === true ? (
-                <p class="block text-sm mb-2 text-red-500">{passwordValidationMessage}</p>
-              ) : null}
+                        {passwordValidationBegun === true ? (
+                          <p class="block text-sm mb-2 text-red-500">
+                            {passwordValidationMessage}
+                          </p>
+                        ) : null}
                       </div>
                       <p
                         class="hidden text-xs text-red-600 mt-2"
@@ -1492,22 +1765,21 @@ Senior-level plumbers typically have 7-10 years of experience in the plumbing in
                       </div>
                     </div>
 
-                    <input type="button"
-                     onClick={() => validate()}
-                     value="Sign up"
+                    <input
+                      type="button"
+                      onClick={() => validate()}
+                      value="Sign up"
                       className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    >
-                   
-                    </input>
+                    ></input>
                     <p class="mt-2 text-center text-sm text-gray-600">
-                Already have an account?
-                  <button
-                    class="text-sky-400  decoration-2 hover:underline ml-1 font-medium"
-                    onClick={() => handleSwitchModals()}
-                  >
-                    Sign in here
-                  </button>
-                </p>
+                      Already have an account?
+                      <button
+                        class="text-sky-400  decoration-2 hover:underline ml-1 font-medium"
+                        onClick={() => handleSwitchModals()}
+                      >
+                        Sign in here
+                      </button>
+                    </p>
                   </div>
                 </form>
               </div>
@@ -1515,6 +1787,6 @@ Senior-level plumbers typically have 7-10 years of experience in the plumbing in
           </div>
         </ModalContent>
       </Modal>
-</>
+    </>
   );
 };

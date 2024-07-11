@@ -410,31 +410,40 @@ const JobDetails = () => {
                         <label class="block mb-2 text-sm font-medium text-stone-800 ">
                           Description
                         </label>
-                        <Markdown>
-                        {job.description}
-                        
-                        </Markdown>
-                        
-                      </div>
-                      <div className="prose ">
+                        <div className="prose prose-li  font-inter marker:text-black ">
                       <Markdown>
+
                         {job.description}
-                        
+                                      
                         </Markdown>
                       </div>
+                      </div>
+                     
 
                       {currentUser ? (currentUser.isBusiness ? (<div className="cursor-default ">
                         <label class="block mb-2 text-sm font-medium text-stone-800 ">
                           Applicant Description
                         </label>
+                        <div className="prose prose-li marker:text-black text-gray-800">
+                      <Markdown>
+
                         {job.applicantDescription}
+                        
+                        </Markdown>
+                      </div>
                       </div>) : (null)) : (null)}
 
                       {currentUser ? (currentUser.isBusiness && job.benefitsDescription ? (<div className="cursor-default ">
                         <label class="block mb-2 text-sm font-medium text-stone-800 ">
                           Benefits Description
                         </label>
+                        <div className="prose prose-li marker:text-black text-gray-800">
+                      <Markdown>
+
                         {job.benefitsDescription}
+                        
+                        </Markdown>
+                      </div>
                       </div>) : (null)) : (null)}
                     </div>
                   </div>

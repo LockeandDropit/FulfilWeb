@@ -870,6 +870,37 @@ const handleOpenFBPage = () => {
               confirmed if sent by facsimile or email; or the day it is shown as
               delivered based on the tracking information of a recognized
               overnight delivery service, if sent for next-day delivery.
+
+              DMCA Notice and Takedown Procedure
+
+DMCA Compliance Fulfil respects the intellectual property rights of others and expects users to do the same. It is our policy to respond to clear notices of alleged copyright infringement that comply with the Digital Millennium Copyright Act (DMCA).
+
+Designated Agent If you believe that your work has been copied in a way that constitutes copyright infringement, please provide our Designated Copyright Agent with the following information:
+
+Identification of the copyrighted work that you claim has been infringed.
+Identification of the material that is claimed to be infringing and where it is located on the site.
+Your contact information, including your address, telephone number, and email address.
+A statement by you that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law.
+A statement by you, made under penalty of perjury, that the above information in your notice is accurate and that you are the copyright owner or authorized to act on the copyright owner’s behalf.
+Your physical or electronic signature.
+Please send your notice of claimed infringement to:
+
+Tyler Bradley
+DMCA Designated Agent
+Email: tyler@getfulfil.com
+
+Counter-Notice by Accused User If you receive a notice from us that material you have posted has been removed or access to it has been disabled and you believe this was done mistakenly or that you have the right to post the material, you may submit a counter-notice to our DMCA Designated Agent with the following information:
+
+Identification of the material that has been removed or to which access has been disabled and the location where the material appeared before it was removed or disabled.
+A statement, under penalty of perjury, that you have a good faith belief that the material was removed or disabled as a result of mistake or misidentification of the material.
+Your name, address, telephone number, and email address.
+A statement that you consent to the jurisdiction of the federal court in your district or, if your address is outside the United States, for any judicial district in which the service provider may be found, and that you will accept service of process from the person who provided the original notification or an agent of such person.
+Your physical or electronic signature.
+Upon receiving a valid counter-notice, we may restore the material in question.
+
+Repeat Infringer Policy Fulfil reserves the right to terminate users who are found to be repeat infringers.
+
+Modifications to Policy We reserve the right to amend this policy at any time by posting a revised version on our website.
             </Text>
           </ModalBody>
 

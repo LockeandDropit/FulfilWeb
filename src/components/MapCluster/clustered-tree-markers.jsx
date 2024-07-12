@@ -760,14 +760,14 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                               true ? (
                                 <label
                                   for="hs-pro-dactmt"
-                                  class="block  text-md font-medium text-gray-800"
+                                  class="block  text-lg font-medium text-gray-800"
                                 >
                                   Full-time
                                 </label>
                               ) : (
                                 <label
                                   for="hs-pro-dactmt"
-                                  class="block  text-md font-medium text-gray-800 "
+                                  class="block  text-lg font-medium text-gray-800 "
                                 >
                                   Part-time
                                 </label>
@@ -776,23 +776,23 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                               {businessPostedJobs.isHourly ? (
                                 <div class="space-y-1 ">
                                   <div class="flex align-items-center">
-                                    <p className=" text-sm font-medium">$</p>
+                                    <p className=" text-md font-medium">$</p>
                                     <label
                                       for="hs-pro-dactmt"
-                                      class="block text-sm font-medium text-gray-800 "
+                                      class="block text-md font-medium text-gray-800 "
                                     >
                                       {businessPostedJobs.lowerRate}
                                     </label>
-                                    <p className=" text-sm font-medium">
+                                    <p className=" text-md font-medium">
                                       /hour - $
                                     </p>
                                     <label
                                       for="hs-pro-dactmt"
-                                      class="block  text-sm font-medium text-gray-800 "
+                                      class="block  text-md font-medium text-gray-800 "
                                     >
                                       {businessPostedJobs.upperRate}
                                     </label>
-                                    <p className=" text-sm font-medium">
+                                    <p className=" text-md font-medium">
                                       /hour
                                     </p>
                                   </div>
@@ -802,41 +802,41 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                               {businessPostedJobs.isSalaried ? (
                                 <div class="space-y-2 ">
                                   <div class="flex align-items-center">
-                                    <p className=" text-sm font-medium">$</p>
+                                    <p className=" text-md font-medium">$</p>
                                     <label
                                       for="hs-pro-dactmt"
-                                      class="block  text-sm font-medium text-gray-800 "
+                                      class="block  text-md font-medium text-gray-800 "
                                     >
                                       {businessPostedJobs.lowerRate}
                                     </label>
-                                    <p className="ml-1 text-sm font-medium ">
+                                    <p className="ml-1 text-md font-medium ">
                                       yearly - $
                                     </p>
                                     <label
                                       for="hs-pro-dactmt"
-                                      class="block  text-sm font-medium text-gray-800 "
+                                      class="block  text-md font-medium text-gray-800 "
                                     >
                                       {businessPostedJobs.upperRate}
                                     </label>
-                                    <p className=" ml-1 text-sm font-medium">
+                                    <p className=" ml-1 c font-medium">
                                       yearly
                                     </p>
                                   </div>
                                 </div>
                               ) : null}
-                              <p class="block  text-sm font-medium text-gray-800 ">
+                              <p class="block  text-md font-medium text-gray-800 ">
                                 {businessPostedJobs.streetAddress},{" "}
                                 {businessPostedJobs.city},{" "}
                                 {businessPostedJobs.state}
                               </p>
-                              <p class="font-semibold text-sm text-gray-500  cursor-default">
-                                <span className="font-semibold text-sm text-slate-700">
+                              <p class="font-semibold text-md text-gray-500  cursor-default">
+                                <span className="font-semibold text-md text-slate-700">
                                   {" "}
                                   Posted:
                                 </span>{" "}
                                 {businessPostedJobs.datePosted}
                               </p>
-                              <p class="font-semibold text-sm text-slate-700  mt-2 cursor-pointer">
+                              <p class="font-semibold text-md text-slate-700  mt-2 cursor-pointer">
                                 Employer:
                               </p>
                               <div className="flex">
@@ -851,10 +851,10 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                                       />
 
                                       <div className="flex flex-col ml-4">
-                                        <p class="font-semibold text-sm text-gray-500  mt-2 cursor-pointer">
+                                        <p class="font-semibold text-md text-gray-500  mt-2 cursor-pointer">
                                           {businessPostedJobs.businessName}
                                         </p>
-                                        <p class="font-semibold text-sm text-gray-500 cursor-default ">
+                                        <p class="font-semibold text-md text-gray-500 cursor-default ">
                                           {businessPostedJobs.city}, Minnesota
                                         </p>
                                       </div>
@@ -862,7 +862,7 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                                   </>
                                 ) : null}
                                 <div className="flex flex-col">
-                                  <p class="font-semibold text-sm text-gray-500  mt-1 cursor-pointer">
+                                  <p class="font-semibold text-md text-gray-500  mt-1 cursor-pointer">
                                     {businessPostedJobs.companyName}
                                   </p>
                                 </div>

@@ -90,7 +90,7 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth, db } from "../firebaseConfig.js";
-
+import Markdown from "react-markdown";
 
 import { FcGoogle } from "react-icons/fc";
 import LoggedOutHeader from "./Landing/LoggedOutHeader.jsx";
@@ -878,7 +878,7 @@ console.log("session id ", sessionId)
                                       <div className="flex">
                                       <label
                                         for="hs-pro-dactmt"
-                                        class="block mb-2 text-lg font-medium text-gray-800">
+                                        class="block mb-2 text-xl font-medium text-gray-900">
                                         {businessPostedJobs.jobTitle}
                                       </label>
 
@@ -893,176 +893,183 @@ console.log("session id ", sessionId)
                                      
                                     
                                       </div>
-                              {businessPostedJobs.isFullTimePosition === true ? ( <label
-                                        for="hs-pro-dactmt"
-                                        class="block  text-md font-medium text-gray-800"
-                                      >
-                                        Full-time
-                                      </label>) : ( <label
-                                        for="hs-pro-dactmt"
-                                        class="block  text-md font-medium text-gray-800 "
-                                      >
-                                        Part-time
-                                      </label>)}
-                                     
+                                      {businessPostedJobs.isFullTimePosition ===
+                              true ? (
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block  text-lg font-medium text-gray-800"
+                                >
+                                  Full-time
+                                </label>
+                              ) : (
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block  text-lg font-medium text-gray-800 "
+                                >
+                                  Part-time
+                                </label>
+                              )}
 
-                                      {businessPostedJobs.isHourly ? (
-                                        <div class="space-y-1 ">
-                                          <div class="flex align-items-center">
-                                            <p className=" text-sm font-medium">
-                                              $
-                                            </p>
-                                            <label
-                                              for="hs-pro-dactmt"
-                                              class="block text-sm font-medium text-gray-800 "
-                                            >
-                                              {businessPostedJobs.lowerRate}
-                                            </label>
-                                            <p className=" text-sm font-medium">
-                                              /hour - $
-                                            </p>
-                                            <label
-                                              for="hs-pro-dactmt"
-                                              class="block  text-sm font-medium text-gray-800 "
-                                            >
-                                            {businessPostedJobs.upperRate}
-                                            </label>
-                                            <p className=" text-sm font-medium">
-                                              /hour
-                                            </p>
-                                          </div>
-                                        </div>
-                                      ) : null}
-
-                                      {businessPostedJobs.isSalaried ? (
-                                         <div class="space-y-2 ">
-                                         <div class="flex align-items-center">
-                                           <p className=" text-sm font-medium">
-                                             $
-                                           </p>
-                                           <label
-                                             for="hs-pro-dactmt"
-                                             class="block  text-sm font-medium text-gray-800 "
-                                           >
-                                             {businessPostedJobs.lowerRate}
-                                           </label>
-                                           <p className="ml-1 text-sm font-medium ">
-                                              yearly - $
-                                           </p>
-                                           <label
-                                             for="hs-pro-dactmt"
-                                             class="block  text-sm font-medium text-gray-800 "
-                                           >
-                                             {businessPostedJobs.upperRate}
-                                           </label>
-                                           <p className=" ml-1 text-sm font-medium">
-                                              yearly
-                                           </p>
-                                         </div>
-                                       </div>
-                                      ) : null}
-<p class="block  text-sm font-medium text-gray-800 ">{businessPostedJobs.streetAddress}, {businessPostedJobs.city}, {businessPostedJobs.state}</p>
-<p class="font-semibold text-sm text-gray-500  cursor-default">
-                                        <span className="font-semibold text-sm text-slate-700">
-                                          {" "}
-                                          Posted:
-                                        </span>{" "}
-                                        {businessPostedJobs.datePosted}
-                                      </p>
-                                      <p class="font-semibold text-sm text-slate-700  mt-2 cursor-pointer">
-                                        Employer:
-                                      </p>
-                                      <div className="flex">
-                                      {businessPostedJobs.employerProfilePicture ? (
-<>
-                                        <div class="flex flex-col justify-center items-center size-[56px]  ">
-                                         
-                                            <img
-                                              src={
-                                                businessPostedJobs.employerProfilePicture
-                                              }
-                                              class="flex-shrink-0 size-[64px] rounded-full"
-                                            />
-                                          
-                                          <div className="flex flex-col ml-4">
-                                          <p class="font-semibold text-sm text-gray-500  mt-2 cursor-pointer">
-                                            {businessPostedJobs.businessName}
-                                          </p>
-                                          <p class="font-semibold text-sm text-gray-500 cursor-default ">
-                                            {businessPostedJobs.city}, Minnesota
-                                          </p>
-                                        </div>
-                                          
-                                        </div>
-                                      
-                                        </>  ) : (null )}
-                                        <div className="flex flex-col">
-                                          <p class="font-semibold text-sm text-gray-500  mt-1 cursor-pointer">
-                                            {businessPostedJobs.companyName}
-                                          </p>
-                                          
-                                        </div>
-                                     
-                                     </div>
-                                    </div>
-                                   
-
-
-                                   
-                                    <div class="space-y-2 mt-10 mb-4">
-                                      <label
-                                        for="dactmi"
-                                        class="block mb-2 text-md font-medium text-gray-800 "
-                                      >
-                                       What you'll be doing
-                                      </label>
-
-                                      <div class="mb-4">
-                                        <p>{businessPostedJobs.description}</p>
-                                      </div>
-                                    </div>
-                                              {businessPostedJobs.bio ? (
-                                                 <div class="space-y-2 mt-10 mb-4">
-                                                 <label
-                                                   for="dactmi"
-                                                   class="block mb-2 text-md font-medium text-gray-800 "
-                                                 >
-                                                 About {businessPostedJobs.companyName}
-                                                 </label>
-         
-                                                 <div class="mb-4">
-                                                   <p>{businessPostedJobs.bio}</p>
-                                                 </div>
-                                               </div>
-                                              ) : (null)}
-                                   
-
-                                    <div class="space-y-2 mb-4">
-                                      <label
-                                        for="dactmi"
-                                        class="block mb-2 text-md font-medium text-gray-800 "
-                                      >
-                                       Job Requirements
-                                      </label>
-
-                                      <div class="mb-4">
-                                        <p>{businessPostedJobs.applicantDescription}</p>
-                                      </div>
-                                    </div>
-                                    <div class="space-y-2 md:mb-4 lg:mb-4 mb-20">
-                                      <label
-                                        for="dactmi"
-                                        class="block mb-2 text-md font-medium text-gray-800 "
-                                      >
-                                        Employment Benefits
-                                      </label>
-
-                                      <div class="mb-4">
-                                      {businessPostedJobs.benefitsDescription ? (  <p>{businessPostedJobs.benefitsDescription}</p>) : (  <p>Nothing listed</p>)}
-                                          
-                                      </div>
-                                    </div>
+                              {businessPostedJobs.isHourly ? (
+                                <div class="space-y-1 ">
+                                  <div class="flex align-items-center">
+                                    <p className=" text-md font-medium">$</p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block text-md font-medium text-gray-800 "
+                                    >
+                                      {businessPostedJobs.lowerRate}
+                                    </label>
+                                    <p className=" text-md font-medium">
+                                      /hour - $
+                                    </p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block  text-md font-medium text-gray-800 "
+                                    >
+                                      {businessPostedJobs.upperRate}
+                                    </label>
+                                    <p className=" text-md font-medium">
+                                      /hour
+                                    </p>
                                   </div>
+                                </div>
+                              ) : null}
+
+                              {businessPostedJobs.isSalaried ? (
+                                <div class="space-y-2 ">
+                                  <div class="flex align-items-center">
+                                    <p className=" text-md font-medium">$</p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block  text-md font-medium text-gray-800 "
+                                    >
+                                      {businessPostedJobs.lowerRate}
+                                    </label>
+                                    <p className="ml-1 text-md font-medium ">
+                                      yearly - $
+                                    </p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block  text-md font-medium text-gray-800 "
+                                    >
+                                      {businessPostedJobs.upperRate}
+                                    </label>
+                                    <p className=" ml-1 c font-medium">
+                                      yearly
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : null}
+                              <p class="block  text-md font-medium text-gray-800 ">
+                                {businessPostedJobs.streetAddress},{" "}
+                                {businessPostedJobs.city},{" "}
+                                {businessPostedJobs.state}
+                              </p>
+                              <p class="font-semibold text-md text-gray-500  cursor-default">
+                                <span className="font-semibold text-md text-slate-700">
+                                  {" "}
+                                  Posted:
+                                </span>{" "}
+                                {businessPostedJobs.datePosted}
+                              </p>
+                              <p class="font-semibold text-md text-slate-700  mt-2 cursor-pointer">
+                                Employer:
+                              </p>
+                              <div className="flex">
+                                {businessPostedJobs.employerProfilePicture ? (
+                                  <>
+                                    <div class="flex flex-col justify-center items-center size-[56px]  ">
+                                      <img
+                                        src={
+                                          businessPostedJobs.employerProfilePicture
+                                        }
+                                        class="flex-shrink-0 size-[64px] rounded-full"
+                                      />
+
+                                      <div className="flex flex-col ml-4">
+                                        <p class="font-semibold text-md text-gray-500  mt-2 cursor-pointer">
+                                          {businessPostedJobs.businessName}
+                                        </p>
+                                        <p class="font-semibold text-md text-gray-500 cursor-default ">
+                                          {businessPostedJobs.city}, Minnesota
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </>
+                                ) : null}
+                                <div className="flex flex-col">
+                                  <p class="font-semibold text-md text-gray-500  mt-1 cursor-pointer">
+                                    {businessPostedJobs.companyName}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                                   
+
+
+                                   
+                                    <div class="space-y-2 mt-10 mb-4 ">
+                              <label
+                                for="dactmi"
+                                class="block mb-2 text-lg font-medium text-gray-900 "
+                              >
+                                What you'll be doing
+                              </label>
+                              <div className="w-full prose prose-li  font-inter marker:text-black mb-4 ">
+                                <Markdown>
+                                  {businessPostedJobs.description}
+                                </Markdown>
+                              </div>
+                            </div>
+                            {businessPostedJobs.bio ? (
+                              <div class="space-y-2 mt-10 mb-4">
+                                <label
+                                  for="dactmi"
+                                  class="block mb-2 text-md font-medium text-gray-800 "
+                                >
+                                  About {businessPostedJobs.companyName}
+                                </label>
+
+                                <div class="mb-4">
+                                  <p>{businessPostedJobs.bio}</p>
+                                </div>
+                              </div>
+                            ) : null}
+
+                            <div class="space-y-2 mb-4 ">
+                              <label
+                                for="dactmi"
+                                class="block mb-2 text-lg font-medium text-gray-900 "
+                              >
+                                Job Requirements
+                              </label>
+
+                              <div className="prose prose-li  font-inter marker:text-black mb-4">
+                                <Markdown>
+                                  {businessPostedJobs.applicantDescription}
+                                </Markdown>
+                              </div>
+                            </div>
+                            <div class="space-y-2 md:mb-4 lg:mb-4 mb-20">
+                              <label
+                                for="dactmi"
+                                class="block mb-2 text-lg font-medium text-gray-900 "
+                              >
+                                Employment Benefits
+                              </label>
+
+                              <div className="prose prose-li  font-inter marker:text-black mb-4">
+                                {businessPostedJobs.benefitsDescription ? (
+                                  <Markdown>
+                                    {businessPostedJobs.benefitsDescription}
+                                  </Markdown>
+                                ) : (
+                                  <p>Nothing listed</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
 
                                   {isDesktop ? (<div class="p-4 flex justify-between gap-x-2">
                                       

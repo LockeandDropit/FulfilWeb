@@ -6,7 +6,8 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 
-// credit https://github.com/codinginflow/nextjs-job-board/blob/Final-Project/src/components/RichTextEditor.tsx
+// credit https://github.com/codinginflow/nextjs-job-board/blob/Final-Project/src/components/RichTextEditor.tsx no licence listed as of 7/11/2024 but was part of a youtube tutorial
+//also i dont think this is subject to copyright
 
 export default forwardRef(
   function RichTextEditor(props, ref) {

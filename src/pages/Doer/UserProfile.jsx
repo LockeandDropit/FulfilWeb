@@ -86,10 +86,17 @@ import ImageUploading from "react-images-uploading";
 
 import star_corner from "../../images/star_corner.png";
 import star_filled from "../../images/star_filled.png";
-
-import { useChatContext } from "stream-chat-react";
-
 import { useMediaQuery } from "@chakra-ui/react";
+import { useChatContext } from "stream-chat-react";
+import { Document, Page } from 'react-pdf';
+import { pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url,
+).toString();
+
+
 
 const UserProfile = () => {
   const [rating, setRating] = useState(null); //make dynamic, pull from Backend
@@ -420,6 +427,11 @@ const UserProfile = () => {
     isOpen: isOpenAddQualification,
     onOpen: onOpenAddQualification,
     onClose: onCloseAddQualification,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenResume,
+    onOpen: onOpenResume,
+    onClose: onCloseResume,
   } = useDisclosure();
   //firebase submission after edit
 
@@ -879,6 +891,74 @@ const UserProfile = () => {
   };
 
 
+  //resume handling
+  const [newResume, setNewResume] = useState(null)
+  const [resume, setResume] = useState(null)
+
+  useEffect(() => {
+    if (newResume) {
+      uploadResumeToFirebase()
+    }
+  }, [newResume])
+
+  const uploadResumeToFirebase = async () => {
+    const storage = getStorage();
+    const resumeRef = ref(storage, "users/" + user.uid + "/resume.pdf");
+console.log("resume", newResume)
+    const img = await fetch(newResume);
+    console.log("resume img",img)
+    const bytes = await img.blob();
+
+    await uploadBytes(resumeRef, bytes).then((snapshot) => {});
+
+    await getDownloadURL(resumeRef).then((response) => {
+      updateDoc(doc(db, "users", user.uid), {
+        resume: response,
+      })
+        .then(() => {
+          //all good
+        })
+        .catch((error) => {
+          // no bueno
+        });
+      })
+  }
+
+  useEffect(() => {
+    if (user) {
+      getResume();
+    } else {
+    }
+  }, [user]);
+
+  const getResume = async () => {
+    const storage = getStorage();
+      const reference = ref(storage, "users/" + user.uid + "/resume.pdf");
+console.log(reference)
+      setResume(reference)
+    // getDoc(doc(db, "users", user.uid)).then((snapshot) => {
+    //   if (!snapshot.data().resume) {
+    //   } else {
+    //     setResume(snapshot.data().resume)
+    //     console.log("resume", snapshot.data().resume)
+    //   }
+    // });
+  };
+
+
+
+  const [numPages, setNumPages] = useState();
+  const [pageNumber, setPageNumber] = useState(1);
+
+  function onDocumentLoadSuccess() {
+    setNumPages(numPages);
+  }
+
+  const viewResume = () => {
+onOpenResume()
+  } 
+
+
   //project image handling
 
   const [projectImages, setProjectImages] = React.useState(null);
@@ -1066,6 +1146,9 @@ const UserProfile = () => {
   }, [subscriptionID]);
 
   const [selectedImage, setSelectedImage] = useState(null);
+
+
+
 
   return (
     <>
@@ -1372,7 +1455,7 @@ const UserProfile = () => {
 
                 <div class="mt-3 text-center">
                   <h1 class="text-xl font-semibold text-gray-800 ">
-                    {userFirstName} {userLastName}
+                    {userFirstName} {userLastName} 
                   </h1>
                   {/* <p class="text-gray-500 ">
                           iam_amanda
@@ -1391,7 +1474,7 @@ const UserProfile = () => {
                 <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
                     <div class="pt-4 first:pt-0">
                       <h2 class="text-sm font-semibold text-gray-800 ">
-                        Details
+                        Details  ss
                       </h2>
 
                       <ul class="mt-3 space-y-2">
@@ -1790,7 +1873,7 @@ const UserProfile = () => {
                   <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
                     <div class="pt-4 first:pt-0">
                       <h2 class="text-sm font-semibold text-gray-800 ">
-                        Details
+                        Details 
                       </h2>
 
                       <ul class="mt-3 space-y-2">
@@ -1910,7 +1993,37 @@ const UserProfile = () => {
                           </div>
                         </li>
                       </ul>
+
+{/* 
+{resume ? (<button onClick={() => onOpenResume()}>view resume</button>) : (<label for="resume-upload" class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none ">
+        Upload Resume
+        <input
+        id="resume-upload"
+                         className="hidden"
+                         
+                         type="file" accept=".pdf"
+                          // onChange={(event) => setNewResume({ selectedFile: event.target.files[0] })}
+                          onChange={(event) => setNewResume(event.target.files[0])}
+                        />
+                      
+               
+    </label>)} */}
+    <Modal isOpen={isOpenResume} onClose={onCloseResume} size="xl">
+                      <ModalOverlay />
+                      <ModalContent>
+                      <div>
+      <Document file={resume} onLoadSuccess={onDocumentLoadSuccess}>
+        <Page pageNumber={pageNumber} />
+      </Document> 
+      <p>
+        Page {pageNumber} of {numPages}
+      </p>
+    </div>
+                      </ModalContent>
+                    </Modal>
+                     
                     </div>
+
                     {/* <div class="w-full">
                       <div class="pt-4 first:pt-0 flex flex-row ">
                         <h2 class="mb-2  mt-2 text-sm font-semibold text-gray-800 ">

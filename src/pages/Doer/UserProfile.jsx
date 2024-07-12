@@ -90,6 +90,9 @@ import { useMediaQuery } from "@chakra-ui/react";
 import { useChatContext } from "stream-chat-react";
 import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
+import test from "./test.pdf"
+
+
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -932,17 +935,17 @@ console.log("resume", newResume)
   }, [user]);
 
   const getResume = async () => {
-    const storage = getStorage();
-      const reference = ref(storage, "users/" + user.uid + "/resume.pdf");
-console.log(reference)
-      setResume(reference)
-    // getDoc(doc(db, "users", user.uid)).then((snapshot) => {
-    //   if (!snapshot.data().resume) {
-    //   } else {
-    //     setResume(snapshot.data().resume)
-    //     console.log("resume", snapshot.data().resume)
-    //   }
-    // });
+//     const storage = getStorage();
+//       const reference = ref(storage, "users/" + user.uid + "/resume.pdf");
+// console.log(reference)
+//       setResume(reference)
+    getDoc(doc(db, "users", user.uid)).then((snapshot) => {
+      if (!snapshot.data().resume) {
+      } else {
+        setResume(snapshot.data().resume)
+        console.log("resume", snapshot.data().resume)
+      }
+    });
   };
 
 
@@ -1994,7 +1997,7 @@ onOpenResume()
                         </li>
                       </ul>
 
-{/* 
+
 {resume ? (<button onClick={() => onOpenResume()}>view resume</button>) : (<label for="resume-upload" class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none ">
         Upload Resume
         <input
@@ -2007,13 +2010,13 @@ onOpenResume()
                         />
                       
                
-    </label>)} */}
-    <Modal isOpen={isOpenResume} onClose={onCloseResume} size="xl">
+    </label>)}
+    <Modal isOpen={isOpenResume} onClose={onCloseResume} size="5xl">
                       <ModalOverlay />
                       <ModalContent>
                       <div>
-      <Document file={resume} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page pageNumber={pageNumber} />
+      <Document className="" file={resume} onLoadSuccess={onDocumentLoadSuccess}>
+        <Page className="" height="500" width="1000" pageNumber={pageNumber} />
       </Document> 
       <p>
         Page {pageNumber} of {numPages}

@@ -41,6 +41,10 @@ import useEmblaCarousel from "embla-carousel-react";
 import { useJobStore } from "./lib/jobsStoreDashboard";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+
+import { Document, Page } from 'react-pdf';
+import { pdfjs } from 'react-pdf';
+
 const ApplicantModal = (props) => {
   const { job } = useJobStore();
   const navigate = useNavigate();
@@ -54,6 +58,8 @@ const ApplicantModal = (props) => {
   const [employerFirstName, setEmployerFirstName] = useState(null);
   const [employerLastName, setEmployerLastName] = useState(null);
   const [isLoading, setIsLoading] = useState(false)
+  const [resume, setResume] = useState(null)
+
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
@@ -97,6 +103,11 @@ const ApplicantModal = (props) => {
 
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenResume,
+    onOpen: onOpenResume,
+    onClose: onCloseResume,
+  } = useDisclosure();
 
   const [userExperience, setUserExperience] = useState(null);
   const [userExperienceLength, setUserExperienceLength] = useState(0);
@@ -356,6 +367,13 @@ const ApplicantModal = (props) => {
     onClose()
   }
 
+  const [numPages, setNumPages] = useState();
+  const [pageNumber, setPageNumber] = useState(1);
+
+  function onDocumentLoadSuccess() {
+    setNumPages(numPages);
+  }
+
   //Note: There is no reason for the below to be named premiumuser.xxx. I copied this from another place and didn't want to change it all.
   return (
     <Modal isOpen={isOpen} onClose={() => handleOnClose()} size="6xl">
@@ -499,6 +517,12 @@ const ApplicantModal = (props) => {
                             class=" mt-2 py-2 px-4 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none "
                           >
                             Contact
+                          </button>
+                          <button
+                        onClick={() => onOpenResume()}
+                            class=" mt-2 py-2 px-4 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-sky-400 hover:text-sky-500 disabled:opacity-50 disabled:pointer-events-none "
+                          >
+                           See resume
                           </button>
                   </div>
                 </div>
@@ -1628,6 +1652,20 @@ const ApplicantModal = (props) => {
               </div>
             </div>
           </div>
+          <Modal isOpen={isOpenResume} onClose={onCloseResume} size="5xl">
+                      <ModalOverlay />
+                      <ModalContent>
+                      <div>
+      <Document className="" file={premiumUser.resume ? premiumUser.resume : null} onLoadSuccess={onDocumentLoadSuccess}>
+        <Page className="" height="500" width="1000" pageNumber={pageNumber} />
+      </Document> 
+      {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
+      <p>
+        Page {pageNumber} of {numPages}
+      </p>
+    </div>
+                      </ModalContent>
+                    </Modal>
         </main>
         )}
       </ModalContent>

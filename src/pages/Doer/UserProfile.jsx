@@ -93,7 +93,6 @@ import { pdfjs } from 'react-pdf';
 import test from "./test.pdf"
 
 
-
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
@@ -898,28 +897,36 @@ const UserProfile = () => {
   const [newResume, setNewResume] = useState(null)
   const [resume, setResume] = useState(null)
 
-  useEffect(() => {
-    if (newResume) {
-      uploadResumeToFirebase()
-    }
-  }, [newResume])
+  // useEffect(() => {
+  //   if (newResume) {
+  //     uploadResumeToFirebase()
+  //   }
+  // }, [newResume])
 
-  const uploadResumeToFirebase = async () => {
+  const uploadResumeToFirebase = async (x) => {
     const storage = getStorage();
     const resumeRef = ref(storage, "users/" + user.uid + "/resume.pdf");
-console.log("resume", newResume)
-    const img = await fetch(newResume);
-    console.log("resume img",img)
-    const bytes = await img.blob();
+console.log("resume", x)
 
-    await uploadBytes(resumeRef, bytes).then((snapshot) => {});
+    // const img = await fetch(newResume);
+  
+    // console.log("resume img",img)
+  
+    // const file = await x.blob();
+      const file = x;
+
+  //   const metadata = {
+  //     contentType: "image/jpeg",
+  // };
+
+    await uploadBytes(resumeRef, file).then((snapshot) => {});
 
     await getDownloadURL(resumeRef).then((response) => {
       updateDoc(doc(db, "users", user.uid), {
         resume: response,
       })
         .then(() => {
-          //all good
+        setResume(response)
         })
         .catch((error) => {
           // no bueno
@@ -927,9 +934,34 @@ console.log("resume", newResume)
       })
   }
 
+
+//   const testPDFtype = async () => {
+//     const storage = getStorage();
+//     const resumeRef = ref(storage, "users/" + user.uid + "/construction-worker-resume.pdf");
+// console.log("resume", newResume)
+//     const img = await fetch(newResume);
+//     console.log("resume img",img)
+//     const bytes = await img.blob();
+
+  
+
+//     await getDownloadURL(resumeRef).then((response) => {
+//       updateDoc(doc(db, "users", user.uid), {
+//         resume: response,
+//       })
+//         .then(() => {
+//           //all good
+//         })
+//         .catch((error) => {
+//           // no bueno
+//         });
+//       })
+//   }
+  
   useEffect(() => {
     if (user) {
       getResume();
+      // testPDFtype()
     } else {
     }
   }, [user]);
@@ -944,11 +976,32 @@ console.log("resume", newResume)
       } else {
         setResume(snapshot.data().resume)
         console.log("resume", snapshot.data().resume)
+
       }
     });
   };
 
 
+  // useEffect(  () => {
+  //   if (resume) {
+  //     async function fetchData() {
+  //     const url = resume;
+  //     try {
+  //       const response = await fetch(url);
+  //       if (!response.ok) {
+  //         throw new Error(`Response status: ${response.status}`);
+  //       }
+    
+  //       const json = await response.json();
+  //       console.log("json resopnse",json);
+  //     } catch (error) {
+  //       console.error(error.message);
+  //     }
+  //   }
+
+  //   fetchData()
+  // }
+  // }, [resume])
 
   const [numPages, setNumPages] = useState();
   const [pageNumber, setPageNumber] = useState(1);
@@ -1149,6 +1202,7 @@ onOpenResume()
   }, [subscriptionID]);
 
   const [selectedImage, setSelectedImage] = useState(null);
+
 
 
 
@@ -2006,18 +2060,22 @@ onOpenResume()
                          
                          type="file" accept=".pdf"
                           // onChange={(event) => setNewResume({ selectedFile: event.target.files[0] })}
-                          onChange={(event) => setNewResume(event.target.files[0])}
+                          onChange={(event) => uploadResumeToFirebase(event.target.files[0])}
                         />
+    </label>)}
+
+
                       
                
-    </label>)}
+  
     <Modal isOpen={isOpenResume} onClose={onCloseResume} size="5xl">
                       <ModalOverlay />
                       <ModalContent>
                       <div>
-      <Document className="" file={resume} onLoadSuccess={onDocumentLoadSuccess}>
+      <Document className="" file={resume ? resume : null} onLoadSuccess={onDocumentLoadSuccess}>
         <Page className="" height="500" width="1000" pageNumber={pageNumber} />
       </Document> 
+      {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
       <p>
         Page {pageNumber} of {numPages}
       </p>
@@ -2899,6 +2957,7 @@ onOpenResume()
 
                       <div class="flex sm:justify-end items-center gap-x-2"></div>
                     </div>
+                 
 
                     {userExperience ? (
                       userExperience.map((userExperience) => (

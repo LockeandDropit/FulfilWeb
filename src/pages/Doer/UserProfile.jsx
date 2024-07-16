@@ -3,7 +3,7 @@ import DoerHeader from "./DoerHeader";
 import DoerDashboard from "./DoerDashboard";
 import Header from "./components/Header";
 import Dashboard from "./components/Dashboard";
-import useEmblaCarousel from 'embla-carousel-react'
+import useEmblaCarousel from "embla-carousel-react";
 import {
   Input,
   Button,
@@ -88,22 +88,18 @@ import star_corner from "../../images/star_corner.png";
 import star_filled from "../../images/star_filled.png";
 import { useMediaQuery } from "@chakra-ui/react";
 import { useChatContext } from "stream-chat-react";
-import { Document, Page } from 'react-pdf';
-import { pdfjs } from 'react-pdf';
-import test from "./test.pdf"
-
+import { Document, Page } from "react-pdf";
+import { pdfjs } from "react-pdf";
+import test from "./test.pdf";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url,
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
 ).toString();
-
-
 
 const UserProfile = () => {
   const [rating, setRating] = useState(null); //make dynamic, pull from Backend
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
-
 
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
 
@@ -114,15 +110,15 @@ const UserProfile = () => {
 
   const [user, setUser] = useState();
 
-  const [emblaRef, emblaApi] = useEmblaCarousel()
+  const [emblaRef, emblaApi] = useEmblaCarousel();
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev()
-  }, [emblaApi])
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
 
   const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext()
-  }, [emblaApi])
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
   // this gets the profile picture
   // const profilePictureURL = useSelector(selectUserProfilePicture);
 
@@ -253,6 +249,10 @@ const UserProfile = () => {
 
       getDoc(docRef).then((snapshot) => {
         setUserBio(snapshot.data().bio);
+        if (snapshot.data().resume) {
+          setResume(snapshot.data().resume)
+        }
+        
       });
     } else {
     }
@@ -892,10 +892,9 @@ const UserProfile = () => {
     setProfilePicture(imageList[0].data_url);
   };
 
-
   //resume handling
-  const [newResume, setNewResume] = useState(null)
-  const [resume, setResume] = useState(null)
+  const [newResume, setNewResume] = useState(null);
+  const [resume, setResume] = useState(null);
 
   // useEffect(() => {
   //   if (newResume) {
@@ -906,18 +905,18 @@ const UserProfile = () => {
   const uploadResumeToFirebase = async (x) => {
     const storage = getStorage();
     const resumeRef = ref(storage, "users/" + user.uid + "/resume.pdf");
-console.log("resume", x)
+    console.log("resume", x);
 
     // const img = await fetch(newResume);
-  
-    // console.log("resume img",img)
-  
-    // const file = await x.blob();
-      const file = x;
 
-  //   const metadata = {
-  //     contentType: "image/jpeg",
-  // };
+    // console.log("resume img",img)
+
+    // const file = await x.blob();
+    const file = x;
+
+    //   const metadata = {
+    //     contentType: "image/jpeg",
+    // };
 
     await uploadBytes(resumeRef, file).then((snapshot) => {});
 
@@ -926,38 +925,35 @@ console.log("resume", x)
         resume: response,
       })
         .then(() => {
-        setResume(response)
+          setResume(response);
         })
         .catch((error) => {
           // no bueno
         });
-      })
-  }
+    });
+  };
 
+  //   const testPDFtype = async () => {
+  //     const storage = getStorage();
+  //     const resumeRef = ref(storage, "users/" + user.uid + "/construction-worker-resume.pdf");
+  // console.log("resume", newResume)
+  //     const img = await fetch(newResume);
+  //     console.log("resume img",img)
+  //     const bytes = await img.blob();
 
-//   const testPDFtype = async () => {
-//     const storage = getStorage();
-//     const resumeRef = ref(storage, "users/" + user.uid + "/construction-worker-resume.pdf");
-// console.log("resume", newResume)
-//     const img = await fetch(newResume);
-//     console.log("resume img",img)
-//     const bytes = await img.blob();
+  //     await getDownloadURL(resumeRef).then((response) => {
+  //       updateDoc(doc(db, "users", user.uid), {
+  //         resume: response,
+  //       })
+  //         .then(() => {
+  //           //all good
+  //         })
+  //         .catch((error) => {
+  //           // no bueno
+  //         });
+  //       })
+  //   }
 
-  
-
-//     await getDownloadURL(resumeRef).then((response) => {
-//       updateDoc(doc(db, "users", user.uid), {
-//         resume: response,
-//       })
-//         .then(() => {
-//           //all good
-//         })
-//         .catch((error) => {
-//           // no bueno
-//         });
-//       })
-//   }
-  
   useEffect(() => {
     if (user) {
       getResume();
@@ -967,20 +963,18 @@ console.log("resume", x)
   }, [user]);
 
   const getResume = async () => {
-//     const storage = getStorage();
-//       const reference = ref(storage, "users/" + user.uid + "/resume.pdf");
-// console.log(reference)
-//       setResume(reference)
+    //     const storage = getStorage();
+    //       const reference = ref(storage, "users/" + user.uid + "/resume.pdf");
+    // console.log(reference)
+    //       setResume(reference)
     getDoc(doc(db, "users", user.uid)).then((snapshot) => {
       if (!snapshot.data().resume) {
       } else {
-        setResume(snapshot.data().resume)
-        console.log("resume", snapshot.data().resume)
-
+        setResume(snapshot.data().resume);
+        console.log("resume", snapshot.data().resume);
       }
     });
   };
-
 
   // useEffect(  () => {
   //   if (resume) {
@@ -991,7 +985,7 @@ console.log("resume", x)
   //       if (!response.ok) {
   //         throw new Error(`Response status: ${response.status}`);
   //       }
-    
+
   //       const json = await response.json();
   //       console.log("json resopnse",json);
   //     } catch (error) {
@@ -1011,9 +1005,8 @@ console.log("resume", x)
   }
 
   const viewResume = () => {
-onOpenResume()
-  } 
-
+    onOpenResume();
+  };
 
   //project image handling
 
@@ -1050,19 +1043,21 @@ onOpenResume()
     const img = await fetch(projectImages[0].data_url);
     const bytes = await img.blob();
 
-    if (projectPictureOne === null) { await uploadBytes(pictureRefOne, bytes).then((snapshot) => {});
+    if (projectPictureOne === null) {
+      await uploadBytes(pictureRefOne, bytes).then((snapshot) => {});
 
-    await getDownloadURL(pictureRefOne).then((response) => {
-      updateDoc(doc(db, "users", user.uid), {
-        projectPictureOne: response,
-      })
-        .then(() => {
-          //all good
+      await getDownloadURL(pictureRefOne).then((response) => {
+        updateDoc(doc(db, "users", user.uid), {
+          projectPictureOne: response,
         })
-        .catch((error) => {
-          // no bueno
-        });
-    })} else if (projectPictureTwo === null) {
+          .then(() => {
+            //all good
+          })
+          .catch((error) => {
+            // no bueno
+          });
+      });
+    } else if (projectPictureTwo === null) {
       await uploadBytes(pictureRefTwo, bytes).then((snapshot) => {});
 
       await getDownloadURL(pictureRefTwo).then((response) => {
@@ -1119,7 +1114,6 @@ onOpenResume()
           });
       });
     }
-    
 
     onCloseProject();
   };
@@ -1203,10 +1197,6 @@ onOpenResume()
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-
-
-
-
   return (
     <>
       <Header />
@@ -1216,8 +1206,6 @@ onOpenResume()
       </Box>
       <main id="content" class="lg:ps-[260px] pt-[59px]">
         <div class="max-w-6xl mx-auto">
-        
-
           <div class="p-2 sm:p-5 sm:py-0 md:pt-5 space-y-5">
             <div class="p-5 pb-0 bg-white border border-gray-200 shadow-sm rounded-xl ">
               <figure>
@@ -1512,153 +1500,157 @@ onOpenResume()
 
                 <div class="mt-3 text-center">
                   <h1 class="text-xl font-semibold text-gray-800 ">
-                    {userFirstName} {userLastName} 
+                    {userFirstName} {userLastName}
                   </h1>
                   {/* <p class="text-gray-500 ">
                           iam_amanda
                         </p> */}
                 </div>
               </div>
-
-              
             </div>
 
-
-            {isDesktop ? (null) : (  <> <div class="xl:ps-5 grow space-y-5">
+            {isDesktop ? null : (
+              <>
+                {" "}
+                <div class="xl:ps-5 grow space-y-5">
                   <div class="flex flex-col bg-white  rounded-xl shadow-sm xl:shadow-none ">
                     {/* Start about */}
                     <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
-                <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
-                    <div class="pt-4 first:pt-0">
-                      <h2 class="text-sm font-semibold text-gray-800 ">
-                        Details  ss
-                      </h2>
+                      <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
+                        <div class="pt-4 first:pt-0">
+                          <h2 class="text-sm font-semibold text-gray-800 ">
+                            Details ss
+                          </h2>
 
-                      <ul class="mt-3 space-y-2">
-                        {businessName ? (
-                          <li>
-                            <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
-                              <svg
-                                class="flex-shrink-0 size-4 text-gray-600 "
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              >
-                                <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
-                                <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
-                                <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
-                                <path d="M10 6h4" />
-                                <path d="M10 10h4" />
-                                <path d="M10 14h4" />
-                                <path d="M10 18h4" />
-                              </svg>
-                            </div>
-                          </li>
-                        ) : null}
-
-                        <li>
-                          <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
-                            <svg
-                              class="flex-shrink-0 size-4 text-gray-600 "
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            >
-                              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                              <circle cx="12" cy="10" r="3" />
-                            </svg>
-                            {userCity}, {userState}
-                          </div>
-                        </li>
-                        <li>
-                          <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
-                            {numberOfRatings ? (
-                              <Flex>
-                                {maxRating.map((item, key) => {
-                                  return (
-                                    <Box
-                                      activeopacity={0.7}
-                                      key={item}
-                                      marginTop="4px"
-                                    >
-                                      <Image
-                                        boxSize="16px"
-                                        src={
-                                          item <= rating
-                                            ? star_filled
-                                            : star_corner
-                                        }
-                                      ></Image>
-                                    </Box>
-                                  );
-                                })}
-
-                                <Text marginTop="4px" marginLeft="4px">
-                                  ({numberOfRatings} reviews)
-                                </Text>
-                              </Flex>
-                            ) : (
-                              <>
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke-width="1.5"
-                                  stroke="currentColor"
-                                  class="flex-shrink-0 size-4 text-gray-600 "
-                                >
-                                  <path
+                          <ul class="mt-3 space-y-2">
+                            {businessName ? (
+                              <li>
+                                <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                                  <svg
+                                    class="flex-shrink-0 size-4 text-gray-600 "
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
-                                    d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
-                                  />
+                                  >
+                                    <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
+                                    <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
+                                    <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
+                                    <path d="M10 6h4" />
+                                    <path d="M10 10h4" />
+                                    <path d="M10 14h4" />
+                                    <path d="M10 18h4" />
+                                  </svg>
+                                </div>
+                              </li>
+                            ) : null}
+
+                            <li>
+                              <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                                <svg
+                                  class="flex-shrink-0 size-4 text-gray-600 "
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                                  <circle cx="12" cy="10" r="3" />
                                 </svg>
-                                <Text>No reviews yet</Text>
-                              </>
-                            )}
-                          </div>
-                        </li>
-                        <li>
-                          <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
-                            <svg
-                              class="flex-shrink-0 size-4 text-gray-600 "
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            >
-                              <rect width="20" height="16" x="2" y="4" rx="2" />
-                              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                            </svg>
-                            {email}
-                          </div>
-                        </li>
-                      </ul>
+                                {userCity}, {userState}
+                              </div>
+                            </li>
+                            <li>
+                              <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                                {numberOfRatings ? (
+                                  <Flex>
+                                    {maxRating.map((item, key) => {
+                                      return (
+                                        <Box
+                                          activeopacity={0.7}
+                                          key={item}
+                                          marginTop="4px"
+                                        >
+                                          <Image
+                                            boxSize="16px"
+                                            src={
+                                              item <= rating
+                                                ? star_filled
+                                                : star_corner
+                                            }
+                                          ></Image>
+                                        </Box>
+                                      );
+                                    })}
+
+                                    <Text marginTop="4px" marginLeft="4px">
+                                      ({numberOfRatings} reviews)
+                                    </Text>
+                                  </Flex>
+                                ) : (
+                                  <>
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke-width="1.5"
+                                      stroke="currentColor"
+                                      class="flex-shrink-0 size-4 text-gray-600 "
+                                    >
+                                      <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                                      />
+                                    </svg>
+                                    <Text>No reviews yet</Text>
+                                  </>
+                                )}
+                              </div>
+                            </li>
+                            <li>
+                              <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                                <svg
+                                  class="flex-shrink-0 size-4 text-gray-600 "
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <rect
+                                    width="20"
+                                    height="16"
+                                    x="2"
+                                    y="4"
+                                    rx="2"
+                                  />
+                                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                                </svg>
+                                {email}
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  </div>
-                  </div>
-                  
-                  </div>
-
-{/* <div class="w-full">
+                </div>
+                {/* <div class="w-full">
 <div class="pt-4 first:pt-0 flex flex-row ">
   <h2 class="mb-2  mt-2 text-sm font-semibold text-gray-800 ">
     Specialties
@@ -1890,9 +1882,8 @@ onOpenResume()
   )}
 </div>
 </div> */}
-</>
-                  
-)}
+              </>
+            )}
 
             <div class="xl:p-5 flex flex-col xl:bg-white xl:border xl:border-gray-200 xl:shadow-sm xl:rounded-xl ">
               <div class="xl:flex">
@@ -1930,7 +1921,7 @@ onOpenResume()
                   <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
                     <div class="pt-4 first:pt-0">
                       <h2 class="text-sm font-semibold text-gray-800 ">
-                        Details 
+                        Details
                       </h2>
 
                       <ul class="mt-3 space-y-2">
@@ -2051,38 +2042,56 @@ onOpenResume()
                         </li>
                       </ul>
 
+                      {resume ? (
+                        <button onClick={() => onOpenResume()}>
+                          view resume
+                        </button>
+                      ) : (
+                        <label
+                          for="resume-upload"
+                          class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
+                        >
+                          Upload Resume
+                          <input
+                            id="resume-upload"
+                            className="hidden"
+                            type="file"
+                            accept=".pdf"
+                            // onChange={(event) => setNewResume({ selectedFile: event.target.files[0] })}
+                            onChange={(event) =>
+                              uploadResumeToFirebase(event.target.files[0])
+                            }
+                          />
+                        </label>
+                      )}
 
-{resume ? (<button onClick={() => onOpenResume()}>view resume</button>) : (<label for="resume-upload" class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none ">
-        Upload Resume
-        <input
-        id="resume-upload"
-                         className="hidden"
-                         
-                         type="file" accept=".pdf"
-                          // onChange={(event) => setNewResume({ selectedFile: event.target.files[0] })}
-                          onChange={(event) => uploadResumeToFirebase(event.target.files[0])}
-                        />
-    </label>)}
-
-
-                      
-               
-  
-    <Modal isOpen={isOpenResume} onClose={onCloseResume} size="5xl">
-                      <ModalOverlay />
-                      <ModalContent>
-                      <div>
-      <Document className="" file={resume ? resume : null} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page className="" height="500" width="1000" pageNumber={pageNumber} />
-      </Document> 
-      {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
-      <p>
-        Page {pageNumber} of {numPages}
-      </p>
-    </div>
-                      </ModalContent>
-                    </Modal>
-                     
+                      <Modal
+                        isOpen={isOpenResume}
+                        onClose={onCloseResume}
+                        size="5xl"
+                      >
+                        <ModalOverlay />
+                        <ModalContent>
+                          <div>
+                            <Document
+                              className=""
+                              file={resume ? resume : null}
+                              onLoadSuccess={onDocumentLoadSuccess}
+                            >
+                              <Page
+                                className=""
+                                height="500"
+                                width="1000"
+                                pageNumber={pageNumber}
+                              />
+                            </Document>
+                            {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
+                            <p>
+                              Page {pageNumber} of {numPages}
+                            </p>
+                          </div>
+                        </ModalContent>
+                      </Modal>
                     </div>
 
                     {/* <div class="w-full">
@@ -2792,11 +2801,28 @@ onOpenResume()
                 {/* end specialty modal */}
 
                 <div class="xl:ps-5 grow space-y-5">
+                {resume ? (<div class="flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm xl:shadow-none">
+                            <Document
+                              className=""
+                              file={resume ? resume : null}
+                              onLoadSuccess={onDocumentLoadSuccess}
+                            >
+                              <Page
+                                className=""
+                                
+                                pageNumber={pageNumber}
+                              />
+                            </Document>
+                            {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
+                            <p>
+                              Page {pageNumber} of {numPages}
+                            </p>
+                          </div>) : (
                   <div class="flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm xl:shadow-none ">
-                    {/* Start about */}
+                  
                     <div class="p-5 pb-2  flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
                       <h2 class="inline-block font-semibold text-gray-800 ">
-                        About
+                        About 
                       </h2>
 
                       {userBio ? (
@@ -2947,6 +2973,25 @@ onOpenResume()
                           </svg>
                           Add Bio
                         </button>
+                        <p className="cursor-pointer mt-2">
+                          or upload your resume{" "}
+                          <label
+                            for="resume-upload"
+                            class="cursor-pointer text-sky-500 underline hover:text-sky-600 "
+                          >
+                            here
+                            <input
+                              id="resume-upload"
+                              className="hidden"
+                              type="file"
+                              accept=".pdf"
+                              // onChange={(event) => setNewResume({ selectedFile: event.target.files[0] })}
+                              onChange={(event) =>
+                                uploadResumeToFirebase(event.target.files[0])
+                              }
+                            />
+                          </label>
+                        </p>
                       </div>
                     )}
                     {/* end about */}
@@ -2957,7 +3002,6 @@ onOpenResume()
 
                       <div class="flex sm:justify-end items-center gap-x-2"></div>
                     </div>
-                 
 
                     {userExperience ? (
                       userExperience.map((userExperience) => (
@@ -2998,8 +3042,6 @@ onOpenResume()
                               </div>
                             </div>
                           </div>
-
-                         
 
                           {openModalID === userExperience.id ? (
                             <Modal
@@ -3152,10 +3194,8 @@ onOpenResume()
                               </ModalContent>
                             </Modal>
                           ) : null}
-                          
                         </>
                       ))
-                      
                     ) : (
                       <div class="p-5 min-h-[328px] flex flex-col justify-center items-center text-center">
                         <svg
@@ -3379,33 +3419,34 @@ onOpenResume()
                       </div>
                     )}
 
-{userExperienceLength < 3 & userExperienceLength !== 0 ? (
-                            <div class="p-5 min-h-[80px] flex flex-col justify-end items-end text-center">
-                              <button
-                                type="button"
-                                class="py-2 px-3 inline-flex  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
-                                data-hs-overlay="#hs-pro-dasadpm"
-                                onClick={() => onOpenAddExperience()}
-                              >
-                                <svg
-                                  class="hidden sm:block flex-shrink-0 size-4"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <path d="M5 12h14" />
-                                  <path d="M12 5v14" />
-                                </svg>
-                                Add experience
-                              </button>
-                            </div>
-                          ) : null}
+                    {(userExperienceLength < 3) &
+                    (userExperienceLength !== 0) ? (
+                      <div class="p-5 min-h-[80px] flex flex-col justify-end items-end text-center">
+                        <button
+                          type="button"
+                          class="py-2 px-3 inline-flex  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
+                          data-hs-overlay="#hs-pro-dasadpm"
+                          onClick={() => onOpenAddExperience()}
+                        >
+                          <svg
+                            class="hidden sm:block flex-shrink-0 size-4"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M5 12h14" />
+                            <path d="M12 5v14" />
+                          </svg>
+                          Add experience
+                        </button>
+                      </div>
+                    ) : null}
 
                     <Modal
                       isOpen={isOpenAddExperience}
@@ -3550,8 +3591,6 @@ onOpenResume()
                         <h2 class="inline-block font-semibold text-gray-800 ">
                           Projects
                         </h2>
-
-                       
                       </div>
 
                       <div class="space-y-2">
@@ -3561,67 +3600,126 @@ onOpenResume()
 
                         {projectPictureOne ? (
                           <>
-                          <div class="p-12 mx-5 mb-5 flex justify-center bg-white border border border-gray-300 rounded-xl ">
-                             <button className="embla__prev" onClick={scrollPrev}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-</svg>
-</button>
-                            <div className="overflow-hidden" >
-                            
-                              <div className="w-full max-w-96 " ref={emblaRef}>
-      <div className="flex">
-       
-        <div className="grow-0 shrink-0  w-full h-full"><img className="w-full h-full" src={projectPictureOne} ></img></div>
-        {projectPictureTwo ? (<div className="grow-0 shrink-0 w-full h-full"><img className="w-full"  src={projectPictureTwo} ></img></div>) : (null)}
-        {projectPictureThree ? (<div className="grow-0 shrink-0 w-full h-full"><img className="w-full "  src={projectPictureThree} ></img></div>) : (null)}
-        {projectPictureFour ? (<div className="grow-0 shrink-0 w-full h-full"><img className="w-full "  src={projectPictureFour} ></img></div>) : (null)}
-        {projectPictureFive ? (<div className="grow-0 shrink-0 w-full h-full"><img className="w-full "  src={projectPictureFive} ></img></div>) : (null)}
+                            <div class="p-12 mx-5 mb-5 flex justify-center bg-white border border border-gray-300 rounded-xl ">
+                              <button
+                                className="embla__prev"
+                                onClick={scrollPrev}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  class="w-6 h-6 mr-2"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15.75 19.5 8.25 12l7.5-7.5"
+                                  />
+                                </svg>
+                              </button>
+                              <div className="overflow-hidden">
+                                <div
+                                  className="w-full max-w-96 "
+                                  ref={emblaRef}
+                                >
+                                  <div className="flex">
+                                    <div className="grow-0 shrink-0  w-full h-full">
+                                      <img
+                                        className="w-full h-full"
+                                        src={projectPictureOne}
+                                      ></img>
+                                    </div>
+                                    {projectPictureTwo ? (
+                                      <div className="grow-0 shrink-0 w-full h-full">
+                                        <img
+                                          className="w-full"
+                                          src={projectPictureTwo}
+                                        ></img>
+                                      </div>
+                                    ) : null}
+                                    {projectPictureThree ? (
+                                      <div className="grow-0 shrink-0 w-full h-full">
+                                        <img
+                                          className="w-full "
+                                          src={projectPictureThree}
+                                        ></img>
+                                      </div>
+                                    ) : null}
+                                    {projectPictureFour ? (
+                                      <div className="grow-0 shrink-0 w-full h-full">
+                                        <img
+                                          className="w-full "
+                                          src={projectPictureFour}
+                                        ></img>
+                                      </div>
+                                    ) : null}
+                                    {projectPictureFive ? (
+                                      <div className="grow-0 shrink-0 w-full h-full">
+                                        <img
+                                          className="w-full "
+                                          src={projectPictureFive}
+                                        ></img>
+                                      </div>
+                                    ) : null}
+                                  </div>
+                                </div>
+                              </div>
 
-        
-      </div>
-    </div>
-    </div>
-    
-    <button className="embla__next" onClick={scrollNext}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 ml-2">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-</svg>
-</button>
-                          </div>
-                          <div class="flex flex-col bg-white  rounded-xl shadow-sm xl:shadow-none ">
-                      <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
-                        <h2 class="inline-block font-semibold text-gray-800 ">
-                          
-                        </h2>
+                              <button
+                                className="embla__next"
+                                onClick={scrollNext}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  class="w-6 h-6 ml-2"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                            <div class="flex flex-col bg-white  rounded-xl shadow-sm xl:shadow-none ">
+                              <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
+                                <h2 class="inline-block font-semibold text-gray-800 "></h2>
 
-                        <div class="flex sm:justify-end justify-end items-center gap-x-2">
-                          <button
-                            type="button"
-                            onClick={() => onOpenProject()}
-                            class="py-2 px-2 inline-flex  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
-                            data-hs-overlay="#hs-pro-dasadpm"
-                          >
-                            <svg
-                              class="hidden sm:block flex-shrink-0 size-4"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            >
-                              <path d="M5 12h14" />
-                              <path d="M12 5v14" />
-                            </svg>
-                            Add pictures
-                          </button>
-                        </div>
-                      </div>
-                      </div>
+                                <div class="flex sm:justify-end justify-end items-center gap-x-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => onOpenProject()}
+                                    class="py-2 px-2 inline-flex  items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
+                                    data-hs-overlay="#hs-pro-dasadpm"
+                                  >
+                                    <svg
+                                      class="hidden sm:block flex-shrink-0 size-4"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="2"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                    >
+                                      <path d="M5 12h14" />
+                                      <path d="M12 5v14" />
+                                    </svg>
+                                    Add pictures
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
                           </>
-                          
                         ) : (
                           <div class="p-12 mx-5 mb-5 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl ">
                             <div class="text-center">
@@ -3701,7 +3799,9 @@ onOpenResume()
                         )}
                       </div>
                     </div>
+                 
                   </div>
+                 )}
                 </div>
               </div>
             </div>
@@ -3754,32 +3854,36 @@ onOpenResume()
                     <div class="p-4 space-y-5">
                       <div>
                         <div class="flex flex-wrap items-center gap-3 sm:gap-5">
-                          {newProjectImage ? (<img class="w-full h-full" src={newProjectImage} />) : (<span class="flex flex-shrink-0 justify-center items-center size-20 border-2 border-dotted border-gray-300 text-gray-400 rounded-full dark:border-neutral-700 dark:text-neutral-600">
-                                  <svg
-                                    class="flex-shrink-0 size-7"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="1"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                  >
-                                    <rect
-                                      width="18"
-                                      height="18"
-                                      x="3"
-                                      y="3"
-                                      rx="2"
-                                      ry="2"
-                                    />
-                                    <circle cx="9" cy="9" r="2" />
-                                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                                  </svg>
-                                </span>)}
-                          
+                          {newProjectImage ? (
+                            <img class="w-full h-full" src={newProjectImage} />
+                          ) : (
+                            <span class="flex flex-shrink-0 justify-center items-center size-20 border-2 border-dotted border-gray-300 text-gray-400 rounded-full dark:border-neutral-700 dark:text-neutral-600">
+                              <svg
+                                class="flex-shrink-0 size-7"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <rect
+                                  width="18"
+                                  height="18"
+                                  x="3"
+                                  y="3"
+                                  rx="2"
+                                  ry="2"
+                                />
+                                <circle cx="9" cy="9" r="2" />
+                                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                              </svg>
+                            </span>
+                          )}
+
                           <div class="grow">
                             <div class="flex items-center gap-x-2">
                               <ImageUploading

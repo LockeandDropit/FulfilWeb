@@ -657,7 +657,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                     d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
                   />
                 </svg>
-              Create Post
+              Create Job Listing
               </>)}
                
                 
@@ -679,7 +679,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                     d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
                   />
                 </svg>
-                Create Job
+                Create Job Listing
               </a>)) : <div class="flex animate-pulse">
   <div class="flex-shrink-0">
     <span class="py-2 px-3 w-[120px] h-[40px] rounded-md items-cente block bg-gray-200  "></span>
@@ -1355,7 +1355,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                     d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
                   />
                 </svg>
-                Create Post
+                Create Job Listing
               </a>) : ( <a
                 class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => setShowAddJob(!showAddJob)}
@@ -1374,7 +1374,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                     d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
                   />
                 </svg>
-                Create Job
+                Create Job Listing
               </a>)) : <div class="flex animate-pulse">
   <div class="flex-shrink-0">
     <span class="py-2 px-3 w-[120px] h-[40px] rounded-md items-cente block bg-gray-200  "></span>
@@ -2040,7 +2040,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                     d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
                   />
                 </svg>
-                Create Post
+                Create Job Listing
               </a>) : ( <a
                 class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => setShowAddJob(!showAddJob)}
@@ -2059,7 +2059,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                     d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
                   />
                 </svg>
-                Create Job
+                Create Job Listing
               </a>)) : <div class="flex animate-pulse">
   <div class="flex-shrink-0">
     <span class="py-2 px-3 w-[120px] h-[40px] rounded-md items-cente block bg-gray-200  "></span>
@@ -2099,7 +2099,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                     data-hs-overlay="#hs-pro-datm"
                     onClick={() => handleOpenFirstJobBusiness()}
                   >
-              Create a Post
+              Create Job Listing
             </button>
           
           </ModalFooter>

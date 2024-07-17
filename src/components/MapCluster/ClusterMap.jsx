@@ -47,6 +47,7 @@ useEffect(() => {
     if (searchResults === null) {
  //normal render
 renderAllJobs()
+getData()
  //initial render with all f(x)
     } else if (searchResults !== null && searchResults[0].isFullTimePosition === "gigwork" ) {
         setTrees(searchResults)
@@ -82,6 +83,29 @@ renderAllJobs()
 
       setTrees(postedByBusiness);
     });
+  }
+
+  async function getData() {
+    const url = "http://localhost:8080/http://localhost:8000/api/jobs/";
+    try {
+      const response = await fetch(url, {
+      
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+  
+      const json = await response.json();
+
+      console.log("json",json)
+
+    } catch (error) {
+      console.error(error.message);
+    }
   }
 // useEffect(() => {
 //     const q = query(collection(db, "Map Jobs"));

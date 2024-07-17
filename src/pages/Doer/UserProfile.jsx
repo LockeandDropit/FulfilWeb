@@ -2043,9 +2043,10 @@ const UserProfile = () => {
                       </ul>
 
                       {resume ? (
-                        <button onClick={() => onOpenResume()}>
-                          view resume
-                        </button>
+                        // <button onClick={() => onOpenResume()}>
+                        //   view resume
+                        // </button>
+                        null
                       ) : (
                         <label
                           for="resume-upload"
@@ -2800,24 +2801,67 @@ const UserProfile = () => {
 
                 {/* end specialty modal */}
 
-                <div class="xl:ps-5 grow space-y-5">
-                {resume ? (<div class="flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm xl:shadow-none">
-                            <Document
-                              className=""
-                              file={resume ? resume : null}
-                              onLoadSuccess={onDocumentLoadSuccess}
-                            >
-                              <Page
-                                className=""
-                                
-                                pageNumber={pageNumber}
-                              />
-                            </Document>
-                            {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
-                            <p>
-                              Page {pageNumber} of {numPages}
-                            </p>
-                          </div>) : (
+                <div class="xl:ps-5 grow space-y-1 mt-2">
+                {resume ? (<>
+                  <div class="flex  flex-col bg-white border border-gray-200 rounded-xl shadow-sm xl:shadow-none ">
+                  
+                  <div class="px-5   flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
+                    <h2 class="inline-block font-semibold text-gray-800  ">
+                      Resume Uploaded 
+                    </h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#008000" class="size-6">
+  <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+</svg>
+
+                    
+                  </div>
+                  <div class="items-center align-center">
+                  <div class="items-center p-5   flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
+                  <div class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none ">
+       <button onClick={() => onOpenResume()}>
+                          View 
+                        </button>
+       </div>
+
+                    
+                  </div>
+                  <div class="px-5  flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
+                  <div className="items-center justify-center">
+       <button >
+                          or
+                        </button>
+       </div>
+
+                    
+                  </div>
+                  <div class="px-5   flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
+                  <div className="items-center justify-center">
+                  <label
+                          for="resume-upload"
+                          class="mt-4 py-2  inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-sky-500 hover:text-sky-600 underline cursor-pointer disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
+                        >
+                          Upload new resume
+                          <input
+                            id="resume-upload"
+                            className="hidden"
+                            type="file"
+                            accept=".pdf"
+                            // onChange={(event) => setNewResume({ selectedFile: event.target.files[0] })}
+                            onChange={(event) =>
+                              uploadResumeToFirebase(event.target.files[0])
+                            }
+                          />
+                        </label>
+       </div>
+
+                    
+                  </div>
+                  </div>
+                  </div>
+                  
+      
+                
+                          </>) : (
                   <div class="flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm xl:shadow-none ">
                   
                     <div class="p-5 pb-2  flex flex-column sm:flex sm:justify-between sm:items-center gap-2">

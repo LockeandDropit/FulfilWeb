@@ -133,15 +133,29 @@ const NeederAccountManager = () => {
     onClose: onCloseLogOut,
   } = useDisclosure();
 
+  const {
+    isOpen: isOpenError,
+    onOpen: onOpenError,
+    onClose: onCloseError,
+  } = useDisclosure();
+
   const handleConfirmDelete = () => {
     onOpen();
   };
 
   const handleLogOut = async () => {
-    setLoading(true);
-    postDeleteRequest();
-    auth.signOut();
-    await client.disconnectUser();
+    // setLoading(true);
+    // postDeleteRequest();
+    try {
+      // user.delete()
+      console.log("user",user)
+    } catch (error) {
+      console.log("error", error)
+      onOpenError()
+    }
+
+    // auth.signOut();
+    // await client.disconnectUser();
 
     setTimeout(() => {
       onOpenLogOut();
@@ -428,10 +442,29 @@ const NeederAccountManager = () => {
         </ModalContent>
       </Modal>
 
+      <Modal isOpen={isOpenError} onClose={onCloseError}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Error</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>There was an error deleting you account</Text>
+            <Text>Please contact support at john@getfulfil.com</Text>
+          </ModalBody>
+
+          <ModalFooter>
+        
+            <Button colorScheme="blue" mr={3} onClick={() => onCloseError()}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <Modal isOpen={isOpenLogOut} onClose={onCloseLogOut}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+   
           <ModalCloseButton />
           <ModalBody>
             <Text> Sorry to see you go! </Text>

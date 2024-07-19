@@ -51,7 +51,7 @@ import { useMediaQuery } from "@chakra-ui/react";
 const BusinessEmailRegister = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
   const navigate = useNavigate();
- 
+ const [loading, setLoading] = useState(false)
   
   //background image https://www.freecodecamp.org/news/react-background-image-tutorial-how-to-set-backgroundimage-with-inline-css-style/
   //image from Photo by Blue Bird https://www.pexels.com/photo/man-standing-beside-woman-on-a-stepladder-painting-the-wall-7217988/
@@ -75,6 +75,7 @@ const BusinessEmailRegister = () => {
   const { trackEvent } = Plausible()
 
   const onSignUp = async () => {
+    setLoading(true)
     const authentication = getAuth();
 
     await createUserWithEmailAndPassword(authentication, email, password)
@@ -401,13 +402,24 @@ const BusinessEmailRegister = () => {
                 </div>
               </div>
 
-              <input type="button"
-                     onClick={() => validate()}
-                     value="Sign Up"
-                      className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    >
-                   
-                    </input>
+
+              {loading ? (
+                <button
+                className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none">
+                  <div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading">
+  <span class="sr-only">Loading...</span>
+</div>
+                </button>
+              ) : (
+                 <input type="button"
+                 onClick={() => validate()}
+                 value="Sign Up"
+                  className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                >
+               
+                </input>
+              )}
+             
             </div>
           </form>
         </div>

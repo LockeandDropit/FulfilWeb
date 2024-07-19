@@ -616,11 +616,15 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                                   </div>
                                 </div>
                               ) : null}
+                              {businessPostedJobs.isEstimatedPay ? (<div className="mb-2 flex flex-col w-full"><a href='https://www.glassdoor.com/index.htm'>estimate powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a></div>) : (null)}
                               <p class="block  text-md font-medium text-gray-800 ">
                                 {businessPostedJobs.streetAddress},{" "}
                                 {businessPostedJobs.city},{" "}
                                 {businessPostedJobs.state}
                               </p>
+                              {businessPostedJobs.isEstimatedAddress ? (    <p class="block italic text-sm  text-gray-800 ">
+                               Address may not be exact
+                              </p>) : (null)}
                               <p class="font-semibold text-md text-gray-500  cursor-default">
                                 <span className="font-semibold text-md text-slate-700">
                                   {" "}
@@ -628,7 +632,7 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                                 </span>{" "}
                                 {businessPostedJobs.datePosted}
                               </p>
-                              <p class="font-semibold text-md text-slate-700  mt-2 cursor-pointer">
+                              <p class="font-semibold text-md text-slate-700 cursor-pointer">
                                 Employer:
                               </p>
                               <div className="flex">

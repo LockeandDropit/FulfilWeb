@@ -80,7 +80,7 @@ const { addJobInfo } = addJobStore()
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
-        console.log(currentUser.uid);
+        console.log("EMAIL", currentUser.email);
       });
       setHasRun(true);
     } else {
@@ -115,6 +115,10 @@ const { addJobInfo } = addJobStore()
 
 
   //all add job logic
+
+  const [isEstimatedAddress, setIsEstimatedAddress] = useState(false)
+  const [isEstimatedPay, setIsEstimatedPay] = useState(false)
+
 
   const [isSalaried, setIsSalaried] = useState(null);
   const [applicantDescription, setApplicantDescription] = useState(null)
@@ -435,6 +439,7 @@ isFullTimePosition : isFullTimePosition,
       isVolunteer: isVolunteer,
       isOneTime: isOneTime,
       isSalaried: isSalaried,
+
       flatRate: flatRate,
       isHourly: isHourly,
       lowerCaseJobTitle: lowerCaseJobTitle,
@@ -451,6 +456,8 @@ isFullTimePosition : isFullTimePosition,
       requirements2: requirements2,
       requirements3: requirements3,
       niceToHave: niceToHave,
+      isEstimatedPay: isEstimatedPay,
+      isEstimatedAddress: isEstimatedAddress,
     })
       .then(() => {
         addDoc(dbRef, placeholderApplicant);
@@ -501,6 +508,8 @@ isFullTimePosition : isFullTimePosition,
       requirements2: requirements2,
       requirements3: requirements3,
       niceToHave: niceToHave,
+      isEstimatedPay: isEstimatedPay,
+      isEstimatedAddress: isEstimatedAddress,
     })
       .then(() => {
         //all good
@@ -542,6 +551,8 @@ isFullTimePosition : isFullTimePosition,
         requirements2: requirements2,
         requirements3: requirements3,
         niceToHave: niceToHave,
+        isEstimatedPay: isEstimatedPay,
+        isEstimatedAddress: isEstimatedAddress,
       })
         .then(() => {
           //all good
@@ -586,6 +597,8 @@ isFullTimePosition : isFullTimePosition,
         requirements2: requirements2,
         requirements3: requirements3,
         niceToHave: niceToHave,
+        isEstimatedPay: isEstimatedPay,
+        isEstimatedAddress: isEstimatedAddress,
       })
         .then(() => {
           //all good
@@ -637,6 +650,8 @@ isFullTimePosition : isFullTimePosition,
       requirements2: requirements2,
       requirements3: requirements3,
       niceToHave: niceToHave,
+      isEstimatedPay: isEstimatedPay,
+      isEstimatedAddress: isEstimatedAddress,
     })
       .then(() => {
         //all good
@@ -686,6 +701,8 @@ isFullTimePosition : isFullTimePosition,
       requirements2: requirements2,
       requirements3: requirements3,
       niceToHave: niceToHave,
+      isEstimatedPay: isEstimatedPay,
+      isEstimatedAddress: isEstimatedAddress,
     })
       .then(() => {
         //all good
@@ -1094,6 +1111,16 @@ const handleBenefitsEditorChange = (editorState) => {
             </select>
                 </div>
 
+                {user && user.email === "themasterbusiness@gmail.com" ? (   <><p>estimated pay ? </p>  <select
+              placeholder="Estimated address?"
+              class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+              onChange={(e) => setIsEstimatedPay(e.target.value)}
+            >
+              <option>Select option</option>
+              <option value={true}>Yes</option>
+              <option value={false}>No</option>
+            </select></>) : (null)}
+
 {isHourly ? (
  <div class="space-y-2 ">
  <label
@@ -1193,6 +1220,16 @@ const handleBenefitsEditorChange = (editorState) => {
                  
                 }}
               />
+
+{user && user.email === "themasterbusiness@gmail.com" ? (   <><p>estimated address ? </p>  <select
+              placeholder="Estimated address?"
+              class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+              onChange={(e) => setIsEstimatedAddress(e.target.value)}
+            >
+              <option>Select option</option>
+              <option value={true}>Yes</option>
+              <option value={false}>No</option>
+            </select></>) : (null)}
 
 {/* <label
                     for="dactmi"

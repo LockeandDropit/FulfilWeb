@@ -364,7 +364,7 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
             </div>
             <div className="sm:col-span-5">
               <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-               Company Website (optional)
+               Company Website 
               </label>
               <div className="mt-2">
                 <input

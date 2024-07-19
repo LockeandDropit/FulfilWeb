@@ -157,13 +157,6 @@ export const ClusteredTreeMarkers = ({ trees }) => {
     });
   }, []);
 
-  const handleInfoWindowClose = useCallback(() => {
-    setSelectedTreeKey(null);
-  }, []);
-
-  const handleMarkerClick = useCallback((tree) => {
-    setSelectedTreeKey(tree.key);
-  }, []);
 
 
   
@@ -181,114 +174,7 @@ export const ClusteredTreeMarkers = ({ trees }) => {
   const { searchResults, searchIsMobile, setSearchIsMobile } =
     useSearchResults();
 
-  //   const closeInfoWindow = props.props
 
-  //   useEffect(() => {
-  // console.log(closeInfoWindow)
-  //     if (closeInfoWindow === true) {
-  //       setOpenInfoWindowMarkerID(null)
-  //     }
-
-  //   }, [closeInfoWindow])
-
-  useEffect(() => {
-    if (searchResults === null) {
-      //normal render
-      renderAllJobs();
-      //initial render with all f(x)
-    } else if (
-      searchResults !== null &&
-      searchResults[0].isFullTimePosition === "gigwork"
-    ) {
-      setPostedJobs(searchResults);
-      setBusinessPostedJobs(null);
-    } else {
-      setBusinessPostedJobs(searchResults);
-
-      console.log("search results map screen", searchResults);
-    }
-  }, [searchResults]);
-
-  const renderAllJobs = () => {
-    const q = query(collection(db, "Map Jobs"));
-
-    onSnapshot(q, (snapshot) => {
-      let results = [];
-      let postedByBusiness = [];
-      snapshot.docs.forEach((doc) => {
-        //review what thiss does
-        if (doc.id === "0a9fb80c-8dc5-4ec0-9316-7335f7fc0058") {
-          //ignore this job is for Needer map screen
-        } else if (doc.data().isPostedByBusiness) {
-          postedByBusiness.push({ ...doc.data(), id: doc.id });
-        } else {
-          results.push({ ...doc.data(), id: doc.id });
-          console.log("this is from results", doc.data());
-        }
-      });
-
-      setPostedJobs(results);
-      setBusinessPostedJobs(postedByBusiness);
-    });
-  };
-
-  const [allJobs, setAllJobs] = useState([]);
-
-  //huge shout out to junaid7898 https://github.com/react-native-maps/react-native-maps/issues/350
-  const filteredLocations = (postedJobs) => {
-    let finalfiltered = [];
-
-    const hash = Object.create(null);
-    const processedLocations = postedJobs.map((postedJobs) => {
-      const { locationLat: lat, locationLng: lng } = postedJobs;
-      // console.log(lat, lng)
-      const latLng = `${lat}_${lng}`;
-      // Check if this combination of latitude and longitude has been encountered before
-      if (hash[latLng]) {
-        // If it has, increment the offset based on the number of occurrences
-        const offset = hash[latLng];
-        hash[latLng] += 1;
-        finalfiltered.push({
-          ...postedJobs,
-
-          locationLat: lat - offset * 0.0001,
-          locationLng: lng - offset * 0.0001,
-        });
-
-        console.log("second encounter hash", finalfiltered);
-      } else {
-        // If it hasn't been encountered before, mark it as seen in the hash table with an offset of 1
-        hash[latLng] = 1;
-        // Return the original location if it's the first time encountering this combination
-
-        finalfiltered.push({ ...postedJobs });
-      }
-    });
-    setAllJobs(finalfiltered);
-    return processedLocations;
-  };
-
-  useEffect(() => {
-    if (!postedJobs.length || !postedJobs) {
-      console.log("nothing");
-    } else {
-      filteredLocations(postedJobs);
-    }
-  }, [postedJobs]);
-
-  useEffect(() => {
-    allJobs.map((allJobs) => {
-      console.log("location lat", allJobs.locationLat);
-    });
-  }, [allJobs]);
-
-  const defaultLat = 44.96797106363888;
-  const defaultLong = -93.26177106829272;
-  const [input, setInput] = useState("");
-
-  const handleInputChange = (e) => setInput(e.target.value);
-
-  const isError = input === "";
 
   //map help https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN
   const [open, setOpen] = useState(false);
@@ -349,75 +235,12 @@ export const ClusteredTreeMarkers = ({ trees }) => {
 
   const [searchJobCategory, setSearchJobCategory] = useState(null);
 
-  useEffect(() => {
-    if (searchJobCategory && searchJobCategory !== null) {
-      searchCategory(searchJobCategory);
-    } else {
-    }
-  }, [searchJobCategory]);
+
   const handlePostedByBusinessToggleOpen = (x) => {
     setOpenInfoWindowMarkerID(x.jobID);
     // updateJobListingViews(x);
     onOpenDrawer();
     console.log("from on click", x);
-  };
-
-  const searchCategory = (value) => {
-    console.log(value);
-    const q = query(collection(db, "Map Jobs"));
-
-    if (value === "all") {
-      const q = query(collection(db, "Map Jobs"));
-
-      onSnapshot(q, (snapshot) => {
-        let results = [];
-        snapshot.docs.forEach((doc) => {
-          results.push({ ...doc.data(), id: doc.id });
-        });
-
-        setPostedJobs(results);
-      });
-    } else {
-      onSnapshot(q, (snapshot) => {
-        let results = [];
-        let secondResults = [];
-
-        snapshot.docs.forEach((doc) => {
-          //review what thiss does
-          results.push({ ...doc.data(), id: doc.id });
-        });
-
-        results.map((results) => {
-          if (results.category == value) {
-            secondResults.push(results);
-            console.log("match", results);
-          } else {
-            // return(<NoCategoryMatchModal props={true}/>)
-            console.log("no match1");
-          }
-        });
-
-        if (secondResults.length === 0) {
-          onOpen();
-        } else {
-          setPostedJobs(secondResults);
-        }
-      });
-    }
-  };
-
-  const handleCloseInfoWindow = () => {
-    setOpenInfoWindowMarkerID(null);
-    setUrlCopied(false);
-  };
-
-  const [openModal, setOpenModal] = useState(null);
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-    setTimeout(() => {
-      setOpenModal(false);
-    }, 200);
   };
 
   //const handle log in / sign up navigate
@@ -445,12 +268,6 @@ export const ClusteredTreeMarkers = ({ trees }) => {
           getDoc(doc(db, "employers", result.user.uid)),
         ])
           .then((results) =>
-            //   results[0]._document === null && results[1]._document === null
-            // ? console.log("new")
-            // : ( results[0]._document !== null &&
-            //   results[0]._document.data.value.mapValue.fields.isEmployer)
-            // ? console.log("doer")
-            // : console.log("needer")
             navigate(
               results[0]._document === null && results[1]._document === null
                 ? "/AddProfileInfo"
@@ -461,10 +278,6 @@ export const ClusteredTreeMarkers = ({ trees }) => {
             )
           )
           .catch();
-
-        //check if user is already in DB
-        //if so, navigate accordingly
-        //if not, navigate to new profile register
       })
       .catch((error) => {
         // Handle Errors here.
@@ -486,26 +299,8 @@ export const ClusteredTreeMarkers = ({ trees }) => {
       // New sign-in will be persisted with local persistence.
       signInWithEmailAndPassword(auth, email, password)
         .then((response) => {
-          // setLoggingIn(true);
-
-          //stream chat log in
-          // const chatClient = new StreamChat(
-          //   process.env.REACT_APP_STREAM_CHAT_API_KEY
-          // );
-
-          // Signed in
-          // setCurrentUser(response.user.uid)
           setIsSignedIn(true);
           const currentUser = response.user.uid;
-
-          // chatClient.connectUser(
-          //   { id: response.user.uid },
-          //   chatClient.devToken(response.user.uid)
-          // );
-
-          // const docRefUsers = doc(db, "users", response.user.uid);
-          // const docRefEmployers = doc(db, "employers", response.user.uid);
-
           // Thanks Jake :)
           Promise.all([
             getDoc(doc(db, "users", response.user.uid)),
@@ -611,11 +406,6 @@ export const ClusteredTreeMarkers = ({ trees }) => {
     onOpenSignIn();
   };
 
-  //this is to receive jobs
-  //will have to eventually makew this so that it checks if the user is logged in...
-  //like if user ? && isDoer navigate("DoerMapScreen/sessionid={blah}")
-  // else (stay here and render it on the logged out map)
-
   //"https://getfulfil.com/DoerMapLoggedOut/?session_id=CHECKOUT_SESSION_ID",
   //test http://localhost:3000/DoerMapLoggedOut/?session_id=CHECKOUT_SESSION_ID
   useEffect(() => {
@@ -700,7 +490,7 @@ export const ClusteredTreeMarkers = ({ trees }) => {
 
   // }, [])
 
-  const [scrollBehavior, setScrollBehavior] = React.useState("inside");
+
 
   //almost all code regarding implementing clustering in this library is from https://github.com/visgl/react-google-maps/tree/main/examples/marker-clustering
   return (

@@ -30,7 +30,7 @@ import {
 import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
-import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import { useNavigate } from "react-router-dom";
@@ -120,6 +120,10 @@ const NeederAccountManager = () => {
       userID: user.uid,
       requestTermination: true,
     });
+
+    deleteDoc(doc(db, "employers", user.uid), {
+
+    })
   };
 
   const client = StreamChat.getInstance(
@@ -145,9 +149,9 @@ const NeederAccountManager = () => {
 
   const handleLogOut = async () => {
     // setLoading(true);
-    // postDeleteRequest();
+    postDeleteRequest();
     try {
-      // user.delete()
+      user.delete()
       console.log("user",user)
     } catch (error) {
       console.log("error", error)

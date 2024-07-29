@@ -585,14 +585,16 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
     if (currentUser.isPremium === true) {
       setShowAddJobBusiness(!showAddJobBusiness)
     } else {
-      setCheckIfPremiumLoading(true)
+      // setCheckIfPremiumLoading(true)
       const docRef = doc(db, "employers", currentUser.uid);
 
       getDoc(docRef).then((snapshot) => {
         if (snapshot.data().isPremium === true) {
           setShowAddJobBusiness(!showAddJobBusiness)
+          setCheckIfPremiumLoading(false)
         } else {
           setShowSubscriptionModal(!showSubscriptionModal)
+          setCheckIfPremiumLoading(false)
         }
         setCheckIfPremiumLoading(false)
       })

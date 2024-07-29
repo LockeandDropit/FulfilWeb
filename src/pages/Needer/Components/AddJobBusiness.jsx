@@ -278,6 +278,9 @@ const [companyName, setCompanyName] = useState(null)
   }
 
   const checkLength = () => {
+
+    //setloading spinner 
+    setPendingSuccess(true)
     //check to see if everything is entered
     const descriptionValid = minLengthRegEx.test(description)
     const applicantDescriptionValid = minLengthRegEx.test(applicantDescription)
@@ -292,11 +295,13 @@ const [companyName, setCompanyName] = useState(null)
       console.log("error here", jobTitleValid, isOneTime, isFullTimePosition, applicantDescription, isSalaried);
       
       onOpenError()
+      setPendingSuccess(false)
       console.log("1");
     } else {
       // if (isOneTime === true && isSalaried === true && !flatRateValid || !descriptionValid this was throwing invalid idk why but hopefully fixed) {
         if (isOneTime === true && isSalaried === true && !flatRateValid ) {
         onOpenError()
+        setPendingSuccess(false)
         console.log("2", isOneTime, isSalaried, flatRateValid, minLengthRegEx.test(description) );
 
       } else {
@@ -306,10 +311,12 @@ const [companyName, setCompanyName] = useState(null)
         ) {
           console.log("3");
           onOpenError()
+          setPendingSuccess(false)
         } else {
           if (isOneTime === false && isSalaried === true && !flatRateValid ) {
             console.log("4");
             onOpenError()
+            setPendingSuccess(false)
           } else {
             if (
               (isOneTime === false && isHourly !== null && !upperRateValid) ||
@@ -317,6 +324,7 @@ const [companyName, setCompanyName] = useState(null)
             ) {
               console.log("5");
               onOpenError()
+              setPendingSuccess(false)
             } else {
               checkAddress();
             }
@@ -331,6 +339,7 @@ const [companyName, setCompanyName] = useState(null)
     if (!streetAddress || !locationLat) {
       console.log(streetAddress, locationLat);
       onOpenError()
+      setPendingSuccess(false)
       console.log("6");
     } else {
       // testJobStore()
@@ -513,6 +522,7 @@ isFullTimePosition : isFullTimePosition,
     })
       .then(() => {
         //all good
+        setPendingSuccess(false)
         console.log("data submitted for Maps");
       })
       .catch((error) => {
@@ -556,6 +566,7 @@ isFullTimePosition : isFullTimePosition,
       })
         .then(() => {
           //all good
+          setPendingSuccess(false)
           console.log("data submitted for Maps");
         })
         .catch((error) => {
@@ -602,6 +613,7 @@ isFullTimePosition : isFullTimePosition,
       })
         .then(() => {
           //all good
+          setPendingSuccess(false)
           console.log("data submitted for Maps");
         })
         .catch((error) => {
@@ -917,8 +929,8 @@ isFullTimePosition : isFullTimePosition,
     if (sessionId) {
       setHasRun(false);
       fetch(
-        // `https://fulfil-api.onrender.com/single-post-session-status?session_id=${sessionId}`
-        `https://localhost:80/single-post-session-status?session_id=${sessionId}`
+        `https://fulfil-api.onrender.com/single-post-session-status?session_id=${sessionId}`
+        // `https://localhost:80/single-post-session-status?session_id=${sessionId}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -928,7 +940,7 @@ isFullTimePosition : isFullTimePosition,
             // submitJob() goes here
             setTimeout(() => {
       console.log("we got your payment", companyName, lowerRate)
-      submitJob()
+      // submitJob()
       setLoading(false)
             }, 2000);
           } else {
@@ -986,6 +998,8 @@ isFullTimePosition : isFullTimePosition,
 
 
 // const [editorState, setEditorState] = useState(null)
+
+const [ pendingSuccess, setPendingSuccess] = useState(false)
 
 
 
@@ -1045,7 +1059,7 @@ const handleBenefitsEditorChange = (editorState) => {
                     for="hs-pro-dactmt"
                     class="block mb-2 text-sm font-medium text-gray-800 "
                   >
-                    Post Title
+                    Post Title 
                   </label>
 
                   <input
@@ -1065,7 +1079,7 @@ const handleBenefitsEditorChange = (editorState) => {
                     class="block mb-2 text-sm font-medium text-gray-800 "
                    
                   >
-                    Is this a full-time or part-time position?
+                    Is this a full-time or part-time position? 
                   </label>
 
                   <label  for="dactmi"
@@ -1083,6 +1097,70 @@ const handleBenefitsEditorChange = (editorState) => {
               <option value={true}>Full-time</option>
               <option value={false}>Part-time</option>
             </select>
+                </div>
+                <div class="space-y-2">
+                  <label
+                    for="dactmd"
+                    class="block mb-2 text-sm font-medium text-gray-800 "
+                  >
+                     What's the address? 
+                  </label>
+
+                  <GooglePlacesAutocomplete
+                apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
+                fetchDetails={true}
+                
+                // minLengthAutocomplete={3}
+                autocompletionRequest={{
+                  
+                    types: ["address"],
+                  
+                }}
+                selectProps={{
+                  rawAddress,
+                  styles: {
+                   zIndex: 9999,
+                   option: (provided) => ({
+                    ...provided,
+                   
+                    zIndex: 9999,
+                  }),
+                  singleValue: (provided) => ({
+                    ...provided,
+                    zIndex: 9999,
+                  }),
+                  },
+                  onChange: setRawAddress,
+                  placeholder: "Type address here",
+                 
+                }}
+              />
+
+{user && user.email === "themasterbusiness@gmail.com" ? (   <><p>estimated address ? </p>  <select
+              placeholder="Estimated address?"
+              class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+              onChange={(e) => setIsEstimatedAddress(e.target.value)}
+            >
+              <option>Select option</option>
+              <option value={true}>Yes</option>
+              <option value={false}>No</option>
+            </select></>) : (null)}
+
+{/* <label
+                    for="dactmi"
+                    class="block mb-2 text-sm font-medium text-gray-800 "
+                  >
+                   Text editor test
+                  </label>
+                  <JobDescriptionInput 
+                   ref={quillRef}
+                  
+                   defaultValue={new Delta()
+                    }
+                 
+              
+                   /> */}
+               
                 </div>
                 <div class="space-y-2">
                   <label
@@ -1195,59 +1273,8 @@ const handleBenefitsEditorChange = (editorState) => {
    </div>
 </div>) : (null)}
 
-<div class="space-y-2">
-                  <label
-                    for="dactmd"
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                  >
-                     What is the address?
-                  </label>
 
-                  <GooglePlacesAutocomplete
-                apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
-                fetchDetails={true}
-                // minLengthAutocomplete={3}
-                autocompletionRequest={{
-                  
-                    types: ["address"],
-                  
-                }}
-                selectProps={{
-                  rawAddress,
-
-                  onChange: setRawAddress,
-                  placeholder: "Type address here",
-                 
-                }}
-              />
-
-{user && user.email === "themasterbusiness@gmail.com" ? (   <><p>estimated address ? </p>  <select
-              placeholder="Estimated address?"
-              class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-              onChange={(e) => setIsEstimatedAddress(e.target.value)}
-            >
-              <option>Select option</option>
-              <option value={true}>Yes</option>
-              <option value={false}>No</option>
-            </select></>) : (null)}
-
-{/* <label
-                    for="dactmi"
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                  >
-                   Text editor test
-                  </label>
-                  <JobDescriptionInput 
-                   ref={quillRef}
-                  
-                   defaultValue={new Delta()
-                    }
-                 
-              
-                   /> */}
-               
-                </div>
-                <div class="space-y-2">
+                <div class="space-y-2 z-0">
                   <label
                     for="dactmi"
                     class="block mb-2 text-sm font-medium text-gray-800 "
@@ -1325,17 +1352,31 @@ const handleBenefitsEditorChange = (editorState) => {
 
               <div class="p-4 flex justify-between gap-x-2">
                 <div class="w-full flex justify-end items-center gap-x-2">
-                  
+                  { pendingSuccess ? (
+                     <button
+                     type="button"
+                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                     data-hs-overlay="#hs-pro-datm"
+           
+                     // onClick={() => testJobStore()}
+                   >
+<div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full " role="status" aria-label="loading">
+  <span class="sr-only">Loading...</span>
+</div>
+                   </button>
+                  ) : (
+                     <button
+                     type="button"
+                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                     data-hs-overlay="#hs-pro-datm"
+                     onClick={() => checkLength()}
+                     // onClick={() => testJobStore()}
+                   >
+                     Post Job 
+                   </button>
+                  ) }
 
-                  <button
-                    type="button"
-                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                    data-hs-overlay="#hs-pro-datm"
-                    onClick={() => checkLength()}
-                    // onClick={() => testJobStore()}
-                  >
-                    Post Job 
-                  </button>
+                 
                 </div>
               </div>
             </div>

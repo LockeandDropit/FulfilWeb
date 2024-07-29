@@ -613,21 +613,21 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
   }
 
     
-  if (isLoading === true) {
-    return (
-      <>
-        <Center>
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-          />
-        </Center>
-      </>
-    );
-  }
+  // if (isLoading === true) {
+  //   return (
+  //     <>
+  //       <Center>
+  //         <Spinner
+  //           thickness="4px"
+  //           speed="0.65s"
+  //           emptyColor="gray.200"
+  //           color="blue.500"
+  //           size="xl"
+  //         />
+  //       </Center>
+  //     </>
+  //   );
+  // }
 
   return (
     <>
@@ -647,7 +647,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                 class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => checkIfPremium()}
               >
-                {checkIfPremiumLoading ? (<div class="animate-spin inline-block size-5 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading">
+                {checkIfPremiumLoading === true ? (<div class="animate-spin inline-block size-5 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading">
   <span class="sr-only">Loading...</span>
 </div>) : ( <><svg
                   class="hidden sm:block flex-shrink-0 size-3"

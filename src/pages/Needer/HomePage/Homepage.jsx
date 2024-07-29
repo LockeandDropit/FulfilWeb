@@ -528,8 +528,11 @@ isFullTimePosition : jobHeld.isFullTimePosition,
     const sessionId = urlParams.get("session_id");
 
     console.log("new update outer")
+
+    console.log("test")
     if (sessionId && user !== null && currentUser !== null ) {
-      if (currentUser.isPremium === false) {
+      console.log("test 2")
+      if (!currentUser.isPremium) {
       console.log("new update inner")
       setHasRun(false);
       fetch(

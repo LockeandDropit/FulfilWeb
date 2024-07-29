@@ -447,8 +447,6 @@ isFullTimePosition : isFullTimePosition,
       upperRate: upperRate,
       isVolunteer: isVolunteer,
       isOneTime: isOneTime,
-      isSalaried: isSalaried,
-
       flatRate: flatRate,
       isHourly: isHourly,
       lowerCaseJobTitle: lowerCaseJobTitle,
@@ -474,6 +472,7 @@ isFullTimePosition : isFullTimePosition,
       })
       .catch((error) => {
         // no bueno
+        onOpenError()
         console.log(error);
       });
   };
@@ -527,6 +526,7 @@ isFullTimePosition : isFullTimePosition,
       })
       .catch((error) => {
         // no bueno
+        onOpenError()
         console.log(error);
       });
 
@@ -571,6 +571,7 @@ isFullTimePosition : isFullTimePosition,
         })
         .catch((error) => {
           // no bueno
+          onOpenError()
           console.log(error);
         });
     } else {
@@ -618,6 +619,7 @@ isFullTimePosition : isFullTimePosition,
         })
         .catch((error) => {
           // no bueno
+          onOpenError()
           console.log(error);
         });
       //adds to paid only db for map
@@ -671,6 +673,7 @@ isFullTimePosition : isFullTimePosition,
       })
       .catch((error) => {
         // no bueno
+        onOpenError()
         console.log(error);
       });
 
@@ -722,6 +725,7 @@ isFullTimePosition : isFullTimePosition,
       })
       .catch((error) => {
         // no bueno
+        onOpenError()
         console.log(error);
       });
 
@@ -1421,6 +1425,8 @@ const handleBenefitsEditorChange = (editorState) => {
           <ModalCloseButton />
           <ModalBody>
             <p>Please fill out all required fields.</p>
+
+            <p className="mt-2">If this problem persists, please contact us at tyler@getfulfil.com</p>
           </ModalBody>
 
           <ModalFooter>

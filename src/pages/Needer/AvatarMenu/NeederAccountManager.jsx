@@ -205,7 +205,7 @@ const NeederAccountManager = () => {
 
   //link to account management billing.stripe.com/p/login/dR6eX2bAJ2qzaIM000
   const manageSubscription = () => {
-    window.open("billing.stripe.com/p/login/dR6eX2bAJ2qzaIM000", "_blank");
+    window.open("https://billing.stripe.com/p/login/dR6eX2bAJ2qzaIM000", "_blank");
   }
 
 

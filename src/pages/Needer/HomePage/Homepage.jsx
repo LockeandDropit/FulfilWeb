@@ -605,6 +605,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
 
   const handleOpenFirstJobBusiness = () => {
     console.log("This is updated", )
+    setCheckIfPremiumLoading(false)
     onClose()
     setShowAddJobBusiness(!showAddJobBusiness)
   }

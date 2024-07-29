@@ -939,7 +939,7 @@ isFullTimePosition : isFullTimePosition,
         .then((res) => res.json())
         .then((data) => {
           if (data.status === "complete") {
-            setIsLoading(true);
+            // setIsLoading(true);
             // getJobDataAgain(data);
             // submitJob() goes here
             setTimeout(() => {

@@ -681,7 +681,7 @@ const handleShowMobileAddJob = () => {
               data-hs-accordion-always-open
             >
               <ul>
-                <li class="px-5 mb-1.5">
+                <li class="px-5 mb-1.5 mt-5">
                   <button
                     class="flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
                     onClick={() => navigate("/Homepage")}
@@ -789,13 +789,13 @@ const handleShowMobileAddJob = () => {
                 </button>
              
 
-                <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
+                {/* <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
                   <span class="block text-xs uppercase text-gray-500">
                     Actions
                   </span>
-                </li>
+                </li> */}
 
-                <li class="px-5 mb-0.5">
+                {/* <li class="px-5 mb-0.5">
                   <button
                     class="flex items-center gap-x-2 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                     onClick={() => navigate(`/NeederAllCategories`)}
@@ -820,8 +820,8 @@ const handleShowMobileAddJob = () => {
                     </span>
                     Find A Pro
                   </button>
-                </li>
-                <li class="px-8 mb-0.5 mt-10">
+                </li> */}
+                {/* <li class="px-8 mb-0.5 mt-10">
                   <button
                     type="button"
                     class="py-2 w-3/4 px-3 inline-flex text-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
@@ -844,7 +844,7 @@ const handleShowMobileAddJob = () => {
                     Create A Job
                   </button>
                  
-                </li>
+                </li> */}
 
                 
               

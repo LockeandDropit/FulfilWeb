@@ -77,6 +77,7 @@ const LoggedOutHeader = (props) => {
   }
 
   const logIn = () => {
+    setIsLoading(true)
     console.log("logging in")
     const auth = getAuth();
     console.log("logging in")
@@ -119,12 +120,14 @@ const LoggedOutHeader = (props) => {
               )
             )
             .catch();
+            setIsLoading(false)
         })
         .catch((error) => {
           // Handle Errors here.
           const errorCode = error.code;
           const errorMessage = error.message;
           setPasswordValidationMessage("Oops! Wrong email or password");
+          setIsLoading(false)
         });
     });
 
@@ -211,7 +214,10 @@ const LoggedOutHeader = (props) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [emailValidationBegun, setEmailValidationBegun] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const modalValidate = () => {
+ 
     setEmailValidationBegun(true);
     const isValid = emailRegex.test(email);
     if (!isValid) {
@@ -530,13 +536,25 @@ const LoggedOutHeader = (props) => {
                       </div>
                     </div>
 
-                    <input type="button"
-                     onClick={() => modalValidate()}
-                     value="Sign In"
+              {isLoading ? (  <button
+                     
+                     
                       className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
                     >
-                   
-                    </input>
+                   <div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full " role="status" aria-label="loading">
+  <span class="sr-only">Loading...</span>
+</div>
+                    </button>) : (
+                  <input type="button"
+                  onClick={() => modalValidate()}
+                  value="Sign In"
+                   className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                 >
+                
+                 </input>
+              )}
+
+                 
                     <p class="mt-2 text-sm text-gray-600">
                   Don't have an account yet?
                   <button

@@ -809,7 +809,7 @@ const Dashboard = () => {
               data-hs-accordion-always-open
             >
               <ul>
-                <li class="px-5 mb-1.5">
+                <li class="px-5 mb-1.5 mt-6">
                   <button
                     class="flex w-full gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
                     onClick={() => navigate("/Homepage")}
@@ -945,7 +945,7 @@ const Dashboard = () => {
 
                
 
-                <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
+                {/* <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
                   <span class="block text-xs uppercase text-gray-500">
                     Actions
                   </span>
@@ -976,7 +976,7 @@ const Dashboard = () => {
                     </span>
                     Find A Pro
                   </button>
-                </li>
+                </li> */}
                 {/* <li class="px-8 mb-0.5 mt-10">
                   <button
                     type="button"

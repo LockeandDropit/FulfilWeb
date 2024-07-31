@@ -248,14 +248,14 @@ const BusinessEmailRegister = () => {
     <div class=" bg-white  mt-4 rounded-xl shadow-sm ">
       <div class="p-4 sm:p-7">
         <div class="text-center">
-          <h1 class="block text-3xl font-bold text-gray-800">
-            Get positions filled with <span className="text-sky-400">quality</span>
+          <h1 class="block text-5xl font-bold text-gray-800">
+            Start hiring <span className="text-sky-400">today</span>
            
           </h1>
-          <h1 class="block text-3xl font-bold text-gray-800">
+          {/* <h1 class="block text-3xl font-bold text-gray-800">
             applicants
            
-          </h1>
+          </h1> */}
           <p class="mt-2 text-sm text-gray-600">
             Already have an account?
             <button

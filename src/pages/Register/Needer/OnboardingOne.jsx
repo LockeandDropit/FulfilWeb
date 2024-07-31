@@ -47,6 +47,7 @@ import Plausible from 'plausible-tracker'
 import LoggedOutHeader from "../../../components/Landing/LoggedOutHeader.jsx";
 import posthog from "posthog-js"
 import { useMediaQuery } from "@chakra-ui/react";
+import LoggedOutHeaderNoGap from "../../../components/Landing/LoggedOutHeaderNoGap.jsx";
 
 const OnboardingOne = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -275,194 +276,116 @@ const OnboardingOne = () => {
     <>
       {/* <Header props={openModal} /> */}
       <LoggedOutHeader props={openModal} />
+     
 
-<div class="max-w-[85rem] mt-10 mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-<div class="grow px-5">
-        <div class="h-full sm:w-[480px] flex flex-col justify-center mx-auto space-y-5">
+
+<div class="bg-white">
+
+  <div class="max-w-5xl px-4 xl:px-0   lg:pb-20 mx-auto">
  
-          <div>
-            <h1 class="text-xl sm:text-2xl font-semibold text-gray-800 text-center">
-              Tell us about yourself!
-            </h1>
-            <p class="mt-1 text-sm text-gray-500 text-center ">
-              We'll make sure you get the perfect set up to meet your needs
+    <div class="max-w-3xl mb-10 lg:mb-14">
+      <h2 class=" font-semibold text-2xl md:text-4xl md:leading-tight">Hiring made simple.</h2>
+      <p class="mt-1 text-neutral-400 text-sm md:text-lg">Hiring shouldn't be difficult when there are so many people looking for work. And it shouldn't cost six figures to hire an agency to do it. That's where Fulfil shines; we make hiring job seekers in the trades and blue collar industries easy and managable, without breaking the bank.</p>
+    </div>
+
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-center">
+      <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
+        <img class="w-full object-cover rounded-xl" src="https://images.unsplash.com/photo-1587614203976-365c74645e83?q=80&w=480&h=600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Features Image" />
+      </div>
+
+      <div>
+
+        <div class="mb-4">
+          <h3 class="text-sky-400 md:text-lg font-semibold ">
+            Features
+          </h3>
+        </div>
+ 
+        <div class="flex gap-x-5 ms-1">
+   
+          <div class="relative last:after:hidden after:absolute after:top-8 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-neutral-800">
+            <div class="relative z-10 size-8 flex justify-center items-center">
+              <span class="flex shrink-0 justify-center items-center size-8 border border-neutral-800 text-sky-400 text-small font-bold uppercase rounded-full">
+                1
+              </span>
+            </div>
+          </div>
+     
+          <div class="grow pt-0.5 pb-8 sm:pb-12">
+            <p class="text-sm md:text-lg text-neutral-400">
+              <span class="text-sky-400 mr-1 font-semibold">List multiple open positions:</span>
+              all for one flat monthly rate.
             </p>
           </div>
        
-          <form>
-            <div class="grid grid-cols-1 gap-3">
-              <label for="hs-pro-gpromf" class="relative py-3 px-4 flex border border-transparent rounded-xl cursor-pointer focus:outline-none">
-                <input  onChange={(e) => setIsBusiness(e.target.checked)} type="radio" id="hs-pro-gpromf" class="peer absolute top-0 start-0 size-full bg-transparent border border-gray-200 rounded-xl cursor-pointer appearance-none focus:ring-white checked:border-2 checked:border-sky-500 checked:hover:border-sky-500 checked:focus:border-sky-500 checked:bg-none checked:text-transparent disabled:opacity-50 disabled:pointer-events-none 
-                before:absolute before:top-3.5 before:end-3.5 before:border before:border-gray-200 before:size-5 before:rounded-full " value="Free" name="hs-pro-gpromn"  />
-                <span class="peer-checked:flex hidden absolute top-4 end-4">
-                  <span class="block size-5 flex justify-center items-center rounded-full bg-sky-400">
-                    <svg class="flex-shrink-0 size-3 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                  </span>
-                </span>
-                <span class="w-full">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6  mb-4 sm:mb-8">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
-</svg>
-
-                  
-                  <span class="block font-semibold text-gray-800 ">
-                    Business
-                  </span>
-                  <span class="block text-sm text-gray-500 ">
-                    I am a company looking to hire someone for a full-time or a part-time role
-                  </span>
-                </span>
-              </label>
-          
-              {/* <label for="hs-pro-gproms" class="relative py-3 px-4 flex border border-transparent rounded-xl cursor-pointer focus:outline-none">
-                <input  onChange={(e) => setIsIndividual(e.target.checked)} type="radio" id="hs-pro-gproms" class="peer absolute top-0 start-0 size-full bg-transparent border border-gray-200 rounded-xl cursor-pointer appearance-none focus:ring-white checked:border-2 checked:border-sky-500 checked:hover:border-sky-500 checked:focus:border-sky-500 checked:bg-none checked:text-transparent disabled:opacity-50 disabled:pointer-events-none 
-
-                before:absolute before:top-3.5 before:end-3.5 before:border before:border-gray-200 before:size-5 before:rounded-full " value="Startup" name="hs-pro-gpromn" />
-                <span class="peer-checked:flex hidden absolute top-4 end-4">
-                  <span class="block size-5 flex justify-center items-center rounded-full bg-sky-400">
-                    <svg class="flex-shrink-0 size-3 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                  </span>
-                </span>
-                <span class="w-full">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 mb-4 sm:mb-8">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-</svg>
-
-                  <span class="block font-semibold text-gray-800 ">
-                    Individual
-                  </span>
-                  <span class="block text-sm text-gray-500 ">
-                    I'm an individual who needs a general task completed (i.e. landscaping, general repairs)
-                  </span>
-                </span>
-              </label> */}
-            
-              
-          
-            
+        </div>
+   
+        <div class="flex gap-x-5 ms-1">
+       
+          <div class="relative last:after:hidden after:absolute after:top-8 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-neutral-800">
+            <div class="relative z-10 size-8 flex justify-center items-center">
+              <span class="flex shrink-0 justify-center items-center size-8 border border-neutral-800 text-sky-400 text-small font-bold uppercase rounded-full">
+                2
+              </span>
             </div>
+          </div>
+  
+          <div class="grow pt-0.5 pb-8 sm:pb-12">
+            <p class="text-sm md:text-lg text-neutral-400">
+              <span class="text-sky-400 mr-1 font-semibold">Reach a primed pool of applicants:</span>
+              We cater specifically to the trades and blue collar work, so you know your positions are being viewed by your intended audience
+            </p>
+          </div>
+   
+        </div>
 
-            <button onClick={() => handleNextStep()} type="button" class="mt-4 sm:mt-6 py-2.5 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none ">
-              Continue
-            </button>
-            {errorTextVisible ? ( <span class="text-center block text-md text-red-500 ">
-                    You must select an option before continuing
-                  </span>) : (null)}
-         
-          </form>
+        <div class="flex gap-x-5 ms-1">
+    
+          <div class="relative last:after:hidden after:absolute after:top-8 after:bottom-0 after:start-4 after:w-px after:-translate-x-[0.5px] after:bg-neutral-800">
+            <div class="relative z-10 size-8 flex justify-center items-center">
+              <span class="flex shrink-0 justify-center items-center size-8 border border-neutral-800 text-sky-400  text-small font-bold uppercase rounded-full">
+                3
+              </span>
+            </div>
+          </div>
+       
+          <div class="grow pt-0.5 pb-8 sm:pb-12">
+            <p class="text-sm md:text-lg text-neutral-400">
+              <span class="text-sky-400 mr-1 font-semibold">Post open positions at multiple locations:</span>
+               Our enterprise plan allows you to post multiple open positions at various locations.
+            </p>
+          </div>
         
         </div>
-      </div>
-  
- 
-{/* 
-    {isDesktop ? ( <div class="w-full rounded-lg ml-6">
-  
-
-    <NeederRegisterMapScreen props={closeInfoWindow} />
-         
+   
       
-    </div>) : (null)} */}
-  
- 
-</div>
-
-{/* {isDesktop ? ( null) : (<div class="w-full rounded-lg mt-10">
    
 
-<NeederRegisterMapScreen props={closeInfoWindow} />
-         
-      
-    </div>)} */}
-
-      {/* <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
-        <Flex p={8} flex={1} align={"center"} justify={"center"}>
-          <Stack spacing={4} w={"full"} maxW={"md"}>
-            <Center flexDirection="column">
-              <Heading fontSize={"3xl"}>Join Fulfil</Heading>
-           
-            </Center>
-            <Center>
-              <Text fontSize={{ base: "md", lg: "lg" }} color={"gray.500"}>
-                Get access to contractors by posting the work you need done.
-                Browse through contractors to find the right fit.
-              </Text>
-            </Center>
-            <FormControl>
-              <FormLabel>Email</FormLabel>
-              <Input
-                borderColor="grey"
-                borderWidth=".25px"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onFocus={() => handleFocus()}
-              />
-              {emailValidationBegun === true ? (
-                <Text color="red">{validationMessage}</Text>
-              ) : null}
-            </FormControl>
-            <FormControl marginTop="4px">
-              <FormLabel>Password</FormLabel>
-
-              <InputGroup>
-                <Input
-                  borderColor="grey"
-                  borderWidth=".5px"
-                  type={visibleToggle}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => handleFocus()}
-                />
-                <InputRightElement>
-                  <ViewIcon onClick={() => handlePasswordVisible()} />
-                </InputRightElement>
-              </InputGroup>
-              {passwordValidationBegun === true ? (
-                <Text color="red">{passwordValidationMessage}</Text>
-              ) : null}
-            </FormControl>
-            <Stack spacing={3}>
-              <Stack
-                direction={{ base: "column", sm: "row" }}
-                align={"start"}
-                justify={"space-between"}
-              ></Stack>
-              <Button
-                bg="#01A2E8"
-                color={"white"}
-                _hover={{
-                  bg: "blue.500",
-                }}
-                onClick={() => validate()}
+        <button onClick={() =>  navigate("/BusinessEmailRegister")} className="mt-4 py-2 px-4 inline-flex items-center gap-x-2 text-lg font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none">
+          Let's start hiring
+          <svg
+                class="flex-shrink-0 size-5 mt-0.5"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
-                Sign up
-              </Button>
-              <Button
-                w={"full"}
-                variant={"outline"}
-                leftIcon={<FcGoogle />}
-                onClick={() => handleGoogleSignUp()}
-              >
-                <Center>
-                  <Text>Sign up with Google</Text>
-                </Center>
-              </Button>
-              <Button backgroundColor="white" onClick={() => handleOpenModal()}>
-                Already have an account?&nbsp;<Text>Log In</Text>
-              </Button>
-             
-            </Stack>
-          </Stack>
-        </Flex>
-        <Flex flex={1}>
-          <Box w={{base: "70vw", lg: "60vw"}} h={{base: "50vh", lg: "70vh"}} padding="2" alignContent="center">
-            <Box w={{base: "70vw" , lg: "60vw"}} h={{base: "50vh", lg: "70vh"}}>
-              <NeederRegisterMapScreen props={closeInfoWindow} />
-            </Box>
-          </Box>
-        </Flex>
-      </Stack> */}
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+        </button>
+      </div>
+  
+    </div>
+
+  </div>
+</div>
+
     </>
   );
 };

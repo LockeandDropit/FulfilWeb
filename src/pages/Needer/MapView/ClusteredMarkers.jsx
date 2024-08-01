@@ -4,7 +4,7 @@ import { Marker, MarkerClusterer } from "@googlemaps/markerclusterer";
 
 import { SingleMarker } from "./SingleMarker.jsx"
 import { auth, db } from "../../../firebaseConfig.js";
-
+import { useJobStore } from "../HomePage/lib/jobsStoreDashboard.js"
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { Input, Button, Text, Box, Container, Image } from "@chakra-ui/react";
@@ -18,6 +18,7 @@ import {
   query,
   collection,
   onSnapshot,
+  updateDoc
 } from "firebase/firestore";
 
 import {
@@ -89,6 +90,7 @@ import {
   WorkplaceShareButton,
 } from "react-share";
 
+
 import {
   onAuthStateChanged,
   setPersistence,
@@ -129,11 +131,12 @@ export const ClusteredMarkers = ({ trees }) => {
 
   // create the markerClusterer once the map is available and update it when
   // the markers are changed
+  var options = { zoomOnClick: false, };
   const map = useMap();
   const clusterer = useMemo(() => {
     if (!map) return null;
 
-    return new MarkerClusterer({ map });
+    return new MarkerClusterer({map,  options});
   }, [map]);
 
   useEffect(() => {
@@ -520,6 +523,33 @@ export const ClusteredMarkers = ({ trees }) => {
         }
   }, [openInfoWindowMarkerID])
 
+  const { fetchJobInfo, setJobHiringState } = useJobStore();
+
+  const handleStoreAndNavigatePosted = (x) => {
+    console.log(x.jobTitle, x.jobID);
+
+    fetchJobInfo(currentUser.uid, x.jobID, "Posted Jobs", x.jobTitle);
+    if (x.hasNewApplicant === true) {
+      updateDoc(doc(db, "employers", currentUser.uid, "Posted Jobs", x.jobTitle), {
+        hasNewApplicant: false,
+      })
+        .then(() => {
+          //user info submitted to Job applicant file
+        })
+        .catch((error) => {
+          //uh oh
+          console.log(error);
+        });
+    }
+    setTimeout(() => navigate("/JobDetails"), 500);
+  };
+
+
+
+  // what I can do... is I can
+  // remove all positions that have repeated lat/lngs (matching positions) and put them in a seperate array.
+  //The clustering will then take care of everything until a certain zoom level, but when they are all grouped together they wont unbundle because they've always been bundled...
+
 
 
   //almost all code regarding implementing clustering in this library is from https://github.com/visgl/react-google-maps/tree/main/examples/marker-clustering
@@ -542,70 +572,32 @@ export const ClusteredMarkers = ({ trees }) => {
                   <DrawerCloseButton />
                   <DrawerHeader>Jobs at this location</DrawerHeader>
                   <DrawerBody>
-                  <div class="p-5 space-y-4 flex flex-col bg-white border border-gray-200 shadow-sm rounded-xl ">
-            <nav
-              class="relative  flex space-x-1 after:absolute after:bottom-0 after:inset-x-0 after:border-b-2 after:border-gray-200 "
-              aria-label="Tabs"
-              role="tablist"
-            >
-              <button
-                type="button"
-                class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2  hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-sm rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none  active"
-                id="hs-pro-tabs-dut-item-all"
-                data-hs-tab="#hs-pro-tabs-dut-all"
-                aria-controls="hs-pro-tabs-dut-all"
-                role="tab"
-              >
-                Active Posts
-              </button>
-              <button
-                type="button"
-                class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2  hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-sm rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none  "
-                id="hs-pro-tabs-dut-item-validaccounts"
-                data-hs-tab="#hs-pro-tabs-dut-validaccounts"
-                aria-controls="hs-pro-tabs-dut-validaccounts"
-                role="tab"
-                onClick={() => console.log("modal no jobs completed yet!")}
-              >
-                Past Posts
-              </button>
-            </nav>
+                  <div class="p-2 space-y-4 flex flex-col bg-white  shadow-sm rounded-xl ">
+          
 
-            <div class="grid md:grid-cols-2 gap-y-2 md:gap-y-0 md:gap-x-5">
-              <div>
-                <div class="relative">
-                  <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
-                    <svg
-                      class="flex-shrink-0 size-4 text-gray-500 "
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <circle cx="11" cy="11" r="8" />
-                      <path d="m21 21-4.3-4.3" />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    class="py-[7px] px-3 ps-10 block w-full bg-gray-100 border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                    placeholder="Search projects"
+       <div className="ml-auto flex flex-col mb-2"><p>Add another job at this location?</p>
+       <a
+                class="mt-1 ml-auto w-3/4 cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                // onClick={() => setShowAddJob(!showAddJob)}
+              >
+                <svg
+                  class="hidden sm:block flex-shrink-0 size-3"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
                   />
-                </div>
-              </div>
-
-              <div class="flex justify-end items-center gap-x-2">
+                </svg>
+                Create Job Listing
+              </a>
+       </div>
             
-
-              
-              </div>
-            </div>
-
             <div>
               <div
                 id="hs-pro-tabs-dut-all"
@@ -617,38 +609,27 @@ export const ClusteredMarkers = ({ trees }) => {
                     <table class="min-w-full divide-y divide-gray-200 ">
                       <thead>
                         <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
-                          <th scope="col" class="px-3 py-2.5 text-start"></th>
+                         
 
                           <th scope="col" class="min-w-[250px]">
                             <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
                               <button
                                 id="hs-pro-dutnms"
                                 type="button"
-                                class="px-4 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                                class=" font-bold text-md px-4 py-2.5 text-start w-full flex items-center gap-x-1  text-gray-800 focus:outline-none focus:bg-gray-100 "
                               >
                                 Post Title
                               </button>
                             </div>
                           </th>
-                          <th scope="col" class="min-w-24">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-default">
-                           <button
-                                id="hs-pro-dutads"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 cursor-default"
-                              >
-                                Views
-                              </button>
-                             
-                            </div>
-                          </th>
+                        
 
                           <th scope="col" class="min-w-24">
                             <div class="hs-dropdown relative inline-flex w-full cursor-default">
                               <button
                                 id="hs-pro-dutads"
                                 type="button"
-                                class="px-3 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                                class="px-3 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
                               >
                                 Applicants
                               </button>
@@ -660,7 +641,7 @@ export const ClusteredMarkers = ({ trees }) => {
                               <button
                                 id="hs-pro-dutsgs"
                                 type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
                               >
                                 Status
                               </button>
@@ -672,7 +653,7 @@ export const ClusteredMarkers = ({ trees }) => {
                               <button
                                 id="hs-pro-dutems"
                                 type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100"
+                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100"
                               >
                                 Date Posted
                               </button>
@@ -684,9 +665,9 @@ export const ClusteredMarkers = ({ trees }) => {
                               <button
                                 id="hs-pro-dutphs"
                                 type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
                               >
-                                Next Step
+                            Actions
                               </button>
                             </div>
                           </th>
@@ -701,7 +682,7 @@ export const ClusteredMarkers = ({ trees }) => {
                         
                         <tbody class="divide-y divide-gray-200 ">
                           <tr class="divide-x divide-gray-200 ">
-                            <td class="size-px whitespace-nowrap px-3 py-4"></td>
+                          
                             <td
                               class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
                             //   onClick={() => handleStoreAndNavigatePosted(job)}
@@ -715,11 +696,7 @@ export const ClusteredMarkers = ({ trees }) => {
                               </div>
                             </td>
                          
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="text-sm text-gray-600 ">
-                              {job.totalViews ? (<p>{job.totalViews}</p>) : (<p>0</p>)}
-                              </span>
-                            </td>
+                           
                             
                             <td class="size-px whitespace-nowrap px-4 py-1">
                               {job.totalApplicants ? (
@@ -731,9 +708,9 @@ export const ClusteredMarkers = ({ trees }) => {
                               )}
                             </td>
                             <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                              <span class="py-2 ps-2 pe-3 inline-flex items-center gap-x-1 text-sm font-medium bg-green-100 text-green-800 rounded-full">
                                 <svg
-                                  class="flex-shrink-0 size-3.5"
+                                  class="flex-shrink-0 size-4 mt-1"
                                   xmlns="http://www.w3.org/2000/svg"
                                   width="24"
                                   height="24"
@@ -746,7 +723,7 @@ export const ClusteredMarkers = ({ trees }) => {
                                 >
                                   <polyline points="20 6 9 17 4 12" />
                                 </svg>
-                                Posted
+                                Active
                               </span>
                             </td>
                             <td class="size-px whitespace-nowrap px-4 py-1">
@@ -758,24 +735,24 @@ export const ClusteredMarkers = ({ trees }) => {
                               <div className=" flex  w-full ">
                                 {job.hasNewApplicant || job.hasUnreadMessage ? (
                                   <button
-                                    // onClick={() =>
-                                    //   handleStoreAndNavigatePosted(job)
-                                    // }
+                                    onClick={() =>
+                                      handleStoreAndNavigatePosted(job)
+                                    }
                                     className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
                                   >
-                                    View applicants
+                                    View 
                                     <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
                                       {job.totalApplicants}
                                     </span>
                                   </button>
                                 ) : (
                                   <button
-                                    // onClick={() =>
-                                    //   handleStoreAndNavigatePosted(job)
-                                    // }
+                                    onClick={() =>
+                                      handleStoreAndNavigatePosted(job)
+                                    }
                                     className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
                                   >
-                                    View applicants
+                                    View 
                                   </button>
                                 )}
                               </div>

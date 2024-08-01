@@ -92,7 +92,7 @@ const NeederMapView = () => {
         {process.env.REACT_APP_GOOGLE_API_KEY ? (
           <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
             <Box
-              h={{ base: "100vh", lg: "94vh" }}
+              h={{ base: "100vh", lg: "96vh" }}
               w={{ base: "100vw", lg: "100vw" }}
               mt={10}
             >
@@ -111,7 +111,7 @@ const NeederMapView = () => {
               >
                 {filteredTrees && <ClusteredMarkers trees={filteredTrees} />}</Map> </Box> </APIProvider>
               ) : (<p>nah</p>) }
-              <p>hello</p>
+            
     </>
   )
 }

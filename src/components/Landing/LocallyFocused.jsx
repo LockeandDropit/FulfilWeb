@@ -19,7 +19,7 @@ const LocallyFocused = () => {
                 up front.
               </h2>
               <p class="text-gray-800 font-semibold ">
-              Know where you're working before applying. Use our map to see exactly where the job is listed.
+              Know where you're working before applying. Use our map to see exactly where the job is listed and identify opprotunities close to you, fast.
               </p>
             </div>
          

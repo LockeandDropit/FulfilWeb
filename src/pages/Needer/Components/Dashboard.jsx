@@ -833,7 +833,7 @@ const Dashboard = () => {
                   </button>
                 </li>
 
-                {/* <li class="px-5 mb-1.5">
+                <li class="px-5 mb-1.5">
                   <button
                     class="flex w-full gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
                     onClick={() => navigate("/NeederMapView")}
@@ -855,7 +855,7 @@ const Dashboard = () => {
                     </svg>
                     Map View
                   </button>
-                </li> */}
+                </li>
 
 
     {unseenMessages > 0 ? (   <button

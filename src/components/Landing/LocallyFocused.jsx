@@ -13,13 +13,13 @@ const LocallyFocused = () => {
         
             <div class="space-y-2 md:space-y-4">
               <h2 class="font-bold text-3xl lg:text-4xl text-gray-800">
-                No Recruiters.
+                All the information you need
               </h2>
               <h2 class="font-bold text-3xl lg:text-4xl text-gray-800">
-                No staffing agencies.
+                up front.
               </h2>
               <p class="text-gray-800 font-semibold ">
-               We don't let third-parties post jobs on our websites. That means we're linking you directly with a company that's hiring. Or it's a job we think is a good opprotunity.
+              Know where you're working before applying. Use our map to see exactly where the job is listed.
               </p>
             </div>
          

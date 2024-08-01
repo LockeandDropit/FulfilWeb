@@ -115,7 +115,7 @@ import ChatHolder from "./pages/Needer/Chat/ChatHolder";
 import DoerSavedJobs from "./pages/Doer/DoerSavedJobs";
 import SavedJobDetails from "./pages/Doer/SavedJobDetails";
 import DoerListViewLoggedOut from "./components/DoerListViewLoggedOut"
-
+import NeederMapView from "./pages/Needer/MapView/NeederMapView";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebaseConfig"
@@ -476,6 +476,10 @@ const router = createBrowserRouter([
   {
     path: "/DoerMapLoggedOutClusterTest",
     element: <DoerMapLoggedOutClusterTest/>,
+  },
+  {
+    path: "/NeederMapView",
+    element: <NeederMapView/>,
   },
 ]);
 

@@ -17,6 +17,7 @@ export default function useNeederJobFetch() {
   console.log("from neederjobFetch", currentUser.uid)
   const [isLoading, setIsLoading] = useState(true);
   const [jobs, setJobs] = useState(null);
+  const [groupedJobs, setGroupedJobs] = useState(null);
 
   useEffect(() => {
     try {
@@ -33,7 +34,8 @@ export default function useNeederJobFetch() {
         });
 
         setIsLoading(false);
-        let finalfiltered = [];
+        let groupFiltered = [];
+        let individualFiltered = []
 
         //huge shout out to junaid7898 https://github.com/react-native-maps/react-native-maps/issues/350
         const hash = Object.create(null);
@@ -46,23 +48,28 @@ export default function useNeederJobFetch() {
             // If it has, increment the offset based on the number of occurrences
             const offset = hash[latLng];
             hash[latLng] += 1;
-            finalfiltered.push({
+            groupFiltered.push({
               ...postedJobs,
 
-              locationLat: lat - offset * 0.0001,
-              locationLng: lng - offset * 0.0001,
+             
             });
 
-            console.log("second encounter hash", finalfiltered);
+
           } else {
             // If it hasn't been encountered before, mark it as seen in the hash table with an offset of 1
             hash[latLng] = 1;
-            // Return the original location if it's the first time encountering this combination
+            // // Return the original location if it's the first time encountering this combination
 
-            finalfiltered.push({ ...postedJobs });
+            individualFiltered.push({ ...postedJobs });
           }
         });
+
+     
+    
         setJobs(postedByBusiness);
+        setGroupedJobs(groupFiltered)
+
+        //if individual filtered matched latlng of any grouped filter, remove from individual and add to grouped.
         return processedLocations;
       });
     } catch (error) {
@@ -70,5 +77,5 @@ export default function useNeederJobFetch() {
     }
   }, []);
 
-  return { isLoading, jobs };
+  return { isLoading, jobs, groupedJobs };
 }

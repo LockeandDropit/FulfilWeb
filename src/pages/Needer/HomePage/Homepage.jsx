@@ -710,10 +710,10 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                 data-hs-tab="#hs-pro-tabs-dut-all"
                 aria-controls="hs-pro-tabs-dut-all"
                 role="tab"
-              >
-                Active Posts
+              > 
+             My Listings
               </button>
-              <button
+              {/* <button
                 type="button"
                 class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2  hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-sm rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none  "
                 id="hs-pro-tabs-dut-item-validaccounts"
@@ -723,11 +723,11 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                 onClick={() => console.log("modal no jobs completed yet!")}
               >
                 Past Posts
-              </button>
+              </button> */}
             </nav>
 
             <div class="grid md:grid-cols-2 gap-y-2 md:gap-y-0 md:gap-x-5">
-              <div>
+              {/* <div>
                 <div class="relative">
                   <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
                     <svg
@@ -752,7 +752,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                     placeholder="Search projects"
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div class="flex justify-end items-center gap-x-2">
             
@@ -892,8 +892,8 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                                 <span class="text-sm text-gray-600 ">0</span>
                               )}
                             </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                            {job.isActive ? (<td class="size-px whitespace-nowrap px-4 py-1">
+                              <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-green-100 text-green-800 rounded-full">
                                 <svg
                                   class="flex-shrink-0 size-3.5"
                                   xmlns="http://www.w3.org/2000/svg"
@@ -908,9 +908,28 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                                 >
                                   <polyline points="20 6 9 17 4 12" />
                                 </svg>
-                                Posted
+                                Active
                               </span>
-                            </td>
+                            </td>) : (<td class="size-px whitespace-nowrap px-4 py-1">
+                              <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                                <svg
+                                  class="flex-shrink-0 size-3.5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Inactive
+                              </span>
+                            </td>)}
+                       
                             <td class="size-px whitespace-nowrap px-4 py-1">
                               <span class="text-sm text-gray-600 ">
                                 {job.datePosted}
@@ -1558,7 +1577,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                               <div class="w-full flex items-center gap-x-3">
                                 <div class="grow">
                                   <span class="text-sm font-medium text-gray-800 ">
-                                    {job.jobTitle}
+                                    {job.jobTitle} 
                                   </span>
                                 </div>
                               </div>
@@ -1577,8 +1596,8 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                                 <span class="text-sm text-gray-600 ">0</span>
                               )}
                             </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                            {job.isActive ? (<td class="size-px whitespace-nowrap px-4 py-1">
+                              <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-green-100 text-green-800 rounded-full">
                                 <svg
                                   class="flex-shrink-0 size-3.5"
                                   xmlns="http://www.w3.org/2000/svg"
@@ -1593,9 +1612,28 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                                 >
                                   <polyline points="20 6 9 17 4 12" />
                                 </svg>
-                                Posted
+                                Active
                               </span>
-                            </td>
+                            </td>) : (<td class="size-px whitespace-nowrap px-4 py-1">
+                              <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                                <svg
+                                  class="flex-shrink-0 size-3.5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                Inactive
+                              </span>
+                            </td>)}
+                       
                             <td class="size-px whitespace-nowrap px-4 py-1">
                               <span class="text-sm text-gray-600 ">
                                 {job.datePosted}

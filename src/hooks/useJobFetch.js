@@ -24,7 +24,7 @@ export default function useJobFetch() {
         snapshot.docs.forEach((doc) => {
           if (doc.id === "0a9fb80c-8dc5-4ec0-9316-7335f7fc0058") {
             //ignore this job is for Needer map screen
-          } else if (doc.data().isPostedByBusiness) {
+          } else if (doc.data().isPostedByBusiness && doc.data().isActive === true) {
             postedByBusiness.push({ ...doc.data(), id: doc.id, key: doc.id });
           }
         });

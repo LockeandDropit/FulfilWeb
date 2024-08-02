@@ -26,7 +26,7 @@ const NeederMapView = () => {
     const [isDesktop] = useMediaQuery("(min-width: 500px)");
     const [user, setUser] = useState(null);
     const [hasRun, setHasRun] = useState(false);
-
+    const [sameLocationJobs, setSameLocationJobs] = useState(false)
 
   
   
@@ -37,7 +37,7 @@ const NeederMapView = () => {
 
 
   
-    const { isLoading, jobs} = useNeederJobFetch()
+    const { isLoading, jobs, groupedJobs} = useNeederJobFetch()
   
     useEffect(() => {
 
@@ -45,10 +45,11 @@ const NeederMapView = () => {
           console.log(isLoading);
         } else {
           setTrees(jobs);
-          console.log("jobs from needer map", jobs)
+          setSameLocationJobs(groupedJobs)
+          console.log("jobs from needer map", groupedJobs)
         }
    
-    }, [jobs]);
+    }, [jobs, groupedJobs]);
   
   
     //Christian, this is the function that returns data from the API you built. 
@@ -109,7 +110,7 @@ const NeederMapView = () => {
                 mapId="6cc03a62d60ca935"
                 // onClick={() => setOpenInfoWindowMarkerID(null)}
               >
-                {filteredTrees && <ClusteredMarkers trees={filteredTrees} />}</Map> </Box> </APIProvider>
+                {filteredTrees && <ClusteredMarkers trees={filteredTrees} sameLocationJobs={sameLocationJobs} />}</Map> </Box> </APIProvider>
               ) : (<p>nah</p>) }
             
     </>

@@ -1,10 +1,10 @@
-import { InfoWindow, useMap } from "@vis.gl/react-google-maps";
+import { AdvancedMarker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Marker, MarkerClusterer } from "@googlemaps/markerclusterer";
-
-import { SingleMarker } from "./SingleMarker.jsx"
+import AddJobBusiness from "../Components/AddJobBusiness.jsx";
+import { SingleMarker } from "./SingleMarker.jsx";
 import { auth, db } from "../../../firebaseConfig.js";
-import { useJobStore } from "../HomePage/lib/jobsStoreDashboard.js"
+import { useJobStore } from "../HomePage/lib/jobsStoreDashboard.js";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { Input, Button, Text, Box, Container, Image } from "@chakra-ui/react";
@@ -18,7 +18,7 @@ import {
   query,
   collection,
   onSnapshot,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 
 import {
@@ -90,7 +90,6 @@ import {
   WorkplaceShareButton,
 } from "react-share";
 
-
 import {
   onAuthStateChanged,
   setPersistence,
@@ -113,13 +112,12 @@ import { useUserStore } from "../../../pages/Needer/Chat/lib/userStore.js";
  * The ClusteredTreeMarkers component is responsible for integrating the
  * markers with the markerclusterer.
  */
-export const ClusteredMarkers = ({ trees }) => {
+export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
   //this is where credited code starts
   //almost all code regarding implementing clustering in this library is from https://github.com/visgl/react-google-maps/tree/main/examples/marker-clustering
   const [markers, setMarkers] = useState({});
   const [selectedTreeKey, setSelectedTreeKey] = useState(null);
-  const {fetchUserInfo, currentUser} = useUserStore()
-
+  const { fetchUserInfo, currentUser } = useUserStore();
 
   const selectedTree = useMemo(
     () =>
@@ -131,12 +129,12 @@ export const ClusteredMarkers = ({ trees }) => {
 
   // create the markerClusterer once the map is available and update it when
   // the markers are changed
-  var options = { zoomOnClick: false, };
+  var options = { zoomOnClick: false };
   const map = useMap();
   const clusterer = useMemo(() => {
     if (!map) return null;
 
-    return new MarkerClusterer({map,  options});
+    return new MarkerClusterer({ map, options });
   }, [map]);
 
   useEffect(() => {
@@ -163,9 +161,6 @@ export const ClusteredMarkers = ({ trees }) => {
     });
   }, []);
 
-
-
-  
   //   all imported logic from DoerMapLoggedOut
 
   const navigate = useNavigate();
@@ -180,14 +175,15 @@ export const ClusteredMarkers = ({ trees }) => {
   const { searchResults, searchIsMobile, setSearchIsMobile } =
     useSearchResults();
 
-
-
   //map help https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN
   const [open, setOpen] = useState(false);
 
   //opening one window at a time help from https://github.com/Developer-Nijat/React-Google-Map-Markers/blob/main/src/App.jsx & https://www.youtube.com/watch?v=Uq-0tA0f_X8 & Vadim Gremyachev https://stackoverflow.com/questions/50903246/react-google-maps-multiple-info-windows-opening-up
 
-  const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState({lat: 1, lng: 1});
+  const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState({
+    lat: 1,
+    lng: 1,
+  });
 
   const handleToggleOpen = (x) => {
     console.log(x);
@@ -241,9 +237,16 @@ export const ClusteredMarkers = ({ trees }) => {
 
   const [searchJobCategory, setSearchJobCategory] = useState(null);
 
-
   const handlePostedByBusinessToggleOpen = (x) => {
-    setOpenInfoWindowMarkerID({lat: x.locationLat , lng: x.locationLng});
+    setOpenInfoWindowMarkerID({ lat: x.locationLat, lng: x.locationLng });
+    // updateJobListingViews(x);
+    onOpenDrawer();
+    console.log("from on click", x);
+  };
+
+  const handleGroupLocationToggleOpen = (x) => {
+    console.log("group open toggle", x);
+    setOpenInfoWindowMarkerID({ lat: x.locationLat, lng: x.locationLng });
     // updateJobListingViews(x);
     onOpenDrawer();
     console.log("from on click", x);
@@ -496,32 +499,36 @@ export const ClusteredMarkers = ({ trees }) => {
 
   // }, [])
 
-  const [locationJobs, setLocationJobs] = useState(null)
+  const [locationJobs, setLocationJobs] = useState(null);
 
   useEffect(() => {
     if (openInfoWindowMarkerID) {
-        try {
-            const q = query(collection(db, "employers", currentUser.uid, "Posted Jobs"));
-      
-            onSnapshot(q, (snapshot) => {
-              let results = [];
-              let postedByBusiness = [];
-      
-              snapshot.docs.forEach((doc) => {
-                if (openInfoWindowMarkerID.lat === doc.data().locationLat && openInfoWindowMarkerID.lng === doc.data().locationLng)
-                  postedByBusiness.push({ ...doc.data(), id: doc.id, key: doc.id });
-              });
-      
-            //   setIsLoading(false);
+      try {
+        const q = query(
+          collection(db, "employers", currentUser.uid, "Posted Jobs")
+        );
 
-              setLocationJobs(postedByBusiness);
-       
-            });
-          } catch (error) {
-            console.log(error);
-          }
-        }
-  }, [openInfoWindowMarkerID])
+        onSnapshot(q, (snapshot) => {
+          let results = [];
+          let postedByBusiness = [];
+
+          snapshot.docs.forEach((doc) => {
+            if (
+              openInfoWindowMarkerID.lat === doc.data().locationLat &&
+              openInfoWindowMarkerID.lng === doc.data().locationLng
+            )
+              postedByBusiness.push({ ...doc.data(), id: doc.id, key: doc.id });
+          });
+
+          //   setIsLoading(false);
+
+          setLocationJobs(postedByBusiness);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [openInfoWindowMarkerID]);
 
   const { fetchJobInfo, setJobHiringState } = useJobStore();
 
@@ -530,9 +537,12 @@ export const ClusteredMarkers = ({ trees }) => {
 
     fetchJobInfo(currentUser.uid, x.jobID, "Posted Jobs", x.jobTitle);
     if (x.hasNewApplicant === true) {
-      updateDoc(doc(db, "employers", currentUser.uid, "Posted Jobs", x.jobTitle), {
-        hasNewApplicant: false,
-      })
+      updateDoc(
+        doc(db, "employers", currentUser.uid, "Posted Jobs", x.jobTitle),
+        {
+          hasNewApplicant: false,
+        }
+      )
         .then(() => {
           //user info submitted to Job applicant file
         })
@@ -544,18 +554,358 @@ export const ClusteredMarkers = ({ trees }) => {
     setTimeout(() => navigate("/JobDetails"), 500);
   };
 
+  const [showAddJobBusiness, setShowAddJobBusiness] = useState(false);
+  console.log("In Clustered Markers", sameLocationJobs);
 
+  const [newTrees, setNewTrees] = useState([]);
+
+  //   useEffect(() => {
+  //     if (trees) {
+  //         setNewTrees(trees)
+  //     }
+  //   }, [trees])
+
+  const filterOutSameLocation = () => {
+    //map over and create lat lng object for each grouped lat/lng value
+
+    let newTrees = [];
+    sameLocationJobs.forEach((job) => {
+      let thisLocation = { lat: job.locationLat, lng: job.locationLng };
+      // console.log(thisLocation)
+      trees.forEach((tree) => {
+        let treeLocation = { lat: tree.locationLat, lng: tree.locationLng };
+        // console.log(treeLocation)
+        if (job.locationLat === tree.locationLat) {
+            //credit https://stackoverflow.com/questions/21659888/find-and-remove-objects-in-an-array-based-on-a-key-value-in-javascript
+          trees = trees.filter(function (obj) {
+            return obj.id !== tree.id;
+          });
+        } else {
+          // console.log(thisLocation, treeLocation)
+        }
+        setNewTrees(trees);
+        console.log("new treess", newTrees);
+      });
+    });
+    //with each one check it against all other listed positions in singlePostedJobs.
+    //If it does exist, remove it from the array
+  };
+
+  useEffect(() => {
+    if (trees && sameLocationJobs) {
+      filterOutSameLocation();
+      console.log("1");
+    }
+  }, [sameLocationJobs, trees]);
 
   // what I can do... is I can
   // remove all positions that have repeated lat/lngs (matching positions) and put them in a seperate array.
   //The clustering will then take care of everything until a certain zoom level, but when they are all grouped together they wont unbundle because they've always been bundled...
 
-
+  //what if I did it here and got rid of clustering...
 
   //almost all code regarding implementing clustering in this library is from https://github.com/visgl/react-google-maps/tree/main/examples/marker-clustering
   return (
     <>
-      {trees.map((businessPostedJobs) => (
+      {sameLocationJobs.map((group) => (
+        <>
+        <AdvancedMarker
+          zIndex={800}
+          position={{
+            lat: group.locationLat ? group.locationLat : 44.96797106363888,
+            lng: group.locationLng ? group.locationLng : -93.26177106829272,
+          }}
+          onClick={() => handleGroupLocationToggleOpen(group)}
+        >
+          <button
+            type="button"
+            class=" z-50 py-1 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
+          >
+            Multiple positions
+          </button>
+        </AdvancedMarker>
+        {openInfoWindowMarkerID.lat === group.locationLat ? (
+            <>
+              <Drawer onClose={onCloseDrawer} isOpen={isOpenDrawer} size={"xl"}>
+                <DrawerOverlay />
+                <DrawerContent>
+                  <DrawerCloseButton />
+                  <DrawerHeader>Jobs at this location</DrawerHeader>
+                  <DrawerBody>
+                    <div class="p-2 space-y-4 flex flex-col bg-white  shadow-sm rounded-xl ">
+                      {/* <div className="ml-auto flex flex-col mb-2">
+                        <p>Add another job at this location?</p>
+                        <a
+                          class="mt-1 ml-auto w-3/4 cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          onClick={() =>
+                            setShowAddJobBusiness(!showAddJobBusiness)
+                          }
+                        >
+                          <svg
+                            class="hidden sm:block flex-shrink-0 size-3"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
+                            />
+                          </svg>
+                          Create Job Listing
+                        </a>
+                      </div> */}
+
+                      <div>
+                        <div
+                          id="hs-pro-tabs-dut-all"
+                          role="tabpanel"
+                          aria-labelledby="hs-pro-tabs-dut-item-all"
+                        >
+                          <div class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                            <div class="min-w-full inline-block align-middle">
+                              <table class="min-w-full divide-y divide-gray-200 ">
+                                <thead>
+                                  <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
+                                    <th scope="col" class="min-w-[250px]">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutnms"
+                                          type="button"
+                                          class=" font-bold text-md px-4 py-2.5 text-start w-full flex items-center gap-x-1  text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Post Title
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col" class="min-w-24">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                                        <button
+                                          id="hs-pro-dutads"
+                                          type="button"
+                                          class="px-3 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Applicants
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col" class="min-w-36">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutsgs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Status
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutems"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100"
+                                        >
+                                          Date Posted
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutphs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Actions
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    {/* <th scope="col"></th> */}
+                                  </tr>
+                                </thead>
+
+                                {locationJobs.map((job) => (
+                                  <tbody class="divide-y divide-gray-200 ">
+                                    <tr class="divide-x divide-gray-200 ">
+                                      <td
+                                        class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
+                                        //   onClick={() => handleStoreAndNavigatePosted(job)}
+                                      >
+                                        <div class="w-full flex items-center gap-x-3">
+                                          <div class="grow">
+                                            <span class="text-sm font-medium text-gray-800 ">
+                                              {job.jobTitle}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </td>
+
+                                      <td class="size-px whitespace-nowrap px-4 py-1">
+                                        {job.totalApplicants ? (
+                                          <span class="text-sm text-gray-600 ">
+                                            {job.totalApplicants}
+                                          </span>
+                                        ) : (
+                                          <span class="text-sm text-gray-600 ">
+                                            0
+                                          </span>
+                                        )}
+                                      </td>
+                                      {job.isActive ? (<td class="size-px whitespace-nowrap px-4 py-1">
+                                        <span class="py-2 ps-2 pe-3 inline-flex items-center gap-x-1 text-sm font-medium bg-green-100 text-green-800 rounded-full">
+                                          <svg
+                                            class="flex-shrink-0 size-4 mt-1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                          >
+                                            <polyline points="20 6 9 17 4 12" />
+                                          </svg>
+                                          Active
+                                        </span>
+                                      </td>) : (<td class="size-px whitespace-nowrap px-4 py-1">
+                                        <span class="py-2 ps-2 pe-3 inline-flex items-center gap-x-1 text-sm font-medium bg-gray-100 text-gray-800 rounded-full">
+                                          <svg
+                                            class="flex-shrink-0 size-4 mt-1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                          >
+                                            <polyline points="20 6 9 17 4 12" />
+                                          </svg>
+                                          Inactive
+                                        </span>
+                                      </td>)}
+                       
+                                      <td class="size-px whitespace-nowrap px-4 py-1">
+                                        <span class="text-sm text-gray-600 ">
+                                          {job.datePosted}
+                                        </span>
+                                      </td>
+                                      <td class="size-px py-2 px-3 space-x-2">
+                                        <div className=" flex  w-full ">
+                                          {job.hasNewApplicant ||
+                                          job.hasUnreadMessage ? (
+                                            <button
+                                              onClick={() =>
+                                                handleStoreAndNavigatePosted(
+                                                  job
+                                                )
+                                              }
+                                              className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
+                                            >
+                                              View
+                                              <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                                {job.totalApplicants}
+                                              </span>
+                                            </button>
+                                          ) : (
+                                            <button
+                                              onClick={() =>
+                                                handleStoreAndNavigatePosted(
+                                                  job
+                                                )
+                                              }
+                                              className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                            >
+                                              View
+                                            </button>
+                                          )}
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                ))}
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </DrawerBody>
+                </DrawerContent>
+              </Drawer>
+
+              {showAddJobBusiness ? <AddJobBusiness /> : null}
+
+              <Modal isOpen={isOpenShare} onClose={onCloseShare}>
+                <ModalContent>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <div class="mt-5 bg-white rounded-xl ">
+                      <div class="p-4 sm:p-7 text-center align-center items-center justify-center">
+                        <div class="text-center align-center items-center justify-center mb-5">
+                          <h1 class="block text-2xl font-bold text-gray-800">
+                            Share to
+                          </h1>
+                        </div>
+
+                        <FacebookShareButton
+                          url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`}
+                        >
+                          <FacebookIcon size={32} round={true} />
+                        </FacebookShareButton>
+                        <h1 class="block text-2xl font-bold text-gray-800">
+                          Copy Link:
+                        </h1>
+                        {urlCopied ? (
+                          <span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">
+                            Copied!
+                          </span>
+                        ) : (
+                          <label
+                            onClick={() => handleCopiedURL(businessPostedJobs)}
+                            className=" inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium mt-2 "
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6 ml-1 items-center cursor-pointer"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
+                              />
+                            </svg>
+                          </label>
+                        )}
+                      </div>
+                    </div>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
+            </>
+          ) : null}
+        </>
+      ))}
+
+      {newTrees.map((businessPostedJobs) => (
         <>
           <SingleMarker
             key={businessPostedJobs.key}
@@ -572,208 +922,224 @@ export const ClusteredMarkers = ({ trees }) => {
                   <DrawerCloseButton />
                   <DrawerHeader>Jobs at this location</DrawerHeader>
                   <DrawerBody>
-                  <div class="p-2 space-y-4 flex flex-col bg-white  shadow-sm rounded-xl ">
-          
+                    <div class="p-2 space-y-4 flex flex-col bg-white  shadow-sm rounded-xl ">
+                      <div className="ml-auto flex flex-col mb-2">
+                        <p>Add another job at this location?</p>
+                        <a
+                          class="mt-1 ml-auto w-3/4 cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          onClick={() =>
+                            setShowAddJobBusiness(!showAddJobBusiness)
+                          }
+                        >
+                          <svg
+                            class="hidden sm:block flex-shrink-0 size-3"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
+                            />
+                          </svg>
+                          Create Job Listing
+                        </a>
+                      </div>
 
-       <div className="ml-auto flex flex-col mb-2"><p>Add another job at this location?</p>
-       <a
-                class="mt-1 ml-auto w-3/4 cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                // onClick={() => setShowAddJob(!showAddJob)}
-              >
-                <svg
-                  class="hidden sm:block flex-shrink-0 size-3"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
-                  />
-                </svg>
-                Create Job Listing
-              </a>
-       </div>
-            
-            <div>
-              <div
-                id="hs-pro-tabs-dut-all"
-                role="tabpanel"
-                aria-labelledby="hs-pro-tabs-dut-item-all"
-              >
-                <div class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-                  <div class="min-w-full inline-block align-middle">
-                    <table class="min-w-full divide-y divide-gray-200 ">
-                      <thead>
-                        <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
-                         
+                      <div>
+                        <div
+                          id="hs-pro-tabs-dut-all"
+                          role="tabpanel"
+                          aria-labelledby="hs-pro-tabs-dut-item-all"
+                        >
+                          <div class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                            <div class="min-w-full inline-block align-middle">
+                              <table class="min-w-full divide-y divide-gray-200 ">
+                                <thead>
+                                  <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
+                                    <th scope="col" class="min-w-[250px]">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutnms"
+                                          type="button"
+                                          class=" font-bold text-md px-4 py-2.5 text-start w-full flex items-center gap-x-1  text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Post Title
+                                        </button>
+                                      </div>
+                                    </th>
 
-                          <th scope="col" class="min-w-[250px]">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                              <button
-                                id="hs-pro-dutnms"
-                                type="button"
-                                class=" font-bold text-md px-4 py-2.5 text-start w-full flex items-center gap-x-1  text-gray-800 focus:outline-none focus:bg-gray-100 "
-                              >
-                                Post Title
-                              </button>
+                                    <th scope="col" class="min-w-24">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                                        <button
+                                          id="hs-pro-dutads"
+                                          type="button"
+                                          class="px-3 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Applicants
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col" class="min-w-36">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutsgs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Status
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutems"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100"
+                                        >
+                                          Date Posted
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutphs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Actions
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    {/* <th scope="col"></th> */}
+                                  </tr>
+                                </thead>
+
+                                {locationJobs.map((job) => (
+                                  <tbody class="divide-y divide-gray-200 ">
+                                    <tr class="divide-x divide-gray-200 ">
+                                      <td
+                                        class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
+                                        //   onClick={() => handleStoreAndNavigatePosted(job)}
+                                      >
+                                        <div class="w-full flex items-center gap-x-3">
+                                          <div class="grow">
+                                            <span class="text-sm font-medium text-gray-800 ">
+                                              {job.jobTitle}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </td>
+
+                                      <td class="size-px whitespace-nowrap px-4 py-1">
+                                        {job.totalApplicants ? (
+                                          <span class="text-sm text-gray-600 ">
+                                            {job.totalApplicants}
+                                          </span>
+                                        ) : (
+                                          <span class="text-sm text-gray-600 ">
+                                            0
+                                          </span>
+                                        )}
+                                      </td>
+                                      {job.isActive ? (<td class="size-px whitespace-nowrap px-4 py-1">
+                                        <span class="py-2 ps-2 pe-3 inline-flex items-center gap-x-1 text-sm font-medium bg-green-100 text-green-800 rounded-full">
+                                          <svg
+                                            class="flex-shrink-0 size-4 mt-1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                          >
+                                            <polyline points="20 6 9 17 4 12" />
+                                          </svg>
+                                          Active
+                                        </span>
+                                      </td>) : (<td class="size-px whitespace-nowrap px-4 py-1">
+                                        <span class="py-2 ps-2 pe-3 inline-flex items-center gap-x-1 text-sm font-medium bg-gray-100 text-gray-800 rounded-full">
+                                          <svg
+                                            class="flex-shrink-0 size-4 mt-1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                          >
+                                            <polyline points="20 6 9 17 4 12" />
+                                          </svg>
+                                          Inactive
+                                        </span>
+                                      </td>)}
+                       
+                                      
+                                      <td class="size-px whitespace-nowrap px-4 py-1">
+                                        <span class="text-sm text-gray-600 ">
+                                          {job.datePosted}
+                                        </span>
+                                      </td>
+                                      <td class="size-px py-2 px-3 space-x-2">
+                                        <div className=" flex  w-full ">
+                                          {job.hasNewApplicant ||
+                                          job.hasUnreadMessage ? (
+                                            <button
+                                              onClick={() =>
+                                                handleStoreAndNavigatePosted(
+                                                  job
+                                                )
+                                              }
+                                              className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
+                                            >
+                                              View
+                                              <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
+                                                {job.totalApplicants}
+                                              </span>
+                                            </button>
+                                          ) : (
+                                            <button
+                                              onClick={() =>
+                                                handleStoreAndNavigatePosted(
+                                                  job
+                                                )
+                                              }
+                                              className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                            >
+                                              View
+                                            </button>
+                                          )}
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                ))}
+                              </table>
                             </div>
-                          </th>
-                        
-
-                          <th scope="col" class="min-w-24">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-default">
-                              <button
-                                id="hs-pro-dutads"
-                                type="button"
-                                class="px-3 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
-                              >
-                                Applicants
-                              </button>
-                            </div>
-                          </th>
-
-                          <th scope="col" class="min-w-36">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                              <button
-                                id="hs-pro-dutsgs"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
-                              >
-                                Status
-                              </button>
-                            </div>
-                          </th>
-
-                          <th scope="col">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                              <button
-                                id="hs-pro-dutems"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100"
-                              >
-                                Date Posted
-                              </button>
-                            </div>
-                          </th>
-
-                          <th scope="col">
-                            <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                              <button
-                                id="hs-pro-dutphs"
-                                type="button"
-                                class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
-                              >
-                            Actions
-                              </button>
-                            </div>
-                          </th>
-
-                          {/* <th scope="col"></th> */}
-                        </tr>
-                      </thead>
-
-                      
-
-                      {locationJobs.map((job) => (
-                        
-                        <tbody class="divide-y divide-gray-200 ">
-                          <tr class="divide-x divide-gray-200 ">
-                          
-                            <td
-                              class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
-                            //   onClick={() => handleStoreAndNavigatePosted(job)}
-                            >
-                              <div class="w-full flex items-center gap-x-3">
-                                <div class="grow">
-                                  <span class="text-sm font-medium text-gray-800 ">
-                                    {job.jobTitle}
-                                  </span>
-                                </div>
-                              </div>
-                            </td>
-                         
-                           
-                            
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              {job.totalApplicants ? (
-                                <span class="text-sm text-gray-600 ">
-                                  {job.totalApplicants}
-                                </span>
-                              ) : (
-                                <span class="text-sm text-gray-600 ">0</span>
-                              )}
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="py-2 ps-2 pe-3 inline-flex items-center gap-x-1 text-sm font-medium bg-green-100 text-green-800 rounded-full">
-                                <svg
-                                  class="flex-shrink-0 size-4 mt-1"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <polyline points="20 6 9 17 4 12" />
-                                </svg>
-                                Active
-                              </span>
-                            </td>
-                            <td class="size-px whitespace-nowrap px-4 py-1">
-                              <span class="text-sm text-gray-600 ">
-                                {job.datePosted}
-                              </span>
-                            </td>
-                            <td class="size-px py-2 px-3 space-x-2">
-                              <div className=" flex  w-full ">
-                                {job.hasNewApplicant || job.hasUnreadMessage ? (
-                                  <button
-                                    onClick={() =>
-                                      handleStoreAndNavigatePosted(job)
-                                    }
-                                    className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
-                                  >
-                                    View 
-                                    <span class="absolute top-0 end-0 inline-flex items-center py-0.5 px-2 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                                      {job.totalApplicants}
-                                    </span>
-                                  </button>
-                                ) : (
-                                  <button
-                                    onClick={() =>
-                                      handleStoreAndNavigatePosted(job)
-                                    }
-                                    className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
-                                  >
-                                    View 
-                                  </button>
-                                )}
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      ))}
-                        </table>
-                    
+                          </div>
                         </div>
-                </div>
-              </div>
-            </div>
-          </div>
-                    
-
-                     
-             
+                      </div>
+                    </div>
                   </DrawerBody>
                 </DrawerContent>
               </Drawer>
+
+              {showAddJobBusiness ? <AddJobBusiness /> : null}
 
               <Modal isOpen={isOpenShare} onClose={onCloseShare}>
                 <ModalContent>
@@ -980,4 +1346,3 @@ export const ClusteredMarkers = ({ trees }) => {
     </>
   );
 };
-

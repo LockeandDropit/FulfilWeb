@@ -54,10 +54,30 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { draftToMarkdown } from 'markdown-draft-js';
 import RichTextEditor from "./RichTextEditor";
 
+
+
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const Delta = Quill.import('delta');
-const AddJobBusiness = () => {
+
+
+const AddJobBusiness = ({ heldSelected }) => {
+
+
+
+  useEffect(() => {
+    if (heldSelected) {
+      console.log("getting passed", heldSelected)
+      setStreetAddress(heldSelected.streetAddress)
+      setCity(heldSelected.city)
+      setState(heldSelected.state)
+      setZipCode(heldSelected.zipCode)
+      setLocationLat(heldSelected.locationLat)
+      setLocationLng(heldSelected.locationLng)
+    } else {
+      console.log("nothing passed")
+    }
+  }, [])
 
   const quillRef = useRef();
   const navigate = useNavigate();
@@ -774,19 +794,19 @@ isFullTimePosition : isFullTimePosition,
     setJobID(uuidv4());
   }, [user]);
 
-  useEffect(() => {
-    if (employerID !== null) {
-      const docRef = doc(db, "employers", employerID);
+  // useEffect(() => {
+  //   if (employerID !== null) {
+  //     const docRef = doc(db, "employers", employerID);
 
-      getDoc(docRef).then((snapshot) => {
-        console.log(snapshot.data());
-        setCity(snapshot.data().city);
-        setState(snapshot.data().state);
-        setFirstName(snapshot.data().firstName);
-      });
-    } else {
-    }
-  }, [employerID]);
+  //     getDoc(docRef).then((snapshot) => {
+  //       console.log(snapshot.data());
+  //       setCity(snapshot.data().city);
+  //       setState(snapshot.data().state);
+  //       setFirstName(snapshot.data().firstName);
+  //     });
+  //   } else {
+  //   }
+  // }, [employerID]);
 
   const submitJob = () => {
     // createJobID();
@@ -805,15 +825,17 @@ isFullTimePosition : isFullTimePosition,
   const [zipCode, setZipCode] = useState(null);
 
   useEffect(() => {
-    setStreetAddress(streetNumber + " " + streetName);
-    console.log(streetAddress);
+    if (!heldSelected) {
+      setStreetAddress(streetNumber + " " + streetName);
+      console.log(streetAddress);
+    } 
   }, [streetName, streetName]);
 
   const [addressIncorrect, setAddressIncorrect] = useState(false)
   let addressIncorrectMessage = "Please enter a more specific address"
 
   useEffect(() => {
-    if (firstAddress !== null) {
+    if (firstAddress !== null && !heldSelected) {
       let results = [];
       // run through ewach object in array (if else)
       //evaluate if type == street address, city, state, etc
@@ -858,7 +880,7 @@ isFullTimePosition : isFullTimePosition,
 
   useEffect(() => {
     console.log("raw address", rawAddress);
-    if (rawAddress) {
+    if (rawAddress && !heldSelected) {
       geocodeByAddress(rawAddress.value.description)
         .then((results) => getLatLng(results[0]))
         .then(({ lat }) => setLocationLat(lat));
@@ -1028,6 +1050,14 @@ const handleBenefitsEditorChange = (editorState) => {
   setBenefitsDescription(draftToMarkdown(editorState))
 }
 
+
+const handleClosePostJob = () => {
+  addJobInfo(heldSelected)
+  onCloseModal()
+
+  //add code to trigger reopen of modal/drawer
+}
+
   
   // if (isLoading === true) {
   //   return (
@@ -1048,11 +1078,12 @@ const handleBenefitsEditorChange = (editorState) => {
   return (
     <div>
      
-     <Drawer onClose={onCloseModal} isOpen={isOpenModal} size={'xl'}>
+     <Drawer onClose={() => handleClosePostJob()} isOpen={isOpenModal} size={'xl'}>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Create Post</DrawerHeader>
+     
+        <DrawerCloseButton />
+          <DrawerHeader w={"50%"}>Create Post</DrawerHeader>
           <DrawerBody>
     <div class=" ">
           <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
@@ -1114,8 +1145,7 @@ const handleBenefitsEditorChange = (editorState) => {
                   >
                      What's the address? 
                   </label>
-
-                  <GooglePlacesAutocomplete
+                  {heldSelected ? (<p>{heldSelected.streetAddress}, {heldSelected.city}, {heldSelected.state}, {heldSelected.zipCode}</p>) : ( <GooglePlacesAutocomplete
                 apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
                 fetchDetails={true}
                 
@@ -1143,7 +1173,9 @@ const handleBenefitsEditorChange = (editorState) => {
                   placeholder: "Type address here",
                  
                 }}
-              />
+              />)}
+
+                 
 
 {user && user.email === "themasterbusiness@gmail.com" ? (   <><p>estimated address ? </p>  <select
               placeholder="Estimated address?"
@@ -1374,6 +1406,17 @@ const handleBenefitsEditorChange = (editorState) => {
 </div>
                    </button>
                   ) : (
+                    <div>
+                       <button
+                     type="button"
+                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                     data-hs-overlay="#hs-pro-datm"
+                    //  onClick={() => handleClosePostJob()}
+                     // onClick={() => testJobStore()}
+                   >
+                   Save Draft
+                   </button>
+                  
                      <button
                      type="button"
                      class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
@@ -1383,6 +1426,7 @@ const handleBenefitsEditorChange = (editorState) => {
                    >
                      Post Job 
                    </button>
+                   </div>
                   ) }
 
                  

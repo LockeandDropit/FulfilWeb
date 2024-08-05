@@ -8,6 +8,7 @@ export const addJobStore = create(
   persist(
     (set) => ({
  jobHeld: null,
+   
 
   addJobInfo: async (jobData) => {
         try {

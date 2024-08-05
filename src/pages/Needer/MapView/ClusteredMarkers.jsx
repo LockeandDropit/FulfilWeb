@@ -103,7 +103,7 @@ import Markdown from "react-markdown";
 import { FcGoogle } from "react-icons/fc";
 // import LoggedOutHeader from "./Landing/LoggedOutHeader.jsx";
 import { useMediaQuery } from "@chakra-ui/react";
-
+import { addJobStore } from "../HomePage/lib/addJobStore";
 import Plausible from "plausible-tracker";
 import { useUserStore } from "../../../pages/Needer/Chat/lib/userStore.js";
 // import LoggedOutHeaderNoGap from "./Landing/LoggedOutHeaderNoGap.jsx";
@@ -163,6 +163,11 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
 
   //   all imported logic from DoerMapLoggedOut
 
+
+  const { jobHeld, addJobInfo} = addJobStore()
+
+
+
   const navigate = useNavigate();
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
   //background image https://www.freecodecamp.org/news/react-background-image-tutorial-how-to-set-backgroundimage-with-inline-css-style/
@@ -218,6 +223,12 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
   } = useDisclosure();
 
   const {
+    isOpen: isOpenDrawerSingle,
+    onOpen: onOpenDrawerSingle,
+    onClose: onCloseDrawerSingle,
+  } = useDisclosure();
+
+  const {
     isOpen: isOpenPlumber,
     onOpen: onOpenPlumber,
     onClose: onClosePlumber,
@@ -237,6 +248,18 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
 
   const [searchJobCategory, setSearchJobCategory] = useState(null);
 
+  
+  const [showAddJobBusiness, setShowAddJobBusiness] = useState(false);
+
+  useEffect(() => {
+    if (jobHeld) {
+     handleGroupLocationToggleOpen(jobHeld)
+     setShowAddJobBusiness(false)
+     console.log("firing 1")
+    //  onOpenDrawer()
+    }
+  },[jobHeld])
+
   const handlePostedByBusinessToggleOpen = (x) => {
     setOpenInfoWindowMarkerID({ lat: x.locationLat, lng: x.locationLng });
     // updateJobListingViews(x);
@@ -245,11 +268,12 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
   };
 
   const handleGroupLocationToggleOpen = (x) => {
-    console.log("group open toggle", x);
+    console.log("group open toggle", x.jobID);
     setOpenInfoWindowMarkerID({ lat: x.locationLat, lng: x.locationLng });
+    //  setOpenInfoWindowMarkerID(x.jobID);
     // updateJobListingViews(x);
     onOpenDrawer();
-    console.log("from on click", x);
+    console.log("same locationJobs", sameLocationJobs);
   };
 
   //const handle log in / sign up navigate
@@ -349,28 +373,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [emailValidationBegun, setEmailValidationBegun] = useState(false);
 
-  const modalValidate = () => {
-    setEmailValidationBegun(true);
-    const isValid = emailRegex.test(email);
-    if (!isValid) {
-      setValidationMessage("Please enter a valid email");
-    } else {
-      setValidationMessage();
-      setEmail(email);
-      console.log("email good");
-    }
-    setPasswordValidationBegun(true);
-    const isValidPassword = passwordRegex.test(password);
-    if (!isValidPassword) {
-    } else {
-      setPasswordValidationMessage();
-      console.log("password good");
-    }
 
-    if (isValid && isValidPassword) {
-      logIn();
-    }
-  };
 
   const onSignUp = async () => {
     const authentication = getAuth();
@@ -461,32 +464,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
 
   const [subscriberEmail, setSubscriberEmail] = useState(null);
 
-  const handleNewEmailSignUp = async () => {
-    // insert email regex, if then
-    onCloseEmailSignUp();
-    onOpenEmailSignUpSuccess();
 
-    console.log("subscriberEmail", subscriberEmail);
-
-    const response = await fetch(
-      "https://emailapi-qi7k.onrender.com/newEmailSignUp",
-
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: subscriberEmail }),
-      }
-    );
-
-    const { data, error } = await response.json();
-    console.log("Any issues?", error);
-
-    onCloseEmailSignUp();
-    onOpenEmailSignUpSuccess();
-  };
 
   //bettter useEffect than I write https://www.youtube.com/watch?v=QQYeipc_cik&t=788s
   // useEffect(() => {
@@ -554,8 +532,8 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
     setTimeout(() => navigate("/JobDetails"), 500);
   };
 
-  const [showAddJobBusiness, setShowAddJobBusiness] = useState(false);
-  console.log("In Clustered Markers", sameLocationJobs);
+
+
 
   const [newTrees, setNewTrees] = useState([]);
 
@@ -598,11 +576,37 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
     }
   }, [sameLocationJobs, trees]);
 
+  //set lat lng of job passed so you can pass it to AddJobBusiness component and also reopen(?) the appropriate drawer when closed.
+ 
+  const [heldSelected, setHeldSelected] = useState(null)
+
+  const handleToggleAddJobSameLocation = (x) => {
+    setHeldSelected(x)
+
+    setShowAddJobBusiness(!showAddJobBusiness)
+    onCloseDrawer()
+  }
+
+  const handleGroupDrawerClose = () => {
+    addJobInfo(null)
+    setShowAddJobBusiness(false)
+    setTimeout(() => {
+ onCloseDrawer() 
+    }, 100)
+
+  }
+
   // what I can do... is I can
   // remove all positions that have repeated lat/lngs (matching positions) and put them in a seperate array.
   //The clustering will then take care of everything until a certain zoom level, but when they are all grouped together they wont unbundle because they've always been bundled...
 
   //what if I did it here and got rid of clustering...
+
+
+
+//so i have to make a store that accepts the heldJob object from AddJobBusiness
+// read it here, if not null then trigger an opening of the drawer below
+
 
   //almost all code regarding implementing clustering in this library is from https://github.com/visgl/react-google-maps/tree/main/examples/marker-clustering
   return (
@@ -626,19 +630,20 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
         </AdvancedMarker>
         {openInfoWindowMarkerID.lat === group.locationLat ? (
             <>
-              <Drawer onClose={onCloseDrawer} isOpen={isOpenDrawer} size={"xl"}>
+              <Drawer onClose={() => handleGroupDrawerClose()} isOpen={isOpenDrawer} size={"xl"}>
                 <DrawerOverlay />
                 <DrawerContent>
                   <DrawerCloseButton />
                   <DrawerHeader>Jobs at this location</DrawerHeader>
                   <DrawerBody>
                     <div class="p-2 space-y-4 flex flex-col bg-white  shadow-sm rounded-xl ">
-                      {/* <div className="ml-auto flex flex-col mb-2">
+                      <div className="ml-auto flex flex-col mb-2">
                         <p>Add another job at this location?</p>
                         <a
                           class="mt-1 ml-auto w-3/4 cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                           onClick={() =>
-                            setShowAddJobBusiness(!showAddJobBusiness)
+                            handleToggleAddJobSameLocation(group)
+                      
                           }
                         >
                           <svg
@@ -657,7 +662,8 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
                           </svg>
                           Create Job Listing
                         </a>
-                      </div> */}
+                       
+                      </div>
 
                       <div>
                         <div
@@ -848,7 +854,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
                 </DrawerContent>
               </Drawer>
 
-              {showAddJobBusiness ? <AddJobBusiness /> : null}
+              {/* {showAddJobBusiness ? <AddJobBusiness /> : null} */}
 
               <Modal isOpen={isOpenShare} onClose={onCloseShare}>
                 <ModalContent>
@@ -907,16 +913,16 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
 
       {newTrees.map((businessPostedJobs) => (
         <>
-          <SingleMarker
+          {/* <SingleMarker
             key={businessPostedJobs.key}
             tree={businessPostedJobs}
             onClick={() => handlePostedByBusinessToggleOpen(businessPostedJobs)}
             setMarkerRef={setMarkerRef}
-          />
+          /> */}
 
           {openInfoWindowMarkerID.lat === businessPostedJobs.locationLat ? (
             <>
-              <Drawer onClose={onCloseDrawer} isOpen={isOpenDrawer} size={"xl"}>
+              <Drawer onClose={onCloseDrawerSingle} isOpen={isOpenDrawerSingle} size={"xl"}>
                 <DrawerOverlay />
                 <DrawerContent>
                   <DrawerCloseButton />
@@ -1343,6 +1349,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
           </div>
         </ModalContent>
       </Modal>
+      {showAddJobBusiness ? <AddJobBusiness heldSelected={heldSelected} /> : null}
     </>
   );
 };

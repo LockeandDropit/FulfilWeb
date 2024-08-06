@@ -39,7 +39,7 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByPlaceId } from "react-google-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 import AddJobBusiness from "./AddJobBusiness";
-
+import { useUserStore } from "../Chat/lib/userStore";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -47,22 +47,23 @@ const Dashboard = () => {
   const [user, setUser] = useState();
 
   //this is the same user, rewritten to accomidate the f(x) that grabs the users unread messages
-  const [currentUser, setCurrentUser] = useState(null)
+  // const [currentUser, setCurrentUser] = useState(null)
 
+  const {fetchUserInfo, currentUser} = useUserStore()
 
   const [hasRun, setHasRun] = useState(false);
 
-  useEffect(() => {
-    if (hasRun === false) {
-      onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser);
-        setCurrentUser(currentUser)
-        console.log(currentUser.uid);
-      });
-      setHasRun(true);
-    } else {
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (hasRun === false) {
+  //     onAuthStateChanged(auth, (currentUser) => {
+  //       setUser(currentUser);
+  //       setCurrentUser(currentUser)
+  //       console.log(currentUser.uid);
+  //     });
+  //     setHasRun(true);
+  //   } else {
+  //   }
+  // }, []);
 
   const [addJobVisible, setAddJobVisible] = useState(false);
 
@@ -123,17 +124,17 @@ const Dashboard = () => {
 
 
 
-  useEffect(() => {
-    if (hasRun === false) {
-      onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser);
-        setEmployerID(currentUser.uid);
-        console.log(currentUser.uid);
-      });
-      setHasRun(true);
-    } else {
-    }
-  }, [hasRun]);
+  // useEffect(() => {
+  //   if (hasRun === false) {
+  //     onAuthStateChanged(auth, (currentUser) => {
+  //       setUser(currentUser);
+  //       setEmployerID(currentUser.uid);
+  //       console.log("currentUser",currentUser);
+  //     });
+  //     setHasRun(true);
+  //   } else {
+  //   }
+  // }, [hasRun]);
 
   //credit https://www.code-sample.com/2019/12/react-allow-only-numbers-in-textbox.html
   const numberOnlyRegexMinimumCharacterInput = /^[0-9\b]{1,7}$/;
@@ -630,6 +631,8 @@ const Dashboard = () => {
     setJobID(uuidv4());
   }, [user]);
 
+  const [isPremium, setIsPremium] = useState(false)
+
   useEffect(() => {
     if (employerID !== null) {
       const docRef = doc(db, "employers", employerID);
@@ -639,6 +642,7 @@ const Dashboard = () => {
         setCity(snapshot.data().city);
         setState(snapshot.data().state);
         setFirstName(snapshot.data().firstName);
+        setIsPremium(snapshot.data().isPremium)
       });
     } else {
     }
@@ -958,8 +962,10 @@ const Dashboard = () => {
                 </button>
 
                
+            
 
-                <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
+                {currentUser ? currentUser.isPremium === true ? (
+                    <><li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
                   <span class="block text-xs uppercase text-gray-500">
                     Actions
                   </span>
@@ -986,7 +992,20 @@ const Dashboard = () => {
                 </svg>
                 Create Job Listing
               </a>
-                </li> 
+                </li> </>) : (null) : (
+                 <div class="flex animate-pulse">
+               
+                 <div class="ms-4 mt-2 w-full">
+                 
+               
+                   <ul class="mt-5 space-y-3">
+                     <li class="w-full h-20 bg-gray-200 rounded-full "></li>
+                     
+                   </ul>
+                 </div>
+               </div>
+                )}
+                
 
 
                 {/* <li class="px-8 mb-0.5 mt-10">

@@ -29,8 +29,8 @@ const NeederMapView = () => {
 
     const [sameLocationJobs, setSameLocationJobs] = useState(false)
 
-    const [user, setUser] = useState(null);
- const [hasRun, setHasRun] = useState(false);
+const [user, setUser] = useState(null);
+const [hasRun, setHasRun] = useState(false);
 
  const {fetchUserInfo, currentUser} = useUserStore()
 

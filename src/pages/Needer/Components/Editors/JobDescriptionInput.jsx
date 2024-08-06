@@ -1,6 +1,10 @@
 import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
 import Quill from 'quill';
 // Editor is an uncontrolled React component
+
+//Idk what this is I think I can delete it.
+
+
 const JobDescriptionInput = forwardRef(
   ({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
     const containerRef = useRef(null);

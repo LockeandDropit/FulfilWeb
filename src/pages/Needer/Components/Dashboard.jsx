@@ -38,6 +38,8 @@ import {
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByPlaceId } from "react-google-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
+import AddJobBusiness from "./AddJobBusiness";
+
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -774,7 +776,7 @@ const Dashboard = () => {
   }, [currentUser]);
 
 
-
+  const [showAddJobBusiness, setShowAddJobBusiness] = useState(false)
 
 
   return (
@@ -957,38 +959,36 @@ const Dashboard = () => {
 
                
 
-                {/* <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
+                <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
                   <span class="block text-xs uppercase text-gray-500">
                     Actions
                   </span>
                 </li>
 
-                <li class="px-5 mb-0.5">
-                  <button
-                    class="flex items-center gap-x-2 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
-                    onClick={() => navigate(`/NeederAllCategories`)}
-                  >
-                    <span class="flex justify-center items-center size-6 bg-sky-400 text-white rounded-md">
-                      <svg
-                        class="flex-shrink-0 size-3"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <rect width="18" height="7" x="3" y="3" rx="1" />
-                        <rect width="9" height="7" x="3" y="14" rx="1" />
-                        <rect width="5" height="7" x="16" y="14" rx="1" />
-                      </svg>
-                    </span>
-                    Find A Pro
-                  </button>
-                </li> */}
+                <li class="px-5 mb-0.5 mt-6">
+                <a
+                class="w-3/4 ml-2 cursor-pointer py-3 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => setShowAddJobBusiness(!showAddJobBusiness)}
+              >
+                <svg
+                  class="hidden sm:block flex-shrink-0 size-3"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8 1C8.55228 1 9 1.44772 9 2V7L14 7C14.5523 7 15 7.44771 15 8C15 8.55228 14.5523 9 14 9L9 9V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V9.00001L2 9.00001C1.44772 9.00001 1 8.5523 1 8.00001C0.999999 7.44773 1.44771 7.00001 2 7.00001L7 7.00001V2C7 1.44772 7.44772 1 8 1Z"
+                  />
+                </svg>
+                Create Job Listing
+              </a>
+                </li> 
+
+
                 {/* <li class="px-8 mb-0.5 mt-10">
                   <button
                     type="button"
@@ -1339,9 +1339,11 @@ const Dashboard = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      {showAddJobBusiness ? <AddJobBusiness /> : null}
     </div>
 
-    
+
   );
 };
 

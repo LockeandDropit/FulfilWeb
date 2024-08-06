@@ -41,7 +41,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
+import { EditorState, convertToRaw, convertFromRaw, onEditorStateChange } from "draft-js";
 import {
   Editable,
   EditableInput,
@@ -89,6 +89,14 @@ import { geocodeByPlaceId } from "react-google-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 import { useLocation } from "react-router-dom";
 import {useJobStore} from "../HomePage/lib/jobsStoreDashboard"
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { draftToMarkdown } from 'markdown-draft-js';
+import RichTextEditor from "./RichTextEditor";
+import htmlToDraft from 'html-to-draftjs';
+import { ContentState } from "react-draft-wysiwyg";
+
+
+
 const EditSelectedBusinessJob = (props) => {
   console.log("edit selected job", props);
 
@@ -627,6 +635,41 @@ onOpen()
     navigate("/JobDetails", { state: { editReset: true } });
   };
 
+  const handleEditorChange = (editorState) => {
+    // (console.log("here it is", draftToMarkdown(editorState)))
+    setDescription(draftToMarkdown(editorState))
+  }
+
+
+  const [contentBlocks, setContentBlocks] = useState(null)
+  const [contentState, setContentState] = useState(null)
+  const [rawHtml, setRawHtml] = useState(null)
+
+  useEffect(() => {
+    if (job) {
+      setContentBlocks(htmlToDraft(job.description))
+      // setContentState(ContentState.createFromBlockArray(contentBlocks))
+      // setRawHtml(convertToRaw(contentState))
+      // console.log("oh boy", rawHtml)
+    }
+  }, [job, contentBlocks ,contentState, rawHtml])
+
+  useEffect(() => {
+    if (contentBlocks) {
+      setContentState(ContentState.createFromBlockArray(contentBlocks))
+    }
+  }, [contentBlocks])
+
+  useEffect(() => {
+    if (rawHtml) {
+      setRawHtml(convertToRaw(contentState))
+    }
+  }, [rawHtml])
+ 
+  // const contentBlocks = htmlToDraft(job.description)
+  // const contentState = ContentState.createFromBlockArray(contentBlocks)
+  // const rawHtml = convertToRaw(contentState)
+
   return (
     <>
       {isVisible ? (
@@ -690,6 +733,20 @@ onOpen()
                     </label>
   
                     <p>{props.props.jobTitle}</p>
+                  </div>
+                  <div class="space-y-2">
+                    <label
+                      for="dactmd"
+                      class="block mb-2 text-sm font-medium text-gray-800 "
+                    >
+                       Location (can not be edited)
+                    </label>
+  
+                    <p>
+                {" "}
+                {streetAddress}, {city}, {state}
+              </p>
+                   
                   </div>
                   <div class="space-y-2">
                     <label
@@ -840,57 +897,7 @@ onOpen()
      </div>
   </div>) : (null)}
   
-  <div class="space-y-2">
-                    <label
-                      for="dactmd"
-                      class="block mb-2 text-sm font-medium text-gray-800 "
-                    >
-                       What is the address? (can not be edited)
-                    </label>
-  
-                    <p>
-                {" "}
-                {streetAddress}, {city}, {state}
-              </p>
-                    <div class="space-y-2">
-                    <label
-                      for="dactmi"
-                      onChange={(e) => setDescription(e.target.value)}
-                      class="block mb-2 mt-4 text-sm font-medium text-gray-800 "
-                      placeholder="ex: I have a downed tree in my yard and would like someone to remove it."
-                    >
-                      What category of work is this? (optional)
-                    </label>
-  
-                    <select
-                    class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                    defaultValue={jobCategory ? jobCategory : false}
-                
-                  onChange={(e) => setJobCategory(e.target.value)}
-                >
-                  <option value={false}>Select category</option>
-                  <option value="asphalt">Asphalt</option>
-                  <option value="carpentry">Carpentry</option>
-                  <option value="concrete">Concrete</option>
-                  <option value="drywall">Drywall</option>
-                  <option value="electrical work">Electrical Work</option>
-                  <option value="general handyman">General Handyman</option>
-                  <option value="gutter cleaning">Gutter Cleaning</option>
-                  <option value="hvac">HVAC</option>
-                  <option value="landscaping">Landscaping</option>
-                  <option value="painting">Painting</option>
-                  <option value="plumbing">Plumbing</option>
-                  <option value="pressure washing">Pressure Washing</option>
-                  <option value="roofing">Roofing</option>
-                  <option value="siding">Siding</option>
-                  <option value="snow removal">Snow Removal</option>
-                  <option value="window installation">Window Installation</option>
-                  <option value="window washing">Window Washing</option>
-                  <option value="yard work">Yard Work</option>
-                  <option value={false}>Clear Selection</option>
-                </select>
-                  </div>
-                  </div>
+
                   <div class="space-y-2">
                     <label
                       for="dactmi"
@@ -899,9 +906,21 @@ onOpen()
                      Job Description 
                     </label>
   
-                    <div class="">
-    <textarea onChange={(e) => setDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" defaultValue={job.description}></textarea>
-  </div>
+                    <div>
+                    <RichTextEditor
+                      // editorState={editorState}
+                      // onChange={(description) =>
+                      //   (handleEditorChange(description))                 
+                      // }
+                      // defaultEditorState="Hello"
+                      // onEditorStateChange={this.onEditorStateChange}
+                      // ref={field.ref}
+                      placeholder="ex: This is a position offered at our company in which you will be responsible for overseeing several skilled machinists."
+                  
+                    />
+         
+          
+                        </div>
                   </div>
   
                   <div class="space-y-2">

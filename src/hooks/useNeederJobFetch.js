@@ -7,17 +7,21 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { auth, db } from "../firebaseConfig.js";
+import { create } from "zustand";
 import { useState, useEffect } from "react";
 import { useUserStore } from "../pages/Needer/Chat/lib/userStore.js";
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 export default function useNeederJobFetch() {
 
   const {fetchUserInfo, currentUser} = useUserStore()
 
-  console.log("from neederjobFetch", currentUser.uid)
+
   const [isLoading, setIsLoading] = useState(true);
   const [jobs, setJobs] = useState(null);
   const [groupedJobs, setGroupedJobs] = useState(null);
+
+  console.log("currentUser from neder job fertchj", currentUser)
 
   useEffect(() => {
     try {
@@ -79,3 +83,5 @@ export default function useNeederJobFetch() {
 
   return { isLoading, jobs, groupedJobs };
 }
+
+

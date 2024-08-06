@@ -334,7 +334,7 @@ const OnboardingOne = () => {
           <div class="grow pt-0.5 pb-8 sm:pb-12">
             <p class="text-sm md:text-lg text-neutral-400">
               <span class="text-sky-400 mr-1 font-semibold">Reach a primed pool of applicants:</span>
-              We cater specifically to the trades and blue collar work, so you know your positions are being viewed by your intended audience
+              We cater specifically to the trades and college-alternative careers, so you know your positions are being viewed by your intended audience.
             </p>
           </div>
    

@@ -1324,14 +1324,7 @@ const handleClosePostJob = () => {
                   </label>
 
                   <div>
-                  {/* <Editor         
-  editorState={description}
-  toolbarClassName="toolbarClassName"
-  wrapperClassName="wrapperClassName"
-  editorClassName="editorClassName"
-  onEditorStateChange={handleEditorChange}
-  onChange={description => draftToMarkdown(description)}
-/> */}
+            
       <RichTextEditor
                       onChange={(description) =>
                         (handleEditorChange(description))

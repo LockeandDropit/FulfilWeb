@@ -315,8 +315,8 @@ setWebsiteValidationMessage("Please enter a valid website")
 
   //handle check agreements
   const [termsOfService, setTermsOfService] = useState(false)
-  const [privacyPolicy, setPrivacyPolicy] = useState(false)
-  const [ageAgreement, setAgeAgreement] = useState(false)
+  const [privacyPolicy, setPrivacyPolicy] = useState(true)
+  const [ageAgreement, setAgeAgreement] = useState(true)
 
 
   useEffect(() => {
@@ -475,7 +475,7 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
 
           <div className="mt-10 space-y-10">
             <fieldset>
-              <legend className="text-sm font-semibold leading-6 text-gray-900">Agreements</legend>
+              <legend className="text-sm font-semibold leading-6 text-gray-900">Agreement</legend>
               <div className="mt-6 space-y-6">
                 <div className="relative flex gap-x-3">
                   <div className="flex h-6 items-center">
@@ -489,12 +489,12 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                   </div>
                   <div className="text-sm leading-6">
                     <label  className="font-medium text-gray-900" >
-                    I have read and agree to the <span class="text-sky-400" onClick={() => onOpenTOS()}>Terms of Service.</span>
+                    I am over 18 years of age and I have read and agree to the <span class="text-sky-400" onClick={() => onOpenTOS()}>Terms of Service</span>, the  <span class="text-sky-400" onClick={() => onOpen()} > Privacy Policy</span>
                     </label>
                    
                   </div>
                 </div>
-                <div className="relative flex gap-x-3">
+                {/* <div className="relative flex gap-x-3">
                   <div className="flex h-6 items-center">
                     <input
                       id="candidates"
@@ -527,7 +527,7 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
                     </label>
                     
                   </div>
-                </div>
+                </div> */}
                 
               </div>
             </fieldset>

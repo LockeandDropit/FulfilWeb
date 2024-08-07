@@ -753,10 +753,10 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
                                     <tr class="divide-x divide-gray-200 ">
                                       <td
                                         class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
-                                        //   onClick={() => handleStoreAndNavigatePosted(job)}
-                                      >
+                                          onClick={() => handleStoreAndNavigatePosted(job)}
+                                      >  
                                         <div class="w-full flex items-center gap-x-3">
-                                          <div class="grow">
+                                          <div class="grow" >
                                             <span class="text-sm font-medium text-gray-800 ">
                                               {job.jobTitle}
                                             </span>
@@ -1043,7 +1043,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
                                     <tr class="divide-x divide-gray-200 ">
                                       <td
                                         class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
-                                        //   onClick={() => handleStoreAndNavigatePosted(job)}
+                                          onClick={() => handleStoreAndNavigatePosted(job)}
                                       >
                                         <div class="w-full flex items-center gap-x-3">
                                           <div class="grow">

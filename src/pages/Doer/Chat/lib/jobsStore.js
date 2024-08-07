@@ -14,6 +14,18 @@ jobHiringState: null,
   fetchJobInfo: async (uid, jobID, jobType, jobTitle) => {
     // if (!uid) return set({ currentUser: null, isLoading: false });
 
+
+  
+      const docRef = doc(db, "users", uid, "Applied", jobTitle );
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists() && docSnap.data().jobID === jobID) {
+        set({ job: docSnap.data(), isJobLoading: false });
+        console.log("jobstore",docSnap.data())
+      } else {
+        set({job: null, isJobLoading: false });
+      }
+
     if (jobType === "Interview") {
         try {
             const docRef = doc(db, "users", uid, "Applied", jobTitle );
@@ -30,20 +42,20 @@ jobHiringState: null,
             return set({ job: null, isJobLoading: false});
           }
     } else {
-      try {
-        const docRef = doc(db, "users", uid, jobType, jobTitle );
-        const docSnap = await getDoc(docRef);
+      // try {
+      //   const docRef = doc(db, "users", uid, jobType, jobTitle );
+      //   const docSnap = await getDoc(docRef);
   
-        if (docSnap.exists() && docSnap.data().jobID === jobID) {
-          set({ job: docSnap.data(), isJobLoading: false });
-          console.log("jobstore",docSnap.data())
-        } else {
-          set({job: null, isJobLoading: false });
-        }
-      } catch (err) {
-        console.log(err);
-        return set({ job: null, isJobLoading: false});
-      }
+      //   if (docSnap.exists() && docSnap.data().jobID === jobID) {
+      //     set({ job: docSnap.data(), isJobLoading: false });
+      //     console.log("jobstore",docSnap.data())
+      //   } else {
+      //     set({job: null, isJobLoading: false });
+      //   }
+      // } catch (err) {
+      //   console.log(err);
+      //   // return set({ job: null, isJobLoading: false});
+      // }
     }
 
    

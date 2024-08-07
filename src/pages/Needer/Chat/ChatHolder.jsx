@@ -11,7 +11,7 @@ import { useMediaQuery } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import ChatPlaceholder from "./ChatPlaceholder";
 import ListPlaceholder from "./ListPlaceholder";
-
+import { useJobStore } from "./lib/jobsStore";
 const ChatHolder = () => {
 
     const { currentUser, isLoading, fetchUserInfo } = useUserStore();
@@ -21,19 +21,29 @@ const ChatHolder = () => {
   
   
     const location = useLocation();
+    const { fetchJobInfo, setJobHiringState } = useJobStore();
   
     const [passedChannel, setPasseChannel] = useState(null);
+
+    const handleJobFetch = async (chat) => {
+      fetchJobInfo(currentUser.uid, chat.jobID, chat.jobType, chat.jobTitle);
+    };
   
     useEffect(() => {
       if (location.state === null) {
         console.log("no channel passed");
         // setSelectedChannel(null);
       } else {
+        console.log("location", location)
     
           if (location.state.selectedChannel && location.state.applicant) {
             setPasseChannel(location.state.selectedChannel);
             changeChat(location.state.selectedChannel, location.state.applicant)
             console.log("passed props",location.state.selectedChannel, location.state.applicant)
+            // const userChatsRef = doc(db, "User Messages", currentUser.uid);
+            handleJobFetch(location.state.job);
+            // console.log("is this right ChatHolder", location.state.job)
+           
           } 
       }
     }, []);
@@ -71,7 +81,7 @@ const ChatHolder = () => {
   {chatId ? (
     <>
  
-    <ChatPlaceholder />
+    <ChatPlaceholder passedChannel={passedChannel}/>
     </>
   ) : (
     <div className="flex h-screen items-center justify-center">
@@ -284,7 +294,7 @@ const ChatHolder = () => {
 ) : null) : (
 
 
-  chatId ? <ChatPlaceholder /> : <ListPlaceholder />
+  chatId ? <ChatPlaceholder passedChannel={passedChannel}/> : <ListPlaceholder />
 
 )}
 

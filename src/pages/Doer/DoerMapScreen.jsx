@@ -814,7 +814,9 @@ renderAllJobs()
 
   //chat channel navigation
   const navigateToChannel = (x) => {
-    navigate("/DoerChatHolder", { state: { selectedChannel: x.channelID } });
+    console.log("navigate with this", x)
+    navigate("/DoerChatHolder", { state: { data: x } });
+    // navigate("/DoerChatHolder", { state: { selectedChannel: x.channelID } });
     // console.log("mesage channel",x);
   };
 

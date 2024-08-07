@@ -10,6 +10,12 @@ import { useMediaQuery } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import ChatPlaceholder from "./ChatPlaceholder";
 import ListPlaceholder from "./ListPlaceholder";
+import { useJobStore } from "./lib/jobsStore";
+import { doc, getDoc } from "firebase/firestore";
+
+import { db } from "../../../firebaseConfig";
+
+
 
 const DoerChatHolder = () => {
 
@@ -20,22 +26,55 @@ const DoerChatHolder = () => {
   
   
     const location = useLocation();
-  
+    const { fetchJobInfo, setJobHiringState } = useJobStore();
     const [passedChannel, setPasseChannel] = useState(null);
-  
+    const [employerData, setEmployerData] = useState(null)
+
+
+
     useEffect(() => {
       if (location.state === null) {
         console.log("no channel passed");
         // setSelectedChannel(null);
       } else {
-    
-          if (location.state.selectedChannel && location.state.applicant) {
-            setPasseChannel(location.state.selectedChannel);
-            changeChat(location.state.selectedChannel, location.state.applicant)
-            console.log("passed props",location.state.selectedChannel, location.state.applicant)
+        console.log("passed props",location.state.data)
+          if (location.state.data.channelId && location.state.data.employerID) {
+            setPasseChannel(location.state.data.channelId);
+  
+
+            getEmployerInfo(location.state.data.employerID)
+          
+           
+            handleJobFetch(location.state.data);
           } 
       }
     }, []);
+
+
+    const handleJobFetch = async (chat) => {
+      fetchJobInfo(currentUser.uid, chat.jobID, chat.jobType, chat.jobTitle);
+      console.log("1", currentUser.uid, chat.jobID, chat.jobType, chat.jobTitle)
+    };
+  
+  const getEmployerInfo = async (x) => {
+    console.log("2", x)
+    try {
+      const docRef = doc(db, "employers", x);
+      const docSnap = await getDoc(docRef);
+//add code to check that jobID === JobID
+      if (docSnap.exists() && docSnap.data()) {
+        setEmployerData(docSnap.data())
+        changeChat(location.state.selectedChannel, docSnap.data())
+        console.log("got it employer", docSnap.data())
+
+      } else {
+        console.log("something is wriong")
+      }
+    } catch (err) {
+      console.log(err);
+      console.log("something is wriong", err)
+    }
+  }
   
     useEffect(() => {
       const unSub = onAuthStateChanged(auth, (user) => {
@@ -69,7 +108,7 @@ const DoerChatHolder = () => {
   {chatId ? (
     <>
  
-    <ChatPlaceholder />
+    <ChatPlaceholder passedChannel={passedChannel}/>
     </>
   ) : (
     <div className="flex h-screen items-center justify-center">

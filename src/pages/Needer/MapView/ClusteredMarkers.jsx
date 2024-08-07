@@ -477,7 +477,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
 
   // }, [])
 
-  const [locationJobs, setLocationJobs] = useState(null);
+  const [locationJobs, setLocationJobs] = useState([]);
 
   useEffect(() => {
     if (openInfoWindowMarkerID) {
@@ -491,6 +491,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
           let postedByBusiness = [];
 
           snapshot.docs.forEach((doc) => {
+
             if (
               openInfoWindowMarkerID.lat === doc.data().locationLat &&
               openInfoWindowMarkerID.lng === doc.data().locationLng
@@ -537,11 +538,11 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
 
   const [newTrees, setNewTrees] = useState([]);
 
-  //   useEffect(() => {
-  //     if (trees) {
-  //         setNewTrees(trees)
-  //     }
-  //   }, [trees])
+    // useEffect(() => {
+    //   if (trees) {
+    //       setNewTrees(trees)
+    //   }
+    // }, [trees])
 
   const filterOutSameLocation = () => {
     //map over and create lat lng object for each grouped lat/lng value
@@ -569,10 +570,16 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
     //If it does exist, remove it from the array
   };
 
+  const [groupJobs, setGroupJobs] = useState([])
+
   useEffect(() => {
     if (trees && sameLocationJobs) {
       filterOutSameLocation();
       console.log("1");
+      setGroupJobs(sameLocationJobs)
+    } else if (trees && !sameLocationJobs) {
+      setNewTrees(trees)
+    
     }
   }, [sameLocationJobs, trees]);
 
@@ -585,6 +592,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
 
     setShowAddJobBusiness(!showAddJobBusiness)
     onCloseDrawer()
+    onCloseDrawerSingle()
   }
 
   const handleGroupDrawerClose = () => {
@@ -611,7 +619,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
   //almost all code regarding implementing clustering in this library is from https://github.com/visgl/react-google-maps/tree/main/examples/marker-clustering
   return (
     <>
-      {sameLocationJobs.map((group) => (
+      {groupJobs.map((group) => (
         <>
         <AdvancedMarker
           zIndex={800}
@@ -934,7 +942,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
                         <a
                           class="mt-1 ml-auto w-3/4 cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                           onClick={() =>
-                            setShowAddJobBusiness(!showAddJobBusiness)
+                            handleToggleAddJobSameLocation(businessPostedJobs)
                           }
                         >
                           <svg

@@ -61,7 +61,12 @@ const [hasRun, setHasRun] = useState(false);
           console.log(isLoading);
         } else {
           setTrees(jobs);
-          setSameLocationJobs(groupedJobs)
+          if (!groupedJobs || groupedJobs.length === 0) {
+            setSameLocationJobs(null)
+          } else {
+            setSameLocationJobs(groupedJobs)
+          }
+          
           console.log("jobs from needer map", groupedJobs)
         }
    

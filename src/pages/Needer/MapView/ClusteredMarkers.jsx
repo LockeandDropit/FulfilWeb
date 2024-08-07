@@ -263,7 +263,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
   const handlePostedByBusinessToggleOpen = (x) => {
     setOpenInfoWindowMarkerID({ lat: x.locationLat, lng: x.locationLng });
     // updateJobListingViews(x);
-    onOpenDrawer();
+    onOpenDrawerSingle();
     console.log("from on click", x);
   };
 
@@ -913,12 +913,12 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
 
       {newTrees.map((businessPostedJobs) => (
         <>
-          {/* <SingleMarker
+          <SingleMarker
             key={businessPostedJobs.key}
             tree={businessPostedJobs}
             onClick={() => handlePostedByBusinessToggleOpen(businessPostedJobs)}
             setMarkerRef={setMarkerRef}
-          /> */}
+          />
 
           {openInfoWindowMarkerID.lat === businessPostedJobs.locationLat ? (
             <>

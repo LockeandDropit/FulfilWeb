@@ -322,15 +322,11 @@ const ListPlaceholder = () => {
                   }
                 });
               });
-    
               if (!selectedChats || !selectedChats.length) {
                 setChats(null);
               } else {
                 setChats(selectedChats.sort((a, b) => b.updatedAt - a.updatedAt));
               }
-        
-  
-          
           }
         );
   

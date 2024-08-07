@@ -276,8 +276,11 @@ const ListPlaceholder = () => {
           async (res) => {
             let fetchedIds = [];
             let selectedChats = [];
-            const items = res.data().chats;
+            let items = res.data().chats
+
+          
   
+            console.log("usser listPlaceholder",currentUser.uid)
             console.log("res data",res.data().chats)
   
             items.map(async (item) => {
@@ -288,12 +291,14 @@ const ListPlaceholder = () => {
   
             
               const promises = items.map(async (item) => {
+                if (item.chatId !== "placeholder") {
                 const userDocRef = doc(db, "users", item.receiverId);
                 const userDocSnap = await getDoc(userDocRef);
     
                 const user = userDocSnap.data();
     
                 return { ...item, user };
+                } 
               });
     
               const chatData = await Promise.all(promises);
@@ -306,10 +311,11 @@ const ListPlaceholder = () => {
     
               filteredChats.forEach((filteredChat) => {
                 chatData.forEach((chatData) => {
-                  if (filteredChat === chatData.chatId) {
-                    selectedChats.push(chatData);
-                    console.log("chat data", chatData);
-                  }
+                  if (chatData && filteredChat === chatData.chatId) {
+                      selectedChats.push(chatData);
+                      console.log("chat data", chatData);
+                   }
+            
                 });
               });
     

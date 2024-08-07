@@ -41,6 +41,7 @@ const ChatHolder = () => {
     useEffect(() => {
       const unSub = onAuthStateChanged(auth, (user) => {
         fetchUserInfo(user?.uid);
+        console.log("fetch test", user?.uid)
       });
   
       return () => {

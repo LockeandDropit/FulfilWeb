@@ -670,6 +670,15 @@ onOpen()
   // const contentState = ContentState.createFromBlockArray(contentBlocks)
   // const rawHtml = convertToRaw(contentState)
 
+
+  const [intermediatePositionType, setIntermediatePositionType] = useState(null)
+
+useEffect(() => {
+  if (intermediatePositionType) {
+    setIsFullTimePosition(JSON.parse(intermediatePositionType))
+  }
+}, [intermediatePositionType])
+
   return (
     <>
       {isVisible ? (
@@ -764,21 +773,21 @@ onOpen()
                 class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                 defaultValue="true"
                 
-                onChange={(e) => setIsFullTimePosition(e.target.value)}
+                onChange={(e) => setIntermediatePositionType(e.target.value)}
               >
                 <option>Select option</option>
-                <option value="true">Full-time</option>
-                <option value="false">Part-time</option>
+                <option value={true}>Full-time</option>
+                <option value={false}>Part-time</option>
               </select>) : ( <select
                 placeholder="Select option"
                 class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                 defaultValue="false"
                 
-                onChange={(e) => setIsFullTimePosition(e.target.value)}
+                onChange={(e) => setIntermediatePositionType(e.target.value)}
               >
                 <option>Select option</option>
-                <option value="true">Full-time</option>
-                <option value="false">Part-time</option>
+                <option value={true}>Full-time</option>
+                <option value={false}>Part-time</option>
               </select>)}
                    
                   </div>

@@ -148,7 +148,7 @@ const AddBusinessProfileInfo = () => {
     const userChatsRef = collection(db, "User Messages");
  await setDoc(doc(userChatsRef, user.uid), {
         chats: arrayUnion({
-   
+          chatId: "placeholder"
         }),
       });
   }

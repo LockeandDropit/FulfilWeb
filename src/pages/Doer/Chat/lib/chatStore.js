@@ -11,6 +11,8 @@ export const useChatStore = create((set) => ({
 
     // CHECK IF CURRENT USER IS BLOCKED
 
+    console.log("from chatStore", chatId, user)
+
     return set({
       chatId,
       user,

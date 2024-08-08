@@ -102,6 +102,8 @@ const ChatPlaceholder = () => {
 
   const { job, jobHiringState, isJobLoading, fetchJobInfo } = useJobStore();
 
+  console.log("job from Doer ChjatPlaceholder", job)
+
   const endRef = useRef(null);
 
   // useEffect(() => {
@@ -416,7 +418,7 @@ const ChatPlaceholder = () => {
                       {isDesktop ? (   <div class="w-20 sm:w-auto flex justify-end items-center gap-x-0.5">
                   {/* add here if you want anything in the end of the internal header */}
                   
-                  {jobHiringState.isJobOffered === true &&
+                  {/* {jobHiringState.isJobOffered === true &&
                       jobHiringState.isHired === false ? (
                         <span    onClick={() => handleOfferVisible()} class=" cursor-pointer py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-green-100 text-green-700 rounded-full">
                 
@@ -469,7 +471,7 @@ const ChatPlaceholder = () => {
                       </span>
                       )}
                   
-             
+              */}
                 </div>) : (null)}
              
               </header>
@@ -800,7 +802,8 @@ const ChatPlaceholder = () => {
                         </svg>
                         View profile
                       </button>
-                      {jobHiringState.isJobOffered === true &&
+
+                      {/* {jobHiringState.isJobOffered === true &&
                       jobHiringState.isHired === false ? (
                         <button
                         onClick={() => handleOfferVisible()}
@@ -825,7 +828,7 @@ const ChatPlaceholder = () => {
                       ) : (
                       null
                       )}
-                    
+                     */}
                     </div>
                   </div>
                 </div>
@@ -944,7 +947,7 @@ const ChatPlaceholder = () => {
                               </p>
                             </dt>
                           
-                            {jobHiringState.isJobOffered === true &&
+                            {/* {jobHiringState.isJobOffered === true &&
                       jobHiringState.isHired === false ? (
                         <span class="py-1.5 ps-1.5 w-[160px] px-1 inline-flex items-center  text-xs font-medium bg-green-100 text-green-800 rounded-full">
                         <svg
@@ -1024,7 +1027,7 @@ const ChatPlaceholder = () => {
                       </span>
                     </dd>
               
-                      )}
+                      )} */}
                   </dl>           
 
                           <dl class="py-1 grid grid-cols-3 gap-x-4">
@@ -1082,7 +1085,7 @@ const ChatPlaceholder = () => {
                                 Budget:
                               </p>
                             </dt>
-{jobHiringState.isHired ? (job.isHourly ? (
+{/* {jobHiringState.isHired ? (job.isHourly ? (
                               <dd class="col-span-2">
                                 <p class="font-medium text-[13px] text-gray-800">
                                   ${job.confirmedRate}/hour
@@ -1106,7 +1109,7 @@ const ChatPlaceholder = () => {
                                   ${job.flatRate} total
                                 </p>
                               </dd>
-                            )}
+                            )} */}
                             
                           </dl>
 
@@ -6871,7 +6874,7 @@ const ChatPlaceholder = () => {
                               </p>
                             </dt>
                           
-                            {jobHiringState.isJobOffered === true &&
+                            {/* {jobHiringState.isJobOffered === true &&
                       jobHiringState.isHired === false ? (
                         <span class="py-1.5 ps-1.5 w-[160px] px-1 inline-flex items-center  text-xs font-medium bg-green-100 text-green-800 rounded-full">
                         <svg
@@ -6950,7 +6953,7 @@ const ChatPlaceholder = () => {
                       </span>
                     </dd>
               
-                      )}
+                      )} */}
                   </dl>           
 
                           <dl class="py-1 grid grid-cols-3 gap-x-4">
@@ -7008,7 +7011,7 @@ const ChatPlaceholder = () => {
                                 Budget:
                               </p>
                             </dt>
-{jobHiringState.isHired ? (job.isHourly ? (
+{/* {jobHiringState.isHired ? (job.isHourly ? (
                               <dd class="col-span-2">
                                 <p class="font-medium text-[13px] text-gray-800">
                                   ${job.confirmedRate}/hour
@@ -7032,7 +7035,7 @@ const ChatPlaceholder = () => {
                                   ${job.flatRate} total
                                 </p>
                               </dd>
-                            )}
+                            )} */}
                             
                           </dl>
 

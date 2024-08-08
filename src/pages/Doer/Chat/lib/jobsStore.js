@@ -23,7 +23,7 @@ jobHiringState: null,
         set({ job: docSnap.data(), isJobLoading: false });
         console.log("jobstore",docSnap.data())
       } else {
-        set({job: null, isJobLoading: false });
+        // set({job: null, isJobLoading: false });
       }
 
     if (jobType === "Interview") {

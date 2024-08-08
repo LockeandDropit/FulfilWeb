@@ -32,6 +32,8 @@ const DoerChatHolder = () => {
 
 
 
+  console.log("chatID from DoerChatHolder", chatId)
+
     useEffect(() => {
       if (location.state === null) {
         console.log("no channel passed");
@@ -40,11 +42,7 @@ const DoerChatHolder = () => {
         console.log("passed props",location.state.data)
           if (location.state.data.channelId && location.state.data.employerID) {
             setPasseChannel(location.state.data.channelId);
-  
-
             getEmployerInfo(location.state.data.employerID)
-          
-           
             handleJobFetch(location.state.data);
           } 
       }
@@ -64,7 +62,7 @@ const DoerChatHolder = () => {
 //add code to check that jobID === JobID
       if (docSnap.exists() && docSnap.data()) {
         setEmployerData(docSnap.data())
-        changeChat(location.state.selectedChannel, docSnap.data())
+        changeChat(location.state.data.channelId, docSnap.data())
         console.log("got it employer", docSnap.data())
 
       } else {

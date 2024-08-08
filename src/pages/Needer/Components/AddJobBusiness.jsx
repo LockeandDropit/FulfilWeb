@@ -388,9 +388,11 @@ const [companyName, setCompanyName] = useState(null)
 
   useEffect(() => {
     if (payType === "Hourly") {
+      console.log("hourly")
       handleIsHourly();
     } else if (payType === "Salaried") {
       handleIsFixed();
+      console.log("salaried")
     } else {
     }
   }, [payType]);
@@ -1338,7 +1340,6 @@ useEffect(() => {
       <RichTextEditor
                       onChange={(description) =>
                         (handleEditorChange(description))
-                        
                       }
                       // ref={field.ref}
                       placeholder="ex: This is a position offered at our company in which you will be responsible for overseeing several skilled machinists."

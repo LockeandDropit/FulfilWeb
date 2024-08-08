@@ -94,7 +94,7 @@ import { draftToMarkdown } from 'markdown-draft-js';
 import RichTextEditor from "./RichTextEditor";
 import htmlToDraft from 'html-to-draftjs';
 import { ContentState } from "react-draft-wysiwyg";
-
+import {stateFromMarkdown} from 'draft-js-import-markdown';
 
 
 const EditSelectedBusinessJob = (props) => {
@@ -180,11 +180,10 @@ onOpen()
         console.log(snapshot.data());
         setJobID(snapshot.data().jobID);
         setLowerRate(snapshot.data().lowerRate);
-        // setBusinessName(snapshot.data(businessName));
         setUpperRate(snapshot.data().upperRate);
         setIsHourly(snapshot.data().isHourly);
-        setPayType(snapshot.data().isHourly);
-
+        // setPayType(snapshot.data().isHourly);
+        setIsSalaried(snapshot.data().isSalaried)
         setIsOneTime(snapshot.data().isOneTime);
         setFlatRate(snapshot.data().flatRate);
         setBusinessName(snapshot.data().businessName);
@@ -199,6 +198,11 @@ onOpen()
         setStreetAddress(snapshot.data().streetAddress);
         setCity(snapshot.data().city);
         setState(snapshot.data().state);
+        setApplicantDescription(snapshot.data().applicantDescription)
+        if (snapshot.data().benefitsDescription) {
+          setBenefitsDescription(snapshot.data().benefitsDescription)
+        }
+        setIsFullTimePosition(snapshot.data().isFullTimePosition)
       });
     } else {
       console.log("oops!");
@@ -337,27 +341,28 @@ onOpen()
   const [payType, setPayType] = useState(null);
 
   // credit help Michael with setting state from select component https://stackoverflow.com/questions/70353397/how-to-update-the-state-if-dropdown-has-selected-value-with-hooks-and-usestate
-  // const handleIsHourly = () => {
-  //   setIsHourly(true);
-  //   setIsFlatRate(false);
-  //   setFlatRate(0);
-  // };
+  const handleIsHourly = () => {
+    setIsHourly(true);
+    setIsSalaried(false);
+    setFlatRate(0);
+    console.log("hourly")
+  };
 
-  // const handleIsFixed = () => {
-  //   setIsFlatRate(true);
-  //   setIsHourly(false);
-  //   setUpperRate(0);
-  //   setLowerRate(0);
-  // };
+  const handleIsFixed = () => {
+    setIsSalaried(true);
+    setIsHourly(false);
+    setUpperRate(0);
+    setLowerRate(0);
+    console.log("salaried")
+  };
 
-  // useEffect(() => {
-  //   if (payType === "Hourly") {
-  //     handleIsHourly();
-  //   } else if (payType === "Fixed") {
-  //     handleIsFixed();
-  //   } else {
-  //   }
-  // }, [payType]);
+  useEffect(() => {
+    if (payType === "Hourly") {
+      handleIsHourly();
+    } else if (payType === "Salaried") {
+      handleIsFixed();
+    }
+  }, [payType]);
 
   const [jobFrequency, setJobFrequency] = useState(null);
 
@@ -404,18 +409,23 @@ onOpen()
 
     //submit data
     updateDoc(doc(db, "employers", user.uid, "Posted Jobs", jobTitle), {
+      isFullTimePosition: isFullTimePosition,
       upperRate: upperRate,
       description: description,
       isOneTime: isOneTime,
       isFlatRate: isFlatRate,
       flatRate: flatRate,
       isHourly: isHourly,
+      isSalaried: isSalaried,
       lowerRate: lowerRate,
       category: jobCategory,
+      applicantDescription: applicantDescription,
+      benefitsDescription: benefitsDescription 
+      
     })
       .then(() => {
-        addDoc(dbRef, placeholderApplicant);
-        console.log("data submitted employers");
+        // addDoc(dbRef, placeholderApplicant);
+        // console.log("data submitted employers");
       })
       .catch((error) => {
         // no bueno
@@ -426,14 +436,18 @@ onOpen()
   const addJobMap = () => {
     //submit data
     updateDoc(doc(db, "Map Jobs", jobID), {
+      isFullTimePosition: isFullTimePosition,
       upperRate: upperRate,
       description: description,
       isOneTime: isOneTime,
       isFlatRate: isFlatRate,
       flatRate: flatRate,
       isHourly: isHourly,
+      isSalaried: isSalaried,
       lowerRate: lowerRate,
       category: jobCategory,
+      applicantDescription: applicantDescription,
+      benefitsDescription: benefitsDescription
     })
       .then(() => {
         //all good
@@ -447,14 +461,18 @@ onOpen()
     if (isVolunteer == true) {
       //adds to volunteer only db for map
       updateDoc(doc(db, "Map Jobs Volunteer", jobID), {
+        isFullTimePosition: isFullTimePosition,
         upperRate: upperRate,
         description: description,
         isOneTime: isOneTime,
         isFlatRate: isFlatRate,
         flatRate: flatRate,
         isHourly: isHourly,
+        isSalaried: isSalaried,
         lowerRate: lowerRate,
         category: jobCategory,
+        applicantDescription: applicantDescription,
+        benefitsDescription: benefitsDescription
       })
         .then(() => {
           //all good
@@ -466,14 +484,18 @@ onOpen()
         });
     } else {
       updateDoc(doc(db, "Map Jobs Paid", jobID), {
+        isFullTimePosition: isFullTimePosition,
         upperRate: upperRate,
         description: description,
         isOneTime: isOneTime,
         isFlatRate: isFlatRate,
         flatRate: flatRate,
         isHourly: isHourly,
+        isSalaried: isSalaried,
         lowerRate: lowerRate,
         category: jobCategory,
+        applicantDescription: applicantDescription,
+        benefitsDescription: benefitsDescription
       })
         .then(() => {
           //all good
@@ -490,14 +512,18 @@ onOpen()
   const addJobGlobal = () => {
     //submit data
     updateDoc(doc(db, "Jobs", user.uid, "Posted Jobs", jobTitle), {
+      isFullTimePosition: isFullTimePosition,
       upperRate: upperRate,
       description: description,
       isOneTime: isOneTime,
       isFlatRate: isFlatRate,
       flatRate: flatRate,
       isHourly: isHourly,
+      isSalaried: isSalaried,
       lowerRate: lowerRate,
       category: jobCategory,
+      applicantDescription: applicantDescription,
+      benefitsDescription: benefitsDescription
     })
       .then(() => {
         //all good
@@ -510,14 +536,18 @@ onOpen()
 
     //submit data
     updateDoc(doc(db, "All Jobs", jobID), {
+      isFullTimePosition: isFullTimePosition,
       upperRate: upperRate,
       description: description,
       isOneTime: isOneTime,
       isFlatRate: isFlatRate,
       flatRate: flatRate,
       isHourly: isHourly,
+      isSalaried: isSalaried,
       lowerRate: lowerRate,
       category: jobCategory,
+      applicantDescription: applicantDescription,
+      benefitsDescription: benefitsDescription
     })
       .then(() => {
         //all good
@@ -569,6 +599,7 @@ onOpen()
         setFirstName(snapshot.data().firstName);
       });
     } else {
+
     }
   }, [employerID]);
 
@@ -636,39 +667,55 @@ onOpen()
   };
 
   const handleEditorChange = (editorState) => {
-    // (console.log("here it is", draftToMarkdown(editorState)))
+    //https://github.com/jpuri/react-draft-wysiwyg/issues/462
     setDescription(draftToMarkdown(editorState))
   }
 
+  const handleApplicantEditorChange = (editorState) => {
+    setApplicantDescription(draftToMarkdown(editorState))
+  }
+  
+  const handleBenefitsEditorChange = (editorState) => {
+    setBenefitsDescription(draftToMarkdown(editorState))
+  }
+  
 
-  const [contentBlocks, setContentBlocks] = useState(null)
-  const [contentState, setContentState] = useState(null)
-  const [rawHtml, setRawHtml] = useState(null)
+  const contentState = stateFromMarkdown(job.description)
+  const applicantState = stateFromMarkdown(job.applicantDescription)
 
-  useEffect(() => {
-    if (job) {
-      setContentBlocks(htmlToDraft(job.description))
-      // setContentState(ContentState.createFromBlockArray(contentBlocks))
-      // setRawHtml(convertToRaw(contentState))
-      // console.log("oh boy", rawHtml)
-    }
-  }, [job, contentBlocks ,contentState, rawHtml])
-
-  useEffect(() => {
-    if (contentBlocks) {
-      setContentState(ContentState.createFromBlockArray(contentBlocks))
-    }
-  }, [contentBlocks])
+  const [benefitsState, setBenefitsState] = useState(null)
 
   useEffect(() => {
-    if (rawHtml) {
-      setRawHtml(convertToRaw(contentState))
-    }
-  }, [rawHtml])
- 
-  // const contentBlocks = htmlToDraft(job.description)
-  // const contentState = ContentState.createFromBlockArray(contentBlocks)
-  // const rawHtml = convertToRaw(contentState)
+    if (job.benefitsDescription) {
+      console.log("here you go ",job.benefitsDescription)
+      setBenefitsState(stateFromMarkdown(job.benefitsDescription))
+    } 
+  }, [job])
+
+
+
+  const [editorState, setEditorState] = useState(null)
+  const [applicantEditorState, setApplicantEditorState] = useState(null)
+  const [benefitsEditorState, setBenefitsEditorState] = useState(null)
+
+  useEffect(() => {
+  if (contentState) {
+    setEditorState(EditorState.createWithContent(contentState))
+  }
+}, [])
+
+useEffect(() => {
+  if (applicantState) {
+    setApplicantEditorState(EditorState.createWithContent(applicantState))
+  }
+}, [])
+
+useEffect(() => {
+  if (benefitsState) {
+    setBenefitsEditorState(EditorState.createWithContent(benefitsState))
+  }
+}, [benefitsState])
+
 
 
   const [intermediatePositionType, setIntermediatePositionType] = useState(null)
@@ -676,8 +723,10 @@ onOpen()
 useEffect(() => {
   if (intermediatePositionType) {
     setIsFullTimePosition(JSON.parse(intermediatePositionType))
-  }
+  } 
 }, [intermediatePositionType])
+
+console.log("looking at the job object", job, payType)
 
   return (
     <>
@@ -772,7 +821,6 @@ useEffect(() => {
                 placeholder="Select option"
                 class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                 defaultValue="true"
-                
                 onChange={(e) => setIntermediatePositionType(e.target.value)}
               >
                 <option>Select option</option>
@@ -807,7 +855,7 @@ useEffect(() => {
                     
                     </label>
 
-                    {job.isHourly ? ( <select
+                    {job.isHourly === true && !payType  ? ( <select
                 placeholder="Select option"
                 class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                 defaultValue="Hourly"
@@ -816,13 +864,31 @@ useEffect(() => {
                 <option>Select option</option>
                 <option value="Hourly">Hourly</option>
                 <option value="Salaried">Salaried</option>
-              </select>) : (null)}
-
-              
-              {job.isSalaried ? ( <select
+              </select>) : payType === "Salaried" ? (<select
                 placeholder="Select option"
                 class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                 defaultValue="Salaried"
+                onChange={(e) => setPayType(e.target.value)}
+              >
+                <option>Select option</option>
+                <option value="Hourly">Hourly</option>
+                <option value="Salaried">Salaried</option>
+              </select>) : (null)}
+
+              
+              {job.isSalaried === true && !payType  ? ( <select
+                placeholder="Select option"
+                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                defaultValue="Salaried"
+                onChange={(e) => setPayType(e.target.value)}
+              >
+                <option>Select option</option>
+                <option value="Hourly">Hourly</option>
+                <option value="Salaried">Salaried</option>
+              </select>) : payType === "Hourly" ? (<select
+                placeholder="Select option"
+                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                defaultValue="Hourly"
                 onChange={(e) => setPayType(e.target.value)}
               >
                 <option>Select option</option>
@@ -833,7 +899,7 @@ useEffect(() => {
                    
                   </div>
   
-  {isHourly ? (
+  {job.isHourly === true && !payType ? (
    <div class="space-y-2 ">
    <label
      for="hs-pro-dactmt"
@@ -848,9 +914,7 @@ useEffect(() => {
      type="text"
      class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
      defaultValue={lowerRate}
-   
      onChange={(e) => lowerRateValidate(e.target.value)}
-  
    />
    <p className="mt-2 text-sm font-medium mr-1 ml-1">/hour - $</p>
    <input
@@ -871,11 +935,37 @@ useEffect(() => {
     </div>
   </div>
   
-  ) : (
-    null
-  )}
+  ) : payType === "Salaried" ? (<div class="space-y-2">
+    <label
+      for="hs-pro-dactmt"
+      class="block mb-2 text-sm font-medium text-gray-800 "
+    >
+      Enter the salary range (yearly)
+    </label>
+    <div className="flex">
+    <p className="mt-2 mr-1 text-sm font-medium">$</p>
+    <input
+     id="hs-pro-dactmt"
+     type="text"
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     defaultValue={lowerRate}
+   
+     onChange={(e) => lowerRateValidate(e.target.value)}
   
-  {isSalaried ? (<div class="space-y-2">
+   />
+   <p className="mt-2 text-sm font-medium mr-1 ml-1"> yearly - $</p>
+   <input
+     id="hs-pro-dactmt"
+     type="text"
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     defaultValue={upperRate}
+     onChange={(e) => upperRateValidate(e.target.value)}
+   />
+     <p className="mt-2 ml-1 text-sm font-medium">yearly</p>
+     </div>
+  </div>) : (null)}
+  
+  {job.isSalaried && !payType ? (<div class="space-y-2">
     <label
       for="hs-pro-dactmt"
       class="block mb-2 text-sm font-medium text-gray-800 "
@@ -904,6 +994,39 @@ useEffect(() => {
    />
      <p className="mt-2 ml-1 text-sm font-medium">yearly</p>
      </div>
+  </div>) : payType === "Hourly" ? (   <div class="space-y-2 ">
+   <label
+     for="hs-pro-dactmt"
+     class="block mb-2 text-sm font-medium text-gray-800">
+      Enter the hourly pay range
+   </label>
+  
+  <div class="flex align-items-center">
+    <p className="mt-2 mr-1 text-sm font-medium">$</p>
+   <input
+     id="hs-pro-dactmt"
+     type="text"
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     defaultValue={lowerRate}
+     onChange={(e) => lowerRateValidate(e.target.value)}
+   />
+   <p className="mt-2 text-sm font-medium mr-1 ml-1">/hour - $</p>
+   <input
+     id="hs-pro-dactmt"
+     type="text"
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     defaultValue={upperRate}
+                      onChange={(e) => upperRateValidate(e.target.value)}
+  
+   />
+   <p className="mt-2 text-sm font-medium">/hour</p>
+     {lowerRateValidationBegun === true ? (
+      <p color="red">{lowerRateValidationMessage}</p>
+    ) : null}
+    {upperRateValidationBegun === true ? (
+      <p color="red">{upperRateValidationMessage}</p>
+    ) : null}
+    </div>
   </div>) : (null)}
   
 
@@ -917,13 +1040,10 @@ useEffect(() => {
   
                     <div>
                     <RichTextEditor
-                      // editorState={editorState}
-                      // onChange={(description) =>
-                      //   (handleEditorChange(description))                 
-                      // }
-                      // defaultEditorState="Hello"
-                      // onEditorStateChange={this.onEditorStateChange}
-                      // ref={field.ref}
+                      defaultEditorState={editorState}
+                      onChange={(editorState) =>
+                        (handleEditorChange(editorState))                 
+                      }
                       placeholder="ex: This is a position offered at our company in which you will be responsible for overseeing several skilled machinists."
                   
                     />
@@ -941,7 +1061,14 @@ useEffect(() => {
                     </label>
   
                     <div class="">
-    <textarea onChange={(e) => setApplicantDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" defaultValue={job.applicantDescription}></textarea>
+                    <RichTextEditor
+                      defaultEditorState={applicantEditorState}
+                      onChange={(applicantState) =>
+                        (handleApplicantEditorChange(applicantState))                 
+                      }
+                      placeholder="ex: This is a position offered at our company in which you will be responsible for overseeing several skilled machinists."
+
+                    />
   </div>
                   </div>
                   <div class="space-y-2">
@@ -953,7 +1080,14 @@ useEffect(() => {
                     </label>
   
                     <div class="">
-    <textarea onChange={(e) => setBenefitsDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" defaultValue={job.benefitsDescription ? job.benefitsDescription : null}></textarea>
+                    <RichTextEditor
+                      defaultEditorState={benefitsEditorState}
+                      onChange={(benefitsState) =>
+                        (handleBenefitsEditorChange(benefitsState))                 
+                      }
+                      placeholder="ex: This is a position offered at our company in which you will be responsible for overseeing several skilled machinists."
+                  
+                    />
   </div>
                   </div>
                

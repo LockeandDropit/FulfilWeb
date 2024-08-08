@@ -281,7 +281,7 @@ const JobDetails = () => {
                 <div class="inline-flex sm:justify-end items-center gap-x-3">
                   <div class="flex justify-end items-center gap-x-2">
              
-                        {/* <button
+                        <button
                           type="button"
                           onClick={() =>
                             setEditBusinessVisible(!editBusinessVisible)
@@ -303,7 +303,7 @@ const JobDetails = () => {
                           >
                             <path d="m9 18 6-6-6-6" />
                           </svg>
-                        </button> */}
+                        </button>
                   
                   </div>
                 </div>

@@ -66,6 +66,8 @@ const JobDetails = () => {
 
   const navigate = useNavigate();
 
+  console.log("job", job)
+
   useEffect(() => {
     if (job) {
       const q = query(

@@ -51,7 +51,7 @@ export const SingleMarker = (props) => {
                             <p>Volunteer!</p>
                           ) : tree.isSalaried ? (
                             <p>
-                              ${tree.lowerRate} yearly - ${tree.upperRate} yearly
+                              ${tree.shortenedSalary} yearly - ${tree.shortenedUpperSalary} yearly
                             </p>
                           ) : (tree.upperRate > tree.lowerRate ?  (<p>
                             ${tree.lowerRate}/hr + 

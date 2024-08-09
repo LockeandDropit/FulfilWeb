@@ -110,8 +110,10 @@ const EditSelectedBusinessJob = (props) => {
   const [isFlatRate, setIsFlatRate] = useState(false);
   const [flatRate, setFlatRate] = useState(0);
   const [isHourly, setIsHourly] = useState();
-  const [lowerRate, setLowerRate] = useState(0);
-  const [upperRate, setUpperRate] = useState(0);
+  const [lowerRate, setLowerRate] = useState(null);
+  const [upperRate, setUpperRate] = useState(null);
+  const [shortenedSalary, setShortenedSalary] = useState(null);
+  const [shortenedUpperSalary, setShortenedUpperSalary] = useState(null);
   const [jobTitle, setJobTitle] = useState(null);
   const [user, setUser] = useState();
   const [employerID, setEmployerID] = useState(null);
@@ -252,17 +254,52 @@ onOpen()
     }
   };
 
+  console.log("isSalaried", isSalaried)
+  const [displayLowerRate, setDisplayLowerRate] = useState(null);
+
   const lowerRateValidate = (lowerRate) => {
+    console.log("first consumed lower rate", lowerRate);
+    let numberLowerRate = parseInt(lowerRate);
     setLowerRateValidationBegun(true);
     const isValid = numberOnlyRegexMinimumCharacterInput.test(lowerRate);
-    if (!isValid) {
+    if (!isValid || null) {
       setLowerRateValidationMessage("Please enter valid rate");
       console.log(lowerRateValidationMessage);
     } else {
       setLowerRateValidationMessage();
-      setLowerRate(lowerRate);
+      if (payType === "Salaried" || isSalaried === true) {
+        console.log("salaried lower rate", lowerRate);
+        if (lowerRate.length > 3) {
+          let parsed = [];
+
+          let shortened = [];
+
+          //string splitting credit lonesomeday https://stackoverflow.com/questions/6484670/how-do-i-split-a-string-into-an-array-of-characters
+          for (var i = 0; i < lowerRate.length; i++) {
+            parsed.push(lowerRate.charAt(i));
+            console.log("inside ", lowerRate.charAt(i));
+          }
+          if (parsed.length === 5) {
+            shortened.push(parsed[0], parsed[1], "k");
+          } else if (parsed.length === 6) {
+            shortened.push(parsed[0], parsed[1], parsed[2], "k");
+          }
+
+          setLowerRate(numberLowerRate.toLocaleString());
+          setShortenedSalary(shortened.join(""));
+        }
+      }
+
+    }
+    if (lowerRate) {
+      setDisplayLowerRate(numberLowerRate.toLocaleString());
+      console.log("lower rate 1", lowerRate);
+    } else {
+      setDisplayLowerRate(null);
+      console.log("lower rate 2", lowerRate);
     }
   };
+
 
   const [upperRateValidationMessage, setUpperRateValidationMessage] =
     useState();
@@ -278,15 +315,48 @@ onOpen()
     }
   };
 
+
+  const [displayUpperRate, setDisplayUpperRate] = useState(null);
+
   const upperRateValidate = (upperRate) => {
+    console.log("first consumed upper rate", upperRate);
+    let numberUpperRate = parseInt(upperRate);
     setUpperRateValidationBegun(true);
     const isValid = numberOnlyRegexMinimumCharacterInput.test(upperRate);
-    if (!isValid) {
+    if (!isValid || null) {
       setUpperRateValidationMessage("Please enter valid rate");
-      console.log(upperRateValidationMessage);
+      console.log(lowerRateValidationMessage);
     } else {
       setUpperRateValidationMessage();
-      setUpperRate(upperRate);
+      if (payType === "Salaried" || isSalaried === true) {
+        console.log("salaried lower rate", upperRate);
+        if (upperRate.length > 3) {
+          let parsed = [];
+
+          let shortened = [];
+
+          for (var i = 0; i < upperRate.length; i++) {
+            parsed.push(upperRate.charAt(i));
+            console.log("inside ", upperRate.charAt(i));
+          }
+          if (parsed.length === 5) {
+            shortened.push(parsed[0], parsed[1], "k");
+          } else if (parsed.length === 6) {
+            shortened.push(parsed[0], parsed[1], parsed[2], "k");
+          }
+
+          setUpperRate(numberUpperRate.toLocaleString());
+          setShortenedUpperSalary(shortened.join(""));
+        }
+      }
+
+    }
+    if (upperRate) {
+      setDisplayUpperRate(numberUpperRate.toLocaleString());
+      console.log("lower rate 1", upperRate);
+    } else {
+      setDisplayUpperRate(null);
+      console.log("lower rate 2", upperRate);
     }
   };
 
@@ -688,6 +758,7 @@ onOpen()
   useEffect(() => {
     if (job.benefitsDescription) {
       console.log("here you go ",job.benefitsDescription)
+      //credit revoltaxz  https://github.com/jpuri/react-draft-wysiwyg/issues/462
       setBenefitsState(stateFromMarkdown(job.benefitsDescription))
     } 
   }, [job])
@@ -698,6 +769,7 @@ onOpen()
   const [applicantEditorState, setApplicantEditorState] = useState(null)
   const [benefitsEditorState, setBenefitsEditorState] = useState(null)
 
+  //credit revoltaxz  https://github.com/jpuri/react-draft-wysiwyg/issues/462 
   useEffect(() => {
   if (contentState) {
     setEditorState(EditorState.createWithContent(contentState))
@@ -911,18 +983,22 @@ console.log("looking at the job object", job, payType)
     <p className="mt-2 mr-1 text-sm font-medium">$</p>
    <input
      id="hs-pro-dactmt"
-     type="text"
+   
      class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
      defaultValue={lowerRate}
-     onChange={(e) => lowerRateValidate(e.target.value)}
+     value={displayLowerRate}
+     onChange={(e) =>
+      lowerRateValidate(e.target.value.replace(",", ""))
+    }
    />
    <p className="mt-2 text-sm font-medium mr-1 ml-1">/hour - $</p>
    <input
      id="hs-pro-dactmt"
-     type="text"
+ 
      class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
      defaultValue={upperRate}
-                      onChange={(e) => upperRateValidate(e.target.value)}
+     value={displayUpperRate}
+     onChange={(e) => upperRateValidate(e.target.value.replace(",", ""))}
   
    />
    <p className="mt-2 text-sm font-medium">/hour</p>
@@ -946,20 +1022,23 @@ console.log("looking at the job object", job, payType)
     <p className="mt-2 mr-1 text-sm font-medium">$</p>
     <input
      id="hs-pro-dactmt"
-     type="text"
+  
      class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-     defaultValue={lowerRate}
    
-     onChange={(e) => lowerRateValidate(e.target.value)}
+     value={displayLowerRate}
+     onChange={(e) =>
+      lowerRateValidate(e.target.value.replace(",", ""))
+    }
   
    />
    <p className="mt-2 text-sm font-medium mr-1 ml-1"> yearly - $</p>
    <input
      id="hs-pro-dactmt"
-     type="text"
+
      class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-     defaultValue={upperRate}
-     onChange={(e) => upperRateValidate(e.target.value)}
+   
+     value={displayUpperRate }
+     onChange={(e) => upperRateValidate(e.target.value.replace(",", ""))}
    />
      <p className="mt-2 ml-1 text-sm font-medium">yearly</p>
      </div>
@@ -970,26 +1049,27 @@ console.log("looking at the job object", job, payType)
       for="hs-pro-dactmt"
       class="block mb-2 text-sm font-medium text-gray-800 "
     >
-      Enter the salary range (yearly)
+      Enter the salary range (yearly) sdfsd
     </label>
     <div className="flex">
     <p className="mt-2 mr-1 text-sm font-medium">$</p>
     <input
      id="hs-pro-dactmt"
-     type="text"
+  
      class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
      defaultValue={lowerRate}
-   
-     onChange={(e) => lowerRateValidate(e.target.value)}
+     value={displayLowerRate }
+     onChange={(e) => lowerRateValidate(e.target.value.replace(",", ""))}
   
    />
    <p className="mt-2 text-sm font-medium mr-1 ml-1"> yearly - $</p>
    <input
      id="hs-pro-dactmt"
-     type="text"
+  
      class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
      defaultValue={upperRate}
-     onChange={(e) => upperRateValidate(e.target.value)}
+     value={displayUpperRate }
+     onChange={(e) => upperRateValidate(e.target.value.replace(",", ""))}
   
    />
      <p className="mt-2 ml-1 text-sm font-medium">yearly</p>

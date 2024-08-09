@@ -49,11 +49,11 @@ export const TreeMarker = (props) => {
                         >
                           {tree.isVolunteer ? (
                             <p>Volunteer!</p>
-                          ) : tree.isSalaried ? (
-                            <p>
+                          ) : tree.isSalaried ? tree.shortenedSalary ? ( <p>
+                            ${tree.shortenedSalary} - ${tree.shortenedUpperSalary} yearly
+                          </p>) : ( <p>
                               ${tree.lowerRate} yearly - ${tree.upperRate} yearly
-                            </p>
-                          ) : (tree.upperRate > tree.lowerRate ?  (<p>
+                            </p>)  : (tree.upperRate > tree.lowerRate ?  (<p>
                             ${tree.lowerRate}/hr + 
                           </p>) : ( <p>
                               ${tree.lowerRate}/hr

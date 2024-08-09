@@ -26,7 +26,7 @@ import {
   ModalCloseButton,
   useDisclosure,
   Center,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import {
   Drawer,
@@ -36,7 +36,7 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-} from '@chakra-ui/react'
+} from "@chakra-ui/react";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByPlaceId } from "react-google-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
@@ -47,37 +47,31 @@ import {
 } from "@stripe/react-stripe-js";
 
 import { addJobStore } from "../HomePage/lib/addJobStore";
-import  JobDescriptionInput  from "./Editors/JobDescriptionInput"
+import JobDescriptionInput from "./Editors/JobDescriptionInput";
 import Quill from "quill";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { draftToMarkdown } from 'markdown-draft-js';
+import { draftToMarkdown } from "markdown-draft-js";
 import RichTextEditor from "./RichTextEditor";
-
-
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-const Delta = Quill.import('delta');
-
+const Delta = Quill.import("delta");
 
 const AddJobBusiness = ({ heldSelected }) => {
-
-
-
   useEffect(() => {
     if (heldSelected) {
-      console.log("getting passed", heldSelected)
-      setStreetAddress(heldSelected.streetAddress)
-      setCity(heldSelected.city)
-      setState(heldSelected.state)
-      setZipCode(heldSelected.zipCode)
-      setLocationLat(heldSelected.locationLat)
-      setLocationLng(heldSelected.locationLng)
+      console.log("getting passed", heldSelected);
+      setStreetAddress(heldSelected.streetAddress);
+      setCity(heldSelected.city);
+      setState(heldSelected.state);
+      setZipCode(heldSelected.zipCode);
+      setLocationLat(heldSelected.locationLat);
+      setLocationLng(heldSelected.locationLng);
     } else {
-      console.log("nothing passed")
+      console.log("nothing passed");
     }
-  }, [])
+  }, []);
 
   const quillRef = useRef();
   const navigate = useNavigate();
@@ -88,13 +82,11 @@ const AddJobBusiness = ({ heldSelected }) => {
 
   const [hasRun, setHasRun] = useState(false);
 
-const { addJobInfo } = addJobStore()
+  const { addJobInfo } = addJobStore();
 
   useEffect(() => {
-
-        onOpenModal()
-    
-  }, [])
+    onOpenModal();
+  }, []);
 
   useEffect(() => {
     if (hasRun === false) {
@@ -129,27 +121,29 @@ const { addJobInfo } = addJobStore()
 
   const [showAddJob, setShowAddJob] = useState(false);
 
-
-  const { isOpen: isOPenMobileDash, onOpen: onOpenMobileDash, onClose: onCloseMobileDash } = useDisclosure()
-
-
+  const {
+    isOpen: isOPenMobileDash,
+    onOpen: onOpenMobileDash,
+    onClose: onCloseMobileDash,
+  } = useDisclosure();
 
   //all add job logic
 
-  const [isEstimatedAddress, setIsEstimatedAddress] = useState(false)
-  const [isEstimatedPay, setIsEstimatedPay] = useState(false)
-
+  const [isEstimatedAddress, setIsEstimatedAddress] = useState(false);
+  const [isEstimatedPay, setIsEstimatedPay] = useState(false);
 
   const [isSalaried, setIsSalaried] = useState(null);
-  const [applicantDescription, setApplicantDescription] = useState(null)
-  const [benefitsDescription, setBenefitsDescription] = useState(null)
-  const [isFullTimePosition, setIsFullTimePosition] = useState(null)
+  const [applicantDescription, setApplicantDescription] = useState(null);
+  const [benefitsDescription, setBenefitsDescription] = useState(null);
+  const [isFullTimePosition, setIsFullTimePosition] = useState(null);
   const [flatRate, setFlatRate] = useState(0);
   const [isHourly, setIsHourly] = useState(null);
-  const [lowerRate, setLowerRate] = useState(0);
-  const [upperRate, setUpperRate] = useState(0);
-  const [jobTitle, setJobTitle] = useState(null);
+  const [lowerRate, setLowerRate] = useState(null);
+  const [upperRate, setUpperRate] = useState(null);
 
+  const [jobTitle, setJobTitle] = useState(null);
+  const [shortenedSalary, setShortenedSalary] = useState(null);
+  const [shortenedUpperSalary, setShortenedUpperSalary] = useState(null);
   const [employerID, setEmployerID] = useState(null);
   const [jobID, setJobID] = useState(null);
   const [isVolunteer, setIsVolunteer] = useState(null);
@@ -160,20 +154,26 @@ const { addJobInfo } = addJobStore()
   const [description, setDescription] = useState(null);
   const [requirements, setRequirements] = useState("");
 
-       //modal control
-       const { isOpen, onOpen, onClose } = useDisclosure()
-       const { isOpen: isOpenModal, onOpen: onOpenModal, onClose: onCloseModal } = useDisclosure()
-       const { isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError } = useDisclosure()
-
+  //modal control
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenModal,
+    onOpen: onOpenModal,
+    onClose: onCloseModal,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenError,
+    onOpen: onOpenError,
+    onClose: onCloseError,
+  } = useDisclosure();
 
   const [requirements2, setRequirements2] = useState("");
   const [requirements3, setRequirements3] = useState("");
   const [niceToHave, setNiceToHave] = useState(null);
-  const [employerProfilePicture, setEmployerProfilePicture] = useState(null)
-const [employerFirstName, setEmployerFirstName] = useState(null)
-const [employerLastName, setEmployerLastName] = useState(null)
-const [companyName, setCompanyName] = useState(null)
-
+  const [employerProfilePicture, setEmployerProfilePicture] = useState(null);
+  const [employerFirstName, setEmployerFirstName] = useState(null);
+  const [employerLastName, setEmployerLastName] = useState(null);
+  const [companyName, setCompanyName] = useState(null);
 
   useEffect(() => {
     if (hasRun === false) {
@@ -187,18 +187,17 @@ const [companyName, setCompanyName] = useState(null)
     }
   }, [hasRun]);
 
-
   useEffect(() => {
     if (user != null) {
       const docRef = doc(db, "employers", user.uid);
 
       getDoc(docRef).then((snapshot) => {
         console.log(snapshot.data());
-        setCompanyName(snapshot.data().companyName)
-        setEmployerFirstName(snapshot.data().firstName)
-        setEmployerLastName(snapshot.data().lastName)
-        setEmployerProfilePicture(snapshot.data().profilePictureResponse)
-     
+        setCompanyName(snapshot.data().companyName);
+        setEmployerFirstName(snapshot.data().firstName);
+        setEmployerLastName(snapshot.data().lastName);
+        setEmployerProfilePicture(snapshot.data().profilePictureResponse);
+
         //get profile picture here as well?
       });
     } else {
@@ -207,7 +206,7 @@ const [companyName, setCompanyName] = useState(null)
   }, [user]);
 
   //credit https://www.code-sample.com/2019/12/react-allow-only-numbers-in-textbox.html
-  const numberOnlyRegexMinimumCharacterInput = /^[0-9.\b]{1,7}$/;
+  const numberOnlyRegexMinimumCharacterInput = /^[0-9.,\b]{1,8}$/;
 
   const [flatRateValidationMessage, setFlatRateValidationMessage] = useState();
 
@@ -249,17 +248,54 @@ const [companyName, setCompanyName] = useState(null)
     }
   };
 
+  const [finalShortened, setFinalShortened] = useState(null);
+
+  const [displayLowerRate, setDisplayLowerRate] = useState(null);
+
   const lowerRateValidate = (lowerRate) => {
+    console.log("first consumed lower rate", lowerRate);
+    let numberLowerRate = parseInt(lowerRate);
     setLowerRateValidationBegun(true);
     const isValid = numberOnlyRegexMinimumCharacterInput.test(lowerRate);
-    if (!isValid) {
+    if (!isValid || null) {
       setLowerRateValidationMessage("Please enter valid rate");
       console.log(lowerRateValidationMessage);
     } else {
       setLowerRateValidationMessage();
-      setLowerRate(lowerRate);
+      if (payType === "Salaried") {
+        console.log("salaried lower rate", lowerRate);
+        if (lowerRate.length > 3) {
+          let parsed = [];
+
+          let shortened = [];
+
+          //string splitting credit lonesomeday https://stackoverflow.com/questions/6484670/how-do-i-split-a-string-into-an-array-of-characters
+          for (var i = 0; i < lowerRate.length; i++) {
+            parsed.push(lowerRate.charAt(i));
+            console.log("inside ", lowerRate.charAt(i));
+          }
+          if (parsed.length === 5) {
+            shortened.push(parsed[0], parsed[1], "k");
+          } else if (parsed.length === 6) {
+            shortened.push(parsed[0], parsed[1], parsed[2], "k");
+          }
+
+          setLowerRate(numberLowerRate.toLocaleString());
+          setShortenedSalary(shortened.join(""));
+        }
+      }
+
+    }
+    if (lowerRate) {
+      setDisplayLowerRate(numberLowerRate.toLocaleString());
+      console.log("lower rate 1", lowerRate);
+    } else {
+      setDisplayLowerRate(null);
+      console.log("lower rate 2", lowerRate);
     }
   };
+
+  /// NEXT: push shortened salary, add it to editing as well. Make it visible on all Maps.
 
   const [upperRateValidationMessage, setUpperRateValidationMessage] =
     useState();
@@ -275,35 +311,64 @@ const [companyName, setCompanyName] = useState(null)
     }
   };
 
+  const [displayUpperRate, setDisplayUpperRate] = useState(null);
+
   const upperRateValidate = (upperRate) => {
+    console.log("first consumed upper rate", upperRate);
+    let numberUpperRate = parseInt(upperRate);
     setUpperRateValidationBegun(true);
     const isValid = numberOnlyRegexMinimumCharacterInput.test(upperRate);
-    if (!isValid) {
+    if (!isValid || null) {
       setUpperRateValidationMessage("Please enter valid rate");
-      console.log(upperRateValidationMessage);
+      console.log(lowerRateValidationMessage);
     } else {
       setUpperRateValidationMessage();
-      setUpperRate(upperRate);
+      if (payType === "Salaried") {
+        console.log("salaried lower rate", upperRate);
+        if (upperRate.length > 3) {
+          let parsed = [];
+
+          let shortened = [];
+
+          for (var i = 0; i < upperRate.length; i++) {
+            parsed.push(upperRate.charAt(i));
+            console.log("inside ", upperRate.charAt(i));
+          }
+          if (parsed.length === 5) {
+            shortened.push(parsed[0], parsed[1], "k");
+          } else if (parsed.length === 6) {
+            shortened.push(parsed[0], parsed[1], parsed[2], "k");
+          }
+
+          setUpperRate(numberUpperRate.toLocaleString());
+          setShortenedUpperSalary(shortened.join(""));
+        }
+      }
+
+    }
+    if (upperRate) {
+      setDisplayUpperRate(numberUpperRate.toLocaleString());
+      console.log("lower rate 1", upperRate);
+    } else {
+      setDisplayUpperRate(null);
+      console.log("lower rate 2", upperRate);
     }
   };
+
 
   //credit https://stackoverflow.com/questions/11511154/regex-for-maximum-length-in-javascript
   const minLengthRegEx = /^.{1,}$/;
 
-
   const isThisValid = () => {
-
-
-    console.log("what now", applicantDescription)
-  }
+    console.log("what now", applicantDescription);
+  };
 
   const checkLength = () => {
-
-    //setloading spinner 
-    setPendingSuccess(true)
+    //setloading spinner
+    setPendingSuccess(true);
     //check to see if everything is entered
-    const descriptionValid = minLengthRegEx.test(description)
-    const applicantDescriptionValid = minLengthRegEx.test(applicantDescription)
+    const descriptionValid = minLengthRegEx.test(description);
+    const applicantDescriptionValid = minLengthRegEx.test(applicantDescription);
     const jobTitleValid = minLengthRegEx.test(jobTitle);
     const upperRateValid = numberOnlyRegexMinimumCharacterInput.test(upperRate);
     const lowerRateValid = numberOnlyRegexMinimumCharacterInput.test(lowerRate);
@@ -311,40 +376,58 @@ const [companyName, setCompanyName] = useState(null)
 
     //check for null values https://stackoverflow.com/questions/6003884/how-do-i-check-for-null-values-in-javascript user578895
 
-    if (!jobTitleValid || isOneTime === null ||  isFullTimePosition === null || applicantDescription === null || isSalaried === null ) {
-      console.log("error here", jobTitleValid, isOneTime, isFullTimePosition, applicantDescription, isSalaried);
-      
-      onOpenError()
-      setPendingSuccess(false)
+    if (
+      !jobTitleValid ||
+      isOneTime === null ||
+      isFullTimePosition === null ||
+      applicantDescription === null ||
+      isSalaried === null
+    ) {
+      console.log(
+        "error here",
+        jobTitleValid,
+        isOneTime,
+        isFullTimePosition,
+        applicantDescription,
+        isSalaried
+      );
+
+      onOpenError();
+      setPendingSuccess(false);
       console.log("1");
     } else {
       // if (isOneTime === true && isSalaried === true && !flatRateValid || !descriptionValid this was throwing invalid idk why but hopefully fixed) {
-        if (isOneTime === true && isSalaried === true && !flatRateValid ) {
-        onOpenError()
-        setPendingSuccess(false)
-        console.log("2", isOneTime, isSalaried, flatRateValid, minLengthRegEx.test(description) );
-
+      if (isOneTime === true && isSalaried === true && !flatRateValid) {
+        onOpenError();
+        setPendingSuccess(false);
+        console.log(
+          "2",
+          isOneTime,
+          isSalaried,
+          flatRateValid,
+          minLengthRegEx.test(description)
+        );
       } else {
         if (
-          (isOneTime === true && isHourly === true && !upperRateValid ) ||
+          (isOneTime === true && isHourly === true && !upperRateValid) ||
           !lowerRateValid
         ) {
           console.log("3");
-          onOpenError()
-          setPendingSuccess(false)
+          onOpenError();
+          setPendingSuccess(false);
         } else {
-          if (isOneTime === false && isSalaried === true && !flatRateValid ) {
+          if (isOneTime === false && isSalaried === true && !flatRateValid) {
             console.log("4");
-            onOpenError()
-            setPendingSuccess(false)
+            onOpenError();
+            setPendingSuccess(false);
           } else {
             if (
               (isOneTime === false && isHourly !== null && !upperRateValid) ||
               !lowerRateValid
             ) {
               console.log("5");
-              onOpenError()
-              setPendingSuccess(false)
+              onOpenError();
+              setPendingSuccess(false);
             } else {
               checkAddress();
             }
@@ -358,8 +441,8 @@ const [companyName, setCompanyName] = useState(null)
   const checkAddress = () => {
     if (!streetAddress || !locationLat) {
       console.log(streetAddress, locationLat);
-      onOpenError()
-      setPendingSuccess(false)
+      onOpenError();
+      setPendingSuccess(false);
       console.log("6");
     } else {
       // testJobStore()
@@ -388,11 +471,11 @@ const [companyName, setCompanyName] = useState(null)
 
   useEffect(() => {
     if (payType === "Hourly") {
-      console.log("hourly")
+      console.log("hourly");
       handleIsHourly();
     } else if (payType === "Salaried") {
       handleIsFixed();
-      console.log("salaried")
+      console.log("salaried");
     } else {
     }
   }, [payType]);
@@ -426,16 +509,13 @@ const [companyName, setCompanyName] = useState(null)
 
   useEffect(() => {
     //credit https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript?rq=3 mohshbool & Samuel Meddows
-    let initialDate = new Date()
-    var dd = String(initialDate.getDate()).padStart(2, '0');
-    var mm = String(initialDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let initialDate = new Date();
+    var dd = String(initialDate.getDate()).padStart(2, "0");
+    var mm = String(initialDate.getMonth() + 1).padStart(2, "0"); //January is 0!
     var yyyy = initialDate.getFullYear();
 
-    var today = mm + '/' + dd + '/' + yyyy;
+    var today = mm + "/" + dd + "/" + yyyy;
 
-
-   
-   
     setDatePosted(today);
   }, []);
 
@@ -453,10 +533,10 @@ const [companyName, setCompanyName] = useState(null)
     //submit data
     setDoc(doc(db, "employers", user.uid, "Posted Jobs", jobTitle), {
       companyName: companyName,
-      isSalaried :  isSalaried,
-applicantDescription: applicantDescription,
-benefitsDescription : benefitsDescription ? benefitsDescription : null,
-isFullTimePosition : isFullTimePosition,
+      isSalaried: isSalaried,
+      applicantDescription: applicantDescription,
+      benefitsDescription: benefitsDescription ? benefitsDescription : null,
+      isFullTimePosition: isFullTimePosition,
       employerID: employerID,
       employerEmail: user.email,
       employerFirstName: employerFirstName,
@@ -468,6 +548,8 @@ isFullTimePosition : isFullTimePosition,
       firstName: firstName,
       lowerRate: lowerRate,
       upperRate: upperRate,
+      shortenedSalary: shortenedSalary,
+      shortenedUpperSalary: shortenedUpperSalary,
       isVolunteer: isVolunteer,
       isOneTime: isOneTime,
       flatRate: flatRate,
@@ -495,7 +577,7 @@ isFullTimePosition : isFullTimePosition,
       })
       .catch((error) => {
         // no bueno
-        onOpenError()
+        onOpenError();
         console.log(error);
       });
   };
@@ -505,10 +587,10 @@ isFullTimePosition : isFullTimePosition,
     setDoc(doc(db, "Map Jobs", jobID), {
       companyName: companyName,
       isPostedByBusiness: true,
-      isSalaried :  isSalaried,
+      isSalaried: isSalaried,
       applicantDescription: applicantDescription,
-      benefitsDescription : benefitsDescription ? benefitsDescription : null,
-      isFullTimePosition : isFullTimePosition,
+      benefitsDescription: benefitsDescription ? benefitsDescription : null,
+      isFullTimePosition: isFullTimePosition,
       employerID: employerID,
       employerEmail: user.email,
       employerFirstName: employerFirstName,
@@ -519,10 +601,11 @@ isFullTimePosition : isFullTimePosition,
       firstName: firstName,
       lowerRate: lowerRate,
       upperRate: upperRate,
+      shortenedSalary: shortenedSalary,
+      shortenedUpperSalary: shortenedUpperSalary,
       isVolunteer: isVolunteer,
       isOneTime: isOneTime,
       isActive: true,
-
       flatRate: flatRate,
       isHourly: isHourly,
       lowerCaseJobTitle: lowerCaseJobTitle,
@@ -544,12 +627,12 @@ isFullTimePosition : isFullTimePosition,
     })
       .then(() => {
         //all good
-        setPendingSuccess(false)
+        setPendingSuccess(false);
         console.log("data submitted for Maps");
       })
       .catch((error) => {
         // no bueno
-        onOpenError()
+        onOpenError();
         console.log(error);
       });
 
@@ -565,6 +648,8 @@ isFullTimePosition : isFullTimePosition,
         firstName: firstName,
         lowerRate: lowerRate,
         upperRate: upperRate,
+        shortenedSalary: shortenedSalary,
+        shortenedUpperSalary: shortenedUpperSalary,
         isVolunteer: isVolunteer,
         isOneTime: isOneTime,
         isActive: true,
@@ -590,22 +675,22 @@ isFullTimePosition : isFullTimePosition,
       })
         .then(() => {
           //all good
-          setPendingSuccess(false)
+          setPendingSuccess(false);
           console.log("data submitted for Maps");
         })
         .catch((error) => {
           // no bueno
-          onOpenError()
+          onOpenError();
           console.log(error);
         });
     } else {
       setDoc(doc(db, "Map Jobs Paid", jobID), {
         companyName: companyName,
         isPostedByBusiness: true,
-        isSalaried :  isSalaried,
+        isSalaried: isSalaried,
         applicantDescription: applicantDescription,
-        benefitsDescription : benefitsDescription ? benefitsDescription : null,
-        isFullTimePosition : isFullTimePosition,
+        benefitsDescription: benefitsDescription ? benefitsDescription : null,
+        isFullTimePosition: isFullTimePosition,
         employerID: employerID,
         employerEmail: user.email,
         jobTitle: jobTitle,
@@ -613,6 +698,8 @@ isFullTimePosition : isFullTimePosition,
         firstName: firstName,
         lowerRate: lowerRate,
         upperRate: upperRate,
+        shortenedSalary: shortenedSalary,
+        shortenedUpperSalary: shortenedUpperSalary,
         isVolunteer: isVolunteer,
         isOneTime: isOneTime,
         isActive: true,
@@ -639,12 +726,12 @@ isFullTimePosition : isFullTimePosition,
       })
         .then(() => {
           //all good
-          setPendingSuccess(false)
+          setPendingSuccess(false);
           console.log("data submitted for Maps");
         })
         .catch((error) => {
           // no bueno
-          onOpenError()
+          onOpenError();
           console.log(error);
         });
       //adds to paid only db for map
@@ -656,10 +743,10 @@ isFullTimePosition : isFullTimePosition,
     setDoc(doc(db, "Jobs", user.uid, "Posted Jobs", jobTitle), {
       companyName: companyName,
       isPostedByBusiness: true,
-      isSalaried :  isSalaried,
+      isSalaried: isSalaried,
       applicantDescription: applicantDescription,
-      benefitsDescription : benefitsDescription ? benefitsDescription : null,
-      isFullTimePosition : isFullTimePosition,
+      benefitsDescription: benefitsDescription ? benefitsDescription : null,
+      isFullTimePosition: isFullTimePosition,
       employerID: employerID,
       employerEmail: user.email,
       jobTitle: jobTitle,
@@ -670,6 +757,8 @@ isFullTimePosition : isFullTimePosition,
       employerLastName: employerLastName,
       employerProfilePicture: employerProfilePicture,
       upperRate: upperRate,
+      shortenedSalary: shortenedSalary,
+      shortenedUpperSalary: shortenedUpperSalary,
       isVolunteer: isVolunteer,
       isOneTime: isOneTime,
       isSalaried: isSalaried,
@@ -699,7 +788,7 @@ isFullTimePosition : isFullTimePosition,
       })
       .catch((error) => {
         // no bueno
-        onOpenError()
+        onOpenError();
         console.log(error);
       });
 
@@ -707,16 +796,18 @@ isFullTimePosition : isFullTimePosition,
     setDoc(doc(db, "All Jobs", jobID), {
       companyName: companyName,
       isPostedByBusiness: true,
-      isSalaried :  isSalaried,
+      isSalaried: isSalaried,
       applicantDescription: applicantDescription,
-      benefitsDescription : benefitsDescription ? benefitsDescription : null,
-      isFullTimePosition : isFullTimePosition,
+      benefitsDescription: benefitsDescription ? benefitsDescription : null,
+      isFullTimePosition: isFullTimePosition,
       employerID: employerID,
       employerEmail: user.email,
       jobTitle: jobTitle,
       jobID: jobID,
       firstName: firstName,
       lowerRate: lowerRate,
+      shortenedSalary: shortenedSalary,
+      shortenedUpperSalary: shortenedUpperSalary,
       upperRate: upperRate,
       isActive: true,
       isVolunteer: isVolunteer,
@@ -752,13 +843,13 @@ isFullTimePosition : isFullTimePosition,
       })
       .catch((error) => {
         // no bueno
-        onOpenError()
+        onOpenError();
         console.log(error);
       });
 
-      setShowAddJob(!showAddJob)
+    setShowAddJob(!showAddJob);
 
-    onOpen()
+    onOpen();
 
     // navigate("/AddJobInfo", {
     //   state: {
@@ -769,8 +860,6 @@ isFullTimePosition : isFullTimePosition,
     //   },
     // });
   };
-
-
 
   const testButtonNavigate = () => {
     navigate("/AddJobInfo", {
@@ -830,11 +919,11 @@ isFullTimePosition : isFullTimePosition,
     if (!heldSelected) {
       setStreetAddress(streetNumber + " " + streetName);
       console.log(streetAddress);
-    } 
+    }
   }, [streetName, streetName]);
 
-  const [addressIncorrect, setAddressIncorrect] = useState(false)
-  let addressIncorrectMessage = "Please enter a more specific address"
+  const [addressIncorrect, setAddressIncorrect] = useState(false);
+  let addressIncorrectMessage = "Please enter a more specific address";
 
   useEffect(() => {
     if (firstAddress !== null && !heldSelected) {
@@ -849,31 +938,31 @@ isFullTimePosition : isFullTimePosition,
         // setStreetNumber(firstAddress[0].long_name);
         // console.log("first one", firstAddress[0].long_name);
       } else {
-        setAddressIncorrect(true)
+        setAddressIncorrect(true);
       }
       if (firstAddress[1]) {
         setStreetName(firstAddress[1].long_name);
         // console.log(firstAddress[1].long_name);
       } else {
-        setAddressIncorrect(true)
+        setAddressIncorrect(true);
       }
       if (firstAddress[2]) {
         setCity(firstAddress[2].long_name);
         // console.log(firstAddress[2].long_name);
       } else {
-        setAddressIncorrect(true)
+        setAddressIncorrect(true);
       }
       if (firstAddress[4]) {
         setState(firstAddress[4].long_name);
         // console.log(firstAddress[4].long_name);
       } else {
-        setAddressIncorrect(true)
+        setAddressIncorrect(true);
       }
       if (firstAddress[6]) {
         setZipCode(firstAddress[6].long_name);
-       setAddressIncorrect(false)
+        setAddressIncorrect(false);
       } else {
-        setAddressIncorrect(true)
+        setAddressIncorrect(true);
       }
       // });
     } else {
@@ -904,13 +993,10 @@ isFullTimePosition : isFullTimePosition,
     setLoading(false);
   }, 1000);
 
-
-
   const handleCloseBoth = () => {
-    onClose()
-    onCloseModal()
-  }
-
+    onClose();
+    onCloseModal();
+  };
 
   const [isLoading, setIsLoading] = useState(false);
   const [stripeOpen, setStripeOpen] = useState(false);
@@ -920,8 +1006,6 @@ isFullTimePosition : isFullTimePosition,
     onOpen: onOpenStripe,
     onClose: onCloseStripe,
   } = useDisclosure();
-
-
 
   const fetchClientSecret = useCallback(() => {
     // Create a Checkout Session
@@ -936,7 +1020,6 @@ isFullTimePosition : isFullTimePosition,
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-        
         }
       )
         .then((res) => res.json())
@@ -952,7 +1035,6 @@ isFullTimePosition : isFullTimePosition,
   }, []);
 
   const options = { fetchClientSecret };
-
 
   useEffect(() => {
     const queryString = window.location.search;
@@ -972,9 +1054,9 @@ isFullTimePosition : isFullTimePosition,
             // getJobDataAgain(data);
             // submitJob() goes here
             setTimeout(() => {
-      console.log("we got your payment", companyName, lowerRate)
-      // submitJob()
-      setLoading(false)
+              console.log("we got your payment", companyName, lowerRate);
+              // submitJob()
+              setLoading(false);
             }, 2000);
           } else {
             alert(
@@ -983,92 +1065,83 @@ isFullTimePosition : isFullTimePosition,
           }
         });
     } else {
-
     }
   }, []);
 
-
-
-
   const testJobStore = () => {
-addJobInfo({
-  companyName: companyName,
-  isSalaried :  isSalaried,
-applicantDescription: applicantDescription,
-benefitsDescription : benefitsDescription ? benefitsDescription : null,
-isFullTimePosition : isFullTimePosition,
-  employerID: employerID,
-  employerEmail: user.email,
-  employerFirstName: employerFirstName,
-  employerLastName: employerLastName,
-  employerProfilePicture: employerProfilePicture,
-  jobTitle: jobTitle,
-  jobID: jobID,
-  firstName: firstName,
-  lowerRate: lowerRate,
-  upperRate: upperRate,
-  isVolunteer: isVolunteer,
-  isOneTime: isOneTime,
-  isSalaried: isSalaried,
-  flatRate: flatRate,
-  isHourly: isHourly,
-  lowerCaseJobTitle: lowerCaseJobTitle,
-  datePosted: datePosted,
-  category: jobCategory,
-  city: city,
-  streetAddress: streetAddress,
-  state: state,
-  zipCode: zipCode,
-  locationLat: locationLat,
-  locationLng: locationLng,
-  description: description,
-  requirements: requirements,
-  requirements2: requirements2,
-  requirements3: requirements3,
-  niceToHave: niceToHave,
-})
-  }
+    addJobInfo({
+      companyName: companyName,
+      isSalaried: isSalaried,
+      applicantDescription: applicantDescription,
+      benefitsDescription: benefitsDescription ? benefitsDescription : null,
+      isFullTimePosition: isFullTimePosition,
+      employerID: employerID,
+      employerEmail: user.email,
+      employerFirstName: employerFirstName,
+      employerLastName: employerLastName,
+      employerProfilePicture: employerProfilePicture,
+      jobTitle: jobTitle,
+      jobID: jobID,
+      firstName: firstName,
+      lowerRate: lowerRate,
+      upperRate: upperRate,
+      isVolunteer: isVolunteer,
+      isOneTime: isOneTime,
+      isSalaried: isSalaried,
+      flatRate: flatRate,
+      isHourly: isHourly,
+      lowerCaseJobTitle: lowerCaseJobTitle,
+      datePosted: datePosted,
+      category: jobCategory,
+      city: city,
+      streetAddress: streetAddress,
+      state: state,
+      zipCode: zipCode,
+      locationLat: locationLat,
+      locationLng: locationLng,
+      description: description,
+      requirements: requirements,
+      requirements2: requirements2,
+      requirements3: requirements3,
+      niceToHave: niceToHave,
+    });
+  };
 
+  // const [editorState, setEditorState] = useState(null)
 
-// const [editorState, setEditorState] = useState(null)
+  const [pendingSuccess, setPendingSuccess] = useState(false);
 
-const [ pendingSuccess, setPendingSuccess] = useState(false)
+  const handleEditorChange = (editorState) => {
+    // (console.log("here it is", draftToMarkdown(editorState)))
+    setDescription(draftToMarkdown(editorState));
+  };
 
+  const handleApplicantEditorChange = (editorState) => {
+    // (console.log("here it is", draftToMarkdown(editorState)))
+    setApplicantDescription(draftToMarkdown(editorState));
+  };
 
+  const handleBenefitsEditorChange = (editorState) => {
+    // (console.log("here it is", draftToMarkdown(editorState)))
+    setBenefitsDescription(draftToMarkdown(editorState));
+  };
 
+  const handleClosePostJob = () => {
+    addJobInfo(heldSelected);
+    onCloseModal();
 
-const handleEditorChange = (editorState) => {
-  // (console.log("here it is", draftToMarkdown(editorState)))
-  setDescription(draftToMarkdown(editorState))
-}
+    //add code to trigger reopen of modal/drawer
+  };
 
-const handleApplicantEditorChange = (editorState) => {
-  // (console.log("here it is", draftToMarkdown(editorState)))
-  setApplicantDescription(draftToMarkdown(editorState))
-}
+  const [intermediatePositionType, setIntermediatePositionType] =
+    useState(null);
 
-const handleBenefitsEditorChange = (editorState) => {
-  // (console.log("here it is", draftToMarkdown(editorState)))
-  setBenefitsDescription(draftToMarkdown(editorState))
-}
+  useEffect(() => {
+    if (intermediatePositionType) {
+      setIsFullTimePosition(JSON.parse(intermediatePositionType));
+    }
+  }, [intermediatePositionType]);
 
-
-const handleClosePostJob = () => {
-  addJobInfo(heldSelected)
-  onCloseModal()
-
-  //add code to trigger reopen of modal/drawer
-}
-
-const [intermediatePositionType, setIntermediatePositionType] = useState(null)
-
-useEffect(() => {
-  if (intermediatePositionType) {
-    setIsFullTimePosition(JSON.parse(intermediatePositionType))
-  }
-}, [intermediatePositionType])
-
-  
   // if (isLoading === true) {
   //   return (
   //     <>
@@ -1087,119 +1160,127 @@ useEffect(() => {
 
   return (
     <div>
-     
-     <Drawer onClose={() => handleClosePostJob()} isOpen={isOpenModal} size={'xl'}>
+      <Drawer
+        onClose={() => handleClosePostJob()}
+        isOpen={isOpenModal}
+        size={"xl"}
+      >
         <DrawerOverlay />
         <DrawerContent>
-     
-        <DrawerCloseButton />
+          <DrawerCloseButton />
           <DrawerHeader w={"50%"}>Create Post</DrawerHeader>
           <DrawerBody>
-    <div class=" ">
-          <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
-            {/* <div class="py-3 px-4 flex justify-between items-center border-b ">
+            <div class=" ">
+              <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
+                {/* <div class="py-3 px-4 flex justify-between items-center border-b ">
               <h3 class="font-semibold text-gray-800">Create A Job</h3>
           
             </div> */}
 
-            <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-              <div class="p-4 space-y-5">
-                <div class="space-y-2">
-                  <label
-                    for="hs-pro-dactmt"
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                  >
-                    Post Title 
-                  </label>
+                <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                  <div class="p-4 space-y-5">
+                    <div class="space-y-2">
+                      <label
+                        for="hs-pro-dactmt"
+                        class="block mb-2 text-sm font-medium text-gray-800 "
+                      >
+                        Post Title
+                      </label>
 
-                  <input
-                    id="hs-pro-dactmt"
-                    type="text"
-                    class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                    placeholder="Ex: Assembler, Hostess, Welder"
-                // width="560px"
-                onChange={(e) => setJobTitle(e.target.value)}
-                 
-                  />
-                </div>
-                <div class="space-y-2">
-                  <label
-                    for="dactmi"
-                   
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                   
-                  >
-                    Is this a full-time or part-time position? 
-                  </label>
+                      <input
+                        id="hs-pro-dactmt"
+                        type="text"
+                        class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                        placeholder="Ex: Assembler, Hostess, Welder"
+                        // width="560px"
+                        onChange={(e) => setJobTitle(e.target.value)}
+                      />
+                    </div>
+                    <div class="space-y-2">
+                      <label
+                        for="dactmi"
+                        class="block mb-2 text-sm font-medium text-gray-800 "
+                      >
+                        Is this a full-time or part-time position?
+                      </label>
 
-                  <label  for="dactmi"
-                   
-                   class="block mb-2 text-sm font-medium text-gray-800 ">
-                  
-                  </label>
+                      <label
+                        for="dactmi"
+                        class="block mb-2 text-sm font-medium text-gray-800 "
+                      ></label>
 
-                  <select
-                  // help from https://groups.google.com/g/knockoutjs/c/_-NzcCQreQ8?pli=1
-                  data-bind="booleanValue: state"
-              placeholder="Select option"
-              class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-              onChange={(e) => setIntermediatePositionType(e.target.value)}
-            >
-              <option>Select option</option>
-              <option value={true}>Full-time</option>
-              <option value={false}>Part-time</option>
-            </select>
-                </div>
-                <div class="space-y-2">
-                  <label
-                    for="dactmd"
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                  >
-                     What's the address? 
-                  </label>
-                  {heldSelected ? (<p>{heldSelected.streetAddress}, {heldSelected.city}, {heldSelected.state}, {heldSelected.zipCode}</p>) : ( <GooglePlacesAutocomplete
-                apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
-                fetchDetails={true}
-                
-                // minLengthAutocomplete={3}
-                autocompletionRequest={{
-                  
-                    types: ["address"],
-                  
-                }}
-                selectProps={{
-                  rawAddress,
-                  styles: {
-                   zIndex: 9999,
-                   option: (provided) => ({
-                    ...provided,
-                   
-                    zIndex: 9999,
-                  }),
-                  singleValue: (provided) => ({
-                    ...provided,
-                    zIndex: 9999,
-                  }),
-                  },
-                  onChange: setRawAddress,
-                  placeholder: "Type address here",
-                 
-                }}
-              />)}
+                      <select
+                        // help from https://groups.google.com/g/knockoutjs/c/_-NzcCQreQ8?pli=1
+                        data-bind="booleanValue: state"
+                        placeholder="Select option"
+                        class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                        onChange={(e) =>
+                          setIntermediatePositionType(e.target.value)
+                        }
+                      >
+                        <option>Select option</option>
+                        <option value={true}>Full-time</option>
+                        <option value={false}>Part-time</option>
+                      </select>
+                    </div>
+                    <div class="space-y-2">
+                      <label
+                        for="dactmd"
+                        class="block mb-2 text-sm font-medium text-gray-800 "
+                      >
+                        What's the address?
+                      </label>
+                      {heldSelected ? (
+                        <p>
+                          {heldSelected.streetAddress}, {heldSelected.city},{" "}
+                          {heldSelected.state}, {heldSelected.zipCode}
+                        </p>
+                      ) : (
+                        <GooglePlacesAutocomplete
+                          apiKey={process.env.REACT_APP_GOOGLE_API_KEY}
+                          fetchDetails={true}
+                          // minLengthAutocomplete={3}
+                          autocompletionRequest={{
+                            types: ["address"],
+                          }}
+                          selectProps={{
+                            rawAddress,
+                            styles: {
+                              zIndex: 9999,
+                              option: (provided) => ({
+                                ...provided,
 
-                 
+                                zIndex: 9999,
+                              }),
+                              singleValue: (provided) => ({
+                                ...provided,
+                                zIndex: 9999,
+                              }),
+                            },
+                            onChange: setRawAddress,
+                            placeholder: "Type address here",
+                          }}
+                        />
+                      )}
 
-{user && user.email === "themasterbusiness@gmail.com" ? (   <><p>estimated address ? </p>  <select
-              placeholder="Estimated address?"
-              class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-              onChange={(e) => setIsEstimatedAddress(e.target.value)}
-            >
-              <option>Select option</option>
-              <option value={true}>Yes</option>
-              <option value={false}>No</option>
-            </select></>) : (null)}
+                      {user && user.email === "themasterbusiness@gmail.com" ? (
+                        <>
+                          <p>estimated address ? </p>{" "}
+                          <select
+                            placeholder="Estimated address?"
+                            class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                            onChange={(e) =>
+                              setIsEstimatedAddress(e.target.value)
+                            }
+                          >
+                            <option>Select option</option>
+                            <option value={true}>Yes</option>
+                            <option value={false}>No</option>
+                          </select>
+                        </>
+                      ) : null}
 
-{/* <label
+                      {/* <label
                     for="dactmi"
                     class="block mb-2 text-sm font-medium text-gray-800 "
                   >
@@ -1213,205 +1294,203 @@ useEffect(() => {
                  
               
                    /> */}
-               
-                </div>
-                <div class="space-y-2">
-                  <label
-                    for="dactmi"
-                   
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                   
-                  >
-                    Is this an hourly or salaried position?
-                  </label>
+                    </div>
+                    <div class="space-y-2">
+                      <label
+                        for="dactmi"
+                        class="block mb-2 text-sm font-medium text-gray-800 "
+                      >
+                        Is this an hourly or salaried position?
+                      </label>
 
-                  <label  for="dactmi"
-                   
-                   class="block mb-2 text-sm font-medium text-gray-800 ">
-                  
-                  </label>
+                      <label
+                        for="dactmi"
+                        class="block mb-2 text-sm font-medium text-gray-800 "
+                      ></label>
 
-                  <select
-              placeholder="Select option"
-              class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-              onChange={(e) => setPayType(e.target.value)}
-            >
-              <option>Select option</option>
-              <option value="Hourly">Hourly</option>
-              <option value="Salaried">Salaried</option>
-            </select>
-                </div>
+                      <select
+                        placeholder="Select option"
+                        class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                        onChange={(e) => setPayType(e.target.value)}
+                      >
+                        <option>Select option</option>
+                        <option value="Hourly">Hourly</option>
+                        <option value="Salaried">Salaried</option>
+                      </select>
+                    </div>
 
-                {user && user.email === "themasterbusiness@gmail.com" ? (   <><p>estimated pay ? </p>  <select
-              placeholder="Estimated address?"
-              class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-              onChange={(e) => setIsEstimatedPay(e.target.value)}
-            >
-              <option>Select option</option>
-              <option value={true}>Yes</option>
-              <option value={false}>No</option>
-            </select></>) : (null)}
+                    {user && user.email === "themasterbusiness@gmail.com" ? (
+                      <>
+                        <p>estimated pay ? </p>{" "}
+                        <select
+                          placeholder="Estimated address?"
+                          class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                          onChange={(e) => setIsEstimatedPay(e.target.value)}
+                        >
+                          <option>Select option</option>
+                          <option value={true}>Yes</option>
+                          <option value={false}>No</option>
+                        </select>
+                      </>
+                    ) : null}
 
-{isHourly ? (
- <div class="space-y-2 ">
- <label
-   for="hs-pro-dactmt"
-   class="block mb-2 text-sm font-medium text-gray-800 "
- >
-    Enter the hourly pay range
- </label>
+                    {isHourly ? (
+                      <div class="space-y-2 ">
+                        <label
+                          for="hs-pro-dactmt"
+                          class="block mb-2 text-sm font-medium text-gray-800 "
+                        >
+                          Enter the hourly pay range
+                        </label>
 
-<div class="flex align-items-center">
-  <p className="mt-2 mr-1 text-sm font-medium">$</p>
- <input
-   id="hs-pro-dactmt"
-   type="text"
-   class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-   placeholder="lower rate"
- 
-   onChange={(e) => lowerRateValidate(e.target.value)}
+                        <div class="flex align-items-center">
+                          <p className="mt-2 mr-1 text-sm font-medium">$</p>
+                          <input
+                            id="hs-pro-dactmt"
+                            type="number"
+                            // value={lowerRate}
+                            class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                            placeholder="lower rate"
+                            onChange={(e) => lowerRateValidate(e.target.value)}
+                          />
+                          <p className="mt-2 text-sm font-medium mr-1 ml-1">
+                            /hour - $
+                          </p>
+                          <input
+                            id="hs-pro-dactmt"
+                            type="text"
+                            class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                            placeholder="upper rate"
+                            onChange={(e) => upperRateValidate(e.target.value)}
+                          />
+                          <p className="mt-2 text-sm font-medium">/hour</p>
+                          {lowerRateValidationBegun === true ? (
+                            <p color="red">{lowerRateValidationMessage}</p>
+                          ) : null}
+                          {upperRateValidationBegun === true ? (
+                            <p color="red">{upperRateValidationMessage}</p>
+                          ) : null}
+                        </div>
+                      </div>
+                    ) : null}
 
- />
- <p className="mt-2 text-sm font-medium mr-1 ml-1">/hour - $</p>
- <input
-   id="hs-pro-dactmt"
-   type="text"
-   class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-   placeholder="upper rate"
-                    onChange={(e) => upperRateValidate(e.target.value)}
+                    {isSalaried ? (
+                      <div class="space-y-2">
+                        <label
+                          for="hs-pro-dactmt"
+                          class="block mb-2 text-sm font-medium text-gray-800 "
+                        >
+                          Enter the salary range (yearly)
+                        </label>
+                        <div className="flex">
+                          <p className="mt-2 mr-1 text-sm font-medium">$</p>
+                          <input
+                            id="hs-pro-dactmt"
+                            value={displayLowerRate}
+                            class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                            placeholder="lower rate"
+                            onChange={(e) =>
+                              lowerRateValidate(e.target.value.replace(",", ""))
+                            }
+                          />
+                          <p className="mt-2 text-sm font-medium mr-1 ml-1">
+                            {" "}
+                            yearly - $
+                          </p>
+                          <input
+                            id="hs-pro-dactmt"
+        
+                            value={displayUpperRate}
+                            class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                            placeholder="upper rate"
+                            // I dont think I have to cite this but https://stackoverflow.com/questions/10398931/how-to-remove-text-from-a-string
+                            onChange={(e) => upperRateValidate(e.target.value.replace(",", ""))}
+                          />
+                          <p className="mt-2 ml-1 text-sm font-medium">
+                            yearly
+                          </p>
+                        </div>
+                      </div>
+                    ) : null}
 
- />
- <p className="mt-2 text-sm font-medium">/hour</p>
-   {lowerRateValidationBegun === true ? (
-    <p color="red">{lowerRateValidationMessage}</p>
-  ) : null}
-  {upperRateValidationBegun === true ? (
-    <p color="red">{upperRateValidationMessage}</p>
-  ) : null}
-  </div>
-</div>
+                    <div class="space-y-2 z-0">
+                      <label
+                        for="dactmi"
+                        class="block mb-2 text-sm font-medium text-gray-800 "
+                      >
+                        Job Description
+                      </label>
 
-) : (
-  null
-)}
+                      <div>
+                        <RichTextEditor
+                          onChange={(description) =>
+                            handleEditorChange(description)
+                          }
+                          // ref={field.ref}
+                          placeholder="ex: This is a position offered at our company in which you will be responsible for overseeing several skilled machinists."
+                        />
+                      </div>
+                    </div>
 
-{isSalaried ? (<div class="space-y-2">
-  <label
-    for="hs-pro-dactmt"
-    class="block mb-2 text-sm font-medium text-gray-800 "
-  >
-    Enter the salary range (yearly)
-  </label>
-  <div className="flex">
-  <p className="mt-2 mr-1 text-sm font-medium">$</p>
-  <input
-   id="hs-pro-dactmt"
-   type="text"
-   class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-   placeholder="lower rate"
- 
-   onChange={(e) => lowerRateValidate(e.target.value)}
-
- />
- <p className="mt-2 text-sm font-medium mr-1 ml-1"> yearly - $</p>
- <input
-   id="hs-pro-dactmt"
-   type="text"
-   class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-   placeholder="upper rate"
-                    onChange={(e) => upperRateValidate(e.target.value)}
-
- />
-   <p className="mt-2 ml-1 text-sm font-medium">yearly</p>
-   </div>
-</div>) : (null)}
-
-
-                <div class="space-y-2 z-0">
-                  <label
-                    for="dactmi"
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                  >
-                   Job Description 
-                  </label>
-
-                  <div>
-            
-      <RichTextEditor
-                      onChange={(description) =>
-                        (handleEditorChange(description))
-                      }
-                      // ref={field.ref}
-                      placeholder="ex: This is a position offered at our company in which you will be responsible for overseeing several skilled machinists."
-                  
-                    />
-                  </div>
-                
-                </div>
-
-                <div class="space-y-2">
-                  <label
-                    for="dactmi"
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                  >
-                    Job Qualifications
-                  </label>
-                  <RichTextEditor
-                      onChange={(description) =>
-                        (handleApplicantEditorChange(description))
-                        
-                      }
-                      // ref={field.ref}
-                      placeholder="ex: 3+ years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "
-                  
-                    />
-                  {/* <div class="">
+                    <div class="space-y-2">
+                      <label
+                        for="dactmi"
+                        class="block mb-2 text-sm font-medium text-gray-800 "
+                      >
+                        Job Qualifications
+                      </label>
+                      <RichTextEditor
+                        onChange={(description) =>
+                          handleApplicantEditorChange(description)
+                        }
+                        // ref={field.ref}
+                        placeholder="ex: 3+ years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "
+                      />
+                      {/* <div class="">
   <textarea onChange={(e) => setApplicantDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" placeholder="ex: 3+ years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "></textarea>
 </div> */}
-                </div>
-                <div class="space-y-2">
-                  <label
-                    for="dactmi"
-                    class="block mb-2 text-sm font-medium text-gray-800 "
-                  >
-                  List employment benefits here (optional)
-                  </label>
-                  <RichTextEditor
-                      onChange={(description) =>
-                        (handleBenefitsEditorChange(description))
-                        
-                      }
-                      // ref={field.ref}
-                      placeholder="ex: 3+ years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "
-                  
-                    />
-                  {/* <div class="">
+                    </div>
+                    <div class="space-y-2">
+                      <label
+                        for="dactmi"
+                        class="block mb-2 text-sm font-medium text-gray-800 "
+                      >
+                        List employment benefits here (optional)
+                      </label>
+                      <RichTextEditor
+                        onChange={(description) =>
+                          handleBenefitsEditorChange(description)
+                        }
+                        // ref={field.ref}
+                        placeholder="ex: 3+ years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "
+                      />
+                      {/* <div class="">
   <textarea onChange={(e) => setBenefitsDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" placeholder="ex: Company-covered health insurance, PTO, 4% 401k match"></textarea>
 </div> */}
-                </div>
-             
-            
-              
-                
-              </div>
+                    </div>
+                  </div>
 
-              <div class="p-4 flex justify-between gap-x-2">
-                <div class="w-full flex justify-end items-center gap-x-2">
-                  { pendingSuccess ? (
-                     <button
-                     type="button"
-                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                     data-hs-overlay="#hs-pro-datm"
-           
-                     // onClick={() => testJobStore()}
-                   >
-<div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full " role="status" aria-label="loading">
-  <span class="sr-only">Loading...</span>
-</div>
-                   </button>
-                  ) : (
-                    <div>
-                       {/* <button
+                  <div class="p-4 flex justify-between gap-x-2">
+                    <div class="w-full flex justify-end items-center gap-x-2">
+                      {pendingSuccess ? (
+                        <button
+                          type="button"
+                          class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                          data-hs-overlay="#hs-pro-datm"
+
+                          // onClick={() => testJobStore()}
+                        >
+                          <div
+                            class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full "
+                            role="status"
+                            aria-label="loading"
+                          >
+                            <span class="sr-only">Loading...</span>
+                          </div>
+                        </button>
+                      ) : (
+                        <div>
+                          {/* <button
                      type="button"
                      class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                      data-hs-overlay="#hs-pro-datm"
@@ -1420,34 +1499,28 @@ useEffect(() => {
                    >
                    Save Draft
                    </button> */}
-                  
-                     <button
-                     type="button"
-                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                     data-hs-overlay="#hs-pro-datm"
-                     onClick={() => checkLength()}
-                     // onClick={() => testJobStore()}
-                   >
-                     Post Job 
-                   </button>
-                   </div>
-                  ) }
 
-                 
+                          <button
+                            type="button"
+                            class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                            data-hs-overlay="#hs-pro-datm"
+                            onClick={() => checkLength()}
+                            // onClick={() => testJobStore()}
+                          >
+                            Post Job
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      
-
-
-        
-        </DrawerBody>
+          </DrawerBody>
         </DrawerContent>
       </Drawer>
 
-        <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Success!</ModalHeader>
@@ -1457,16 +1530,14 @@ useEffect(() => {
           </ModalBody>
 
           <ModalFooter>
-            
-          <button
-                    type="button"
-                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                    data-hs-overlay="#hs-pro-datm"
-                    onClick={() => handleCloseBoth()}
-                  >
+            <button
+              type="button"
+              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => handleCloseBoth()}
+            >
               Close
             </button>
-          
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -1479,46 +1550,41 @@ useEffect(() => {
           <ModalBody>
             <p>Please fill out all required fields.</p>
 
-            <p className="mt-2">If this problem persists, please contact us at tyler@getfulfil.com</p>
+            <p className="mt-2">
+              If this problem persists, please contact us at tyler@getfulfil.com
+            </p>
           </ModalBody>
 
           <ModalFooter>
-            
-          <button
-                    type="button"
-                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                    data-hs-overlay="#hs-pro-datm"
-                    onClick={() => onCloseError()}
-                  >
+            <button
+              type="button"
+              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => onCloseError()}
+            >
               Close
             </button>
-          
           </ModalFooter>
         </ModalContent>
       </Modal>
 
       {stripeOpen && (
-            <Modal
-              isOpen={isOpenStripe}
-              onClose={() => setStripeOpen(false)}
-              size="xl"
-            >
-              <ModalOverlay />
-              <ModalContent>
-                <ModalCloseButton />
+        <Modal
+          isOpen={isOpenStripe}
+          onClose={() => setStripeOpen(false)}
+          size="xl"
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalCloseButton />
 
-                <EmbeddedCheckoutProvider
-                  stripe={stripePromise}
-                  options={options}
-                >
-                  <EmbeddedCheckout />
-                </EmbeddedCheckoutProvider>
-              </ModalContent>
-            </Modal>
-          )}
+            <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
+              <EmbeddedCheckout />
+            </EmbeddedCheckoutProvider>
+          </ModalContent>
+        </Modal>
+      )}
     </div>
-
-    
   );
 };
 

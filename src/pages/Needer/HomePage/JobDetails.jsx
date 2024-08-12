@@ -525,7 +525,7 @@ const JobDetails = () => {
 
                       <div className="mb-10 h-[60px]"></div>
 
-                      <Accordion defaultIndex={[0]} allowMultiple mt={5}>
+                      <Accordion  allowMultiple mt={5}>
                         <AccordionItem>
                           <h2>
                             <AccordionButton>
@@ -555,7 +555,7 @@ const JobDetails = () => {
                                   for="hs-pro-epdsku"
                                   class="block mb-2 text-sm font-medium text-stone-800 "
                                 >
-                                  Applicant Description
+                                  Who you're looking for
                                 </label>
                               </Box>
                               <AccordionIcon />

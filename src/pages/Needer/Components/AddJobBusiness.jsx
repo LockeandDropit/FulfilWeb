@@ -252,6 +252,30 @@ const AddJobBusiness = ({ heldSelected }) => {
 
   const [displayLowerRate, setDisplayLowerRate] = useState(null);
 
+  const lowerRateHourlyValidate = (lowerRate) => {
+    setLowerRateValidationBegun(true);
+    const isValid = numberOnlyRegexMinimumCharacterInput.test(lowerRate);
+    if (!isValid) {
+      setLowerRateValidationMessage("Please enter valid rate");
+      console.log(lowerRateValidationMessage);
+    } else {
+      setLowerRateValidationMessage();
+      setLowerRate(lowerRate);
+    }
+  }
+
+  const upperRateHourlyValidate = (upperRate) => {
+    setUpperRateValidationBegun(true);
+    const isValid = numberOnlyRegexMinimumCharacterInput.test(upperRate);
+    if (!isValid) {
+      setUpperRateValidationMessage("Please enter valid rate");
+      console.log(upperRateValidationMessage);
+    } else {
+      setUpperRateValidationMessage();
+      setUpperRate(upperRate);
+    }
+  };
+
   const lowerRateValidate = (lowerRate) => {
     console.log("first consumed lower rate", lowerRate);
     let numberLowerRate = parseInt(lowerRate);
@@ -1351,7 +1375,7 @@ const AddJobBusiness = ({ heldSelected }) => {
                             // value={lowerRate}
                             class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                             placeholder="lower rate"
-                            onChange={(e) => lowerRateValidate(e.target.value)}
+                            onChange={(e) => lowerRateHourlyValidate(e.target.value)}
                           />
                           <p className="mt-2 text-sm font-medium mr-1 ml-1">
                             /hour - $
@@ -1361,7 +1385,7 @@ const AddJobBusiness = ({ heldSelected }) => {
                             type="text"
                             class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                             placeholder="upper rate"
-                            onChange={(e) => upperRateValidate(e.target.value)}
+                            onChange={(e) => upperRateHourlyValidate(e.target.value)}
                           />
                           <p className="mt-2 text-sm font-medium">/hour</p>
                           {lowerRateValidationBegun === true ? (

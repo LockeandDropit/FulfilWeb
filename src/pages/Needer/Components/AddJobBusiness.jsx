@@ -1371,7 +1371,7 @@ const AddJobBusiness = ({ heldSelected }) => {
                           <p className="mt-2 mr-1 text-sm font-medium">$</p>
                           <input
                             id="hs-pro-dactmt"
-                            type="number"
+                          
                             // value={lowerRate}
                             class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                             placeholder="lower rate"
@@ -1382,7 +1382,7 @@ const AddJobBusiness = ({ heldSelected }) => {
                           </p>
                           <input
                             id="hs-pro-dactmt"
-                            type="text"
+                          
                             class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                             placeholder="upper rate"
                             onChange={(e) => upperRateHourlyValidate(e.target.value)}

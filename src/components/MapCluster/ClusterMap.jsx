@@ -73,7 +73,7 @@ const ClusterMap = (props) => {
       <Map
         mapId={"bf51a910020fa25a"}
         defaultCenter={{ lat: 44.96797106363888, lng: -93.26177106829272 }}
-        defaultZoom={10}
+        defaultZoom={11}
         gestureHandling={"greedy"}
         disableDefaultUI
       >

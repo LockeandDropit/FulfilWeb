@@ -12,8 +12,7 @@ import { useState, useEffect } from "react";
 import { useUserStore } from "../pages/Needer/Chat/lib/userStore.js";
 import { persist, createJSONStorage } from 'zustand/middleware'
 
-
-export default function useNeederJobFetch() {
+export default function useDoerJobFetch() {
 
   const {fetchUserInfo, currentUser} = useUserStore()
 
@@ -22,19 +21,21 @@ export default function useNeederJobFetch() {
   const [jobs, setJobs] = useState(null);
   const [groupedJobs, setGroupedJobs] = useState(null);
 
-  console.log("currentUser from neder job fertchj", currentUser)
+
 
   useEffect(() => {
     try {
-      const q = query(collection(db, "employers", currentUser.uid, "Posted Jobs"));
+      const q = query(collection(db, "Map Jobs"));
 
       onSnapshot(q, (snapshot) => {
         let results = [];
         let postedByBusiness = [];
 
         snapshot.docs.forEach((doc) => {
-         
-            postedByBusiness.push({ ...doc.data(), id: doc.id, key: doc.id });
+         if (doc.data().isPostedByBusiness && doc.data().isActive === true) {
+          postedByBusiness.push({ ...doc.data(), id: doc.id, key: doc.id });
+         }
+           
           
         });
 

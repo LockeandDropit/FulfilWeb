@@ -116,6 +116,7 @@ import DoerSavedJobs from "./pages/Doer/DoerSavedJobs";
 import SavedJobDetails from "./pages/Doer/SavedJobDetails";
 import DoerListViewLoggedOut from "./components/DoerListViewLoggedOut"
 import NeederMapView from "./pages/Needer/MapView/NeederMapView";
+import DoerMapView from "./pages/Doer/MapView/DoerMapView";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebaseConfig"
@@ -480,6 +481,10 @@ const router = createBrowserRouter([
   {
     path: "/NeederMapView",
     element: <NeederMapView/>,
+  },
+  {
+    path: "/DoerMapView",
+    element: <DoerMapView/>,
   },
 ]);
 

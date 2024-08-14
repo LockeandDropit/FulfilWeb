@@ -1,9 +1,9 @@
-import { InfoWindow, useMap } from "@vis.gl/react-google-maps";
+import { AdvancedMarker, InfoWindow, useMap } from "@vis.gl/react-google-maps";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Marker, MarkerClusterer } from "@googlemaps/markerclusterer";
-import { Tree } from "./trees";
-import { TreeMarker } from "./tree-marker";
-import { auth, db } from "../../firebaseConfig.js";
+
+import { SingleMarker } from "./SingleMarker.jsx";
+import { auth, db } from "../../../firebaseConfig.js";
 
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
@@ -18,8 +18,8 @@ import {
   query,
   collection,
   onSnapshot,
-  setDoc,
   updateDoc,
+  setDoc,
   deleteDoc,
   increment,
 } from "firebase/firestore";
@@ -55,8 +55,8 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import JobFilter from "../../pages/Doer/components/JobFilter.jsx";
-import { useSearchResults } from "../../pages/Doer/Chat/lib/searchResults";
+
+import { useSearchResults } from "../../../pages/Doer/Chat/lib/searchResults";
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
 import {
   FormControl,
@@ -108,13 +108,14 @@ import { FcGoogle } from "react-icons/fc";
 import { useMediaQuery } from "@chakra-ui/react";
 
 import Plausible from "plausible-tracker";
+
 // import LoggedOutHeaderNoGap from "./Landing/LoggedOutHeaderNoGap.jsx";
 
 /**
  * The ClusteredTreeMarkers component is responsible for integrating the
  * markers with the markerclusterer.
  */
-export const ClusteredTreeMarkers = ({ trees }) => {
+export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
   //this is where credited code starts
   //almost all code regarding implementing clustering in this library is from https://github.com/visgl/react-google-maps/tree/main/examples/marker-clustering
   const [markers, setMarkers] = useState({});
@@ -130,11 +131,12 @@ export const ClusteredTreeMarkers = ({ trees }) => {
 
   // create the markerClusterer once the map is available and update it when
   // the markers are changed
+  var options = { zoomOnClick: false };
   const map = useMap();
   const clusterer = useMemo(() => {
     if (!map) return null;
 
-    return new MarkerClusterer({ map });
+    return new MarkerClusterer({ map, options });
   }, [map]);
 
   useEffect(() => {
@@ -168,7 +170,7 @@ export const ClusteredTreeMarkers = ({ trees }) => {
   //background image https://www.freecodecamp.org/news/react-background-image-tutorial-how-to-set-backgroundimage-with-inline-css-style/
   //image from Photo by Blue Bird https://www.pexels.com/photo/man-standing-beside-woman-on-a-stepladder-painting-the-wall-7217988/
 
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [postedJobs, setPostedJobs] = useState([]);
   const [businessPostedJobs, setBusinessPostedJobs] = useState([]);
 
@@ -180,7 +182,16 @@ export const ClusteredTreeMarkers = ({ trees }) => {
 
   //opening one window at a time help from https://github.com/Developer-Nijat/React-Google-Map-Markers/blob/main/src/App.jsx & https://www.youtube.com/watch?v=Uq-0tA0f_X8 & Vadim Gremyachev https://stackoverflow.com/questions/50903246/react-google-maps-multiple-info-windows-opening-up
 
-  const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState(null);
+  const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] = useState({
+    lat: 1,
+    lng: 1,
+  });
+
+  const [openInfoWindowMarkerIDSingle, setOpenInfoWindowMarkerIDSingle] =
+    useState({
+      lat: 1,
+      lng: 1,
+    });
 
   const handleToggleOpen = (x) => {
     console.log(x);
@@ -188,6 +199,11 @@ export const ClusteredTreeMarkers = ({ trees }) => {
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenSaved,
+    onOpen: onOpenSaved,
+    onClose: onCloseSaved,
+  } = useDisclosure();
   const {
     isOpen: isOpenSignIn,
     onOpen: onOpenSignIn,
@@ -197,6 +213,11 @@ export const ClusteredTreeMarkers = ({ trees }) => {
     isOpen: isOpenShare,
     onOpen: onOpenShare,
     onClose: onCloseShare,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenDrawerSingleFromGroup,
+    onOpen: onOpenDrawerSingleFromGroup,
+    onClose: onCloseDrawerSingleFromGroup,
   } = useDisclosure();
   const {
     isOpen: isOpenEmailSignUp,
@@ -212,6 +233,12 @@ export const ClusteredTreeMarkers = ({ trees }) => {
     isOpen: isOpenDrawer,
     onOpen: onOpenDrawer,
     onClose: onCloseDrawer,
+  } = useDisclosure();
+
+  const {
+    isOpen: isOpenDrawerSingle,
+    onOpen: onOpenDrawerSingle,
+    onClose: onCloseDrawerSingle,
   } = useDisclosure();
 
   const {
@@ -234,11 +261,55 @@ export const ClusteredTreeMarkers = ({ trees }) => {
 
   const [searchJobCategory, setSearchJobCategory] = useState(null);
 
+  const [showAddJobBusiness, setShowAddJobBusiness] = useState(false);
+
+  // useEffect(() => {
+  //   if (jobHeld) {
+  //    handleGroupLocationToggleOpen(jobHeld)
+  //    setShowAddJobBusiness(false)
+  //    console.log("firing 1")
+  //   //  onOpenDrawer()
+  //   }
+  // },[jobHeld])
+
+  const [selectedJobFromGroup, setSelectedJobFromGroup] = useState(null);
+
   const handlePostedByBusinessToggleOpen = (x) => {
-    setOpenInfoWindowMarkerID(x.jobID);
+    setOpenInfoWindowMarkerID({ lat: x.locationLat, lng: x.locationLng });
+    // updateJobListingViews(x);
+
+    onCloseDrawer();
+    onOpenDrawerSingle();
+
+    console.log("from on click", x);
+  };
+
+  const handleOpenSingleJobFromGroup = (x) => {
+    setOpenInfoWindowMarkerIDSingle(x.jobID);
+    // updateJobListingViews(x);
+    setSelectedJobFromGroup(x);
+    onCloseDrawer();
+    console.log("opened single from group");
+
+    handleOpenSeperately();
+  };
+
+  const handleOpenSeperately = () => {
+    onOpenDrawerSingleFromGroup();
+  };
+
+  const handleCloseOfSingleFromGroup = (x) => {
+    onCloseDrawerSingleFromGroup();
+    handleGroupLocationToggleOpen(x);
+  };
+
+  const handleGroupLocationToggleOpen = (x) => {
+    console.log("group open toggle", x.jobID);
+    setOpenInfoWindowMarkerID({ lat: x.locationLat, lng: x.locationLng });
+    //  setOpenInfoWindowMarkerID(x.jobID);
     // updateJobListingViews(x);
     onOpenDrawer();
-    console.log("from on click", x);
+    console.log("same locationJobs", sameLocationJobs);
   };
 
   //const handle log in / sign up navigate
@@ -289,60 +360,6 @@ export const ClusteredTreeMarkers = ({ trees }) => {
       });
   };
 
-  const handleSendEmail = async (x) => {
-    const response = await fetch(
-      "https://emailapi-qi7k.onrender.com/sendNewApplicantEmail",
-
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: x.employerEmail }),
-      }
-    );
-
-    const { data, error } = await response.json();
-    console.log("Any issues?", error);
-  };
-
-  const logIn = () => {
-    console.log("logging in");
-    const auth = getAuth();
-    console.log("logging in");
-    setPersistence(auth, browserLocalPersistence).then(() => {
-      // New sign-in will be persisted with local persistence.
-      signInWithEmailAndPassword(auth, email, password)
-        .then((response) => {
-          setIsSignedIn(true);
-          const currentUser = response.user.uid;
-          // Thanks Jake :)
-          Promise.all([
-            getDoc(doc(db, "users", response.user.uid)),
-            getDoc(doc(db, "employers", response.user.uid)),
-          ])
-            .then((results) =>
-              navigate(
-                results[0]._document !== null &&
-                  results[0]._document.data.value.mapValue.fields.isEmployer
-                  ? "/DoerMapScreen"
-                  : "/NeederMapScreen"
-              )
-            )
-            .catch();
-        })
-        .catch((error) => {
-          // Handle Errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          setPasswordValidationMessage("Oops! Wrong email or password");
-        });
-    });
-
-    // template credit simple log in card https://chakra-templates.vercel.app/forms/authentication
-  };
-
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -355,29 +372,6 @@ export const ClusteredTreeMarkers = ({ trees }) => {
   // credit https://github.com/chelseafarley/text-input-validation-tutorial-react-native/blob/main/App.js
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [emailValidationBegun, setEmailValidationBegun] = useState(false);
-
-  const modalValidate = () => {
-    setEmailValidationBegun(true);
-    const isValid = emailRegex.test(email);
-    if (!isValid) {
-      setValidationMessage("Please enter a valid email");
-    } else {
-      setValidationMessage();
-      setEmail(email);
-      console.log("email good");
-    }
-    setPasswordValidationBegun(true);
-    const isValidPassword = passwordRegex.test(password);
-    if (!isValidPassword) {
-    } else {
-      setPasswordValidationMessage();
-      console.log("password good");
-    }
-
-    if (isValid && isValidPassword) {
-      logIn();
-    }
-  };
 
   const onSignUp = async () => {
     const authentication = getAuth();
@@ -457,6 +451,169 @@ export const ClusteredTreeMarkers = ({ trees }) => {
     }
   }, []);
 
+  const handleSendEmail = async (x) => {
+    const response = await fetch(
+      "https://emailapi-qi7k.onrender.com/sendNewApplicantEmail",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: x.employerEmail }),
+      }
+    );
+
+    const { data, error } = await response.json();
+    console.log("Any issues?", error);
+  };
+
+  //apply logic
+  const applyAndNavigate = (x) => {
+    //If anything is going wring in the application or saved job flow it's because I changed this on 5/27/24 at 2:30. Revert to previous if any issues
+
+    updateDoc(doc(db, "employers", x.employerID, "Posted Jobs", x.jobTitle), {
+      hasNewApplicant: true,
+    })
+      .then(() => {
+        //user info submitted to Job applicant file
+      })
+      .catch((error) => {
+        //uh oh
+      });
+
+    setDoc(
+      doc(
+        db,
+        "employers",
+        x.employerID,
+        "Posted Jobs",
+        x.jobTitle,
+        "Applicants",
+        user.uid
+      ),
+      {
+        applicantID: user.uid,
+        isNewApplicant: true,
+      }
+    )
+      .then(() => {
+        //user info submitted to Job applicant file
+        // navigation.navigate("BottomUserTab");
+      })
+      .catch((error) => {
+        //uh oh
+      });
+
+    const docRef = doc(
+      db,
+      "employers",
+      x.employerID,
+      "Posted Jobs",
+      x.jobTitle
+    );
+
+    updateDoc(docRef, { totalApplicants: increment(1) });
+
+    setDoc(doc(db, "users", user.uid, "Applied", x.jobTitle), {
+      requirements: x.requirements ? x.requirements : null,
+      requirements2: x.requirements2 ? x.requirements2 : null,
+      requirements3: x.requirements3 ? x.requirements3 : null,
+      isFlatRate: x.isFlatRate ? x.isFlatRate : null,
+      niceToHave: x.niceToHave ? x.niceToHave : null,
+      datePosted: x.datePosted ? x.datePosted : null,
+
+      jobID: x.jobID,
+      jobTitle: x.jobTitle ? x.jobTitle : null,
+      hourlyRate: x.hourlyRate ? x.hourlyRate : null,
+      streetAddress: x.streetAddress ? x.streetAddress : null,
+      city: x.city ? x.city : null,
+      state: x.state ? x.state : null,
+      zipCode: x.zipCode ? x.zipCode : null,
+      description: x.description ? x.description : null,
+      addressNumber: x.addressNumber ? x.addressNumber : null,
+      addressName: x.addressName ? x.addressName : null,
+      lowerRate: x.lowerRate ? x.lowerRate : null,
+      upperRate: x.upperRate ? x.upperRate : null,
+      addressSuffix: x.addressSuffix ? x.addressSuffix : null,
+      locationLat: x.locationLat ? x.locationLat : null,
+      locationLng: x.locationLng ? x.locationLng : null,
+      businessName: x.businessName ? x.businessName : null,
+      employerID: x.employerID ? x.employerID : null,
+      employerFirstName: x.employerFirstName ? x.employerFirstName : null,
+      flatRate: x.flatRate ? x.flatRate : null,
+      isHourly: x.isHourly ? x.isHourly : null,
+      category: x.category ? x.category : null,
+      isOneTime: x.isOneTime ? x.isOneTime : null,
+      lowerCaseJobTitle: x.lowerCaseJobTitle ? x.lowerCaseJobTitle : null,
+    })
+      .then(() => {
+        onOpen();
+      })
+      .catch((error) => {
+        //uh oh
+      });
+
+    handleSendEmail(x);
+    console.log(x.employerEmail);
+  };
+
+
+  //save logic 
+  const saveJob = (x) => {
+    setDoc(doc(db, "users", user.uid, "Saved Jobs", x.jobID), {
+      companyName: x.companyName,
+      isPostedByBusiness: true,
+      isSalaried :  x.isSalaried,
+      applicantDescription: x.applicantDescription,
+      benefitsDescription : x.benefitsDescription ? x.benefitsDescription : null,
+      isFullTimePosition : x.isFullTimePosition,
+      employerID: x.employerID,
+      // employerEmail: user.email,
+      employerFirstName: x.employerFirstName,
+      employerLastName: x.employerLastName,
+      employerProfilePicture: x.employerProfilePicture,
+      jobTitle: x.jobTitle,
+      jobID: x.jobID,
+      firstName: x.firstName,
+      lowerRate: x.lowerRate,
+      upperRate: x.upperRate,
+      isVolunteer: x.isVolunteer,
+      isOneTime: x.isOneTime,
+     
+
+      flatRate: x.flatRate,
+      isHourly: x.isHourly,
+      lowerCaseJobTitle: x.lowerCaseJobTitle,
+      datePosted: x.datePosted,
+      category: x.category,
+      city: x.city,
+      streetAddress: x.streetAddress,
+      state: x.state,
+      zipCode: x.zipCode,
+      locationLat: x.locationLat,
+      locationLng: x.locationLng,
+      description: x.description,
+      requirements: x.requirements,
+      requirements2: x.requirements2,
+      requirements3: x.requirements3,
+      niceToHave: x.niceToHave,
+  
+    })
+      .then(() => {
+        //all good
+
+        // navigation.navigate("BottomUserTab");
+        onOpenSaved();
+      })
+      .catch((error) => {
+        // no bueno
+      });
+
+    //submit data
+  };
+
   const [urlCopied, setUrlCopied] = useState(false);
 
   const handleCopiedURL = (businessPostedJobs) => {
@@ -467,124 +624,6 @@ export const ClusteredTreeMarkers = ({ trees }) => {
   };
 
   const [subscriberEmail, setSubscriberEmail] = useState(null);
-
-  const handleNewEmailSignUp = async () => {
-    // insert email regex, if then
-    onCloseEmailSignUp();
-    onOpenEmailSignUpSuccess();
-
-    console.log("subscriberEmail", subscriberEmail);
-
-    const response = await fetch(
-      "https://emailapi-qi7k.onrender.com/newEmailSignUp",
-
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: subscriberEmail }),
-      }
-    );
-
-    const { data, error } = await response.json();
-    console.log("Any issues?", error);
-
-    onCloseEmailSignUp();
-    onOpenEmailSignUpSuccess();
-  };
-
-  const applyAndNavigate = (x) => {
-    //If anything is going wring in the application or saved job flow it's because I changed this on 5/27/24 at 2:30. Revert to previous if any issues
-
-
-      updateDoc(doc(db, "employers", x.employerID, "Posted Jobs", x.jobTitle), {
-        hasNewApplicant: true,
-      })
-        .then(() => {
-          //user info submitted to Job applicant file
-        })
-        .catch((error) => {
-          //uh oh
-        });
-
-      setDoc(
-        doc(
-          db,
-          "employers",
-          x.employerID,
-          "Posted Jobs",
-          x.jobTitle,
-          "Applicants",
-          user.uid
-        ),
-        {
-          applicantID: user.uid,
-          isNewApplicant: true,
-        }
-      )
-        .then(() => {
-          //user info submitted to Job applicant file
-          // navigation.navigate("BottomUserTab");
-        })
-        .catch((error) => {
-          //uh oh
-        });
-
-      const docRef = doc(
-        db,
-        "employers",
-        x.employerID,
-        "Posted Jobs",
-        x.jobTitle
-      );
-
-      updateDoc(docRef, { totalApplicants: increment(1) });
-
-      setDoc(doc(db, "users", user.uid, "Applied", x.jobTitle), {
-        requirements: x.requirements ? x.requirements : null,
-        requirements2: x.requirements2 ? x.requirements2 : null,
-        requirements3: x.requirements3 ? x.requirements3 : null,
-        isFlatRate: x.isFlatRate ? x.isFlatRate : null,
-        niceToHave: x.niceToHave ? x.niceToHave : null,
-        datePosted: x.datePosted ? x.datePosted : null,
-
-        jobID: x.jobID,
-        jobTitle: x.jobTitle ? x.jobTitle : null,
-        hourlyRate: x.hourlyRate ? x.hourlyRate : null,
-        streetAddress: x.streetAddress ? x.streetAddress : null,
-        city: x.city ? x.city : null,
-        state: x.state ? x.state : null,
-        zipCode: x.zipCode ? x.zipCode : null,
-        description: x.description ? x.description : null,
-        addressNumber: x.addressNumber ? x.addressNumber : null,
-        addressName: x.addressName ? x.addressName : null,
-        lowerRate: x.lowerRate ? x.lowerRate : null,
-        upperRate: x.upperRate ? x.upperRate : null,
-        addressSuffix: x.addressSuffix ? x.addressSuffix : null,
-        locationLat: x.locationLat ? x.locationLat : null,
-        locationLng: x.locationLng ? x.locationLng : null,
-        businessName: x.businessName ? x.businessName : null,
-        employerID: x.employerID ? x.employerID : null,
-        employerFirstName: x.employerFirstName ? x.employerFirstName : null,
-        flatRate: x.flatRate ? x.flatRate : null,
-        isHourly: x.isHourly ? x.isHourly : null,
-        category: x.category ? x.category : null,
-        isOneTime: x.isOneTime ? x.isOneTime : null,
-        lowerCaseJobTitle: x.lowerCaseJobTitle ? x.lowerCaseJobTitle : null,
-      })
-        .then(() => {
-          onOpen();
-        })
-        .catch((error) => {
-          //uh oh
-        });
-
-      handleSendEmail(x);
-      console.log(x.employerEmail);
- 
-  };
 
   //bettter useEffect than I write https://www.youtube.com/watch?v=QQYeipc_cik&t=788s
   // useEffect(() => {
@@ -597,21 +636,917 @@ export const ClusteredTreeMarkers = ({ trees }) => {
 
   // }, [])
 
+  const [locationJobs, setLocationJobs] = useState([]);
+
+  useEffect(() => {
+    if (openInfoWindowMarkerID) {
+      try {
+        const q = query(collection(db, "Map Jobs"));
+
+        onSnapshot(q, (snapshot) => {
+          let results = [];
+          let postedByBusiness = [];
+
+          snapshot.docs.forEach((doc) => {
+            if (
+              openInfoWindowMarkerID.lat === doc.data().locationLat &&
+              openInfoWindowMarkerID.lng === doc.data().locationLng
+            )
+              postedByBusiness.push({ ...doc.data(), id: doc.id, key: doc.id });
+          });
+
+          //   setIsLoading(false);
+
+          setLocationJobs(postedByBusiness);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [openInfoWindowMarkerID]);
+
+  const handleStoreAndNavigatePosted = (x) => {
+    // console.log(x.jobTitle, x.jobID);
+
+    // fetchJobInfo(currentUser.uid, x.jobID, "Posted Jobs", x.jobTitle);
+    // if (x.hasNewApplicant === true) {
+    //   updateDoc(
+    //     doc(db, "employers", currentUser.uid, "Posted Jobs", x.jobTitle),
+    //     {
+    //       hasNewApplicant: false,
+    //     }
+    //   )
+    //     .then(() => {
+    //       //user info submitted to Job applicant file
+    //     })
+    //     .catch((error) => {
+    //       //uh oh
+    //       console.log(error);
+    //     });
+    // }
+    setTimeout(() => navigate("/JobDetails"), 500);
+  };
+
+  const [newTrees, setNewTrees] = useState([]);
+
+  // useEffect(() => {
+  //   if (trees) {
+  //       setNewTrees(trees)
+  //   }
+  // }, [trees])
+
+  const filterOutSameLocation = () => {
+    //map over and create lat lng object for each grouped lat/lng value
+
+    let newTrees = [];
+    sameLocationJobs.forEach((job) => {
+      let thisLocation = { lat: job.locationLat, lng: job.locationLng };
+      // console.log(thisLocation)
+      trees.forEach((tree) => {
+        let treeLocation = { lat: tree.locationLat, lng: tree.locationLng };
+        // console.log(treeLocation)
+        if (job.locationLat === tree.locationLat) {
+          //credit https://stackoverflow.com/questions/21659888/find-and-remove-objects-in-an-array-based-on-a-key-value-in-javascript
+          trees = trees.filter(function (obj) {
+            return obj.id !== tree.id;
+          });
+        } else {
+          // console.log(thisLocation, treeLocation)
+        }
+        setNewTrees(trees);
+        console.log("new treess", newTrees);
+      });
+    });
+    //with each one check it against all other listed positions in singlePostedJobs.
+    //If it does exist, remove it from the array
+  };
+
+  const [groupJobs, setGroupJobs] = useState([]);
+
+  useEffect(() => {
+    if (trees && sameLocationJobs) {
+      filterOutSameLocation();
+      console.log("1");
+      setGroupJobs(sameLocationJobs);
+    } else if (trees && !sameLocationJobs) {
+      setNewTrees(trees);
+    }
+  }, [sameLocationJobs, trees]);
+
+  //set lat lng of job passed so you can pass it to AddJobBusiness component and also reopen(?) the appropriate drawer when closed.
+
+  const [heldSelected, setHeldSelected] = useState(null);
+
+  const handleToggleAddJobSameLocation = (x) => {
+    setHeldSelected(x);
+
+    setShowAddJobBusiness(!showAddJobBusiness);
+    onCloseDrawer();
+    onCloseDrawerSingle();
+  };
+
+  const handleGroupDrawerClose = () => {
+    // addJobInfo(null)
+    setShowAddJobBusiness(false);
+    setTimeout(() => {
+      onCloseDrawer();
+    }, 100);
+  };
+
+  // what I can do... is I can
+  // remove all positions that have repeated lat/lngs (matching positions) and put them in a seperate array.
+  //The clustering will then take care of everything until a certain zoom level, but when they are all grouped together they wont unbundle because they've always been bundled...
+
+  //what if I did it here and got rid of clustering...
+
+  //so i have to make a store that accepts the heldJob object from AddJobBusiness
+  // read it here, if not null then trigger an opening of the drawer below
+
   //almost all code regarding implementing clustering in this library is from https://github.com/visgl/react-google-maps/tree/main/examples/marker-clustering
   return (
     <>
-      {trees.map((businessPostedJobs) => (
+      {groupJobs.map((group) => (
         <>
-          <TreeMarker
+          <AdvancedMarker
+            zIndex={800}
+            position={{
+              lat: group.locationLat ? group.locationLat : 44.96797106363888,
+              lng: group.locationLng ? group.locationLng : -93.26177106829272,
+            }}
+            onClick={() => handleGroupLocationToggleOpen(group)}
+          >
+            <button
+              type="button"
+              class=" z-50 py-1 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              Multiple positions
+            </button>
+          </AdvancedMarker>
+          {openInfoWindowMarkerID.lat === group.locationLat ? (
+            <>
+              <Drawer
+                onClose={() => handleGroupDrawerClose()}
+                isOpen={isOpenDrawer}
+                size={"xl"}
+              >
+                <DrawerOverlay />
+                <DrawerContent>
+                  <DrawerCloseButton />
+                  <DrawerHeader>Jobs at this location</DrawerHeader>
+                  <DrawerBody>
+                    <div class="p-2 space-y-4 flex flex-col bg-white  shadow-sm rounded-xl ">
+                      <div>
+                        <div
+                          id="hs-pro-tabs-dut-all"
+                          role="tabpanel"
+                          aria-labelledby="hs-pro-tabs-dut-item-all"
+                        >
+                          <div class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                            <div class="min-w-full inline-block align-middle">
+                              <table class="min-w-full divide-y divide-gray-200 ">
+                                <thead>
+                                  <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
+                                    <th scope="col" class="min-w-[250px]">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutnms"
+                                          type="button"
+                                          class=" font-bold text-md px-4 py-2.5 text-start w-full flex items-center gap-x-1  text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Job
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col" class="min-w-24">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                                        <button
+                                          id="hs-pro-dutads"
+                                          type="button"
+                                          class="px-3 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Pay
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col" class="min-w-36">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutsgs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Type
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    {/* <th scope="col">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutems"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100"
+                                        >
+                                          Date Posted
+                                        </button>
+                                      </div>
+                                    </th> */}
+
+                                    <th scope="col">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutphs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-white focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Actions
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    {/* <th scope="col"></th> */}
+                                  </tr>
+                                </thead>
+
+                                {locationJobs.map((job) => (
+                                  <tbody class="divide-y divide-gray-200 ">
+                                    <tr class="divide-x divide-gray-200 ">
+                                      <td
+                                        class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
+                                        onClick={() =>
+                                          handleOpenSingleJobFromGroup(job)
+                                        }
+                                      >
+                                        <div class="w-full flex items-center gap-x-3">
+                                          <div class="grow">
+                                            <span class="text-md font-medium text-gray-800 ">
+                                              {job.jobTitle}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </td>
+
+                                      <td class="size-px whitespace-nowrap px-4 py-1">
+                                        {job.isVolunteer ? (
+                                          <p>Volunteer!</p>
+                                        ) : job.isSalaried ? (
+                                          <p class="font-semibold">
+                                            ${job.shortenedSalary} - $
+                                            {job.shortenedUpperSalary}/year
+                                          </p>
+                                        ) : job.upperRate > job.lowerRate ? (
+                                          <p class="font-semibold">
+                                            ${job.lowerRate}/hr +
+                                          </p>
+                                        ) : (
+                                          <p class="font-semibold">
+                                            ${job.lowerRate}/hr
+                                          </p>
+                                        )}
+                                      </td>
+                                      {job.isFullTimePosition ? (
+                                        <td class="size-px whitespace-nowrap px-4 py-1">
+                                          <p class=" text-color-gray-700">
+                                            Full-time
+                                          </p>
+                                        </td>
+                                      ) : (
+                                        <td class="size-px whitespace-nowrap px-4 py-1">
+                                          <p class=" text-color-gray-700">
+                                            Part-time
+                                          </p>
+                                        </td>
+                                      )}
+
+                                      {/* <td class="size-px whitespace-nowrap px-4 py-1">
+                                        <span class="text-sm text-gray-600 ">
+                                          {job.datePosted}
+                                        </span>
+                                      </td> */}
+                                      <td class="size-px py-2 px-3 space-x-2">
+                                        <div className=" flex  w-full ">
+                                          <button  onClick={() =>
+                                          handleOpenSingleJobFromGroup(job)
+                                        } className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                                            See More
+                                          </button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                ))}
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </DrawerBody>
+                </DrawerContent>
+              </Drawer>
+
+              {/* {showAddJobBusiness ? <AddJobBusiness /> : null} */}
+
+              <Modal isOpen={isOpenShare} onClose={onCloseShare}>
+                <ModalContent>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <div class="mt-5 bg-white rounded-xl ">
+                      <div class="p-4 sm:p-7 text-center align-center items-center justify-center">
+                        <div class="text-center align-center items-center justify-center mb-5">
+                          <h1 class="block text-2xl font-bold text-gray-800">
+                            Share to
+                          </h1>
+                        </div>
+
+                        <FacebookShareButton
+                          url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`}
+                        >
+                          <FacebookIcon size={32} round={true} />
+                        </FacebookShareButton>
+                        <h1 class="block text-2xl font-bold text-gray-800">
+                          Copy Link:
+                        </h1>
+                        {urlCopied ? (
+                          <span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">
+                            Copied!
+                          </span>
+                        ) : (
+                          <label
+                            onClick={() => handleCopiedURL(businessPostedJobs)}
+                            className=" inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium mt-2 "
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6 ml-1 items-center cursor-pointer"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
+                              />
+                            </svg>
+                          </label>
+                        )}
+                      </div>
+                    </div>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
+            </>
+          ) : null}
+
+          
+        </>
+      ))}
+
+{selectedJobFromGroup?.jobID === openInfoWindowMarkerIDSingle ? (
+            <>
+              <Drawer
+                onClose={() =>
+                  handleCloseOfSingleFromGroup(selectedJobFromGroup)
+                }
+                isOpen={isOpenDrawerSingleFromGroup}
+                size={"xl"}
+              >
+                <DrawerOverlay />
+                <DrawerContent>
+                  <DrawerCloseButton />
+                  <DrawerHeader>{selectedJobFromGroup.jobTitle}</DrawerHeader>
+                  <DrawerBody>
+                    <div class="">
+                      <Helmet>
+                        <meta charSet="utf-8" />
+                        <title>{selectedJobFromGroup.jobTitle}</title>
+                        <meta
+                          name="description"
+                          content={selectedJobFromGroup.description}
+                        />
+                        {/* <link rel="canonical" href=`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}` /> */}
+                      </Helmet>
+                      <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto ">
+                        <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                          <div class="p-4">
+                            <div class=" ">
+                              <div className="flex">
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block mb-2 text-xl font-medium text-gray-900"
+                                >
+                                  {selectedJobFromGroup.jobTitle}
+                                </label>
+
+                                <label onClick={() => onOpenShare()}>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="size-4 ml-1 cursor-pointer"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
+                                    />
+                                  </svg>
+                                </label>
+                              </div>
+                              {selectedJobFromGroup.isFullTimePosition ===
+                              true ? (
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block  text-lg font-medium text-gray-800"
+                                >
+                                  Full-time
+                                </label>
+                              ) : (
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block  text-lg font-medium text-gray-800 "
+                                >
+                                  Part-time
+                                </label>
+                              )}
+
+                              {selectedJobFromGroup.isHourly ? (
+                                <div class="space-y-1 ">
+                                  <div class="flex align-items-center">
+                                    <p className=" text-md font-medium">$</p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block text-md font-medium text-gray-800 "
+                                    >
+                                      {selectedJobFromGroup.lowerRate}
+                                    </label>
+                                    <p className=" text-md font-medium">
+                                      /hour - $
+                                    </p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block  text-md font-medium text-gray-800 "
+                                    >
+                                      {selectedJobFromGroup.upperRate}
+                                    </label>
+                                    <p className=" text-md font-medium">
+                                      /hour
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : null}
+
+                              {selectedJobFromGroup.isSalaried ? (
+                                <div class="space-y-2 ">
+                                  <div class="flex align-items-center">
+                                    <p className=" text-md font-medium">$</p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block  text-md font-medium text-gray-800 "
+                                    >
+                                      {selectedJobFromGroup.lowerRate}
+                                    </label>
+                                    <p className="ml-1 text-md font-medium ">
+                                      yearly - $
+                                    </p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block  text-md font-medium text-gray-800 "
+                                    >
+                                      {selectedJobFromGroup.upperRate}
+                                    </label>
+                                    <p className=" ml-1 c font-medium">
+                                      yearly
+                                    </p>
+                                    {selectedJobFromGroup.isEstimatedPay ? (
+                                      <p>*</p>
+                                    ) : null}
+                                  </div>
+                                </div>
+                              ) : null}
+                              {selectedJobFromGroup.isEstimatedPay ? (
+                                <div className="mb-2 flex flex-col w-full text-sm ">
+                                  <a href="https://www.glassdoor.com/index.htm">
+                                    *Estimate. Powered by{" "}
+                                    <img
+                                      src="https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png"
+                                      title="Job Search"
+                                    />
+                                  </a>
+                                </div>
+                              ) : null}
+                              <p class="block  text-md font-medium text-gray-800 ">
+                                {selectedJobFromGroup.streetAddress},{" "}
+                                {selectedJobFromGroup.city},{" "}
+                                {selectedJobFromGroup.state}
+                              </p>
+                              {selectedJobFromGroup.isEstimatedAddress ? (
+                                <p class="block italic text-sm  text-gray-800 ">
+                                  Address may not be exact
+                                </p>
+                              ) : null}
+                              <p class="font-semibold text-md text-gray-500  cursor-default">
+                                <span className="font-semibold text-md text-slate-700">
+                                  {" "}
+                                  Posted:
+                                </span>{" "}
+                                {selectedJobFromGroup.datePosted}
+                              </p>
+                              <p class="font-semibold text-md text-slate-700 cursor-pointer">
+                                Employer:
+                              </p>
+                              <div className="flex">
+                                {selectedJobFromGroup.employerProfilePicture ? (
+                                  <>
+                                    <div class="flex flex-col justify-center items-center size-[56px]  ">
+                                      <img
+                                        src={
+                                          selectedJobFromGroup.employerProfilePicture
+                                        }
+                                        class="flex-shrink-0 size-[64px] rounded-full"
+                                      />
+
+                                      <div className="flex flex-col ml-4">
+                                        <p class="font-semibold text-md text-gray-500  mt-2 cursor-pointer">
+                                          {selectedJobFromGroup.businessName}
+                                        </p>
+                                        <p class="font-semibold text-md text-gray-500 cursor-default ">
+                                          {selectedJobFromGroup.city}, Minnesota
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </>
+                                ) : null}
+                                <div className="flex flex-col">
+                                  <p class="font-semibold text-md text-gray-500  mt-1 cursor-pointer">
+                                    {selectedJobFromGroup.companyName}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="space-y-2 mt-10 mb-4 ">
+                              <label
+                                for="dactmi"
+                                class="block mb-2 text-lg font-medium text-gray-900 "
+                              >
+                                What you'll be doing
+                              </label>
+                              <div className="w-full prose prose-li  font-inter marker:text-black mb-4 ">
+                                <Markdown>
+                                  {selectedJobFromGroup.description}
+                                </Markdown>
+                              </div>
+                            </div>
+                            {selectedJobFromGroup.bio ? (
+                              <div class="space-y-2 mt-10 mb-4">
+                                <label
+                                  for="dactmi"
+                                  class="block mb-2 text-md font-medium text-gray-800 "
+                                >
+                                  About {selectedJobFromGroup.companyName}
+                                </label>
+
+                                <div class="mb-4">
+                                  <p>{selectedJobFromGroup.bio}</p>
+                                </div>
+                              </div>
+                            ) : null}
+
+                            <div class="space-y-2 mb-4 ">
+                              <label
+                                for="dactmi"
+                                class="block mb-2 text-lg font-medium text-gray-900 "
+                              >
+                                Job Requirements
+                              </label>
+
+                              <div className="prose prose-li  font-inter marker:text-black mb-4">
+                                <Markdown>
+                                  {selectedJobFromGroup.applicantDescription}
+                                </Markdown>
+                              </div>
+                            </div>
+                            <div class="space-y-2 md:mb-4 lg:mb-4 mb-20">
+                              <label
+                                for="dactmi"
+                                class="block mb-2 text-lg font-medium text-gray-900 "
+                              >
+                                Employment Benefits
+                              </label>
+
+                              <div className="prose prose-li  font-inter marker:text-black mb-4">
+                                {selectedJobFromGroup.benefitsDescription ? (
+                                  <Markdown>
+                                    {selectedJobFromGroup.benefitsDescription}
+                                  </Markdown>
+                                ) : (
+                                  <p>Nothing listed</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {isDesktop ? (
+                            <div class="p-4 flex justify-between gap-x-2">
+                              <div class="w-full flex justify-end items-center gap-x-2">
+                                {selectedJobFromGroup.jobTitle.includes(
+                                  "Plumber"
+                                ) ? (
+                                  <button
+                                    type="button"
+                                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                    data-hs-overlay="#hs-pro-datm"
+                                    onClick={() => onOpenPlumber()}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke-width="1.5"
+                                      stroke="currentColor"
+                                      class="size-4 ml-1"
+                                    >
+                                      <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                      />
+                                    </svg>
+                                    See career path
+                                  </button>
+                                ) : null}
+                                {selectedJobFromGroup.jobTitle.includes(
+                                  "Server" || "server"
+                                ) ? (
+                                  <button
+                                    type="button"
+                                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                    data-hs-overlay="#hs-pro-datm"
+                                    onClick={() => onOpenServer()}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke-width="1.5"
+                                      stroke="currentColor"
+                                      class="size-4 ml-1"
+                                    >
+                                      <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                      />
+                                    </svg>
+                                    See career path
+                                  </button>
+                                ) : null}
+                                {selectedJobFromGroup.jobTitle.includes(
+                                  "Machinist" || "CNC"
+                                ) ? (
+                                  <button
+                                    type="button"
+                                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                    data-hs-overlay="#hs-pro-datm"
+                                    onClick={() => onOpenCNC()}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke-width="1.5"
+                                      stroke="currentColor"
+                                      class="size-4 ml-1"
+                                    >
+                                      <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                      />
+                                    </svg>
+                                    See career path
+                                  </button>
+                                ) : null}
+                              </div>
+                            </div>
+                          ) : (
+                            <div
+                              id="cookies-simple-with-dismiss-button"
+                              class="fixed bottom-0 start-1/2 transform -translate-x-1/2 z-[60] sm:max-w-4xl w-full mx-auto px-2"
+                            >
+                              <div class="p-2 bg-white border border-gray-200 rounded-sm shadow-sm ">
+                                <div class="p-2 flex justify-between gap-x-2">
+                                  <div class="w-full flex justify-center items-center gap-x-2">
+                                    {selectedJobFromGroup.jobTitle.includes(
+                                      "Plumber"
+                                    ) ? (
+                                      <button
+                                        type="button"
+                                        class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200 bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
+                                        data-hs-overlay="#hs-pro-datm"
+                                        onClick={() => onOpenPlumber()}
+                                      >
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          stroke-width="1.5"
+                                          stroke="currentColor"
+                                          class="size-4 ml-1"
+                                        >
+                                          <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                          />
+                                        </svg>
+                                        See career path
+                                      </button>
+                                    ) : null}
+                                    {selectedJobFromGroup.jobTitle.includes(
+                                      "Server" || "server"
+                                    ) ? (
+                                      <button
+                                        type="button"
+                                        class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                        data-hs-overlay="#hs-pro-datm"
+                                        onClick={() => onOpenServer()}
+                                      >
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          stroke-width="1.5"
+                                          stroke="currentColor"
+                                          class="size-4 ml-1"
+                                        >
+                                          <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                          />
+                                        </svg>
+                                        See career path
+                                      </button>
+                                    ) : null}
+                                    {selectedJobFromGroup.jobTitle.includes(
+                                      "Machinist" || "CNC"
+                                    ) ? (
+                                      <button
+                                        type="button"
+                                        class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
+                                        data-hs-overlay="#hs-pro-datm"
+                                        onClick={() => onOpenCNC()}
+                                      >
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          stroke-width="1.5"
+                                          stroke="currentColor"
+                                          class="size-4 ml-1"
+                                        >
+                                          <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                          />
+                                        </svg>
+                                        See career path
+                                      </button>
+                                    ) : null}
+                                    <button
+                                      type="button"
+                                      class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                      data-hs-overlay="#hs-pro-datm"
+                                      onClick={() =>
+                                        applyAndNavigate(selectedJobFromGroup)
+                                      }
+                                    >
+                                      Apply
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </DrawerBody>
+                  <DrawerFooter>
+                    <button
+                      type="button"
+                      class="py-3 px-6 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800  lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                      data-hs-overlay="#hs-pro-datm"
+                      onClick={() => saveJob(selectedJobFromGroup)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                        />
+                      </svg>
+                      Save
+                    </button>
+                    <button
+                      type="button"
+                      class="py-3 px-8 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                      data-hs-overlay="#hs-pro-datm"
+                      onClick={() => applyAndNavigate(selectedJobFromGroup)}
+                    >
+                      Apply
+                    </button>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
+
+              <Modal isOpen={isOpenShare} onClose={onCloseShare}>
+                <ModalContent>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <div class="mt-5 bg-white rounded-xl ">
+                      <div class="p-4 sm:p-7 text-center align-center items-center justify-center">
+                        <div class="text-center align-center items-center justify-center mb-5">
+                          <h1 class="block text-2xl font-bold text-gray-800">
+                            Share to
+                          </h1>
+                        </div>
+
+                        <FacebookShareButton
+                          url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${selectedJobFromGroup.jobID}`}
+                        >
+                          <FacebookIcon size={32} round={true} />
+                        </FacebookShareButton>
+                        <h1 class="block text-2xl font-bold text-gray-800">
+                          Copy Link:
+                        </h1>
+                        {urlCopied ? (
+                          <span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">
+                            Copied!
+                          </span>
+                        ) : (
+                          <label
+                            onClick={() =>
+                              handleCopiedURL(selectedJobFromGroup)
+                            }
+                            className=" inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium mt-2 "
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6 ml-1 items-center cursor-pointer"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
+                              />
+                            </svg>
+                          </label>
+                        )}
+                      </div>
+                    </div>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
+            </>
+          ) : null}
+
+      {newTrees.map((businessPostedJobs) => (
+        <>
+          <SingleMarker
             key={businessPostedJobs.key}
             tree={businessPostedJobs}
             onClick={() => handlePostedByBusinessToggleOpen(businessPostedJobs)}
             setMarkerRef={setMarkerRef}
           />
 
-          {openInfoWindowMarkerID === businessPostedJobs.jobID ? (
+          {openInfoWindowMarkerID.lat === businessPostedJobs.locationLat ? (
             <>
-              <Drawer onClose={onCloseDrawer} isOpen={isOpenDrawer} size={"xl"}>
+              <Drawer
+                onClose={onCloseDrawerSingle}
+                isOpen={isOpenDrawerSingle}
+                size={"xl"}
+              >
                 <DrawerOverlay />
                 <DrawerContent>
                   <DrawerCloseButton />
@@ -628,8 +1563,6 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                         {/* <link rel="canonical" href=`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}` /> */}
                       </Helmet>
                       <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto ">
-                     
-
                         <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
                           <div class="p-4">
                             <div class=" ">
@@ -933,37 +1866,6 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                                     See career path
                                   </button>
                                 ) : null}
-
-                                <button
-                                  type="button"
-                                  class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                  data-hs-overlay="#hs-pro-datm"
-                                  onClick={() => onOpen()}
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1.5}
-                                    stroke="currentColor"
-                                    className="size-4"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                                    />
-                                  </svg>
-                                  Save
-                                </button>
-                                <button
-                                  type="button"
-                                  class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                  data-hs-overlay="#hs-pro-datm"
-                                  onClick={() => onOpen()}
-                                >
-                                  Apply
-                                </button>
                               </div>
                             </div>
                           ) : (
@@ -974,18 +1876,6 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                               <div class="p-2 bg-white border border-gray-200 rounded-sm shadow-sm ">
                                 <div class="p-2 flex justify-between gap-x-2">
                                   <div class="w-full flex justify-center items-center gap-x-2">
-                                    {/* <button
-                              type="button"
-                              class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                              data-hs-overlay="#hs-pro-datm"
-                              onClick={() => onOpen()}
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
-     <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-     </svg>
-     
-                              Save
-                            </button> */}
                                     {businessPostedJobs.jobTitle.includes(
                                       "Plumber"
                                     ) ? (
@@ -1068,7 +1958,9 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                                       type="button"
                                       class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
                                       data-hs-overlay="#hs-pro-datm"
-                                      onClick={() => onOpen()}
+                                      onClick={() =>
+                                        applyAndNavigate(businessPostedJobs)
+                                      }
                                     >
                                       Apply
                                     </button>
@@ -1503,6 +2395,38 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                       </Drawer>
                     </div>
                   </DrawerBody>
+                  <DrawerFooter>
+                    <button
+                      type="button"
+                      class="py-3 px-6 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800  lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                      data-hs-overlay="#hs-pro-datm"
+                      onClick={() => saveJob(selectedJobFromGroup)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                        />
+                      </svg>
+                      Save
+                    </button>
+                    <button
+                      type="button"
+                      class="py-3 px-8 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                      data-hs-overlay="#hs-pro-datm"
+                      onClick={() => applyAndNavigate(businessPostedJobs)}
+                    >
+                      Apply
+                    </button>
+                  </DrawerFooter>
                 </DrawerContent>
               </Drawer>
 
@@ -1561,153 +2485,42 @@ export const ClusteredTreeMarkers = ({ trees }) => {
         </>
       ))}
 
-      <Modal
-        isOpen={isOpen}
-        onClose={() => handleClose()}
-        size={{ base: "full", lg: "md" }}
-      >
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
           <ModalCloseButton />
-          <div class="mt-5 bg-white rounded-xl ">
-            <div class="p-4 sm:p-7">
-              <div class="text-center">
-                <h1 class="block text-2xl font-bold text-gray-800">Sign up</h1>
-                <p class="mt-2 text-sm text-gray-600">It's fast and free</p>
-              </div>
+          <ModalBody>
+            <Text>Application submitted.</Text>
+          </ModalBody>
 
-              <div class="mt-3">
-                <button
-                  type="button"
-                  class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-                  onClick={() => handleGoogleSignUp()}
-                >
-                  <svg
-                    class="w-4 h-auto"
-                    width="46"
-                    height="47"
-                    viewBox="0 0 46 47"
-                    fill="none"
-                  >
-                    <path
-                      d="M46 24.0287C46 22.09 45.8533 20.68 45.5013 19.2112H23.4694V27.9356H36.4069C36.1429 30.1094 34.7347 33.37 31.5957 35.5731L31.5663 35.8669L38.5191 41.2719L38.9885 41.3306C43.4477 37.2181 46 31.1669 46 24.0287Z"
-                      fill="#4285F4"
-                    />
-                    <path
-                      d="M23.4694 47C29.8061 47 35.1161 44.9144 39.0179 41.3012L31.625 35.5437C29.6301 36.9244 26.9898 37.8937 23.4987 37.8937C17.2793 37.8937 12.0281 33.7812 10.1505 28.1412L9.88649 28.1706L2.61097 33.7812L2.52296 34.0456C6.36608 41.7125 14.287 47 23.4694 47Z"
-                      fill="#34A853"
-                    />
-                    <path
-                      d="M10.1212 28.1413C9.62245 26.6725 9.32908 25.1156 9.32908 23.5C9.32908 21.8844 9.62245 20.3275 10.0918 18.8588V18.5356L2.75765 12.8369L2.52296 12.9544C0.909439 16.1269 0 19.7106 0 23.5C0 27.2894 0.909439 30.8731 2.49362 34.0456L10.1212 28.1413Z"
-                      fill="#FBBC05"
-                    />
-                    <path
-                      d="M23.4694 9.07688C27.8699 9.07688 30.8622 10.9863 32.5344 12.5725L39.1645 6.11C35.0867 2.32063 29.8061 0 23.4694 0C14.287 0 6.36607 5.2875 2.49362 12.9544L10.0918 18.8588C11.9987 13.1894 17.25 9.07688 23.4694 9.07688Z"
-                      fill="#EB4335"
-                    />
-                  </svg>
-                  Sign up with Google
-                </button>
-
-                <div class="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6">
-                  Or
-                </div>
-
-                <form>
-                  <div class="grid gap-y-4">
-                    <div>
-                      <label for="email" class="block text-sm mb-2">
-                        Email address
-                      </label>
-                      <div class="relative">
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-                          required
-                          aria-describedby="email-error"
-                        />
-                        {emailValidationBegun === true ? (
-                          <p class="block text-sm mb-2 text-red-500">
-                            {validationMessage}
-                          </p>
-                        ) : null}
-                      </div>
-                    </div>
-
-                    <div>
-                      <div class="flex justify-between items-center">
-                        <label for="password" class="block text-sm mb-2">
-                          Password
-                        </label>
-                        {/* <a class="text-sm text-blue-600 decoration-2 hover:underline font-medium" href="../examples/html/recover-account.html">Forgot password?</a> */}
-                      </div>
-                      <div class="relative">
-                        <input
-                          type="password"
-                          id="password"
-                          name="password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-                          required
-                          aria-describedby="password-error"
-                        />
-                        {passwordValidationBegun === true ? (
-                          <p class="block text-sm mb-2 text-red-500">
-                            {passwordValidationMessage}
-                          </p>
-                        ) : null}
-                      </div>
-                      <p
-                        class="hidden text-xs text-red-600 mt-2"
-                        id="password-error"
-                      >
-                        8+ characters required
-                      </p>
-                    </div>
-
-                    <div class="flex items-center">
-                      <div class="flex">
-                        <input
-                          id="remember-me"
-                          name="remember-me"
-                          type="checkbox"
-                          class="shrink-0 mt-0.5 border-gray-200  text-blue-600 focus:ring-blue-500"
-                        />
-                      </div>
-                      <div class="ms-3">
-                        <label for="remember-me" class="text-sm">
-                          Remember me
-                        </label>
-                      </div>
-                    </div>
-
-                    <input
-                      type="button"
-                      onClick={() => validate()}
-                      value="Sign up"
-                      className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    ></input>
-                    <p class="mt-2 text-center text-sm text-gray-600">
-                      Already have an account?
-                      <button
-                        class="text-sky-400  decoration-2 hover:underline ml-1 font-medium"
-                        onClick={() => handleSwitchModals()}
-                      >
-                        Sign in here
-                      </button>
-                    </p>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Continue
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
+      <Modal isOpen={isOpenSaved} onClose={onCloseSaved}>
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Success!</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      <Text>You've saved this job</Text>
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <Button
+                        colorScheme="blue"
+                        mr={3}
+                        onClick={() => onCloseSaved()}
+                      >
+                        Close
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
     </>
   );
 };

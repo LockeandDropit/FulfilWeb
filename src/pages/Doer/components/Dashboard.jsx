@@ -282,9 +282,9 @@ const Dashboard = () => {
         <div class="flex flex-col h-full max-h-full py-3">
           <header class="h-[46px] px-8">
             <a
-              class="flex-none text-4xl font-sans font-bold text-sky-400"
+              class="flex-none text-4xl font-sans font-bold text-sky-400 cursor-pointer"
               aria-label="Brand"
-              onClick={() => navigate("/DoerMapScreen")}
+              onClick={() => navigate("/DoerMapView")}
             >
               Fulfil
             </a>
@@ -296,10 +296,10 @@ const Dashboard = () => {
               data-hs-accordion-always-open
             >
               <ul>
-                <li class="px-5 mb-1.5">
+                <li class="px-5 mb-1.5 mt-6">
                   <button
-                    class="flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
-                    onClick={() => navigate("/DoerMapScreen")}
+                   class="hs-accordion-toggle  mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
+                    onClick={() => navigate("/DoerMapView")}
                   >
                     <svg
                       class="flex-shrink-0 mt-0.5 size-4"
@@ -321,24 +321,13 @@ const Dashboard = () => {
                 </li>
                 <li class="px-5 mb-1.5">
                   <button
-                    class="flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
+                    class="hs-accordion-toggle mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
                     onClick={() => navigate("/DoerSavedJobs")}
                   >
-                    <svg
-                      class="flex-shrink-0 mt-0.5 size-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                      <polyline points="9 22 9 12 15 12 15 22" />
-                    </svg>
+                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"  class="flex-shrink-0 mt-0.5 size-4">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+</svg>
+
                     Saved Jobs
                   </button>
                 </li>
@@ -368,7 +357,7 @@ const Dashboard = () => {
                   Messages
                   <span class=" ml-auto inline-flex items-center  px-2 rounded-full text-[10px] font-medium bg-red-500 text-white">{unseenMessages}</span>
                   
-                </button>) : (   <button
+                </button>) : (<button
                   type="button"
                   class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
              onClick={() => navigate("/DoerChatHolder")}

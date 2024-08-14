@@ -84,26 +84,8 @@ const LoggedOutHeaderNoGap = (props) => {
       // New sign-in will be persisted with local persistence.
       signInWithEmailAndPassword(auth, email, password)
         .then((response) => {
-          // setLoggingIn(true);
-
-          //stream chat log in
-          // const chatClient = new StreamChat(
-          //   process.env.REACT_APP_STREAM_CHAT_API_KEY
-          // );
-
-          // Signed in
-          // setCurrentUser(response.user.uid)
           setIsSignedIn(true);
           const currentUser = response.user.uid;
-
-          // chatClient.connectUser(
-          //   { id: response.user.uid },
-          //   chatClient.devToken(response.user.uid)
-          // );
-
-          // const docRefUsers = doc(db, "users", response.user.uid);
-          // const docRefEmployers = doc(db, "employers", response.user.uid);
-
           // Thanks Jake :)
           Promise.all([
             getDoc(doc(db, "users", response.user.uid)),
@@ -114,7 +96,7 @@ const LoggedOutHeaderNoGap = (props) => {
               navigate(
                 results[0]._document !== null &&
                   results[0]._document.data.value.mapValue.fields.isEmployer
-                  ? "/DoerMapScreen"
+                  ? "/DoerMapView"
                   : "/Homepage"
               )
             )
@@ -127,7 +109,7 @@ const LoggedOutHeaderNoGap = (props) => {
           setPasswordValidationMessage("Oops! Wrong email or password");
         });
     });
-
+    setIsLoading(false)
     // template credit simple log in card https://chakra-templates.vercel.app/forms/authentication
   };
 
@@ -163,7 +145,7 @@ const LoggedOutHeaderNoGap = (props) => {
                 ? "/DoerAddProfileInfo"
                 : results[0]._document !== null &&
                   results[0]._document.data.value.mapValue.fields.isEmployer
-                ? "/DoerMapScreen"
+                ? "/DoerMapView"
                 : "/Homepage"
             )
           )
@@ -210,11 +192,32 @@ const LoggedOutHeaderNoGap = (props) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [emailValidationBegun, setEmailValidationBegun] = useState(false);
 
+
+
+  //listen for enter button to and call modalValidate
+  // ty buddy https://www.youtube.com/watch?v=D5SdvGMTEaU&t=71s
+
+// useEffect(() => {
+//   document.addEventListener('keydown', handleKeyDown, true);
+// }, [])
+
+// const handleKeyDown = (e) => {
+// if (e.key === "Enter") {
+//   e.preventDefault();
+//   modalValidate()
+// }
+// };
+
+const [isLoading, setIsLoading] = useState(false)
+
+
+
   const modalValidate = () => {
+    setIsLoading(true)
     setEmailValidationBegun(true);
     const isValid = emailRegex.test(email);
     if (!isValid) {
-      setValidationMessage("Please enter a valid email");
+      
     } else {
       setValidationMessage();
       setEmail(email);
@@ -227,9 +230,12 @@ const LoggedOutHeaderNoGap = (props) => {
       setPasswordValidationMessage();
       console.log("password good")
     }
-
     if (isValid && isValidPassword) {
       logIn()
+    } else {
+      setTimeout(() => {
+      setPasswordValidationMessage("Invalid email or password");
+    }, 500)
     }
   };
 
@@ -471,9 +477,7 @@ const LoggedOutHeaderNoGap = (props) => {
                       <div class="relative">
                         <input
                           type="email"
-                          id="email"
-                          name="email"
-                          value={email}
+                          label="email"
                           onChange={(e) => setEmail(e.target.value)}
                           className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                           required
@@ -495,10 +499,10 @@ const LoggedOutHeaderNoGap = (props) => {
                       </div>
                       <div class="relative">
                         <input
-                          type="password"
-                          id="password"
-                          name="password"
-                          value={password}
+                         type="password"
+                        
+                          
+                        
                   onChange={(e) => setPassword(e.target.value)}
                   className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                           required
@@ -523,6 +527,7 @@ const LoggedOutHeaderNoGap = (props) => {
                           name="remember-me"
                           type="checkbox"
                           class="shrink-0 mt-0.5 border-gray-200  text-blue-600 focus:ring-blue-500"
+                     
                         />
                       </div>
                       <div class="ms-3">
@@ -532,13 +537,25 @@ const LoggedOutHeaderNoGap = (props) => {
                       </div>
                     </div>
 
-                    <input type="button"
+            {isLoading ? (
+  <button
+  
+   className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+ >
+<div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full " role="status" aria-label="loading">
+  <span class="sr-only">Loading...</span>
+</div>
+ </button>
+            ) : (
+  <input type="button"
                      onClick={() => modalValidate()}
                      value="Sign In"
                       className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
                     >
                    
                     </input>
+            )}
+                  
                     <p class="mt-2 text-sm text-center text-gray-600">
                   Are you looking to post a job?
                   <button

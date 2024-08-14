@@ -85,26 +85,7 @@ const LoggedOutHeader = (props) => {
       // New sign-in will be persisted with local persistence.
       signInWithEmailAndPassword(auth, email, password)
         .then((response) => {
-          // setLoggingIn(true);
-
-          //stream chat log in
-          const chatClient = new StreamChat(
-            process.env.REACT_APP_STREAM_CHAT_API_KEY
-          );
-
-          // Signed in
-          // setCurrentUser(response.user.uid)
           setIsSignedIn(true);
-          const currentUser = response.user.uid;
-
-          chatClient.connectUser(
-            { id: response.user.uid },
-            chatClient.devToken(response.user.uid)
-          );
-
-          // const docRefUsers = doc(db, "users", response.user.uid);
-          // const docRefEmployers = doc(db, "employers", response.user.uid);
-
           // Thanks Jake :)
           Promise.all([
             getDoc(doc(db, "users", response.user.uid)),
@@ -115,7 +96,7 @@ const LoggedOutHeader = (props) => {
               navigate(
                 results[0]._document !== null &&
                   results[0]._document.data.value.mapValue.fields.isEmployer
-                  ? "/DoerMapScreen"
+                  ? "/DoerMapView"
                   : "/Homepage"
               )
             )
@@ -130,7 +111,7 @@ const LoggedOutHeader = (props) => {
           setIsLoading(false)
         });
     });
-
+    setIsLoading(false)
     // template credit simple log in card https://chakra-templates.vercel.app/forms/authentication
   };
 
@@ -166,7 +147,7 @@ const LoggedOutHeader = (props) => {
                 ? "/DoerAddProfileInfo"
                 : results[0]._document !== null &&
                   results[0]._document.data.value.mapValue.fields.isEmployer
-                ? "/DoerMapScreen"
+                ? "/DoerMapView"
                 : "/Homepage"
             )
           )
@@ -214,17 +195,35 @@ const LoggedOutHeader = (props) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [emailValidationBegun, setEmailValidationBegun] = useState(false);
 
+  // useEffect(() => {
+  //   document.addEventListener('keydown', handleKeyDown, true);
+  // }, [])
+  
+  // const handleKeyDown = (e) => {
+  // if (e.key === "Enter") {
+  //   e.preventDefault();
+  //   modalValidate()
+    
+  // }
+  // };
+
+  useEffect(() => {
+    console.log("email", email)
+  }, [email])
+  
   const [isLoading, setIsLoading] = useState(false)
 
   const modalValidate = () => {
- 
+     setIsLoading(true)
     setEmailValidationBegun(true);
     const isValid = emailRegex.test(email);
     if (!isValid) {
       setValidationMessage("Please enter a valid email");
+      console.log(" email", email, isValid)
     } else {
       setValidationMessage();
       setEmail(email);
+  
       console.log("email good")
     }
     setPasswordValidationBegun(true);
@@ -232,11 +231,15 @@ const LoggedOutHeader = (props) => {
     if (!isValidPassword) {
     } else {
       setPasswordValidationMessage();
+
       console.log("password good")
     }
 
     if (isValid && isValidPassword) {
       logIn()
+
+    } else {
+      setIsLoading(false)
     }
   };
 
@@ -475,9 +478,7 @@ const LoggedOutHeader = (props) => {
                       <div class="relative">
                         <input
                           type="email"
-                          id="email"
-                          name="email"
-                          value={email}
+                          label="email"
                           onChange={(e) => setEmail(e.target.value)}
                           className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                           required
@@ -500,9 +501,7 @@ const LoggedOutHeader = (props) => {
                       <div class="relative">
                         <input
                           type="password"
-                          id="password"
-                          name="password"
-                          value={password}
+                        
                   onChange={(e) => setPassword(e.target.value)}
                   className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                           required
@@ -559,7 +558,7 @@ const LoggedOutHeader = (props) => {
                   Don't have an account yet?
                   <button
                     class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
-                    onClick={() => navigate("/DoerEmailRegister")}
+                    // onClick={() => navigate("/DoerEmailRegister")}
                   >
                     Sign up here
                   </button>

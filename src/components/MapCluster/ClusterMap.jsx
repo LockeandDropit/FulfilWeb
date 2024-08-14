@@ -67,6 +67,8 @@ const ClusterMap = (props) => {
     );
   }, [trees, selectedCategory]);
 
+
+
   //almost all code regarding implementing clustering in this library is from https://github.com/visgl/react-google-maps/tree/main/examples/marker-clustering
   return (
     <APIProvider apiKey={API_KEY}>

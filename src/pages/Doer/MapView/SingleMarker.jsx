@@ -12,7 +12,7 @@ import {AdvancedMarker} from '@vis.gl/react-google-maps';
 /**
  * Wrapper Component for an AdvancedMarker for a single tree.
  */
-export const TreeMarker = (props) => {
+export const SingleMarker = (props) => {
   const {tree, onClick, setMarkerRef} = props;
 
   const handleClick = useCallback(() => onClick(tree), [onClick, tree]);
@@ -45,15 +45,15 @@ export const TreeMarker = (props) => {
       }} ref={ref} onClick={handleClick}>
       <button
                           type="button"
-                          class="py-1 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
+                          class=" -z-30 py-1 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
                         >
                           {tree.isVolunteer ? (
                             <p>Volunteer!</p>
-                          ) : tree.isSalaried ? tree.shortenedSalary ? ( <p>
-                             ${tree.shortenedSalary} - ${tree.shortenedUpperSalary}/year
-                          </p>) : ( <p>
-                              ${tree.lowerRate} yearly - ${tree.upperRate} yearly
-                            </p>)  : (tree.upperRate > tree.lowerRate ?  (<p>
+                          ) : tree.isSalaried ? (
+                            <p>
+                              ${tree.shortenedSalary} - ${tree.shortenedUpperSalary}/year
+                            </p>
+                          ) : (tree.upperRate > tree.lowerRate ?  (<p>
                             ${tree.lowerRate}/hr + 
                           </p>) : ( <p>
                               ${tree.lowerRate}/hr

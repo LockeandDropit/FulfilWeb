@@ -408,7 +408,7 @@ renderAllJobs()
                 ? "/AddProfileInfo"
                 : results[0]._document !== null &&
                   results[0]._document.data.value.mapValue.fields.isEmployer
-                ? "/DoerMapScreen"
+                ? "/DoerMapView"
                 : "/NeederMapScreen"
             )
           )
@@ -469,7 +469,7 @@ renderAllJobs()
               navigate(
                 results[0]._document !== null &&
                   results[0]._document.data.value.mapValue.fields.isEmployer
-                  ? "/DoerMapScreen"
+                  ? "/DoerMapView"
                   : "/NeederMapScreen"
               )
             )

@@ -558,9 +558,18 @@ const LoggedOutHeader = (props) => {
                   Don't have an account yet?
                   <button
                     class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
-                    // onClick={() => navigate("/DoerEmailRegister")}
+                    onClick={() => navigate("/DoerEmailRegister")}
                   >
                     Sign up here
+                  </button>
+                </p>
+                <p class="mt-2 text-sm text-gray-600">
+                  Forgot your password?
+                  <button
+                    class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
+                    onClick={() => navigate("/ResetPasswordLoggedOut")}
+                  >
+                    Reset your password
                   </button>
                 </p>
                   </div>

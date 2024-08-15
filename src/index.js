@@ -70,7 +70,7 @@ import AddBusinessProfileInfo from "./pages/Register/Needer/BusinessOnboarding/A
 import AddLogoAbout from "./pages/Register/Needer/BusinessOnboarding/AddLogoAbout";
 import DoerMapLoggedOut from "./components/DoerMapLoggedOut";
 import DoerMapLoggedOutClusterTest from "./components/DoerMapLoggedOutClusterTest";
-
+import ResetPasswordLoggedOut from "./components/Landing/ResetPasswordLoggedOut";
 
 
 
@@ -485,6 +485,10 @@ const router = createBrowserRouter([
   {
     path: "/DoerMapView",
     element: <DoerMapView/>,
+  },
+  {
+    path: "/ResetPasswordLoggedOut",
+    element: <ResetPasswordLoggedOut />,
   },
 ]);
 

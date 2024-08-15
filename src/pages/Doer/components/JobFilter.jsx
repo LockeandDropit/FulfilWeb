@@ -77,7 +77,7 @@ const JobFilter = () => {
     const searchResults = [];
     onSnapshot(q, (snapshot) => {
       snapshot.docs.forEach((doc) => {
-        if (doc.data().lowerCaseJobTitle.includes(value.toLowerCase())) {
+        if (doc.data().lowerCaseJobTitle.includes(value.toLowerCase()) && doc.data().isActive === true) {
           searchResults.push(doc.data());
         }
       });
@@ -107,18 +107,7 @@ const JobFilter = () => {
       var categoryTitle = null
       let allMatchingTitleJobs = [];
 
-      // if (splitTitle.length >= 2) {
-      //   splitTitle.forEach((word) => {
-      //     jobTitleSearchResults.forEach((results) => {
-      //       if (results.lowerCaseJobTitle.includes(word)) {
-      //           categoryTitle = word
-      //           allMatchingTitleJobs.push(results)
-      //           console.log("from inner forEach", results)
-      //         //push word to category tile, push all matching jobs to category array that would be displayed
-      //       }
-      //     });
-      //   });
-      // } else {
+
         jobTitleSearchResults.forEach((results) => {
           if (results.lowerCaseJobTitle.includes(firstWord)) {
             categoryTitle = firstWord
@@ -162,7 +151,7 @@ search()
         //if a b c we are not solving for salary right now
 
         if (jobTitle && !minimumPay && !positionType) {
-          if (doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase())) {
+          if (doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) && doc.data().isActive === true) {
             results.push({ ...doc.data(), id: doc.id, key: doc.id  });
             console.log("title", doc.data());
           } else {
@@ -173,7 +162,7 @@ search()
           console.log("title and minimum");
           if (
             doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) &&
-            doc.data().lowerRate >= minimumPay
+            doc.data().lowerRate >= minimumPay && doc.data().isActive === true
           ) {
             console.log("heres your match with pay", doc.data());
             results.push({ ...doc.data(), id: doc.id, key: doc.id  });
@@ -186,7 +175,7 @@ search()
           var isTrueSet = /^true$/i.test(positionType);
           if (
             doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) &&
-            doc.data().isFullTimePosition === isTrueSet
+            doc.data().isFullTimePosition === isTrueSet && doc.data().isActive === true
           ) {
             console.log("heres your match with pay", doc.data());
             results.push({ ...doc.data(), id: doc.id, key: doc.id  });
@@ -200,7 +189,7 @@ search()
           if (
             doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) &&
             doc.data().lowerRate >= minimumPay &&
-            doc.data().isFullTimePosition === isTrueSet
+            doc.data().isFullTimePosition === isTrueSet && doc.data().isActive === true
           ) {
             console.log("heres your match with pay", doc.data());
             results.push({ ...doc.data(), id: doc.id, key: doc.id  });
@@ -210,7 +199,7 @@ search()
           }
         } else if (minimumPay && !jobTitle && !positionType) {
           console.log("minimum", minimumPay);
-          if (doc.data().lowerRate >= minimumPay) {
+          if (doc.data().lowerRate >= minimumPay && doc.data().isActive === true) {
             console.log("heres your match with pay", doc.data());
             results.push({ ...doc.data(), id: doc.id, key: doc.id  });
           } else {
@@ -222,7 +211,7 @@ search()
           var isTrueSet = /^true$/i.test(positionType);
           if (
             doc.data().lowerRate >= minimumPay &&
-            doc.data().isFullTimePosition === isTrueSet
+            doc.data().isFullTimePosition === isTrueSet && doc.data().isActive === true
           ) {
             console.log("heres your match with pay", doc.data());
             results.push({ ...doc.data(), id: doc.id, key: doc.id  });
@@ -236,7 +225,7 @@ search()
           var isTrueSet = /^true$/i.test(positionType);
           if (
             doc.data().lowerRate >= minimumPay &&
-            doc.data().isFullTimePosition === isTrueSet
+            doc.data().isFullTimePosition === isTrueSet && doc.data().isActive === true
           ) {
             console.log("heres your match with pay", doc.data());
             results.push({ ...doc.data(), id: doc.id, key: doc.id  });
@@ -293,14 +282,14 @@ search()
   return (
     <>
       {isDesktop ? (
-        <div class="w-full bg-white  px-4 sm:px-6 lg:px-8  ">
+        <div class="w-full bg-white  px-4 sm:px-6 lg:px-8  rounded">
           <div class="flex flex-row items-center mx-auto mb-4 mt-4">
             <form id="search-form">
               <div class=" flex flex-col items-center gap-2 sm:flex-row sm:gap-3 ">
                 {/* <div class="max-w-[560px] min-w-[320px]">
                   <label
                     for="hs-select-label"
-                    class="block text-sm font-medium mb-1 ml-1"
+                    class="block text-md font-medium mb-1 ml-1"
                   >
                     Job Title
                   </label>

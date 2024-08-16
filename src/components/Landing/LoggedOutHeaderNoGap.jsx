@@ -555,7 +555,7 @@ const [isLoading, setIsLoading] = useState(false)
                    
                     </input>
             )}
-                     <p class="mt-2 text-sm text-gray-600">
+                     <p class="mt-2 text-center text-sm text-gray-600">
                   Forgot your password?
                   <button
                     class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"

@@ -3036,6 +3036,18 @@ const UserProfile = () => {
                             />
                           </label>
                         </p>
+                        <p className="cursor-pointer mt-2">
+                          Need to make a resume? Get started for free {" "}
+                          <label
+                            for="resume-upload"
+                            class="cursor-pointer text-sky-500 underline hover:text-sky-600"
+                            onClick={() => window.open("https://uhi.red/resume-examples", "_blank")}
+                           
+                          >
+                            here
+                           
+                          </label>
+                        </p>
                       </div>
                     )}
                     {/* end about */}

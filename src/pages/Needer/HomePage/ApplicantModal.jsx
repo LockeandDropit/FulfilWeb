@@ -45,7 +45,7 @@ import { useNavigate } from "react-router-dom";
 import { Document, Page } from 'react-pdf';
 import { pdfjs } from 'react-pdf';
 
-const ApplicantModal = (props) => {
+const ApplicantModal = (props, jobTitle) => {
   const { job } = useJobStore();
   const navigate = useNavigate();
   useEffect(() => {
@@ -107,6 +107,11 @@ const ApplicantModal = (props) => {
     isOpen: isOpenResume,
     onOpen: onOpenResume,
     onClose: onCloseResume,
+  } = useDisclosure();
+  const {
+    onOpen: onOpenDelete,
+    isOpen: isOpenDelete,
+    onClose: onCloseDelete,
   } = useDisclosure();
 
   const [userExperience, setUserExperience] = useState(null);
@@ -374,6 +379,30 @@ const ApplicantModal = (props) => {
     setNumPages(numPages);
   }
 
+  const passedJobTitle = props.jobTitle
+  
+  console.log("test new propos", passedJobTitle, premiumUser.uid)
+
+
+  const handleDeleteModal = () => {
+onOpenDelete()
+
+  }
+
+  const deleteApplicant = () => {
+  deleteDoc(doc(db, "employers", userID, "Posted Jobs", passedJobTitle,"Applicants", premiumUser.uid))
+  .then(() => {
+onCloseDelete()
+navigate("/JobDetails", {state: {applicantReset: true}})
+
+onClose()
+  })
+  .catch((e) => {
+    console.log(e)
+  })
+    
+  }
+
   //Note: There is no reason for the below to be named premiumuser.xxx. I copied this from another place and didn't want to change it all.
   return (
     <Modal isOpen={isOpen} onClose={() => handleOnClose()} size="6xl">
@@ -524,6 +553,12 @@ const ApplicantModal = (props) => {
                           >
                            See resume
                           </button>) : (null)}
+                          <button
+                            onClick={() => handleDeleteModal()}
+                            class="  ml-2 mt-2 py-2 px-4 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none "
+                          >
+                            Remove applicant
+                          </button>
                           
                   </div>
                 </div>
@@ -1666,6 +1701,39 @@ const ApplicantModal = (props) => {
       </p>
     </div>
                       </ModalContent>
+                    </Modal>
+
+                    <Modal isOpen={isOpenDelete} onClose={onCloseDelete} size="xl">
+                    <ModalOverlay />
+        <ModalContent>
+        <ModalHeader>
+          Delete Applicant?
+        </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p>Are you sure you want to remove this applicant?</p>
+          </ModalBody>
+
+          <ModalFooter>
+
+          <button
+              type="button"
+              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-black text-sm font-medium rounded-lg shadow-sm align-middle focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => onCloseDelete()}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => deleteApplicant()}
+            >
+              Yes, I'm sure
+            </button>
+          </ModalFooter>
+        </ModalContent>
                     </Modal>
         </main>
         )}

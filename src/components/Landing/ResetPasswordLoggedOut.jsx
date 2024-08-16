@@ -331,11 +331,9 @@ const ResetPasswordLoggedOut = () => {
                     required
                     aria-describedby="email-error"
                   />
-                  {email ? (<p>{email}</p>) : (null)}
                    {emailValidationBegun === true ? (
                 <p class="block text-sm mb-2 text-red-500">{validationMessage}</p>
               ) : null}
-                 
                 </div>
                 <p
                   class="hidden text-xs text-red-600 mt-2"
@@ -345,10 +343,6 @@ const ResetPasswordLoggedOut = () => {
                   to you
                 </p>
               </div>
-
-              
-            
-
               {emailSent ? (
                    <div class="text-center mt-4">
                 <div class=" bg-white border border-gray-200 rounded-xl shadow-lg " role="alert" tabindex="-1" aria-labelledby="hs-toast-stack-toggle-update-label">

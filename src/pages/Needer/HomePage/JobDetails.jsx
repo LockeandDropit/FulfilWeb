@@ -66,7 +66,7 @@ const JobDetails = () => {
 
   const navigate = useNavigate();
 
-  console.log("job", job)
+  console.log("job", job);
 
   useEffect(() => {
     if (job) {
@@ -200,8 +200,10 @@ const JobDetails = () => {
   }, [location]);
 
   const [applicantVisible, setApplicantVisible] = useState(false);
+  const [selectedApplicant, setSelectedApplicant] = useState(null)
 
-  const handleApplicantVisible = () => {
+  const handleApplicantVisible = (x) => {
+    setSelectedApplicant(x)
     setApplicantVisible(true);
     //also pass job info so chat can be started.
   };
@@ -250,6 +252,43 @@ const JobDetails = () => {
       });
   };
 
+  //delete logic
+  const {
+    onOpen: onOpenDelete,
+    isOpen: isOpenDelete,
+    onClose: onCloseDelete,
+  } = useDisclosure();
+
+  const handleDeleteModal = () => {
+    onOpenDelete()
+    
+      }
+    
+      const deleteJob = () => {
+      deleteDoc(doc(db, "employers", currentUser.uid, "Posted Jobs", job.jobTitle))
+      .then(() => {
+
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+
+      deleteDoc(doc(db, "Map Jobs", job.jobID,))
+      .then(() => {
+        onCloseDelete()
+        navigate("/Homepage")
+
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+
+
+
+    
+        
+      }
+
   return (
     <>
       <Header />
@@ -282,31 +321,39 @@ const JobDetails = () => {
 
                 <div class="inline-flex sm:justify-end items-center gap-x-3">
                   <div class="flex justify-end items-center gap-x-2">
-             
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setEditBusinessVisible(!editBusinessVisible)
-                          }
-                          class="py-2 px-2.5 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border border-stone-200 bg-white text-stone-800 shadow-sm hover:bg-stone-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-stone-50 "
-                        >
-                          Edit
-                          <svg
-                            class="flex-shrink-0 size-4"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          >
-                            <path d="m9 18 6-6-6-6" />
-                          </svg>
-                        </button>
-                  
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setEditBusinessVisible(!editBusinessVisible)
+                      }
+                      class="py-2 px-2.5 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border border-stone-200 bg-white text-stone-800 shadow-sm hover:bg-stone-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-stone-50 "
+                    >
+                      Edit
+                      <svg
+                        class="flex-shrink-0 size-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="m9 18 6-6-6-6" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onOpenDelete()
+                      }
+                      class="py-2 px-2.5 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border  bg-red-500 text-white shadow-sm hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-stone-50 "
+                    >
+                      Delete Job
+                      
+                    </button>
                   </div>
                 </div>
               </div>
@@ -525,7 +572,7 @@ const JobDetails = () => {
 
                       <div className="mb-10 h-[60px]"></div>
 
-                      <Accordion  allowMultiple mt={5}>
+                      <Accordion allowMultiple mt={5}>
                         <AccordionItem>
                           <h2>
                             <AccordionButton>
@@ -598,9 +645,6 @@ const JobDetails = () => {
                   {editBusinessVisible ? (
                     <EditSelectedBusinessJob props={job} />
                   ) : null}
-   
-            
-           
 
                   <div class="p-5 space-y-4 w-full flex flex-col bg-white border border-gray-200 shadow-sm rounded-xl ">
                     <nav
@@ -866,7 +910,7 @@ const JobDetails = () => {
                                             </td>
                                             <td class="size-px whitespace-nowrap px-4 py-1">
                                               <span class="text-sm text-gray-600 ">
-                                                {job.datePosted}
+                                                {applicant.dateApplied}
                                               </span>
                                             </td>
                                             <td class="size-px py-2 px-3 space-x-2">
@@ -883,7 +927,7 @@ const JobDetails = () => {
                                     </button> */}
                                                     {applicant.hasUnreadMessage ? (
                                                       <button
-                                                          className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
+                                                        className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
                                                         onClick={() =>
                                                           navigateToChannel(
                                                             applicant
@@ -897,7 +941,7 @@ const JobDetails = () => {
                                                       </button>
                                                     ) : (
                                                       <button
-                                                         className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
+                                                        className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
                                                         onClick={() =>
                                                           navigateToChannel(
                                                             applicant
@@ -912,19 +956,15 @@ const JobDetails = () => {
                                                   <button
                                                     type="button"
                                                     onClick={() =>
-                                                      handleApplicantVisible()
+                                                      handleApplicantVisible(applicant)
                                                     }
-                                                     className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
+                                                    className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
                                                   >
                                                     View profile
                                                   </button>
                                                 )}
                                               </div>
-                                              {applicantVisible ? (
-                                                <ApplicantModal
-                                                  props={applicant}
-                                                />
-                                              ) : null}
+                                            
                                             </td>
                                           </tr>
                                         </tbody>
@@ -939,6 +979,13 @@ const JobDetails = () => {
                     </div>
                   </div>
                 </div>
+
+                {applicantVisible ? (
+                                                <ApplicantModal
+                                                  props={selectedApplicant}
+                                                  jobTitle={job.jobTitle}
+                                                />
+                                              ) : null}
 
                 <Modal isOpen={isOpen} onClose={onClose}>
                   <ModalOverlay />
@@ -999,12 +1046,7 @@ const JobDetails = () => {
                           Change status
                         </button>
                       </div>
-
-
-
                     </div>
-
-
                   </ModalContent>
                 </Modal>
 
@@ -1249,6 +1291,39 @@ const JobDetails = () => {
           </div>
         </main>
       ) : null}
+
+<Modal isOpen={isOpenDelete} onClose={onCloseDelete} size="xl">
+                    <ModalOverlay />
+        <ModalContent>
+        <ModalHeader>
+          Delete job?
+        </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p>Are you sure you want to remove this job post?</p>
+          </ModalBody>
+
+          <ModalFooter>
+
+          <button
+              type="button"
+              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-black text-sm font-medium rounded-lg shadow-sm align-middle focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => onCloseDelete()}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => deleteJob()}
+            >
+              Yes, I'm sure
+            </button>
+          </ModalFooter>
+        </ModalContent>
+                    </Modal>
     </>
   );
 };

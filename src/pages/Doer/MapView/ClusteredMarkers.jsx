@@ -469,6 +469,20 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
     console.log("Any issues?", error);
   };
 
+  const [dateApplied, setDateApplied] = useState(null);
+
+  useEffect(() => {
+    //credit https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript?rq=3 mohshbool & Samuel Meddows
+    let initialDate = new Date();
+    var dd = String(initialDate.getDate()).padStart(2, "0");
+    var mm = String(initialDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var yyyy = initialDate.getFullYear();
+
+    var today = mm + "/" + dd + "/" + yyyy;
+
+    setDateApplied(today);
+  }, []);
+
   //apply logic
   const applyAndNavigate = (x) => {
     //If anything is going wring in the application or saved job flow it's because I changed this on 5/27/24 at 2:30. Revert to previous if any issues
@@ -496,6 +510,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
       {
         applicantID: user.uid,
         isNewApplicant: true,
+        dateApplied: dateApplied
       }
     )
       .then(() => {
@@ -581,8 +596,6 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
       upperRate: x.upperRate,
       isVolunteer: x.isVolunteer,
       isOneTime: x.isOneTime,
-     
-
       flatRate: x.flatRate,
       isHourly: x.isHourly,
       lowerCaseJobTitle: x.lowerCaseJobTitle,

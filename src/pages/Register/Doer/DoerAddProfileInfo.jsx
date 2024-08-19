@@ -193,6 +193,7 @@ const DoerAddProfileInfo = () => {
       streamChatID: user.uid,
       isOnboarded: false,
       emailVerified: false,
+      resumeUploaded: false,
       stripeOnboarded: false,
       PrivacyPolicyAgree: privacyPolicy, 
       ageAgreement: ageAgreement,

@@ -55,7 +55,7 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
-
+import { useUserStore } from "../Chat/lib/userStore.js";
 import { useSearchResults } from "../../../pages/Doer/Chat/lib/searchResults";
 import { Checkbox, CheckboxGroup } from "@chakra-ui/react";
 import {
@@ -102,11 +102,9 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import Markdown from "react-markdown";
-
 import { FcGoogle } from "react-icons/fc";
 // import LoggedOutHeader from "./Landing/LoggedOutHeader.jsx";
 import { useMediaQuery } from "@chakra-ui/react";
-
 import Plausible from "plausible-tracker";
 
 // import LoggedOutHeaderNoGap from "./Landing/LoggedOutHeaderNoGap.jsx";
@@ -177,6 +175,10 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
   const { searchResults, searchIsMobile, setSearchIsMobile } =
     useSearchResults();
 
+  const { currentUser } = useUserStore();
+
+  console.log("current user", currentUser);
+
   //map help https://www.youtube.com/watch?v=PfZ4oLftItk&list=PL2rFahu9sLJ2QuJaKKYDaJp0YqjFCDCtN
   const [open, setOpen] = useState(false);
 
@@ -199,6 +201,12 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const {
+    isOpen: isOpenNoResume,
+    onOpen: onOpenNoResume,
+    onClose: onCloseNoResume,
+  } = useDisclosure();
   const {
     isOpen: isOpenSaved,
     onOpen: onOpenSaved,
@@ -219,16 +227,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
     onOpen: onOpenDrawerSingleFromGroup,
     onClose: onCloseDrawerSingleFromGroup,
   } = useDisclosure();
-  const {
-    isOpen: isOpenEmailSignUp,
-    onOpen: onOpenEmailSignUp,
-    onClose: onCloseEmailSignUp,
-  } = useDisclosure();
-  const {
-    isOpen: isOpenEmailSignUpSuccess,
-    onOpen: onOpenEmailSignUpSuccess,
-    onClose: onCloseEmailSignUpSuccess,
-  } = useDisclosure();
+
   const {
     isOpen: isOpenDrawer,
     onOpen: onOpenDrawer,
@@ -262,15 +261,6 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
   const [searchJobCategory, setSearchJobCategory] = useState(null);
 
   const [showAddJobBusiness, setShowAddJobBusiness] = useState(false);
-
-  // useEffect(() => {
-  //   if (jobHeld) {
-  //    handleGroupLocationToggleOpen(jobHeld)
-  //    setShowAddJobBusiness(false)
-  //    console.log("firing 1")
-  //   //  onOpenDrawer()
-  //   }
-  // },[jobHeld])
 
   const [selectedJobFromGroup, setSelectedJobFromGroup] = useState(null);
 
@@ -310,105 +300,6 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
     // updateJobListingViews(x);
     onOpenDrawer();
     console.log("same locationJobs", sameLocationJobs);
-  };
-
-  //const handle log in / sign up navigate
-  const handleClose = () => {
-    onClose();
-  };
-  const handleGoogleSignUp = async () => {
-    const provider = await new GoogleAuthProvider();
-
-    return signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log("result", result);
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
-
-        console.log("google user", user);
-
-        Promise.all([
-          getDoc(doc(db, "users", result.user.uid)),
-          getDoc(doc(db, "employers", result.user.uid)),
-        ])
-          .then((results) =>
-            navigate(
-              results[0]._document === null && results[1]._document === null
-                ? "/AddProfileInfo"
-                : results[0]._document !== null &&
-                  results[0]._document.data.value.mapValue.fields.isEmployer
-                ? "/DoerMapScreen"
-                : "/NeederMapScreen"
-            )
-          )
-          .catch();
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log("hello", error);
-      });
-  };
-
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [isSignedIn, setIsSignedIn] = useState(false);
-
-  const [passwordValidationMessage, setPasswordValidationMessage] = useState();
-  const passwordRegex = /[^\>]*/;
-  const [passwordValidationBegun, setPasswordValidationBegun] = useState(false);
-
-  const [validationMessage, setValidationMessage] = useState();
-  // credit https://github.com/chelseafarley/text-input-validation-tutorial-react-native/blob/main/App.js
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const [emailValidationBegun, setEmailValidationBegun] = useState(false);
-
-  const onSignUp = async () => {
-    const authentication = getAuth();
-
-    await createUserWithEmailAndPassword(authentication, email, password)
-      .then(() => {
-        navigate("/DoerAddProfileInfo");
-      })
-      .catch((error) => {
-        alert("oops! That email is already being used.");
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
-      });
-  };
-
-  const validate = () => {
-    setEmailValidationBegun(true);
-    const isValid = emailRegex.test(email);
-    if (!isValid) {
-      setValidationMessage("Please enter a valid email");
-    } else {
-      setValidationMessage();
-      setEmail(email);
-    }
-    setPasswordValidationBegun(true);
-    const isValidPassword = passwordRegex.test(password);
-    if (!isValidPassword) {
-      setPasswordValidationMessage(
-        "Password Invalid. Must be at least 6 characters, have 1 uppercase letter, 1 lowercase letter, and 1 number"
-      );
-    } else {
-      setPasswordValidationMessage();
-    }
-    if (isValid && isValidPassword) {
-      onSignUp();
-    }
   };
 
   const handleSwitchModals = () => {
@@ -487,103 +378,107 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
   const applyAndNavigate = (x) => {
     //If anything is going wring in the application or saved job flow it's because I changed this on 5/27/24 at 2:30. Revert to previous if any issues
 
-    updateDoc(doc(db, "employers", x.employerID, "Posted Jobs", x.jobTitle), {
-      hasNewApplicant: true,
-    })
-      .then(() => {
-        //user info submitted to Job applicant file
+    if (currentUser.resumeUploaded) {
+      updateDoc(doc(db, "employers", x.employerID, "Posted Jobs", x.jobTitle), {
+        hasNewApplicant: true,
       })
-      .catch((error) => {
-        //uh oh
-      });
+        .then(() => {
+          //user info submitted to Job applicant file
+        })
+        .catch((error) => {
+          //uh oh
+        });
 
-    setDoc(
-      doc(
+      setDoc(
+        doc(
+          db,
+          "employers",
+          x.employerID,
+          "Posted Jobs",
+          x.jobTitle,
+          "Applicants",
+          user.uid
+        ),
+        {
+          applicantID: user.uid,
+          isNewApplicant: true,
+          dateApplied: dateApplied,
+        }
+      )
+        .then(() => {
+          //user info submitted to Job applicant file
+          // navigation.navigate("BottomUserTab");
+        })
+        .catch((error) => {
+          //uh oh
+        });
+
+      const docRef = doc(
         db,
         "employers",
         x.employerID,
         "Posted Jobs",
-        x.jobTitle,
-        "Applicants",
-        user.uid
-      ),
-      {
-        applicantID: user.uid,
-        isNewApplicant: true,
-        dateApplied: dateApplied
-      }
-    )
-      .then(() => {
-        //user info submitted to Job applicant file
-        // navigation.navigate("BottomUserTab");
+        x.jobTitle
+      );
+
+      updateDoc(docRef, { totalApplicants: increment(1) });
+
+      setDoc(doc(db, "users", user.uid, "Applied", x.jobTitle), {
+        requirements: x.requirements ? x.requirements : null,
+        requirements2: x.requirements2 ? x.requirements2 : null,
+        requirements3: x.requirements3 ? x.requirements3 : null,
+        isFlatRate: x.isFlatRate ? x.isFlatRate : null,
+        niceToHave: x.niceToHave ? x.niceToHave : null,
+        datePosted: x.datePosted ? x.datePosted : null,
+
+        jobID: x.jobID,
+        jobTitle: x.jobTitle ? x.jobTitle : null,
+        hourlyRate: x.hourlyRate ? x.hourlyRate : null,
+        streetAddress: x.streetAddress ? x.streetAddress : null,
+        city: x.city ? x.city : null,
+        state: x.state ? x.state : null,
+        zipCode: x.zipCode ? x.zipCode : null,
+        description: x.description ? x.description : null,
+        addressNumber: x.addressNumber ? x.addressNumber : null,
+        addressName: x.addressName ? x.addressName : null,
+        lowerRate: x.lowerRate ? x.lowerRate : null,
+        upperRate: x.upperRate ? x.upperRate : null,
+        addressSuffix: x.addressSuffix ? x.addressSuffix : null,
+        locationLat: x.locationLat ? x.locationLat : null,
+        locationLng: x.locationLng ? x.locationLng : null,
+        businessName: x.businessName ? x.businessName : null,
+        employerID: x.employerID ? x.employerID : null,
+        employerFirstName: x.employerFirstName ? x.employerFirstName : null,
+        flatRate: x.flatRate ? x.flatRate : null,
+        isHourly: x.isHourly ? x.isHourly : null,
+        category: x.category ? x.category : null,
+        isOneTime: x.isOneTime ? x.isOneTime : null,
+        lowerCaseJobTitle: x.lowerCaseJobTitle ? x.lowerCaseJobTitle : null,
       })
-      .catch((error) => {
-        //uh oh
-      });
+        .then(() => {
+          onOpen();
+        })
+        .catch((error) => {
+          //uh oh
+        });
 
-    const docRef = doc(
-      db,
-      "employers",
-      x.employerID,
-      "Posted Jobs",
-      x.jobTitle
-    );
-
-    updateDoc(docRef, { totalApplicants: increment(1) });
-
-    setDoc(doc(db, "users", user.uid, "Applied", x.jobTitle), {
-      requirements: x.requirements ? x.requirements : null,
-      requirements2: x.requirements2 ? x.requirements2 : null,
-      requirements3: x.requirements3 ? x.requirements3 : null,
-      isFlatRate: x.isFlatRate ? x.isFlatRate : null,
-      niceToHave: x.niceToHave ? x.niceToHave : null,
-      datePosted: x.datePosted ? x.datePosted : null,
-
-      jobID: x.jobID,
-      jobTitle: x.jobTitle ? x.jobTitle : null,
-      hourlyRate: x.hourlyRate ? x.hourlyRate : null,
-      streetAddress: x.streetAddress ? x.streetAddress : null,
-      city: x.city ? x.city : null,
-      state: x.state ? x.state : null,
-      zipCode: x.zipCode ? x.zipCode : null,
-      description: x.description ? x.description : null,
-      addressNumber: x.addressNumber ? x.addressNumber : null,
-      addressName: x.addressName ? x.addressName : null,
-      lowerRate: x.lowerRate ? x.lowerRate : null,
-      upperRate: x.upperRate ? x.upperRate : null,
-      addressSuffix: x.addressSuffix ? x.addressSuffix : null,
-      locationLat: x.locationLat ? x.locationLat : null,
-      locationLng: x.locationLng ? x.locationLng : null,
-      businessName: x.businessName ? x.businessName : null,
-      employerID: x.employerID ? x.employerID : null,
-      employerFirstName: x.employerFirstName ? x.employerFirstName : null,
-      flatRate: x.flatRate ? x.flatRate : null,
-      isHourly: x.isHourly ? x.isHourly : null,
-      category: x.category ? x.category : null,
-      isOneTime: x.isOneTime ? x.isOneTime : null,
-      lowerCaseJobTitle: x.lowerCaseJobTitle ? x.lowerCaseJobTitle : null,
-    })
-      .then(() => {
-        onOpen();
-      })
-      .catch((error) => {
-        //uh oh
-      });
-
-    handleSendEmail(x);
-    console.log(x.employerEmail);
+      handleSendEmail(x);
+      console.log(x.employerEmail);
+    } else {
+      onOpenNoResume();
+      // pop modal here
+    }
   };
 
-
-  //save logic 
+  //save logic
   const saveJob = (x) => {
     setDoc(doc(db, "users", user.uid, "Saved Jobs", x.jobID), {
       companyName: x.companyName,
       isPostedByBusiness: true,
-      isSalaried :  x.isSalaried,
+      isSalaried: x.isSalaried,
       applicantDescription: x.applicantDescription,
-      benefitsDescription : x.benefitsDescription ? x.benefitsDescription : null,
-      isFullTimePosition : x.isFullTimePosition,
+      benefitsDescription: x.benefitsDescription ? x.benefitsDescription : null,
+      isFullTimePosition: x.isFullTimePosition,
       employerID: x.employerID,
       // employerEmail: user.email,
       employerFirstName: x.employerFirstName,
@@ -612,7 +507,6 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
       requirements2: x.requirements2,
       requirements3: x.requirements3,
       niceToHave: x.niceToHave,
-  
     })
       .then(() => {
         //all good
@@ -940,9 +834,12 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
                                       </td> */}
                                       <td class="size-px py-2 px-3 space-x-2">
                                         <div className=" flex  w-full ">
-                                          <button  onClick={() =>
-                                          handleOpenSingleJobFromGroup(job)
-                                        } className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 ">
+                                          <button
+                                            onClick={() =>
+                                              handleOpenSingleJobFromGroup(job)
+                                            }
+                                            className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                          >
                                             See More
                                           </button>
                                         </div>
@@ -1014,267 +911,346 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
               </Modal>
             </>
           ) : null}
-
-          
         </>
       ))}
 
-{selectedJobFromGroup?.jobID === openInfoWindowMarkerIDSingle ? (
-            <>
-              <Drawer
-                onClose={() =>
-                  handleCloseOfSingleFromGroup(selectedJobFromGroup)
-                }
-                isOpen={isOpenDrawerSingleFromGroup}
-                size={"xl"}
-              >
-                <DrawerOverlay />
-                <DrawerContent>
-                  <DrawerCloseButton />
-                  <DrawerHeader>{selectedJobFromGroup.jobTitle}</DrawerHeader>
-                  <DrawerBody>
-                    <div class="">
-                      <Helmet>
-                        <meta charSet="utf-8" />
-                        <title>{selectedJobFromGroup.jobTitle}</title>
-                        <meta
-                          name="description"
-                          content={selectedJobFromGroup.description}
-                        />
-                        {/* <link rel="canonical" href=`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}` /> */}
-                      </Helmet>
-                      <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto ">
-                        <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
-                          <div class="p-4">
-                            <div class=" ">
-                              <div className="flex">
+      {selectedJobFromGroup?.jobID === openInfoWindowMarkerIDSingle ? (
+        <>
+          <Drawer
+            onClose={() => handleCloseOfSingleFromGroup(selectedJobFromGroup)}
+            isOpen={isOpenDrawerSingleFromGroup}
+            size={"xl"}
+          >
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader>{selectedJobFromGroup.jobTitle}</DrawerHeader>
+              <DrawerBody>
+                <div class="">
+                  <Helmet>
+                    <meta charSet="utf-8" />
+                    <title>{selectedJobFromGroup.jobTitle}</title>
+                    <meta
+                      name="description"
+                      content={selectedJobFromGroup.description}
+                    />
+                    {/* <link rel="canonical" href=`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}` /> */}
+                  </Helmet>
+                  <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto ">
+                    <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                      <div class="p-4">
+                        <div class=" ">
+                          <div className="flex">
+                            <label
+                              for="hs-pro-dactmt"
+                              class="block mb-2 text-xl font-medium text-gray-900"
+                            >
+                              {selectedJobFromGroup.jobTitle}
+                            </label>
+
+                            <label onClick={() => onOpenShare()}>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="size-4 ml-1 cursor-pointer"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
+                                />
+                              </svg>
+                            </label>
+                          </div>
+                          {selectedJobFromGroup.isFullTimePosition === true ? (
+                            <label
+                              for="hs-pro-dactmt"
+                              class="block  text-lg font-medium text-gray-800"
+                            >
+                              Full-time
+                            </label>
+                          ) : (
+                            <label
+                              for="hs-pro-dactmt"
+                              class="block  text-lg font-medium text-gray-800 "
+                            >
+                              Part-time
+                            </label>
+                          )}
+
+                          {selectedJobFromGroup.isHourly ? (
+                            <div class="space-y-1 ">
+                              <div class="flex align-items-center">
+                                <p className=" text-md font-medium">$</p>
                                 <label
                                   for="hs-pro-dactmt"
-                                  class="block mb-2 text-xl font-medium text-gray-900"
+                                  class="block text-md font-medium text-gray-800 "
                                 >
-                                  {selectedJobFromGroup.jobTitle}
+                                  {selectedJobFromGroup.lowerRate}
                                 </label>
-
-                                <label onClick={() => onOpenShare()}>
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1.5}
-                                    stroke="currentColor"
-                                    className="size-4 ml-1 cursor-pointer"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
-                                    />
-                                  </svg>
-                                </label>
-                              </div>
-                              {selectedJobFromGroup.isFullTimePosition ===
-                              true ? (
-                                <label
-                                  for="hs-pro-dactmt"
-                                  class="block  text-lg font-medium text-gray-800"
-                                >
-                                  Full-time
-                                </label>
-                              ) : (
-                                <label
-                                  for="hs-pro-dactmt"
-                                  class="block  text-lg font-medium text-gray-800 "
-                                >
-                                  Part-time
-                                </label>
-                              )}
-
-                              {selectedJobFromGroup.isHourly ? (
-                                <div class="space-y-1 ">
-                                  <div class="flex align-items-center">
-                                    <p className=" text-md font-medium">$</p>
-                                    <label
-                                      for="hs-pro-dactmt"
-                                      class="block text-md font-medium text-gray-800 "
-                                    >
-                                      {selectedJobFromGroup.lowerRate}
-                                    </label>
-                                    <p className=" text-md font-medium">
-                                      /hour - $
-                                    </p>
-                                    <label
-                                      for="hs-pro-dactmt"
-                                      class="block  text-md font-medium text-gray-800 "
-                                    >
-                                      {selectedJobFromGroup.upperRate}
-                                    </label>
-                                    <p className=" text-md font-medium">
-                                      /hour
-                                    </p>
-                                  </div>
-                                </div>
-                              ) : null}
-
-                              {selectedJobFromGroup.isSalaried ? (
-                                <div class="space-y-2 ">
-                                  <div class="flex align-items-center">
-                                    <p className=" text-md font-medium">$</p>
-                                    <label
-                                      for="hs-pro-dactmt"
-                                      class="block  text-md font-medium text-gray-800 "
-                                    >
-                                      {selectedJobFromGroup.lowerRate}
-                                    </label>
-                                    <p className="ml-1 text-md font-medium ">
-                                      yearly - $
-                                    </p>
-                                    <label
-                                      for="hs-pro-dactmt"
-                                      class="block  text-md font-medium text-gray-800 "
-                                    >
-                                      {selectedJobFromGroup.upperRate}
-                                    </label>
-                                    <p className=" ml-1 c font-medium">
-                                      yearly
-                                    </p>
-                                    {selectedJobFromGroup.isEstimatedPay ? (
-                                      <p>*</p>
-                                    ) : null}
-                                  </div>
-                                </div>
-                              ) : null}
-                              {selectedJobFromGroup.isEstimatedPay ? (
-                                <div className="mb-2 flex flex-col w-full text-sm ">
-                                  <a href="https://www.glassdoor.com/index.htm">
-                                    *Estimate. Powered by{" "}
-                                    <img
-                                      src="https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png"
-                                      title="Job Search"
-                                    />
-                                  </a>
-                                </div>
-                              ) : null}
-                              <p class="block  text-md font-medium text-gray-800 ">
-                                {selectedJobFromGroup.streetAddress},{" "}
-                                {selectedJobFromGroup.city},{" "}
-                                {selectedJobFromGroup.state}
-                              </p>
-                              {selectedJobFromGroup.isEstimatedAddress ? (
-                                <p class="block italic text-sm  text-gray-800 ">
-                                  Address may not be exact
+                                <p className=" text-md font-medium">
+                                  /hour - $
                                 </p>
-                              ) : null}
-                              <p class="font-semibold text-md text-gray-500  cursor-default">
-                                <span className="font-semibold text-md text-slate-700">
-                                  {" "}
-                                  Posted:
-                                </span>{" "}
-                                {selectedJobFromGroup.datePosted}
-                              </p>
-                              <p class="font-semibold text-md text-slate-700 cursor-pointer">
-                                Employer:
-                              </p>
-                              <div className="flex">
-                                {selectedJobFromGroup.employerProfilePicture ? (
-                                  <>
-                                    <div class="flex flex-col justify-center items-center size-[56px]  ">
-                                      <img
-                                        src={
-                                          selectedJobFromGroup.employerProfilePicture
-                                        }
-                                        class="flex-shrink-0 size-[64px] rounded-full"
-                                      />
-
-                                      <div className="flex flex-col ml-4">
-                                        <p class="font-semibold text-md text-gray-500  mt-2 cursor-pointer">
-                                          {selectedJobFromGroup.businessName}
-                                        </p>
-                                        <p class="font-semibold text-md text-gray-500 cursor-default ">
-                                          {selectedJobFromGroup.city}, Minnesota
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </>
-                                ) : null}
-                                <div className="flex flex-col">
-                                  <p class="font-semibold text-md text-gray-500  mt-1 cursor-pointer">
-                                    {selectedJobFromGroup.companyName}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="space-y-2 mt-10 mb-4 ">
-                              <label
-                                for="dactmi"
-                                class="block mb-2 text-lg font-medium text-gray-900 "
-                              >
-                                What you'll be doing
-                              </label>
-                              <div className="w-full prose prose-li  font-inter marker:text-black mb-4 ">
-                                <Markdown>
-                                  {selectedJobFromGroup.description}
-                                </Markdown>
-                              </div>
-                            </div>
-                            {selectedJobFromGroup.bio ? (
-                              <div class="space-y-2 mt-10 mb-4">
                                 <label
-                                  for="dactmi"
-                                  class="block mb-2 text-md font-medium text-gray-800 "
+                                  for="hs-pro-dactmt"
+                                  class="block  text-md font-medium text-gray-800 "
                                 >
-                                  About {selectedJobFromGroup.companyName}
+                                  {selectedJobFromGroup.upperRate}
                                 </label>
-
-                                <div class="mb-4">
-                                  <p>{selectedJobFromGroup.bio}</p>
-                                </div>
-                              </div>
-                            ) : null}
-
-                            <div class="space-y-2 mb-4 ">
-                              <label
-                                for="dactmi"
-                                class="block mb-2 text-lg font-medium text-gray-900 "
-                              >
-                                Job Requirements
-                              </label>
-
-                              <div className="prose prose-li  font-inter marker:text-black mb-4">
-                                <Markdown>
-                                  {selectedJobFromGroup.applicantDescription}
-                                </Markdown>
+                                <p className=" text-md font-medium">/hour</p>
                               </div>
                             </div>
-                            <div class="space-y-2 md:mb-4 lg:mb-4 mb-20">
-                              <label
-                                for="dactmi"
-                                class="block mb-2 text-lg font-medium text-gray-900 "
-                              >
-                                Employment Benefits
-                              </label>
+                          ) : null}
 
-                              <div className="prose prose-li  font-inter marker:text-black mb-4">
-                                {selectedJobFromGroup.benefitsDescription ? (
-                                  <Markdown>
-                                    {selectedJobFromGroup.benefitsDescription}
-                                  </Markdown>
-                                ) : (
-                                  <p>Nothing listed</p>
-                                )}
+                          {selectedJobFromGroup.isSalaried ? (
+                            <div class="space-y-2 ">
+                              <div class="flex align-items-center">
+                                <p className=" text-md font-medium">$</p>
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block  text-md font-medium text-gray-800 "
+                                >
+                                  {selectedJobFromGroup.lowerRate}
+                                </label>
+                                <p className="ml-1 text-md font-medium ">
+                                  yearly - $
+                                </p>
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block  text-md font-medium text-gray-800 "
+                                >
+                                  {selectedJobFromGroup.upperRate}
+                                </label>
+                                <p className=" ml-1 c font-medium">yearly</p>
+                                {selectedJobFromGroup.isEstimatedPay ? (
+                                  <p>*</p>
+                                ) : null}
                               </div>
+                            </div>
+                          ) : null}
+                          {selectedJobFromGroup.isEstimatedPay ? (
+                            <div className="mb-2 flex flex-col w-full text-sm ">
+                              <a href="https://www.glassdoor.com/index.htm">
+                                *Estimate. Powered by{" "}
+                                <img
+                                  src="https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png"
+                                  title="Job Search"
+                                />
+                              </a>
+                            </div>
+                          ) : null}
+                          <p class="block  text-md font-medium text-gray-800 ">
+                            {selectedJobFromGroup.streetAddress},{" "}
+                            {selectedJobFromGroup.city},{" "}
+                            {selectedJobFromGroup.state}
+                          </p>
+                          {selectedJobFromGroup.isEstimatedAddress ? (
+                            <p class="block italic text-sm  text-gray-800 ">
+                              Address may not be exact
+                            </p>
+                          ) : null}
+                          <p class="font-semibold text-md text-gray-500  cursor-default">
+                            <span className="font-semibold text-md text-slate-700">
+                              {" "}
+                              Posted:
+                            </span>{" "}
+                            {selectedJobFromGroup.datePosted}
+                          </p>
+                          <p class="font-semibold text-md text-slate-700 cursor-pointer">
+                            Employer:
+                          </p>
+                          <div className="flex">
+                            {selectedJobFromGroup.employerProfilePicture ? (
+                              <>
+                                <div class="flex flex-col justify-center items-center size-[56px]  ">
+                                  <img
+                                    src={
+                                      selectedJobFromGroup.employerProfilePicture
+                                    }
+                                    class="flex-shrink-0 size-[64px] rounded-full"
+                                  />
+
+                                  <div className="flex flex-col ml-4">
+                                    <p class="font-semibold text-md text-gray-500  mt-2 cursor-pointer">
+                                      {selectedJobFromGroup.businessName}
+                                    </p>
+                                    <p class="font-semibold text-md text-gray-500 cursor-default ">
+                                      {selectedJobFromGroup.city}, Minnesota
+                                    </p>
+                                  </div>
+                                </div>
+                              </>
+                            ) : null}
+                            <div className="flex flex-col">
+                              <p class="font-semibold text-md text-gray-500  mt-1 cursor-pointer">
+                                {selectedJobFromGroup.companyName}
+                              </p>
                             </div>
                           </div>
+                        </div>
 
-                          {isDesktop ? (
-                            <div class="p-4 flex justify-between gap-x-2">
-                              <div class="w-full flex justify-end items-center gap-x-2">
+                        <div class="space-y-2 mt-10 mb-4 ">
+                          <label
+                            for="dactmi"
+                            class="block mb-2 text-lg font-medium text-gray-900 "
+                          >
+                            What you'll be doing
+                          </label>
+                          <div className="w-full prose prose-li  font-inter marker:text-black mb-4 ">
+                            <Markdown>
+                              {selectedJobFromGroup.description}
+                            </Markdown>
+                          </div>
+                        </div>
+                        {selectedJobFromGroup.bio ? (
+                          <div class="space-y-2 mt-10 mb-4">
+                            <label
+                              for="dactmi"
+                              class="block mb-2 text-md font-medium text-gray-800 "
+                            >
+                              About {selectedJobFromGroup.companyName}
+                            </label>
+
+                            <div class="mb-4">
+                              <p>{selectedJobFromGroup.bio}</p>
+                            </div>
+                          </div>
+                        ) : null}
+
+                        <div class="space-y-2 mb-4 ">
+                          <label
+                            for="dactmi"
+                            class="block mb-2 text-lg font-medium text-gray-900 "
+                          >
+                            Job Requirements
+                          </label>
+
+                          <div className="prose prose-li  font-inter marker:text-black mb-4">
+                            <Markdown>
+                              {selectedJobFromGroup.applicantDescription}
+                            </Markdown>
+                          </div>
+                        </div>
+                        <div class="space-y-2 md:mb-4 lg:mb-4 mb-20">
+                          <label
+                            for="dactmi"
+                            class="block mb-2 text-lg font-medium text-gray-900 "
+                          >
+                            Employment Benefits
+                          </label>
+
+                          <div className="prose prose-li  font-inter marker:text-black mb-4">
+                            {selectedJobFromGroup.benefitsDescription ? (
+                              <Markdown>
+                                {selectedJobFromGroup.benefitsDescription}
+                              </Markdown>
+                            ) : (
+                              <p>Nothing listed</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {isDesktop ? (
+                        <div class="p-4 flex justify-between gap-x-2">
+                          <div class="w-full flex justify-end items-center gap-x-2">
+                            {selectedJobFromGroup.jobTitle.includes(
+                              "Plumber"
+                            ) ? (
+                              <button
+                                type="button"
+                                class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                data-hs-overlay="#hs-pro-datm"
+                                onClick={() => onOpenPlumber()}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  class="size-4 ml-1"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                  />
+                                </svg>
+                                See career path
+                              </button>
+                            ) : null}
+                            {selectedJobFromGroup.jobTitle.includes(
+                              "Server" || "server"
+                            ) ? (
+                              <button
+                                type="button"
+                                class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                data-hs-overlay="#hs-pro-datm"
+                                onClick={() => onOpenServer()}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  class="size-4 ml-1"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                  />
+                                </svg>
+                                See career path
+                              </button>
+                            ) : null}
+                            {selectedJobFromGroup.jobTitle.includes(
+                              "Machinist" || "CNC"
+                            ) ? (
+                              <button
+                                type="button"
+                                class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                data-hs-overlay="#hs-pro-datm"
+                                onClick={() => onOpenCNC()}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  class="size-4 ml-1"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                  />
+                                </svg>
+                                See career path
+                              </button>
+                            ) : null}
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          id="cookies-simple-with-dismiss-button"
+                          class="fixed bottom-0 start-1/2 transform -translate-x-1/2 z-[60] sm:max-w-4xl w-full mx-auto px-2"
+                        >
+                          <div class="p-2 bg-white border border-gray-200 rounded-sm shadow-sm ">
+                            <div class="p-2 flex justify-between gap-x-2">
+                              <div class="w-full flex justify-center items-center gap-x-2">
                                 {selectedJobFromGroup.jobTitle.includes(
                                   "Plumber"
                                 ) ? (
                                   <button
                                     type="button"
-                                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                    class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200 bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
                                     data-hs-overlay="#hs-pro-datm"
                                     onClick={() => onOpenPlumber()}
                                   >
@@ -1300,7 +1276,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
                                 ) ? (
                                   <button
                                     type="button"
-                                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                    class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
                                     data-hs-overlay="#hs-pro-datm"
                                     onClick={() => onOpenServer()}
                                   >
@@ -1326,7 +1302,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
                                 ) ? (
                                   <button
                                     type="button"
-                                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                    class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
                                     data-hs-overlay="#hs-pro-datm"
                                     onClick={() => onOpenCNC()}
                                   >
@@ -1347,202 +1323,112 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
                                     See career path
                                   </button>
                                 ) : null}
+                                <button
+                                  type="button"
+                                  class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                  data-hs-overlay="#hs-pro-datm"
+                                  onClick={() =>
+                                    applyAndNavigate(selectedJobFromGroup)
+                                  }
+                                >
+                                  Apply
+                                </button>
                               </div>
                             </div>
-                          ) : (
-                            <div
-                              id="cookies-simple-with-dismiss-button"
-                              class="fixed bottom-0 start-1/2 transform -translate-x-1/2 z-[60] sm:max-w-4xl w-full mx-auto px-2"
-                            >
-                              <div class="p-2 bg-white border border-gray-200 rounded-sm shadow-sm ">
-                                <div class="p-2 flex justify-between gap-x-2">
-                                  <div class="w-full flex justify-center items-center gap-x-2">
-                                    {selectedJobFromGroup.jobTitle.includes(
-                                      "Plumber"
-                                    ) ? (
-                                      <button
-                                        type="button"
-                                        class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200 bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
-                                        data-hs-overlay="#hs-pro-datm"
-                                        onClick={() => onOpenPlumber()}
-                                      >
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          fill="none"
-                                          viewBox="0 0 24 24"
-                                          stroke-width="1.5"
-                                          stroke="currentColor"
-                                          class="size-4 ml-1"
-                                        >
-                                          <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-                                          />
-                                        </svg>
-                                        See career path
-                                      </button>
-                                    ) : null}
-                                    {selectedJobFromGroup.jobTitle.includes(
-                                      "Server" || "server"
-                                    ) ? (
-                                      <button
-                                        type="button"
-                                        class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                        data-hs-overlay="#hs-pro-datm"
-                                        onClick={() => onOpenServer()}
-                                      >
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          fill="none"
-                                          viewBox="0 0 24 24"
-                                          stroke-width="1.5"
-                                          stroke="currentColor"
-                                          class="size-4 ml-1"
-                                        >
-                                          <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-                                          />
-                                        </svg>
-                                        See career path
-                                      </button>
-                                    ) : null}
-                                    {selectedJobFromGroup.jobTitle.includes(
-                                      "Machinist" || "CNC"
-                                    ) ? (
-                                      <button
-                                        type="button"
-                                        class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
-                                        data-hs-overlay="#hs-pro-datm"
-                                        onClick={() => onOpenCNC()}
-                                      >
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          fill="none"
-                                          viewBox="0 0 24 24"
-                                          stroke-width="1.5"
-                                          stroke="currentColor"
-                                          class="size-4 ml-1"
-                                        >
-                                          <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-                                          />
-                                        </svg>
-                                        See career path
-                                      </button>
-                                    ) : null}
-                                    <button
-                                      type="button"
-                                      class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                      data-hs-overlay="#hs-pro-datm"
-                                      onClick={() =>
-                                        applyAndNavigate(selectedJobFromGroup)
-                                      }
-                                    >
-                                      Apply
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
-                  </DrawerBody>
-                  <DrawerFooter>
-                    <button
-                      type="button"
-                      class="py-3 px-6 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800  lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                      data-hs-overlay="#hs-pro-datm"
-                      onClick={() => saveJob(selectedJobFromGroup)}
+                  </div>
+                </div>
+              </DrawerBody>
+              <DrawerFooter>
+                <button
+                  type="button"
+                  class="py-3 px-6 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800  lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                  data-hs-overlay="#hs-pro-datm"
+                  onClick={() => saveJob(selectedJobFromGroup)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                    />
+                  </svg>
+                  Save
+                </button>
+                <button
+                  type="button"
+                  class="py-3 px-8 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                  data-hs-overlay="#hs-pro-datm"
+                  onClick={() => applyAndNavigate(selectedJobFromGroup)}
+                >
+                  Apply
+                </button>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+
+          <Modal isOpen={isOpenShare} onClose={onCloseShare}>
+            <ModalContent>
+              <ModalCloseButton />
+              <ModalBody>
+                <div class="mt-5 bg-white rounded-xl ">
+                  <div class="p-4 sm:p-7 text-center align-center items-center justify-center">
+                    <div class="text-center align-center items-center justify-center mb-5">
+                      <h1 class="block text-2xl font-bold text-gray-800">
+                        Share to
+                      </h1>
+                    </div>
+
+                    <FacebookShareButton
+                      url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${selectedJobFromGroup.jobID}`}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-4"
+                      <FacebookIcon size={32} round={true} />
+                    </FacebookShareButton>
+                    <h1 class="block text-2xl font-bold text-gray-800">
+                      Copy Link:
+                    </h1>
+                    {urlCopied ? (
+                      <span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">
+                        Copied!
+                      </span>
+                    ) : (
+                      <label
+                        onClick={() => handleCopiedURL(selectedJobFromGroup)}
+                        className=" inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium mt-2 "
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                        />
-                      </svg>
-                      Save
-                    </button>
-                    <button
-                      type="button"
-                      class="py-3 px-8 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                      data-hs-overlay="#hs-pro-datm"
-                      onClick={() => applyAndNavigate(selectedJobFromGroup)}
-                    >
-                      Apply
-                    </button>
-                  </DrawerFooter>
-                </DrawerContent>
-              </Drawer>
-
-              <Modal isOpen={isOpenShare} onClose={onCloseShare}>
-                <ModalContent>
-                  <ModalCloseButton />
-                  <ModalBody>
-                    <div class="mt-5 bg-white rounded-xl ">
-                      <div class="p-4 sm:p-7 text-center align-center items-center justify-center">
-                        <div class="text-center align-center items-center justify-center mb-5">
-                          <h1 class="block text-2xl font-bold text-gray-800">
-                            Share to
-                          </h1>
-                        </div>
-
-                        <FacebookShareButton
-                          url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${selectedJobFromGroup.jobID}`}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="size-6 ml-1 items-center cursor-pointer"
                         >
-                          <FacebookIcon size={32} round={true} />
-                        </FacebookShareButton>
-                        <h1 class="block text-2xl font-bold text-gray-800">
-                          Copy Link:
-                        </h1>
-                        {urlCopied ? (
-                          <span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">
-                            Copied!
-                          </span>
-                        ) : (
-                          <label
-                            onClick={() =>
-                              handleCopiedURL(selectedJobFromGroup)
-                            }
-                            className=" inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium mt-2 "
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="size-6 ml-1 items-center cursor-pointer"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
-                              />
-                            </svg>
-                          </label>
-                        )}
-                      </div>
-                    </div>
-                  </ModalBody>
-                </ModalContent>
-              </Modal>
-            </>
-          ) : null}
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
+                          />
+                        </svg>
+                      </label>
+                    )}
+                  </div>
+                </div>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </>
+      ) : null}
 
       {newTrees.map((businessPostedJobs) => (
         <>
@@ -2515,25 +2401,44 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
         </ModalContent>
       </Modal>
       <Modal isOpen={isOpenSaved} onClose={onCloseSaved}>
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Success!</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                      <Text>You've saved this job</Text>
-                    </ModalBody>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>You've saved this job</Text>
+          </ModalBody>
 
-                    <ModalFooter>
-                      <Button
-                        colorScheme="blue"
-                        mr={3}
-                        onClick={() => onCloseSaved()}
-                      >
-                        Close
-                      </Button>
-                    </ModalFooter>
-                  </ModalContent>
-                </Modal>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={() => onCloseSaved()}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isOpenNoResume} onClose={onCloseNoResume}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Complete your profile</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              Please upload a resume to your profile before applying for open
+              positions
+            </Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={() => navigate("/UserProfile")}
+            >
+              Upload my resume
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

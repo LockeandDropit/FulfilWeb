@@ -6,6 +6,7 @@ import { useJobStore } from "./lib/jobsStoreDashboard";
 import { db } from "../../../firebaseConfig";
 import star_corner from "../../../images/star_corner.png";
 import star_filled from "../../../images/star_filled.png";
+import ApplicantCard from "./ApplicantCard";
 import {
   Accordion,
   AccordionItem,
@@ -52,6 +53,7 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
+import { Document, Page } from 'react-pdf';
 
 const JobDetails = () => {
   const { job, fetchJobInfo } = useJobStore();
@@ -61,6 +63,13 @@ const JobDetails = () => {
   const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
   const [numberOfRatings, setNumberOfRatings] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [numPages, setNumPages] = useState();
+  const [pageNumber, setPageNumber] = useState(1);
+
+  function onDocumentLoadSuccess() {
+    setNumPages(numPages);
+  }
 
   const { currentUser } = useUserStore();
 
@@ -208,6 +217,19 @@ const JobDetails = () => {
     //also pass job info so chat can be started.
   };
 
+  const {
+    isOpen: isOpenResume,
+    onOpen: onOpenResume,
+    onClose: onCloseResume,
+  } = useDisclosure();
+
+  const [selectedApplicantResume, setSelectedApplicantResume] = useState(null)
+
+  const viewResume = (x) => {
+    setSelectedApplicantResume(x.resume)
+    onOpenResume()
+  }
+
   const navigateToChannel = (x) => {
     console.log("this is what youre passing", x);
     navigate("/ChatHolder", {
@@ -328,28 +350,18 @@ const JobDetails = () => {
                       }
                       class="py-2 px-2.5 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border border-stone-200 bg-white text-stone-800 shadow-sm hover:bg-stone-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-stone-50 "
                     >
-                      Edit
-                      <svg
-                        class="flex-shrink-0 size-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path d="m9 18 6-6-6-6" />
-                      </svg>
+                      Edit                
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="flex-shrink-0 size-4">
+  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+</svg>
+
                     </button>
                     <button
                       type="button"
                       onClick={() =>
                         onOpenDelete()
                       }
-                      class="py-2 px-2.5 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border  bg-red-500 text-white shadow-sm hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-stone-50 "
+                      class="py-2 px-2.5 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border  bg-red-500 text-white shadow-sm hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none "
                     >
                       Delete Job
                       
@@ -692,7 +704,7 @@ const JobDetails = () => {
                                         </button>
                                       </div>
                                     </th>
-                                    <th scope="col" class="min-w-12">
+                                    {/* <th scope="col" class="min-w-12">
                                       <div class="hs-dropdown relative inline-flex w-full cursor-default">
                                         <button
                                           id="hs-pro-dutads"
@@ -702,7 +714,7 @@ const JobDetails = () => {
                                           Rating
                                         </button>
                                       </div>
-                                    </th>
+                                    </th> */}
 
                                     <th scope="col" class="min-w-36">
                                       <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
@@ -809,7 +821,7 @@ const JobDetails = () => {
                                               </div>
                                             </td>
 
-                                            <p class="flex flex-col items-center mt-6 text-sm text-gray-500 ">
+                                            {/* <p class="flex flex-col items-center mt-6 text-sm text-gray-500 ">
                                               <div class=" text-center items-center gap-x-3 text-sm text-gray-800 cursor-default ">
                                                 {applicant.numberOfRatings ? (
                                                   <>
@@ -867,7 +879,7 @@ const JobDetails = () => {
                                                   </>
                                                 )}
                                               </div>
-                                            </p>
+                                            </p> */}
 
                                             <td class="size-px whitespace-nowrap px-4 py-1">
                                               {applicant.channelId ? (
@@ -956,11 +968,11 @@ const JobDetails = () => {
                                                   <button
                                                     type="button"
                                                     onClick={() =>
-                                                      handleApplicantVisible(applicant)
+                                                      viewResume(applicant)
                                                     }
                                                     className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
                                                   >
-                                                    View profile
+                                                    View Resume
                                                   </button>
                                                 )}
                                               </div>
@@ -981,10 +993,12 @@ const JobDetails = () => {
                 </div>
 
                 {applicantVisible ? (
-                                                <ApplicantModal
-                                                  props={selectedApplicant}
-                                                  jobTitle={job.jobTitle}
-                                                />
+                                                // <ApplicantModal
+                                                //   props={selectedApplicant}
+                                                //   jobTitle={job.jobTitle}
+                                                // />
+                                                <ApplicantCard   props={selectedApplicant}
+                                                jobTitle={job.jobTitle}/>
                                               ) : null}
 
                 <Modal isOpen={isOpen} onClose={onClose}>
@@ -1269,7 +1283,8 @@ const JobDetails = () => {
                                     )}
                                   </div>
                                   {applicantVisible ? (
-                                    <ApplicantModal props={applicant} />
+                                    // <ApplicantModal props={applicant} />
+                                    <ApplicantCard props={applicant}/>
                                   ) : null}
                                 </>
 
@@ -1323,6 +1338,21 @@ const JobDetails = () => {
             </button>
           </ModalFooter>
         </ModalContent>
+                    </Modal>
+
+                    <Modal isOpen={isOpenResume} onClose={onCloseResume} size="5xl">
+                      <ModalOverlay />
+                      <ModalContent>
+                      <div>
+      <Document className="" file={selectedApplicantResume} onLoadSuccess={onDocumentLoadSuccess}>
+        <Page className="" height="500" width="1000" pageNumber={pageNumber} />
+      </Document> 
+      {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
+      <p>
+        Page {pageNumber} of {numPages}
+      </p>
+    </div>
+                      </ModalContent>
                     </Modal>
     </>
   );

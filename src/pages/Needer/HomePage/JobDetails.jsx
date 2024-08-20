@@ -15,6 +15,8 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 import {
+  arrayUnion,
+  serverTimestamp,
   doc,
   getDoc,
   collectionGroup,
@@ -70,6 +72,7 @@ const JobDetails = () => {
   function onDocumentLoadSuccess() {
     setNumPages(numPages);
   }
+  const [resetApplicantList, setResetApplicantList] = useState(false)
 
   const { currentUser } = useUserStore();
 
@@ -185,7 +188,7 @@ const JobDetails = () => {
         });
       });
     }
-  }, [job]);
+  }, [job, resetApplicantList]);
 
   console.log("job", job);
   console.log("applicant", applicant);
@@ -194,6 +197,7 @@ const JobDetails = () => {
 
   const [editVisible, setEditVisible] = useState(false);
   const [editBusinessVisible, setEditBusinessVisible] = useState(false);
+
 
   useEffect(() => {
     console.log("location", location.state);
@@ -204,6 +208,7 @@ const JobDetails = () => {
       } else if (location.state.applicantReset) {
         console.log("hello", location.state.applicantReset);
         setApplicantVisible(false);
+        setResetApplicantList(true)
       }
     }
   }, [location]);
@@ -273,6 +278,11 @@ const JobDetails = () => {
         console.log(error);
       });
   };
+  const {
+    onOpen: onOpenDeleteApplicant,
+    isOpen: isOpenDeleteApplicant,
+    onClose: onCloseDeleteApplicant,
+  } = useDisclosure();
 
   //delete logic
   const {
@@ -304,12 +314,215 @@ const JobDetails = () => {
       .catch((e) => {
         console.log(e)
       })
-
-
-
-    
-        
       }
+
+      const createInterviewChat = (x) => {
+        setIsLoading(true)
+        setDoc(doc(db, "Messages", "intermediate", job.jobID, "Info"), {
+          jobTitle: job.jobTitle,
+          applicantFirstName: x.firstName,
+          applicantLastName: x.lastName,
+          applicantID: x.uid,
+          employerFirstName: currentUser.firstName,
+          employerLastName: currentUser.lastName,
+          employerID: currentUser.uid,
+          isHired: false,
+          isHourly: job.isHourly,
+          // isFlatRate: job.isFlatRate,
+          isVolunteer: false,
+          needsDeposit: false,
+          // applicantAvatar: profilePictureURL,
+          // employerAvatar: employerProfilePictureURL
+        })
+          .then(() => {
+            console.log("new chat created global");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    
+        setDoc(doc(db, "Messages", job.jobID), {
+          jobTitle: job.jobTitle,
+          jobID: job.jobID,
+          applicantFirstName: x.firstName,
+          applicantLastName: x.lastName,
+          employerFirstName: currentUser.firstName,
+          employerLastName: currentUser.lastName,
+          applicantID: x.uid,
+          employerID: currentUser.uid,
+          isHired: false,
+          isHourly: job.isHourly,
+          // isFlatRate: job.isFlatRate,
+          confirmedRate: 0,
+          jobOffered: false,
+          applicationSent: false,
+          isVolunteer: false,
+          // applicantAvatar: profilePictureURL,
+          // employerAvatar: employerProfilePictureURL,
+          // applicantInitials: here,
+          // employerInitials: here
+        })
+          .then(() => {
+            console.log("new chat created global");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    
+        setDoc(doc(db, "employers", currentUser.uid, "User Messages", job.jobID), {
+          placeholder: null,
+        })
+          .then(() => {
+            console.log("new chat created employer");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    
+        setDoc(doc(db, "users", x.uid, "User Messages", job.jobID), {
+          placeholder: null,
+        })
+          .then(() => {
+            console.log("new chat created applicant");
+            // navigation.navigate("MessagesFinal", { props: jobID, firstInterview: true, applicantFirstName: userFirstName });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    
+        //add JobID to active chat list for both applicant and employer
+    
+        testNewChannel(x);
+      };
+
+
+      const testNewChannel = async (x) => {
+
+        const chatRef = collection(db, "chats");
+        const userChatsRef = collection(db, "User Messages");
+    
+        try {
+          const newChatRef = doc(chatRef);
+    
+          await setDoc(newChatRef, {
+            createdAt: serverTimestamp(),
+            messages: [],
+            id: newChatRef.id,
+            jobID: job.jobID,
+            jobTitle: job.jobTitle,
+          });
+    
+          await updateDoc(doc(userChatsRef, x.uid), {
+            chats: arrayUnion({
+              chatId: newChatRef.id,
+              lastMessage: "",
+              receiverId: currentUser.uid,
+              updatedAt: Date.now(),
+              jobID: job.jobID,
+              jobTitle: job.jobTitle,
+              jobType: "Interview",
+              isRequest: false,
+              jobOfferd: false,
+              isHired: false,
+            }),
+          });
+    
+          await updateDoc(doc(userChatsRef, currentUser.uid), {
+            chats: arrayUnion({
+              chatId: newChatRef.id,
+              lastMessage: "",
+              receiverId: x.uid,
+              updatedAt: Date.now(),
+              jobID: job.jobID,
+              jobTitle: job.jobTitle,
+              jobType: "Interview",
+              isRequest: false,
+              jobOfferd: false,
+              isHired: false,
+            }),
+          });
+    
+          await updateDoc(
+            doc(db, "users", x.uid, "Applied", job.jobTitle),
+            {
+              hasUnreadMessage: true,
+              interviewStarted: true,
+              channelId: newChatRef.id,
+            }
+          );
+    
+          await updateDoc(
+            doc(
+              db,
+              "employers",
+              currentUser.uid,
+              "Posted Jobs",
+              job.jobTitle,
+              "Applicants",
+              x.uid
+            ),
+            {
+              channelId: newChatRef.id,
+            }
+          ).then(() => {
+            setTimeout(() => {
+              setIsLoading(false)
+              navigate("/ChatHolder", {
+                state: {
+                  selectedChannel: newChatRef.id,
+                },
+              });
+            }, 1000);
+          });
+        } catch (err) {
+          console.log(err);
+        }
+    
+        setTimeout(() => {
+          //   setIsLoading(false);
+        }, 1000);
+      };
+
+
+      const [selectedApplicantToBeDeleted, setSelectedApplicantToBeDeleted] = useState(null)
+
+      const handleDeleteApplicantModal = (x) => {
+        onOpenDeleteApplicant()
+        setSelectedApplicantToBeDeleted(x)
+
+      }
+
+
+
+      const deleteApplicant = () => {
+        let newApplicantsArray = []
+        for (let i = 0; i < applicant.length; i++){
+        if (applicant[i].uid !== selectedApplicantToBeDeleted) {
+          newApplicantsArray.push(applicant[i])
+          console.log("added", applicant[i].uid, selectedApplicantToBeDeleted)
+        }  
+
+        console.log("newAplicants array",newApplicantsArray)
+
+        setApplicant(newApplicantsArray)
+        }
+
+      onCloseDeleteApplicant()
+
+
+      //   deleteDoc(doc(db, "employers", currentUser.uid, "Posted Jobs", job.jobTitle,"Applicants", selectedApplicantToBeDeleted))
+      //   .then(() => {
+      //     onCloseDeleteApplicant()
+      //     console.log("firing")
+      // navigate("/JobDetails", {state: {applicantReset: true}})
+      
+      // // onClose()
+      //   })
+      //   .catch((e) => {
+      //     console.log(e)
+      //   })
+        
+        }
 
   return (
     <>
@@ -593,7 +806,7 @@ const JobDetails = () => {
                                   for="hs-pro-epdsku"
                                   class="block mb-2 text-sm font-medium text-stone-800 "
                                 >
-                                  Description
+                                  Description 
                                 </label>
                               </Box>
                               <AccordionIcon />
@@ -694,7 +907,7 @@ const JobDetails = () => {
                                     ></th>
 
                                     <th scope="col" class="min-w-[250px]">
-                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
                                         <button
                                           id="hs-pro-dutnms"
                                           type="button"
@@ -704,20 +917,10 @@ const JobDetails = () => {
                                         </button>
                                       </div>
                                     </th>
-                                    {/* <th scope="col" class="min-w-12">
-                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
-                                        <button
-                                          id="hs-pro-dutads"
-                                          type="button"
-                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 cursor-default"
-                                        >
-                                          Rating
-                                        </button>
-                                      </div>
-                                    </th> */}
+                                    
 
                                     <th scope="col" class="min-w-36">
-                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
                                         <button
                                           id="hs-pro-dutsgs"
                                           type="button"
@@ -729,7 +932,7 @@ const JobDetails = () => {
                                     </th>
 
                                     <th scope="col " class="min-w-36">
-                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
                                         <button
                                           id="hs-pro-dutems"
                                           type="button"
@@ -741,13 +944,35 @@ const JobDetails = () => {
                                     </th>
 
                                     <th scope="col" class="min-w-36">
-                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
                                         <button
                                           id="hs-pro-dutphs"
                                           type="button"
                                           class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
                                         >
-                                          Next Step
+                                          Resume
+                                        </button>
+                                      </div>
+                                    </th>
+                                    <th scope="col" class="min-w-36">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                                        <button
+                                          id="hs-pro-dutphs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Messaging
+                                        </button>
+                                      </div>
+                                    </th>
+                                    <th scope="col" class="min-w-36">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                                        <button
+                                          id="hs-pro-dutphs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Remove
                                         </button>
                                       </div>
                                     </th>
@@ -756,7 +981,7 @@ const JobDetails = () => {
                                   </tr>
                                 </thead>
                               ) : (
-                                <p class="text-sm text-gray-800">
+                                <p class="text-sm text-gray-800 cursor-default">
                                   No applicants yet
                                 </p>
                               )}
@@ -770,7 +995,9 @@ const JobDetails = () => {
                                             <td class="size-px whitespace-nowrap px-3 py-4"></td>
                                             <td
                                               class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
-                                              // onClick={() => handleStoreAndNavigatePosted(job)}
+                                              onClick={() =>
+                                                viewResume(applicant)
+                                              }
                                             >
                                               <div class="w-full flex items-center gap-x-3">
                                                 {applicant.profilePictureResponse ? (
@@ -821,67 +1048,9 @@ const JobDetails = () => {
                                               </div>
                                             </td>
 
-                                            {/* <p class="flex flex-col items-center mt-6 text-sm text-gray-500 ">
-                                              <div class=" text-center items-center gap-x-3 text-sm text-gray-800 cursor-default ">
-                                                {applicant.numberOfRatings ? (
-                                                  <>
-                                                    <Flex>
-                                                      {maxRating.map(
-                                                        (item, key) => {
-                                                          return (
-                                                            <Box
-                                                              activeopacity={
-                                                                0.7
-                                                              }
-                                                              key={item}
-                                                              marginTop="1px"
-                                                            >
-                                                              <Image
-                                                                boxSize="16px"
-                                                                src={
-                                                                  item <=
-                                                                  applicant.rating
-                                                                    ? star_filled
-                                                                    : star_corner
-                                                                }
-                                                              ></Image>
-                                                            </Box>
-                                                          );
-                                                        }
-                                                      )}
-                                                    </Flex>
+                                        
 
-                                                    <Text marginLeft="4px">
-                                                      (
-                                                      {
-                                                        applicant.numberOfRatings
-                                                      }{" "}
-                                                      reviews)
-                                                    </Text>
-                                                  </>
-                                                ) : (
-                                                  <>
-                                                    <svg
-                                                      xmlns="http://www.w3.org/2000/svg"
-                                                      fill="none"
-                                                      viewBox="0 0 24 24"
-                                                      stroke-width="1.5"
-                                                      stroke="currentColor"
-                                                      class="flex-shrink-0 size-4 text-gray-600 "
-                                                    >
-                                                      <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
-                                                      />
-                                                    </svg>
-                                                    <Text>No reviews yet</Text>
-                                                  </>
-                                                )}
-                                              </div>
-                                            </p> */}
-
-                                            <td class="size-px whitespace-nowrap px-4 py-1">
+                                            <td class="size-px whitespace-nowrap px-4 py-1 cursor-default">
                                               {applicant.channelId ? (
                                                 <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
                                                   <svg
@@ -920,23 +1089,31 @@ const JobDetails = () => {
                                                 </span>
                                               )}
                                             </td>
-                                            <td class="size-px whitespace-nowrap px-4 py-1">
+                                            <td class="size-px whitespace-nowrap px-4 py-1 cursor-default">
                                               <span class="text-sm text-gray-600 ">
                                                 {applicant.dateApplied}
                                               </span>
                                             </td>
                                             <td class="size-px py-2 px-3 space-x-2">
                                               <div className=" flex  w-full ">
+                                            
+                                                  <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                      viewResume(applicant)
+                                                    }
+                                                    className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
+                                                  >
+                                                    View Resume
+                                                  </button>
+                                          
+                                              </div>
+                                            </td>
+                                            <td class="size-px py-2 px-3 space-x-2">
+                                              <div className=" flex  w-full ">
                                                 {applicant.channelId ? (
                                                   <>
-                                                    {" "}
-                                                    {/* <button
-                                      type="button"
-                                      onClick={() => handleApplicantVisible()}
-                                      class="py-2 px-2  inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500  "
-                                    >
-                                      View profile
-                                    </button> */}
+                                                  
                                                     {applicant.hasUnreadMessage ? (
                                                       <button
                                                         className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
@@ -966,17 +1143,24 @@ const JobDetails = () => {
                                                   </>
                                                 ) : (
                                                   <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                      viewResume(applicant)
-                                                    }
+                                                    type="button"                                                   
+                                                    onClick={() => createInterviewChat(applicant)}
                                                     className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
                                                   >
-                                                    View Resume
+                                                    Contact
                                                   </button>
                                                 )}
                                               </div>
-                                            
+                                            </td>
+                                            <td class="size-px py-2 px-3 space-x-2">
+                                              <div className=" flex  w-full ">
+                                              <button
+                            onClick={() => handleDeleteApplicantModal(applicant.uid)}
+                            class="  w-full py-2 px-3 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none "
+                          >
+                            Delete
+                          </button>
+                                              </div>
                                             </td>
                                           </tr>
                                         </tbody>
@@ -1354,6 +1538,40 @@ const JobDetails = () => {
     </div>
                       </ModalContent>
                     </Modal>
+
+                    <Modal isOpen={isOpenDeleteApplicant} onClose={onCloseDeleteApplicant} size="xl">
+                    <ModalOverlay />
+        <ModalContent>
+        <ModalHeader>
+          Delete Applicant?
+        </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p>Are you sure you want to remove this applicant?</p>
+          </ModalBody>
+
+          <ModalFooter>
+
+          <button
+              type="button"
+              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-black text-sm font-medium rounded-lg shadow-sm align-middle focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => onCloseDeleteApplicant()}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => deleteApplicant()}
+            >
+              Yes, I'm sure
+            </button>
+          </ModalFooter>
+        </ModalContent>
+                    </Modal>
+                    
     </>
   );
 };

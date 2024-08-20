@@ -187,20 +187,6 @@ const ApplicantCard = (props, jobTitle) => {
   //this is all to initiate a new message instance
 
   const testNewChannel = async () => {
-    // setIsLoading(true);
-    // client.connectUser(userInfo, client.devToken(userID));
-
-    // const channel = client.channel("messaging", jobID, {
-    //   members: [applicant.streamChatID, user.uid],
-    //   name: jobTitle,
-    // });
-
-    // await channel.create();
-    // // setNewChannel(newChannel);
-
-    // // trying to see if this will return access to "unread" message count
-    // const startWatching = channel.watch();
-    // console.log(startWatching);
 
     const chatRef = collection(db, "chats");
     const userChatsRef = collection(db, "User Messages");

@@ -434,6 +434,7 @@ const UserProfile = () => {
     onOpen: onOpenResume,
     onClose: onCloseResume,
   } = useDisclosure();
+  
   //firebase submission after edit
 
   // const handleAddQualificationOpen = () => {

@@ -401,7 +401,7 @@ const NeederProfileModal = () => {
                             )}
                           </div> */}
                         </li>
-                        <li>
+                        {/* <li>
                           <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
                             <svg
                               class="flex-shrink-0 size-4 text-gray-600 "
@@ -420,7 +420,7 @@ const NeederProfileModal = () => {
                             </svg>
                             {user.email}
                           </div>
-                        </li>
+                        </li> */}
                       </ul>
                     </div>
                   </div>

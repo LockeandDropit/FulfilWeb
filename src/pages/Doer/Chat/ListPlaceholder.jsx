@@ -46,10 +46,10 @@ const ListPlaceholder = () => {
         if (!channelIds || !channelIds.length) {
           setChats(null)
           setSelectedCategoryChannelIDs(null)
-          console.log("why no null?")
+        
           //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
         } else {
-          console.log("HERES WHY")
+        
           setSelectedCategoryChannelIDs(channelIds);
         }
       });
@@ -765,73 +765,7 @@ const ListPlaceholder = () => {
        
   
         
-            <div class="py-1.5 border-b border-gray-200">
-              <div class="-mb-2.5  overflow-x-auto">
-                <div class="overflow-x-auto [&::-webkit-scrollbar]:h-0">
-                  
-                  <nav class="flex gap-x-1" aria-label="Tabs" role="tablist">
-
-                  {selectedCategory === "Posted Jobs" ? (  <button 
-                    value="Posted Jobs"
-                       onClick={(e) => setSelectedCategory(e.target.value)}
-                    type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100 text-gray-800 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 " aria-controls="hs-pro-tabs-chsn-all" role="tab" >
-                      
-                      Interviews
-                      {postedUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                      
-                    </button>) : (  <button 
-                    value="Posted Jobs"
-                       onClick={(e) => setSelectedCategory(e.target.value)}
-                    type="button" class="px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100 text-gray-500 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none active " id="hs-pro-tabs-chsn-item-all" data-hs-tab="#hs-pro-tabs-chsn-all" aria-controls="hs-pro-tabs-chsn-all" role="tab" >
-                      Interviews
-                      {postedUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>)}
-                 
-                 {selectedCategory === "Jobs In Progress" ? (<button value="Jobs In Progress" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class=" text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  font-medium  hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-mentions" data-hs-tab="#hs-pro-tabs-chsn-mentions" aria-controls="hs-pro-tabs-chsn-mentions" role="tab" >
-                     In Progress
-                     {jobsInProgressUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>) : (<button value="Jobs In Progress" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="hs-tab-active:after:bg-gray-800 hover:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100 text-gray-500 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-mentions" data-hs-tab="#hs-pro-tabs-chsn-mentions" aria-controls="hs-pro-tabs-chsn-mentions" role="tab" >
-                     In Progress
-                     {jobsInProgressUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>)}
-                    {selectedCategory === "In Review" ? (<button   value="In Review"  onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="text-gray-800 font-medium bg-gray-100 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-spammed" data-hs-tab="#hs-pro-tabs-chsn-spammed" aria-controls="hs-pro-tabs-chsn-spammed" role="tab" >
-                      In Review
-                      {inReviewUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>) : (<button   value="In Review"  onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none active " id="hs-pro-tabs-chsn-item-all" data-hs-tab="#hs-pro-tabs-chsn-all" aria-controls="hs-pro-tabs-chsn-all" role="tab" >
-                      In Review
-                      {inReviewUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>)}
-
-                    {selectedCategory === "Requests" ? (<button   value="Requests" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="text-gray-800 font-medium bg-gray-100  px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-blocked" data-hs-tab="#hs-pro-tabs-chsn-blocked" aria-controls="hs-pro-tabs-chsn-blocked" role="tab" >
-                     Requests
-                     {requestsUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>) : (<button   value="Requests" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-blocked" data-hs-tab="#hs-pro-tabs-chsn-blocked" aria-controls="hs-pro-tabs-chsn-blocked" role="tab" >
-                     Requests
-                     {requestsUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>)}
-                    
-                    
-                  </nav>
-               
-                </div>
-              </div>
-            </div>
+       
           
   
             <div class="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-sm [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">

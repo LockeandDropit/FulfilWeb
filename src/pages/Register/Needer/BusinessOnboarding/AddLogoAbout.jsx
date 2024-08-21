@@ -17,7 +17,7 @@ import {
   FormHelperText,
 } from "@chakra-ui/react";
 import { Center, Flex } from "@chakra-ui/react";
-
+import ImageUploading from "react-images-uploading";
 import { Heading } from "@chakra-ui/react";
 import {
   Card,
@@ -201,7 +201,68 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
   const { isOpen: isOpenTOS, onOpen: onOpenTOS, onClose: onCloseTOS } = useDisclosure();
   const { isOpen: isOpenIncomplete, onOpen: onOpenIncomplete, onClose: onCloseIncomplete } = useDisclosure();
 
-  
+  const {
+    isOpen: isOpenAvatar,
+    onOpen: onOpenAvatar,
+    onClose: onCloseAvatar,
+  } = useDisclosure();
+
+  //alert handling
+
+  //avatar image handling
+  const [hasUploadedProfilePicture, setHasUploadedProfilePicture] =
+    useState(false);
+  const [images, setImages] = React.useState(null);
+  const maxNumber = 1;
+  const onChange = (imageList, addUpdateIndex) => {
+    // data for submit
+
+    setImages(imageList);
+    setProfilePicture(imageList[0].data_url);
+  };
+
+  const uploadToFirebase = async () => {
+    const storage = getStorage();
+    const pictureRef = ref(
+      storage,
+      "employers/" + user.uid + "/profilePicture.jpg"
+    );
+
+    // setImage(result.assets[0].uri);
+    // dispatch(selectUserProfilePicture(result.assets[0].uri))
+
+    const img = await fetch(images[0].data_url);
+    const bytes = await img.blob();
+
+    await uploadBytes(pictureRef, bytes).then((snapshot) => {});
+
+    await getDownloadURL(pictureRef).then((response) => {
+      updateDoc(doc(db, "employers", user.uid), {
+        profilePictureResponse: response,
+      })
+        .then(() => {
+          //all good
+        })
+        .catch((error) => {
+          // no bueno
+        });
+    });
+
+    setTimeout(() => {
+      updateDoc(doc(db, "employers", user.uid), {
+        hasUploadedProfilePicture: hasUploadedProfilePicture,
+      })
+        .then(() => {
+          setHasUploadedProfilePicture(hasUploadedProfilePicture);
+        })
+        .catch((error) => {
+          // no bueno
+        });
+    });
+
+    onCloseAvatar();
+  };
+
   return (
     <>
 
@@ -221,23 +282,30 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div className="sm:col-span-6">
-          {/* <div class="sm:col-span-3">
+          <div class="sm:col-span-3">
             <label class="block text-sm font-medium leading-6 text-gray-900 mb-2 ">
              Company Logo (optional)
             </label>
-          </div> */}
+          </div>
        
-{/* 
+
           <div class="sm:col-span-9 mb-16">
         
             <div class="flex flex-wrap items-center gap-3 sm:gap-5">
               <span class="flex flex-shrink-0 justify-center items-center size-20 border-2 border-dotted border-gray-300 text-gray-400 rounded-full ">
-                <svg class="flex-shrink-0 size-7" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+              {profilePicture ? (
+                    <img
+                      class="object-cover size-full rounded-full"
+                      src={profilePicture}
+                      alt="Image Description"
+                    />
+                  ) : (
+                <svg class="flex-shrink-0 size-7" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>)}
               </span>
 
               <div class="grow">
                 <div class="flex items-center gap-x-2">
-                  <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500" >
+                  <button onClick={() => onOpenAvatar()} type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500" >
                     <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
                     Upload photo
                   </button>
@@ -245,7 +313,176 @@ console.log(termsOfService, privacyPolicy, ageAgreement)
               </div>
             </div>
            
-          </div> */}
+          </div>
+          <Modal
+                  isOpen={isOpenAvatar}
+                  onClose={onCloseAvatar}
+                  size="xl"
+                  height="420px"
+                >
+                  <ModalOverlay />
+                  <ModalContent>
+                    <div
+                      id="hs-pro-dasadpm"
+                      class=" size-full fixed top-0 start-0 z-[80]  overflow-y-auto pointer-events-none [--close-when-click-inside:true] "
+                    >
+                      <div class="mt-7 opacity-100 duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
+                        <div class="w-full max-h-full flex flex-col bg-white rounded-xl pointer-events-auto shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)] ">
+                          <div class="py-3 px-4 flex justify-between items-center border-b ">
+                            <h3 class="font-semibold text-gray-800 ">
+                              Profile Picture
+                            </h3>
+                            <button
+                              type="button"
+                              onClick={() => onCloseAvatar()}
+                              class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                              data-hs-overlay="#hs-pro-dasadpm"
+                            >
+                              <span class="sr-only">Close</span>
+                              <svg
+                                class="flex-shrink-0 size-4"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path d="M18 6 6 18" />
+                                <path d="m6 6 12 12" />
+                              </svg>
+                            </button>
+                          </div>
+
+                          <form>
+                            <div class="p-4 space-y-5">
+                              <div>
+                                <div class="flex flex-wrap items-center gap-3 sm:gap-5">
+                                  <img
+                                    src={
+                                      profilePicture ? (
+                                        profilePicture
+                                      ) : images ? (
+                                        images
+                                      ) : (
+                                        <span class="flex flex-shrink-0 justify-center items-center size-20 border-2 border-dotted border-gray-300 text-gray-400 rounded-full dark:border-neutral-700 dark:text-neutral-600">
+                                          <svg
+                                            class="flex-shrink-0 size-7"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="24"
+                                            height="24"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                          >
+                                            <rect
+                                              width="18"
+                                              height="18"
+                                              x="3"
+                                              y="3"
+                                              rx="2"
+                                              ry="2"
+                                            />
+                                            <circle cx="9" cy="9" r="2" />
+                                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                                          </svg>
+                                        </span>
+                                      )
+                                    }
+                                  ></img>
+
+                                  <div class="grow">
+                                    <div class="flex items-center gap-x-2">
+                                      <ImageUploading
+                                        multiple
+                                        value={images}
+                                        onChange={onChange}
+                                        maxNumber={maxNumber}
+                                        dataURLKey="data_url"
+                                      >
+                                        {({
+                                          imageList,
+                                          onImageUpload,
+                                          onImageRemoveAll,
+                                          onImageUpdate,
+                                          onImageRemove,
+                                          isDragging,
+                                          dragProps,
+                                        }) => (
+                                          // write your building UI
+                                          <div className="upload__image-wrapper">
+                                            <button
+                                              type="button"
+                                              onClick={() => onImageUpdate()}
+                                              {...dragProps}
+                                              class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            >
+                                              <svg
+                                                class="flex-shrink-0 size-4"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                              >
+                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                                <polyline points="17 8 12 3 7 8" />
+                                                <line
+                                                  x1="12"
+                                                  x2="12"
+                                                  y1="3"
+                                                  y2="15"
+                                                />
+                                              </svg>
+                                              Upload photo
+                                            </button>
+                                            &nbsp;
+                                          </div>
+                                        )}
+                                      </ImageUploading>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="p-4 flex justify-end gap-x-2">
+                              <div class="w-full flex justify-end items-center gap-x-2">
+                                <button
+                                  type="button"
+                                  onClick={() => onCloseAvatar()}
+                                  class="py-2 px-3  inline-flex justify-center items-center text-start bg-white border border-gray-200 text-gray-800 text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-gray-50 "
+                                  data-hs-overlay="#hs-pro-dasadpm"
+                                >
+                                  Cancel
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => uploadToFirebase()}
+                                  class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-blue-600 border border-blue-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                  data-hs-overlay="#hs-pro-dasadpm"
+                                >
+                                  Save
+                                </button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </ModalContent>
+                </Modal>
               <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
                About us (optional)
               </label>

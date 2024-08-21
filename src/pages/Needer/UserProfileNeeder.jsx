@@ -423,7 +423,7 @@ const UserProfileNeeder = () => {
     await uploadBytes(pictureRef, bytes).then((snapshot) => {});
 
     await getDownloadURL(pictureRef).then((response) => {
-      updateDoc(doc(db, "users", user.uid), {
+      updateDoc(doc(db, "employers", user.uid), {
         profilePictureResponse: response,
       })
         .then(() => {
@@ -435,7 +435,7 @@ const UserProfileNeeder = () => {
     });
 
     setTimeout(() => {
-      updateDoc(doc(db, "users", user.uid), {
+      updateDoc(doc(db, "employers", user.uid), {
         hasUploadedProfilePicture: hasUploadedProfilePicture,
       })
         .then(() => {

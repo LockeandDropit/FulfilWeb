@@ -740,41 +740,7 @@ const ChatPlaceholder = () => {
                     <h2 class="text-lg font-semibold text-gray-800">
                       {user.firstName} {user.lastName}
                     </h2>
-                    {numberOfRatings ? (
-                      <div className="flex justify-center items-center text-center">
-                        {maxRating.map((item, key) => {
-                          return (
-                            <Box activeopacity={0.7} key={item} marginTop="2px">
-                              <Image
-                                boxSize="16px"
-                                src={item <= rating ? star_filled : star_corner}
-                              ></Image>
-                            </Box>
-                          );
-                        })}
-                        <p class="font-semibold text-sm text-gray-400  ml-2">
-                          ({numberOfRatings} reviews)
-                        </p>
-                      </div>
-                    ) : (
-                      <>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          class="flex-shrink-0 size-4 text-gray-600"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
-                          />
-                        </svg>
-                        <Text>No reviews yet</Text>
-                      </>
-                    )}
+                
 
                     <div class="mt-4 flex justify-center items-center gap-x-3">
                       <button
@@ -803,32 +769,7 @@ const ChatPlaceholder = () => {
                         View profile
                       </button>
 
-                      {/* {jobHiringState.isJobOffered === true &&
-                      jobHiringState.isHired === false ? (
-                        <button
-                        onClick={() => handleOfferVisible()}
-                          type="button"
-                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md   bg-green-100 text-green-800 shadow-sm  disabled:opacity-50 disabled:pointer-events-none focus:outline-none  "
-                        >
-                          View Offer
-                       
-                        </button>
-                      ) : jobHiringState.isHired === true &&
-                        jobHiringState.isMarkedCompleteDoer === false ? (
-                          <button
-                          type="button"
-                          onClick={() => handleMarkCompleteVisible()}
-                          class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md  bg-blue-600 text-white shadow-sm hover:bg-blue-700"
-                        >
-                          Mark Complete
-                        
-                        </button>
-                      ) : jobHiringState.isMarkedCompleteDoer === true ? (
-                       null
-                      ) : (
-                      null
-                      )}
-                     */}
+          
                     </div>
                   </div>
                 </div>
@@ -932,119 +873,6 @@ const ChatPlaceholder = () => {
                                   stroke-linecap="round"
                                   stroke-linejoin="round"
                                 >
-                                  <path d="M12 12h.01" />
-                                  <path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-                                  <path d="M22 13a18.15 18.15 0 0 1-20 0" />
-                                  <rect
-                                    width="20"
-                                    height="14"
-                                    x="2"
-                                    y="6"
-                                    rx="2"
-                                  />
-                                </svg>
-                                Status:
-                              </p>
-                            </dt>
-                          
-                            {/* {jobHiringState.isJobOffered === true &&
-                      jobHiringState.isHired === false ? (
-                        <span class="py-1.5 ps-1.5 w-[160px] px-1 inline-flex items-center  text-xs font-medium bg-green-100 text-green-800 rounded-full">
-                        <svg
-                          class="flex-shrink-0 size-3.5 mr-2"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                        You received an offer!
-                      </span>
-                      ) : jobHiringState.isHired === true &&
-                        jobHiringState.isMarkedCompleteDoer === false ? (
-                          <span class="py-1.5 ps-1.5  px-1 inline-flex items-center  text-xs font-medium bg-green-100 text-green-700 rounded-full">
-                          <svg
-                            class="flex-shrink-0 size-3.5"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Job Accepted!
-                        </span>
-                      ) : jobHiringState.isMarkedCompleteDoer === true ? (
-                        <span class="py-1.5 ps-1.5 w-[160px] inline-flex items-center  text-xs font-medium bg-blue-600 text-white rounded-full">
-                        <svg
-                          class="flex-shrink-0 size-3.5 mr-2"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                        Awaiting confirmation
-                      </span>
-                      ) : (
-                    
-                          <dd>
-                         
-                       
-                      <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
-                        <svg
-                          class="flex-shrink-0 size-3.5"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                        Interviewing
-                      </span>
-                    </dd>
-              
-                      )} */}
-                  </dl>           
-
-                          <dl class="py-1 grid grid-cols-3 gap-x-4">
-                            <dt class="col-span-1">
-                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
-                                <svg
-                                  class="flex-shrink-0 size-3.5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
                                   <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                                   <circle cx="12" cy="10" r="3" />
                                 </svg>
@@ -1082,34 +910,23 @@ const ChatPlaceholder = () => {
                                   />
                                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                                 </svg>
-                                Budget:
+                                Pay:
                               </p>
                             </dt>
-{/* {jobHiringState.isHired ? (job.isHourly ? (
-                              <dd class="col-span-2">
-                                <p class="font-medium text-[13px] text-gray-800">
-                                  ${job.confirmedRate}/hour
-                                </p>
-                              </dd>
-                            ) : (
-                              <dd class="col-span-2">
-                                <p class="font-medium text-[13px] text-gray-800">
-                                  ${job.confirmedRate} total
-                                </p>
-                              </dd>
-                            )) : job.isHourly ? (
-                              <dd class="col-span-2">
-                                <p class="font-medium text-[13px] text-gray-800">
-                                  ${job.lowerRate}/hour - ${job.upperRate}/hour
-                                </p>
-                              </dd>
-                            ) : (
-                              <dd class="col-span-2">
-                                <p class="font-medium text-[13px] text-gray-800">
-                                  ${job.flatRate} total
-                                </p>
-                              </dd>
-                            )} */}
+                            {job.isVolunteer ? (
+                            <p>Volunteer!</p>
+                          ) : job.isSalaried ? (
+                            <p class="font-medium text-[13px] text-gray-800">
+                              ${job.shortenedSalary} yearly - ${job.shortenedUpperSalary} yearly
+                            </p>
+                          ) : (job.upperRate > job.lowerRate ?  (<p class="font-medium text-[13px] text-gray-800">
+                           ${job.lowerRate}/hr -  ${job.upperRate}/hr 
+                          </p>) : ( <p class="font-medium text-[13px] text-gray-800">
+                              ${job.lowerRate}/hr
+                            </p>)
+                           
+                          )}
+
                             
                           </dl>
 
@@ -7008,34 +6825,22 @@ const ChatPlaceholder = () => {
                                   />
                                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                                 </svg>
-                                Budget:
+                                Pay:
                               </p>
                             </dt>
-{/* {jobHiringState.isHired ? (job.isHourly ? (
-                              <dd class="col-span-2">
-                                <p class="font-medium text-[13px] text-gray-800">
-                                  ${job.confirmedRate}/hour
-                                </p>
-                              </dd>
-                            ) : (
-                              <dd class="col-span-2">
-                                <p class="font-medium text-[13px] text-gray-800">
-                                  ${job.confirmedRate} total
-                                </p>
-                              </dd>
-                            )) : job.isHourly ? (
-                              <dd class="col-span-2">
-                                <p class="font-medium text-[13px] text-gray-800">
-                                  ${job.lowerRate}/hour - ${job.upperRate}/hour
-                                </p>
-                              </dd>
-                            ) : (
-                              <dd class="col-span-2">
-                                <p class="font-medium text-[13px] text-gray-800">
-                                  ${job.flatRate} total
-                                </p>
-                              </dd>
-                            )} */}
+                            {job.isVolunteer ? (
+                            <p>Volunteer!</p>
+                          ) : job.isSalaried ? (
+                            <p class="font-medium text-[13px] text-gray-800">
+                              ${job.shortenedSalary} yearly - ${job.shortenedUpperSalary} yearly
+                            </p>
+                          ) : (job.upperRate > job.lowerRate ?  (<p class="font-medium text-[13px] text-gray-800">
+                            ${job.lowerRate}/hr -  ${job.upperRate}/hr 
+                          </p>) : ( <p class="font-medium text-[13px] text-gray-800">
+                              ${job.lowerRate}/hr
+                            </p>)
+                           
+                          )}
                             
                           </dl>
 

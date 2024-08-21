@@ -615,7 +615,7 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                 <DrawerOverlay />
                 <DrawerContent>
                   <DrawerCloseButton />
-                  <DrawerHeader>{businessPostedJobs.jobTitle}</DrawerHeader>
+                
                   <DrawerBody>
                     <div class="">
                       <Helmet>
@@ -634,13 +634,14 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                           <div class="p-4">
                             <div class=" ">
                               <div className="flex">
+                                  <div className="flex">
+                              </div>
                                 <label
                                   for="hs-pro-dactmt"
-                                  class="block mb-2 text-xl font-medium text-gray-900"
+                                  class="block mb-2 text-2xl font-medium text-gray-900"
                                 >
                                   {businessPostedJobs.jobTitle}
                                 </label>
-
                                 <label onClick={() => onOpenShare()}>
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -658,6 +659,29 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                                   </svg>
                                 </label>
                               </div>
+                              {businessPostedJobs.employerProfilePicture ? (
+                                  <>
+                                    <div class="flex flex-col justify-center items-center size-[64px]  ">
+                                      <img
+                                        src={
+                                          businessPostedJobs.employerProfilePicture
+                                        }
+                                        class="flex-shrink-0 size-[64px] rounded-full"
+                                        alt="company logo"
+                                      />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <p class="font-semibold text-xl text-gray-800 cursor-pointer">
+                                          {businessPostedJobs.companyName} 
+                                        </p>
+                                      </div>
+                                  </>
+                                ) : (  <div className="flex flex-col">
+                                  <p class="font-semibold text-md text-gray-800 cursor-pointer">
+                                    {businessPostedJobs.companyName}
+                                  </p>
+                                </div>)}
+                            
                               {businessPostedJobs.isFullTimePosition ===
                               true ? (
                                 <label
@@ -757,10 +781,10 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                                 </span>{" "}
                                 {businessPostedJobs.datePosted}
                               </p>
-                              <p class="font-semibold text-md text-slate-700 cursor-pointer">
+                              {/* <p class="font-semibold text-md text-slate-700 cursor-pointer">
                                 Employer:
-                              </p>
-                              <div className="flex">
+                              </p> */}
+                              {/* <div className="flex">
                                 {businessPostedJobs.employerProfilePicture ? (
                                   <>
                                     <div class="flex flex-col justify-center items-center size-[56px]  ">
@@ -787,7 +811,7 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                                     {businessPostedJobs.companyName}
                                   </p>
                                 </div>
-                              </div>
+                              </div> */}
                             </div>
 
                             <div class="space-y-2 mt-10 mb-4 ">

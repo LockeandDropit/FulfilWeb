@@ -1490,6 +1490,28 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
                                   </svg>
                                 </label>
                               </div>
+                              {businessPostedJobs.employerProfilePicture ? (
+                                  <>
+                                    <div class="flex flex-col justify-center items-center size-[64px]  ">
+                                      <img
+                                        src={
+                                          businessPostedJobs.employerProfilePicture
+                                        }
+                                        class="flex-shrink-0 size-[64px] rounded-full"
+                                        alt="company logo"
+                                      />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <p class="font-semibold text-xl text-gray-800 cursor-pointer">
+                                          {businessPostedJobs.companyName} 
+                                        </p>
+                                      </div>
+                                  </>
+                                ) : (  <div className="flex flex-col">
+                                  <p class="font-semibold text-xl text-gray-800 cursor-pointer">
+                                    {businessPostedJobs.companyName}
+                                  </p>
+                                </div>)}
                               {businessPostedJobs.isFullTimePosition ===
                               true ? (
                                 <label
@@ -1589,37 +1611,8 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
                                 </span>{" "}
                                 {businessPostedJobs.datePosted}
                               </p>
-                              <p class="font-semibold text-md text-slate-700 cursor-pointer">
-                                Employer:
-                              </p>
-                              <div className="flex">
-                                {businessPostedJobs.employerProfilePicture ? (
-                                  <>
-                                    <div class="flex flex-col justify-center items-center size-[56px]  ">
-                                      <img
-                                        src={
-                                          businessPostedJobs.employerProfilePicture
-                                        }
-                                        class="flex-shrink-0 size-[64px] rounded-full"
-                                      />
-
-                                      <div className="flex flex-col ml-4">
-                                        <p class="font-semibold text-md text-gray-500  mt-2 cursor-pointer">
-                                          {businessPostedJobs.businessName}
-                                        </p>
-                                        <p class="font-semibold text-md text-gray-500 cursor-default ">
-                                          {businessPostedJobs.city}, Minnesota
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </>
-                                ) : null}
-                                <div className="flex flex-col">
-                                  <p class="font-semibold text-md text-gray-500  mt-1 cursor-pointer">
-                                    {businessPostedJobs.companyName}
-                                  </p>
-                                </div>
-                              </div>
+                             
+                             
                             </div>
 
                             <div class="space-y-2 mt-10 mb-4 ">

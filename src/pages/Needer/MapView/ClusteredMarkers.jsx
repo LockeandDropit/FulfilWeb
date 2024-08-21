@@ -604,6 +604,36 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
 
   }
 
+
+  const { isOpenActivity, onOpenActivity, onCloseActivity } = useDisclosure();
+
+  const handleChangeJobActivity = () => {
+    onOpen();
+  };
+  const changeJobActivityStatus = (x) => {
+    //change local store so changes are displayed
+
+    //update firebase
+    updateDoc(doc(db, "Map Jobs", x.jobID), {
+      isActive: !x.isActive,
+    });
+    updateDoc(
+      doc(db, "employers", currentUser.uid, "Posted Jobs", x.jobTitle),
+      {
+        isActive: !x.isActive,
+      }
+    )
+      .then(() => {
+        onClose();
+
+        fetchJobInfo(currentUser.uid, x.jobID, "Posted Jobs", x.jobTitle);
+      })
+      .catch((error) => {
+        // no bueno
+        console.log(error);
+      });
+  };
+
   // what I can do... is I can
   // remove all positions that have repeated lat/lngs (matching positions) and put them in a seperate array.
   //The clustering will then take care of everything until a certain zoom level, but when they are all grouped together they wont unbundle because they've always been bundled...
@@ -727,7 +757,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
                                           type="button"
                                           class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100"
                                         >
-                                          Date Posted
+                                        Posted
                                         </button>
                                       </div>
                                     </th>
@@ -775,7 +805,30 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
                                           </span>
                                         )}
                                       </td>
-                                      {job.isActive ? (<td class="size-px whitespace-nowrap px-4 py-1">
+                                      <td class="size-px whitespace-nowrap px-4 py-1">
+                                      <div class="flex items-center">
+                                        
+                              
+                              <input
+                                type="checkbox"
+                                id="hs-basic-with-description"
+                                class="relative w-[3.25rem] h-7 p-px bg-gray-100 border-transparent text-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-blue-600 disabled:opacity-50 disabled:pointer-events-none checked:bg-none checked:text-blue-600 checked:border-blue-600 focus:checked:border-blue-600 
+
+  before:inline-block before:size-6 before:bg-white checked:before:bg-blue-200 before:translate-x-0 checked:before:translate-x-full before:rounded-full before:shadow before:transform before:ring-0 before:transition before:ease-in-out before:duration-200 dark:before:bg-neutral-400 dark:checked:before:bg-blue-200"
+                                checked={job.isActive}
+                                onClick={() => changeJobActivityStatus(job)}
+                              />
+
+{job.isActive ? ( <label
+                                for="hs-basic-with-description"
+                                class="text-sm text-gray-500 ms-3 dark:text-neutral-400"
+                              >
+                                Active
+                              </label>) : (null)}
+                             
+                            </div>
+                            </td>
+                                      {/* {job.isActive ? (<td class="size-px whitespace-nowrap px-4 py-1">
                                         <span class="py-2 ps-2 pe-3 inline-flex items-center gap-x-1 text-sm font-medium bg-green-100 text-green-800 rounded-full">
                                           <svg
                                             class="flex-shrink-0 size-4 mt-1"
@@ -811,7 +864,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
                                           </svg>
                                           Inactive
                                         </span>
-                                      </td>)}
+                                      </td>)} */}
                        
                                       <td class="size-px whitespace-nowrap px-4 py-1">
                                         <span class="text-sm text-gray-600 ">
@@ -1358,6 +1411,70 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
         </ModalContent>
       </Modal>
       {showAddJobBusiness ? <AddJobBusiness heldSelected={heldSelected} /> : null}
+
+
+      <Modal isOpen={isOpenActivity} onClose={onCloseActivity}>
+                  <ModalOverlay />
+                  <ModalContent>
+                    <div class="w-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto ">
+                      <div class="flex justify-between items-center py-3 px-4  ">
+                        <h3
+                          id="hs-scale-animation-modal-label"
+                          class="font-bold text-gray-800 "
+                        >
+                          Change Job Status
+                        </h3>
+                        <button
+                          onClick={() => onCloseActivity()}
+                          type="button"
+                          class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                          aria-label="Close"
+                          data-hs-overlay="#hs-scale-animation-modal"
+                        >
+                          <span class="sr-only">Close</span>
+                          <svg
+                            class="shrink-0 size-4"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M18 6 6 18"></path>
+                            <path d="m6 6 12 12"></path>
+                          </svg>
+                        </button>
+                      </div>
+                      <div class="p-4 overflow-y-auto">
+                        <p class="mt-1 text-gray-800 ">
+                          Are you sure you want to change the active status of
+                          this job post?
+                        </p>
+                      </div>
+                      <div class="flex justify-end items-center gap-x-2 py-3 px-4 ">
+                        <button
+                          onClick={() => onCloseActivity()}
+                          type="button"
+                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none "
+                          data-hs-overlay="#hs-scale-animation-modal"
+                        >
+                          Close
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => changeJobActivityStatus()}
+                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                        >
+                          Change status
+                        </button>
+                      </div>
+                    </div>
+                  </ModalContent>
+                </Modal>
     </>
   );
 };

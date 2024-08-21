@@ -677,7 +677,7 @@ export const ClusteredTreeMarkers = ({ trees }) => {
                                       </div>
                                   </>
                                 ) : (  <div className="flex flex-col">
-                                  <p class="font-semibold text-md text-gray-800 cursor-pointer">
+                                  <p class="font-semibold text-xl text-gray-800 cursor-pointer">
                                     {businessPostedJobs.companyName}
                                   </p>
                                 </div>)}

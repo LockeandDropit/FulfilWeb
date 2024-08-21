@@ -2991,29 +2991,7 @@ const UserProfile = () => {
                             </p>
                             <p class="mb-5 text-sm text-gray-500 "></p>
                           </div>
-                          {/* <button
-                          type="button"
-                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          data-hs-overlay="#hs-pro-dasadpm"
-                          onClick={() => onOpenBio()}
-                        >
-                          <svg
-                            class="hidden sm:block flex-shrink-0 size-4"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          >
-                            <path d="M5 12h14" />
-                            <path d="M12 5v14" />
-                          </svg>
-                          Add Bio
-                        </button> */}
+                        
                           <p className="cursor-pointer mt-2">
                             upload your resume{" "}
                             <label
@@ -3040,24 +3018,18 @@ const UserProfile = () => {
                               class="cursor-pointer text-sky-500 underline hover:text-sky-600"
                               onClick={() =>
                                 window.open(
-                                  "https://uhi.red/resume-examples",
+                                  "https://gdoc.io/resume-templates/",
                                   "_blank"
                                 )
                               }
                             >
                               here.
                             </label>
+                            <p className="cursor-pointer mt-2">(Make sure you download the file as a pdf)</p>
                           </p>
                         </div>
                       )}
-                      {/* end about */}
-                      {/* <div class="p-5 pb-2 grid sm:flex sm:justify-between sm:items-center gap-2">
-                        <h2 class="inline-block font-semibold text-gray-800 ">
-                          Experience
-                        </h2>
-
-                        <div class="flex sm:justify-end items-center gap-x-2"></div>
-                      </div> */}
+                    
 
                       {userExperience ? (
                         userExperience.map((userExperience) => (

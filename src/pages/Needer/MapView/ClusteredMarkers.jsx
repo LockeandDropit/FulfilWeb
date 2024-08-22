@@ -244,11 +244,11 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
     onOpen: onOpenCNC,
     onClose: onCloseCNC,
   } = useDisclosure();
+
   //category search
 
   const [searchJobCategory, setSearchJobCategory] = useState(null);
 
-  
   const [showAddJobBusiness, setShowAddJobBusiness] = useState(false);
 
   useEffect(() => {
@@ -270,7 +270,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
   const handleGroupLocationToggleOpen = (x) => {
     console.log("group open toggle", x.jobID);
     setOpenInfoWindowMarkerID({ lat: x.locationLat, lng: x.locationLng });
-    //  setOpenInfoWindowMarkerID(x.jobID);
+    // setOpenInfoWindowMarkerID(x.jobID);
     // updateJobListingViews(x);
     onOpenDrawer();
     console.log("same locationJobs", sameLocationJobs);
@@ -280,6 +280,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
   const handleClose = () => {
     onClose();
   };
+
   const handleGoogleSignUp = async () => {
     const provider = await new GoogleAuthProvider();
 
@@ -373,11 +374,8 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [emailValidationBegun, setEmailValidationBegun] = useState(false);
 
-
-
   const onSignUp = async () => {
     const authentication = getAuth();
-
     await createUserWithEmailAndPassword(authentication, email, password)
       .then(() => {
         navigate("/DoerAddProfileInfo");
@@ -388,7 +386,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
         const errorMessage = error.message;
         console.log(errorMessage);
       });
-  };
+  }; 
 
   const validate = () => {
     setEmailValidationBegun(true);
@@ -464,8 +462,6 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
 
   const [subscriberEmail, setSubscriberEmail] = useState(null);
 
-
-
   //bettter useEffect than I write https://www.youtube.com/watch?v=QQYeipc_cik&t=788s
   // useEffect(() => {
   //   const openEmail = () => setTimeout(() => {
@@ -512,7 +508,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
   const { fetchJobInfo, setJobHiringState } = useJobStore();
 
   const handleStoreAndNavigatePosted = (x) => {
-    console.log(x.jobTitle, x.jobID);
+    console.log(x.jobTitle, x.jobID)
 
     fetchJobInfo(currentUser.uid, x.jobID, "Posted Jobs", x.jobTitle);
     if (x.hasNewApplicant === true) {
@@ -534,15 +530,9 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
   };
 
 
-
-
   const [newTrees, setNewTrees] = useState([]);
 
-    // useEffect(() => {
-    //   if (trees) {
-    //       setNewTrees(trees)
-    //   }
-    // }, [trees])
+
 
   const filterOutSameLocation = () => {
     //map over and create lat lng object for each grouped lat/lng value
@@ -820,7 +810,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
                               />
 
 {job.isActive ? ( <label
-                                for="hs-basic-with-description"
+                                for="hs-basic-with-description" 
                                 class="text-sm text-gray-500 ms-3 dark:text-neutral-400"
                               >
                                 Active

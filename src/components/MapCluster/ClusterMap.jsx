@@ -17,24 +17,29 @@ const ClusterMap = (props) => {
   const [trees, setTrees] = useState();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
-
+  const [sameLocationJobs, setSameLocationJobs] = useState(false)
 
   const { searchResults, searchIsMobile, setSearchIsMobile } =
     useSearchResults();
 
-  const { isLoading, jobs } = useJobFetch();
-
+  const { isLoading, jobs, groupedJobs } = useJobFetch();
   useEffect(() => {
-    if (searchResults === null) {
-      if (isLoading) {
-        console.log(isLoading);
+    if (isLoading ) {
+      console.log(isLoading);
+    } else {
+      if (searchResults === null) {
+      setTrees(jobs);
+      if (!groupedJobs || groupedJobs.length === 0) {
+        setSameLocationJobs(null)
       } else {
-        setTrees(jobs);
+        setSameLocationJobs(groupedJobs)
       }
-    } else  {
+      console.log("jobs from needer map", groupedJobs)
+    } else {
       setTrees(searchResults);
     }
-  }, [searchResults, jobs]);
+    }
+}, [jobs, groupedJobs, searchResults]);
 
 
   //Christian, this is the function that returns data from the API you built. 
@@ -99,7 +104,7 @@ const ClusterMap = (props) => {
             </Card>
           </Center>
         )}
-        {filteredTrees && <ClusteredTreeMarkers trees={filteredTrees} />}
+        {filteredTrees && <ClusteredTreeMarkers trees={filteredTrees} sameLocationJobs={sameLocationJobs}/>}
       </Map>
     </APIProvider>
   );

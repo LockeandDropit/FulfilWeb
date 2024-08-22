@@ -198,12 +198,10 @@ const LoggedOutHeader = (props) => {
   // useEffect(() => {
   //   document.addEventListener('keydown', handleKeyDown, true);
   // }, [])
-  
   // const handleKeyDown = (e) => {
   // if (e.key === "Enter") {
   //   e.preventDefault();
   //   modalValidate()
-    
   // }
   // };
 

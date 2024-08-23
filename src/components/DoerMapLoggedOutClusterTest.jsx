@@ -664,7 +664,16 @@ console.log("session id ", sessionId)
 
 const [scrollBehavior, setScrollBehavior] = React.useState('inside')
 
+useEffect(() => {
+  document.addEventListener('keydown', handleKeyDown, true);
+}, [])
 
+const handleKeyDown = (e) => {
+  console.log("hit enter mapscreen")
+if (e.key === "Enter") {
+  e.preventDefault();
+}
+};
 
 
  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication

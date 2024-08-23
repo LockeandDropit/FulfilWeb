@@ -65,10 +65,16 @@ const JobFilter = () => {
   const [jobsInCategory, setJobsInCategory] = useState(null)
   const [viewDropDown, setViewDropDown] = useState(false)
 
+
+
   const handleSearch = (value) => {
     testSearch(value);
     setJobTitle(value);
   };
+
+  useEffect(() => {
+    console.log("firing",jobTitle, minimumPay, positionType)
+  }, [jobTitle, minimumPay, positionType])
 
   const testSearch = (value) => {
     const q = query(collection(db, "Map Jobs"));
@@ -79,12 +85,12 @@ const JobFilter = () => {
       snapshot.docs.forEach((doc) => {
         if (doc.data().lowerCaseJobTitle.includes(value.toLowerCase()) || doc.data().description.includes(value.toLowerCase())  && doc.data().isActive === true) {
           searchResults.push(doc.data());
-          console.log("here are search results", doc.data())
+          // console.log("here are search results", doc.data())
         }
       });
 
 
-      console.log("search results to close bar", searchResults)
+      // console.log("search results to close bar", searchResults)
       if (!searchResults.length || !searchResults || !value.length) {
         setViewDropDown(false)
         setJobTitleSearchResults(null)
@@ -99,7 +105,7 @@ const JobFilter = () => {
       
     });
 
-    console.log("jobtitle search results", jobTitleSearchResults)
+    // console.log("jobtitle search results", jobTitleSearchResults)
     if (value.length >= 2 && jobTitleSearchResults) {
       let splitTitle = jobTitleSearchResults[0].lowerCaseJobTitle.split(" ");
       console.log("split title", splitTitle[0]);
@@ -145,7 +151,7 @@ search()
 
     // resetSearch()
 
-    console.log(jobTitle, minimumPay, positionType)
+    console.log("firing", jobTitle, minimumPay, positionType)
 
     const q = query(collection(db, "Map Jobs"));
 
@@ -275,23 +281,41 @@ search()
     document.getElementById("search-form").reset();
   };
 
-  useEffect(() => {
-    //ty molevolence https://www.reddit.com/r/reactjs/comments/w8hdd5/how_to_handle_keyboard_events_the_proper_way_in/
-    const handleKeyDown = (e) => {
-      if (e.key === "Enter") {
-        // search()
-        e.preventDefault();
-      
-        search()
-      }
-    };
+  // useEffect(() => {
+  //   //ty molevolence https://www.reddit.com/r/reactjs/comments/w8hdd5/how_to_handle_keyboard_events_the_proper_way_in/
+  //   const handleKeyDown = (e) => {
+  //     if (e.key === "Enter") {
+  //       // search()
+  //       e.preventDefault();
+  //       search()
+  //     }
+  //   };
    
   
 
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, []);
+
+
+    //listen for enter button to and call modalValidate
+  // ty buddy https://www.youtube.com/watch?v=D5SdvGMTEaU&t=71s
+
+// useEffect(() => {
+//   document.addEventListener('keydown', handleKeyDown, true);
+// }, [])
+
+// const handleKeyDown = (e) => {
+//   console.log("hit enter")
+// if (e.key === "Enter") {
+
+//   e.preventDefault();
+//   search()
+// }
+// };
+
+
 
   return (
     <>
@@ -308,6 +332,7 @@ search()
                     Job Title
                   </label>
                   <input
+                    onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                     onChange={(e) => handleSearch(e.target.value)}
                     class=" mb-2 py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                     placeholder="Ex: Landscaping, Hostess, Construction"
@@ -330,6 +355,7 @@ search()
                     Pay Range
                   </label>
                   <select
+                  onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                     onChange={(e) => setMinimumPay(e.target.value)}
                     id="hs-select-label"
                     value={minimumPay}
@@ -353,6 +379,7 @@ search()
                     Full-time/Part-time
                   </label>
                   <select
+                   onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                     onChange={(e) => setPositionType(e.target.value)}
                     id="hs-select-label"
                     class="mb-2 py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-medium focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
@@ -382,6 +409,7 @@ search()
             <button
               class=" h-[48px] ml-4 w-auto sm:w-auto whitespace-nowrap  px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
               onClick={() => search()}
+              onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -402,6 +430,7 @@ search()
             <a
               class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
               onClick={() => clearSearch()}
+              onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
             >
               Clear search
             </a>

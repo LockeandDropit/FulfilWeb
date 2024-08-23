@@ -624,13 +624,17 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
   const [groupJobs, setGroupJobs] = useState([]);
 
   useEffect(() => {
-    if (trees && sameLocationJobs) {
+    if (trees && sameLocationJobs && !searchResults) {
       filterOutSameLocation();
       console.log("1");
       setGroupJobs(sameLocationJobs);
+    } else if (trees && sameLocationJobs && searchResults) {
+      setNewTrees(trees);
+      setGroupJobs([])
+      console.log("2");
     } else if (trees && !sameLocationJobs) {
       setNewTrees(trees);
-      // setGroupJobs([])
+      setGroupJobs([])
     }
   }, [sameLocationJobs, trees]);
 

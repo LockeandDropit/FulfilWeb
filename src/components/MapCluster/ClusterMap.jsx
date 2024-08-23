@@ -74,6 +74,18 @@ const ClusterMap = (props) => {
   }, [trees, selectedCategory]);
 
 
+  useEffect(() => {
+  document.addEventListener('keydown', handleKeyDown, true);
+}, [])
+
+const handleKeyDown = (e) => {
+  console.log("hit enter")
+if (e.key === "Enter") {
+  e.preventDefault();
+}
+};
+
+
 
   //almost all code regarding implementing clustering in this library is from https://github.com/visgl/react-google-maps/tree/main/examples/marker-clustering
   return (

@@ -294,6 +294,7 @@ const AddJobBusiness = ({ heldSelected }) => {
           let shortened = [];
 
           //string splitting credit lonesomeday https://stackoverflow.com/questions/6484670/how-do-i-split-a-string-into-an-array-of-characters
+          // https:// maybe from here too starball & somethinghere stackoverflow.com/questions/26425637/javascript-split-string-with-white-space
           for (var i = 0; i < lowerRate.length; i++) {
             parsed.push(lowerRate.charAt(i));
             console.log("inside ", lowerRate.charAt(i));

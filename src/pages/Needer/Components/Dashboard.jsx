@@ -801,7 +801,7 @@ const Dashboard = () => {
         <div class="flex flex-col h-full max-h-full py-3">
           <header class="h-[46px] px-8">
             <a
-              class="flex-none text-4xl font-sans font-bold text-sky-400"
+              class="flex-none text-4xl font-sans font-bold text-sky-400 cursor-pointer"
               aria-label="Brand"
               onClick={() => navigate("/Homepage")}
             >

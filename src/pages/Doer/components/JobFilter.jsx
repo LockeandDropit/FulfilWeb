@@ -77,8 +77,9 @@ const JobFilter = () => {
     const searchResults = [];
     onSnapshot(q, (snapshot) => {
       snapshot.docs.forEach((doc) => {
-        if (doc.data().lowerCaseJobTitle.includes(value.toLowerCase()) && doc.data().isActive === true) {
+        if (doc.data().lowerCaseJobTitle.includes(value.toLowerCase()) || doc.data().description.includes(value.toLowerCase())  && doc.data().isActive === true) {
           searchResults.push(doc.data());
+          console.log("here are search results", doc.data())
         }
       });
 
@@ -94,7 +95,6 @@ const JobFilter = () => {
 
       //if value > 2 (3?)
       //if a & b contain "main root", show just one of those jobs
-
       //some code to see if this word appears more than once, if it does, only render it one time in the autocomplete but keep the jobs all stored in the search results
       
     });
@@ -116,7 +116,7 @@ const JobFilter = () => {
           }
         });
       
-      // }
+
 
 
       setDisplayedCategory(categoryTitle)
@@ -142,6 +142,11 @@ search()
   // map over (filter) all jobs on narrowed search (where value >= 2) and look for a word match. If all results contain that word, that is set & displayed as the category
 
   const search = () => {
+
+    // resetSearch()
+
+    console.log(jobTitle, minimumPay, positionType)
+
     const q = query(collection(db, "Map Jobs"));
 
     onSnapshot(q, (snapshot) => {
@@ -151,30 +156,31 @@ search()
         //if a b c we are not solving for salary right now
 
         if (jobTitle && !minimumPay && !positionType) {
-          if (doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) && doc.data().isActive === true) {
+          if (doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) || doc.data().description.includes(jobTitle.toLowerCase()) && doc.data().isActive === true) {
             results.push({ ...doc.data(), id: doc.id, key: doc.id  });
             console.log("title", doc.data());
           } else {
             // onOpen()
             console.log("1");
           }
-        } else if (jobTitle && minimumPay && !positionType) {
+        } else if (jobTitle && minimumPay && !positionType) { 
           console.log("title and minimum");
           if (
-            doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) &&
-            doc.data().lowerRate >= minimumPay && doc.data().isActive === true
+            (doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) || doc.data().description.includes(jobTitle.toLowerCase())) &&
+            doc.data().lowerRate >= minimumPay
+            //  && doc.data().isActive === true
           ) {
             console.log("heres your match with pay", doc.data());
             results.push({ ...doc.data(), id: doc.id, key: doc.id  });
           } else {
             // onOpen()
-            console.log("2");
+            console.log("2", minimumPay, doc.data().lowerRate);
           }
         } else if (jobTitle && !minimumPay && positionType) {
           console.log("title and type");
           var isTrueSet = /^true$/i.test(positionType);
           if (
-            doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) &&
+            doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) || doc.data().description.includes(jobTitle.toLowerCase()) &&
             doc.data().isFullTimePosition === isTrueSet && doc.data().isActive === true
           ) {
             console.log("heres your match with pay", doc.data());
@@ -187,7 +193,7 @@ search()
           console.log("title, minimum, type");
           var isTrueSet = /^true$/i.test(positionType);
           if (
-            doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) &&
+            (doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) || doc.data().description.includes(jobTitle.toLowerCase())) &&
             doc.data().lowerRate >= minimumPay &&
             doc.data().isFullTimePosition === isTrueSet && doc.data().isActive === true
           ) {
@@ -195,7 +201,7 @@ search()
             results.push({ ...doc.data(), id: doc.id, key: doc.id  });
           } else {
             // onOpen()
-            console.log("4");
+            console.log("4", isTrueSet, doc.data().isFullTimePosition);
           }
         } else if (minimumPay && !jobTitle && !positionType) {
           console.log("minimum", minimumPay);
@@ -241,11 +247,16 @@ search()
 
       if (!results || !results.length) {
         onOpen();
+        console.log("results", results)
+        setSearchResults(null);
       } else {
+        console.log("new results", results)
         setSearchResults(results);
+        
       }
+     
     });
-  };
+  }; 
 
   const clearSearch = () => {
     resetSearch();
@@ -270,9 +281,12 @@ search()
       if (e.key === "Enter") {
         // search()
         e.preventDefault();
+      
+        search()
       }
     };
-    document.addEventListener("keydown", handleKeyDown, true);
+   
+  
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
@@ -286,7 +300,7 @@ search()
           <div class="flex flex-row items-center mx-auto mb-4 mt-4">
             <form id="search-form">
               <div class=" flex flex-col items-center gap-2 sm:flex-row sm:gap-3 ">
-                {/* <div class="max-w-[560px] min-w-[320px]">
+                <div class="max-w-[560px] min-w-[320px]">
                   <label
                     for="hs-select-label"
                     class="block text-md font-medium mb-1 ml-1"
@@ -295,22 +309,18 @@ search()
                   </label>
                   <input
                     onChange={(e) => handleSearch(e.target.value)}
-                    type="text"
-                    id="hero-input"
-                    name="hero-input"
                     class=" mb-2 py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                     placeholder="Ex: Landscaping, Hostess, Construction"
                   />
-                  {jobsInCategory && viewDropDown ? (
+                  {/* {jobsInCategory && viewDropDown ? (
                     <div class="absolute w-[320px] z-50  mb-2 py-3 px-4 block  bg-white border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                       <p className="font-semibold text-medium cursor-default">Category</p>
                       <div className="hover:bg-gray-200 rounded-sm p-0.5 ">
                       <p className="text-lg cursor-pointer mb-2 justify-center items-center mt-0.5" onClick={() => handleRenderJobCategory()}>{displayedCategory}</p>
                       </div>
-                  
                     </div>
-                  ) : null}
-                </div> */}
+                  ) : null} */}
+                </div>
         
                 <div className=" w-[320px]">
                   <label

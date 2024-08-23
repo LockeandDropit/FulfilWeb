@@ -37,6 +37,7 @@ const ClusterMap = (props) => {
       console.log("jobs from needer map", groupedJobs)
     } else {
       setTrees(searchResults);
+      // setSameLocationJobs([])
     }
     }
 }, [jobs, groupedJobs, searchResults]);

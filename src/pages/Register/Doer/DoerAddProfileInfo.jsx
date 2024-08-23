@@ -434,7 +434,7 @@ const DoerAddProfileInfo = () => {
                   </div>
                   <div className="text-sm leading-6">
                     <label  className="font-medium text-gray-900" >
-                    I have read and agree to the  <span class="text-sky-400" onClick={() => onOpen()} > Privacy Policy,</span>, <span class="text-sky-400" onClick={() => onOpenTOS()}>Terms of Service.</span>, and by continuing I agree and understand that I am an independent contractor and not an employee of Fulfil.
+                    I have read and agree to the  <span class="text-sky-400" onClick={() => onOpen()} > Privacy Policy,</span>, <span class="text-sky-400" onClick={() => onOpenTOS()}>Terms of Service.</span>
                     </label>
                    
                   </div>

@@ -2834,6 +2834,7 @@ const UserProfile = () => {
                               <button>or</button>
                             </div>
                           </div>
+                          {/* help from Nexo & Josh Crozier https://stackoverflow.com/questions/572768/styling-an-input-type-file-button */}
                           <div class="px-5   flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
                             <div className="items-center justify-center">
                               <label

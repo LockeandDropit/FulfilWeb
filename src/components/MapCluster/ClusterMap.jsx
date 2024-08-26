@@ -103,7 +103,7 @@ if (e.key === "Enter") {
               align="center"
               mt={2}
               width={{ base: "full", md: "auto" }}
-              ml={{ base: "0px", md: "80px" }}
+              // ml={{ base: "0px", md: "80px" }}
             >
               <JobFilter />
             </Card>

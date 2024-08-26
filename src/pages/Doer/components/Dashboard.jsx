@@ -275,7 +275,7 @@ const Dashboard = () => {
       hidden
       fixed inset-y-0 start-0 z-[60]
       bg-white border-e border-gray-200
-      lg:block lg:translate-x-0 lg:end-auto lg:bottom-0
+      xl:block lg:translate-x-0 lg:end-auto lg:bottom-0
      
      "
       >

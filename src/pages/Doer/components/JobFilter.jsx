@@ -320,11 +320,11 @@ search()
   return (
     <>
       {isDesktop ? (
-        <div class="w-full bg-white  px-4 sm:px-6 lg:px-8  rounded">
+        <div class="sm:w-1/4 md:w-full bg-white px-4 sm:px-6 lg:px-8 rounded">
           <div class="flex flex-row items-center mx-auto mb-4 mt-4">
             <form id="search-form">
-              <div class=" flex flex-col items-center gap-2 sm:flex-row sm:gap-3 ">
-                <div class="max-w-[560px] min-w-[320px]">
+            <div class="flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
+            <div className="w-[120px] sm:w-[240px]">
                   <label
                     for="hs-select-label"
                     class="block text-md font-medium mb-1 ml-1"
@@ -347,7 +347,7 @@ search()
                   ) : null} */}
                 </div>
         
-                <div className=" w-[320px]">
+                <div className="w-[120px] sm:w-[240px]">
                   <label
                     for="hs-select-label"
                     class="block text-medium font-medium mb-1 ml-1"
@@ -371,7 +371,7 @@ search()
                     <option value="40">$40/hour +</option>
                   </select>
                 </div>
-                <div className=" w-[320px]">
+                <div className="w-[120px] sm:w-[240px]">
                   <label
                     for="hs-select-label"
                     class="block text-medium font-medium mb-1  ml-1"

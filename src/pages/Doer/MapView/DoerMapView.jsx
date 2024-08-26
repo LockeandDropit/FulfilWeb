@@ -138,7 +138,8 @@ const [hasRun, setHasRun] = useState(false);
               align="center"
               mt={6}
               width={{ base: "full", md: "auto" }}
-              ml={{ base: "0px", md: "80px" }}
+              ml={{ xl: "160px" }}
+
             >
               <JobFilter />
             </Card>

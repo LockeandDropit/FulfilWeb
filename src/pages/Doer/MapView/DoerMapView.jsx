@@ -133,17 +133,26 @@ const [hasRun, setHasRun] = useState(false);
                 // onClick={() => setOpenInfoWindowMarkerID(null)}
               >
                     {isDesktop ? (
-          <Center>
-            <Card
-              align="center"
-              mt={6}
-              width={{ base: "full", md: "auto" }}
-              ml={{ xl: "160px" }}
+          // <Center>
+          //   <Card
+          //     align="center"
+          //     mt={6}
+          //     width={{ base: "full", md: "auto" }}
+          //     ml={{ xl: "160px" }}
 
-            >
-              <JobFilter />
-            </Card>
-          </Center>
+          //   >
+          //     <JobFilter />
+          //   </Card>
+          // </Center>
+          <Card
+                      align={"left"}
+          mt={4}
+          width={{ base: "full", md: "full" }}
+          ml={{ xl: "240px" }}
+
+        >
+          <JobFilter />
+        </Card>
         ) : (
           <Center>
             <Card align="center" width={{ base: "100vw" }}>

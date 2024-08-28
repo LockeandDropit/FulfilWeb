@@ -2804,7 +2804,7 @@ const UserProfile = () => {
                   {resume ? (
                     <>
                       <div class="flex  flex-col bg-white border border-gray-200 rounded-xl shadow-sm xl:shadow-none ">
-                        <div class="px-5   flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
+                        <div class="px-5 py-5  flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
                           <h2 class="inline-block font-semibold text-gray-800  ">
                             Resume Uploaded
                           </h2>
@@ -2821,7 +2821,7 @@ const UserProfile = () => {
                             />
                           </svg>
                         </div>
-                        <div class="items-center align-center">
+                        <div class="items-center align-center justify-center text-center">
                           <div class="items-center p-5   flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
                             <div class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none ">
                               <button onClick={() => onOpenResume()}>

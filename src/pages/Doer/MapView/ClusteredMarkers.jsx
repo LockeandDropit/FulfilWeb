@@ -472,6 +472,8 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
 
   //save logic
   const saveJob = (x) => {
+
+    
     setDoc(doc(db, "users", user.uid, "Saved Jobs", x.jobID), {
       companyName: x.companyName,
       isPostedByBusiness: true,
@@ -517,6 +519,8 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
       .catch((error) => {
         // no bueno
       });
+
+    
 
     //submit data
   };

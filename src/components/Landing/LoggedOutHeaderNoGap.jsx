@@ -266,7 +266,7 @@ const [isLoading, setIsLoading] = useState(false)
         <>
           <header class="flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm ">
             <nav
-              class="mt-2 relative  w-full bg-white border-bottom shadow-md border-gray-800 mx-2 py-3 px-4 md:flex md:items-center md:justify-between md:py-0 md:px-6 lg:px-8 xl:mx-auto"
+              class="mt-2 relative  w-full bg-white border-bottom  border-gray-800 mx-2 py-3 px-4 md:flex md:items-center md:justify-between md:py-0 md:px-6 lg:px-8 xl:mx-auto"
               aria-label="Global"
             >
               <div class="flex items-center justify-between">

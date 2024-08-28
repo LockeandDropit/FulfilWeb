@@ -98,20 +98,33 @@ if (e.key === "Enter") {
         disableDefaultUI
       >
         {isDesktop ? (
-          <Center>
-            <Card
+          // <Center>
+          //   <Card
+          //     align="center"
+          //     mt={2}
+          //     width={{ base: "full", md: "auto" }}
+          //     // ml={{ base: "0px", md: "80px" }}
+          //   >
+          //     <JobFilter />
+          //   </Card>
+          // </Center>
+         
+                    <Card
+          
               align="center"
-              mt={2}
+              alignContent="center"
+              alignItems="center"
               width={{ base: "full", md: "auto" }}
               // ml={{ base: "0px", md: "80px" }}
             >
               <JobFilter />
             </Card>
-          </Center>
+           
+           
         ) : (
           <Center>
             <Card align="center" width={{ base: "100vw" }}>
-              <div className="w-3/4 mt-4 mb-2">
+              <div className="w-3/4  mb-2">
                 <JobFilter />
               </div>
             </Card>

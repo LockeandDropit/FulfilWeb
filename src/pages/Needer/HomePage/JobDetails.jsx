@@ -55,7 +55,7 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Document, Page } from 'react-pdf';
+import { Document, Page } from "react-pdf";
 
 const JobDetails = () => {
   const { job, fetchJobInfo } = useJobStore();
@@ -72,7 +72,7 @@ const JobDetails = () => {
   function onDocumentLoadSuccess() {
     setNumPages(numPages);
   }
-  const [resetApplicantList, setResetApplicantList] = useState(false)
+  const [resetApplicantList, setResetApplicantList] = useState(false);
 
   const { currentUser } = useUserStore();
 
@@ -198,7 +198,6 @@ const JobDetails = () => {
   const [editVisible, setEditVisible] = useState(false);
   const [editBusinessVisible, setEditBusinessVisible] = useState(false);
 
-
   useEffect(() => {
     console.log("location", location.state);
     if (location.state === null) {
@@ -208,16 +207,16 @@ const JobDetails = () => {
       } else if (location.state.applicantReset) {
         console.log("hello", location.state.applicantReset);
         setApplicantVisible(false);
-        setResetApplicantList(true)
+        setResetApplicantList(true);
       }
     }
   }, [location]);
 
   const [applicantVisible, setApplicantVisible] = useState(false);
-  const [selectedApplicant, setSelectedApplicant] = useState(null)
+  const [selectedApplicant, setSelectedApplicant] = useState(null);
 
   const handleApplicantVisible = (x) => {
-    setSelectedApplicant(x)
+    setSelectedApplicant(x);
     setApplicantVisible(true);
     //also pass job info so chat can be started.
   };
@@ -228,12 +227,12 @@ const JobDetails = () => {
     onClose: onCloseResume,
   } = useDisclosure();
 
-  const [selectedApplicantResume, setSelectedApplicantResume] = useState(null)
+  const [selectedApplicantResume, setSelectedApplicantResume] = useState(null);
 
   const viewResume = (x) => {
-    setSelectedApplicantResume(x.resume)
-    onOpenResume()
-  }
+    setSelectedApplicantResume(x.resume);
+    onOpenResume();
+  };
 
   const navigateToChannel = (x) => {
     console.log("this is what youre passing", x);
@@ -292,237 +291,225 @@ const JobDetails = () => {
   } = useDisclosure();
 
   const handleDeleteModal = () => {
-    onOpenDelete()
-    
-      }
-    
-      const deleteJob = () => {
-      deleteDoc(doc(db, "employers", currentUser.uid, "Posted Jobs", job.jobTitle))
-      .then(() => {
+    onOpenDelete();
+  };
 
+  const deleteJob = () => {
+    deleteDoc(
+      doc(db, "employers", currentUser.uid, "Posted Jobs", job.jobTitle)
+    )
+      .then(() => {})
+      .catch((e) => {
+        console.log(e);
+      });
+
+    deleteDoc(doc(db, "Map Jobs", job.jobID))
+      .then(() => {
+        onCloseDelete();
+        navigate("/Homepage");
       })
       .catch((e) => {
-        console.log(e)
-      })
+        console.log(e);
+      });
+  };
 
-      deleteDoc(doc(db, "Map Jobs", job.jobID,))
+  const createInterviewChat = (x) => {
+    setIsLoading(true);
+    setDoc(doc(db, "Messages", "intermediate", job.jobID, "Info"), {
+      jobTitle: job.jobTitle,
+      applicantFirstName: x.firstName,
+      applicantLastName: x.lastName,
+      applicantID: x.uid,
+      employerFirstName: currentUser.firstName,
+      employerLastName: currentUser.lastName,
+      employerID: currentUser.uid,
+      isHired: false,
+      isHourly: job.isHourly,
+      // isFlatRate: job.isFlatRate,
+      isVolunteer: false,
+      needsDeposit: false,
+      // applicantAvatar: profilePictureURL,
+      // employerAvatar: employerProfilePictureURL
+    })
       .then(() => {
-        onCloseDelete()
-        navigate("/Homepage")
-
+        console.log("new chat created global");
       })
-      .catch((e) => {
-        console.log(e)
-      })
-      }
+      .catch((error) => {
+        console.log(error);
+      });
 
-      const createInterviewChat = (x) => {
-        setIsLoading(true)
-        setDoc(doc(db, "Messages", "intermediate", job.jobID, "Info"), {
-          jobTitle: job.jobTitle,
-          applicantFirstName: x.firstName,
-          applicantLastName: x.lastName,
-          applicantID: x.uid,
-          employerFirstName: currentUser.firstName,
-          employerLastName: currentUser.lastName,
-          employerID: currentUser.uid,
-          isHired: false,
-          isHourly: job.isHourly,
-          // isFlatRate: job.isFlatRate,
-          isVolunteer: false,
-          needsDeposit: false,
-          // applicantAvatar: profilePictureURL,
-          // employerAvatar: employerProfilePictureURL
-        })
-          .then(() => {
-            console.log("new chat created global");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-    
-        setDoc(doc(db, "Messages", job.jobID), {
-          jobTitle: job.jobTitle,
+    setDoc(doc(db, "Messages", job.jobID), {
+      jobTitle: job.jobTitle,
+      jobID: job.jobID,
+      applicantFirstName: x.firstName,
+      applicantLastName: x.lastName,
+      employerFirstName: currentUser.firstName,
+      employerLastName: currentUser.lastName,
+      applicantID: x.uid,
+      employerID: currentUser.uid,
+      isHired: false,
+      isHourly: job.isHourly,
+      // isFlatRate: job.isFlatRate,
+      confirmedRate: 0,
+      jobOffered: false,
+      applicationSent: false,
+      isVolunteer: false,
+      // applicantAvatar: profilePictureURL,
+      // employerAvatar: employerProfilePictureURL,
+      // applicantInitials: here,
+      // employerInitials: here
+    })
+      .then(() => {
+        console.log("new chat created global");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setDoc(doc(db, "employers", currentUser.uid, "User Messages", job.jobID), {
+      placeholder: null,
+    })
+      .then(() => {
+        console.log("new chat created employer");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setDoc(doc(db, "users", x.uid, "User Messages", job.jobID), {
+      placeholder: null,
+    })
+      .then(() => {
+        console.log("new chat created applicant");
+        // navigation.navigate("MessagesFinal", { props: jobID, firstInterview: true, applicantFirstName: userFirstName });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    //add JobID to active chat list for both applicant and employer
+
+    testNewChannel(x);
+  };
+
+  const testNewChannel = async (x) => {
+    const chatRef = collection(db, "chats");
+    const userChatsRef = collection(db, "User Messages");
+
+    try {
+      const newChatRef = doc(chatRef);
+
+      await setDoc(newChatRef, {
+        createdAt: serverTimestamp(),
+        messages: [],
+        id: newChatRef.id,
+        jobID: job.jobID,
+        jobTitle: job.jobTitle,
+      });
+
+      await updateDoc(doc(userChatsRef, x.uid), {
+        chats: arrayUnion({
+          chatId: newChatRef.id,
+          lastMessage: "",
+          receiverId: currentUser.uid,
+          updatedAt: Date.now(),
           jobID: job.jobID,
-          applicantFirstName: x.firstName,
-          applicantLastName: x.lastName,
-          employerFirstName: currentUser.firstName,
-          employerLastName: currentUser.lastName,
-          applicantID: x.uid,
-          employerID: currentUser.uid,
+          jobTitle: job.jobTitle,
+          jobType: "Interview",
+          isRequest: false,
+          jobOfferd: false,
           isHired: false,
-          isHourly: job.isHourly,
-          // isFlatRate: job.isFlatRate,
-          confirmedRate: 0,
-          jobOffered: false,
-          applicationSent: false,
-          isVolunteer: false,
-          // applicantAvatar: profilePictureURL,
-          // employerAvatar: employerProfilePictureURL,
-          // applicantInitials: here,
-          // employerInitials: here
-        })
-          .then(() => {
-            console.log("new chat created global");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-    
-        setDoc(doc(db, "employers", currentUser.uid, "User Messages", job.jobID), {
-          placeholder: null,
-        })
-          .then(() => {
-            console.log("new chat created employer");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-    
-        setDoc(doc(db, "users", x.uid, "User Messages", job.jobID), {
-          placeholder: null,
-        })
-          .then(() => {
-            console.log("new chat created applicant");
-            // navigation.navigate("MessagesFinal", { props: jobID, firstInterview: true, applicantFirstName: userFirstName });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-    
-        //add JobID to active chat list for both applicant and employer
-    
-        testNewChannel(x);
-      };
+        }),
+      });
 
+      await updateDoc(doc(userChatsRef, currentUser.uid), {
+        chats: arrayUnion({
+          chatId: newChatRef.id,
+          lastMessage: "",
+          receiverId: x.uid,
+          updatedAt: Date.now(),
+          jobID: job.jobID,
+          jobTitle: job.jobTitle,
+          jobType: "Interview",
+          isRequest: false,
+          jobOfferd: false,
+          isHired: false,
+        }),
+      });
 
-      const testNewChannel = async (x) => {
+      await updateDoc(doc(db, "users", x.uid, "Applied", job.jobTitle), {
+        hasUnreadMessage: true,
+        interviewStarted: true,
+        channelId: newChatRef.id,
+      });
 
-        const chatRef = collection(db, "chats");
-        const userChatsRef = collection(db, "User Messages");
-    
-        try {
-          const newChatRef = doc(chatRef);
-    
-          await setDoc(newChatRef, {
-            createdAt: serverTimestamp(),
-            messages: [],
-            id: newChatRef.id,
-            jobID: job.jobID,
-            jobTitle: job.jobTitle,
-          });
-    
-          await updateDoc(doc(userChatsRef, x.uid), {
-            chats: arrayUnion({
-              chatId: newChatRef.id,
-              lastMessage: "",
-              receiverId: currentUser.uid,
-              updatedAt: Date.now(),
-              jobID: job.jobID,
-              jobTitle: job.jobTitle,
-              jobType: "Interview",
-              isRequest: false,
-              jobOfferd: false,
-              isHired: false,
-            }),
-          });
-    
-          await updateDoc(doc(userChatsRef, currentUser.uid), {
-            chats: arrayUnion({
-              chatId: newChatRef.id,
-              lastMessage: "",
-              receiverId: x.uid,
-              updatedAt: Date.now(),
-              jobID: job.jobID,
-              jobTitle: job.jobTitle,
-              jobType: "Interview",
-              isRequest: false,
-              jobOfferd: false,
-              isHired: false,
-            }),
-          });
-    
-          await updateDoc(
-            doc(db, "users", x.uid, "Applied", job.jobTitle),
-            {
-              hasUnreadMessage: true,
-              interviewStarted: true,
-              channelId: newChatRef.id,
-            }
-          );
-    
-          await updateDoc(
-            doc(
-              db,
-              "employers",
-              currentUser.uid,
-              "Posted Jobs",
-              job.jobTitle,
-              "Applicants",
-              x.uid
-            ),
-            {
-              channelId: newChatRef.id,
-            }
-          ).then(() => {
-            setTimeout(() => {
-              setIsLoading(false)
-              navigate("/ChatHolder", {
-                state: {
-                  selectedChannel: newChatRef.id,
-                },
-              });
-            }, 1000);
-          });
-        } catch (err) {
-          console.log(err);
+      await updateDoc(
+        doc(
+          db,
+          "employers",
+          currentUser.uid,
+          "Posted Jobs",
+          job.jobTitle,
+          "Applicants",
+          x.uid
+        ),
+        {
+          channelId: newChatRef.id,
         }
-    
+      ).then(() => {
         setTimeout(() => {
-          //   setIsLoading(false);
+          setIsLoading(false);
+          navigate("/ChatHolder", {
+            state: {
+              selectedChannel: newChatRef.id,
+            },
+          });
         }, 1000);
-      };
+      });
+    } catch (err) {
+      console.log(err);
+    }
 
+    setTimeout(() => {
+      //   setIsLoading(false);
+    }, 1000);
+  };
 
-      const [selectedApplicantToBeDeleted, setSelectedApplicantToBeDeleted] = useState(null)
+  const [selectedApplicantToBeDeleted, setSelectedApplicantToBeDeleted] =
+    useState(null);
 
-      const handleDeleteApplicantModal = (x) => {
-        onOpenDeleteApplicant()
-        setSelectedApplicantToBeDeleted(x)
+  const handleDeleteApplicantModal = (x) => {
+    onOpenDeleteApplicant();
+    setSelectedApplicantToBeDeleted(x);
+  };
 
+  const deleteApplicant = () => {
+    let newApplicantsArray = [];
+    for (let i = 0; i < applicant.length; i++) {
+      if (applicant[i].uid !== selectedApplicantToBeDeleted) {
+        newApplicantsArray.push(applicant[i]);
+        console.log("added", applicant[i].uid, selectedApplicantToBeDeleted);
       }
 
+      console.log("newAplicants array", newApplicantsArray);
 
+      setApplicant(newApplicantsArray);
+    }
 
-      const deleteApplicant = () => {
-        let newApplicantsArray = []
-        for (let i = 0; i < applicant.length; i++){
-        if (applicant[i].uid !== selectedApplicantToBeDeleted) {
-          newApplicantsArray.push(applicant[i])
-          console.log("added", applicant[i].uid, selectedApplicantToBeDeleted)
-        }  
+    onCloseDeleteApplicant();
 
-        console.log("newAplicants array",newApplicantsArray)
+    //   deleteDoc(doc(db, "employers", currentUser.uid, "Posted Jobs", job.jobTitle,"Applicants", selectedApplicantToBeDeleted))
+    //   .then(() => {
+    //     onCloseDeleteApplicant()
+    //     console.log("firing")
+    // navigate("/JobDetails", {state: {applicantReset: true}})
 
-        setApplicant(newApplicantsArray)
-        }
-
-      onCloseDeleteApplicant()
-
-
-      //   deleteDoc(doc(db, "employers", currentUser.uid, "Posted Jobs", job.jobTitle,"Applicants", selectedApplicantToBeDeleted))
-      //   .then(() => {
-      //     onCloseDeleteApplicant()
-      //     console.log("firing")
-      // navigate("/JobDetails", {state: {applicantReset: true}})
-      
-      // // onClose()
-      //   })
-      //   .catch((e) => {
-      //     console.log(e)
-      //   })
-        
-        }
+    // // onClose()
+    //   })
+    //   .catch((e) => {
+    //     console.log(e)
+    //   })
+  };
 
   return (
     <>
@@ -563,21 +550,28 @@ const JobDetails = () => {
                       }
                       class="py-2 px-2.5 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border border-stone-200 bg-white text-stone-800 shadow-sm hover:bg-stone-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-stone-50 "
                     >
-                      Edit                
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="flex-shrink-0 size-4">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-</svg>
-
+                      Edit
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="flex-shrink-0 size-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                        />
+                      </svg>
                     </button>
                     <button
                       type="button"
-                      onClick={() =>
-                        onOpenDelete()
-                      }
+                      onClick={() => onOpenDelete()}
                       class="py-2 px-2.5 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border  bg-red-500 text-white shadow-sm hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none "
                     >
                       Delete Job
-                      
                     </button>
                   </div>
                 </div>
@@ -687,7 +681,7 @@ const JobDetails = () => {
                                 id="hs-basic-with-description"
                                 class="relative w-[3.25rem] h-7 p-px bg-gray-100 border-transparent text-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:ring-blue-600 disabled:opacity-50 disabled:pointer-events-none checked:bg-none checked:text-blue-600 checked:border-blue-600 focus:checked:border-blue-600 
 
-  before:inline-block before:size-6 before:bg-white checked:before:bg-blue-200 before:translate-x-0 checked:before:translate-x-full before:rounded-full before:shadow before:transform before:ring-0 before:transition before:ease-in-out before:duration-200 dark:before:bg-neutral-400 dark:checked:before:bg-blue-200"
+                                  before:inline-block before:size-6 before:bg-white checked:before:bg-blue-200 before:translate-x-0 checked:before:translate-x-full before:rounded-full before:shadow before:transform before:ring-0 before:transition before:ease-in-out before:duration-200 dark:before:bg-neutral-400 dark:checked:before:bg-blue-200"
                                 checked={job.isActive}
                                 onClick={() => handleChangeJobActivity()}
                               />
@@ -806,7 +800,7 @@ const JobDetails = () => {
                                   for="hs-pro-epdsku"
                                   class="block mb-2 text-sm font-medium text-stone-800 "
                                 >
-                                  Description 
+                                  Description
                                 </label>
                               </Box>
                               <AccordionIcon />
@@ -917,7 +911,6 @@ const JobDetails = () => {
                                         </button>
                                       </div>
                                     </th>
-                                    
 
                                     <th scope="col" class="min-w-36">
                                       <div class="hs-dropdown relative inline-flex w-full cursor-default">
@@ -1048,8 +1041,6 @@ const JobDetails = () => {
                                               </div>
                                             </td>
 
-                                        
-
                                             <td class="size-px whitespace-nowrap px-4 py-1 cursor-default">
                                               {applicant.channelId ? (
                                                 <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
@@ -1096,24 +1087,21 @@ const JobDetails = () => {
                                             </td>
                                             <td class="size-px py-2 px-3 space-x-2">
                                               <div className=" flex  w-full ">
-                                            
-                                                  <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                      viewResume(applicant)
-                                                    }
-                                                    className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
-                                                  >
-                                                    View Resume
-                                                  </button>
-                                          
+                                                <button
+                                                  type="button"
+                                                  onClick={() =>
+                                                    viewResume(applicant)
+                                                  }
+                                                  className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
+                                                >
+                                                  View Resume
+                                                </button>
                                               </div>
                                             </td>
                                             <td class="size-px py-2 px-3 space-x-2">
                                               <div className=" flex  w-full ">
                                                 {applicant.channelId ? (
                                                   <>
-                                                  
                                                     {applicant.hasUnreadMessage ? (
                                                       <button
                                                         className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
@@ -1143,8 +1131,12 @@ const JobDetails = () => {
                                                   </>
                                                 ) : (
                                                   <button
-                                                    type="button"                                                   
-                                                    onClick={() => createInterviewChat(applicant)}
+                                                    type="button"
+                                                    onClick={() =>
+                                                      createInterviewChat(
+                                                        applicant
+                                                      )
+                                                    }
                                                     className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
                                                   >
                                                     Contact
@@ -1154,12 +1146,16 @@ const JobDetails = () => {
                                             </td>
                                             <td class="size-px py-2 px-3 space-x-2">
                                               <div className=" flex  w-full ">
-                                              <button
-                            onClick={() => handleDeleteApplicantModal(applicant.uid)}
-                            class="  w-full py-2 px-3 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none "
-                          >
-                            Delete
-                          </button>
+                                                <button
+                                                  onClick={() =>
+                                                    handleDeleteApplicantModal(
+                                                      applicant.uid
+                                                    )
+                                                  }
+                                                  class="  w-full py-2 px-3 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none "
+                                                >
+                                                  Delete
+                                                </button>
                                               </div>
                                             </td>
                                           </tr>
@@ -1177,13 +1173,15 @@ const JobDetails = () => {
                 </div>
 
                 {applicantVisible ? (
-                                                // <ApplicantModal
-                                                //   props={selectedApplicant}
-                                                //   jobTitle={job.jobTitle}
-                                                // />
-                                                <ApplicantCard   props={selectedApplicant}
-                                                jobTitle={job.jobTitle}/>
-                                              ) : null}
+                  // <ApplicantModal
+                  //   props={selectedApplicant}
+                  //   jobTitle={job.jobTitle}
+                  // />
+                  <ApplicantCard
+                    props={selectedApplicant}
+                    jobTitle={job.jobTitle}
+                  />
+                ) : null}
 
                 <Modal isOpen={isOpen} onClose={onClose}>
                   <ModalOverlay />
@@ -1468,7 +1466,7 @@ const JobDetails = () => {
                                   </div>
                                   {applicantVisible ? (
                                     // <ApplicantModal props={applicant} />
-                                    <ApplicantCard props={applicant}/>
+                                    <ApplicantCard props={applicant} />
                                   ) : null}
                                 </>
 
@@ -1491,20 +1489,17 @@ const JobDetails = () => {
         </main>
       ) : null}
 
-<Modal isOpen={isOpenDelete} onClose={onCloseDelete} size="xl">
-                    <ModalOverlay />
+      <Modal isOpen={isOpenDelete} onClose={onCloseDelete} size="xl">
+        <ModalOverlay />
         <ModalContent>
-        <ModalHeader>
-          Delete job?
-        </ModalHeader>
+          <ModalHeader>Delete job?</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <p>Are you sure you want to remove this job post?</p>
           </ModalBody>
 
           <ModalFooter>
-
-          <button
+            <button
               type="button"
               class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-black text-sm font-medium rounded-lg shadow-sm align-middle focus:outline-none focus:ring-1 focus:ring-blue-300 "
               data-hs-overlay="#hs-pro-datm"
@@ -1522,37 +1517,47 @@ const JobDetails = () => {
             </button>
           </ModalFooter>
         </ModalContent>
-                    </Modal>
+      </Modal>
 
-                    <Modal isOpen={isOpenResume} onClose={onCloseResume} size="5xl">
-                      <ModalOverlay />
-                      <ModalContent>
-                      <div>
-      <Document className="" file={selectedApplicantResume} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page className="" height="500" width="1000" pageNumber={pageNumber} />
-      </Document> 
-      {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
-      <p>
-        Page {pageNumber} of {numPages}
-      </p>
-    </div>
-                      </ModalContent>
-                    </Modal>
-
-                    <Modal isOpen={isOpenDeleteApplicant} onClose={onCloseDeleteApplicant} size="xl">
-                    <ModalOverlay />
+      <Modal isOpen={isOpenResume} onClose={onCloseResume} size="5xl">
+        <ModalOverlay />
         <ModalContent>
-        <ModalHeader>
-          Delete Applicant?
-        </ModalHeader>
+          <div>
+            <Document
+              className=""
+              file={selectedApplicantResume}
+              onLoadSuccess={onDocumentLoadSuccess}
+            >
+              <Page
+                className=""
+                height="500"
+                width="1000"
+                pageNumber={pageNumber}
+              />
+            </Document>
+            {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
+            <p>
+              Page {pageNumber} of {numPages}
+            </p>
+          </div>
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={isOpenDeleteApplicant}
+        onClose={onCloseDeleteApplicant}
+        size="xl"
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Delete Applicant?</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <p>Are you sure you want to remove this applicant?</p>
           </ModalBody>
 
           <ModalFooter>
-
-          <button
+            <button
               type="button"
               class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-black text-sm font-medium rounded-lg shadow-sm align-middle focus:outline-none focus:ring-1 focus:ring-blue-300 "
               data-hs-overlay="#hs-pro-datm"
@@ -1570,8 +1575,7 @@ const JobDetails = () => {
             </button>
           </ModalFooter>
         </ModalContent>
-                    </Modal>
-                    
+      </Modal>
     </>
   );
 };

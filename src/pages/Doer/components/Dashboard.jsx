@@ -274,7 +274,7 @@ const Dashboard = () => {
       w-[260px]
       hidden
       fixed inset-y-0 start-0 z-[60]
-      bg-white border-e border-gray-200
+      bg-white 
       xl:block lg:translate-x-0 lg:end-auto lg:bottom-0
      
      "
@@ -493,7 +493,7 @@ const Dashboard = () => {
             </nav>
           </div>
 
-          <footer class="lg:block absolute bottom-0 inset-x-0 border-t border-gray-200">
+          {/* <footer class="lg:block absolute bottom-0 inset-x-0 border-t border-gray-200">
             <div class="hs-dropdown [--auto-close:inside] relative flex">
               <div class="p-1 border-t border-gray-200">
                 {loggingOut ? (
@@ -515,7 +515,7 @@ const Dashboard = () => {
                 )}
               </div>
             </div>
-          </footer>
+          </footer> */}
         </div>
       </aside>
 

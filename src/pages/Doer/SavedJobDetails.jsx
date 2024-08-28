@@ -20,7 +20,6 @@ import {
   increment,
 } from "firebase/firestore";
 
-
 import { useLocation } from "react-router-dom";
 import {
   Center,
@@ -31,6 +30,7 @@ import {
   Box,
   Stack,
   CloseButton,
+  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -40,9 +40,16 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
-
+import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "./Chat/lib/userStore";
+import Markdown from "react-markdown";
 
 const SavedJobDetails = () => {
   const { job } = useSavedJobStore();
@@ -53,9 +60,9 @@ const SavedJobDetails = () => {
   const [numberOfRatings, setNumberOfRatings] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const {currentUser} = useUserStore()
+  const { currentUser } = useUserStore();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (job) {
@@ -170,6 +177,12 @@ const SavedJobDetails = () => {
   console.log("job", job);
   console.log("applicant", applicant);
 
+  const {
+    isOpen: isOpenNoResume,
+    onOpen: onOpenNoResume,
+    onClose: onCloseNoResume,
+  } = useDisclosure();
+
   const handleSendEmail = async (x) => {
     const response = await fetch(
       "https://emailapi-qi7k.onrender.com/sendNewApplicantEmail",
@@ -194,38 +207,37 @@ const SavedJobDetails = () => {
   const [editBusinessVisible, setEditBusinessVisible] = useState(false);
 
   useEffect(() => {
-    console.log("location", location.state)
+    console.log("location", location.state);
     if (location.state === null) {
     } else {
       if (location.state.editReset) {
         setEditVisible(false);
       } else if (location.state.applicantReset) {
-        console.log("hello",location.state.applicantReset)
-        setApplicantVisible(false)
+        console.log("hello", location.state.applicantReset);
+        setApplicantVisible(false);
       }
     }
   }, [location]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [applicantVisible, setApplicantVisible] = useState(false)
-  
+  const [applicantVisible, setApplicantVisible] = useState(false);
+
   const handleApplicantVisible = () => {
-    setApplicantVisible(true)
+    setApplicantVisible(true);
     //also pass job info so chat can be started.
-  }
+  };
 
   const navigateToChannel = (x) => {
     console.log("this is what youre passing", x);
     navigate("/ChatHolder", {
       state: { selectedChannel: x.channelID, applicant: x },
     });
-
   };
 
   const applyAndNavigate = (x) => {
     //If anything is going wring in the application or saved job flow it's because I changed this on 5/27/24 at 2:30. Revert to previous if any issues
 
-    if (currentUser.isOnboarded === true) {
+    if (currentUser.resumeUploaded === true) {
       updateDoc(doc(db, "employers", x.employerID, "Posted Jobs", x.jobTitle), {
         hasNewApplicant: true,
       })
@@ -259,15 +271,15 @@ const SavedJobDetails = () => {
           //uh oh
         });
 
-        deleteDoc(doc(db, "users", currentUser.uid, "Saved Jobs", x.jobID), {
-          hasNewApplicant: true,
+      deleteDoc(doc(db, "users", currentUser.uid, "Saved Jobs", x.jobID), {
+        hasNewApplicant: true,
+      })
+        .then(() => {
+          //user info submitted to Job applicant file
         })
-          .then(() => {
-            //user info submitted to Job applicant file
-          })
-          .catch((error) => {
-            //uh oh
-          });
+        .catch((error) => {
+          //uh oh
+        });
 
       const docRef = doc(
         db,
@@ -321,14 +333,14 @@ const SavedJobDetails = () => {
       handleSendEmail(x);
       console.log(x.employerEmail);
     } else {
-      // onOpenNotOnboarded();
+      onOpenNoResume();
     }
   };
 
   const handleOnClose = () => {
-    onClose()
-    navigate("/DoerSavedJobs")
-  }
+    onClose();
+    navigate("/DoerSavedJobs");
+  };
   return (
     <>
       <Header />
@@ -336,17 +348,14 @@ const SavedJobDetails = () => {
       {job ? (
         <main id="content" class="lg:ps-[260px] pt-[59px]">
           <div class="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
-           {currentUser ? (currentUser.isBusiness ? (null) : (null)) : (null)}
+            {currentUser ? (currentUser.isBusiness ? null : null) : null}
 
             <div class="py-2 sm:pb-0 sm:pt-5 space-y-5">
               <div class="grid sm:flex sm:justify-between sm:items-center gap-3 sm:gap-5">
                 <div class="flex flex-wrap justify-between items-center gap-2">
                   <div>
                     <p class="inline-flex justify-between items-center gap-x-1">
-                      <a
-                        class="text-sm text-sky-400 decoration-2  font-medium cursor-default "
-                      
-                      >
+                      <a class="text-sm text-sky-400 decoration-2  font-medium cursor-default ">
                         Active
                       </a>
                     </p>
@@ -355,8 +364,6 @@ const SavedJobDetails = () => {
                     </h1>
                   </div>
                 </div>
-
-               
               </div>
 
               <div class="grid grid-cols-1 lg:grid-cols-6 gap-5">
@@ -367,188 +374,186 @@ const SavedJobDetails = () => {
                         Post Info
                       </h2>
                       <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full cursor-default">
-                             <svg
-                               class="flex-shrink-0 size-3.5"
-                               xmlns="http://www.w3.org/2000/svg"
-                               width="24"
-                               height="24"
-                               viewBox="0 0 24 24"
-                               fill="none"
-                               stroke="currentColor"
-                               stroke-width="2"
-                               stroke-linecap="round"
-                               stroke-linejoin="round"
-                             >
-                               <polyline points="20 6 9 17 4 12" />
-                             </svg>
-                            Active
-                           </span>
+                        <svg
+                          class="flex-shrink-0 size-3.5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Active
+                      </span>
                     </div>
 
                     <div class="p-5 space-y-4">
-                    <div class="grid sm:grid-cols-2 gap-3 sm:gap-5">
-                      <div>
-                        <label
-                          for="hs-pro-epdnm"
-                          class="block mb-2 text-sm font-medium text-stone-800 "
-                        >
-                          Job Title
-                        </label>
-                        <p className="cursor-default ">{job.jobTitle}</p>
-                      </div> 
-                      
-                      {/* <div className="ml-20">
-                        <label
-                          for="hs-pro-epdnm"
-                          class="block mb-2 text-sm font-medium text-stone-800 "
-                        >
-                          Total Views
-                        </label>
-                        <p className="cursor-default ">{job.totalViews}</p>
-                      </div>  */}
-                   
-                        
-                        </div>
-                        <div class="grid sm:grid-cols-2 gap-3 sm:gap-5">
-                      <div>
-                        <div className="cursor-default ">
+                      <div class="grid sm:grid-cols-2 gap-3 sm:gap-5">
+                        <div>
                           <label
-                            for="hs-pro-epdsku"
+                            for="hs-pro-epdnm"
                             class="block mb-2 text-sm font-medium text-stone-800 "
                           >
-                           Employer
+                            Name
                           </label>
-                          {job.companyName}
+                          <p className="cursor-default ">{job.jobTitle}</p>
+                        </div>
+                        
+                      </div>
+                      <div class="grid sm:grid-cols-2 gap-3 sm:gap-5">
+                        <div>
+                          <div className="cursor-default ">
+                            <label
+                              for="hs-pro-epdsku"
+                              class="block mb-2 text-sm font-medium text-stone-800 "
+                            >
+                              Location
+                            </label>
+                            {job.streetAddress}, {job.city}, MN
+                          </div>
+                        </div>
+                        <div>
+                          
                         </div>
                       </div>
-                      <div>
                     
-                      </div>
-                     
-                      </div>
-                        <div class="grid sm:grid-cols-2 gap-3 sm:gap-5">
-                      <div>
-                        <div className="cursor-default ">
-                          <label
-                            for="hs-pro-epdsku"
-                            class="block mb-2 text-sm font-medium text-stone-800 "
-                          >
-                            Location
-                          </label>
-                          {job.streetAddress}, {job.city}, MN
+                          <div className="cursor-default ">
+                            <label
+                              for="hs-pro-epdsku"
+                              class="block mb-2 text-sm font-medium text-stone-800 "
+                            >
+                              Position Type
+                            </label>
+
+                            {job.isFullTimePosition ? (
+                              <p>Full-time</p>
+                            ) : (
+                              <p>Part-time</p>
+                            )}
+                          </div>
+                       
+      
+
+                      <div class="grid sm:grid-cols-2 gap-3 sm:gap-5 mb-6">
+                       
+                            <div className="cursor-default ">
+                              <label
+                                for="hs-pro-epdsku"
+                                class="block mb-2 text-sm font-medium text-stone-800 "
+                              >
+                                Pay Type
+                              </label>
+
+                              {job.isSalaried ? <p>Salary</p> : <p>Hourly</p>}
+                            </div>
+                        
+                          
+                        
+                        
+
+                        <div className="ml-20">
+                        
+                          
+                              <div className="cursor-default ">
+                                <label
+                                  for="hs-pro-epdsku"
+                                  class="block mb-2 text-sm font-medium text-stone-800 "
+                                >
+                                  Pay Rate
+                                </label>
+                                {job.isSalaried ? (
+                                  <p>
+                                    ${job.lowerRate}/year - ${job.upperRate}
+                                    /year
+                                  </p>
+                                ) : (
+                                  <p>
+                                    ${job.lowerRate}/hour - ${job.upperRate}
+                                    /hour
+                                  </p>
+                                )}
+                              </div>
+                          
+                         
                         </div>
                       </div>
-                      <div>
-                        {/* <div className="cursor-default ml-20">
-                          <label
-                            for="hs-pro-epdsku"
-                            class=" block mb-2 text-sm font-medium text-stone-800 "
-                          >
-                            Status
-                          </label>
-                        Posted
-                        </div> */}
-                      </div>
-                     
-                      </div>
-                      {job ? (job.isPostedByBusiness  ? (<div className="cursor-default ">
-                        <label
-                          for="hs-pro-epdsku"
-                          class="block mb-2 text-sm font-medium text-stone-800 "
-                        >
-                          Position Type
-                        </label>
-                        
-                        {job.isFullTimePosition ? (<p>Full-time</p>) : (<p>Part-time</p>)}
-                      </div>) : (null)) : (null)}
 
-                      {job ? (job.isPostedByBusiness  ? (     <div className="cursor-default ">
-                        <label
-                          for="hs-pro-epdsku"
-                          class="block mb-2 text-sm font-medium text-stone-800 "
-                        >
-                          Pay Type
-                        </label>
-                        
-                        {job.isSalaried ? <p>Salary</p> : <p>Hourly</p>}
-                      </div>) : (     <div className="cursor-default ">
-                        <label
-                          for="hs-pro-epdsku"
-                          class="block mb-2 text-sm font-medium text-stone-800 "
-                        >
-                          Pay Type
-                        </label>
-                        
-                        {job.isFlatRate ? <p>Flat Rate</p> : <p>Hourly</p>}
-                      </div>)) : (null)}
-                      
-                 
-                      {job ? (job.isPostedByBusiness  ? (     <div className="cursor-default ">
-                        <label
-                          for="hs-pro-epdsku"
-                          class="block mb-2 text-sm font-medium text-stone-800 "
-                        >
-                          Pay Rate
-                        </label>
-                        {job.isSalaried ? ( <p>
-                            ${job.lowerRate}/year - ${job.upperRate}/year
-                          </p>) : ( <p>
-                            ${job.lowerRate}/hour - ${job.upperRate}/hour
-                          </p>)}
-                       
-                      </div>) : (     <div className="cursor-default ">
-                        <label
-                          for="hs-pro-epdsku"
-                          class="block mb-2 text-sm font-medium text-stone-800 "
-                        >
-                          Pay Rate
-                        </label>
-                        {job.isFlatRate ? (
-                          <p>${job.flatRate} total</p>
-                        ) : (
-                          <p>
-                            ${job.lowerRate}/hour - ${job.upperRate}/hour
-                          </p>
-                        )}
-                      </div>)) : (null)}
-                     
+                      <div className="mb-10 h-[60px]"></div>
 
+                      <Accordion allowMultiple mt={5}>
+                        <AccordionItem>
+                          <h2>
+                            <AccordionButton>
+                              <Box flex="1" textAlign="left">
+                                <label
+                                  for="hs-pro-epdsku"
+                                  class="block mb-2 text-sm font-medium text-stone-800 "
+                                >
+                                  Description
+                                </label>
+                              </Box>
+                              <AccordionIcon />
+                            </AccordionButton>
+                          </h2>
+                          <AccordionPanel pb={4}>
+                            <div className="prose prose-li  font-inter marker:text-black ">
+                              <Markdown>{job.description}</Markdown>
+                            </div>
+                          </AccordionPanel>
+                        </AccordionItem>
 
-                      <div className="cursor-default ">
-                        <label class="block mb-2 text-sm font-medium text-stone-800 ">
-                          Description
-                        </label>
-                        {job.description}
-                      </div>
+                        <AccordionItem>
+                          <h2>
+                            <AccordionButton>
+                              <Box as="span" flex="1" textAlign="left">
+                                <label
+                                  for="hs-pro-epdsku"
+                                  class="block mb-2 text-sm font-medium text-stone-800 "
+                                >
+                                  Qualifications
+                                </label>
+                              </Box>
+                              <AccordionIcon />
+                            </AccordionButton>
+                          </h2>
+                          <AccordionPanel pb={4}>
+                            <div className="prose prose-li marker:text-black text-gray-800">
+                              <Markdown>{job.applicantDescription}</Markdown>
+                            </div>
+                          </AccordionPanel>
+                        </AccordionItem>
 
-                      {job ? (job.isPostedByBusiness ? (<div className="cursor-default ">
-                        <label class="block mb-2 text-sm font-medium text-stone-800 ">
-                          Applicant Description
-                        </label>
-                        {job.applicantDescription}
-                      </div>) : (null)) : (null)}
-
-                      {job ? (job.isPostedByBusiness  && job.benefitsDescription ? (<div className="cursor-default ">
-                        <label class="block mb-2 text-sm font-medium text-stone-800 ">
-                          Benefits Description
-                        </label>
-                        {job.benefitsDescription}
-                      </div>) : (null)) : (null)}
-                      <div class="flex flex-row-reverse">
-                      <button
-                                          type="button"
-                                          class="ml-auto py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                          data-hs-overlay="#hs-pro-datm"
-                                          onClick={() =>
-                                            applyAndNavigate(job)
-                                          }
-                                        >
-                                          Apply
-                                        </button>
-                                        </div>
+                        {job.benefitsDescription ? (
+                          <AccordionItem>
+                            <h2>
+                              <AccordionButton>
+                                <Box as="span" flex="1" textAlign="left">
+                                  <label
+                                    for="hs-pro-epdsku"
+                                    class="block mb-2 text-sm font-medium text-stone-800 "
+                                  >
+                                    Benefits 
+                                  </label>
+                                </Box>
+                                <AccordionIcon />
+                              </AccordionButton>
+                            </h2>
+                            <AccordionPanel pb={4}>
+                              <div className="prose prose-li marker:text-black text-gray-800">
+                                <Markdown>{job.benefitsDescription}</Markdown>
+                              </div>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        ) : null}
+                      </Accordion>
                     </div>
+                    {/* <button onClick={() => applyAndNavigate(job)}> apply</button> */}
                   </div>
-
 
                   {/* 
             
@@ -677,46 +682,58 @@ const SavedJobDetails = () => {
               </div>
           
             </div> */}
-
-
-
-
-          
-          
                 </div>
-
-                
-        
-               
               </div>
             </div>
           </div>
         </main>
       ) : null}
 
-<Modal isOpen={isOpen} onClose={onClose}>
-                  <ModalOverlay />
-                  <ModalContent>
-                    <ModalHeader>Success!</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                      <Text>Application submitted.</Text>
-                    </ModalBody>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Application submitted.</Text>
+          </ModalBody>
 
-                    <ModalFooter>
-                    <button
-                                          type="button"
-                                          class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                          data-hs-overlay="#hs-pro-datm"
-                                          onClick={() =>
-                                         handleOnClose()
-                                          }
-                                        >
-                                          close
-                                        </button>
-                    </ModalFooter>
-                  </ModalContent>
-                </Modal>
+          <ModalFooter>
+            <button
+              type="button"
+              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => handleOnClose()}
+            >
+              close
+            </button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isOpenNoResume} onClose={onCloseNoResume}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Complete your profile</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              Please upload a resume to your profile before applying for open
+              positions
+            </Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={() => navigate("/UserProfile")}
+            >
+              Upload my resume
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

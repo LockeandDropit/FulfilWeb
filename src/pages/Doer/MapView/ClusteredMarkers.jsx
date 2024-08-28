@@ -2292,7 +2292,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
                       type="button"
                       class="py-3 px-6 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800  lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
                       data-hs-overlay="#hs-pro-datm"
-                      onClick={() => saveJob(selectedJobFromGroup)}
+                      onClick={() => saveJob(businessPostedJobs)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

@@ -335,8 +335,8 @@ search()
                   <input
                     onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
                     onChange={(e) => handleSearch(e.target.value)}
-                    class="placeholder:text-black placeholder:font-normal placeholder:text-base  py-3.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                    placeholder="Search"
+                    class="placeholder:text-gray-600 placeholder:font-normal placeholder:text-base  py-3.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                    placeholder="Job Title"
                   />
                   {/* {jobsInCategory && viewDropDown ? (
                     <div class="absolute w-[320px] z-50  mb-2 py-3 px-4 block  bg-white border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
@@ -385,7 +385,7 @@ search()
                     id="hs-select-label"
                     class=" py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-medium focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                   >
-                    <option value={null}>Position</option>
+                    <option value={null}>Job Type</option>
 
                     <option value={true} class="text-medium">Full-time</option>
                     <option value={false}>Part-time</option>

@@ -15,6 +15,7 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  increment
 } from "firebase/firestore";
 import { db, auth } from "../../firebaseConfig";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
@@ -24,6 +25,13 @@ import { useMediaQuery } from "@chakra-ui/react";
 import { useUserStore } from "./Chat/lib/userStore";
 
 import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -33,8 +41,11 @@ import {
   ModalCloseButton,
   useDisclosure,
   Center,
-  Spinner
+  Spinner,
+  Text,
+  Button
 } from "@chakra-ui/react";
+import Markdown from "react-markdown";
 
 
 // import { addJobStore } from "./lib/addJobStore";
@@ -66,17 +77,29 @@ const DoerSavedJobs = () => {
   }, []);
 
 
+  const {
+    isOpen: isOpenDrawerSingle,
+    onOpen: onOpenDrawerSingle,
+    onClose: onCloseDrawerSingle,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenNoResume,
+    onOpen: onOpenNoResume,
+    onClose: onCloseNoResume,
+  } = useDisclosure();
 
 
+  const [openInfoWindowMarkerID, setOpenInfoWindowMarkerID] =  useState({
+    lat: 1,
+    lng: 1,
+  });
 
-// useEffect(() => {
-//   if (jobHeld !== null && user !== null) {
-//     submitJob()
-//     onOpen()
-//     addJobInfo(null)
-//   }
-
-// },[jobHeld, user])
+  const handlePostedByBusinessToggleOpen = (x) => {
+    setOpenInfoWindowMarkerID(x);
+    // updateJobListingViews(x);
+    onOpenDrawerSingle();
+    console.log("from on click", x);
+  };
 
   useEffect(() => {
     if (user != null) {
@@ -144,27 +167,22 @@ const DoerSavedJobs = () => {
     setTimeout(() => navigate("/SavedJobDetails"), 500);
   };
 
-  const handleStoreAndNavigateHired = (x) => {
-    console.log(x.jobTitle, x.jobID);
-    fetchJobInfo(user.uid, x.jobID, "Saved Jobs", x.jobTitle);
-    if (x.hasNewNotification === true) {
-      updateDoc(
-        doc(db, "employers", user.uid, "Jobs In Progress", x.jobTitle),
-        {
-          hasNewNotification: false,
-        }
-      )
-        .then(() => {
-          //user info submitted to Job applicant file
-        })
-        .catch((error) => {
-          //uh oh
-          console.log(error);
-        });
-    }
-    //set store info... uid, jobTitle, jobID,.
+  const handleSendEmail = async (x) => {
+    const response = await fetch(
+      "https://emailapi-qi7k.onrender.com/sendNewApplicantEmail",
 
-    setTimeout(() => navigate("/JobDetailsHired"), 500);
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: x.employerEmail }),
+      }
+    );
+
+    const { data, error } = await response.json();
+    console.log("Any issues?", error);
   };
 
   const handleStoreAndNavigateInReview = (x) => {
@@ -187,7 +205,140 @@ const DoerSavedJobs = () => {
     setTimeout(() => navigate("/JobDetailsReadyToPay"), 500);
   };
 
+  const [dateApplied, setDateApplied] = useState(null);
+
+  useEffect(() => {
+    //credit https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript?rq=3 mohshbool & Samuel Meddows
+    let initialDate = new Date();
+    var dd = String(initialDate.getDate()).padStart(2, "0");
+    var mm = String(initialDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var yyyy = initialDate.getFullYear();
+
+    var today = mm + "/" + dd + "/" + yyyy;
+
+    setDateApplied(today);
+  }, []);
+
   const [isLoading, setIsLoading] = useState(false);
+
+  const applyAndNavigate = (x) => {
+    //If anything is going wring in the application or saved job flow it's because I changed this on 5/27/24 at 2:30. Revert to previous if any issues
+
+    if (currentUser.resumeUploaded) {
+      updateDoc(doc(db, "employers", x.employerID, "Posted Jobs", x.jobTitle), {
+        hasNewApplicant: true,
+      })
+        .then(() => {
+          //user info submitted to Job applicant file
+        })
+        .catch((error) => {
+          //uh oh
+        });
+
+      setDoc(
+        doc(
+          db,
+          "employers",
+          x.employerID,
+          "Posted Jobs",
+          x.jobTitle,
+          "Applicants",
+          user.uid
+        ),
+        {
+          applicantID: user.uid,
+          isNewApplicant: true,
+          dateApplied: dateApplied,
+        }
+      )
+        .then(() => {
+          //user info submitted to Job applicant file
+          // navigation.navigate("BottomUserTab");
+        })
+        .catch((error) => {
+          //uh oh
+        });
+
+        deleteDoc(doc(db, "users", currentUser.uid, "Saved Jobs", x.jobID), {
+          hasNewApplicant: true,
+        })
+          .then(() => {
+            //user info submitted to Job applicant file
+          })
+          .catch((error) => {
+            //uh oh
+          });
+
+      const docRef = doc(
+        db,
+        "employers",
+        x.employerID,
+        "Posted Jobs",
+        x.jobTitle
+      );
+
+      updateDoc(docRef, { totalApplicants: increment(1) });
+
+      setDoc(doc(db, "users", user.uid, "Applied", x.jobTitle), {
+        requirements: x.requirements ? x.requirements : null,
+        requirements2: x.requirements2 ? x.requirements2 : null,
+        requirements3: x.requirements3 ? x.requirements3 : null,
+        isFlatRate: x.isFlatRate ? x.isFlatRate : null,
+        niceToHave: x.niceToHave ? x.niceToHave : null,
+        datePosted: x.datePosted ? x.datePosted : null,
+
+        jobID: x.jobID,
+        jobTitle: x.jobTitle ? x.jobTitle : null,
+        hourlyRate: x.hourlyRate ? x.hourlyRate : null,
+        streetAddress: x.streetAddress ? x.streetAddress : null,
+        city: x.city ? x.city : null,
+        state: x.state ? x.state : null,
+        zipCode: x.zipCode ? x.zipCode : null,
+        description: x.description ? x.description : null,
+        addressNumber: x.addressNumber ? x.addressNumber : null,
+        addressName: x.addressName ? x.addressName : null,
+        lowerRate: x.lowerRate ? x.lowerRate : null,
+        upperRate: x.upperRate ? x.upperRate : null,
+        addressSuffix: x.addressSuffix ? x.addressSuffix : null,
+        locationLat: x.locationLat ? x.locationLat : null,
+        locationLng: x.locationLng ? x.locationLng : null,
+        businessName: x.businessName ? x.businessName : null,
+        employerID: x.employerID ? x.employerID : null,
+        employerFirstName: x.employerFirstName ? x.employerFirstName : null,
+        flatRate: x.flatRate ? x.flatRate : null,
+        isHourly: x.isHourly ? x.isHourly : null,
+        category: x.category ? x.category : null,
+        isOneTime: x.isOneTime ? x.isOneTime : null,
+        lowerCaseJobTitle: x.lowerCaseJobTitle ? x.lowerCaseJobTitle : null,
+      })
+        .then(() => {
+          onOpen();
+        })
+        .catch((error) => {
+          //uh oh
+        });
+
+      handleSendEmail(x);
+      console.log(x.employerEmail);
+    } else {
+      onOpenNoResume();
+      // pop modal here
+    }
+  };
+
+
+  const deleteSavedJob = (x) => {
+    deleteDoc(doc(db, "users", currentUser.uid, "Saved Jobs", x.jobID), {
+      hasNewApplicant: true,
+    })
+      .then(() => {
+      
+        onCloseDrawerSingle()
+      })
+      .catch((error) => {
+        //uh oh
+      });
+  }
 
   // useEffect(() => {
   //   const queryString = window.location.search;
@@ -345,13 +496,13 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
         <div class="p-2 sm:p-5 sm:py-0 md:pt-5 space-y-5">
           <div class="flex justify-between items-center gap-x-5">
             <h2 class="inline-block text-lg font-semibold text-gray-800 ">
-            My Dashboard
+            Saved Jobs
             </h2>
 
             
           </div>
 {isDesktop ? (    <div class="p-5 space-y-4 flex flex-col bg-white border border-gray-200 shadow-sm rounded-xl ">
-            <nav
+            {/* <nav
               class="relative  flex space-x-1 after:absolute after:bottom-0 after:inset-x-0 after:border-b-2 after:border-gray-200 "
               aria-label="Tabs"
               role="tablist"
@@ -367,10 +518,10 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                Saved Jobs
               </button>
              
-            </nav>
+            </nav> */}
 
             <div class="grid md:grid-cols-2 gap-y-2 md:gap-y-0 md:gap-x-5">
-              <div>
+              {/* <div>
                 <div class="relative">
                   <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
                     <svg
@@ -395,7 +546,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                     placeholder="Search projects"
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div class="flex justify-end items-center gap-x-2">
             
@@ -414,7 +565,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                   <div class="min-w-full inline-block align-middle">
                     <table class="min-w-full divide-y divide-gray-200 ">
                       <thead>
-                        <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
+                        <tr class=" divide-x divide-gray-200 ">
                           <th scope="col" class="px-3 py-2.5 text-start"></th>
 
                           <th scope="col" class="min-w-[250px]">
@@ -496,12 +647,14 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                     
 
                       {jobsInProgressMap.map((job) => (
+
+                        <>
                         <tbody class="divide-y divide-gray-200 ">
                           <tr class="divide-x divide-gray-200 ">
                             <td class="size-px whitespace-nowrap px-3 py-4"></td>
                             <td class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer">
                               <div
-                                onClick={() => handleStoreAndNavigateSaved(job)}
+                                onClick={() => handlePostedByBusinessToggleOpen(job)}
                                 class="w-full flex items-center gap-x-3"
                               >
                                 <div class="grow">
@@ -581,19 +734,457 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                             <td class="size-px py-2 px-3 space-x-2">
                               <div className=" flex  w-full ">
                               
-                                  <button
-                                    onClick={() =>
-                                      handleStoreAndNavigateSaved(job)
-                                    }
+                                  <button 
+                                onClick={() => handlePostedByBusinessToggleOpen(job)}
                                     className="py-2 px-3  w-full text-sm font-semibold rounded-md border border-transparent bg-sky-400 hover:bg-sky-500 text-white disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
                                   >
-                                   Apply
+                                 View
                                   </button>
                              
                               </div>
                             </td>
                           </tr>
                         </tbody>
+                          
+
+
+
+
+                        {openInfoWindowMarkerID.locationLat === job.locationLat ? (
+                                  <>
+                                    <Drawer
+                                      onClose={onCloseDrawerSingle}
+                                      isOpen={isOpenDrawerSingle}
+                                      size={"xl"}
+                                    >
+                                      <DrawerOverlay />
+                                      <DrawerContent>
+                                        <DrawerCloseButton />
+                                        <DrawerHeader>{job.jobTitle}</DrawerHeader>
+                                        <DrawerBody>
+                                          <div class="">
+                                         
+                                            <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto ">
+                                              <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                                                <div class="p-4">
+                                                  <div class=" ">
+                                                    <div className="flex">
+                                                      <label
+                                                        for="hs-pro-dactmt"
+                                                        class="block mb-2 text-xl font-medium text-gray-900"
+                                                      >
+                                                        {job.jobTitle}
+                                                      </label>
+                        
+                                                    
+                                                    </div>
+                                                    {job.employerProfilePicture ? (
+                                                        <>
+                                                          <div class="flex flex-col justify-center items-center size-[64px]  ">
+                                                            <img
+                                                              src={
+                                                                job.employerProfilePicture
+                                                              }
+                                                              class="flex-shrink-0 size-[64px] rounded-full"
+                                                              alt="company logo"
+                                                            />
+                                                          </div>
+                                                          <div className="flex flex-col">
+                                                              <p class="font-semibold text-xl text-gray-800 cursor-pointer">
+                                                                {job.companyName} 
+                                                              </p>
+                                                            </div>
+                                                        </>
+                                                      ) : (  <div className="flex flex-col">
+                                                        <p class="font-semibold text-xl text-gray-800 cursor-pointer">
+                                                          {job.companyName}
+                                                        </p>
+                                                      </div>)}
+                                                    {job.isFullTimePosition ===
+                                                    true ? (
+                                                      <label
+                                                        for="hs-pro-dactmt"
+                                                        class="block  text-lg font-medium text-gray-800"
+                                                      >
+                                                        Full-time
+                                                      </label>
+                                                    ) : (
+                                                      <label
+                                                        for="hs-pro-dactmt"
+                                                        class="block  text-lg font-medium text-gray-800 "
+                                                      >
+                                                        Part-time
+                                                      </label>
+                                                    )}
+                        
+                                                    {job.isHourly ? (
+                                                      <div class="space-y-1 ">
+                                                        <div class="flex align-items-center">
+                                                          <p className=" text-md font-medium">$</p>
+                                                          <label
+                                                            for="hs-pro-dactmt"
+                                                            class="block text-md font-medium text-gray-800 "
+                                                          >
+                                                            {job.lowerRate}
+                                                          </label>
+                                                          <p className=" text-md font-medium">
+                                                            /hour - $
+                                                          </p>
+                                                          <label
+                                                            for="hs-pro-dactmt"
+                                                            class="block  text-md font-medium text-gray-800 "
+                                                          >
+                                                            {job.upperRate}
+                                                          </label>
+                                                          <p className=" text-md font-medium">
+                                                            /hour
+                                                          </p>
+                                                        </div>
+                                                      </div>
+                                                    ) : null}
+                        
+                                                    {job.isSalaried ? (
+                                                      <div class="space-y-2 ">
+                                                        <div class="flex align-items-center">
+                                                          <p className=" text-md font-medium">$</p>
+                                                          <label
+                                                            for="hs-pro-dactmt"
+                                                            class="block  text-md font-medium text-gray-800 "
+                                                          >
+                                                            {job.lowerRate}
+                                                          </label>
+                                                          <p className="ml-1 text-md font-medium ">
+                                                            yearly - $
+                                                          </p>
+                                                          <label
+                                                            for="hs-pro-dactmt"
+                                                            class="block  text-md font-medium text-gray-800 "
+                                                          >
+                                                            {job.upperRate}
+                                                          </label>
+                                                          <p className=" ml-1 c font-medium">
+                                                            yearly
+                                                          </p>
+                                                          {job.isEstimatedPay ? (
+                                                            <p>*</p>
+                                                          ) : null}
+                                                        </div>
+                                                      </div>
+                                                    ) : null}
+                                                    {job.isEstimatedPay ? (
+                                                      <div className="mb-2 flex flex-col w-full text-sm ">
+                                                        <a href="https://www.glassdoor.com/index.htm">
+                                                          *Estimate. Powered by{" "}
+                                                          <img
+                                                            src="https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png"
+                                                            title="Job Search"
+                                                          />
+                                                        </a>
+                                                      </div>
+                                                    ) : null}
+                                                    <p class="block  text-md font-medium text-gray-800 ">
+                                                      {job.streetAddress},{" "}
+                                                      {job.city},{" "}
+                                                      {job.state}
+                                                    </p>
+                                                    {job.isEstimatedAddress ? (
+                                                      <p class="block italic text-sm  text-gray-800 ">
+                                                        Address may not be exact
+                                                      </p>
+                                                    ) : null}
+                                                    <p class="font-semibold text-md text-gray-500  cursor-default">
+                                                      <span className="font-semibold text-md text-slate-700">
+                                                        {" "}
+                                                        Posted:
+                                                      </span>{" "}
+                                                      {job.datePosted}
+                                                    </p>
+                                                   
+                                                   
+                                                  </div>
+                        
+                                                  <div class="space-y-2 mt-10 mb-4 ">
+                                                    <label
+                                                      for="dactmi"
+                                                      class="block mb-2 text-lg font-medium text-gray-900 "
+                                                    >
+                                                      What you'll be doing
+                                                    </label>
+                                                    <div className="w-full prose prose-li  font-inter marker:text-black mb-4 ">
+                                                      <Markdown>
+                                                        {job.description}
+                                                      </Markdown>
+                                                    </div>
+                                                  </div>
+                                                  {job.bio ? (
+                                                    <div class="space-y-2 mt-10 mb-4">
+                                                      <label
+                                                        for="dactmi"
+                                                        class="block mb-2 text-md font-medium text-gray-800 "
+                                                      >
+                                                        About {job.companyName}
+                                                      </label>
+                        
+                                                      <div class="mb-4">
+                                                        <p>{job.bio}</p>
+                                                      </div>
+                                                    </div>
+                                                  ) : null}
+                        
+                                                  <div class="space-y-2 mb-4 ">
+                                                    <label
+                                                      for="dactmi"
+                                                      class="block mb-2 text-lg font-medium text-gray-900 "
+                                                    >
+                                                      Job Requirements
+                                                    </label>
+                        
+                                                    <div className="prose prose-li  font-inter marker:text-black mb-4">
+                                                      <Markdown>
+                                                        {job.applicantDescription}
+                                                      </Markdown>
+                                                    </div>
+                                                  </div>
+                                                  <div class="space-y-2 md:mb-4 lg:mb-4 mb-20">
+                                                    <label
+                                                      for="dactmi"
+                                                      class="block mb-2 text-lg font-medium text-gray-900 "
+                                                    >
+                                                      Employment Benefits
+                                                    </label>
+                        
+                                                    <div className="prose prose-li  font-inter marker:text-black mb-4">
+                                                      {job.benefitsDescription ? (
+                                                        <Markdown>
+                                                          {job.benefitsDescription}
+                                                        </Markdown>
+                                                      ) : (
+                                                        <p>Nothing listed</p>
+                                                      )}
+                                                    </div>
+                                                  </div>
+                                                </div>
+                        
+                                                {isDesktop ? (
+                                                  <div class="p-4 flex justify-between gap-x-2">
+                                                    <div class="w-full flex justify-end items-center gap-x-2">
+                                                      {job.jobTitle.includes(
+                                                        "Plumber"
+                                                      ) ? (
+                                                        <button
+                                                          type="button"
+                                                          class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                                          data-hs-overlay="#hs-pro-datm"
+                                                        
+                                                        >
+                                                          <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke-width="1.5"
+                                                            stroke="currentColor"
+                                                            class="size-4 ml-1"
+                                                          >
+                                                            <path
+                                                              stroke-linecap="round"
+                                                              stroke-linejoin="round"
+                                                              d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                                            />
+                                                          </svg>
+                                                          See career path
+                                                        </button>
+                                                      ) : null}
+                                                      {job.jobTitle.includes(
+                                                        "Server" || "server"
+                                                      ) ? (
+                                                        <button
+                                                          type="button"
+                                                          class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                                          data-hs-overlay="#hs-pro-datm"
+                                                        
+                                                        >
+                                                          <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke-width="1.5"
+                                                            stroke="currentColor"
+                                                            class="size-4 ml-1"
+                                                          >
+                                                            <path
+                                                              stroke-linecap="round"
+                                                              stroke-linejoin="round"
+                                                              d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                                            />
+                                                          </svg>
+                                                          See career path
+                                                        </button>
+                                                      ) : null}
+                                                      {job.jobTitle.includes(
+                                                        "Machinist" || "CNC"
+                                                      ) ? (
+                                                        <button
+                                                          type="button"
+                                                          class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                                          data-hs-overlay="#hs-pro-datm"
+                                                         
+                                                        >
+                                                          <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke-width="1.5"
+                                                            stroke="currentColor"
+                                                            class="size-4 ml-1"
+                                                          >
+                                                            <path
+                                                              stroke-linecap="round"
+                                                              stroke-linejoin="round"
+                                                              d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                                            />
+                                                          </svg>
+                                                          See career path
+                                                        </button>
+                                                      ) : null}
+                                                    </div>
+                                                  </div>
+                                                ) : (
+                                                  <div
+                                                    id="cookies-simple-with-dismiss-button"
+                                                    class="fixed bottom-0 start-1/2 transform -translate-x-1/2 z-[60] sm:max-w-4xl w-full mx-auto px-2"
+                                                  >
+                                                    <div class="p-2 bg-white border border-gray-200 rounded-sm shadow-sm ">
+                                                      <div class="p-2 flex justify-between gap-x-2">
+                                                        <div class="w-full flex justify-center items-center gap-x-2">
+                                                          {job.jobTitle.includes(
+                                                            "Plumber"
+                                                          ) ? (
+                                                            <button
+                                                              type="button"
+                                                              class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200 bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
+                                                              data-hs-overlay="#hs-pro-datm"
+                                                              
+                                                            >
+                                                              <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                fill="none"
+                                                                viewBox="0 0 24 24"
+                                                                stroke-width="1.5"
+                                                                stroke="currentColor"
+                                                                class="size-4 ml-1"
+                                                              >
+                                                                <path
+                                                                  stroke-linecap="round"
+                                                                  stroke-linejoin="round"
+                                                                  d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                                                />
+                                                              </svg>
+                                                              See career path
+                                                            </button>
+                                                          ) : null}
+                                                          {job.jobTitle.includes(
+                                                            "Server" || "server"
+                                                          ) ? (
+                                                            <button
+                                                              type="button"
+                                                              class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                                              data-hs-overlay="#hs-pro-datm"
+                                                             
+                                                            >
+                                                              <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                fill="none"
+                                                                viewBox="0 0 24 24"
+                                                                stroke-width="1.5"
+                                                                stroke="currentColor"
+                                                                class="size-4 ml-1"
+                                                              >
+                                                                <path
+                                                                  stroke-linecap="round"
+                                                                  stroke-linejoin="round"
+                                                                  d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                                                />
+                                                              </svg>
+                                                              See career path
+                                                            </button>
+                                                          ) : null}
+                                                          {job.jobTitle.includes(
+                                                            "Machinist" || "CNC"
+                                                          ) ? (
+                                                            <button
+                                                              type="button"
+                                                              class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start border border-gray-200  bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300"
+                                                              data-hs-overlay="#hs-pro-datm"
+                                                             
+                                                            >
+                                                              <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                fill="none"
+                                                                viewBox="0 0 24 24"
+                                                                stroke-width="1.5"
+                                                                stroke="currentColor"
+                                                                class="size-4 ml-1"
+                                                              >
+                                                                <path
+                                                                  stroke-linecap="round"
+                                                                  stroke-linejoin="round"
+                                                                  d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                                                />
+                                                              </svg>
+                                                              See career path
+                                                            </button>
+                                                          ) : null}
+                                                          <button
+                                                            type="button"
+                                                            class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                                            data-hs-overlay="#hs-pro-datm"
+                                                            onClick={() =>
+                                                             onOpen()
+                                                            }
+                                                          >
+                                                            Apply
+                                                          </button>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                )}
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </DrawerBody>
+                                        <DrawerFooter>
+                                          <button
+                                            type="button"
+                                            class="py-3 px-6 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-red-500 hover:text-red-600  lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                            data-hs-overlay="#hs-pro-datm"
+                                            onClick={() => deleteSavedJob(job)}
+                                          >
+                                           
+                                            Remove 
+                                          </button>
+                                          <button
+                                            type="button"
+                                            class="py-3 px-8 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                            data-hs-overlay="#hs-pro-datm"
+                                            onClick={() => applyAndNavigate(job)}
+                                          >
+                                            Apply
+                                          </button>
+                                        </DrawerFooter>
+                                      </DrawerContent>
+                                    </Drawer>
+                        
+                                 
+                                  </>
+                                ) : null}
+
+
+
+
+                        
+                              </>
+                             
                       ))}
                       
                     </table>
@@ -1491,7 +2082,29 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
         </div>
       </main>
   
+      <Modal isOpen={isOpenNoResume} onClose={onCloseNoResume}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Complete your profile</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              Please upload a resume to your profile before applying for open
+              positions
+            </Text>
+          </ModalBody>
 
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={() => navigate("/UserProfile")}
+            >
+              Upload my resume
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -1499,20 +2112,18 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
           <ModalHeader>Success!</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p>You can now post your open positions and interview candidates.</p>
+            <Text>Application submitted.</Text>
           </ModalBody>
 
           <ModalFooter>
-            
-          <button
-                    type="button"
-                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                    data-hs-overlay="#hs-pro-datm"
-                    onClick={() => handleOpenFirstJobBusiness()}
-                  >
-              Create a Post
+            <button
+              type="button"
+              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => onClose()}
+            >
+              close
             </button>
-          
           </ModalFooter>
         </ModalContent>
       </Modal>

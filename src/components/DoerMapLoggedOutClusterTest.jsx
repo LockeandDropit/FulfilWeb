@@ -655,12 +655,15 @@ console.log("session id ", sessionId)
 // useEffect(() => {
 //   const openEmail = () => setTimeout(() => {
 //     onOpenEmailSignUp()
-//     }, 120000
+//     }, 10000
 //     );
 
 //       openEmail()
 
 // }, [])
+
+
+// increment clicks on jobs, if jobs clicked === 3, do the pop up
 
 const [scrollBehavior, setScrollBehavior] = React.useState('inside')
 
@@ -695,6 +698,7 @@ if (e.key === "Enter") {
             > */}
 
               <Box
+              mt={2}
               h={{ base: "100vh", lg: "92vh" }}
               w={{ base: "100vw", lg: "100vw" }}
             > 
@@ -1020,7 +1024,7 @@ if (e.key === "Enter") {
         
         </ModalContent>
       </Modal>
-      {/* <Modal isOpen={isOpenEmailSignUp} onClose={onCloseEmailSignUp} >
+      <Modal isOpen={isOpenEmailSignUp} onClose={onCloseEmailSignUp} >
    
         <ModalContent    pointerEvents="all"
     containerProps={{ pointerEvents: "none" }}>
@@ -1048,7 +1052,7 @@ if (e.key === "Enter") {
 </div>
 </ModalBody>
 </ModalContent>
-</Modal> */}
+</Modal>
 
 <Modal  isCentered isOpen={isOpenEmailSignUp} onClose={onCloseEmailSignUp} size={"md"} >
    <ModalOverlay />

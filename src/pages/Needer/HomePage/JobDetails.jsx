@@ -15,6 +15,7 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 import {
+  addDoc,
   arrayUnion,
   serverTimestamp,
   doc,
@@ -190,8 +191,128 @@ const JobDetails = () => {
     }
   }, [job, resetApplicantList]);
 
+
+
+  const [rejectedApplicants, setRejectedApplicants] = useState(null)
+  useEffect(() => {
+    if (job) {
+      const q = query(
+        collection(
+          db,
+          "employers",
+          job.employerID,
+          "Posted Jobs",
+          job.jobTitle,
+          "Rejected Applicants"
+        )
+      );
+
+      onSnapshot(q, (snapshot) => {
+        let testResults = []
+        let results = [];
+        let finalResults = [];
+        let toMergeResults = [];
+        snapshot.docs.forEach((doc) => {
+          if (doc.id.length > 25) {
+            results.push(doc.id);
+            console.log("here?", doc.id);
+          } else {
+          }
+        });
+
+        results.forEach((results) => {
+          const messageRef = doc(
+            db,
+            "employers",
+            job.employerID,
+            "Posted Jobs",
+            job.jobTitle,
+            "Rejected Applicants",
+            results
+          );
+
+          getDoc(messageRef).then((snapshot) => {
+            if (!snapshot.data()) {
+              console.log("nothing");
+              // console.log(snapshot.data())
+            } else {
+              console.log(
+                "applicant messageinfo from employer fb",
+                snapshot.data()
+              );
+              toMergeResults.push({
+                ...snapshot.data(),
+                id: snapshot.data().applicantID,
+              });
+              testResults.push(snapshot.data())
+            }
+          });
+        });
+
+        results.forEach((results) => {
+          const secondQuery = doc(db, "users", results);
+
+          getDoc(secondQuery).then((snapshot) => {
+            if (!snapshot.data()) {
+              console.log("nothing");
+              // console.log(snapshot.data())
+            } else {
+              finalResults.push({
+                ...snapshot.data(),
+                id: snapshot.data().streamChatID,
+              });
+            }
+
+            setTimeout(() => {
+
+              console.log("to merge results", toMergeResults, finalResults)
+              //credit Andreas Tzionis https://stackoverflow.com/questions/19480008/javascript-merging-objects-by-id
+              setRejectedApplicants(
+                finalResults.map((t1) => ({
+                  ...t1,
+                  ...toMergeResults.find((t2) => t2.uid === t1.id),
+                }))
+              );
+
+              // setRejectedApplicants(testResults)
+
+              // setIsLoading(false);
+            }, 500);
+
+            const ratingsQuery = query(
+              collection(db, "users", finalResults[0].streamChatID, "Ratings")
+            );
+
+            onSnapshot(ratingsQuery, (snapshot) => {
+              let ratingResults = [];
+              snapshot.docs.forEach((doc) => {
+                //review what this does
+                if (isNaN(doc.data().rating)) {
+                  console.log("not a number");
+                } else {
+                  ratingResults.push(doc.data().rating);
+                }
+              });
+              //cited elsewhere
+              if (!ratingResults || !ratingResults.length) {
+                //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
+                setRating(0);
+              } else {
+                setRating(
+                  ratingResults.reduce((a, b) => a + b) / ratingResults.length
+                );
+                setNumberOfRatings(ratingResults.length);
+              }
+            });
+          });
+        });
+      });
+    }
+  }, [job, resetApplicantList]);
+
   console.log("job", job);
   console.log("applicant", applicant);
+  console.log("applicant eddddd", rejectedApplicants);
 
   const location = useLocation();
 
@@ -481,9 +602,47 @@ const JobDetails = () => {
   const handleDeleteApplicantModal = (x) => {
     onOpenDeleteApplicant();
     setSelectedApplicantToBeDeleted(x);
+    console.log("from initial modal", x)
   };
 
   const deleteApplicant = () => {
+
+    console.log("selected to be deleted", selectedApplicantToBeDeleted)
+    //delete applicant from FB
+    deleteDoc(
+      doc(
+        db,
+        "employers",
+        currentUser.uid,
+        "Posted Jobs",
+        job.jobTitle,
+        "Applicants",
+        selectedApplicantToBeDeleted
+      ),
+      
+    ).then(() => {
+    // eh
+    }).catch((e) => {console.log(e)})
+
+    //add rejected applicant to fb and local "rejected applicants" bucket
+     setDoc(
+      doc(
+        db,
+        "employers",
+        currentUser.uid,
+        "Posted Jobs",
+        job.jobTitle,
+        "Rejected Applicants",
+        selectedApplicantToBeDeleted 
+      ), {
+     uid: selectedApplicantToBeDeleted,
+     rejectionReason: rejectionReason ? rejectionReason : null
+      }
+      
+    ).then(() => {
+    // eh
+    }).catch((e) => {console.log(e)})
+
     let newApplicantsArray = [];
     for (let i = 0; i < applicant.length; i++) {
       if (applicant[i].uid !== selectedApplicantToBeDeleted) {
@@ -496,20 +655,14 @@ const JobDetails = () => {
       setApplicant(newApplicantsArray);
     }
 
+
     onCloseDeleteApplicant();
 
-    //   deleteDoc(doc(db, "employers", currentUser.uid, "Posted Jobs", job.jobTitle,"Applicants", selectedApplicantToBeDeleted))
-    //   .then(() => {
-    //     onCloseDeleteApplicant()
-    //     console.log("firing")
-    // navigate("/JobDetails", {state: {applicantReset: true}})
-
-    // // onClose()
-    //   })
-    //   .catch((e) => {
-    //     console.log(e)
-    //   })
   };
+
+  const [rejectionReason, setRejectionReason] = useState(null)
+
+  const [showRejected, setShowRejected] = useState(false);
 
   return (
     <>
@@ -871,34 +1024,224 @@ const JobDetails = () => {
                       aria-label="Tabs"
                       role="tablist"
                     >
-                      <button
+                      {showRejected ? ( <button
+                        type="button"
+                        class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2  hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-sm rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none"
+                        id="hs-pro-tabs-dut-item-all"
+                        data-hs-tab="#hs-pro-tabs-dut-all"
+                        aria-controls="hs-pro-tabs-dut-all"
+                        role="tab"
+                        onClick={() => setShowRejected(false)}
+                      >
+                        Applicants
+                      </button>) : ( <button
                         type="button"
                         class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2  hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-sm rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none  active"
                         id="hs-pro-tabs-dut-item-all"
                         data-hs-tab="#hs-pro-tabs-dut-all"
                         aria-controls="hs-pro-tabs-dut-all"
                         role="tab"
+                        onClick={() => setShowRejected(false)}
                       >
                         Applicants
-                      </button>
+                      </button>)}
+                     
+                      {showRejected ? ( <button
+                        type="button"
+                        class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2  hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-sm rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none  active"
+                        id="hs-pro-tabs-dut-item-all"
+                        data-hs-tab="#hs-pro-tabs-dut-all"
+                        aria-controls="hs-pro-tabs-dut-all"
+                        role="tab"
+                        onClick={() => setShowRejected(true)}
+                      >
+                        Rejected Applicants
+                      </button>) : ( <button
+                        type="button"
+                        class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2  hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-sm rounded-lg disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none  "
+                        id="hs-pro-tabs-dut-item-all"
+                        data-hs-tab="#hs-pro-tabs-dut-all"
+                        aria-controls="hs-pro-tabs-dut-all"
+                        role="tab"
+                        onClick={() => setShowRejected(true)}
+                      >
+                        Rejected Applicants
+                      </button>) }
+                     
                     </nav>
 
-                    <div>
+                  
+
+                    {/* Rejected Applicants */}
+                    {showRejected ? (<div>
                       <div
                         id="hs-pro-tabs-dut-all"
                         role="tabpanel"
                         aria-labelledby="hs-pro-tabs-dut-item-all"
-                      >
+                        >
+                        <div class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                          <div class="min-w-full inline-block align-middle">
+                            <table class="min-w-full divide-y divide-gray-200 ">
+                              {rejectedApplicants ? (
+                                <thead>
+                                  <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
+                                    
+
+                                    <th scope="col" class="min-w-[120px]">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                                        <button
+                                          id="hs-pro-dutnms"
+                                          type="button"
+                                          class="px-4 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Name
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                  
+
+                                   
+
+                                    <th scope="col" class="min-w-[80px]">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                                        <button
+                                          id="hs-pro-dutphs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Resume
+                                        </button>
+                                      </div>
+                                    </th>
+                                   
+                                    <th scope="col" class="min-w-[260px]">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                                        <button
+                                          id="hs-pro-dutphs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Reason for rejection
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    {/* <th scope="col"></th> */}
+                                  </tr>
+                                </thead>
+                              ) : (
+                                <p class="text-sm text-gray-800 cursor-default">
+                                  No applicants yet
+                                </p>
+                              )}
+
+                              {currentUser
+                                ? currentUser.isBusiness
+                                  ? rejectedApplicants
+                                    ? rejectedApplicants.map((applicant) => (
+                                        <tbody class="divide-y divide-gray-200 ">
+                                          <tr class="divide-x divide-gray-200 ">
+                                            
+                                            <td
+                                              class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
+                                              onClick={() =>
+                                                viewResume(applicant)
+                                              }
+                                            >
+                                              <div class="w-full flex items-center gap-x-3">
+                                                {applicant.profilePictureResponse ? (
+                                                  <img
+                                                    class="flex-shrink-0 size-[38px] rounded-full"
+                                                    src={
+                                                      applicant.profilePictureResponse
+                                                    }
+                                                    alt="Image Description"
+                                                  />
+                                                ) : (
+                                                  <svg
+                                                    class="w-12 h-12 rounded-full object-cover text-gray-500"
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 16 16"
+                                                    fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                  >
+                                                    <rect
+                                                      x="0.62854"
+                                                      y="0.359985"
+                                                      width="15"
+                                                      height="15"
+                                                      rx="7.5"
+                                                      fill="white"
+                                                    ></rect>
+                                                    <path
+                                                      d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                                                      fill="currentColor"
+                                                    ></path>
+                                                    <path
+                                                      d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                                                      fill="currentColor"
+                                                    ></path>
+                                                  </svg>
+                                                )}
+                                                {applicant ? (
+                                                  <p class="text-sm text-gray-800">
+                                                    {applicant.firstName}{" "}
+                                                    {applicant.lastName}
+                                                  </p>
+                                                ) : (
+                                                  <p class="text-sm text-gray-800">
+                                                    No applicants yet
+                                                  </p>
+                                                )}
+                                              </div>
+                                            </td>
+
+                                           
+                                            <td class="size-px py-2 px-3 space-x-2">
+                                              <div className=" flex  w-full ">
+                                                <button
+                                                  type="button"
+                                                  onClick={() =>
+                                                    viewResume(applicant)
+                                                  }
+                                                  className="py-2 px-3 w-full relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
+                                                >
+                                                  View Resume
+                                                </button>
+                                              </div>
+                                            </td>
+                                          
+                                            <td class="size-px py-2 px-3 space-x-2">
+                                              <div className=" flex  w-full ">
+                                                {applicant.rejectionReason ? (applicant.rejectionReason === "Other" ? (<p>{applicant.rejectionReason}</p>) : (<p>{applicant.rejectionReason}</p>) ) : ( <p>N/a</p>)}
+                                              
+                                              </div>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      ))
+                                    : null
+                                  : null
+                                : null}
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>) : (  <div>
+                      <div
+                        id="hs-pro-tabs-dut-all"
+                        role="tabpanel"
+                        aria-labelledby="hs-pro-tabs-dut-item-all"
+                        >
                         <div class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
                           <div class="min-w-full inline-block align-middle">
                             <table class="min-w-full divide-y divide-gray-200 ">
                               {applicant ? (
                                 <thead>
                                   <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
-                                    <th
-                                      scope="col"
-                                      class="px-3 py-2.5 text-start"
-                                    ></th>
+                                  
 
                                     <th scope="col" class="min-w-[250px]">
                                       <div class="hs-dropdown relative inline-flex w-full cursor-default">
@@ -985,7 +1328,7 @@ const JobDetails = () => {
                                     ? applicant.map((applicant) => (
                                         <tbody class="divide-y divide-gray-200 ">
                                           <tr class="divide-x divide-gray-200 ">
-                                            <td class="size-px whitespace-nowrap px-3 py-4"></td>
+                                           
                                             <td
                                               class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
                                               onClick={() =>
@@ -1168,7 +1511,7 @@ const JobDetails = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div>)}
                   </div>
                 </div>
 
@@ -1553,7 +1896,35 @@ const JobDetails = () => {
           <ModalHeader>Delete Applicant?</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+          
             <p>Are you sure you want to remove this applicant?</p>
+            <div class="space-y-2 mt-4">
+                      <label
+                        for="dactmi"
+                        class="block mb-2 text-sm font-medium text-gray-800 "
+                      >
+                        Reason for rejection (optional)
+                      </label>
+
+                    
+
+                      <select
+                        placeholder="Select option"
+                        class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                        onChange={(e) => setRejectionReason(e.target.value)}
+                      >
+                        <option>Select option</option>
+                        <option value="Not qualified">Not qualified</option>
+                        <option value="Not enough experience">Not enough experience</option>
+                        <option value="Scheduling conflicts">Scheduling conflicts</option>
+                        <option value="Compensation expectations">Compensation expectations</option>
+                        <option value="Went with another candidate">Went with another candidate</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    {rejectionReason === "Other" ? (<div class="mt-2 space-y-3">
+  <input onChange={(e) => setRejectionReason(e.target.value)} type="text" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" placeholder="Ex: Lacked communication skills" />
+</div>) : (null)}
           </ModalBody>
 
           <ModalFooter>

@@ -732,7 +732,7 @@ const Header = () => {
             <a
               class="flex-none text-4xl font-sans font-bold text-sky-400"
               aria-label="Brand"
-              onClick={() => navigate("/DoerMapScreen")}
+              onClick={() => navigate("/DoerMapView")}
             >
               Fulfil
             </a>
@@ -747,7 +747,7 @@ const Header = () => {
                 <li class="px-5 mb-1.5">
                   <button
                     class="flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
-                    onClick={() => navigate("/DoerMapScreen")}
+                    onClick={() => navigate("/DoerMapView")}
                   >
                     <svg
                       class="flex-shrink-0 mt-0.5 size-4"
@@ -765,6 +765,18 @@ const Header = () => {
                       <polyline points="9 22 9 12 15 12 15 22" />
                     </svg>
                     My Jobs
+                  </button>
+                </li>
+                <li class="px-5 mb-1.5">
+                  <button
+                    class="hs-accordion-toggle mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
+                    onClick={() => navigate("/DoerSavedJobs")}
+                  >
+                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"  class="flex-shrink-0 mt-0.5 size-4">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+</svg>
+
+                    Saved Jobs
                   </button>
                 </li>
 
@@ -851,11 +863,11 @@ const Header = () => {
                   Account Settings
                 </button>
 
-                <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
+                {/* <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
                   <span class="block text-xs uppercase text-gray-500">
                     Actions
                   </span>
-                </li>
+                </li> */}
 
               
                 <li class="px-8 mb-0.5 mt-10">

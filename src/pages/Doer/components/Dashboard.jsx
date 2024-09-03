@@ -266,7 +266,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <aside
+      {/* <aside
         id="hs-pro-sidebar"
         class="hs-overlay [--auto-close:lg]
       hs-overlay-open:translate-x-0
@@ -278,7 +278,16 @@ const Dashboard = () => {
       xl:block lg:translate-x-0 lg:end-auto lg:bottom-0
      
      "
-      >
+      > */}
+      <aside id="hs-pro-sidebar" class="hs-overlay [--auto-close:lg]
+    hs-overlay-open:translate-x-0
+    -translate-x-full transition-all duration-300 transform
+    w-[260px]
+    hidden
+    fixed inset-y-0 start-0 z-[60]
+    bg-white border-e border-gray-200
+    lg:block lg:translate-x-0 lg:end-auto lg:bottom-0
+   ">
         <div class="flex flex-col h-full max-h-full py-3">
           <header class="h-[46px] px-8">
             <a

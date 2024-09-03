@@ -719,6 +719,7 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
 
   const handleOpenSeperately = () => {
     onOpenDrawerSingleFromGroup();
+   
   };
 
   const handleCloseOfSingleFromGroup = (x) => {
@@ -731,11 +732,38 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
     setOpenInfoWindowMarkerIDSingle(x.jobID);
     // updateJobListingViews(x);
     setSelectedJobFromGroup(x);
+
+
     onCloseDrawer();
     console.log("opened single from group");
 
     handleOpenSeperately();
   };
+
+  // this checks whether or not any drawers are open. 
+  // If so, and the browsers back button is clicked, stop the browser from returning to the previous page and close the drawer instead.
+
+  const [ locationKeys, setLocationKeys ] = useState([])
+
+
+  // useEffect(() => {
+   
+  //   console.log("check open drawer booleans", isOpenDrawer, isOpenDrawerSingle, isOpenDrawerSingleFromGroup)
+
+
+
+  //   if ( isOpenDrawer === true || isOpenDrawerSingle === true || isOpenDrawerSingleFromGroup === true ) {
+  //     //https://stackoverflow.com/questions/71369320/how-to-controling-browser-back-button-with-react-router-dom-v6
+  //     //https://stackoverflow.com/questions/32432296/is-it-possible-to-e-preventdefault-in-window-onpopstate Zoe - Save the data dump & John
+  //     window.onpopstate = (e) => {
+  //       console.log("received back button")
+  //       e.preventDefault();
+  //       window.history.go(1);
+  //     }  
+  //   }
+
+  // }, [isOpenDrawer, isOpenDrawerSingle, isOpenDrawerSingleFromGroup])
+  
 
   //bettter useEffect than I write https://www.youtube.com/watch?v=QQYeipc_cik&t=788s
   useEffect(() => {
@@ -2826,7 +2854,7 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
         </ModalContent>
       </Modal> */}
 
-<Modal
+{/* <Modal
         isCentered
         isOpen={isOpenEmailSignUp}
         onClose={onCloseEmailSignUp}
@@ -2841,12 +2869,10 @@ src="https://cdn.forms-content-1.sg-form.com/90536fa1-6711-11ef-95dd-8a66f6c330b
   style={{ width: '100%',  height: '40vh' }}
   waitForLoad
 />
-          {/* <div class="h-60">
-          <iframe src="https://cdn.forms-content-1.sg-form.com/90536fa1-6711-11ef-95dd-8a66f6c330b7"/>
-            </div> */}
+         
           </ModalBody>
         </ModalContent>
-      </Modal>
+      </Modal> */}
 
       <Modal
         isOpen={isOpenEmailSignUpSuccess}

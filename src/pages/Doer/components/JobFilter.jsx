@@ -46,6 +46,8 @@ const JobFilter = () => {
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
   const { setSearchResults, searchIsMobile } = useSearchResults();
 
+  const [ isSmall ] = useMediaQuery('(min-width: 700px )')
+
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
@@ -281,6 +283,8 @@ search()
     document.getElementById("search-form").reset();
   };
 
+  const [filterIsOpen, setFilterIsOpen] = useState(false)
+
   // useEffect(() => {
   //   //ty molevolence https://www.reddit.com/r/reactjs/comments/w8hdd5/how_to_handle_keyboard_events_the_proper_way_in/
   //   const handleKeyDown = (e) => {
@@ -319,151 +323,136 @@ search()
 
   return (
     <>
-      {isDesktop ? (
+      {isDesktop ? ( 
         <div class=" w-full bg-white px-4 sm:px-6 lg:px-8 rounded border border-t">
-          {/* <div class="flex flex-row items-center align-center justify-center mx-auto mb-4 mt-4"> */}
-          <div class="flex flex-row mb-4 mt-4">
-            <form id="search-form">
-            <div class="flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
-            <div className="w-[120px] sm:w-[240px]">
-                  {/* <label
-                    for="hs-select-label"
-                    class="block text-md font-medium mb-1 ml-1"
-                  >
-                    Job Title
-                  </label> */}
-                  <input
-                    onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
-                    onChange={(e) => handleSearch(e.target.value)}
-                    class="placeholder:text-gray-600 placeholder:font-normal placeholder:text-base  py-3.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                    placeholder="Job Title"
-                  />
-                  {/* {jobsInCategory && viewDropDown ? (
-                    <div class="absolute w-[320px] z-50  mb-2 py-3 px-4 block  bg-white border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
-                      <p className="font-semibold text-medium cursor-default">Category</p>
-                      <div className="hover:bg-gray-200 rounded-sm p-0.5 ">
-                      <p className="text-lg cursor-pointer mb-2 justify-center items-center mt-0.5" onClick={() => handleRenderJobCategory()}>{displayedCategory}</p>
-                      </div>
-                    </div>
-                  ) : null} */}
-                </div>
-        
-                <div className="w-[120px] sm:w-[240px]">
-                  {/* <label
-                    for="hs-select-label"
-                    class="block text-medium font-medium mb-1 ml-1"
-                  >
-                    Pay Range
-                  </label> */}
-                  <select
+        {/* <div class="flex flex-row items-center align-center justify-center mx-auto mb-4 mt-4"> */}
+        <div class="grid sm:inline-flex mt-2 mb-2 ">
+        <form id="search-form">
+          <div class="flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
+          {/* <div className="w-[120px] sm:w-[240px]">
+              
+                <input
                   onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
-                    onChange={(e) => setMinimumPay(e.target.value)}
-                    id="hs-select-label"
-                    value={minimumPay}
-                    class="  py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-base focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                  >
-                    <option value={null}>Pay</option>
-                    <option value="10">$10/hour +</option>
-                    <option value="15">$15/hour +</option>
-                    <option value="20">$20/hour +</option>
-                    <option value="25">$25/hour +</option>
-                    <option value="30">$30/hour +</option>
-                    <option value="35">$35/hour +</option>
-                    <option value="40">$40/hour +</option>
-                  </select>
-                </div>
-                <div className="w-[120px] sm:w-[240px]">
-                  {/* <label
-                    for="hs-select-label"
-                    class="block text-medium font-medium mb-1  ml-1"
-                  >
-                    Full-time/Part-time
-                  </label> */}
-                  <select
-                   onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
-                    onChange={(e) => setPositionType(e.target.value)}
-                    id="hs-select-label"
-                    class=" py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-medium focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                  >
-                    <option value={null}>Job Type</option>
+                  onChange={(e) => handleSearch(e.target.value)}
+                  class="placeholder:text-gray-600 placeholder:font-normal placeholder:text-base  py-3.5 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                  placeholder="Job Title"
+                />
+               
+              </div> */}
+      
+              <div className="w-3/4 sm:w-[240px]">
+              
+                <select
+                onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+                  onChange={(e) => setMinimumPay(e.target.value)}
+                  id="hs-select-label"
+                  value={minimumPay}
+                  class="  py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-base focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                >
+                  <option value={null}>Pay</option>
+                  <option value="10">$10/hour +</option>
+                  <option value="15">$15/hour +</option>
+                  <option value="20">$20/hour +</option>
+                  <option value="25">$25/hour +</option>
+                  <option value="30">$30/hour +</option>
+                  <option value="35">$35/hour +</option>
+                  <option value="40">$40/hour +</option>
+                </select>
+              </div>
+              <div className="w-3/4 sm:w-[240px] ">
+               
+                <select
+                 onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+                  onChange={(e) => setPositionType(e.target.value)}
+                  id="hs-select-label"
+                  class=" py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-medium focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                >
+                  <option value={null}>Job Type</option>
 
-                    <option value={true} class="text-medium">Full-time</option>
-                    <option value={false}>Part-time</option>
-                    {/* <option value="gigwork">Gig-work</option> */}
-                  </select>
-                </div>
+                  <option value={true} class="text-medium">Full-time</option>
+                  <option value={false}>Part-time</option>
+                  {/* <option value="gigwork">Gig-work</option> */}
+                </select>
+              </div>
 
-                {/* <button class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none cursor-pointer" onClick={() => search()}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
-  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-</svg>
-
+            
+            </div>
+          </form>
+          <button
+            class="mt-2 sm:mt-0 h-[48px] ml-4 w-auto sm:w-auto whitespace-nowrap  pl-8 pr-10  inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+            onClick={() => search()}
+            onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+              />
+            </svg>
             Search
           </button>
-          <a class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none cursor-pointer" onClick={() => clearSearch()}>
+          <a
+            class="w-full sm:w-auto whitespace-nowrap py-3 px-4  ml-2 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+            onClick={() => clearSearch()}
+            onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+          >
+            Clear
+          </a>
+</div>
+  
+      </div>
+      
         
-
-           Clear search
-          </a> */}
-              </div>
-            </form>
-            <button
-              class=" h-[48px] ml-4 w-auto sm:w-auto whitespace-nowrap  pl-8 pr-10  inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-              onClick={() => search()}
-              onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                />
-              </svg>
-              Search
-            </button>
-            <a
-              class="w-full sm:w-auto whitespace-nowrap py-3 px-4  ml-2 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-              onClick={() => clearSearch()}
-              onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
-            >
-              Clear
-            </a>
-          </div>
-        </div>
       ) : (
         <Menu closeOnSelect={true}>
-          <MenuButton width={{ base: "100%" }}>
+          {filterIsOpen ? ( <MenuButton width={{ base: "100%" }} onClick={() => setFilterIsOpen(false)}>
             <a class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-gray-600 hover:bg-blue-700 cursor-pointer">
+              
               Filter
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-4"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-                />
-              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 mt-1">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+</svg>
+
             </a>
-          </MenuButton>
+          </MenuButton>) : (
+            
+          <MenuButton width={{ base: "100%" }} onClick={() => setFilterIsOpen(true)}>
+          <a class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-gray-600 hover:bg-blue-700 cursor-pointer">
+            Filter
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+              />
+            </svg>
+          </a>
+        </MenuButton>
+          )}
+         
+
+        
           <MenuList width={{ base: "100vw" }}>
             <div class="w-full bg-white  px-4 sm:px-6 lg:px-8  mx-auto">
               <div class="text-center mx-auto mb-4 mt-4">
                 <form id="search-form">
                   <div class=" flex flex-col items-center gap-2 sm:flex-row sm:gap-3 mt-2">
-                    <div class="w-full">
+                    {/* <div class="w-full">
                       <label
                         for="hs-select-label"
                         class="block text-sm font-medium "
@@ -478,7 +467,7 @@ search()
                         class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                         placeholder="Ex: Landscaping, Hostess, Construction"
                       />
-                    </div>
+                    </div> */}
                     {jobsInCategory && viewDropDown ? (
                     <div class=" w-full z-60  shadow-md mb-2 pb-3 px-4 block  bg-white border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
                       <p className="font-semibold text-medium cursor-default">Category</p>
@@ -491,28 +480,16 @@ search()
                       ))}
                     </div>
                   ) : null}
-                    {/* <div className=" w-[560px]">
-          <label for="hs-select-label" class="block text-sm font-medium  ">Pay Type</label>
-<select id="hs-select-label" class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none ">
-  <option selected="">Hourly</option>
-  <option>Salary</option>
- 
-</select>
-</div> */}
+              
                     <div class="w-full">
-                      <label
-                        for="hs-select-label"
-                        class="block text-sm font-medium  "
-                      >
-                        Pay Range
-                      </label>
+                    
                       <select
                         onChange={(e) => setMinimumPay(e.target.value)}
                         id="hs-select-label"
                         value={minimumPay}
                         class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                       >
-                        <option value={null}>Select minimum pay</option>
+                        <option value={null}>Pay Range</option>
                         <option value="10">$10/hour +</option>
                         <option value="15">$15/hour +</option>
                         <option value="20">$20/hour +</option>
@@ -523,21 +500,17 @@ search()
                       </select>
                     </div>
                     <div class="w-full">
-                      <label
-                        for="hs-select-label"
-                        class="block text-sm font-medium  "
-                      >
-                        Full-time/Part-time
-                      </label>
+                  
+                   
                       <select
                         onChange={(e) => setPositionType(e.target.value)}
                         id="hs-select-label"
-                        class="py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                        class="mt-2 py-3 px-4 pe-9 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                       >
-                        <option value={null}>Select position type</option>
+                        <option value={null}>Position Type</option>
                         <option value={true}>Full-time</option>
                         <option value={false}>Part-time</option>
-                        {/* <option value="gigwork">Gig-work</option> */}
+                     
                       </select>
                     </div>
                   </div>
@@ -548,29 +521,14 @@ search()
                     class="w-full sm:w-auto whitespace-nowrap py-3 px-4  mt-2 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                     onClick={() => search()}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="size-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                      />
-                    </svg>
                     Search
                   </button>
                 </MenuItem>
-
                 <a
                   class="w-full sm:w-auto whitespace-nowrap py-3 px-4 md:mt-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                   onClick={() => clearSearch()}
                 >
-                  Clear search
+                  Clear 
                 </a>
               </div>
             </div>

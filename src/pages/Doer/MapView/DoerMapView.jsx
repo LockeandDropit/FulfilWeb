@@ -148,7 +148,7 @@ const [hasRun, setHasRun] = useState(false);
                       align={"left"}
           mt={4}
           width={{ base: "full", md: "full" }}
-          ml={{ xl: "240px" }}
+          ml={{ lg: "240px" }}
 
         >
           <JobFilter />

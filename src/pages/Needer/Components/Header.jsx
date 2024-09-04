@@ -153,21 +153,6 @@ const handleShowMobileAddJob = () => {
       </div>
 
 
-      <aside
-        id="hs-pro-sidebar"
-        class="hs-overlay [--auto-close:lg]
-      hs-overlay-open:translate-x-0
-      -translate-x-full transition-all duration-300 transform
-      w-[260px]
-      hidden
-      fixed inset-y-0 start-0 z-[60]
-      bg-white border-e border-gray-200
-      lg:block lg:translate-x-0 lg:end-auto lg:bottom-0
-     
-     "
-      >
-     
-      </aside>
   
       <div class="xl:col-span-2 flex justify-end items-center gap-x-2">
         <div class="flex items-center">

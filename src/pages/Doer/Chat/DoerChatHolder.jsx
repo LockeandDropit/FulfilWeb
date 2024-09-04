@@ -10,6 +10,8 @@ import { useMediaQuery } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import ChatPlaceholder from "./ChatPlaceholder";
 import ListPlaceholder from "./ListPlaceholder";
+import ListPlaceholderMobile from "./ListPlaceholderMobile";
+import ChatDashboard from "../components/ChatDashboard";
 import { useJobStore } from "./lib/jobsStore";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -91,27 +93,19 @@ const DoerChatHolder = () => {
   return (
     <>
     <Header />
-    <Dashboard />
-   
-
-
-
     {isDesktop ? ( currentUser ? (
-
-
 <>
-
-
+<ChatDashboard />
   <ListPlaceholder />
   {chatId ? (
     <>
- 
     <ChatPlaceholder passedChannel={passedChannel}/>
     </>
   ) : (
     <div className="flex h-screen items-center justify-center">
 
-    <div className="flex-[2_2_0%] h-full flex flex-col items-center justify-center">
+    {/* <div className="flex-[2_2_0%] h-full flex flex-col items-center justify-center"> */}
+    <div className=" h-full flex flex-col items-center justify-center">
       <div class="ml-60 p-5 min-h-[328px] flex flex-col justify-center items-center text-center">
         <svg
           class="w-48  mb-4 "
@@ -319,7 +313,7 @@ const DoerChatHolder = () => {
 ) : null) : (
 
 
-  chatId ? <ChatPlaceholder /> : <ListPlaceholder />
+  chatId ? <ChatPlaceholder /> : <ListPlaceholderMobile />
 
 )}
 

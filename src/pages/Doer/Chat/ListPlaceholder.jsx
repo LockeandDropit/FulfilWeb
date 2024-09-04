@@ -385,8 +385,14 @@ const ListPlaceholder = () => {
     <aside class="relative ">
        
     <div id="hs-pro-sidebar" class="
-      sm:w-76 
-      h-[calc(100vh-70px)] mt-16
+hs-overlay [--auto-close:lg]
+    hs-overlay-open:translate-x-0
+    -translate-x-full transition-all duration-300 transform
+    xl:w-[328px]
+    
+    md:w-[300px]
+sm:w-[286px]
+   h-[calc(100vh-70px)] mt-14
    
       z-50
       fixed inset-y-0 start-0 xl:start-64 
@@ -397,7 +403,7 @@ const ListPlaceholder = () => {
       <div class="h-full flex ">
   
       
-        <div class="sm:w-76  truncate bg-white border-x border-gray-200">
+        <div class="sm:w-[286px] md:w-[300px] lg:w-full truncate bg-white border-x border-gray-200">
           <div class="h-full flex flex-col">
           
             <div class="ps-4 pe-3 py-2 flex justify-between items-center gap-x-2 border-b border-gray-200">

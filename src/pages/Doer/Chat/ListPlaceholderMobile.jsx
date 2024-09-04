@@ -15,9 +15,9 @@ import { filter } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 
 import { useJobStore } from "./lib/jobsStore";
-import Header from "../Components/Header";
 
-const ListPlaceholder = () => {
+
+const ListPlaceholderMobile = () => {
     const [chats, setChats] = useState([]);
     const [addMode, setAddMode] = useState(false);
     const [input, setInput] = useState("");
@@ -28,36 +28,41 @@ const ListPlaceholder = () => {
     
   
     useEffect(() => {
-      const jobQuery = query(
-        collection(db, "employers", currentUser.uid, "Posted Jobs")
+   
+
+
+      const chatIdQuery = query(
+        collection(db, "users", currentUser.uid, "Applied")
       );
 
-      onSnapshot(jobQuery, (snapshot) => {
-        let jobData = [];
+      onSnapshot(chatIdQuery, (snapshot) => {
+        let channelIds = [];
         snapshot.docs.forEach((doc) => {
-          //review what this does
-          // console.log("test",doc.data())
-          jobData.push({ jobTitle: doc.data().jobTitle, id: doc.data().jobID });
+          if (doc.data().channelId) {
+            channelIds.push(doc.data().channelId);
+          }
         });
 
-        if (!jobData || !jobData.length) {
-          //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
-          // setInterviewNewMessageLength(null);
+        if (!channelIds || !channelIds.length) {
+          setChats(null)
           setSelectedCategoryChannelIDs(null)
+        
+          //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
         } else {
-          setInterviewMessageData(jobData);
-          console.log("1")
+        
+          setSelectedCategoryChannelIDs(channelIds);
         }
       });
+  
+      
     }, [currentUser.uid]);
 
 
-
-
-    const [postedUnread, setPostedUnread] = useState(false)
-    const [jobsInProgressUnread, setJobsInProgressUnread] = useState(false)
-    const [inReviewUnread, setInReviewUnread] = useState(false)
-    const [requestsUnread, setRequestsUnread] = useState(false)
+    
+    const [postedUnread, setPostedUnread] = useState(0)
+    const [jobsInProgressUnread, setJobsInProgressUnread] = useState(0)
+    const [inReviewUnread, setInReviewUnread] = useState(0)
+    const [requestsUnread, setRequestsUnread] = useState(0)
 
 
 
@@ -83,8 +88,6 @@ const ListPlaceholder = () => {
    
                if (item.isSeen === false && item.jobType === "Interview") {
                   postedJobsUnread++
-                  console.log("got one")
-
                }
                if (item.isSeen === false && item.jobType === "Jobs In Progress") {
                 progressUnread++
@@ -96,8 +99,13 @@ const ListPlaceholder = () => {
                  requestUnread++
                }
              });
-        
    
+   
+          
+   
+             if (postedJobsUnread > 0) {
+              setPostedUnread(true) 
+             }
              if (postedJobsUnread > 0) {
               setPostedUnread(true) 
              }
@@ -118,7 +126,6 @@ const ListPlaceholder = () => {
          };
       }
      }, [currentUser]);
-   
   
     //Check channel Id's from "Category" and run them against "User MEssages" (? The one with user ID), then set those to chat
   
@@ -136,30 +143,31 @@ const ListPlaceholder = () => {
   
     useEffect(() => {
       if (selectedCategory === "Posted Jobs") {
-        const jobQuery = query(
-          collection(db, "employers", currentUser.uid, "Posted Jobs")
+        const chatIdQuery = query(
+          collection(db, "users", currentUser.uid, "Applied")
         );
   
-        onSnapshot(jobQuery, (snapshot) => {
-          let jobData = [];
+        onSnapshot(chatIdQuery, (snapshot) => {
+          let channelIds = [];
           snapshot.docs.forEach((doc) => {
-            //review what this does
-            // console.log("test",doc.data())
-            jobData.push({ jobTitle: doc.data().jobTitle, id: doc.data().jobID });
+            if (doc.data().channelId) {
+              channelIds.push(doc.data().channelId);
+            }
           });
   
-          if (!jobData || !jobData.length) {
-            //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
-            // setInterviewNewMessageLength(null);
+          if (!channelIds || !channelIds.length) {
+            setChats(null)
             setSelectedCategoryChannelIDs(null)
+            console.log("why no null?")
+            //from stack overflow https://stackoverflow.com/questions/29544371/finding-the-average-of-an-array-using-js
           } else {
-            setInterviewMessageData(jobData);
-            console.log("1")
+            console.log("HERES WHY")
+            setSelectedCategoryChannelIDs(channelIds);
           }
         });
-      } else if (selectedCategory === "Jobs In Progress") {
+      }else if (selectedCategory === "Jobs In Progress") {
         const chatIdQuery = query(
-          collection(db, "employers", currentUser.uid, "Jobs In Progress")
+          collection(db, "users", currentUser.uid, "Jobs In Progress")
         );
   
         onSnapshot(chatIdQuery, (snapshot) => {
@@ -180,7 +188,7 @@ const ListPlaceholder = () => {
         });
       } else if (selectedCategory === "In Review") {
         const chatIdQuery = query(
-          collection(db, "employers", currentUser.uid, "In Review")
+          collection(db, "users", currentUser.uid, "In Review")
         );
   
         onSnapshot(chatIdQuery, (snapshot) => {
@@ -201,7 +209,7 @@ const ListPlaceholder = () => {
         });
       } else if (selectedCategory === "Requests") {
         const chatIdQuery = query(
-          collection(db, "employers", currentUser.uid, "Requests")
+          collection(db, "users", currentUser.uid, "Requests")
         );
   
         onSnapshot(chatIdQuery, (snapshot) => {
@@ -276,11 +284,8 @@ const ListPlaceholder = () => {
           async (res) => {
             let fetchedIds = [];
             let selectedChats = [];
-            let items = res.data().chats
-
-          
+            const items = res.data().chats;
   
-            console.log("usser listPlaceholder",currentUser.uid)
             console.log("res data",res.data().chats)
   
             items.map(async (item) => {
@@ -292,13 +297,13 @@ const ListPlaceholder = () => {
             
               const promises = items.map(async (item) => {
                 if (item.chatId !== "placeholder") {
-                const userDocRef = doc(db, "users", item.receiverId);
+                const userDocRef = doc(db, "employers", item.receiverId);
                 const userDocSnap = await getDoc(userDocRef);
     
                 const user = userDocSnap.data();
     
                 return { ...item, user };
-                } 
+                }
               });
     
               const chatData = await Promise.all(promises);
@@ -312,21 +317,16 @@ const ListPlaceholder = () => {
               filteredChats.forEach((filteredChat) => {
                 chatData.forEach((chatData) => {
                   if (chatData && filteredChat === chatData.chatId) {
-                      selectedChats.push(chatData);
-                      console.log("chat data", chatData);
-                   }
-            
+                    selectedChats.push(chatData);
+                    console.log("chat data", chatData);
+                  }
                 });
               });
-    
               if (!selectedChats || !selectedChats.length) {
                 setChats(null);
               } else {
                 setChats(selectedChats.sort((a, b) => b.updatedAt - a.updatedAt));
               }
-        
-  
-          
           }
         );
   
@@ -362,11 +362,7 @@ const ListPlaceholder = () => {
   
       const userChatsRef = doc(db, "User Messages", currentUser.uid);
   
-      //add field that keeps track of type of chat: Accepted, Request, Interviewing, Completed
-      //originally show all.
-      // filter between each via drop down? or toggle. idk
-      // mvp tho? add jobTitle to job title
-      //so on create add JobID and Job Title (and title: request if Needer contacting Doer)to User Messages sub-collection
+
   
       try {
         await updateDoc(userChatsRef, {
@@ -378,36 +374,38 @@ const ListPlaceholder = () => {
         console.log(err);
       }
     };
+
+
+
   
-    // const filteredChats = chats.filter((c) =>
-    //   c.user.username.toLowerCase().includes(input.toLowerCase())
-    // );
+   
   
   return (
   
     <aside class="relative ">
        
-       <div id="hs-pro-sidebar" class="
+    <div id="hs-pro-sidebar" class="
 
 
-hs-overlay [--auto-close:lg]
-    hs-overlay-open:translate-x-0
-    -translate-x-full transition-all duration-300 transform
 
-    xl:w-[328px]
+
     
-    md:w-[300px]
-sm:w-[286px]
-   h-[calc(100vh-70px)] mt-14
+    w-full
+
+   h-[calc(100vh-70px)] mt-16
    
       z-50
       fixed inset-y-0 start-0 xl:start-64 
       bg-white
       lg:block lg:translate-x-0 lg:end-auto lg:bottom-0]xl:block xl:translate-x-0 xl:end-auto xl:bottom-0
-     ">  
+     ">
+     
       <div class="h-full flex ">
-      <div class="sm:w-[286px] md:w-[300px] lg:w-full truncate bg-white lg:border-x border-gray-200">
+  
+      
+        <div class="sm:w-[300px] w-full  truncate bg-white border-x border-gray-200">
           <div class="h-full flex flex-col">
+          
             <div class="ps-4 pe-3 py-2 flex justify-between items-center gap-x-2 border-b border-gray-200">
               <h1 class="truncate font-semibold text-gray-800">
                 Inbox
@@ -415,7 +413,24 @@ sm:w-[286px]
   
               <div class="flex items-center">
            
-               
+                {/* <div class="relative inline-block">
+                  <select id="hs-pro-select-revenue" data-hs-select='{
+                      "placeholder": "Select option...",
+                      "toggleTag": "<button type=\"button\"></button>",
+                      "toggleClasses": "hs-select-disabled:pointer-events-none hs-select-disabled:opacity-50 relative py-2 ps-2.5 pe-6 inline-flex flex-shrink-0 justify-center items-center gap-x-1.5 text-xs text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 before:absolute before:inset-0 before:z-[1]",
+                      "dropdownClasses": "mt-2 z-50 w-32 p-1 space-y-0.5 bg-white rounded-xl shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)]",
+                      "optionClasses": "hs-selected:bg-gray-100 py-1.5 px-2 w-full text-[13px] text-gray-800 rounded-lg cursor-pointer hover:bg-gray-100 rounded-lg focus:outline-none focus:bg-gray-100",
+                      "optionTemplate": "<div class=\"flex justify-between items-center w-full\"><span data-title></span><span class=\"hidden hs-selected:block\"><svg class=\"flex-shrink-0 size-3.5 text-gray-800" xmlns=\"http:.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></span></div>"
+                    }' class="hidden">
+                    <option value="">Choose</option>
+                    <option selected>Newest</option>
+                    <option>Oldest</option>
+                  </select>
+  
+                  <div class="absolute top-1/2 end-2 -translate-y-1/2">
+                    <svg class="flex-shrink-0 size-3.5 text-gray-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </div>
+                </div> */}
          
   
                 <div class="relative flex items-center gap-x-1 ps-2 ms-2 before:absolute before:top-1/2 before:start-0 before:w-px before:h-4 before:bg-gray-200 before:-translate-y-1/2">
@@ -756,73 +771,7 @@ sm:w-[286px]
        
   
         
-            {/* <div class="py-1.5 border-b border-gray-200">
-              <div class="-mb-2.5  overflow-x-auto">
-                <div class="overflow-x-auto [&::-webkit-scrollbar]:h-0">
-                  
-                  <nav class="flex gap-x-1" aria-label="Tabs" role="tablist">
-                
-                    {selectedCategory === "Posted Jobs" ? (  <button 
-                    value="Posted Jobs"
-                       onClick={(e) => setSelectedCategory(e.target.value)}
-                    type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100 text-gray-800 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 " aria-controls="hs-pro-tabs-chsn-all" role="tab" >
-                      
-                      Interviews
-                      {postedUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                      
-                    </button>) : (  <button 
-                    value="Posted Jobs"
-                       onClick={(e) => setSelectedCategory(e.target.value)}
-                    type="button" class="px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100 text-gray-500 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none active " id="hs-pro-tabs-chsn-item-all" data-hs-tab="#hs-pro-tabs-chsn-all" aria-controls="hs-pro-tabs-chsn-all" role="tab" >
-                      Interviews
-                      {postedUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>)}
-                 
-                 {selectedCategory === "Jobs In Progress" ? (<button value="Jobs In Progress" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class=" text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  font-medium  hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-mentions" data-hs-tab="#hs-pro-tabs-chsn-mentions" aria-controls="hs-pro-tabs-chsn-mentions" role="tab" >
-                     In Progress
-                     {jobsInProgressUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>) : (<button value="Jobs In Progress" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="hs-tab-active:after:bg-gray-800 hover:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100 text-gray-500 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-mentions" data-hs-tab="#hs-pro-tabs-chsn-mentions" aria-controls="hs-pro-tabs-chsn-mentions" role="tab" >
-                     In Progress
-                     {jobsInProgressUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>)}
-                    {selectedCategory === "In Review" ? (<button   value="In Review"  onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="text-gray-800 font-medium bg-gray-100 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-spammed" data-hs-tab="#hs-pro-tabs-chsn-spammed" aria-controls="hs-pro-tabs-chsn-spammed" role="tab" >
-                      In Review
-                      {inReviewUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>) : (<button   value="In Review"  onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="px-2.5 py-2 mb-3 relative inline-flex justify-center items-center gap-x-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 font-medium text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none active " id="hs-pro-tabs-chsn-item-all" data-hs-tab="#hs-pro-tabs-chsn-all" aria-controls="hs-pro-tabs-chsn-all" role="tab" >
-                      In Review
-                      {inReviewUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>)}
-
-                    {selectedCategory === "Requests" ? (<button   value="Requests" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="text-gray-800 font-medium bg-gray-100  px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100  hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-blocked" data-hs-tab="#hs-pro-tabs-chsn-blocked" aria-controls="hs-pro-tabs-chsn-blocked" role="tab" >
-                     Requests
-                     {requestsUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>) : (<button   value="Requests" onClick={(e) => setSelectedCategory(e.target.value)} type="button" class="hs-tab-active:after:bg-gray-800 hs-tab-active:text-gray-800 px-2.5 py-2 mb-3 relative inline-flex justify-center items-center  hover:bg-gray-100 text-gray-500 hover:text-gray-800 text-xs rounded-md disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 after:absolute after:-bottom-2 after:inset-x-2.5 after:z-10 after:h-0.5 after:pointer-events-none  " id="hs-pro-tabs-chsn-item-blocked" data-hs-tab="#hs-pro-tabs-chsn-blocked" aria-controls="hs-pro-tabs-chsn-blocked" role="tab" >
-                     Requests
-                     {requestsUnread ? (<span class="absolute top-1 end-1 inline-flex items-center py-1 px-1 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-red-500 text-white">
-                          
-                          </span>) : (null)}
-                    </button>)}
-                    
-                    
-                  </nav>
-               
-                </div>
-              </div>
-            </div> */}
+       
           
   
             <div class="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-sm [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
@@ -839,8 +788,8 @@ sm:w-[286px]
             <div class="py-4 px-3 flex items-center gap-x-3 border-b border-b-gray-100">
               <div class="flex-shrink-0">
                 <div class="relative size-8">
-                  <span class="flex flex-shrink-0 justify-center items-center size-8 text-xs font-medium uppercase  text-white rounded-full">
-                  {chat.user.profilePictureResponse ? (<img
+                  <span class="flex flex-shrink-0 justify-center items-center size-10 text-xs font-medium uppercase  text-white rounded-full">
+                 {chat.user.profilePictureResponse ? (<img
                 src={chat.user.profilePictureResponse}
                 className="w-8 h-8 mt-2.5 rounded-full object-cover"
                  />) : (<svg
@@ -1076,4 +1025,4 @@ sm:w-[286px]
   )
 }
 
-export default ListPlaceholder
+export default ListPlaceholderMobile

@@ -319,10 +319,10 @@ const ChatPlaceholder = () => {
   return (
     <>
   
-      <body class="hs-overlay-body-open sm:ml-auto sm:w-[calc(100vw-282px)] sm:h-[calc(100vh-100px)] mt-16 bg-gray-100">
+      <body class="hs-overlay-body-open lg:ml-[296px] lg:w-[calc(100vw-316px)] sm:h-[calc(100vh-100px)] mt-16 bg-gray-100">
         <main
           id="content"
-          class="2xl:hs-overlay-layout-open:pe-96 lg:ps-72 transition-all duration-300 "
+          class="2xl:hs-overlay-layout-open:pe-96 xl:ps-72 transition-all duration-300 "
         >
           <div
             id="hs-pro-tabs-chct-1"
@@ -330,7 +330,7 @@ const ChatPlaceholder = () => {
             aria-labelledby="hs-pro-tabs-chct-item-1"
           >
             <div class="relative h-dvh flex flex-col justify-end">
-              <header class="sticky top-16 inset-x-0 z-20 py-2 px-4 flex justify-between gap-x-2 xl:grid xl:grid-cols-2 bg-white border-b border-gray-200">
+              <header class="sticky h-24 top-12 inset-x-0 z-20 py-2 px-4 flex justify-between gap-x-2 xl:grid xl:grid-cols-2 bg-white border-b border-gray-200">
                 <div class="lg:hidden w-20 sm:w-auto flex items-center">
                   <div class="-ms-3">
                     <button
@@ -481,7 +481,7 @@ const ChatPlaceholder = () => {
                   <div class="relative">
                     <div class="sticky top-0 inset-x-0 z-10 max-w-lg mx-auto text-center">
                       <span class="py-0.5 px-1.5 bg-gray-100 text-xs text-gray-500 rounded-full">
-                        {chat?.messages ? <p>Today</p> : null}
+                        {/* {chat?.messages ? <p>Today</p> : null} */}
                       </span>
                     </div>
 

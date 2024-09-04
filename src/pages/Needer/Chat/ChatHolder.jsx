@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom";
 import ChatPlaceholder from "./ChatPlaceholder";
 import ListPlaceholder from "./ListPlaceholder";
 import { useJobStore } from "./lib/jobsStore";
+import ChatDashboard from "../Components/ChatDashboard";
 const ChatHolder = () => {
 
     const { currentUser, isLoading, fetchUserInfo } = useUserStore();
@@ -66,21 +67,12 @@ const ChatHolder = () => {
   return (
     <>
     <Header />
-    <Dashboard />
-   
-
-
-
     {isDesktop ? ( currentUser ? (
-
-
 <>
-
-
+<ChatDashboard />
   <ListPlaceholder />
   {chatId ? (
     <>
- 
     <ChatPlaceholder passedChannel={passedChannel}/>
     </>
   ) : (

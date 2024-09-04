@@ -746,7 +746,7 @@ const Header = () => {
               <ul>
                 <li class="px-5 mb-1.5">
                   <button
-                    class="flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
+                    class="flex gap-x-3 py-2 px-3 text-sm text-gray-800 w-full rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
                     onClick={() => navigate("/DoerMapView")}
                   >
                     <svg
@@ -764,7 +764,7 @@ const Header = () => {
                       <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                       <polyline points="9 22 9 12 15 12 15 22" />
                     </svg>
-                    My Jobs
+                    Explore
                   </button>
                 </li>
                 <li class="px-5 mb-1.5">

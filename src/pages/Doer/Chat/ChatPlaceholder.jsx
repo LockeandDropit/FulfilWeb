@@ -9,6 +9,7 @@ import {
   query,
   collection,
 } from "firebase/firestore";
+import Markdown from "react-markdown";
 import { db } from "../../../firebaseConfig";
 import { useChatStore } from "./lib/chatStore";
 import { useUserStore } from "./lib/userStore";
@@ -37,12 +38,12 @@ import { format } from "timeago.js";
 import OfferModal from "../components/OfferModal";
 import { useMediaQuery } from "@chakra-ui/react";
 import Detail from "./Detail";
-import NeederProfileModal from "../components/NeederProfileModal"
-import MarkCompleteModal from "../Messaging/MarkCompleteModal"
+import NeederProfileModal from "../components/NeederProfileModal";
+import MarkCompleteModal from "../Messaging/MarkCompleteModal";
 import { useJobStore } from "./lib/jobsStore";
 
-import Header from "../components/Header"
-import Dashboard from "../components/Dashboard"
+import Header from "../components/Header";
+import Dashboard from "../components/Dashboard";
 import ListPlaceholder from "./ListPlaceholder";
 
 const ChatPlaceholder = () => {
@@ -54,6 +55,11 @@ const ChatPlaceholder = () => {
     isOpen: isOpenDetails,
     onOpen: onOpenDetails,
     onClose: onCloseDetails,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenDrawer,
+    onOpen: onOpenDrawer,
+    onClose: onCloseDrawer,
   } = useDisclosure();
   //pulls cumulative reviews
   const [numberOfRatings, setNumberOfRatings] = useState(null);
@@ -102,7 +108,7 @@ const ChatPlaceholder = () => {
 
   const { job, jobHiringState, isJobLoading, fetchJobInfo } = useJobStore();
 
-  console.log("job from Doer ChjatPlaceholder", job)
+  console.log("job from Doer ChjatPlaceholder", job);
 
   const endRef = useRef(null);
 
@@ -280,13 +286,11 @@ const ChatPlaceholder = () => {
 
   //height calc help credit Ryu-The-Sick https://www.reddit.com/r/tailwindcss/comments/v7jarp/how_do_i_make_the_height_of_a_div_the_height_of/
 
-
-  const [neederProfileVisible, setNeederProfileVisible] = useState(false)
+  const [neederProfileVisible, setNeederProfileVisible] = useState(false);
 
   const handleNeederProfileVisible = () => {
-    setNeederProfileVisible(!neederProfileVisible)
-
-  }
+    setNeederProfileVisible(!neederProfileVisible);
+  };
 
   const [offerVisible, setOfferVisible] = useState(false);
 
@@ -294,31 +298,27 @@ const ChatPlaceholder = () => {
     setOfferVisible(!offerVisible);
   };
 
-
-
   useEffect(() => {
-    console.log("location", location.state)
+    console.log("location", location.state);
     if (location.state === null) {
     } else {
       if (location.state.profileModalReset) {
         setNeederProfileVisible(false);
       } else if (location.state.offerReset) {
-   
-        setOfferVisible(false)
+        setOfferVisible(false);
       }
     }
   }, [location]);
 
-  const [markCompleteVisible, setMarkCompleteVisible] = useState(false)
+  const [markCompleteVisible, setMarkCompleteVisible] = useState(false);
 
   const handleMarkCompleteVisible = () => {
-    setMarkCompleteVisible(!markCompleteVisible)  
-  }
+    setMarkCompleteVisible(!markCompleteVisible);
+  };
 
   if (isJobLoading) return <div className="loading">Loading...</div>;
   return (
     <>
-  
       <body class="hs-overlay-body-open lg:ml-[296px] lg:w-[calc(100vw-316px)] sm:h-[calc(100vh-100px)] mt-16 bg-gray-100">
         <main
           id="content"
@@ -334,7 +334,7 @@ const ChatPlaceholder = () => {
                 <div class="lg:hidden w-20 sm:w-auto flex items-center">
                   <div class="-ms-3">
                     <button
-                    onClick={() => resetChat()}
+                      onClick={() => resetChat()}
                       type="button"
                       class="flex justify-center items-center gap-x-1 py-1.5 px-2.5 text-sm text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
                       data-hs-overlay="#hs-pro-sidebar"
@@ -362,7 +362,7 @@ const ChatPlaceholder = () => {
 
                 <div>
                   <div
-                  onClick={() => onOpenDetails()}
+                    onClick={() => onOpenDetails()}
                     class="truncate flex items-center gap-x-3.5 focus:outline-none cursor-default"
                     data-hs-overlay="#hs-pro-chhds1"
                     aria-controls="hs-pro-chhds1"
@@ -371,7 +371,7 @@ const ChatPlaceholder = () => {
                     <span class="lg:block  relative flex-shrink-0">
                       {user.profilePictureResponse ? (
                         <img
-                          class="flex-shrink-0 size-8 rounded-full"
+                          class="flex-shrink-0 size-12 rounded-full"
                           src={user.profilePictureResponse}
                         />
                       ) : (
@@ -401,24 +401,24 @@ const ChatPlaceholder = () => {
                           ></path>
                         </svg>
                       )}
-
-                 
                     </span>
-                    <span class="grow text-center lg:text-start truncate">
-                      <span class="truncate block font-semibold text-sm leading-4 text-gray-800">
+                    <span class="grow text-center justify-center align-center items-center lg:text-start truncate">
+                      <span class="truncate block font-semibold text-lg leading-4 text-gray-800 ">
                         {user.firstName} {user.lastName}
                       </span>
-                      {isDesktop ? (null) : (    <span class="truncate block text-xs text-blue-600 leading-4">
-                See details
-              </span>)}
-                  
+                      {isDesktop ? null : (
+                        <span class="truncate block text-xs text-blue-600 leading-4">
+                          See details
+                        </span>
+                      )}
                     </span>
                   </div>
                 </div>
-                      {isDesktop ? (   <div class="w-20 sm:w-auto flex justify-end items-center gap-x-0.5">
-                  {/* add here if you want anything in the end of the internal header */}
-                  
-                  {/* {jobHiringState.isJobOffered === true &&
+                {isDesktop ? (
+                  <div class="w-20 sm:w-auto flex justify-end items-center gap-x-0.5">
+                    {/* add here if you want anything in the end of the internal header */}
+
+                    {/* {jobHiringState.isJobOffered === true &&
                       jobHiringState.isHired === false ? (
                         <span    onClick={() => handleOfferVisible()} class=" cursor-pointer py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-green-100 text-green-700 rounded-full">
                 
@@ -472,8 +472,8 @@ const ChatPlaceholder = () => {
                       )}
                   
               */}
-                </div>) : (null)}
-             
+                  </div>
+                ) : null}
               </header>
 
               <div class="h-full overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-sm [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
@@ -704,47 +704,46 @@ const ChatPlaceholder = () => {
                 </div>
 
                 <div class="p-5 flex flex-col justify-center items-center text-center border-b border-gray-100">
-                {user.profilePictureResponse ? (
-                        <img
-                          class="flex-shrink-0 size-16 rounded-full"
-                          src={user.profilePictureResponse}
-                        />
-                      ) : (
-                        <svg
-                          class="w-16 h-16  rounded-full object-cover text-gray-500"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <rect
-                            x="0.62854"
-                            y="0.359985"
-                            width="15"
-                            height="15"
-                            rx="7.5"
-                            fill="white"
-                          ></rect>
-                          <path
-                            d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
-                            fill="currentColor"
-                          ></path>
-                          <path
-                            d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
-                            fill="currentColor"
-                          ></path>
-                        </svg>
-                      )}
+                  {user.profilePictureResponse ? (
+                    <img
+                      class="flex-shrink-0 size-16 rounded-full"
+                      src={user.profilePictureResponse}
+                    />
+                  ) : (
+                    <svg
+                      class="w-16 h-16  rounded-full object-cover text-gray-500"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect
+                        x="0.62854"
+                        y="0.359985"
+                        width="15"
+                        height="15"
+                        rx="7.5"
+                        fill="white"
+                      ></rect>
+                      <path
+                        d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                        fill="currentColor"
+                      ></path>
+                      <path
+                        d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>
+                  )}
                   <div class="mt-2 w-full">
                     <h2 class="text-lg font-semibold text-gray-800">
                       {user.firstName} {user.lastName}
                     </h2>
-                
 
                     <div class="mt-4 flex justify-center items-center gap-x-3">
                       <button
-                         onClick={() => handleNeederProfileVisible()}
+                        onClick={() => handleNeederProfileVisible()}
                         type="button"
                         class="py-2 px-2.5 min-w-32 inline-flex justify-center items-center gap-x-1.5 font-medium text-xs rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50"
                       >
@@ -768,195 +767,92 @@ const ChatPlaceholder = () => {
                         </svg>
                         View profile
                       </button>
-
-          
                     </div>
                   </div>
                 </div>
 
-                <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-sm [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+                <div class="w-full">
                   <div class="hs-accordion-group" data-hs-accordion-always-open>
                     <div
                       class="hs-accordion border-b border-gray-100 active"
                       id="hs-pro-chdsudc1"
                     >
-                      <button
-                        type="button"
-                        class="hs-accordion-toggle p-5 w-full flex justify-between items-center gap-x-3 text-gray-800 hover:text-gray-600 focus:outline-none focus:text-gray-600 disabled:opacity-50 disabled:pointer-events-none"
-                        aria-controls="hs-pro-chdsudc1-collapse"
-                      >
-                        <span class="text-sm font-medium">Job details</span>
-                        <svg
-                          class="hs-accordion-active:hidden block size-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path d="M5 12h14"></path>
-                          <path d="M12 5v14"></path>
-                        </svg>
-                        <svg
-                          class="hs-accordion-active:block hidden size-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path d="M5 12h14"></path>
-                        </svg>
-                      </button>
+                   
 
                       <div
                         id="hs-pro-chdsudc1-collapse"
                         class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
                         aria-labelledby="hs-pro-chdsudc1"
                       >
-                        <div class="px-5 pb-5">
-                          <dl class="py-1 grid grid-cols-3 gap-x-4">
+                        <div class="px-5 mb-2">
+                          <dl class="">
                             <dt class="col-span-1">
-                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
-                                <svg
-                                  class="flex-shrink-0 size-3.5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <path d="M12 12h.01" />
-                                  <path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-                                  <path d="M22 13a18.15 18.15 0 0 1-20 0" />
-                                  <rect
-                                    width="20"
-                                    height="14"
-                                    x="2"
-                                    y="6"
-                                    rx="2"
-                                  />
-                                </svg>
-                                Job Title:
+                              <p class="inline-flex items-center gap-x-2 text-xl text-gray-500">
+                                <p class="font-medium text-lg text-gray-800 mt-2">
+                                  {job.jobTitle}
+                                </p>
                               </p>
                             </dt>
-                            <dd class="col-span-2">
-                              <p class="font-medium text-[13px] text-gray-800">
-                                {job.jobTitle}
-                              </p>
-                            </dd>
-                          </dl>
-                          <dl class="py-1 grid grid-cols-3 gap-x-4">
-                            <dt class="col-span-1">
-                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
-                                <svg
-                                  class="flex-shrink-0 size-3.5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                                  <circle cx="12" cy="10" r="3" />
-                                </svg>
-                                location:
-                              </p>
-                            </dt>
-                            <dd class="col-span-2">
-                              <p class="font-medium text-[13px] text-gray-800">
-                                {job.streetAddress}, {job.city}, MN
-                              </p>
-                            </dd>
                           </dl>
 
-                          <dl class="py-1 grid grid-cols-3 gap-x-4">
-                            <dt class="col-span-1">
-                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
-                                <svg
-                                  class="flex-shrink-0 size-3.5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <rect
-                                    width="20"
-                                    height="16"
-                                    x="2"
-                                    y="4"
-                                    rx="2"
-                                  />
-                                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                                </svg>
-                                Pay:
+                          
+                              <p class="inline-flex items-center gap-x-2 text-lg text-gray-500">
+                                {job.isVolunteer ? (
+                                  <p>Volunteer!</p>
+                                ) : job.isSalaried ? (
+                                  <p class="font-medium text-base text-gray-800">
+                                    ${job.shortenedSalary} - $
+                                    {job.shortenedUpperSalary} year
+                                  </p>
+                                ) : job.upperRate > job.lowerRate ? (
+                                  <p class="font-medium text-base text-gray-800">
+                                    ${job.lowerRate}/hr - ${job.upperRate}/hr
+                                  </p>
+                                ) : (
+                                  <p class="font-medium text-base text-gray-800">
+                                    ${job.lowerRate}/hr
+                                  </p>
+                                )}
                               </p>
-                            </dt>
-                            {job.isVolunteer ? (
-                            <p>Volunteer!</p>
-                          ) : job.isSalaried ? (
-                            <p class="font-medium text-[13px] text-gray-800">
-                              ${job.shortenedSalary} yearly - ${job.shortenedUpperSalary} yearly
+                          
+                          <div className="flex flex-col">
+                          {job.isFullTime ? (
+                            <p class="inline-flex items-center gap-x-2 text-base text-gray-500">
+                              Full-time
                             </p>
-                          ) : (job.upperRate > job.lowerRate ?  (<p class="font-medium text-[13px] text-gray-800">
-                           ${job.lowerRate}/hr -  ${job.upperRate}/hr 
-                          </p>) : ( <p class="font-medium text-[13px] text-gray-800">
-                              ${job.lowerRate}/hr
-                            </p>)
-                           
+                          ) : (
+                            <p class="inline-flex items-center gap-x-2 text-base text-gray-500">
+                              Part-time
+                            </p>
                           )}
 
-                            
-                          </dl>
+                          <p class="inline-flex items-center gap-x-2 text-base text-gray-500">
+                            {job.streetAddress}, {job.city}, MN
+                          </p>
 
-                          <dl class="py-1 grid grid-cols-3 gap-x-4">
-                            <dt class="col-span-1">
-                              <p class="inline-flex items-center gap-x-2 text-[13px] text-gray-500">
-                                <svg
-                                  class="flex-shrink-0 size-3.5"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="24"
-                                  height="24"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                                </svg>
-                                Posted:
-                              </p>
-                            </dt>
-                            <dd class="col-span-2">
-                              <p class="font-medium text-[13px] text-gray-800">
-                                {job.datePosted}
-                              </p>
-                            </dd>
-                          </dl>
-                        
+                         
+                          <div className="mt-6 w-full prose prose-li font-inter marker:text-black  line-clamp-6 ">
+                            <Markdown>
+                              {job.description}
+                            </Markdown>
+                          </div>
+                          <div className="flex justify-center mt-4">
+                          <button
+                                       onClick={() => onOpenDrawer()}
+                                            className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                          >
+                                            See More
+                                          </button>
+                          </div>
+                          </div>
+                          {/* <div className="flex justify-center mt-4">
+                          <button
+                                       
+                                            className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                          >
+                                            See More
+                                          </button>
+                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -965,6 +861,233 @@ const ChatPlaceholder = () => {
               </div>
             </aside>
           </div>
+
+          <Drawer
+            onClose={onCloseDrawer}
+            isOpen={isOpenDrawer}
+            size={"xl"}
+          >
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader>{job.jobTitle}</DrawerHeader>
+              <DrawerBody>
+                <div class="">
+                
+                  <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto ">
+                    <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                      <div class="p-4">
+                        <div class=" ">
+                          <div className="flex">
+                            <label
+                              for="hs-pro-dactmt"
+                              class="block mb-2 text-xl font-medium text-gray-900"
+                            >
+                              {job.jobTitle}
+                            </label>
+
+                           
+                          </div>
+                          {job.isFullTimePosition === true ? (
+                            <label
+                              for="hs-pro-dactmt"
+                              class="block  text-lg font-medium text-gray-800"
+                            >
+                              Full-time
+                            </label>
+                          ) : (
+                            <label
+                              for="hs-pro-dactmt"
+                              class="block  text-lg font-medium text-gray-800 "
+                            >
+                              Part-time
+                            </label>
+                          )}
+
+                          {job.isHourly ? (
+                            <div class="space-y-1 ">
+                              <div class="flex align-items-center">
+                                <p className=" text-md font-medium">$</p>
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block text-md font-medium text-gray-800 "
+                                >
+                                  {job.lowerRate}
+                                </label>
+                                <p className=" text-md font-medium">
+                                  /hour - $
+                                </p>
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block  text-md font-medium text-gray-800 "
+                                >
+                                  {job.upperRate}
+                                </label>
+                                <p className=" text-md font-medium">/hour</p>
+                              </div>
+                            </div>
+                          ) : null}
+
+                          {job.isSalaried ? (
+                            <div class="space-y-2 ">
+                              <div class="flex align-items-center">
+                                <p className=" text-md font-medium">$</p>
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block  text-md font-medium text-gray-800 "
+                                >
+                                  {job.lowerRate}
+                                </label>
+                                <p className="ml-1 text-md font-medium ">
+                                  yearly - $
+                                </p>
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block  text-md font-medium text-gray-800 "
+                                >
+                                  {job.upperRate}
+                                </label>
+                                <p className=" ml-1 c font-medium">yearly</p>
+                                {job.isEstimatedPay ? (
+                                  <p>*</p>
+                                ) : null}
+                              </div>
+                            </div>
+                          ) : null}
+                          {job.isEstimatedPay ? (
+                            <div className="mb-2 flex flex-col w-full text-sm ">
+                              <a href="https://www.glassdoor.com/index.htm">
+                                *Estimate. Powered by{" "}
+                                <img
+                                  src="https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png"
+                                  title="Job Search"
+                                />
+                              </a>
+                            </div>
+                          ) : null}
+                          <p class="block  text-md font-medium text-gray-800 ">
+                            {job.streetAddress},{" "}
+                            {job.city},{" "}
+                            {job.state}
+                          </p>
+                          {job.isEstimatedAddress ? (
+                            <p class="block italic text-sm  text-gray-800 ">
+                              Address may not be exact
+                            </p>
+                          ) : null}
+                          <p class="font-semibold text-md text-gray-500  cursor-default">
+                            <span className="font-semibold text-md text-slate-700">
+                              {" "}
+                              Posted:
+                            </span>{" "}
+                            {job.datePosted}
+                          </p>
+                          <p class="font-semibold text-md text-slate-700 cursor-pointer">
+                            Employer:
+                          </p>
+                          <div className="flex">
+                            {job.employerProfilePicture ? (
+                              <>
+                                <div class="flex flex-col justify-center items-center size-[56px]  ">
+                                  <img
+                                    src={
+                                      job.employerProfilePicture
+                                    }
+                                    class="flex-shrink-0 size-[64px] rounded-full"
+                                  />
+
+                                  <div className="flex flex-col ml-4">
+                                    <p class="font-semibold text-md text-gray-500  mt-2 cursor-pointer">
+                                      {job.businessName}
+                                    </p>
+                                    <p class="font-semibold text-md text-gray-500 cursor-default ">
+                                      {job.city}, Minnesota
+                                    </p>
+                                  </div>
+                                </div>
+                              </>
+                            ) : null}
+                            <div className="flex flex-col">
+                              <p class="font-semibold text-md text-gray-500  mt-1 cursor-pointer">
+                                {job.companyName}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="space-y-2 mt-10 mb-4 ">
+                          <label
+                            for="dactmi"
+                            class="block mb-2 text-lg font-medium text-gray-900 "
+                          >
+                            What you'll be doing
+                          </label>
+                          <div className="w-full prose prose-li  font-inter marker:text-black mb-4 ">
+                            <Markdown>
+                              {job.description}
+                            </Markdown>
+                          </div>
+                        </div>
+                        {job.bio ? (
+                          <div class="space-y-2 mt-10 mb-4">
+                            <label
+                              for="dactmi"
+                              class="block mb-2 text-md font-medium text-gray-800 "
+                            >
+                              About {job.companyName}
+                            </label>
+
+                            <div class="mb-4">
+                              <p>{job.bio}</p>
+                            </div>
+                          </div>
+                        ) : null}
+
+                        <div class="space-y-2 mb-4 ">
+                          <label
+                            for="dactmi"
+                            class="block mb-2 text-lg font-medium text-gray-900 "
+                          >
+                            Job Requirements
+                          </label>
+
+                          <div className="prose prose-li  font-inter marker:text-black mb-4">
+                            <Markdown>
+                              {job.applicantDescription}
+                            </Markdown>
+                          </div>
+                        </div>
+                        <div class="space-y-2 md:mb-4 lg:mb-4 mb-20">
+                          <label
+                            for="dactmi"
+                            class="block mb-2 text-lg font-medium text-gray-900 "
+                          >
+                            Employment Benefits
+                          </label>
+
+                          <div className="prose prose-li  font-inter marker:text-black mb-4">
+                            {job.benefitsDescription ? (
+                              <Markdown>
+                                {job.benefitsDescription}
+                              </Markdown>
+                            ) : (
+                              <p>Nothing listed</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                     
+                               
+                        
+                 
+                    </div>
+                  </div>
+                </div>
+              </DrawerBody>
+              
+            </DrawerContent>
+          </Drawer>
 
           <div
             id="hs-pro-tabs-chct-2"
@@ -1872,7 +1995,7 @@ const ChatPlaceholder = () => {
             >
               <div class="h-full flex flex-col">
                 <div class="py-3 px-4 flex justify-between items-center border-b border-gray-200">
-                  <h3 class="font-semibold text-gray-800">Details</h3>
+                  {/* <h3 class="font-semibold text-gray-800 cursor-default">Details</h3> */}
 
                   <div class="absolute top-2 end-4 z-10">
                     <button
@@ -2903,7 +3026,7 @@ const ChatPlaceholder = () => {
             >
               <div class="h-full flex flex-col">
                 <div class="py-3 px-4 flex justify-between items-center border-b border-gray-200">
-                  <h3 class="font-semibold text-gray-800">Details</h3>
+                  {/* <h3 class="font-semibold text-gray-800">Details</h3> */}
 
                   <div class="absolute top-2 end-4 z-10">
                     <button
@@ -6418,21 +6541,18 @@ const ChatPlaceholder = () => {
         </main>
       </body>
 
-{/* Modals live here */}
+      {/* Modals live here */}
       {offerVisible ? <OfferModal /> : null}
-    {neederProfileVisible ? <NeederProfileModal /> : null}
+      {neederProfileVisible ? <NeederProfileModal /> : null}
 
-    {markCompleteVisible ? <MarkCompleteModal /> : null}
- 
-      <Drawer 
-          isOpen={isOpenDetails}
-          placement='right'
-          onClose={onCloseDetails}>
-      <DrawerOverlay />
-      <DrawerContent>
-      <DrawerCloseButton />
-                                  <DrawerBody>
-                                  <aside
+      {markCompleteVisible ? <MarkCompleteModal /> : null}
+
+      <Drawer isOpen={isOpenDetails} placement="right" onClose={onCloseDetails}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerBody>
+            <aside
               id="hs-pro-chhds1"
               class="hs-overlay [--body-scroll:true] 2xl:[--overlay-backdrop:false] [--is-layout-affect:true] [--opened:2xl] [--auto-close:2xl]
          
@@ -6473,38 +6593,38 @@ const ChatPlaceholder = () => {
                 </div>
 
                 <div class="p-5 flex flex-col justify-center items-center text-center border-b border-gray-100">
-                {user.profilePictureResponse ? (
-                        <img
-                          class="flex-shrink-0 size-16 rounded-full"
-                          src={user.profilePictureResponse}
-                        />
-                      ) : (
-                        <svg
-                          class="w-16 h-16  rounded-full object-cover text-gray-500"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <rect
-                            x="0.62854"
-                            y="0.359985"
-                            width="15"
-                            height="15"
-                            rx="7.5"
-                            fill="white"
-                          ></rect>
-                          <path
-                            d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
-                            fill="currentColor"
-                          ></path>
-                          <path
-                            d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
-                            fill="currentColor"
-                          ></path>
-                        </svg>
-                      )}
+                  {user.profilePictureResponse ? (
+                    <img
+                      class="flex-shrink-0 size-16 rounded-full"
+                      src={user.profilePictureResponse}
+                    />
+                  ) : (
+                    <svg
+                      class="w-16 h-16  rounded-full object-cover text-gray-500"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect
+                        x="0.62854"
+                        y="0.359985"
+                        width="15"
+                        height="15"
+                        rx="7.5"
+                        fill="white"
+                      ></rect>
+                      <path
+                        d="M8.12421 7.20374C9.21151 7.20374 10.093 6.32229 10.093 5.23499C10.093 4.14767 9.21151 3.26624 8.12421 3.26624C7.0369 3.26624 6.15546 4.14767 6.15546 5.23499C6.15546 6.32229 7.0369 7.20374 8.12421 7.20374Z"
+                        fill="currentColor"
+                      ></path>
+                      <path
+                        d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>
+                  )}
                   <div class="mt-2 w-full">
                     <h2 class="text-lg font-semibold text-gray-800">
                       {user.firstName} {user.lastName}
@@ -6571,8 +6691,6 @@ const ChatPlaceholder = () => {
                         </svg>
                         View profile
                       </button>
-
-                 
                     </div>
                   </div>
                 </div>
@@ -6690,7 +6808,7 @@ const ChatPlaceholder = () => {
                                 Status:
                               </p>
                             </dt>
-                          
+
                             {/* {jobHiringState.isJobOffered === true &&
                       jobHiringState.isHired === false ? (
                         <span class="py-1.5 ps-1.5 w-[160px] px-1 inline-flex items-center  text-xs font-medium bg-green-100 text-green-800 rounded-full">
@@ -6771,7 +6889,7 @@ const ChatPlaceholder = () => {
                     </dd>
               
                       )} */}
-                  </dl>           
+                          </dl>
 
                           <dl class="py-1 grid grid-cols-3 gap-x-4">
                             <dt class="col-span-1">
@@ -6829,19 +6947,21 @@ const ChatPlaceholder = () => {
                               </p>
                             </dt>
                             {job.isVolunteer ? (
-                            <p>Volunteer!</p>
-                          ) : job.isSalaried ? (
-                            <p class="font-medium text-[13px] text-gray-800">
-                              ${job.shortenedSalary} yearly - ${job.shortenedUpperSalary} yearly
-                            </p>
-                          ) : (job.upperRate > job.lowerRate ?  (<p class="font-medium text-[13px] text-gray-800">
-                            ${job.lowerRate}/hr -  ${job.upperRate}/hr 
-                          </p>) : ( <p class="font-medium text-[13px] text-gray-800">
-                              ${job.lowerRate}/hr
-                            </p>)
-                           
-                          )}
-                            
+                              <p>Volunteer!</p>
+                            ) : job.isSalaried ? (
+                              <p class="font-medium text-[13px] text-gray-800">
+                                ${job.shortenedSalary} yearly - $
+                                {job.shortenedUpperSalary} yearly
+                              </p>
+                            ) : job.upperRate > job.lowerRate ? (
+                              <p class="font-medium text-[13px] text-gray-800">
+                                ${job.lowerRate}/hr - ${job.upperRate}/hr
+                              </p>
+                            ) : (
+                              <p class="font-medium text-[13px] text-gray-800">
+                                ${job.lowerRate}/hr
+                              </p>
+                            )}
                           </dl>
 
                           <dl class="py-1 grid grid-cols-3 gap-x-4">
@@ -6870,18 +6990,14 @@ const ChatPlaceholder = () => {
                               </p>
                             </dd>
                           </dl>
-                    
                         </div>
                       </div>
                     </div>
-
-                   
                   </div>
                 </div>
               </div>
             </aside>
-
-      </DrawerBody>
+          </DrawerBody>
         </DrawerContent>
       </Drawer>
     </>

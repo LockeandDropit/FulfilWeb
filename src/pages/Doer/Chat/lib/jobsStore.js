@@ -15,32 +15,44 @@ jobHiringState: null,
     // if (!uid) return set({ currentUser: null, isLoading: false });
 
 
-  
+    //what I should do is map over the collection of Applied, extract the jobID from each, then match those with the MapJobs and pull the data from there.
+
+    let jobIds = []
+
       const docRef = doc(db, "users", uid, "Applied", jobTitle );
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists() && docSnap.data().jobID === jobID) {
-        set({ job: docSnap.data(), isJobLoading: false });
-        console.log("jobstore",docSnap.data())
+        jobIds.push(docSnap.data().jobID)
       } else {
-        // set({job: null, isJobLoading: false });
+      }
+
+      //now grab from Map Jobs
+
+      const docRefGolbal = doc(db, "Map Jobs", jobID );
+      const docSnap2 = await getDoc(docRefGolbal);
+
+      if (docSnap2.exists() && docSnap2.data().jobID === jobID) {
+        set({ job: docSnap2.data(), isJobLoading: false });
+        console.log("jobstore beep beep", docSnap2.data())
+      } else {
       }
 
     if (jobType === "Interview") {
-        try {
-            const docRef = doc(db, "users", uid, "Applied", jobTitle );
-            const docSnap = await getDoc(docRef);
-      //add code to check that jobID === JobID
-            if (docSnap.exists() && docSnap.data().jobID === jobID) {
-              set({ job: docSnap.data(), isJobLoading: false });
-              console.log("jobstore",docSnap.data())
-            } else {
-              set({job: null, isJobLoading: false });
-            }
-          } catch (err) {
-            console.log(err);
-            return set({ job: null, isJobLoading: false});
-          }
+      //   try {
+      //       const docRef = doc(db, "users", uid, "Applied", jobTitle );
+      //       const docSnap = await getDoc(docRef);
+      // //add code to check that jobID === JobID
+      //       if (docSnap.exists() && docSnap.data().jobID === jobID) {
+      //         set({ job: docSnap.data(), isJobLoading: false });
+      //         console.log("jobstore",docSnap.data())
+      //       } else {
+      //         set({job: null, isJobLoading: false });
+      //       }
+      //     } catch (err) {
+      //       console.log(err);
+      //       return set({ job: null, isJobLoading: false});
+      //     }
     } else {
       // try {
       //   const docRef = doc(db, "users", uid, jobType, jobTitle );

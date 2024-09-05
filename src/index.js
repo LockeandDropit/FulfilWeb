@@ -493,12 +493,16 @@ const router = createBrowserRouter([
 ]);
 
 
-if (!window.location.host.includes('127.0.0.1') && !window.location.host.includes('localhost')) {
+
+if (process.env.NODE_ENV === 'production') {
   posthog.init(
     process.env.REACT_APP_POSTHOG_API, {api_host: "https://us.i.posthog.com"}
     
   );
+} else {
+  console.log("Hi Christian, this is running in development mode")
 }
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

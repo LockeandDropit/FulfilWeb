@@ -407,7 +407,7 @@ const ListPlaceholderMobile = () => {
           <div class="h-full flex flex-col">
           
             <div class="ps-4 pe-3 py-2 flex justify-between items-center gap-x-2 border-b border-gray-200">
-              <h1 class="truncate font-semibold text-gray-800">
+              <h1 class="truncate font-semibold text-xl text-gray-800">
                 Inbox
               </h1>
   
@@ -791,11 +791,11 @@ const ListPlaceholderMobile = () => {
                   <span class="flex flex-shrink-0 justify-center items-center size-10 text-xs font-medium uppercase  text-white rounded-full">
                  {chat.user.profilePictureResponse ? (<img
                 src={chat.user.profilePictureResponse}
-                className="w-8 h-8 mt-2.5 rounded-full object-cover"
+                className="w-10 h-10  rounded-full object-cover"
                  />) : (<svg
-                          class="w-14 h-14  rounded-full object-cover text-gray-500"
-                          width="14"
-                          height="14"
+                          class="w-16 h-16  rounded-full object-cover text-gray-500"
+                          width="16"
+                          height="16"
                           viewBox="0 0 16 16"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
@@ -820,9 +820,9 @@ const ListPlaceholderMobile = () => {
                   </span>
                 </div>
               </div>
-              <div class="grow truncate">
+              <div class="grow truncate ml-1">
                 <div class="flex justify-between items-center gap-x-1">
-                  <p class="truncate font-semibold text-[13px] text-gray-800">{chat.user.firstName}   </p>
+                <span class="truncate font-semibold text-base text-gray-800 flex">{chat.user.firstName} {chat.user.lastName} <p className="mx-2 text-gray-600 text-xl" >&#x2022;</p> {chat.jobTitle}</span>
                   <div>
                   {chat.isSeen ? (null) :( <span class="relative min-w-[18px] min-h-[18px] inline-flex justify-center items-center text-[10px] bg-blue-500 text-white rounded-full px-1">
                     1
@@ -834,7 +834,7 @@ const ListPlaceholderMobile = () => {
                   <div class="flex items-center gap-x-1.5">
                   
                     <div class="grow truncate">
-                      <p class="truncate font-medium text-gray-800 text-xs">{chat.lastMessage}</p>
+                    <p class="truncate text-gray-800 text-sm">{chat.lastMessage ? chat.lastMessage : <p>No messages yet</p>}</p>
                     </div>
                   </div>
                 </div>

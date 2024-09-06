@@ -14,6 +14,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {
   doc,
   getDoc,
+  getDocs,
   collectionGroup,
   query,
   collection,
@@ -69,30 +70,9 @@ import {
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { ViewIcon } from "@chakra-ui/icons";
 import {
-  EmailShareButton,
   FacebookShareButton,
   FacebookIcon,
-  RedditIcon,
-  GabShareButton,
-  HatenaShareButton,
-  InstapaperShareButton,
-  LineShareButton,
-  LinkedinShareButton,
-  LivejournalShareButton,
-  MailruShareButton,
-  OKShareButton,
-  PinterestShareButton,
-  PocketShareButton,
-  RedditShareButton,
-  TelegramShareButton,
-  TumblrShareButton,
-  TwitterShareButton,
-  ViberShareButton,
-  VKShareButton,
-  WhatsappShareButton,
-  WorkplaceShareButton,
 } from "react-share";
-
 import {
   onAuthStateChanged,
   setPersistence,
@@ -106,6 +86,7 @@ import { FcGoogle } from "react-icons/fc";
 // import LoggedOutHeader from "./Landing/LoggedOutHeader.jsx";
 import { useMediaQuery } from "@chakra-ui/react";
 import Plausible from "plausible-tracker";
+import SingleMarkerApplied from "./SingleMarkerApplied.jsx";
 
 // import LoggedOutHeaderNoGap from "./Landing/LoggedOutHeaderNoGap.jsx";
 
@@ -600,11 +581,36 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
 
   const [newTrees, setNewTrees] = useState([]);
 
-  // useEffect(() => {
-  //   if (trees) {
-  //       setNewTrees(trees)
-  //   }
-  // }, [trees])
+//this is to check which jobs the user has already applied to.
+
+const [appliedJobIds, setAppliedJobIds] = useState([])
+
+useEffect(() => {
+  if (currentUser) {
+  let jobIds = [];
+
+  const q = query(collection(db, "users", currentUser.uid, "Applied"));
+
+  async function getAppliedJobIds() {
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      jobIds.push(doc.data().jobID)
+      // console.log("here are all the docs", doc.data());
+    });
+
+    setAppliedJobIds(jobIds)
+    
+  }
+
+
+  getAppliedJobIds()
+}
+}, []);
+
+
+
 
   const filterOutSameLocation = () => {
     //map over and create lat lng object for each grouped lat/lng value
@@ -1436,6 +1442,8 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
 
       {newTrees.map((businessPostedJobs) => (
         <>
+        {appliedJobIds.indexOf(businessPostedJobs.jobID) !== -1 ? (<SingleMarkerApplied props={businessPostedJobs}/>) : (
+          <>
           <SingleMarker
             key={businessPostedJobs.key}
             tree={businessPostedJobs}
@@ -1475,6 +1483,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
                                   class="block mb-2 text-xl font-medium text-gray-900"
                                 >
                                   {businessPostedJobs.jobTitle}
+                       
                                 </label>
 
                                 <label onClick={() => onOpenShare()}>
@@ -2398,8 +2407,11 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
                   </ModalBody>
                 </ModalContent>
               </Modal>
+            
             </>
           ) : null}
+          </>
+        )}
         </>
       ))}
 

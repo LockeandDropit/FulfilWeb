@@ -47,25 +47,17 @@ export default function useJobFetch() {
             hash[latLng] += 1;
             groupFiltered.push({
               ...postedJobs,
-
-             
             });
-
-
           } else {
             // If it hasn't been encountered before, mark it as seen in the hash table with an offset of 1
             hash[latLng] = 1;
             // // Return the original location if it's the first time encountering this combination
-
             individualFiltered.push({ ...postedJobs });
           }
         });
-
-     
-    
         setJobs(postedByBusiness);
         setGroupedJobs(groupFiltered)
-
+        
         //if individual filtered matched latlng of any grouped filter, remove from individual and add to grouped.
         return processedLocations;
       });

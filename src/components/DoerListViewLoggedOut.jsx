@@ -651,7 +651,7 @@ console.log("session id ", sessionId)
    </div>
  </div>
 </div> */}
-  {isDesktop ? (  <Center >
+  {isDesktop ? (  <Center>
                   
                   <Card
                     align="center"

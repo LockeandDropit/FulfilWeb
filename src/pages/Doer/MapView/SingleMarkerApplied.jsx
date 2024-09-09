@@ -406,7 +406,7 @@ const SingleMarkerApplied = ({props}) => {
         </DrawerBody>
         <DrawerFooter>
             <div className="flex align-center justify-center">
-            <p>{'\u2728'}You've already applied for this position!{'\u2728'}</p>
+            <p className="text-lg font-semibold">{'\u2728'}You've already applied for this position!{'\u2728'}</p>
             </div>
         </DrawerFooter>
       </DrawerContent>

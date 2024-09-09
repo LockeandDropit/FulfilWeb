@@ -1520,7 +1520,7 @@ const UserProfile = () => {
                       <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
                         <div class="pt-4 first:pt-0">
                           <h2 class="text-sm font-semibold text-gray-800 ">
-                            Details ss
+                            Details 
                           </h2>
 
                           <ul class="mt-3 space-y-2">
@@ -3019,7 +3019,7 @@ const UserProfile = () => {
                               class="cursor-pointer text-sky-500 underline hover:text-sky-600"
                               onClick={() =>
                                 window.open(
-                                  "https://gdoc.io/resume-templates/",
+                                  "https://www.resumatic.ai/",
                                   "_blank"
                                 )
                               }

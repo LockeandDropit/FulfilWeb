@@ -450,7 +450,6 @@ const Dashboard = () => {
                   </svg>
                   Account Settings
                 </button>
-
                 {/* <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
                   <span class="block text-xs uppercase text-gray-500">
                     Actions

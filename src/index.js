@@ -71,7 +71,7 @@ import AddLogoAbout from "./pages/Register/Needer/BusinessOnboarding/AddLogoAbou
 import DoerMapLoggedOut from "./components/DoerMapLoggedOut";
 import DoerMapLoggedOutClusterTest from "./components/DoerMapLoggedOutClusterTest";
 import ResetPasswordLoggedOut from "./components/Landing/ResetPasswordLoggedOut";
-
+import DoerListView from "./pages/Doer/MapView/DoerListView";
 
 
 //Stream Chat
@@ -485,6 +485,10 @@ const router = createBrowserRouter([
   {
     path: "/DoerMapView",
     element: <DoerMapView/>,
+  },
+  {
+    path: "/DoerListView",
+    element: <DoerListView/>,
   },
   {
     path: "/ResetPasswordLoggedOut",

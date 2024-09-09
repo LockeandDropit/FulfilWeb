@@ -19,13 +19,16 @@ import useJobFetch from "../../../hooks/useJobFetch.js";
 import useDoerJobFetch from "../../../hooks/useDoerJobFetch copy.js";
 import { auth } from "../../../firebaseConfig.js";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
-
+import { useNavigate } from "react-router-dom";
 import {useUserStore} from "../Chat/lib/userStore.js"
 
 const DoerMapView = () => {
     const [trees, setTrees] = useState();
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [isDesktop] = useMediaQuery("(min-width: 500px)");
+
+
+    const navigate = useNavigate();
 
     const [sameLocationJobs, setSameLocationJobs] = useState(false)
 
@@ -167,7 +170,29 @@ const [hasRun, setHasRun] = useState(false);
               </div>
                 {filteredTrees && <ClusteredMarkers user={user} trees={filteredTrees} sameLocationJobs={sameLocationJobs} />}
             
-                </Map> </Box> </APIProvider>
+                </Map> </Box> 
+                <div id="cookies-simple-with-dismiss-button" class="fixed bottom-0 start-1/2 transform -translate-x-1/2 z-[60] sm:max-w-4xl w-auto mx-auto px-2">
+                                         <div class="p-2 bg-transparent rounded-sm shadow-sm ">
+                                        <div class="p-2 flex justify-between gap-x-2">
+                                      <div class="w-full flex justify-center items-center gap-x-2">
+                                        <button
+                                          type="button"
+                                          class="border shadow-sm border-slate-800 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800 text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                          data-hs-overlay="#hs-pro-datm"
+                                          onClick={() => navigate("/DoerListView")}
+                                        >
+                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+</svg>
+
+
+                                         List View
+                                        </button>
+                                      
+                                      </div>
+                                    </div>
+                                    </div>
+                                    </div></APIProvider>
               ) : (<p>nah</p>) }
             
     </>

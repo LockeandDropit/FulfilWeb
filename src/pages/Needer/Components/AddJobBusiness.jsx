@@ -53,6 +53,7 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { draftToMarkdown } from "markdown-draft-js";
 import RichTextEditor from "./RichTextEditor";
+import ScreeningQuestions from "./screening_questions/ScreeningQuestions";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -1167,6 +1168,16 @@ const AddJobBusiness = ({ heldSelected }) => {
     }
   }, [intermediatePositionType]);
 
+
+
+  const [addScreeningQuestions, setAddScreeningQuestions] = useState(false)
+
+  const handleAddScreeningQuestions = () => {
+    setAddScreeningQuestions(!addScreeningQuestions)
+    handleCloseBoth()
+    
+  }
+
   // if (isLoading === true) {
   //   return (
   //     <>
@@ -1524,10 +1535,20 @@ const AddJobBusiness = ({ heldSelected }) => {
                    >
                    Save Draft
                    </button> */}
+                        {/* <button
+                     type="button"
+                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                     data-hs-overlay="#hs-pro-datm"
+                    //  onClick={() => handleClosePostJob()}
+                     // onClick={() => testJobStore()}
+                     onClick={() => setAddScreeningQuestions(!addScreeningQuestions)}
+                   >
+                   Add Screening Qustions
+                   </button> */}
 
                           <button
                             type="button"
-                            class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                            class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                             data-hs-overlay="#hs-pro-datm"
                             onClick={() => checkLength()}
                             // onClick={() => testJobStore()}
@@ -1545,23 +1566,36 @@ const AddJobBusiness = ({ heldSelected }) => {
         </DrawerContent>
       </Drawer>
 
+      {addScreeningQuestions === true ? (<ScreeningQuestions props={jobTitle ? jobTitle : undefined} jobID={jobID ? jobID : null}/>) : null}
+     
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Success!</ModalHeader>
+          <ModalHeader>Screening Questions</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p>Your job has been posted.</p>
+            <p className="text-gray-800 text-base">Would you like to add screening questions to this job post?</p>
+
           </ModalBody>
 
           <ModalFooter>
-            <button
+          <button
               type="button"
-              class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              class="py-3 px-4 inline-flex justify-center items-center gap-x-2 mr-1 text-start bg-white hover:bg-gray-100 text-sky-400  font-medium rounded-lg  align-middle focus:outline-none focus:ring-1 focus:ring-blue-300 "
               data-hs-overlay="#hs-pro-datm"
               onClick={() => handleCloseBoth()}
             >
-              Close
+              No thanks
+            </button>
+
+            <button
+              type="button"
+              class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => handleAddScreeningQuestions()}
+            >
+              Add screening questions
             </button>
           </ModalFooter>
         </ModalContent>

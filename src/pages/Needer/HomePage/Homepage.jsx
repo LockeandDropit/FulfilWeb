@@ -39,6 +39,7 @@ import {
 import SubscriptionModal from "../Components/SubscriptionModal";
 
 import { addJobStore } from "./lib/addJobStore";
+import ScreeningQuestions from "../Components/screening_questions/ScreeningQuestions";
 
 const Homepage = () => {
   const [user, setUser] = useState(null);
@@ -2128,6 +2129,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
       </main>
       {showAddJob ? <AddJobModal /> : null}
       {showAddJobBusiness ? <AddJobBusiness /> : null}
+      {/* {showAddScreeningQuestions ? <ScreeningQuestions /> : null} */}
       {showSubscriptionModal ? <SubscriptionModal /> : null}
 
       <Modal isOpen={isOpen} onClose={onClose}>

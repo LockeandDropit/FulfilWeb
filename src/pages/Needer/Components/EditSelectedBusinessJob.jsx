@@ -95,7 +95,7 @@ import RichTextEditor from "./RichTextEditor";
 import htmlToDraft from 'html-to-draftjs';
 import { ContentState } from "react-draft-wysiwyg";
 import {stateFromMarkdown} from 'draft-js-import-markdown';
-
+import EditScreeningQuestions from "./screening_questions/EditScreeningQuestions";
 
 const EditSelectedBusinessJob = (props) => {
   console.log("edit selected job", props);
@@ -800,6 +800,14 @@ useEffect(() => {
 
 console.log("looking at the job object", job, payType)
 
+const [addScreeningQuestions, setAddScreeningQuestions] = useState(false)
+
+const handleAddScreeningQuestions = () => {
+  setAddScreeningQuestions(!addScreeningQuestions)
+  onClose()
+  
+}
+
   return (
     <>
       {isVisible ? (
@@ -1170,28 +1178,9 @@ console.log("looking at the job object", job, payType)
                     />
   </div>
                   </div>
-               
-              
-                
-                  
-                </div>
-  
-                <div class="p-4 flex justify-between gap-x-2">
-                  <div class="w-full flex justify-end items-center gap-x-2">
-                    
-  
-                    <button
-                      type="button"
-                      class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                      data-hs-overlay="#hs-pro-datm"
-                      onClick={() => checkLength()}
-                    >
-                      Update Post
-                    </button>
-                  </div>
                 </div>
               </div>
-            
+          
               )}
             </div>
        
@@ -1214,11 +1203,43 @@ console.log("looking at the job object", job, payType)
             </ModalContent>
           </Modal>
           </DrawerBody>
+            
+          <DrawerFooter>
+                <div class="p-4 flex justify-between gap-x-2">
+                  <div class="w-full flex justify-end items-center gap-x-2">
+                    {job.hasScreeningQuestions ? (  <button
+                      type="button"
+                      class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-gray-800 font-medium rounded-lg  align-middle focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                      data-hs-overlay="#hs-pro-datm"
+                      onClick={() => handleAddScreeningQuestions()}
+                    >
+                      Edit Screening Questions
+                    </button>) : (  <button
+                      type="button"
+                      class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-gray-800 font-medium rounded-lg  align-middle focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                      data-hs-overlay="#hs-pro-datm"
+                      // onClick={() => checkLength()}
+                    >
+                      Add Screening Questions
+                    </button>)}
+                
+                    <button
+                      type="button"
+                      class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white font-medium rounded-lg shadow-sm align-middle focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                      data-hs-overlay="#hs-pro-datm"
+                      onClick={() => checkLength()}
+                    >
+                      Update Post
+                    </button>
+                  </div>
+                </div>
+              </DrawerFooter>
           </DrawerContent>
       </Drawer>
         </>
         
       ) : null}
+       {addScreeningQuestions === true ? (<EditScreeningQuestions props={job ? job : undefined}/>) : null}
     </>
   );
 };

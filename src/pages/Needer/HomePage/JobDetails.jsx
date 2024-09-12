@@ -664,6 +664,37 @@ const JobDetails = () => {
 
   const [showRejected, setShowRejected] = useState(false);
 
+
+  const [questions, setQuestions] = useState([])
+
+  const [hasbeenOpened, setHasBeenOpened] = useState(false)
+
+ 
+
+  useEffect(() => {   
+      if ( hasbeenOpened === false) {
+          setHasBeenOpened(true)
+          let questions = []
+          const q = query(collection(db, "employers", currentUser.uid, "Posted Jobs", job.jobTitle, "Screening Questions"), );
+
+          const fetchQuestions = async () => {
+            const querySnapshot =  await getDocs(q);
+            querySnapshot.forEach((doc) => {
+              // doc.data() is never undefined for query doc snapshots
+              console.log(doc.id, " => ", doc.data());
+              questions.push(doc.data().question)
+            });
+
+            
+            // setIsLoading(false)
+            setQuestions(questions)
+          }
+
+          fetchQuestions()
+       
+      }
+  }, [])
+
   return (
     <>
       <Header />
@@ -941,14 +972,34 @@ const JobDetails = () => {
                           ) : null}
                         </div>
                       </div>
+                      <div className="h-[2px]">
+                        {/* This is here because margin t &b were not adding any margin */}
+                        </div>
+                        {questions.length > 0 ? (
+                          <div className= "w-full">
+                          <label
+                                      for="hs-pro-epdsku"
+                                      class="block mb-2 font-medium underline text-stone-800 "
+                                    >
+                                      Screening Questions
+                                    </label>
+                          </div>
+                        ) : (null)}
+                        
+                        {questions?.map((q) => (
+                                  <p className="gray-800">{q}</p>
+                        ))}
+                     
 
-                      <div className="mb-10 h-[60px]"></div>
-
-                      <Accordion allowMultiple mt={5}>
+<div className="h-[2px]">
+                        {/* This is here because margin t &b were not adding any margin */}
+                        </div>
+                
+                      <Accordion allowMultiple>
                         <AccordionItem>
                           <h2>
                             <AccordionButton>
-                              <Box flex="1" textAlign="left">
+                              <Box flex="1" textAlign="left" >
                                 <label
                                   for="hs-pro-epdsku"
                                   class="block mb-2 text-sm font-medium text-stone-800 "

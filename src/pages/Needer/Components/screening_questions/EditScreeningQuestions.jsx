@@ -49,13 +49,13 @@ const EditScreeningQuestions = ( props ) => {
             setHasBeenOpened(true)
             console.log("props from questrions", props.props)
             let questions = []
-            const q = query(collection(db, "employers", currentUser.uid, "Posted Jobs", jobTitle, "Screening Questions"), );
+            const q = query(collection(db, "employers", currentUser.uid, "Posted Jobs", jobTitle, "Screening Questions"));
 
             const fetchQuestions = async () => {
               const querySnapshot =  await getDocs(q);
               querySnapshot.forEach((doc) => {
                 // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id, " => ", doc.data());
+                console.log("all results", doc.data());
                 questions.push(doc.data().question)
               });
   
@@ -63,9 +63,10 @@ const EditScreeningQuestions = ( props ) => {
               setQuestion2(questions[1])
               setQuestion3(questions[2] ? questions[2] : null)
               setIsLoading(false)
+           
             }
 
-            fetchQuestions()
+           fetchQuestions();
          
         }
     }, [props])
@@ -156,7 +157,7 @@ const addQuestion3 = () => {
   <Drawer isOpen={isOpen} onClose={onClose} size={"xl"}>
         <DrawerOverlay />
         <DrawerContent>
-    <DrawerHeader>Edit Screening Questions</DrawerHeader>
+    <DrawerHeader>Edit Screening questions</DrawerHeader>
 <DrawerBody>
 
 {isLoading ? (
@@ -176,10 +177,23 @@ const addQuestion3 = () => {
 ) : (<>
     <div class="col-span-full">
           <label for="about" class="block  font-medium leading-6 text-gray-900">Question 1</label>
+        
           <div class="mt-2">
             <textarea onChange={(e) => setUpdatedQuestion1(e.target.value)} id="about" name="about" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-400 sm:text-sm sm:leading-6">{question1 ? question1 : null}</textarea>
           </div>
         </div>
+        {/* <label for="about" class="block mt-2 leading-6 text-gray-900">Select the format of the applicant's answer to this question</label>
+        <div class="flex mt-1">
+        
+  <input type="checkbox" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  id="hs-default-checkbox" />
+  <label for="hs-default-checkbox" class="text-sm text-gray-800 ms-3 ">Free text</label>
+</div>
+
+<div class="flex mt-1">
+  <input type="checkbox" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" id="hs-checked-checkbox"  />
+  <label for="hs-checked-checkbox" class="text-sm text-gray-800 ms-3 ">Yes/No</label>
+</div> */}
+
         <div class="col-span-full mt-4">
           <label for="about" class="block  font-medium leading-6 text-gray-900">Question 2 (optional)</label>
           <div class="mt-2">

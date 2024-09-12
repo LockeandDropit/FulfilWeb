@@ -87,6 +87,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useMediaQuery } from "@chakra-ui/react";
 import Plausible from "plausible-tracker";
 import SingleMarkerApplied from "./SingleMarkerApplied.jsx";
+import ApplicantScreeningQuestions from "../components/ApplicantScreeningQuestions.jsx";
 
 // import LoggedOutHeaderNoGap from "./Landing/LoggedOutHeaderNoGap.jsx";
 
@@ -356,6 +357,33 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
   }, []);
 
   //apply logic
+
+  const [screeningQuestionsVisible, setScreeningQuestionsVisible] = useState(false)
+
+const checkForScreeningQuestions = (x) => {
+
+  if (x.hasScreeningQuestions === true ) {
+    //open screening questions here.. pass componenet
+    if (currentUser.resumeUploaded) {
+    onCloseDrawerSingle();
+
+    onCloseDrawerSingleFromGroup();
+
+    setScreeningQuestionsVisible(!screeningQuestionsVisible);
+    } else {
+      onOpenNoResume();
+    }
+  } else {
+
+    applyAndNavigate(x);
+
+  }
+}
+
+
+
+
+
   const applyAndNavigate = (x) => {
     //If anything is going wring in the application or saved job flow it's because I changed this on 5/27/24 at 2:30. Revert to previous if any issues
 
@@ -1338,7 +1366,7 @@ useEffect(() => {
                                   class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
                                   data-hs-overlay="#hs-pro-datm"
                                   onClick={() =>
-                                    applyAndNavigate(selectedJobFromGroup)
+                                    checkForScreeningQuestions(selectedJobFromGroup)
                                   }
                                 >
                                   Apply
@@ -1379,7 +1407,7 @@ useEffect(() => {
                   type="button"
                   class="py-3 px-8 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
                   data-hs-overlay="#hs-pro-datm"
-                  onClick={() => applyAndNavigate(selectedJobFromGroup)}
+                  onClick={() => checkForScreeningQuestions(selectedJobFromGroup)}
                 >
                   Apply
                 </button>
@@ -1886,7 +1914,7 @@ useEffect(() => {
                                       class="py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
                                       data-hs-overlay="#hs-pro-datm"
                                       onClick={() =>
-                                        applyAndNavigate(businessPostedJobs)
+                                        checkForScreeningQuestions(businessPostedJobs)
                                       }
                                     >
                                       Apply
@@ -2349,7 +2377,7 @@ useEffect(() => {
                       type="button"
                       class="py-3 px-8 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
                       data-hs-overlay="#hs-pro-datm"
-                      onClick={() => applyAndNavigate(businessPostedJobs)}
+                    onClick={() => checkForScreeningQuestions(businessPostedJobs)}
                     >
                       Apply
                     </button>
@@ -2407,10 +2435,12 @@ useEffect(() => {
                   </ModalBody>
                 </ModalContent>
               </Modal>
-            
+              {screeningQuestionsVisible ? (<ApplicantScreeningQuestions props={businessPostedJobs} />) : (null)}
             </>
           ) : null}
+          
           </>
+          
         )}
         </>
       ))}

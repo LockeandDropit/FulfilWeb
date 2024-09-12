@@ -75,12 +75,16 @@ const ScreeningQuestions = ( props ) => {
         updateDoc(doc(db, "employers", currentUser.uid, "Posted Jobs", jobTitle), {
             hasScreeningQuestions: true
         })
+        updateDoc(doc(db, "Map Jobs", jobID), {
+            hasScreeningQuestions: true
+          })
         setDoc(doc(db, "employers", currentUser.uid, "Posted Jobs", jobTitle, "Screening Questions", "Question 1"), {
             question: question1,
           })
           setDoc(doc(db, "Map Jobs", jobID, "Screening Questions", "Question 1"), {
             question: question1,
           })
+         
     }
 
     const addQuestion2 = () => {

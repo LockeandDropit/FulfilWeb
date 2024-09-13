@@ -276,14 +276,14 @@ const [answerToQuestion3, setAnswerToQuestion3] = useState(null)
           <label for="about" class="block text-lg font-medium leading-6 text-gray-900">{question1}</label>
         
           <div class="mt-3">
-            <textarea onChange={(e) => setAnswerToQuestion1(e.target.value)} id="about" name="about" rows="6" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-400 sm:text-sm sm:leading-6"></textarea>
+            <textarea onChange={(e) => setAnswer1(e.target.value)} id="about" name="about" rows="6" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-400 sm:text-sm sm:leading-6"></textarea>
           </div>
         </div>  
 {question2 ? (
    <div class="col-span-full mt-6">
    <label for="about" class="block text-lg font-medium leading-6 text-gray-900">{question2}</label>
    <div class="mt-3">
-     <textarea onChange={(e) => setAnswerToQuestion2(e.target.value)} id="about" name="about" rows="6" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-400 sm:text-sm sm:leading-6"></textarea>
+     <textarea onChange={(e) => setAnswer2(e.target.value)} id="about" name="about" rows="6" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-400 sm:text-sm sm:leading-6"></textarea>
    </div>
  </div>
 ) : (null)}
@@ -292,7 +292,7 @@ const [answerToQuestion3, setAnswerToQuestion3] = useState(null)
    <div class="col-span-full mt-6">
    <label for="about" class="block text-lg font-medium leading-6 text-gray-900">{question3}</label>
    <div class="mt-3">
-     <textarea onChange={(e) => setAnswerToQuestion3(e.target.value)} id="about" name="about" rows="6" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-400 sm:text-sm sm:leading-6"></textarea>
+     <textarea onChange={(e) => setAnswer3(e.target.value)} id="about" name="about" rows="6" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-400 sm:text-sm sm:leading-6"></textarea>
    </div>
  </div>
 ) : (null)}</>)}

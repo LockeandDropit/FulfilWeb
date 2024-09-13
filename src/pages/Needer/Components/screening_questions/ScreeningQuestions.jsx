@@ -46,6 +46,11 @@ const ScreeningQuestions = ( props ) => {
         onOpen: onOpen,
         onClose: onClose,
       } = useDisclosure();
+      const {
+        isOpen: isOpenErrorModal,
+        onOpen: onOpenErrorModal,
+        onClose: onCloseErrorModal,
+      } = useDisclosure();
 
       const {
         isOpen: isOpenModal,
@@ -57,13 +62,19 @@ const ScreeningQuestions = ( props ) => {
       const addQuestions = () => {
         if (question1) {
             addQuestion1()
+            if (question2) {
+              addQuestion2()
+              if (question3) {
+                addQuestion3()
+            }
+          }
+        } else {
+          onOpenErrorModal()
         }    
         if (question2) {
             addQuestion2()
         }
-        if (question3) {
-            addQuestion3()
-        }
+       
         onClose()
         onOpenModal()
     
@@ -84,7 +95,6 @@ const ScreeningQuestions = ( props ) => {
           setDoc(doc(db, "Map Jobs", jobID, "Screening Questions", "Question 1"), {
             question: question1,
           })
-         
     }
 
     const addQuestion2 = () => {
@@ -106,7 +116,6 @@ const ScreeningQuestions = ( props ) => {
                  setDoc(doc(db, "Map Jobs", jobID, "Screening Questions", "Question 3"), {
             question: question3,
           })
-
 
 //onpen success modal
     }
@@ -155,7 +164,7 @@ const ScreeningQuestions = ( props ) => {
           <ModalHeader>Success!</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p className="text-gray-800 text-base">Your job has been posted. </p>
+            <p className="text-gray-800 text-base">Your post is live.</p>
 
           </ModalBody>
 
@@ -166,6 +175,30 @@ const ScreeningQuestions = ( props ) => {
               class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
               data-hs-overlay="#hs-pro-datm"
               onClick={() => onCloseModal()}
+            >
+              Continue
+            </button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isOpenErrorModal} onClose={onCloseErrorModal}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p className="text-gray-800 text-base">Your post is live.</p>
+
+          </ModalBody>
+
+          <ModalFooter>
+         
+            <button
+              type="button"
+              class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => onCloseErrorModal()}
             >
               Continue
             </button>

@@ -57,6 +57,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Document, Page } from "react-pdf";
+import ApplicantAnswersModal from "../Components/ApplicantAnswersModal";
 
 const JobDetails = () => {
   const { job, fetchJobInfo } = useJobStore();
@@ -342,6 +343,11 @@ const JobDetails = () => {
     //also pass job info so chat can be started.
   };
 
+  const viewAnswersModal = (x) => {
+    setSelectedApplicant(x)
+    setAnswerModalVisible(!answerModalVisible)
+  }
+
   const {
     isOpen: isOpenResume,
     onOpen: onOpenResume,
@@ -354,6 +360,8 @@ const JobDetails = () => {
     setSelectedApplicantResume(x.resume);
     onOpenResume();
   };
+
+
 
   const navigateToChannel = (x) => {
     console.log("this is what youre passing", x);
@@ -694,6 +702,10 @@ const JobDetails = () => {
        
       }
   }, [])
+
+  const [ answerModalVisible, setAnswerModalVisible ] = useState(false)
+
+
 
   return (
     <>
@@ -1294,7 +1306,7 @@ const JobDetails = () => {
                                   <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
                                   
 
-                                    <th scope="col" class="min-w-[250px]">
+                                    <th scope="col" class="min-w-[160px]">
                                       <div class="hs-dropdown relative inline-flex w-full cursor-default">
                                         <button
                                           id="hs-pro-dutnms"
@@ -1330,6 +1342,18 @@ const JobDetails = () => {
                                       </div>
                                     </th>
 
+                                    {job.hasScreeningQuestions ? (<th scope="col" class="min-w-36">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                                        <button
+                                          id="hs-pro-dutphs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 text-sm font-normal text-gray-500 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Screening
+                                        </button>
+                                      </div>
+                                    </th>) : (null)}
+
                                     <th scope="col" class="min-w-36">
                                       <div class="hs-dropdown relative inline-flex w-full cursor-default">
                                         <button
@@ -1352,7 +1376,7 @@ const JobDetails = () => {
                                         </button>
                                       </div>
                                     </th>
-                                    <th scope="col" class="min-w-36">
+                                    <th scope="col" class="min-w-12">
                                       <div class="hs-dropdown relative inline-flex w-full cursor-default">
                                         <button
                                           id="hs-pro-dutphs"
@@ -1387,7 +1411,7 @@ const JobDetails = () => {
                                               }
                                             >
                                               <div class="w-full flex items-center gap-x-3">
-                                                {applicant.profilePictureResponse ? (
+                                                {/* {applicant.profilePictureResponse ? (
                                                   <img
                                                     class="flex-shrink-0 size-[38px] rounded-full"
                                                     src={
@@ -1421,9 +1445,9 @@ const JobDetails = () => {
                                                       fill="currentColor"
                                                     ></path>
                                                   </svg>
-                                                )}
+                                                )} */}
                                                 {applicant ? (
-                                                  <p class="text-sm text-gray-800">
+                                                  <p class="text-sm text-gray-800 ml-0.5">
                                                     {applicant.firstName}{" "}
                                                     {applicant.lastName}
                                                   </p>
@@ -1479,19 +1503,35 @@ const JobDetails = () => {
                                                 {applicant.dateApplied}
                                               </span>
                                             </td>
+                                            {job.hasScreeningQuestions ? (
+                                               <td class="size-px py-2 px-3 space-x-2">
+                                               <div className=" flex  w-full ">
+                                                 <button
+                                                   type="button"
+                                                   onClick={() =>
+                                                    viewAnswersModal(applicant)
+                                                    
+                                                   }
+                                                   className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
+                                                 >
+                                                   See answers
+                                                 </button>
+                                               </div>
+                                             </td>
+                                            ) : (null)}
                                             <td class="size-px py-2 px-3 space-x-2">
-                                              <div className=" flex  w-full ">
-                                                <button
-                                                  type="button"
-                                                  onClick={() =>
-                                                    viewResume(applicant)
-                                                  }
-                                                  className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
-                                                >
-                                                  View Resume
-                                                </button>
-                                              </div>
-                                            </td>
+                                               <div className=" flex  w-full ">
+                                                 <button
+                                                   type="button"
+                                                   onClick={() =>
+                                                     viewResume(applicant)
+                                                   }
+                                                   className="py-2 px-3 w-full   relative inline-flex justify-center items-center text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 "
+                                                 >
+                                                   View Resume
+                                                 </button>
+                                               </div>
+                                             </td>
                                             <td class="size-px py-2 px-3 space-x-2">
                                               <div className=" flex  w-full ">
                                                 {applicant.channelId ? (
@@ -1546,9 +1586,9 @@ const JobDetails = () => {
                                                       applicant.uid
                                                     )
                                                   }
-                                                  class="  w-full py-2 px-3 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none "
+                                                  class="  w-full py-2 px-3 inline-flex justify-center items-center gap-x-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-red-500  disabled:opacity-50 disabled:pointer-events-none "
                                                 >
-                                                  Delete
+                                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ban"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
                                                 </button>
                                               </div>
                                             </td>
@@ -1565,6 +1605,8 @@ const JobDetails = () => {
                     </div>)}
                   </div>
                 </div>
+
+                {answerModalVisible ? (<ApplicantAnswersModal applicant={selectedApplicant} job={job} questions={questions}/>) : (null)}
 
                 {applicantVisible ? (
                   // <ApplicantModal

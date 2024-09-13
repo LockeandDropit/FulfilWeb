@@ -96,6 +96,8 @@ import htmlToDraft from 'html-to-draftjs';
 import { ContentState } from "react-draft-wysiwyg";
 import {stateFromMarkdown} from 'draft-js-import-markdown';
 import EditScreeningQuestions from "./screening_questions/EditScreeningQuestions";
+import ScreeningQuestions from "./screening_questions/ScreeningQuestions";
+
 
 const EditSelectedBusinessJob = (props) => {
   console.log("edit selected job", props);
@@ -808,6 +810,14 @@ const handleAddScreeningQuestions = () => {
   
 }
 
+const [editScreeningQuestions, setEditScreeningQuestions] = useState(false)
+
+const handleEditScreeningQuestions = () => {
+  setEditScreeningQuestions(!editScreeningQuestions)
+  onClose()
+  
+}
+
   return (
     <>
       {isVisible ? (
@@ -1211,14 +1221,14 @@ const handleAddScreeningQuestions = () => {
                       type="button"
                       class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-gray-800 font-medium rounded-lg  align-middle focus:outline-none focus:ring-1 focus:ring-blue-300 "
                       data-hs-overlay="#hs-pro-datm"
-                      onClick={() => handleAddScreeningQuestions()}
+                      onClick={() => handleEditScreeningQuestions()}
                     >
                       Edit Screening Questions
                     </button>) : (  <button
                       type="button"
                       class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-gray-800 font-medium rounded-lg  align-middle focus:outline-none focus:ring-1 focus:ring-blue-300 "
                       data-hs-overlay="#hs-pro-datm"
-                      // onClick={() => checkLength()}
+                      onClick={() => handleAddScreeningQuestions()}
                     >
                       Add Screening Questions
                     </button>)}
@@ -1239,7 +1249,8 @@ const handleAddScreeningQuestions = () => {
         </>
         
       ) : null}
-       {addScreeningQuestions === true ? (<EditScreeningQuestions props={job ? job : undefined}/>) : null}
+       {addScreeningQuestions === true ? (<ScreeningQuestions props={jobTitle ? jobTitle : undefined} jobID={jobID ? jobID : null}/>) : null}
+       {editScreeningQuestions === true ? (<EditScreeningQuestions props={job ? job : undefined}/>) : null}
     </>
   );
 };

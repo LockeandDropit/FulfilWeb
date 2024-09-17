@@ -465,7 +465,7 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
   const handleCopiedURL = (businessPostedJobs) => {
     setUrlCopied(true);
     navigator.clipboard.writeText(
-      `https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`
+      `https://getfulfil.com/DoerMapLoggedOutClusterTest/?session_id=${businessPostedJobs.jobID}`
     );
   };
 

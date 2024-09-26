@@ -59,13 +59,14 @@ const Landing = () => {
 
 {/* <MapHero /> */}
 <WhatWeOffer />
-<NoDegreeNoProblem />
 <LocallyFocused />
+<NoDegreeNoProblem />
+
 <CostComparison />
 {/* <MainUserJourney /> */}
 <EmployerCTAMobileOnly />
 {/* <LocallyFocused /> */}
-<FAQ />
+{/* <FAQ /> */}
 {/* <MainCategories /> */}
 
       <Footer />

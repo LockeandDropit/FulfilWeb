@@ -8,7 +8,9 @@ import { useNavigate } from "react-router-dom";
 const MainHero = () => {
   const navigate = useNavigate();
   return (
-    <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 h-[calc(100vh-220px)]">
+   
+   
+    <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 h-[calc(100vh-180px)] sm:h-[calc(100vh-448px)]">
       <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
         <div>
           <h1 class="block text-2xl font-bold text-gray-800 sm:text-4xl lg:text-6xl lg:leading-tight">
@@ -64,7 +66,7 @@ const MainHero = () => {
             </button> */}
           </div>
 
-          <div class="mt-6 lg:mt-10 grid grid-cols-2 gap-x-5"></div>
+
         </div>
 
         {/* <div class="relative ms-4"> */}
@@ -73,14 +75,21 @@ const MainHero = () => {
             class=" max-h-[800px] md:ml-20 rounded-md"
             // src="https://images.unsplash.com/photo-1665686377065-08ba896d16fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=700&h=800&q=80" alt="Image Description"
             // src="https://images.pexels.com/photos/3182831/pexels-photo-3182831.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              src="https://images.pexels.com/photos/3182831/pexels-photo-3182831.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              // src="https://images.pexels.com/photos/3182831/pexels-photo-3182831.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+
+              //credit fauxelshttps://www.pexels.com/photo/photo-of-man-wearing-brown-sweater-3184603/
+              src="/landingImages/pexels-fauxels-3184603.jpg"
          
           
           />
           <div class="absolute inset-0 -z-[1] bg-gradient-to-tr from-gray-200 via-white/0 to-white/0 size-full rounded-md mt-4 -mb-4 me-4 -ms-4 lg:mt-6 lg:-mb-6 lg:me-6 lg:-ms-6"></div>
         </div>
+        
       </div>
+    
     </div>
+
+
   );
 };
 

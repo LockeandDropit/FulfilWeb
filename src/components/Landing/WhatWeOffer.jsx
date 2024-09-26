@@ -7,14 +7,15 @@ const WhatWeOffer = () => {
   const navigate = useNavigate();
 
   return (   
-<div class="w-full bg-sky-100">
-    <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto ">
-      <div class="aspect-w-16 aspect-h-7">
-        <img class="w-full object-cover rounded-xl"  src="/landingImages/car-care-woman.jpg" alt="Features Image" />
-      </div>
+    <>
+   
+<div class="w-full  mt-24 sm:mt-0 ">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#E0F2FE" fill-opacity="1" d="M0,192L80,176C160,160,320,128,480,144C640,160,800,224,960,224C1120,224,1280,160,1360,128L1440,96L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
+    <div class="max-w-[85rem]  py-10 pb-10 sm:px-6 lg:px-8 lg:py-14 mx-auto ">
+     
     
 
-      <div class="mt-5 lg:mt-16 grid lg:grid-cols-3 gap-8 lg:gap-12">
+      <div class=" p-5 sm:p-1 grid lg:grid-cols-3 gap-8 lg:gap-12 mb-10">
         <div class="lg:col-span-1">
           <h2 class="font-bold text-2xl md:text-3xl text-gray-800 ">
             Find employment in growing fields
@@ -80,10 +81,12 @@ const WhatWeOffer = () => {
         </div>
       
       </div>
-   
+      <div class="aspect-w-16 aspect-h-7">
+        <img class="w-full object-cover sm:rounded-xl"  src="/landingImages/car-care-woman.jpg" alt="Features Image" />
+      </div>
     </div>
     </div>
-  
+    </>
   )
 }
 

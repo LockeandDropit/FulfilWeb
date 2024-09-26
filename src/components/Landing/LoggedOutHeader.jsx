@@ -409,8 +409,11 @@ const LoggedOutHeader = (props) => {
         </>
       )}
 
-      <main id="content">
+      {/* <main id="content">
         <div class="max-w-[85rem] mx-auto pt-12 pb-10 px-4 sm:px-6 lg:px-8 md:pt-24"></div>
+      </main> */}
+         <main id="content">
+        <div class="max-w-[85rem] mx-auto pt-6 pb-5 px-4 sm:px-6 lg:px-8 md:pt-24"></div>
       </main>
       <Modal
         isOpen={isOpen}

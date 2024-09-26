@@ -21,7 +21,7 @@ import {
   ListIcon,
   ListItem,
   VStack,
-  Skeleton
+  Skeleton,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 import { Container, Text, Flex, Box, Center } from "@chakra-ui/react";
@@ -54,20 +54,17 @@ const Dashboard = () => {
   const navigate = useNavigate();
   //validate & set current user
   const [user, setUser] = useState(null);
-  const [unseenMessages, setUnseenMessages] = useState(0)
+  const [unseenMessages, setUnseenMessages] = useState(0);
 
-
-
-
-    //this is the same user, rewritten to accomidate the f(x) that grabs the users unread messages
-    const [currentUser, setCurrentUser] = useState(null)
+  //this is the same user, rewritten to accomidate the f(x) that grabs the users unread messages
+  const [currentUser, setCurrentUser] = useState(null);
   const [hasRun, setHasRun] = useState(false);
 
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
-        setCurrentUser(currentUser)
+        setCurrentUser(currentUser);
         console.log(currentUser.uid);
       });
       setHasRun(true);
@@ -91,21 +88,22 @@ const Dashboard = () => {
       .catch((e) => console.log(e));
   };
 
-
   const [employerID, setEmployerID] = useState(null);
 
   const [city, setCity] = useState(null);
   const [state, setState] = useState(null);
 
   const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
 
+  //modal control
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-       //modal control
-       const { isOpen, onOpen, onClose } = useDisclosure()
-
-
-
-
+  const {
+    isOpen: isOpenSuccess,
+    onOpen: onOpenSuccess,
+    onClose: onCloseSuccess,
+  } = useDisclosure();
 
   useEffect(() => {
     if (hasRun === false) {
@@ -119,14 +117,6 @@ const Dashboard = () => {
     }
   }, [hasRun]);
 
-  
-
-
-
-
-
-
-
   useEffect(() => {
     if (user !== null) {
       const docRef = doc(db, "users", user.uid);
@@ -136,16 +126,10 @@ const Dashboard = () => {
         setCity(snapshot.data().city);
         setState(snapshot.data().state);
         setFirstName(snapshot.data().firstName);
+        setLastName(snapshot.data().lastName);
       });
-    } else {
     }
   }, [user]);
-
-
-
-
-
-
 
   //laoding control
 
@@ -154,37 +138,55 @@ const Dashboard = () => {
     setLoading(false);
   }, 1000);
 
-  const [isLoading, setIsLoading] = useState(true)
-  const [isPremium, setIsPremium] = useState(null)
+  const [isLoading, setIsLoading] = useState(true);
+  const [isPremium, setIsPremium] = useState(null);
 
-  const [test, setTest] = useState("test")
+  const [test, setTest] = useState("test");
 
   useEffect(() => {
     if (user) {
       const docRef = doc(db, "users", user.uid);
-      getDoc(docRef).then((snapshot) => {
-     console.log(snapshot.data())
-        setIsPremium(snapshot.data().isPremium)
-      })
+      getDoc(docRef)
+        .then((snapshot) => {
+          console.log(snapshot.data());
+          setIsPremium(snapshot.data().isPremium);
+        })
         .then(() => {
           setTimeout(() => {
-            setIsLoading(false)
-          }, 500)
-        
+            setIsLoading(false);
+          }, 500);
         })
         .catch((error) => {
           // no buen
-          console.log(error)
+          console.log(error);
         });
     }
   }, [user]);
 
-
   useEffect(() => {
-    console.log(isLoading, isPremium)
-  }, [isLoading, isPremium])
+    console.log(isLoading, isPremium);
+  }, [isLoading, isPremium]);
 
+  const [userSubmission, setUserSubmission] = useState(null);
+  const [validationMessage, setValidationMessage] = useState();
 
+  const addCareerCoachingInitiation = async () => {
+    if (!userSubmission) {
+      setValidationMessage("Please fill out the form above");
+    } else {
+      await setDoc(doc(db, "Career Coaching", user.uid), {
+        name: firstName + " " + lastName,
+        email: user.email,
+        submission: userSubmission,
+        hasBeenViewed: false,
+        id: user.uid
+      });
+
+      onClose()
+      onOpenSuccess()
+      //open success modal
+    }
+  };
 
   const [subscriptionID, setSubscriptionID] = useState(null);
 
@@ -221,48 +223,42 @@ const Dashboard = () => {
     }
   }, [subscriptionID]);
 
+  //get number of unread messages
 
-    //get number of unread messages
+  useEffect(() => {
+    if (currentUser) {
+      let allChats = [];
 
-    useEffect(() => {
-      if (currentUser) {
-         let allChats = [];
-   
-         const unSub = onSnapshot(
-           doc(db, "User Messages", currentUser.uid),
-           async (res) => {
-             let unreadMessages = 0;
-       
-             const items = res.data().chats;
-   
-             console.log("res data",res.data().chats)
-   
-             items.map(async (item) => {
-              
-               console.log("fetchedIDs", item.chatId)
-   
-               if (item.isSeen === false) {
-                   unreadMessages++
-               }
-             });
-   
-   
-             console.log(unreadMessages)
-   
-             if (unreadMessages > 0) {
-              setUnseenMessages(unreadMessages) 
-             }
-           }
-         );
-   
-         return () => {
-           unSub();
-         };
-      }
-     }, [currentUser]);
+      const unSub = onSnapshot(
+        doc(db, "User Messages", currentUser.uid),
+        async (res) => {
+          let unreadMessages = 0;
 
-    
+          const items = res.data().chats;
 
+          console.log("res data", res.data().chats);
+
+          items.map(async (item) => {
+            console.log("fetchedIDs", item.chatId);
+
+            if (item.isSeen === false) {
+              unreadMessages++;
+            }
+          });
+
+          console.log(unreadMessages);
+
+          if (unreadMessages > 0) {
+            setUnseenMessages(unreadMessages);
+          }
+        }
+      );
+
+      return () => {
+        unSub();
+      };
+    }
+  }, [currentUser]);
 
   return (
     <div>
@@ -279,7 +275,9 @@ const Dashboard = () => {
      
      "
       > */}
-      <aside id="hs-pro-sidebar" class="hs-overlay [--auto-close:lg]
+      <aside
+        id="hs-pro-sidebar"
+        class="hs-overlay [--auto-close:lg]
     hs-overlay-open:translate-x-0
     -translate-x-full transition-all duration-300 transform
     w-[260px]
@@ -287,7 +285,8 @@ const Dashboard = () => {
     fixed inset-y-0 start-0 z-[60]
     bg-white border-e border-gray-200
     lg:block lg:translate-x-0 lg:end-auto lg:bottom-0
-   ">
+   "
+      >
         <div class="flex flex-col h-full max-h-full py-3">
           <header class="h-[46px] px-8">
             <a
@@ -307,7 +306,7 @@ const Dashboard = () => {
               <ul>
                 <li class="px-5 mb-1.5 mt-6">
                   <button
-                   class="hs-accordion-toggle  mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
+                    class="hs-accordion-toggle  mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
                     onClick={() => navigate("/DoerMapView")}
                   >
                     <svg
@@ -333,65 +332,78 @@ const Dashboard = () => {
                     class="hs-accordion-toggle mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
                     onClick={() => navigate("/DoerSavedJobs")}
                   >
-                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"  class="flex-shrink-0 mt-0.5 size-4">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-</svg>
-
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      class="flex-shrink-0 mt-0.5 size-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                      />
+                    </svg>
                     Saved Jobs
                   </button>
                 </li>
 
-                {unseenMessages > 0 ? (   <button
-                  type="button"
-                  class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
-             onClick={() => navigate("/DoerChatHolder")}
-                >
-                  <svg
-                    class="flex-shrink-0 mt-0.5 size-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                {unseenMessages > 0 ? (
+                  <button
+                    type="button"
+                    class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
+                    onClick={() => navigate("/DoerChatHolder")}
                   >
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                  </svg>
-                  Messages
-                  <span class=" ml-auto inline-flex items-center  px-2 rounded-full text-[10px] font-medium bg-red-500 text-white">{unseenMessages}</span>
-                  
-                </button>) : (<button
-                  type="button"
-                  class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
-             onClick={() => navigate("/DoerChatHolder")}
-                >
-                  <svg
-                    class="flex-shrink-0 mt-0.5 size-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    <svg
+                      class="flex-shrink-0 mt-0.5 size-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    Messages
+                    <span class=" ml-auto inline-flex items-center  px-2 rounded-full text-[10px] font-medium bg-red-500 text-white">
+                      {unseenMessages}
+                    </span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    class="hs-accordion-toggle px-8 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex gap-x-3 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100"
+                    onClick={() => navigate("/DoerChatHolder")}
                   >
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                  </svg>
-                  Messages
-                </button>)}
-
-              
+                    <svg
+                      class="flex-shrink-0 mt-0.5 size-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    Messages
+                  </button>
+                )}
 
                 <button
                   type="button"
@@ -454,9 +466,9 @@ const Dashboard = () => {
                   <span class="block text-xs uppercase text-gray-500">
                     Actions
                   </span>
-                </li>
+                </li> */}
 
-                <li class="px-5 mb-0.5">
+                {/* <li class="px-5 mb-0.5">
                   <button
                     class="flex items-center gap-x-2 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                     onClick={() => navigate(`/NeederAllCategories`)}
@@ -483,137 +495,80 @@ const Dashboard = () => {
                   </button>
                 </li> */}
                 <li class="px-8 mb-0.5 mt-10">
-                  {/* <button
+                  <button
                     type="button"
-                    class="py-2 w-full px-11 inline-flex text-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                   onClick={() => onOpen()}
+                    class="py-2 w-full px-11 text-center items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                    onClick={() => onOpen()}
                   >
-                    
-                   
-                   Upgrade to Pro
-                  </button> */}
-                 
+                    Level up!
+                  </button>
                 </li>
-
-                
-              
               </ul>
             </nav>
           </div>
-
-          {/* <footer class="lg:block absolute bottom-0 inset-x-0 border-t border-gray-200">
-            <div class="hs-dropdown [--auto-close:inside] relative flex">
-              <div class="p-1 border-t border-gray-200">
-                {loggingOut ? (
-                  <div
-                    class="animate-spin ml-4 inline-block size-6 border-[3px] border-current border-t-transparent text-red-600 rounded-full"
-                    role="status"
-                    aria-label="loading"
-                  >
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    class="w-full flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-red-600 hover:bg-gray-100 disabled:opacity-50 focus:outline-none focus:bg-gray-100"
-                    onClick={() => handleLogOut()}
-                  >
-                    Sign out
-                  </button>
-                )}
-              </div>
-            </div>
-          </footer> */}
         </div>
       </aside>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size={"lg"}>
         <ModalOverlay />
         <ModalContent>
-          <Center py={6}>
-            <Box
-              maxW={"330px"}
-              w={"full"}
-              bg={useColorModeValue("white", "gray.800")}
-              rounded={"md"}
-              overflow={"hidden"}
-            >
-              <VStack spacing={1} textAlign="center">
-                <Heading as="h1" fontSize="4xl">
-                  Upgrade to premium
-                </Heading>
-                <Text fontSize="lg" color={"gray.500"}>
-                  Get the frist 2 months for $1/month. Then continue at
-                  $29/month.
-                </Text>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p>Interested in leveling up your career?</p>
+            <p>
+              Tell us what you're interested in and we'll help you find the
+              right path. Completely free.
+            </p>
 
-                <Text fontSize="md" color={"gray.500"}>
-                  Cancel at anytime.
-                </Text>
-              </VStack>
-              <Stack
-                textAlign={"center"}
-                p={5}
-                color={useColorModeValue("gray.800", "white")}
-                align={"center"}
+            <div class="w-full space-y-3 mt-4">
+              <textarea
+                onChange={(e) => setUserSubmission(e.target.value)}
+                class=" py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                rows="4"
+                placeholder="ex: I've recently graduated from highschool and want to work with my hands. I'd like to do something mechanical, but don;t know where to get started."
+              ></textarea>
+            </div>
+            {validationMessage ? (
+              <p className="text-red-500 mt-1 ml-1">{validationMessage}</p>
+            ) : null}
+
+            <div className="w-full flex mt-6">
+              <button
+                onClick={() => addCareerCoachingInitiation()}
+                type="button"
+                class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
               >
-                <Text
-                  fontSize={"md"}
-                  fontWeight={500}
-                  textColor="#01A2E8"
-                  p={2}
-                  px={3}
-                  rounded={"full"}
-                >
-                  Premium Subscription
-                </Text>
-                <Stack direction={"row"} align={"center"} justify={"center"}>
-                  <Text fontSize={"3xl"}>$</Text>
-                  <Text fontSize={"6xl"} fontWeight={800}>
-                    1
-                  </Text>
-                  <Text color={"gray.500"}>/month</Text>
-                </Stack>
-              </Stack>
+                Submit
+              </button>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
 
-              <Box px={1} py={6}>
-                <List spacing={3}>
-                  <ListItem>
-                    <ListIcon as={CheckIcon} color="#01A2E8" />
-                    Save 50% on all transaction fees
-                  </ListItem>
-                  <ListItem>
-                    <ListIcon as={CheckIcon} color="#01A2E8" />
-                    Get noticed by customers as a Premium Contractor
-                  </ListItem>
+      <Modal isOpen={isOpenSuccess} onClose={onCloseSuccess} size={"lg"}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p>We'll get back to you in the next 48 hours.</p>
+          
 
-                  <ListItem>
-                    <ListIcon as={CheckIcon} color="#01A2E8" />
-                    Be seen by customers who are looking for contractors in your
-                    category
-                  </ListItem>
-                </List>
-
-                <Button
-                  mt={10}
-                  w={"full"}
-                  bg="#01A2E8"
-                  color={"white"}
-                  rounded={"xl"}
-                  boxShadow={"0 5px 20px 0px rgb(72 187 120 / 43%)"}
-                  _hover={{ bg: "#018ecb", textColor: "white" }}
-                  onClick={() => initializeSubscription()}
-                >
-                  Start your trial
-                </Button>
-              </Box>
-            </Box>
-          </Center>
+            
+          </ModalBody>
+          <ModalFooter>
+          <button
+                onClick={() => onCloseSuccess()}
+                type="button"
+                class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+              >
+                Close
+              </button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </div>
-
-    
   );
 };
 

@@ -117,11 +117,15 @@ import SavedJobDetails from "./pages/Doer/SavedJobDetails";
 import DoerListViewLoggedOut from "./components/DoerListViewLoggedOut"
 import NeederMapView from "./pages/Needer/MapView/NeederMapView";
 import DoerMapView from "./pages/Doer/MapView/DoerMapView";
+import TestLanding from "./components/Landing/TestLanding";
+
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebaseConfig"
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
+
+
 
 import posthog from 'posthog-js';
 import { PostHogProvider} from 'posthog-js/react'
@@ -493,6 +497,10 @@ const router = createBrowserRouter([
   {
     path: "/ResetPasswordLoggedOut",
     element: <ResetPasswordLoggedOut />,
+  },
+  {
+    path: "/TestLanding",
+    element: <TestLanding />,
   },
 ]);
 

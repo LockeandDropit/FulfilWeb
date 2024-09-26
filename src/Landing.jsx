@@ -42,8 +42,9 @@ import MobileDoerCTA from "./components/Landing/MobileDoerCTA.jsx";
 import { useMediaQuery } from "@chakra-ui/react";
 import FAQ from "./components/Landing/FAQ.jsx";
 import EmployerCTAMobileOnly from "./components/Landing/EmployerCTAMobileOnly.jsx";
-
-
+import NoDegreeNoProblem from "./components/Landing/NoDegreeNoProblem.jsx";
+import WhatWeOffer from "./components/Landing/WhatWeOffer.jsx";
+import CostComparison from "./components/Landing/CostComparison.jsx";
 const Landing = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
   const navigate = useNavigate();
@@ -57,10 +58,13 @@ const Landing = () => {
 {/* {isDesktop ? (null) : (<MobileDoerCTA />)} */}
 
 {/* <MapHero /> */}
-
-<MainUserJourney />
-<EmployerCTAMobileOnly />
+<WhatWeOffer />
+<NoDegreeNoProblem />
 <LocallyFocused />
+<CostComparison />
+{/* <MainUserJourney /> */}
+<EmployerCTAMobileOnly />
+{/* <LocallyFocused /> */}
 <FAQ />
 {/* <MainCategories /> */}
 

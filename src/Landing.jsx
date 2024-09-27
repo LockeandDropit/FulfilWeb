@@ -45,6 +45,7 @@ import EmployerCTAMobileOnly from "./components/Landing/EmployerCTAMobileOnly.js
 import NoDegreeNoProblem from "./components/Landing/NoDegreeNoProblem.jsx";
 import WhatWeOffer from "./components/Landing/WhatWeOffer.jsx";
 import CostComparison from "./components/Landing/CostComparison.jsx";
+import CostWithChart from "./components/Landing/CostWithChart.jsx";
 const Landing = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
   const navigate = useNavigate();
@@ -55,19 +56,17 @@ const Landing = () => {
     <>
 <LoggedOutHeader />
 <MainHero />
-{/* {isDesktop ? (null) : (<MobileDoerCTA />)} */}
 
-{/* <MapHero /> */}
 <WhatWeOffer />
 <LocallyFocused />
 <NoDegreeNoProblem />
 
 <CostComparison />
-{/* <MainUserJourney /> */}
+<CostWithChart />
+
 <EmployerCTAMobileOnly />
-{/* <LocallyFocused /> */}
-{/* <FAQ /> */}
-{/* <MainCategories /> */}
+
+
 
       <Footer />
 

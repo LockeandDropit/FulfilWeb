@@ -2601,13 +2601,13 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                         </label>
                       </div>
                     </div>
-
-                    <input
+                        {/* this used to be an input, not a button. If anything is jacked up here this is why. */}
+                    <button
                       type="button"
-                      onClick={() => validate()}
-                      value="Sign up"
+                      onClick={validate}
+                      // value="Sign up"
                       className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    ></input>
+                    >Sign up</button>
                     <p class="mt-2 text-center text-sm text-gray-600">
                       Already have an account?
                       <button

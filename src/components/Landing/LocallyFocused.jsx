@@ -23,18 +23,18 @@ const LocallyFocused = () => {
               The median cost of a technical college is $9,000, while a 4-year traditional college costs roughly $40,000 total.
               </p>
               <ul class="space-y-2 sm:space-y-4 ">
-              <li class="flex space-x-3">
+              <li class="flex space-x-1">
                 <span class=" size-7 flex justify-center items-center rounded-full  text-gray-800">
                   1.
                 </span>
     
                 <span class="text-sm sm:text-lg text-gray-800">
                   {/* <span class="font-bold">Post</span> what you need done */}
-                  The average trade school costs 75% less than a 4 year college.
+                  The average trade school costs 75% less than a 4 year college (after aid awarded)<span className='text-gray-800 text-xs'>(4)</span>.
                 </span>
               </li>
     
-              <li class="flex space-x-3">
+              <li class="flex space-x-1">
                 <span class="size-7 flex justify-center items-center rounded-full  text-gray-800">
                  2.
                 </span>
@@ -44,7 +44,7 @@ const LocallyFocused = () => {
                 </span>
               </li>
     
-              <li class="flex space-x-3">
+              <li class="flex space-x-1">
                 <span class="size-7 flex justify-center items-center rounded-full  text-gray-800">
                   3.
                 </span>
@@ -54,6 +54,12 @@ const LocallyFocused = () => {
                 </span>
               </li>
             </ul>
+
+            <p className='mt-12 text-xs text-gray-800' >Sources:</p>
+            <p className=' mt-2 text-xs text-gray-800'>1. https://www.niche.com/colleges/riverland-community-college/</p>
+            <p className=' text-xs text-gray-800'>2. https://www.zippia.com/advice/average-starting-salary-out-of-college-statistics/</p>
+            <p className=' text-xs text-gray-800'>3. https://www.sofi.com/learn/content/average-salary-for-trade-jobs/</p>
+            <p className=' text-xs text-gray-800'>4. https://educationdata.org/average-cost-of-college</p>
             </div>
          
        

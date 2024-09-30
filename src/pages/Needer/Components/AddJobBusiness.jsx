@@ -582,7 +582,7 @@ const AddJobBusiness = ({ heldSelected }) => {
       isHourly: isHourly,
       lowerCaseJobTitle: lowerCaseJobTitle,
       datePosted: datePosted,
-      category: jobCategory,
+      category: jobCategory ? jobCategory : false,
       city: city,
       streetAddress: streetAddress,
       state: state,
@@ -636,7 +636,7 @@ const AddJobBusiness = ({ heldSelected }) => {
       isHourly: isHourly,
       lowerCaseJobTitle: lowerCaseJobTitle,
       datePosted: datePosted,
-      category: jobCategory,
+      category: jobCategory ? jobCategory : false,
       city: city,
       streetAddress: streetAddress,
       state: state,
@@ -684,7 +684,7 @@ const AddJobBusiness = ({ heldSelected }) => {
         flatRate: flatRate,
         isHourly: isHourly,
         lowerCaseJobTitle: lowerCaseJobTitle,
-        category: jobCategory,
+        category: jobCategory ? jobCategory : false,
         city: city,
         streetAddress: streetAddress,
         state: state,
@@ -735,7 +735,7 @@ const AddJobBusiness = ({ heldSelected }) => {
         isHourly: isHourly,
         lowerCaseJobTitle: lowerCaseJobTitle,
         datePosted: datePosted,
-        category: jobCategory,
+        category: jobCategory ? jobCategory : false,
         city: city,
         streetAddress: streetAddress,
         state: state,
@@ -793,7 +793,7 @@ const AddJobBusiness = ({ heldSelected }) => {
       isHourly: isHourly,
       lowerCaseJobTitle: lowerCaseJobTitle,
       datePosted: datePosted,
-      category: jobCategory,
+      category: jobCategory ? jobCategory : false,
       city: city,
       streetAddress: streetAddress,
       state: state,
@@ -848,7 +848,7 @@ const AddJobBusiness = ({ heldSelected }) => {
       city: city,
       state: state,
       datePosted: datePosted,
-      category: jobCategory,
+      category: jobCategory ? jobCategory : false,
 
       streetAddress: streetAddress,
 
@@ -1118,7 +1118,7 @@ const AddJobBusiness = ({ heldSelected }) => {
       isHourly: isHourly,
       lowerCaseJobTitle: lowerCaseJobTitle,
       datePosted: datePosted,
-      category: jobCategory,
+      category: jobCategory ? jobCategory : false,
       city: city,
       streetAddress: streetAddress,
       state: state,
@@ -1354,6 +1354,7 @@ const AddJobBusiness = ({ heldSelected }) => {
                         <option value="Salaried">Salaried</option>
                       </select>
                     </div>
+                    
 
                     {user && user.email === "themasterbusiness@gmail.com" ? (
                       <>
@@ -1448,6 +1449,38 @@ const AddJobBusiness = ({ heldSelected }) => {
                         </div>
                       </div>
                     ) : null}
+                    <div class="space-y-2">
+                      <label
+                        for="dactmi"
+                        class="block mb-2 text-sm font-medium text-gray-800 "
+                      >
+                        Choose a category for this position (optional)
+                      </label>
+
+                      <label
+                        for="dactmi"
+                        class="block mb-2 text-sm font-medium text-gray-800 "
+                      ></label>
+
+                      <select
+                        placeholder="Select option"
+                        class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                        onChange={(e) => setJobCategory(e.target.value)}
+                      >
+                        <option>Select option</option>
+                        <option value="Healthcare & Ambulatory Health Care">Healthcare & Ambulatory Health Care</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Warehousing">Warehousing</option>
+                        <option value="Accommodation & Food Services">Accommodation & Food Services</option>
+                        <option value="Arts, Entertainment, and Recreation">Arts, Entertainment, and Recreation</option>
+                        <option value="Agriculture, Forestry">Agriculture, Forestry</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="General Physical Labor">General Physical Labor</option>
+                      </select>
+                    </div>
 
                     <div class="space-y-2 z-0">
                       <label

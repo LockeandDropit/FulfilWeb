@@ -62,6 +62,7 @@ const JobFilter = () => {
   const [minimumPay, setMinimumPay] = useState(null);
   const [positionType, setPositionType] = useState(null);
   const [jobTitleSearchResults, setJobTitleSearchResults] = useState(null);
+  const [jobCategory, setJobCategory] = useState(null)
 
   const [displayedCategory, setDisplayedCategory] = useState(null)
   const [jobsInCategory, setJobsInCategory] = useState(null)
@@ -70,68 +71,68 @@ const JobFilter = () => {
 
 
   const handleSearch = (value) => {
-    testSearch(value);
+    // testSearch(value);
     setJobTitle(value);
   };
 
-  useEffect(() => {
-    console.log("firing",jobTitle, minimumPay, positionType)
-  }, [jobTitle, minimumPay, positionType])
+  // useEffect(() => {
+  //   console.log("firing", jobCategory, minimumPay, positionType)
+  // }, [jobTitle, minimumPay, positionType])
 
-  const testSearch = (value) => {
-    const q = query(collection(db, "Map Jobs"));
+  // const testSearch = (value) => {
+  //   const q = query(collection(db, "Map Jobs"));
 
-    // is this super expensive and going to cause our FB cost to shoot up?
-    const searchResults = [];
-    onSnapshot(q, (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        if (doc.data().lowerCaseJobTitle.includes(value.toLowerCase()) || doc.data().description.includes(value.toLowerCase())  && doc.data().isActive === true) {
-          searchResults.push(doc.data());
-          // console.log("here are search results", doc.data())
-        }
-      });
+  //   // is this super expensive and going to cause our FB cost to shoot up?
+  //   const searchResults = [];
+  //   onSnapshot(q, (snapshot) => {
+  //     snapshot.docs.forEach((doc) => {
+  //       if (doc.data().lowerCaseJobTitle.includes(value.toLowerCase()) || doc.data().description.includes(value.toLowerCase())  && doc.data().isActive === true) {
+  //         searchResults.push(doc.data());
+  //         // console.log("here are search results", doc.data())
+  //       }
+  //     });
 
 
-      // console.log("search results to close bar", searchResults)
-      if (!searchResults.length || !searchResults || !value.length) {
-        setViewDropDown(false)
-        setJobTitleSearchResults(null)
-        setViewDropDown(false)
-      } else {
-        setJobTitleSearchResults(searchResults);
-      }
+  //     // console.log("search results to close bar", searchResults)
+  //     if (!searchResults.length || !searchResults || !value.length) {
+  //       setViewDropDown(false)
+  //       setJobTitleSearchResults(null)
+  //       setViewDropDown(false)
+  //     } else {
+  //       setJobTitleSearchResults(searchResults);
+  //     }
 
-      //if value > 2 (3?)
-      //if a & b contain "main root", show just one of those jobs
-      //some code to see if this word appears more than once, if it does, only render it one time in the autocomplete but keep the jobs all stored in the search results
+  //     //if value > 2 (3?)
+  //     //if a & b contain "main root", show just one of those jobs
+  //     //some code to see if this word appears more than once, if it does, only render it one time in the autocomplete but keep the jobs all stored in the search results
       
-    });
+  //   });
 
-    // console.log("jobtitle search results", jobTitleSearchResults)
-    if (value.length >= 2 && jobTitleSearchResults) {
-      let splitTitle = jobTitleSearchResults[0].lowerCaseJobTitle.split(" ");
-      console.log("split title", splitTitle[0]);
-      let firstWord = splitTitle[0]
-      var categoryTitle = null
-      let allMatchingTitleJobs = [];
+  //   // console.log("jobtitle search results", jobTitleSearchResults)
+  //   if (value.length >= 2 && jobTitleSearchResults) {
+  //     let splitTitle = jobTitleSearchResults[0].lowerCaseJobTitle.split(" ");
+  //     console.log("split title", splitTitle[0]);
+  //     let firstWord = splitTitle[0]
+  //     var categoryTitle = null
+  //     let allMatchingTitleJobs = [];
 
 
-        jobTitleSearchResults.forEach((results) => {
-          if (results.lowerCaseJobTitle.includes(firstWord)) {
-            categoryTitle = firstWord
-            allMatchingTitleJobs.push(results)
-            console.log("from inner forEach", results)
-          }
-        });
+  //       jobTitleSearchResults.forEach((results) => {
+  //         if (results.lowerCaseJobTitle.includes(firstWord)) {
+  //           categoryTitle = firstWord
+  //           allMatchingTitleJobs.push(results)
+  //           console.log("from inner forEach", results)
+  //         }
+  //       });
       
 
 
 
-      setDisplayedCategory(categoryTitle)
-      setJobsInCategory(allMatchingTitleJobs)
-      setViewDropDown(true)
-    }
-  };
+  //     setDisplayedCategory(categoryTitle)
+  //     setJobsInCategory(allMatchingTitleJobs)
+  //     setViewDropDown(true)
+  //   }
+  // };
 
   const handleRenderJobCategory = () => {
 setViewDropDown(false)
@@ -141,11 +142,11 @@ search()
 
 
 
-  useEffect(() => {
-    if (displayedCategory && jobsInCategory) {
-      console.log("here we gooo", displayedCategory, jobsInCategory)
-    }
-  }, [displayedCategory, jobsInCategory])
+  // useEffect(() => {
+  //   if (displayedCategory && jobsInCategory) {
+  //     console.log("here we gooo", displayedCategory, jobsInCategory)
+  //   }
+  // }, [displayedCategory, jobsInCategory])
 
   // map over (filter) all jobs on narrowed search (where value >= 2) and look for a word match. If all results contain that word, that is set & displayed as the category
 
@@ -153,7 +154,7 @@ search()
 
     // resetSearch()
 
-    console.log("firing", jobTitle, minimumPay, positionType)
+    console.log("firing", jobCategory, minimumPay, positionType)
 
     const q = query(collection(db, "Map Jobs"));
 
@@ -163,20 +164,20 @@ search()
       snapshot.docs.forEach((doc) => {
         //if a b c we are not solving for salary right now
 
-        if (jobTitle && !minimumPay && !positionType) {
-          if (doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) || doc.data().description.includes(jobTitle.toLowerCase()) && doc.data().isActive === true) {
+        if (jobCategory && !minimumPay && !positionType) {
+          if (doc.data().category === jobCategory && doc.data().isActive === true) {
             results.push({ ...doc.data(), id: doc.id, key: doc.id  });
-            console.log("title", doc.data());
+            console.log("job category", doc.data());
           } else {
             // onOpen()
             console.log("1");
           }
-        } else if (jobTitle && minimumPay && !positionType) { 
+        } else if (jobCategory && minimumPay && !positionType) { 
           console.log("title and minimum");
           if (
-            (doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) || doc.data().description.includes(jobTitle.toLowerCase())) &&
+            doc.data().category === jobCategory  &&
             doc.data().lowerRate >= minimumPay
-            //  && doc.data().isActive === true
+             && doc.data().isActive === true
           ) {
             console.log("heres your match with pay", doc.data());
             results.push({ ...doc.data(), id: doc.id, key: doc.id  });
@@ -184,11 +185,11 @@ search()
             // onOpen()
             console.log("2", minimumPay, doc.data().lowerRate);
           }
-        } else if (jobTitle && !minimumPay && positionType) {
+        } else if (jobCategory && !minimumPay && positionType) {
           console.log("title and type");
           var isTrueSet = /^true$/i.test(positionType);
           if (
-            doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) || doc.data().description.includes(jobTitle.toLowerCase()) &&
+            doc.data().category === jobCategory &&
             doc.data().isFullTimePosition === isTrueSet && doc.data().isActive === true
           ) {
             console.log("heres your match with pay", doc.data());
@@ -197,11 +198,11 @@ search()
             // onOpen()
             console.log("3");
           }
-        } else if (jobTitle && minimumPay && positionType) {
+        } else if (jobCategory && minimumPay && positionType) {
           console.log("title, minimum, type");
           var isTrueSet = /^true$/i.test(positionType);
           if (
-            (doc.data().lowerCaseJobTitle.includes(jobTitle.toLowerCase()) || doc.data().description.includes(jobTitle.toLowerCase())) &&
+            doc.data().category === jobCategory &&
             doc.data().lowerRate >= minimumPay &&
             doc.data().isFullTimePosition === isTrueSet && doc.data().isActive === true
           ) {
@@ -237,8 +238,7 @@ search()
           console.log("type", positionType, doc.data().isFullTimePosition);
           //from https://stackoverflow.com/questions/263965/how-can-i-convert-a-string-to-boolean-in-javascript credit guinaps
           var isTrueSet = /^true$/i.test(positionType);
-          if (
-            doc.data().lowerRate >= minimumPay &&
+          if (            
             doc.data().isFullTimePosition === isTrueSet && doc.data().isActive === true
           ) {
             console.log("heres your match with pay", doc.data());
@@ -360,6 +360,7 @@ search()
                   <option value="40">$40/hour +</option>
                 </select>
               </div>
+              
               <div className="w-3/4 sm:w-[240px] ">
                
                 <select
@@ -375,7 +376,27 @@ search()
                   {/* <option value="gigwork">Gig-work</option> */}
                 </select>
               </div>
-
+              <div className="w-3/4 sm:w-[320px]">
+              
+              <select
+                        placeholder="Category"
+                        class="py-3 px-4 pe-9 block w-full bg-white border-gray-200 rounded-lg  focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                        onChange={(e) => setJobCategory(e.target.value)}
+                      >
+                        <option value={null}>Category</option>
+                        <option value="Healthcare & Ambulatory Health Care">Healthcare & Ambulatory Health Care</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Warehousing">Warehousing</option>
+                        <option value="Accommodation & Food Services">Accommodation & Food Services</option>
+                        <option value="Arts, Entertainment, and Recreation">Arts, Entertainment, and Recreation</option>
+                        <option value="Agriculture, Forestry">Agriculture, Forestry</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="General Physical Labor">General Physical Labor</option>
+                      </select>
+              </div>
             
             </div>
           </form>

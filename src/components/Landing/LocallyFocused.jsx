@@ -1,4 +1,7 @@
 import React from 'react'
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
 
 const LocallyFocused = () => {
   return (
@@ -69,7 +72,11 @@ const LocallyFocused = () => {
         <div className=''>
           {/* <img class="rounded-xl max-h-[560px] md:ml-20 " src="https://images.unsplash.com/photo-1664574654529-b60630f33fdb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80" alt="Image Description" /> */}
           {/* <img class="rounded-md max-h-[640px] md:ml-20 " src="https://images.pexels.com/photos/4855334/pexels-photo-4855334.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Image Description" /> */}
-          <img class="rounded-md  " src="./landingImages/unrecognizable-male-welder-work.jpg" />
+          {/* <img class="rounded-md  " src="./landingImages/unrecognizable-male-welder-work.jpg" loading="lazy"/> */}
+          <LazyLoadImage
+      effect="blur"
+     src="./landingImages/unrecognizable-male-welder-work.jpg"
+  />
         </div>
     
    

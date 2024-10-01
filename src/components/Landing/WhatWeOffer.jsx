@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from "react-router-dom";
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const WhatWeOffer = () => {
   
@@ -81,8 +82,12 @@ const WhatWeOffer = () => {
         </div>
       
       </div>
-      <div class="aspect-w-16 aspect-h-7">
-        <img class="w-full object-cover sm:rounded-xl"  src="/landingImages/car-care-woman.jpg" alt="Features Image" />
+      <div class="aspect-w-16 aspect-h-7 ">
+      <LazyLoadImage
+      effect="blur"
+      src="/landingImages/car-care-woman.jpg"
+  />
+        {/* <img class="w-full object-cover sm:rounded-xl"  src="/landingImages/car-care-woman.jpg" alt="Features Image" loading="lazy"  /> */}
       </div>
     </div>
     </div>

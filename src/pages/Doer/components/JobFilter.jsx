@@ -269,7 +269,7 @@ search()
   const clearSearch = () => {
     resetSearch();
     setSearchResults(null);
-    setJobTitle(null);
+    setJobCategory(null);
     setMinimumPay(null);
     setPositionType(null);
     setViewDropDown(false)
@@ -403,7 +403,7 @@ search()
           <button
             class="mt-2 sm:mt-0 h-[48px] ml-4 w-auto sm:w-auto whitespace-nowrap  pl-8 pr-10  inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
             onClick={() => search()}
-            onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+            onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault() }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

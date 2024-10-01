@@ -1,5 +1,8 @@
 import React from 'react'
 import { useNavigate } from "react-router-dom";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
 const NoDegreeNoProblem = () => {
   const navigate = useNavigate();
   return (
@@ -17,7 +20,11 @@ const NoDegreeNoProblem = () => {
     
       <div class="md:grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32">
         <div>
-          <img class="rounded-md" src="landingImages/positive-diverse-workers-unloading-boxes-warehouse.jpg" alt="Image Description" />
+        <LazyLoadImage
+      effect="blur"
+      src="landingImages/positive-diverse-workers-unloading-boxes-warehouse.jpg"
+  />
+          {/* <img class="rounded-md" src="landingImages/positive-diverse-workers-unloading-boxes-warehouse.jpg" alt="Image Description" loading="lazy"/> */}
         </div>
         <div class="mt-5 sm:mt-10 lg:mt-0">
           <div class="space-y-1 sm:space-y-2">

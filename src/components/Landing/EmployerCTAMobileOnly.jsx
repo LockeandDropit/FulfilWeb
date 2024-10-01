@@ -17,7 +17,7 @@ const EmployerCTAMobileOnly = () => {
           <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl lg:text-6xl">Looking to hire?</h1>
           <p class="mt-3 text-lg text-gray-800">Get your open positions filled with local talent.</p>
           <div class="lg:col-span-4 mt-6 lg:mt-0">
-          <img class="w-full rounded-xl" src="landingImages/horizontal-portrait-people-sit-queue-have-pleasant-conversation-with-each-other.jpg" alt="Image Description" />
+          <img class="w-full rounded-xl" src="landingImages/horizontal-portrait-people-sit-queue-have-pleasant-conversation-with-each-other.jpg" alt="Image Description" loading="lazy"/>
         </div>
           <div class="mt-5 lg:mt-8 flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
           

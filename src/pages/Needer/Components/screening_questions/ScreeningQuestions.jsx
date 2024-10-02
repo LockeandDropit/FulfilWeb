@@ -21,7 +21,7 @@ import { db } from '../../../../firebaseConfig';
 import { useState, useEffect } from 'react'
 import { useUserStore } from '../../Chat/lib/userStore';
 
-const ScreeningQuestions = ( props ) => {
+const ScreeningQuestions = (props ) => {
 
     const jobTitle = props.props
     const jobID = props.jobID

@@ -432,7 +432,9 @@ isFullTimePosition : jobHeld.isFullTimePosition,
           console.log(error);
         });
     }
-    setTimeout(() => navigate("/JobDetails"), 500);
+
+    //unsure why this setTimeout was here. It was 500 ms before, but changed to 0 and everything seems to be just fine. Idk man.
+    setTimeout(() => navigate("/JobDetails"), 0);
   };
 
   const handleStoreAndNavigateHired = (x) => {
@@ -580,11 +582,18 @@ isFullTimePosition : jobHeld.isFullTimePosition,
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
 const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
 
+//credit Jessie Rohrer Oct 30, 2021 https://dev.to/jrrohrer/rendering-a-react-modal-from-another-component-2omn for the hoisting function to have a child component be able to communicate back witha parent component.
+const toggleModal = () => {
+  setShowAddJobBusiness(!showAddJobBusiness)
+}
+
   const checkIfPremium = () => {
   
 
     if (currentUser.isPremium === true) {
       setShowAddJobBusiness(!showAddJobBusiness)
+      console.log("is premium", showAddJobBusiness)
+
     } else {
       // setCheckIfPremiumLoading(true)
       const docRef = doc(db, "employers", currentUser.uid);
@@ -649,7 +658,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
 
             <div class="flex justify-end items-center gap-x-2">
              {currentUser ? (currentUser.isBusiness ? ( <a
-                class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="cursor-pointer py-2.5 px-3 inline-flex items-center gap-x-2 font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => checkIfPremium()}
               >
                 {checkIfPremiumLoading === true ? (<div class="animate-spin inline-block size-5 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading">
@@ -673,7 +682,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                
                 
               </a>) : ( <a
-                class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="cursor-pointer py-2.5 px-3 inline-flex items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => setShowAddJob(!showAddJob)}
               >
                 <svg
@@ -1368,7 +1377,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                             </p>
                             <p class="mb-5 text-sm text-gray-500 "></p>
                             {currentUser ? (currentUser.isBusiness ? ( <a
-                class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="cursor-pointer py-2.5 px-3 inline-flex items-center gap-x-2 font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => checkIfPremium()}
               >
                 <svg
@@ -1387,7 +1396,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                 </svg>
                 Create Job Listing
               </a>) : ( <a
-                class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="cursor-pointer py-2.5 px-3 inline-flex items-center gap-x-2 font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => setShowAddJob(!showAddJob)}
               >
                 <svg
@@ -2072,7 +2081,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                             </p>
                             <p class="mb-5 text-sm text-gray-500 "></p>
                             {currentUser ? (currentUser.isBusiness ? ( <a
-                class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="cursor-pointer py-2.5 px-3 inline-flex items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => setShowAddJobBusiness(!showAddJobBusiness)}
               >
                 <svg
@@ -2091,7 +2100,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
                 </svg>
                 Create Job Listing
               </a>) : ( <a
-                class="cursor-pointer py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="cursor-pointer py-2.5 px-3 inline-flex items-center gap-x-2 font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onClick={() => setShowAddJob(!showAddJob)}
               >
                 <svg
@@ -2128,7 +2137,8 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
         </div>
       </main>
       {showAddJob ? <AddJobModal /> : null}
-      {showAddJobBusiness ? <AddJobBusiness /> : null}
+      {/* {showAddJobBusiness ? <AddJobBusiness /> : null} */}
+      <AddJobBusiness  modalOpen={showAddJobBusiness} toggle={toggleModal}/> 
       {/* {showAddScreeningQuestions ? <ScreeningQuestions /> : null} */}
       {showSubscriptionModal ? <SubscriptionModal /> : null}
 
@@ -2145,7 +2155,7 @@ const [checkIfPremiumLoading, setCheckIfPremiumLoading] = useState(false)
             
           <button
                     type="button"
-                    class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                    class="py-2.5 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                     data-hs-overlay="#hs-pro-datm"
                     onClick={() => handleOpenFirstJobBusiness()}
                   >

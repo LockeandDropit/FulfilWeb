@@ -305,15 +305,15 @@ const NeederAccountManager = () => {
               </div>
 
 
-            <div class="mb-4 xl:mb-8">
+            {/* <div class="mb-4 xl:mb-8">
               <h1 class="text-lg font-semibold text-gray-800 ">Onboarding</h1>
               <p class="text-sm text-gray-500 ">
                 You must complete all steps below before you can apply to posts.
               </p>
-            </div>
+            </div> */}
 
             <form>
-              <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
+              {/* <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
                 <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
                   <div class="sm:col-span-4 2xl:col-span-2">
                     <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
@@ -343,7 +343,7 @@ const NeederAccountManager = () => {
                   
                 </div>
               </div>
-             
+              */}
                 
 
                 
@@ -371,7 +371,7 @@ const NeederAccountManager = () => {
       
          <button
            type="button"
-           class="py-1.5 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400  hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+           class="py-2.5 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-blue-600  hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm align-middle " 
            data-hs-overlay="#hs-pro-dasadpm"
            onClick={() => manageSubscription()}
          >
@@ -397,7 +397,7 @@ const NeederAccountManager = () => {
                    
                       <button
                         type="button"
-                        class="py-1.5 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-red-500  hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                        class="py-2.5 px-6 inline-flex justify-center items-center gap-x-2 text-start bg-red-500  hover:bg-red-600 text-white text-sm font-medium rounded-md shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                         data-hs-overlay="#hs-pro-dasadpm"
                         onClick={() => handleConfirmDelete()}
                       >

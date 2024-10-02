@@ -782,6 +782,9 @@ const Dashboard = () => {
 
   const [showAddJobBusiness, setShowAddJobBusiness] = useState(false)
 
+  const toggleModal = () => {
+    setShowAddJobBusiness(!showAddJobBusiness)
+  }
 
   return (
     <div>
@@ -1359,7 +1362,9 @@ const Dashboard = () => {
         </ModalContent>
       </Modal>
 
-      {showAddJobBusiness ? <AddJobBusiness /> : null}
+      {/* {showAddJobBusiness ? <AddJobBusiness /> : null} */}
+      <AddJobBusiness  modalOpen={showAddJobBusiness} toggle={toggleModal}/> 
+    
     </div>
 
 

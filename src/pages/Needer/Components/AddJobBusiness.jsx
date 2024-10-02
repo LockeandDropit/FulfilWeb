@@ -59,7 +59,7 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const Delta = Quill.import("delta");
 
-const AddJobBusiness = ({ heldSelected }) => {
+const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
   useEffect(() => {
     if (heldSelected) {
       console.log("getting passed", heldSelected);
@@ -73,6 +73,8 @@ const AddJobBusiness = ({ heldSelected }) => {
       console.log("nothing passed");
     }
   }, []);
+
+  
 
   const quillRef = useRef();
   const navigate = useNavigate();
@@ -157,6 +159,7 @@ const AddJobBusiness = ({ heldSelected }) => {
 
   //modal control
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
@@ -182,6 +185,7 @@ const AddJobBusiness = ({ heldSelected }) => {
         setUser(currentUser);
         setEmployerID(currentUser.uid);
         console.log(currentUser.uid);
+       
       });
       setHasRun(true);
     } else {
@@ -1019,10 +1023,32 @@ const AddJobBusiness = ({ heldSelected }) => {
     setLoading(false);
   }, 1000);
 
-  const handleCloseBoth = () => {
+  const handleCloseBothAndOpenQuestions = () => {
+    toggle();
     onClose();
-    onCloseModal();
+
+    // onCloseModal();
+    
   };
+
+  const handleCloseBoth = () => {
+    toggle();
+    onClose();
+    // onCloseModal();
+    
+    onOpenSuccess();
+  };
+
+  const {
+    isOpen: isOpenSuccess,
+    onOpen: onOpenSuccess,
+    onClose: onCloseSuccess,
+  } = useDisclosure();
+
+  const handleCloseSuccess = () => {
+  onCloseSuccess();  
+  // toggle();
+  }
 
   const [isLoading, setIsLoading] = useState(false);
   const [stripeOpen, setStripeOpen] = useState(false);
@@ -1173,10 +1199,15 @@ const AddJobBusiness = ({ heldSelected }) => {
   const [addScreeningQuestions, setAddScreeningQuestions] = useState(false)
 
   const handleAddScreeningQuestions = () => {
+    handleCloseBothAndOpenQuestions();
     setAddScreeningQuestions(!addScreeningQuestions)
-    handleCloseBoth()
-    
+ 
   }
+
+  const handleClosePostTest = () => {
+    toggle();
+  }
+ 
 
   // if (isLoading === true) {
   //   return (
@@ -1196,9 +1227,14 @@ const AddJobBusiness = ({ heldSelected }) => {
 
   return (
     <div>
-      <Drawer
+      {/* <Drawer
         onClose={() => handleClosePostJob()}
         isOpen={isOpenModal}
+        size={"xl"}
+      > */}
+      <Drawer
+        onClose={() => handleClosePostTest()}
+        isOpen={modalOpen}
         size={"xl"}
       >
         <DrawerOverlay />
@@ -1599,7 +1635,7 @@ const AddJobBusiness = ({ heldSelected }) => {
         </DrawerContent>
       </Drawer>
 
-      {addScreeningQuestions === true ? (<ScreeningQuestions props={jobTitle ? jobTitle : undefined} jobID={jobID ? jobID : null}/>) : null}
+      {addScreeningQuestions === true ? (<ScreeningQuestions props={jobTitle ? jobTitle : undefined} jobID={jobID ? jobID : null} toggle={toggle}/>) : null}
      
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -1629,6 +1665,32 @@ const AddJobBusiness = ({ heldSelected }) => {
               onClick={() => handleAddScreeningQuestions()}
             >
               Add screening questions
+            </button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      
+      <Modal isOpen={isOpenSuccess} onClose={onCloseSuccess}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p className="text-gray-800 text-base">Your position has been posted.</p>
+
+          </ModalBody>
+
+          <ModalFooter>
+        
+
+            <button
+              type="button"
+              class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              onClick={() => handleCloseSuccess()}
+            >
+              Continue
             </button>
           </ModalFooter>
         </ModalContent>

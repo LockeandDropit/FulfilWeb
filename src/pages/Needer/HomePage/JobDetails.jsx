@@ -58,6 +58,8 @@ import {
 } from "@chakra-ui/react";
 import { Document, Page } from "react-pdf";
 import ApplicantAnswersModal from "../Components/ApplicantAnswersModal";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css"
 
 const JobDetails = () => {
   const { job, fetchJobInfo } = useJobStore();
@@ -1965,16 +1967,15 @@ const JobDetails = () => {
               onLoadSuccess={onDocumentLoadSuccess}
             >
               <Page
-                className=""
-                height="500"
+              renderTextLayer={false}
+                // className=""
+                // height="250"
                 width="1000"
-                pageNumber={pageNumber}
+                pageNumber={1}
               />
             </Document>
             {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
-            <p>
-              Page {pageNumber} of {numPages}
-            </p>
+           
           </div>
         </ModalContent>
       </Modal>

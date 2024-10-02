@@ -16,8 +16,8 @@ const MainHero = () => {
    
    
     <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 h-[calc(100vh-180px)] sm:h-[calc(100vh-448px)]">
-      <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
-        <div>
+      <div class="grid md:grid-cols-2   xl:gap-20 md:items-center">
+        <div className="z-50">
           <h1 class="block text-2xl font-bold text-gray-800 sm:text-4xl lg:text-6xl lg:leading-tight">
             {/* credit ty https://www.svgbackgrounds.com/elements/underline-doodles/ */}
             {/* credit Stickers 2/8/2018 https://stackoverflow.com/questions/48688385/adding-underline-text-decoration-without-text-for-an-inline-svg */}
@@ -29,7 +29,7 @@ const MainHero = () => {
           </p>
           
 
-          <div class="mt-7 grid gap-3 w-full sm:inline-flex">
+          <div class="mt-7 grid gap-3 w-full sm:inline-flex ">
             <button
               class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-600 disabled:opacity-50 disabled:pointer-events-none"
               onClick={handleNavigateAndCaptureFunnel}
@@ -76,8 +76,8 @@ const MainHero = () => {
         </div>
 
         {/* <div class="relative ms-4"> */}
-        <div class="relative">
-          <div class=" max-h-[800px] md:ml-20 rounded-md">
+        <div class="relative mt-3 sm:mt-0  ">
+          <div class=" max-h-[800px] min-h-96 ml-0 lg:ml-20 rounded-md  ">
 
 
         

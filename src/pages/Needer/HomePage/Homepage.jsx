@@ -87,7 +87,7 @@ const Homepage = () => {
 
   useEffect(() => {
     console.log("HERE",currentUser)
-if (currentUser.email === "eleto@mistercarwash.com"){
+if (currentUser.email === "eleto@mistercarwash.com" & currentUser.termsOfService === false){
 
   onOpenCarWash()
 }
@@ -2379,7 +2379,7 @@ if (currentUser.email === "eleto@mistercarwash.com"){
                       id="comments"
                       name="comments"
                       type="checkbox"
-                      // onChange={(e) => setTermsOfService(e.target.checked)}
+                      onChange={(e) => setTermsOfService(e.target.checked)}
                       className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
                     />
                   </div>

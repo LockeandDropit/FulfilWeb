@@ -251,6 +251,10 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
 
   const [showAddJobBusiness, setShowAddJobBusiness] = useState(false);
 
+  const toggleModal = () => {
+    setShowAddJobBusiness(!showAddJobBusiness);
+  };
+
   useEffect(() => {
     if (jobHeld) {
      handleGroupLocationToggleOpen(jobHeld)
@@ -526,7 +530,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
           console.log(error);
         });
     }
-    setTimeout(() => navigate("/JobDetails"), 500);
+    setTimeout(() => navigate("/JobDetails"), 0);
   };
 
 
@@ -1196,7 +1200,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
                 </DrawerContent>
               </Drawer>
 
-              {showAddJobBusiness ? <AddJobBusiness /> : null}
+              <AddJobBusiness heldSelected={heldSelected} modalOpen={showAddJobBusiness} toggle={toggleModal}/>
 
               <Modal isOpen={isOpenShare} onClose={onCloseShare}>
                 <ModalContent>
@@ -1400,7 +1404,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
           </div>
         </ModalContent>
       </Modal>
-      {showAddJobBusiness ? <AddJobBusiness heldSelected={heldSelected} /> : null}
+       <AddJobBusiness heldSelected={heldSelected} modalOpen={showAddJobBusiness} toggle={toggleModal}/>
 
 
       <Modal isOpen={isOpenActivity} onClose={onCloseActivity}>

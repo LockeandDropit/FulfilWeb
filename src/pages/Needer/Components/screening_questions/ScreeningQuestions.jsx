@@ -70,10 +70,12 @@ const ScreeningQuestions = (props ) => {
           }
         } else {
           onOpenErrorModal()
-        }    
-        if (question2) {
-            addQuestion2()
         }
+        
+        //why was this here? Seems redundant. Muted for now.
+        // if (question2) {
+        //     addQuestion2()
+        // }
        
         onClose()
         onOpenModal()

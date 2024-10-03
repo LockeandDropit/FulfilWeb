@@ -361,6 +361,7 @@ const Homepage = () => {
         if (!results || !results.length) {
           //this was crashing everything??
           // setPostedJobs(0);
+          setLoading(false);
         } else {
           setPostedJobs(results);
           setLoading(false);

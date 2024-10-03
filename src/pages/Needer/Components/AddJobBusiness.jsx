@@ -393,36 +393,90 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
     console.log("what now", applicantDescription);
   };
 
+  const [jobTitleMessage, setJobTitleMessage] = useState();
+  const [fullTimePositionMessage, setFullTimePositionMessage] = useState();
+  const [addressErrorMessage, setAddressErrorMessage] = useState();
+  const [isSalariedErrorMessage, setIsSalariedErrorMessage] = useState();
+  const [applicantDescriptionMessage, setApplicantDescriptionMessage] = useState();
+  const [descriptionErrorMessage, setDescriptionErrorMessage] = useState();
+
   const checkLength = () => {
     //setloading spinner
+    
     setPendingSuccess(true);
+    setJobTitleMessage();
+    setFullTimePositionMessage();
+    setAddressErrorMessage();
+    setIsSalariedErrorMessage();
+    setApplicantDescriptionMessage();
+    setDescriptionErrorMessage();
+
+
     //check to see if everything is entered
     const descriptionValid = minLengthRegEx.test(description);
     const applicantDescriptionValid = minLengthRegEx.test(applicantDescription);
-    const jobTitleValid = minLengthRegEx.test(jobTitle);
+    
     const upperRateValid = numberOnlyRegexMinimumCharacterInput.test(upperRate);
     const lowerRateValid = numberOnlyRegexMinimumCharacterInput.test(lowerRate);
     const flatRateValid = numberOnlyRegexMinimumCharacterInput.test(flatRate);
 
     //check for null values https://stackoverflow.com/questions/6003884/how-do-i-check-for-null-values-in-javascript user578895
 
+
+
+    
+
+    
+    if (!jobTitle || jobTitle.length < 1 || jobTitle === "undefined") {
+      onOpenError();
+      setPendingSuccess(false);
+      setJobTitleMessage("Please add a title to the post.")
+    } 
+    if (isFullTimePosition === null) {
+      onOpenError();
+      setPendingSuccess(false);
+      setFullTimePositionMessage("Please indicate if this position is full-time or part-time.")
+    }
+
+    if (applicantDescription === null || applicantDescription.length === 0) {
+      onOpenError();
+      setPendingSuccess(false);
+      setApplicantDescriptionMessage("Please fill out the qualifications needed for this position.")
+    }
+
+    if (description === null || description.length === 0) {
+      onOpenError();
+      setPendingSuccess(false);
+      setDescriptionErrorMessage("Please fill out the description for this position.")
+    }
+
+    if (isSalaried === null) {
+      onOpenError();
+      setPendingSuccess(false);
+      setIsSalariedErrorMessage("Please indicate if this is a salaried or an hourly position.")
+    }
+
+
     if (
-      !jobTitleValid ||
+      //seperate this into their own checks.
+      // Ideally this check would be abstracted into it's own Hook... but why start writing legible code now?
+      // !jobTitleValid ||
       isOneTime === null ||
-      isFullTimePosition === null ||
-      applicantDescription === null ||
+      // isFullTimePosition === null ||
+      // applicantDescription === null ||
       isSalaried === null
     ) {
       console.log(
         "error here",
-        jobTitleValid,
-        isOneTime,
-        isFullTimePosition,
-        applicantDescription,
-        isSalaried
+        // jobTitleValid,
+        jobTitle
+        // isOneTime,
+        // isFullTimePosition,
+        // applicantDescription,
+        // isSalaried
       );
 
-      onOpenError();
+      // onOpenError();
       setPendingSuccess(false);
       console.log("1");
     } else {
@@ -469,8 +523,9 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
   };
 
   const checkAddress = () => {
-    if (!streetAddress || !locationLat) {
+    if (!streetAddress || !locationLat || !heldSelected) {
       console.log(streetAddress, locationLat);
+      setAddressErrorMessage("Please add an address for this position.")
       onOpenError();
       setPendingSuccess(false);
       console.log("6");
@@ -1240,7 +1295,7 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader w={"50%"}>Create Post</DrawerHeader>
+          <DrawerHeader w={"50%"}>Create Position</DrawerHeader>
           <DrawerBody>
             <div class=" ">
               <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto  ">
@@ -1254,9 +1309,9 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                     <div class="space-y-2">
                       <label
                         for="hs-pro-dactmt"
-                        class="block mb-2 text-sm font-medium text-gray-800 "
+                        class="block mb-2 font-medium text-gray-800 "
                       >
-                        Post Title
+                        Position Title
                       </label>
 
                       <input
@@ -1267,25 +1322,23 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                         // width="560px"
                         onChange={(e) => setJobTitle(e.target.value)}
                       />
+                      {jobTitleMessage ? (<p className="text-red-500 ">{jobTitleMessage}</p>) : null}
                     </div>
                     <div class="space-y-2">
                       <label
                         for="dactmi"
-                        class="block mb-2 text-sm font-medium text-gray-800 "
+                        class="block mb-2  font-medium text-gray-800 "
                       >
                         Is this a full-time or part-time position?
                       </label>
 
-                      <label
-                        for="dactmi"
-                        class="block mb-2 text-sm font-medium text-gray-800 "
-                      ></label>
+                     
 
                       <select
                         // help from https://groups.google.com/g/knockoutjs/c/_-NzcCQreQ8?pli=1
                         data-bind="booleanValue: state"
                         placeholder="Select option"
-                        class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                        class="py-3 px-4 pe-9 block w-full bg-white border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                         onChange={(e) =>
                           setIntermediatePositionType(e.target.value)
                         }
@@ -1294,13 +1347,14 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                         <option value={true}>Full-time</option>
                         <option value={false}>Part-time</option>
                       </select>
+                      {fullTimePositionMessage ? (<p className="text-red-500 ">{fullTimePositionMessage}</p>) : null}
                     </div>
                     <div class="space-y-2">
                       <label
                         for="dactmd"
-                        class="block mb-2 text-sm font-medium text-gray-800 "
+                        class="block mb-2  font-medium text-gray-800 "
                       >
-                        What's the address?
+                        Where is this position located?
                       </label>
                       {heldSelected ? (
                         <p>
@@ -1334,6 +1388,10 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                           }}
                         />
                       )}
+  
+                      {addressErrorMessage ? (<p className="text-red-500" >{addressErrorMessage}</p>) : null}
+
+
 
                       {user && user.email === "themasterbusiness@gmail.com" ? (
                         <>
@@ -1370,7 +1428,7 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                     <div class="space-y-2">
                       <label
                         for="dactmi"
-                        class="block mb-2 text-sm font-medium text-gray-800 "
+                        class="block mb-2  font-medium text-gray-800 "
                       >
                         Is this an hourly or salaried position?
                       </label>
@@ -1382,13 +1440,14 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
 
                       <select
                         placeholder="Select option"
-                        class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                        class="py-3 px-4 pe-9 block w-full bg-white border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                         onChange={(e) => setPayType(e.target.value)}
                       >
                         <option>Select option</option>
                         <option value="Hourly">Hourly</option>
                         <option value="Salaried">Salaried</option>
                       </select>
+                      {isSalariedErrorMessage ? (<p className="text-red-500">{isSalariedErrorMessage}</p>) : null}
                     </div>
                     
 
@@ -1397,7 +1456,7 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                         <p>estimated pay ? </p>{" "}
                         <select
                           placeholder="Estimated address?"
-                          class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                          class="py-3 px-4 pe-9 block w-full bg-white border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                           onChange={(e) => setIsEstimatedPay(e.target.value)}
                         >
                           <option>Select option</option>
@@ -1411,28 +1470,28 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                       <div class="space-y-2 ">
                         <label
                           for="hs-pro-dactmt"
-                          class="block mb-2 text-sm font-medium text-gray-800 "
+                          class="block mb-2  font-medium text-gray-800 "
                         >
                           Enter the hourly pay range
                         </label>
 
                         <div class="flex align-items-center">
-                          <p className="mt-2 mr-1 text-sm font-medium">$</p>
+                          <p className="mt-2 mr-1 font-medium">$</p>
                           <input
                             id="hs-pro-dactmt"
                           
                             // value={lowerRate}
-                            class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                            class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg  placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                             placeholder="lower rate"
                             onChange={(e) => lowerRateHourlyValidate(e.target.value)}
                           />
-                          <p className="mt-2 text-sm font-medium mr-1 ml-1">
+                          <p className="mt-2  font-medium mr-1 ml-1">
                             /hour - $
                           </p>
                           <input
                             id="hs-pro-dactmt"
                           
-                            class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                            class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg  placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                             placeholder="upper rate"
                             onChange={(e) => upperRateHourlyValidate(e.target.value)}
                           />
@@ -1451,22 +1510,22 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                       <div class="space-y-2">
                         <label
                           for="hs-pro-dactmt"
-                          class="block mb-2 text-sm font-medium text-gray-800 "
+                          class="block mb-2  font-medium text-gray-800 "
                         >
-                          Enter the salary range (yearly)
+                          Enter the salary range (annual pay)
                         </label>
                         <div className="flex">
-                          <p className="mt-2 mr-1 text-sm font-medium">$</p>
+                          <p className="mt-2 mr-1 font-medium">$</p>
                           <input
                             id="hs-pro-dactmt"
                             value={displayLowerRate}
-                            class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                            class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg  placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                             placeholder="lower rate"
                             onChange={(e) =>
                               lowerRateValidate(e.target.value.replace(",", ""))
                             }
                           />
-                          <p className="mt-2 text-sm font-medium mr-1 ml-1">
+                          <p className="mt-2 font-medium mr-1 ml-1">
                             {" "}
                             yearly - $
                           </p>
@@ -1474,12 +1533,12 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                             id="hs-pro-dactmt"
         
                             value={displayUpperRate}
-                            class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                            class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg  placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                             placeholder="upper rate"
                             // I dont think I have to cite this but https://stackoverflow.com/questions/10398931/how-to-remove-text-from-a-string
                             onChange={(e) => upperRateValidate(e.target.value.replace(",", ""))}
                           />
-                          <p className="mt-2 ml-1 text-sm font-medium">
+                          <p className="mt-2 ml-1 font-medium">
                             yearly
                           </p>
                         </div>
@@ -1488,19 +1547,14 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                     <div class="space-y-2">
                       <label
                         for="dactmi"
-                        class="block mb-2 text-sm font-medium text-gray-800 "
+                        class="block mb-2  font-medium text-gray-800 "
                       >
                         Choose a category for this position (optional)
                       </label>
 
-                      <label
-                        for="dactmi"
-                        class="block mb-2 text-sm font-medium text-gray-800 "
-                      ></label>
-
                       <select
                         placeholder="Select option"
-                        class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                        class="py-3 px-4 pe-9 block w-full bg-white border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                         onChange={(e) => setJobCategory(e.target.value)}
                       >
                         <option>Select option</option>
@@ -1521,7 +1575,7 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                     <div class="space-y-2 z-0">
                       <label
                         for="dactmi"
-                        class="block mb-2 text-sm font-medium text-gray-800 "
+                        class="block mb-2 font-medium text-gray-800 "
                       >
                         Job Description
                       </label>
@@ -1535,12 +1589,13 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                           placeholder="ex: This is a position offered at our company in which you will be responsible for overseeing several skilled machinists."
                         />
                       </div>
+                     {descriptionErrorMessage ? (<p className="text-red-500">{descriptionErrorMessage}</p>) : null}
                     </div>
 
                     <div class="space-y-2">
                       <label
                         for="dactmi"
-                        class="block mb-2 text-sm font-medium text-gray-800 "
+                        class="block mb-2 font-medium text-gray-800 "
                       >
                         Job Qualifications
                       </label>
@@ -1551,6 +1606,7 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                         // ref={field.ref}
                         placeholder="ex: 3+ years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "
                       />
+                       {applicantDescriptionMessage ? (<p className="text-red-500">{applicantDescriptionMessage}</p>) : null}
                       {/* <div class="">
   <textarea onChange={(e) => setApplicantDescription(e.target.value)} class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"  rows="6" placeholder="ex: 3+ years of management expereince in either a construction or construction adjacent industry. You should be able to prioritize tasks well and in accordance with our overall business goals. "></textarea>
 </div> */}
@@ -1558,7 +1614,7 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                     <div class="space-y-2">
                       <label
                         for="dactmi"
-                        class="block mb-2 text-sm font-medium text-gray-800 "
+                        class="block mb-2 font-medium text-gray-800 "
                       >
                         List employment benefits here (optional)
                       </label>
@@ -1595,25 +1651,7 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                         </button>
                       ) : (
                         <div>
-                          {/* <button
-                     type="button"
-                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                     data-hs-overlay="#hs-pro-datm"
-                    //  onClick={() => handleClosePostJob()}
-                     // onClick={() => testJobStore()}
-                   >
-                   Save Draft
-                   </button> */}
-                        {/* <button
-                     type="button"
-                     class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                     data-hs-overlay="#hs-pro-datm"
-                    //  onClick={() => handleClosePostJob()}
-                     // onClick={() => testJobStore()}
-                     onClick={() => setAddScreeningQuestions(!addScreeningQuestions)}
-                   >
-                   Add Screening Qustions
-                   </button> */}
+                         
 
                           <button
                             type="button"

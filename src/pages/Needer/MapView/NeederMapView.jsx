@@ -124,7 +124,7 @@ const [hasRun, setHasRun] = useState(false);
                   lat:  defaultLat,
                   lng: defaultLong,
                 }}
-                defaultZoom={12}
+                defaultZoom={11}
                 gestureHandling={"greedy"}
                 disableDefaultUI={true}
                 //move to env

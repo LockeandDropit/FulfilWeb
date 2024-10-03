@@ -278,8 +278,10 @@ const ResetPasswordLoggedOut = () => {
  
       try {
       if (email) {
-      await sendPasswordResetEmail(auth, email);
-   setEmailSent(true)
+      await sendPasswordResetEmail(auth, email)
+      .then(() => setEmailSent(true))
+      .catch((e) => console.log(e))
+   
       }
       } catch (error) {
       console.log(error.message)
@@ -354,7 +356,7 @@ const ResetPasswordLoggedOut = () => {
       </div>
       <div class="ms-3">
         <p id="hs-toast-stack-toggle-update-label" class="text-md text-gray-700 ">
-          Email sent successfully. Check your email for a link to reset your password
+          An email will be sent to your inbox in the next 5 minutes. Check your email for a link to reset your password.
         </p>
       </div>
     </div>

@@ -161,7 +161,7 @@ const UserProfileNeeder = () => {
   const [updatedBio, setUpdatedBio] = useState(null);
   const [isPremium, setIsPremium] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
-  const [businessName, setBusinessName] = useState(null);
+  const [companyName, setCompanyName] = useState(null);
   const [email, setEmail] = useState(null);
   const [projectPictureOne, setProjectPictureOne] = useState(null);
   const [projectPictureTwo, setProjectPictureTwo] = useState(null);
@@ -210,8 +210,9 @@ const UserProfileNeeder = () => {
           setProjectPictureFive(snapshot.data().projectPictureFive);
         }
 
-        if (snapshot.data().businessName) {
-          setBusinessName(snapshot.data().businessName);
+        setUserBio(snapshot.data().bio);
+        if (snapshot.data().companyName) {
+          setCompanyName(snapshot.data().companyName);
         }
       });
     } else {
@@ -224,8 +225,8 @@ const UserProfileNeeder = () => {
 
       getDoc(docRef).then((snapshot) => {
         setUserBio(snapshot.data().bio);
-        if (snapshot.data().businessName) {
-          setBusinessName(snapshot.data().businessName);
+        if (snapshot.data().companyName) {
+          setCompanyName(snapshot.data().companyName);
         }
       });
     } else {
@@ -974,14 +975,14 @@ const UserProfileNeeder = () => {
 
                   <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
                     <div class="pt-4 first:pt-0">
-                      <h2 class="text-sm font-semibold text-gray-800 ">
-                        About
+                      <h2 class="text-lg font-semibold text-gray-800 ">
+                        Details
                       </h2>
 
                       <ul class="mt-3 space-y-2">
-                        {businessName ? (
+                        {companyName ? (
                           <li>
-                            <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                            <div class="inline-flex items-center gap-x-3 text-lg text-gray-800 ">
                               <svg
                                 class="flex-shrink-0 size-4 text-gray-600 "
                                 xmlns="http://www.w3.org/2000/svg"
@@ -1002,12 +1003,13 @@ const UserProfileNeeder = () => {
                                 <path d="M10 14h4" />
                                 <path d="M10 18h4" />
                               </svg>
+                              {companyName}
                             </div>
                           </li>
                         ) : null}
 
                         <li>
-                          <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                          <div class="inline-flex items-center gap-x-3 text-lg text-gray-800 ">
                             <svg
                               class="flex-shrink-0 size-4 text-gray-600 "
                               xmlns="http://www.w3.org/2000/svg"
@@ -1026,7 +1028,7 @@ const UserProfileNeeder = () => {
                             {userCity}, {userState}
                           </div>
                         </li>
-                        <li>
+                        {/* <li>
                           <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
                             {numberOfRatings ? (
                               <Flex>
@@ -1073,9 +1075,9 @@ const UserProfileNeeder = () => {
                               </>
                             )}
                           </div>
-                        </li>
+                        </li> */}
                         <li>
-                          <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
+                          <div class="inline-flex items-center gap-x-3 text-lg text-gray-800 ">
                             <svg
                               class="flex-shrink-0 size-4 text-gray-600 "
                               xmlns="http://www.w3.org/2000/svg"
@@ -1119,7 +1121,7 @@ const UserProfileNeeder = () => {
                       </h2>
 
                       <ul class="mt-3 space-y-2">
-                        {businessName ? (
+                        {companyName ? (
                           <li>
                             <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
                               <svg
@@ -1142,6 +1144,7 @@ const UserProfileNeeder = () => {
                                 <path d="M10 14h4" />
                                 <path d="M10 18h4" />
                               </svg>
+                              {companyName}
                             </div>
                           </li>
                         ) : null}
@@ -1166,7 +1169,7 @@ const UserProfileNeeder = () => {
                             {userCity}, {userState}
                           </div>
                         </li>
-                        <li>
+                        {/* <li>
                           <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
                             {numberOfRatings ? (
                               <Flex>
@@ -1213,7 +1216,7 @@ const UserProfileNeeder = () => {
                               </>
                             )}
                           </div>
-                        </li>
+                        </li> */}
                         <li>
                           <div class="inline-flex items-center gap-x-3 text-sm text-gray-800 ">
                             <svg
@@ -1244,12 +1247,13 @@ const UserProfileNeeder = () => {
              
                 {/* end test */}
 
-                <div class="xl:ps-5 grow space-y-5">
+                {/* <div class="xl:ps-5 grow space-y-5"> */}
+                <div class="w-full">
                   <div class="flex flex-col bg-white border border-gray-200 rounded-xl shadow-sm xl:shadow-none ">
                     {/* Start about */}
                     <div class="p-5 pb-2  flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
                       <h2 class="inline-block font-semibold text-gray-800 ">
-                        About
+                        About 
                       </h2>
 
                       {userBio ? (
@@ -1279,8 +1283,8 @@ const UserProfileNeeder = () => {
                           <div class="mt-7 opacity-100 duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
                             <div class="w-full max-h-full flex flex-col bg-white rounded-xl pointer-events-auto shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)] ">
                               <div class="py-3 px-4 flex justify-between items-center border-b ">
-                                <h3 class="font-semibold text-gray-800 ">
-                                  Add your bio
+                                <h3 class="font-semibold text-gray-800 text-large">
+                            About Us
                                 </h3>
                                 <button
                                   type="button"
@@ -1310,12 +1314,12 @@ const UserProfileNeeder = () => {
                               <form>
                                 <div class="p-4 space-y-5">
                                   <div>
-                                    <label
+                                    {/* <label
                                       for="hs-pro-dalpn"
-                                      class="block mb-2 text-sm font-medium text-gray-800 "
+                                      class="block mb-2 text-lg font-medium text-gray-800 "
                                     >
-                                      About Me
-                                    </label>
+                                      About Us
+                                    </label> */}
 
                                     <textarea
                                       type="text"
@@ -1326,7 +1330,7 @@ const UserProfileNeeder = () => {
                                       id="hs-pro-dalpn"
                                       rows="5"
                                       class="  sm:p-5 py-3 px-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                                      placeholder="ex: I am a dedicated landscaper with over 10 years of experience in the field."
+                                      placeholder="ex: We are a local company dedicated to growing your career."
                                     />
                                   </div>
                                 </div>
@@ -1373,13 +1377,13 @@ const UserProfileNeeder = () => {
                         {" "}
                         <div class="max-w-sm mx-auto">
                           <p class="mt-2 font-medium text-gray-800 ">
-                            Nothing here
+                            Nothing here yet
                           </p>
                           <p class="mb-5 text-sm text-gray-500 "></p>
                         </div>
                         <button
                           type="button"
-                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          class="py-2.5 px-3 inline-flex items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                           data-hs-overlay="#hs-pro-dasadpm"
                           onClick={() => onOpenBio()}
                         >
@@ -1398,7 +1402,7 @@ const UserProfileNeeder = () => {
                             <path d="M5 12h14" />
                             <path d="M12 5v14" />
                           </svg>
-                          Add Bio
+                          Add "About Us"
                         </button>
                       </div>
                     )}

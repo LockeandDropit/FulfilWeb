@@ -1027,7 +1027,7 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
             <DrawerOverlay />
             <DrawerContent>
               <DrawerCloseButton />
-              <DrawerHeader>{selectedJobFromGroup.jobTitle}</DrawerHeader>
+              <DrawerHeader></DrawerHeader>
               <DrawerBody>
                 <div class="">
                   <Helmet>
@@ -1046,7 +1046,7 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                           <div className="flex">
                             <label
                               for="hs-pro-dactmt"
-                              class="block mb-2 text-xl font-medium text-gray-900"
+                              class="block mb-2 text-2xl font-medium text-gray-900"
                             >
                               {selectedJobFromGroup.jobTitle}
                             </label>
@@ -1068,10 +1068,36 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                               </svg>
                             </label>
                           </div>
+                          {selectedJobFromGroup.employerProfilePicture ? (
+                                <>
+                                  <div class="flex flex-row items-center">
+                                    <div className="justify-center items-center "> 
+                                    <img
+                                      src={
+                                        selectedJobFromGroup.employerProfilePicture
+                                      }
+                                      class="flex-shrink-0 size-[48px] rounded-full"
+                                      alt="company logo"
+                                    />
+                                    </div>
+                                    
+                                    <p class="ml-2 font-semibold text-xl text-gray-800 cursor-pointer">
+                                      {selectedJobFromGroup.companyName}
+                                    </p>
+                                  </div>
+                               
+                                </>
+                              ) : (
+                                <div className="flex flex-col">
+                                  <p class="font-semibold text-xl text-gray-800 cursor-pointer">
+                                    {businessPostedJobs.companyName}
+                                  </p>
+                                </div>
+                              )}
                           {selectedJobFromGroup.isFullTimePosition === true ? (
                             <label
                               for="hs-pro-dactmt"
-                              class="block  text-lg font-medium text-gray-800"
+                              class="block mt-1  text-lg font-medium text-gray-800"
                             >
                               Full-time
                             </label>
@@ -1162,36 +1188,10 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                             </span>{" "}
                             {selectedJobFromGroup.datePosted}
                           </p>
-                          <p class="font-semibold text-md text-slate-700 cursor-pointer">
-                            Employer:
-                          </p>
+                         
                           <div className="flex">
-                            {selectedJobFromGroup.employerProfilePicture ? (
-                              <>
-                                <div class="flex flex-col justify-center items-center size-[56px]  ">
-                                  <img
-                                    src={
-                                      selectedJobFromGroup.employerProfilePicture
-                                    }
-                                    class="flex-shrink-0 size-[64px] rounded-full"
-                                  />
-
-                                  <div className="flex flex-col ml-4">
-                                    <p class="font-semibold text-md text-gray-500  mt-2 cursor-pointer">
-                                      {selectedJobFromGroup.businessName}
-                                    </p>
-                                    <p class="font-semibold text-md text-gray-500 cursor-default ">
-                                      {selectedJobFromGroup.city}, Minnesota
-                                    </p>
-                                  </div>
-                                </div>
-                              </>
-                            ) : null}
-                            <div className="flex flex-col">
-                              <p class="font-semibold text-md text-gray-500  mt-1 cursor-pointer">
-                                {selectedJobFromGroup.companyName}
-                              </p>
-                            </div>
+                         
+                         
                           </div>
                         </div>
 
@@ -1551,7 +1551,7 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                 <DrawerOverlay />
                 <DrawerContent>
                   <DrawerCloseButton />
-                  <DrawerHeader>{businessPostedJobs.jobTitle}</DrawerHeader>
+                  <DrawerHeader></DrawerHeader>
                   <DrawerBody>
                     <div class="">
                       <Helmet>
@@ -1570,7 +1570,7 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                               <div className="flex">
                                 <label
                                   for="hs-pro-dactmt"
-                                  class="block mb-2 text-xl font-medium text-gray-900"
+                                  class="block mb-2 text-2xl font-medium text-gray-900"
                                 >
                                   {businessPostedJobs.jobTitle}
                                 </label>
@@ -1594,20 +1594,26 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                               </div>
                               {businessPostedJobs.employerProfilePicture ? (
                                 <>
-                                  <div class="flex flex-col justify-center items-center size-[64px]  ">
+                                  <div class="flex flex-row items-center">
+                                    <div className="justify-center items-center"> 
                                     <img
                                       src={
                                         businessPostedJobs.employerProfilePicture
                                       }
-                                      class="flex-shrink-0 size-[64px] rounded-full"
+                                      class="flex-shrink-0 size-[56px] rounded-full"
                                       alt="company logo"
                                     />
-                                  </div>
-                                  <div className="flex flex-col">
-                                    <p class="font-semibold text-xl text-gray-800 cursor-pointer">
+                                    </div>
+                                    
+                                    <p class="font-semibold ml-2 text-xl text-gray-800 cursor-pointer">
                                       {businessPostedJobs.companyName}
                                     </p>
                                   </div>
+                                  {/* <div className="flex flex-col">
+                                    <p class="font-semibold text-xl text-gray-800 cursor-pointer">
+                                      {businessPostedJobs.companyName}
+                                    </p>
+                                  </div> */}
                                 </>
                               ) : (
                                 <div className="flex flex-col">
@@ -1620,7 +1626,7 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                               true ? (
                                 <label
                                   for="hs-pro-dactmt"
-                                  class="block  text-lg font-medium text-gray-800"
+                                  class="block mt-1 text-lg font-medium text-gray-800"
                                 >
                                   Full-time
                                 </label>

@@ -530,7 +530,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs }) => {
           console.log(error);
         });
     }
-    setTimeout(() => navigate("/JobDetails"), 0);
+    setTimeout(() => navigate("/JobDetails"), 500);
   };
 
 

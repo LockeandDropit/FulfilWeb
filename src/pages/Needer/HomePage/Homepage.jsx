@@ -485,7 +485,7 @@ if (currentUser?.email === "eleto@mistercarwash.com" & currentUser?.termsOfServi
     }
 
     //unsure why this setTimeout was here. It was 500 ms before, but changed to 0 and everything seems to be just fine. Idk man.
-    setTimeout(() => navigate("/JobDetails"), 0);
+    setTimeout(() => navigate("/JobDetails"), 500);
   };
 
   const handleStoreAndNavigateHired = (x) => {

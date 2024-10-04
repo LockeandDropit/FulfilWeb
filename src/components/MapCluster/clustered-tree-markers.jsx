@@ -1722,7 +1722,20 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                                 {businessPostedJobs.datePosted}
                               </p>
                             </div>
-
+                            {businessPostedJobs.companyBio ? (  <div class="space-y-2 mt-10 mb-4 ">
+                              <label
+                                for="dactmi"
+                                class="block mb-2 text-lg font-medium text-gray-900 "
+                              >
+                                About us
+                              </label>
+                              <div className="w-full prose prose-li  font-inter marker:text-black mb-4 ">
+                            
+                                  {businessPostedJobs.companyBio}
+                              
+                              </div>
+                            </div>) : null}
+                          
                             <div class="space-y-2 mt-10 mb-4 ">
                               <label
                                 for="dactmi"

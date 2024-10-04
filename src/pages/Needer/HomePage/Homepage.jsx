@@ -85,13 +85,13 @@ const Homepage = () => {
   }
 
 
-//   useEffect(() => {
+  useEffect(() => {
     
-// if (currentUser.email === "eleto@mistercarwash.com" & currentUser.termsOfService === false){
+if (currentUser?.email === "eleto@mistercarwash.com" & currentUser?.termsOfService === false){
 
-//   onOpenCarWash()
-// }
-//   }, [])
+  onOpenCarWash()
+}
+  }, [])
 
   useEffect(() => {
     if (hasRun === false) {

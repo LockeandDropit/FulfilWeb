@@ -875,7 +875,7 @@ const handleEditScreeningQuestions = () => {
                   <div class="space-y-2">
                     <label
                       for="hs-pro-dactmt"
-                      class="block mb-2 text-sm font-medium text-gray-800 "
+                      class="block mb-2 font-medium text-gray-800 "
                     >
                       Post Title (can not be edited)
                     </label>
@@ -885,7 +885,7 @@ const handleEditScreeningQuestions = () => {
                   <div class="space-y-2">
                     <label
                       for="dactmd"
-                      class="block mb-2 text-sm font-medium text-gray-800 "
+                      class="block mb-2  font-medium text-gray-800 "
                     >
                        Location (can not be edited)
                     </label>
@@ -899,17 +899,17 @@ const handleEditScreeningQuestions = () => {
                   <div class="space-y-2">
                     <label
                       for="dactmi"                 
-                      class="block mb-2 text-sm font-medium text-gray-800 "
+                      class="block mb-2 font-medium text-gray-800 "
                     >
                       Is this a full-time or part-time position?
                     </label>
   
                     <label  for="dactmi"                   
-                     class="block mb-2 text-sm font-medium text-gray-800 ">
+                     class="block mb-2 font-medium text-gray-800 ">
                     </label>
   {job.isFullTimePosition ? ( <select
                 placeholder="Select option"
-                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                 defaultValue="true"
                 onChange={(e) => setIntermediatePositionType(e.target.value)}
               >
@@ -918,7 +918,7 @@ const handleEditScreeningQuestions = () => {
                 <option value={false}>Part-time</option>
               </select>) : ( <select
                 placeholder="Select option"
-                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                 defaultValue="false"
                 
                 onChange={(e) => setIntermediatePositionType(e.target.value)}
@@ -933,7 +933,7 @@ const handleEditScreeningQuestions = () => {
                     <label
                       for="dactmi"
                      
-                      class="block mb-2 text-sm font-medium text-gray-800 "
+                      class="block mb-2 font-medium text-gray-800 "
                      
                     >
                       Is this an hourly or salaried position?
@@ -941,13 +941,13 @@ const handleEditScreeningQuestions = () => {
   
                     <label  for="dactmi"
                      
-                     class="block mb-2 text-sm font-medium text-gray-800 ">
+                     class="block mb-2 font-medium text-gray-800 ">
                     
                     </label>
 
                     {job.isHourly === true && !payType  ? ( <select
                 placeholder="Select option"
-                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                 defaultValue="Hourly"
                 onChange={(e) => setPayType(e.target.value)}
               >
@@ -956,7 +956,7 @@ const handleEditScreeningQuestions = () => {
                 <option value="Salaried">Salaried</option>
               </select>) : payType === "Salaried" ? (<select
                 placeholder="Select option"
-                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                 defaultValue="Salaried"
                 onChange={(e) => setPayType(e.target.value)}
               >
@@ -968,7 +968,7 @@ const handleEditScreeningQuestions = () => {
               
               {job.isSalaried === true && !payType  ? ( <select
                 placeholder="Select option"
-                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                 defaultValue="Salaried"
                 onChange={(e) => setPayType(e.target.value)}
               >
@@ -977,7 +977,7 @@ const handleEditScreeningQuestions = () => {
                 <option value="Salaried">Salaried</option>
               </select>) : payType === "Hourly" ? (<select
                 placeholder="Select option"
-                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                class="py-3 px-4 pe-9 block w-full bg-white border-transparent rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                 defaultValue="Hourly"
                 onChange={(e) => setPayType(e.target.value)}
               >
@@ -993,33 +993,33 @@ const handleEditScreeningQuestions = () => {
    <div class="space-y-2 ">
    <label
      for="hs-pro-dactmt"
-     class="block mb-2 text-sm font-medium text-gray-800">
+     class="block mb-2 font-medium text-gray-800">
       Enter the hourly pay range
    </label>
   
   <div class="flex align-items-center">
-    <p className="mt-2 mr-1 text-sm font-medium">$</p>
+    <p className="mt-2 mr-1 font-medium">$</p>
    <input
      id="hs-pro-dactmt"
    
-     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
      defaultValue={lowerRate}
      value={displayLowerRate}
      onChange={(e) =>
       lowerRateValidate(e.target.value.replace(",", ""))
     }
    />
-   <p className="mt-2 text-sm font-medium mr-1 ml-1">/hour - $</p>
+   <p className="mt-2 font-medium mr-1 ml-1">/hour - $</p>
    <input
      id="hs-pro-dactmt"
  
-     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
      defaultValue={upperRate}
      value={displayUpperRate}
      onChange={(e) => upperRateValidate(e.target.value.replace(",", ""))}
   
    />
-   <p className="mt-2 text-sm font-medium">/hour</p>
+   <p className="mt-2 font-medium">/hour</p>
      {lowerRateValidationBegun === true ? (
       <p color="red">{lowerRateValidationMessage}</p>
     ) : null}
@@ -1032,16 +1032,16 @@ const handleEditScreeningQuestions = () => {
   ) : payType === "Salaried" ? (<div class="space-y-2">
     <label
       for="hs-pro-dactmt"
-      class="block mb-2 text-sm font-medium text-gray-800 "
+      class="block mb-2 font-medium text-gray-800 "
     >
       Enter the salary range (yearly)
     </label>
     <div className="flex">
-    <p className="mt-2 mr-1 text-sm font-medium">$</p>
+    <p className="mt-2 mr-1 font-medium">$</p>
     <input
      id="hs-pro-dactmt"
   
-     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
    
      value={displayLowerRate}
      onChange={(e) =>
@@ -1049,75 +1049,75 @@ const handleEditScreeningQuestions = () => {
     }
   
    />
-   <p className="mt-2 text-sm font-medium mr-1 ml-1"> yearly - $</p>
+   <p className="mt-2 font-medium mr-1 ml-1"> yearly - $</p>
    <input
      id="hs-pro-dactmt"
 
-     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
    
      value={displayUpperRate }
      onChange={(e) => upperRateValidate(e.target.value.replace(",", ""))}
    />
-     <p className="mt-2 ml-1 text-sm font-medium">yearly</p>
+     <p className="mt-2 ml-1 font-medium">yearly</p>
      </div>
   </div>) : (null)}
   
   {job.isSalaried && !payType ? (<div class="space-y-2">
     <label
       for="hs-pro-dactmt"
-      class="block mb-2 text-sm font-medium text-gray-800 "
+      class="block mb-2 font-medium text-gray-800 "
     >
-      Enter the salary range (yearly) sdfsd
+      Enter the salary range (yearly)
     </label>
     <div className="flex">
-    <p className="mt-2 mr-1 text-sm font-medium">$</p>
+    <p className="mt-2 mr-1 font-medium">$</p>
     <input
      id="hs-pro-dactmt"
   
-     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
      defaultValue={lowerRate}
      value={displayLowerRate }
      onChange={(e) => lowerRateValidate(e.target.value.replace(",", ""))}
   
    />
-   <p className="mt-2 text-sm font-medium mr-1 ml-1"> yearly - $</p>
+   <p className="mt-2 font-medium mr-1 ml-1"> yearly - $</p>
    <input
      id="hs-pro-dactmt"
   
-     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
      defaultValue={upperRate}
      value={displayUpperRate }
      onChange={(e) => upperRateValidate(e.target.value.replace(",", ""))}
   
    />
-     <p className="mt-2 ml-1 text-sm font-medium">yearly</p>
+     <p className="mt-2 ml-1 font-medium">yearly</p>
      </div>
   </div>) : payType === "Hourly" ? (   <div class="space-y-2 ">
    <label
      for="hs-pro-dactmt"
-     class="block mb-2 text-sm font-medium text-gray-800">
+     class="block mb-2 font-medium text-gray-800">
       Enter the hourly pay range
    </label>
   
   <div class="flex align-items-center">
-    <p className="mt-2 mr-1 text-sm font-medium">$</p>
+    <p className="mt-2 mr-1 font-medium">$</p>
    <input
      id="hs-pro-dactmt"
      type="text"
-     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
      defaultValue={lowerRate}
      onChange={(e) => lowerRateValidate(e.target.value)}
    />
-   <p className="mt-2 text-sm font-medium mr-1 ml-1">/hour - $</p>
+   <p className="mt-2 font-medium mr-1 ml-1">/hour - $</p>
    <input
      id="hs-pro-dactmt"
      type="text"
-     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+     class="py-2 px-3 block w-1/3 border-gray-200 rounded-lg placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
      defaultValue={upperRate}
                       onChange={(e) => upperRateValidate(e.target.value)}
   
    />
-   <p className="mt-2 text-sm font-medium">/hour</p>
+   <p className="mt-2 font-medium">/hour</p>
      {lowerRateValidationBegun === true ? (
       <p color="red">{lowerRateValidationMessage}</p>
     ) : null}
@@ -1131,7 +1131,7 @@ const handleEditScreeningQuestions = () => {
                   <div class="space-y-2">
                     <label
                       for="dactmi"
-                      class="block mb-2 text-sm font-medium text-gray-800 "
+                      class="block mb-2 font-medium text-gray-800 "
                     >
                      Job Description 
                     </label>
@@ -1153,7 +1153,7 @@ const handleEditScreeningQuestions = () => {
                   <div class="space-y-2">
                     <label
                       for="dactmi"
-                      class="block mb-2 text-sm font-medium text-gray-800 "
+                      class="block mb-2 font-medium text-gray-800 "
                     >
                     Tell applicants what you're looking for
                     </label>
@@ -1172,7 +1172,7 @@ const handleEditScreeningQuestions = () => {
                   <div class="space-y-2">
                     <label
                       for="dactmi"
-                      class="block mb-2 text-sm font-medium text-gray-800 "
+                      class="block mb-2 font-medium text-gray-800 "
                     >
                     List employment benefits here (optional)
                     </label>

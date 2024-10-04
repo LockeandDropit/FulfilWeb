@@ -470,7 +470,9 @@ if (currentUser?.email === "eleto@mistercarwash.com" & currentUser?.termsOfServi
   const handleStoreAndNavigatePosted = (x) => {
     console.log(x.jobTitle, x.jobID);
 
-    fetchJobInfo(user.uid, x.jobID, "Posted Jobs", x.jobTitle);
+    fetchJobInfo(user.uid, x.jobID, "Posted Jobs", x.jobTitle)
+    //come back to this
+    // .then(() => setTimeout(() => navigate("/JobDetails"), 500))
     if (x.hasNewApplicant === true) {
       updateDoc(doc(db, "employers", user.uid, "Posted Jobs", x.jobTitle), {
         hasNewApplicant: false,
@@ -2384,7 +2386,7 @@ if (currentUser?.email === "eleto@mistercarwash.com" & currentUser?.termsOfServi
                     />
                   </div>
                   <div className="text-sm leading-6">
-                    <label  className="font-medium text-gray-900" >
+                    <label  className="font-medium text-gray-900">
                     I am over 18 years of age and I have read and agree to the <span class="text-sky-400" onClick={() => onOpenTOS()}>Terms of Service</span>, the  <span class="text-sky-400" onClick={() => onOpenPP()} > Privacy Policy</span>
                     </label>
                    
@@ -2394,7 +2396,8 @@ if (currentUser?.email === "eleto@mistercarwash.com" & currentUser?.termsOfServi
           </ModalBody>
 
           <ModalFooter>
-              <button
+
+       <button
               type="button"
               class="py-2.5 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
               data-hs-overlay="#hs-pro-datm"
@@ -2402,6 +2405,8 @@ if (currentUser?.email === "eleto@mistercarwash.com" & currentUser?.termsOfServi
             >
               Confirm
             </button>
+
+         
           
           </ModalFooter>
         </ModalContent>

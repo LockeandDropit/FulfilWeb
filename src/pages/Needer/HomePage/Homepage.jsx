@@ -85,13 +85,13 @@ const Homepage = () => {
   }
 
 
-  useEffect(() => {
-    console.log("HERE",currentUser)
-if (currentUser.email === "eleto@mistercarwash.com" & currentUser.termsOfService === false){
+//   useEffect(() => {
+    
+// if (currentUser.email === "eleto@mistercarwash.com" & currentUser.termsOfService === false){
 
-  onOpenCarWash()
-}
-  }, [])
+//   onOpenCarWash()
+// }
+//   }, [])
 
   useEffect(() => {
     if (hasRun === false) {

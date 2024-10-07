@@ -310,6 +310,12 @@ const ChatPlaceholder = () => {
     }
   }, [location]);
 
+  const endOfMessagesRef = useRef(null)
+
+  endOfMessagesRef.current?.scrollIntoView({
+    behavior: "smooth"
+  })
+
   const [markCompleteVisible, setMarkCompleteVisible] = useState(false);
 
   const handleMarkCompleteVisible = () => {
@@ -609,6 +615,7 @@ const ChatPlaceholder = () => {
                           </div>
                         )
                       )}
+                      <div ref={endOfMessagesRef}></div>
                     </div>
                   </div>
                 </div>

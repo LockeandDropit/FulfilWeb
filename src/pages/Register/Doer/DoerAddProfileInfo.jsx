@@ -90,9 +90,13 @@ const DoerAddProfileInfo = () => {
   const [state, setState] = useState(null);
   const [test, setTest] = useState(null);
   const [isEmployer, setIsEmployer] = useState(true);
-  const [profilePicture, setProfilePicture] = useState(null)
-  const [phoneNumber, setPhoneNumber] = useState(null)
-  const [businessName, setBusinessName] = useState(null)
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [businessName, setBusinessName] = useState(null);
+
+  const [isConvictedFelon, setIsConvictedFelon] = useState(false)
+  const [isNonEnglishSpeaking, setIsNonEnglishSpeaking] = useState(false)
+
 
 
   const [hasRun, setHasRun] = useState(false);
@@ -199,7 +203,9 @@ const DoerAddProfileInfo = () => {
       ageAgreement: ageAgreement,
       termsOfService: termsOfService,
       taxAgreementConfirmed: taxAgreementConfirmed,
-      profilePictureResponse: profilePicture ? profilePicture : null
+      profilePictureResponse: profilePicture ? profilePicture : null,
+      isConvictedFelon: isConvictedFelon,
+      isNonEnglishSpeaking : isNonEnglishSpeaking,
     });
     // IN USE
   createChatSlotInDB()
@@ -287,12 +293,12 @@ const DoerAddProfileInfo = () => {
        
 
         <div className=" border-gray-900/10 pb-0">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-          <p className="mt-1 text-sm leading-6 text-gray-600"> We just need a few pieces of information to get started</p>
+          <h2 className="text-xl font-semibold leading-7 text-gray-900">Personal Information</h2>
+          <p className="mt-1 text-base leading-6 text-gray-600"> We just need a few pieces of information to get started</p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-3">
-              <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="first-name" className="block text-lg font-medium leading-6 text-gray-900">
                 First name
               </label>
               <div className="mt-2">
@@ -308,7 +314,7 @@ const DoerAddProfileInfo = () => {
             </div>
 
             <div className="sm:col-span-3">
-              <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="last-name" className="block text-lg font-medium leading-6 text-gray-900">
                 Last name
               </label>
               <div className="mt-2">
@@ -329,7 +335,7 @@ const DoerAddProfileInfo = () => {
             
 
             <div className="sm:col-span-2 sm:col-start-1">
-              <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="city" className="block text-lg font-medium leading-6 text-gray-900">
                 City
               </label>
               <div className="mt-2">
@@ -345,7 +351,7 @@ const DoerAddProfileInfo = () => {
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="region" className="block text-sm font-medium leading-6 text-gray-900">
+              <label htmlFor="region" className="block text-lg font-medium leading-6 text-gray-900">
                 State / Province
               </label>
               <div className="mt-2">
@@ -362,7 +368,7 @@ const DoerAddProfileInfo = () => {
 
             
             <div className="sm:col-span-4">
-              <label  className="block text-sm font-medium leading-6 text-gray-900">
+              <label  className="block text-lg font-medium leading-6 text-gray-900">
                 Phone Number (optional)
               </label>
               <div className="mt-2">
@@ -376,56 +382,75 @@ const DoerAddProfileInfo = () => {
                 />
               </div>
             </div>
-            <div className="sm:col-span-4">
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                Business Name (optional)
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  onChange={(e) => setBusinessName(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
+            
 
             
           </div>
         </div>
-
         <div className="border-b border-gray-900/10 pb-12">
          
 
           <div className="mt-10 space-y-10">
             <fieldset>
-              <legend className="text-sm font-semibold leading-6 text-gray-900">User Agreements</legend>
+              <legend className="text-lg font-semibold leading-6 text-gray-900">Indicate if you are:</legend>
+              <legend className="text-sm  leading-6 text-gray-900">(This will not effect your ability to find a position, we use this information to help tailor your search)</legend>
               <div className="mt-6 space-y-6">
-                {/* <div className="relative flex gap-x-3">
+        
+                <div className="relative flex gap-x-3">
                   <div className="flex h-6 items-center">
                     <input
-                      id="comments"
-                      name="comments"
+                      id="candidates"
+                      name="candidates"                  
+                      onChange={(e) => setIsConvictedFelon(e.target.checked)}
                       type="checkbox"
-                      onChange={(e) => setTermsOfService(e.target.checked)}
                       className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
                     />
                   </div>
                   <div className="text-sm leading-6">
                     <label  className="font-medium text-gray-900" >
-                    I have read and agree to the <span class="text-sky-400" onClick={() => onOpenTOS()}>Terms of Service.</span>
+                    Convicted of a felony.
                     </label>
                    
                   </div>
-                </div> */}
+                </div>
                 <div className="relative flex gap-x-3">
                   <div className="flex h-6 items-center">
                     <input
                       id="candidates"
                       name="candidates"
-                      // onChange={(e) => setPrivacyPolicy(e.target.checked)}
+            onChange={(e) => setIsNonEnglishSpeaking(e.target.checked)}
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                    />
+                  </div>
+                  <div className="text-sm leading-6">
+                    <label  className="font-medium text-gray-900" >
+                    Non-english speaking.
+                    </label>
+                   
+                  </div>
+                </div>
+               
+              </div>
+            </fieldset>
+           
+          </div>
+        </div>
+
+        <div className=" pb-12">
+         
+
+          <div className="mt-10 space-y-10">
+            <fieldset>
+              <legend className="text-xl font-semibold leading-6 text-gray-900">User Agreements</legend>
+              <div className="mt-6 space-y-6">
+        
+                <div className="relative flex gap-x-3">
+                  <div className="flex h-6 items-center">
+                    <input
+                      id="candidates"
+                      name="candidates"
+                  
                        onChange={(e) => handleAgreeAll(e.target.checked)}
                       
                       type="checkbox"
@@ -439,40 +464,7 @@ const DoerAddProfileInfo = () => {
                    
                   </div>
                 </div>
-                {/* <div className="relative flex gap-x-3">
-                  <div className="flex h-6 items-center">
-                    <input
-                      id="offers"
-                      name="offers"
-                      type="checkbox"
-                      onChange={(e) => setAgeAgreement(e.target.checked)}
-                      className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
-                    />
-                  </div>
-                  <div className="text-sm leading-6">
-                    <label htmlFor="offers" className="font-medium text-gray-900">
-                    I am over 18 years of age
-                    </label>
-                    
-                  </div>
-                </div> */}
-                {/* <div className="relative flex gap-x-3">
-                  <div className="flex h-6 items-center">
-                    <input
-                      id="offers"
-                      name="offers"
-                      type="checkbox"
-                      onChange={(e) => setTaxAgreementConfirmed(e.target.checked)}
-                      className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
-                    />
-                  </div>
-                  <div className="text-sm leading-6">
-                    <label htmlFor="offers" className="font-medium text-gray-900">
-                    By continuing I agree and understand that I am an independent contractor and not an employee of Fulfil.
-                    </label>
-                    
-                  </div>
-                </div> */}
+               
               </div>
             </fieldset>
            
@@ -482,7 +474,7 @@ const DoerAddProfileInfo = () => {
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
       
-      <input type="button"  value="Sign Up" onClick={() => checkLength()} class="py-2 px-3 inline-flex justify-center mb-12 items-center gap-x-2 text-start bg-sky-500  hover:bg-sky-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 " data-hs-overlay="#">
+      <input type="button"  value="Sign Up" onClick={() => checkLength()} class="cursor-pointer py-2.5 px-4 inline-flex justify-center mb-12 items-center gap-x-2 text-start bg-sky-500  hover:bg-sky-600 text-white text-lg font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 " data-hs-overlay="#">
           
           </input>
       </div>

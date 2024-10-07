@@ -156,6 +156,12 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
   const [firstName, setFirstName] = useState(null);
   const [description, setDescription] = useState(null);
   const [requirements, setRequirements] = useState("");
+  const [isFelonEligible, setIsFelonEligible] = useState(false)
+  const [isNonEnglishEligible, setIsNonEnglishEligible] = useState(false)
+
+
+  // isFelonEligible
+  // isNonEnglishEligible
 
   //modal control
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -522,13 +528,30 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
     // checkAddress();
   };
 
+
+// if (!streetAddress) {
+
+// if (heldaddress) {
+//   submit()
+// }
+
+//error
+
+// } else {
+//   submit()
+// }
+
   const checkAddress = () => {
-    if (!streetAddress || !locationLat || !heldSelected) {
-      console.log(streetAddress, locationLat);
-      setAddressErrorMessage("Please add an address for this position.")
-      onOpenError();
-      setPendingSuccess(false);
-      console.log("6");
+    if (!streetAddress || !locationLat ) {
+      if (heldSelected) {
+        submitJob();
+      } else {
+        console.log(streetAddress, locationLat);
+        setAddressErrorMessage("Please add an address for this position.")
+        onOpenError();
+        setPendingSuccess(false);
+        console.log("6");
+      }
     } else {
       // testJobStore()
       submitJob();
@@ -655,6 +678,8 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
       niceToHave: niceToHave,
       isEstimatedPay: isEstimatedPay,
       isEstimatedAddress: isEstimatedAddress,
+      isFelonEligible: isFelonEligible,
+      isNonEnglishEligible: isNonEnglishEligible,
     })
       .then(() => {
         addDoc(dbRef, placeholderApplicant);
@@ -709,6 +734,8 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
       niceToHave: niceToHave,
       isEstimatedPay: isEstimatedPay,
       isEstimatedAddress: isEstimatedAddress,
+      isFelonEligible: isFelonEligible,
+      isNonEnglishEligible: isNonEnglishEligible,
     })
       .then(() => {
         //all good
@@ -757,6 +784,8 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
         niceToHave: niceToHave,
         isEstimatedPay: isEstimatedPay,
         isEstimatedAddress: isEstimatedAddress,
+        isFelonEligible: isFelonEligible,
+        isNonEnglishEligible: isNonEnglishEligible,
       })
         .then(() => {
           //all good
@@ -808,6 +837,8 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
         niceToHave: niceToHave,
         isEstimatedPay: isEstimatedPay,
         isEstimatedAddress: isEstimatedAddress,
+        isFelonEligible: isFelonEligible,
+        isNonEnglishEligible: isNonEnglishEligible,
       })
         .then(() => {
           //all good
@@ -866,6 +897,8 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
       niceToHave: niceToHave,
       isEstimatedPay: isEstimatedPay,
       isEstimatedAddress: isEstimatedAddress,
+      isFelonEligible: isFelonEligible,
+      isNonEnglishEligible: isNonEnglishEligible,
     })
       .then(() => {
         //all good
@@ -908,9 +941,7 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
       state: state,
       datePosted: datePosted,
       category: jobCategory ? jobCategory : false,
-
       streetAddress: streetAddress,
-
       zipCode: zipCode,
       locationLat: locationLat,
       locationLng: locationLng,
@@ -921,6 +952,8 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
       niceToHave: niceToHave,
       isEstimatedPay: isEstimatedPay,
       isEstimatedAddress: isEstimatedAddress,
+      isFelonEligible: isFelonEligible,
+      isNonEnglishEligible: isNonEnglishEligible,
     })
       .then(() => {
         //all good
@@ -1031,6 +1064,7 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
       } else {
         setAddressIncorrect(true);
       }
+      
       if (firstAddress[2]) {
         setCity(firstAddress[2].long_name);
         // console.log(firstAddress[2].long_name);
@@ -1051,6 +1085,7 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
       }
       // });
     } else {
+    
     }
   }, [firstAddress]);
 
@@ -1570,6 +1605,57 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
                         <option value="Utilities">Utilities</option>
                         <option value="General Physical Labor">General Physical Labor</option>
                       </select>
+                    </div>
+
+                    <div class="space-y-2">
+                      <label
+                        for="dactmi"
+                        class="block mb-2  font-medium text-gray-800 "
+                      >
+                        This position is open to those who are(optional):
+                      </label>
+
+                      <div class="flex">
+                      <div className="relative flex gap-x-3">
+                  <div className="flex h-6 items-center">
+                    <input
+                      id="comments"
+                      name="comments"
+                      type="checkbox"
+                      onChange={(e) => setIsFelonEligible(e.target.checked)}
+                      className="h-5 w-5 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                    />
+                  </div>
+                  <div className=" leading-6">
+                    <label  className=" text-gray-900" >
+                  Convicted felons
+                    </label>
+                   
+                  </div>
+                </div>
+</div>
+
+<div class="flex">
+<div className="relative flex gap-x-3">
+                  <div className="flex h-6 items-center">
+                    <input
+                      id="comments"
+                      name="comments"
+                      type="checkbox"
+                      onChange={(e) => setIsNonEnglishEligible(e.target.checked)}
+                      className="h-5 w-5 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                    />
+                  </div>
+                  <div className=" leading-6">
+                    <label  className=" text-gray-900" >
+                 Non-english speakers
+                    </label>
+                   
+                  </div>
+                </div>
+</div>
+
+                     
                     </div>
 
                     <div class="space-y-2 z-0">

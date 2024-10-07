@@ -163,19 +163,7 @@ const ChatPlaceholder = ({ passedChannel }) => {
     };
   }, [chatId]);
 
-  const handleEmoji = (e) => {
-    setText((prev) => prev + e.emoji);
-    setOpen(false);
-  };
 
-  const handleImg = (e) => {
-    if (e.target.files[0]) {
-      setImg({
-        file: e.target.files[0],
-        url: URL.createObjectURL(e.target.files[0]),
-      });
-    }
-  };
 
   //listener credit https://www.youtube.com/watch?v=D5SdvGMTEaU
 
@@ -199,6 +187,7 @@ const ChatPlaceholder = ({ passedChannel }) => {
   useEffect(() => {
   console.log("text global", text)
 }, [text])
+
 
 
 
@@ -319,6 +308,15 @@ const ChatPlaceholder = ({ passedChannel }) => {
   function onDocumentLoadSuccess() {
     setNumPages(numPages);
   }
+
+
+  //scroll to bottom of messages credit Colby Fayock 1/4/24 https://www.youtube.com/watch?v=MjHlltcA-nA
+
+  const endOfMessagesRef = useRef(null)
+
+endOfMessagesRef.current?.scrollIntoView({
+  behavior: "smooth"
+})
  
 
   if (isJobLoading) return <div className="loading">Loading...</div>;
@@ -490,7 +488,7 @@ const ChatPlaceholder = ({ passedChannel }) => {
                   <div class="relative">
                     <div class="sticky top-16 inset-x-0 z-10 max-w-lg mx-auto text-center">
                       <span class="py-0.5 px-1.5 bg-gray-100 text-xs text-gray-500 rounded-full">
-                        {chat?.messages ? <p>Today</p> : null}
+                        {/* {chat?.messages ? <p>Today</p> : null} */}
                       </span>
                     </div>
 
@@ -618,6 +616,7 @@ const ChatPlaceholder = ({ passedChannel }) => {
                           </div>
                         )
                       )}
+                      <div ref={endOfMessagesRef}></div>
                     </div>
                   </div>
                 </div>
@@ -5481,9 +5480,13 @@ const ChatPlaceholder = ({ passedChannel }) => {
 
                   <div class="relative space-y-5">
                     <div class="sticky top-0 inset-x-0 z-10 max-w-lg mx-auto text-center">
-                      <span class="py-0.5 px-1.5 bg-gray-100 text-xs text-gray-500 rounded-full">
+                      {/* <span class="py-0.5 px-1.5 bg-gray-100 text-xs text-gray-500 rounded-full">
                         Today
+                      </span> */}
+                       <span class="py-0.5 px-1.5 bg-gray-100 text-xs text-gray-500 rounded-full">
+                      
                       </span>
+
                     </div>
 
                     <div class="w-full space-y-4">

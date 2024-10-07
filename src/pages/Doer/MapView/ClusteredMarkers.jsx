@@ -539,7 +539,7 @@ const checkForScreeningQuestions = (x) => {
   const handleCopiedURL = (businessPostedJobs) => {
     setUrlCopied(true);
     navigator.clipboard.writeText(
-      `https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`
+     `https://getfulfil.com/DoerMapLoggedOutClusterTest/?session_id=${businessPostedJobs.jobID}`
     );
   };
 
@@ -910,7 +910,7 @@ useEffect(() => {
                         </div>
 
                         <FacebookShareButton
-                          url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`}
+                          url={`https://getfulfil.com/DoerMapLoggedOutClusterTest/?session_id=${businessPostedJobs.jobID}`}
                         >
                           <FacebookIcon size={32} round={true} />
                         </FacebookShareButton>
@@ -1424,7 +1424,7 @@ useEffect(() => {
                     </div>
 
                     <FacebookShareButton
-                      url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${selectedJobFromGroup.jobID}`}
+                      url={`https://getfulfil.com/DoerMapLoggedOutClusterTest/?session_id=${selectedJobFromGroup.jobID}`}
                     >
                       <FacebookIcon size={32} round={true} />
                     </FacebookShareButton>

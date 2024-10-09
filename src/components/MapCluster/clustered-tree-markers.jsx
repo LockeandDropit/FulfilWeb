@@ -730,7 +730,7 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const sessionId = urlParams.get("session_id");
-    
+
     if (sessionId) { 
       onCloseDrawerSingleFromGroup();
     } else {
@@ -1106,12 +1106,13 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                                   </p>
                                 </div>
                               )}
+
                           {selectedJobFromGroup.isFullTimePosition === true ? (
                             <label
                               for="hs-pro-dactmt"
                               class="block mt-1  text-lg font-medium text-gray-800"
                             >
-                              Full-time
+                              Full-time  
                             </label>
                           ) : (
                             <label
@@ -1123,12 +1124,26 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                           )}
 
                           {selectedJobFromGroup.isHourly ? (
-                            <div class="space-y-1 ">
+
+                            selectedJobFromGroup.isSalsaCompany === true ? (<div class="space-y-1">
                               <div class="flex align-items-center">
-                                <p className=" text-md font-medium">$</p>
+                                <p className="text-md font-medium">$</p>
                                 <label
                                   for="hs-pro-dactmt"
-                                  class="block text-md font-medium text-gray-800 "
+                                  class="block text-md font-medium text-gray-800"
+                                >
+                                  {selectedJobFromGroup.lowerRate}+/hour 
+                                </label>
+                               
+                            
+                              </div>
+                            </div>) : (
+                              <div class="space-y-1">
+                              <div class="flex align-items-center">
+                                <p className="text-md font-medium">$</p>
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block text-md font-medium text-gray-800"
                                 >
                                   {selectedJobFromGroup.lowerRate}
                                 </label>
@@ -1144,6 +1159,8 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                                 <p className=" text-md font-medium">/hour</p>
                               </div>
                             </div>
+                            )
+                          
                           ) : null}
 
                           {selectedJobFromGroup.isSalaried ? (

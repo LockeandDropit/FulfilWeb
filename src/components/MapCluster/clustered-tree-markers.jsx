@@ -446,6 +446,7 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
               // setPostedJobs([])
               handlePostedByBusinessToggleOpen(doc.data());
               console.log("business result inner", doc.data());
+              handleOpenSingleJobFromGroup(doc.data())
             } else if (doc.data().isFullTimePosition === "gigwork") {
               handlePostedByBusinessToggleOpen(doc.data());
               console.log("gig link", doc.data());
@@ -722,9 +723,20 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
    
   };
 
+
+  //If user comes to this page from a link posted elsewhere, this removes the drawer with the rest of the jobs at that location from popping back up.
+  
   const handleCloseOfSingleFromGroup = (x) => {
-    onCloseDrawerSingleFromGroup();
-    handleGroupLocationToggleOpen(x);
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const sessionId = urlParams.get("session_id");
+    
+    if (sessionId) { 
+      onCloseDrawerSingleFromGroup();
+    } else {
+      onCloseDrawerSingleFromGroup();
+      handleGroupLocationToggleOpen(x);
+    } 
   };
 
   const handleOpenSingleJobFromGroup = (x) => {

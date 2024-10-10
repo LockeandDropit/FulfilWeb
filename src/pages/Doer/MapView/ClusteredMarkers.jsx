@@ -278,8 +278,7 @@ export const ClusteredMarkers = ({ trees, sameLocationJobs, user }) => {
   const handleGroupLocationToggleOpen = (x) => {
     console.log("group open toggle", x.jobID);
     setOpenInfoWindowMarkerID({ lat: x.locationLat, lng: x.locationLng });
-    //  setOpenInfoWindowMarkerID(x.jobID);
-    // updateJobListingViews(x);
+    setSelectedGroup(x)
     onOpenDrawer();
     console.log("same locationJobs", sameLocationJobs);
   };
@@ -558,6 +557,8 @@ const checkForScreeningQuestions = (x) => {
 
   const [locationJobs, setLocationJobs] = useState([]);
 
+  const [selectedGroup, setSelectedGroup] = useState(null)
+
   useEffect(() => {
     if (openInfoWindowMarkerID) {
       try {
@@ -571,8 +572,9 @@ const checkForScreeningQuestions = (x) => {
             if (
               openInfoWindowMarkerID.lat === doc.data().locationLat &&
               openInfoWindowMarkerID.lng === doc.data().locationLng
-            )
+            ) {
               postedByBusiness.push({ ...doc.data(), id: doc.id, key: doc.id });
+            }
           });
 
           //   setIsLoading(false);
@@ -727,7 +729,218 @@ useEffect(() => {
               Multiple positions
             </button>
           </AdvancedMarker>
-          {openInfoWindowMarkerID.lat === group.locationLat ? (
+          {/* {openInfoWindowMarkerID.lat === group.locationLat ? (
+            <>
+              <Drawer
+                onClose={() => handleGroupDrawerClose()}
+                isOpen={isOpenDrawer}
+                size={"xl"}
+              >
+                <DrawerOverlay />
+                <DrawerContent>
+                  <DrawerCloseButton />
+                  <DrawerHeader>Jobs at this location</DrawerHeader>
+                  <DrawerBody>
+                    <div class="p-2 space-y-4 flex flex-col bg-white  shadow-sm rounded-xl ">
+                      <div>
+                        <div
+                          id="hs-pro-tabs-dut-all"
+                          role="tabpanel"
+                          aria-labelledby="hs-pro-tabs-dut-item-all"
+                        >
+                          <div class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                            <div class="min-w-full inline-block align-middle">
+                              <table class="min-w-full divide-y divide-gray-200 ">
+                                <thead>
+                                  <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
+                                    <th scope="col" class="min-w-[250px]">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutnms"
+                                          type="button"
+                                          class=" font-bold text-md px-4 py-2.5 text-start w-full flex items-center gap-x-1  text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Job
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col" class="min-w-24">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                                        <button
+                                          id="hs-pro-dutads"
+                                          type="button"
+                                          class="px-3 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Pay
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col" class="min-w-36">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutsgs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Type
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                   
+
+                                    <th scope="col">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutphs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-white focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Actions
+                                        </button>
+                                      </div>
+                                    </th>
+
+                        
+                                  </tr>
+                                </thead>
+
+                                {locationJobs.map((job) => (
+                                  <tbody class="divide-y divide-gray-200 ">
+                                    <tr class="divide-x divide-gray-200 ">
+                                      <td
+                                        class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
+                                        onClick={() =>
+                                          handleOpenSingleJobFromGroup(job)
+                                        }
+                                      >
+                                        <div class="w-full flex items-center gap-x-3">
+                                          <div class="grow">
+                                            <span class="text-md font-medium text-gray-800 ">
+                                              {job.jobTitle}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </td>
+
+                                      <td class="size-px whitespace-nowrap px-4 py-1">
+                                        {job.isVolunteer ? (
+                                          <p>Volunteer!</p>
+                                        ) : job.isSalaried ? (
+                                          <p class="font-semibold">
+                                            ${job.shortenedSalary} - $
+                                            {job.shortenedUpperSalary}/year
+                                          </p>
+                                        ) : job.upperRate > job.lowerRate ? (
+                                          <p class="font-semibold">
+                                            ${job.lowerRate}/hr +
+                                          </p>
+                                        ) : (
+                                          <p class="font-semibold">
+                                            ${job.lowerRate}/hr
+                                          </p>
+                                        )}
+                                      </td>
+                                      {job.isFullTimePosition ? (
+                                        <td class="size-px whitespace-nowrap px-4 py-1">
+                                          <p class=" text-color-gray-700">
+                                            Full-time
+                                          </p>
+                                        </td>
+                                      ) : (
+                                        <td class="size-px whitespace-nowrap px-4 py-1">
+                                          <p class=" text-color-gray-700">
+                                            Part-time
+                                          </p>
+                                        </td>
+                                      )}
+
+                                     
+                                      <td class="size-px py-2 px-3 space-x-2">
+                                        <div className=" flex  w-full ">
+                                          <button
+                                            onClick={() =>
+                                              handleOpenSingleJobFromGroup(job)
+                                            }
+                                            className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                          >
+                                            See More
+                                          </button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                ))}
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </DrawerBody>
+                </DrawerContent>
+              </Drawer>
+
+          
+
+              <Modal isOpen={isOpenShare} onClose={onCloseShare}>
+                <ModalContent>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <div class="mt-5 bg-white rounded-xl ">
+                      <div class="p-4 sm:p-7 text-center align-center items-center justify-center">
+                        <div class="text-center align-center items-center justify-center mb-5">
+                          <h1 class="block text-2xl font-bold text-gray-800">
+                            Share to
+                          </h1>
+                        </div>
+
+                        <FacebookShareButton
+                          url={`https://getfulfil.com/DoerMapLoggedOutClusterTest/?session_id=${businessPostedJobs.jobID}`}
+                        >
+                          <FacebookIcon size={32} round={true} />
+                        </FacebookShareButton>
+                        <h1 class="block text-2xl font-bold text-gray-800">
+                          Copy Link:
+                        </h1>
+                        {urlCopied ? (
+                          <span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">
+                            Copied!
+                          </span>
+                        ) : (
+                          <label
+                            onClick={() => handleCopiedURL(businessPostedJobs)}
+                            className=" inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium mt-2 "
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6 ml-1 items-center cursor-pointer"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
+                              />
+                            </svg>
+                          </label>
+                        )}
+                      </div>
+                    </div>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
+            </>
+          ) : null} */}
+        </>
+      ))}
+
+{openInfoWindowMarkerID?.lat === selectedGroup?.locationLat ? (
             <>
               <Drawer
                 onClose={() => handleGroupDrawerClose()}
@@ -788,16 +1001,16 @@ useEffect(() => {
                                     </th>
 
                                     {/* <th scope="col">
-                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
-                                        <button
-                                          id="hs-pro-dutems"
-                                          type="button"
-                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100"
-                                        >
-                                          Date Posted
-                                        </button>
-                                      </div>
-                                    </th> */}
+                                    <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                      <button
+                                        id="hs-pro-dutems"
+                                        type="button"
+                                        class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100"
+                                      >
+                                        Date Posted
+                                      </button>
+                                    </div>
+                                  </th> */}
 
                                     <th scope="col">
                                       <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
@@ -866,10 +1079,10 @@ useEffect(() => {
                                       )}
 
                                       {/* <td class="size-px whitespace-nowrap px-4 py-1">
-                                        <span class="text-sm text-gray-600 ">
-                                          {job.datePosted}
-                                        </span>
-                                      </td> */}
+                                      <span class="text-sm text-gray-600 ">
+                                        {job.datePosted}
+                                      </span>
+                                    </td> */}
                                       <td class="size-px py-2 px-3 space-x-2">
                                         <div className=" flex  w-full ">
                                           <button
@@ -895,8 +1108,6 @@ useEffect(() => {
                 </DrawerContent>
               </Drawer>
 
-              {/* {showAddJobBusiness ? <AddJobBusiness /> : null} */}
-
               <Modal isOpen={isOpenShare} onClose={onCloseShare}>
                 <ModalContent>
                   <ModalCloseButton />
@@ -910,7 +1121,7 @@ useEffect(() => {
                         </div>
 
                         <FacebookShareButton
-                          url={`https://getfulfil.com/DoerMapLoggedOutClusterTest/?session_id=${businessPostedJobs.jobID}`}
+                          url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`}
                         >
                           <FacebookIcon size={32} round={true} />
                         </FacebookShareButton>
@@ -949,8 +1160,6 @@ useEffect(() => {
               </Modal>
             </>
           ) : null}
-        </>
-      ))}
 
       {selectedJobFromGroup?.jobID === openInfoWindowMarkerIDSingle ? (
         <>

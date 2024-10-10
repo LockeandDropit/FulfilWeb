@@ -656,11 +656,9 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
     console.log("passed info", x);
     setOpenInfoWindowMarkerID({ lat: x.locationLat, lng: x.locationLng });
     setSelectedGroup(x)
-    //  setOpenInfoWindowMarkerID(x.jobID);
-    // updateJobListingViews(x);
     onOpenDrawer();
     console.log("firing now");
-    // console.log("same locationJobs", sameLocationJobs);
+
   };
 
   const handleGroupDrawerClose = () => {

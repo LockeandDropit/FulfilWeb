@@ -107,7 +107,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useMediaQuery } from "@chakra-ui/react";
 
 import Plausible from "plausible-tracker";
-import IframeResizer from "@iframe-resizer/react"
+import IframeResizer from "@iframe-resizer/react";
 // import LoggedOutHeaderNoGap from "./Landing/LoggedOutHeaderNoGap.jsx";
 
 /**
@@ -446,7 +446,7 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
               // setPostedJobs([])
               handlePostedByBusinessToggleOpen(doc.data());
               console.log("business result inner", doc.data());
-              handleOpenSingleJobFromGroup(doc.data())
+              handleOpenSingleJobFromGroup(doc.data());
             } else if (doc.data().isFullTimePosition === "gigwork") {
               handlePostedByBusinessToggleOpen(doc.data());
               console.log("gig link", doc.data());
@@ -483,12 +483,12 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
       .catch((error) => {
         //uh oh
       });
-  }
+  };
 
   const handleNewEmailSignUp = async () => {
     // insert email regex, if then
 
-  //  addEmailToFirebase()
+    //  addEmailToFirebase()
 
     console.log("subscriberEmail", subscriberEmail);
 
@@ -653,12 +653,14 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
   }, [sameLocationJobs, trees]);
 
   const handleGroupLocationToggleOpen = (x) => {
-    console.log("group open toggle", x.jobID);
+    console.log("passed info", x);
     setOpenInfoWindowMarkerID({ lat: x.locationLat, lng: x.locationLng });
+    setSelectedGroup(x)
     //  setOpenInfoWindowMarkerID(x.jobID);
     // updateJobListingViews(x);
     onOpenDrawer();
-    console.log("same locationJobs", sameLocationJobs);
+    console.log("firing now");
+    // console.log("same locationJobs", sameLocationJobs);
   };
 
   const handleGroupDrawerClose = () => {
@@ -670,6 +672,8 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
   };
 
   const [locationJobs, setLocationJobs] = useState([]);
+
+  const [selectedGroup, setSelectedGroup] = useState(null)
 
   useEffect(() => {
     if (openInfoWindowMarkerID) {
@@ -684,8 +688,9 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
             if (
               openInfoWindowMarkerID.lat === doc.data().locationLat &&
               openInfoWindowMarkerID.lng === doc.data().locationLng
-            )
+            ) {
               postedByBusiness.push({ ...doc.data(), id: doc.id, key: doc.id });
+            }
           });
 
           //   setIsLoading(false);
@@ -720,23 +725,21 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
 
   const handleOpenSeperately = () => {
     onOpenDrawerSingleFromGroup();
-   
   };
 
-
   //If user comes to this page from a link posted elsewhere, this removes the drawer with the rest of the jobs at that location from popping back up.
-  
+
   const handleCloseOfSingleFromGroup = (x) => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const sessionId = urlParams.get("session_id");
 
-    if (sessionId) { 
+    if (sessionId) {
       onCloseDrawerSingleFromGroup();
     } else {
       onCloseDrawerSingleFromGroup();
       handleGroupLocationToggleOpen(x);
-    } 
+    }
   };
 
   const handleOpenSingleJobFromGroup = (x) => {
@@ -745,24 +748,20 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
     // updateJobListingViews(x);
     setSelectedJobFromGroup(x);
 
-
     onCloseDrawer();
     console.log("opened single from group");
 
     handleOpenSeperately();
   };
 
-  // this checks whether or not any drawers are open. 
+  // this checks whether or not any drawers are open.
   // If so, and the browsers back button is clicked, stop the browser from returning to the previous page and close the drawer instead.
 
-  const [ locationKeys, setLocationKeys ] = useState([])
-
+  const [locationKeys, setLocationKeys] = useState([]);
 
   // useEffect(() => {
-   
+
   //   console.log("check open drawer booleans", isOpenDrawer, isOpenDrawerSingle, isOpenDrawerSingleFromGroup)
-
-
 
   //   if ( isOpenDrawer === true || isOpenDrawerSingle === true || isOpenDrawerSingleFromGroup === true ) {
   //     //https://stackoverflow.com/questions/71369320/how-to-controling-browser-back-button-with-react-router-dom-v6
@@ -771,11 +770,10 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
   //       console.log("received back button")
   //       e.preventDefault();
   //       window.history.go(1);
-  //     }  
+  //     }
   //   }
 
   // }, [isOpenDrawer, isOpenDrawerSingle, isOpenDrawerSingleFromGroup])
-  
 
   //bettter useEffect than I write https://www.youtube.com/watch?v=QQYeipc_cik&t=788s
   useEffect(() => {
@@ -804,7 +802,211 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
               Multiple positions
             </button>
           </AdvancedMarker>
-          {openInfoWindowMarkerID.lat === group.locationLat ? (
+          {/* opening mulltipletimes bc they all have the same lat/lng */}
+          {/* {openInfoWindowMarkerID.lat === group.locationLat ? (
+            <>
+              <Drawer
+                onClose={() => handleGroupDrawerClose()}
+                isOpen={isOpenDrawer}
+                size={"xl"}
+              >
+                <DrawerOverlay />
+                <DrawerContent>
+                  <DrawerCloseButton />
+                  <DrawerHeader>Jobs at this location</DrawerHeader>
+                  <DrawerBody>
+                    <div class="p-2 space-y-4 flex flex-col bg-white  shadow-sm rounded-xl ">
+                      <div>
+                        <div
+                          id="hs-pro-tabs-dut-all"
+                          role="tabpanel"
+                          aria-labelledby="hs-pro-tabs-dut-item-all"
+                        >
+                          <div class="overflow-x-auto [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
+                            <div class="min-w-full inline-block align-middle">
+                              <table class="min-w-full divide-y divide-gray-200 ">
+                                <thead>
+                                  <tr class="border-t border-gray-200 divide-x divide-gray-200 ">
+                                    <th scope="col" class="min-w-[250px]">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutnms"
+                                          type="button"
+                                          class=" font-bold text-md px-4 py-2.5 text-start w-full flex items-center gap-x-1  text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Job
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col" class="min-w-24">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-default">
+                                        <button
+                                          id="hs-pro-dutads"
+                                          type="button"
+                                          class="px-3 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Pay
+                                        </button>
+                                      </div>
+                                    </th>
+
+                                    <th scope="col" class="min-w-36">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutsgs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-gray-800 focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Type
+                                        </button>
+                                      </div>
+                                    </th>
+                                    <th scope="col">
+                                      <div class="hs-dropdown relative inline-flex w-full cursor-pointer">
+                                        <button
+                                          id="hs-pro-dutphs"
+                                          type="button"
+                                          class="px-5 py-2.5 text-start w-full flex items-center gap-x-1 font-bold text-md text-white focus:outline-none focus:bg-gray-100 "
+                                        >
+                                          Actions
+                                        </button>
+                                      </div>
+                                    </th>
+                                  </tr>
+                                </thead>
+
+                                {locationJobs.map((job) => (
+                                  <tbody class="divide-y divide-gray-200 ">
+                                    <tr class="divide-x divide-gray-200 ">
+                                      <td
+                                        class="size-px whitespace-nowrap px-4 py-1 relative group cursor-pointer"
+                                        onClick={() =>
+                                          handleOpenSingleJobFromGroup(job)
+                                        }
+                                      >
+                                        <div class="w-full flex items-center gap-x-3">
+                                          <div class="grow">
+                                            <span class="text-md font-medium text-gray-800 ">
+                                              {job.jobTitle}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </td>
+
+                                      <td class="size-px whitespace-nowrap px-4 py-1">
+                                        {job.isVolunteer ? (
+                                          <p>Volunteer!</p>
+                                        ) : job.isSalaried ? (
+                                          <p class="font-semibold">
+                                            ${job.shortenedSalary} - $
+                                            {job.shortenedUpperSalary}/year
+                                          </p>
+                                        ) : job.upperRate > job.lowerRate ? (
+                                          <p class="font-semibold">
+                                            ${job.lowerRate}/hr +
+                                          </p>
+                                        ) : (
+                                          <p class="font-semibold">
+                                            ${job.lowerRate}/hr
+                                          </p>
+                                        )}
+                                      </td>
+                                      {job.isFullTimePosition ? (
+                                        <td class="size-px whitespace-nowrap px-4 py-1">
+                                          <p class=" text-color-gray-700">
+                                            Full-time
+                                          </p>
+                                        </td>
+                                      ) : (
+                                        <td class="size-px whitespace-nowrap px-4 py-1">
+                                          <p class=" text-color-gray-700">
+                                            Part-time
+                                          </p>
+                                        </td>
+                                      )}
+                                      <td class="size-px py-2 px-3 space-x-2">
+                                        <div className=" flex  w-full ">
+                                          <button
+                                            onClick={() =>
+                                              handleOpenSingleJobFromGroup(job)
+                                            }
+                                            className="py-2 px-3 w-full  text-sm font-semibold rounded-md border border-transparent bg-sky-100 text-sky-700 hover:bg-sky-200 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-2 "
+                                          >
+                                            See More
+                                          </button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                ))}
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </DrawerBody>
+                </DrawerContent>
+              </Drawer>
+
+              <Modal isOpen={isOpenShare} onClose={onCloseShare}>
+                <ModalContent>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <div class="mt-5 bg-white rounded-xl ">
+                      <div class="p-4 sm:p-7 text-center align-center items-center justify-center">
+                        <div class="text-center align-center items-center justify-center mb-5">
+                          <h1 class="block text-2xl font-bold text-gray-800">
+                            Share to
+                          </h1>
+                        </div>
+
+                        <FacebookShareButton
+                          url={`https://getfulfil.com/DoerMapLoggedOut/?session_id=${businessPostedJobs.jobID}`}
+                        >
+                          <FacebookIcon size={32} round={true} />
+                        </FacebookShareButton>
+                        <h1 class="block text-2xl font-bold text-gray-800">
+                          Copy Link:
+                        </h1>
+                        {urlCopied ? (
+                          <span class=" h-[24px] ml-1 inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-700 ">
+                            Copied!
+                          </span>
+                        ) : (
+                          <label
+                            onClick={() => handleCopiedURL(businessPostedJobs)}
+                            className=" inline-flex items-center gap-x-1.5 py-0.5 px-3 rounded-lg text-xs font-medium mt-2 "
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6 ml-1 items-center cursor-pointer"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
+                              />
+                            </svg>
+                          </label>
+                        )}
+                      </div>
+                    </div>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
+            </>
+          ) : null} */}
+        </>
+      ))}
+
+
+{openInfoWindowMarkerID?.lat === selectedGroup?.locationLat ? (
             <>
               <Drawer
                 onClose={() => handleGroupDrawerClose()}
@@ -972,8 +1174,6 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                 </DrawerContent>
               </Drawer>
 
-              {/* {showAddJobBusiness ? <AddJobBusiness /> : null} */}
-
               <Modal isOpen={isOpenShare} onClose={onCloseShare}>
                 <ModalContent>
                   <ModalCloseButton />
@@ -1026,8 +1226,6 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
               </Modal>
             </>
           ) : null}
-        </>
-      ))}
 
       {selectedJobFromGroup?.jobID === openInfoWindowMarkerIDSingle ? (
         <>
@@ -1081,38 +1279,37 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                             </label>
                           </div>
                           {selectedJobFromGroup.employerProfilePicture ? (
-                                <>
-                                  <div class="flex flex-row items-center">
-                                    <div className="justify-center items-center "> 
-                                    <img
-                                      src={
-                                        selectedJobFromGroup.employerProfilePicture
-                                      }
-                                      class="flex-shrink-0 size-[48px] rounded-full"
-                                      alt="company logo"
-                                    />
-                                    </div>
-                                    
-                                    <p class="ml-2 font-semibold text-xl text-gray-800 cursor-pointer">
-                                      {selectedJobFromGroup.companyName}
-                                    </p>
-                                  </div>
-                               
-                                </>
-                              ) : (
-                                <div className="flex flex-col">
-                                  <p class="font-semibold text-xl text-gray-800 cursor-pointer">
-                                    {businessPostedJobs.companyName}
-                                  </p>
+                            <>
+                              <div class="flex flex-row items-center">
+                                <div className="justify-center items-center ">
+                                  <img
+                                    src={
+                                      selectedJobFromGroup.employerProfilePicture
+                                    }
+                                    class="flex-shrink-0 size-[48px] rounded-full"
+                                    alt="company logo"
+                                  />
                                 </div>
-                              )}
+
+                                <p class="ml-2 font-semibold text-xl text-gray-800 cursor-pointer">
+                                  {selectedJobFromGroup.companyName}
+                                </p>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="flex flex-col">
+                              <p class="font-semibold text-xl text-gray-800 cursor-pointer">
+                                {businessPostedJobs.companyName}
+                              </p>
+                            </div>
+                          )}
 
                           {selectedJobFromGroup.isFullTimePosition === true ? (
                             <label
                               for="hs-pro-dactmt"
                               class="block mt-1  text-lg font-medium text-gray-800"
                             >
-                              Full-time  
+                              Full-time
                             </label>
                           ) : (
                             <label
@@ -1124,43 +1321,41 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                           )}
 
                           {selectedJobFromGroup.isHourly ? (
-
-                            selectedJobFromGroup.isSalsaCompany === true ? (<div class="space-y-1">
-                              <div class="flex align-items-center">
-                                <p className="text-md font-medium">$</p>
-                                <label
-                                  for="hs-pro-dactmt"
-                                  class="block text-md font-medium text-gray-800"
-                                >
-                                  {selectedJobFromGroup.lowerRate}+/hour 
-                                </label>
-                               
-                            
-                              </div>
-                            </div>) : (
+                            selectedJobFromGroup.isSalsaCompany === true ? (
                               <div class="space-y-1">
-                              <div class="flex align-items-center">
-                                <p className="text-md font-medium">$</p>
-                                <label
-                                  for="hs-pro-dactmt"
-                                  class="block text-md font-medium text-gray-800"
-                                >
-                                  {selectedJobFromGroup.lowerRate}
-                                </label>
-                                <p className=" text-md font-medium">
-                                  /hour - $
-                                </p>
-                                <label
-                                  for="hs-pro-dactmt"
-                                  class="block  text-md font-medium text-gray-800 "
-                                >
-                                  {selectedJobFromGroup.upperRate}
-                                </label>
-                                <p className=" text-md font-medium">/hour</p>
+                                <div class="flex align-items-center">
+                                  <p className="text-md font-medium">$</p>
+                                  <label
+                                    for="hs-pro-dactmt"
+                                    class="block text-md font-medium text-gray-800"
+                                  >
+                                    {selectedJobFromGroup.lowerRate}+/hour
+                                  </label>
+                                </div>
                               </div>
-                            </div>
+                            ) : (
+                              <div class="space-y-1">
+                                <div class="flex align-items-center">
+                                  <p className="text-md font-medium">$</p>
+                                  <label
+                                    for="hs-pro-dactmt"
+                                    class="block text-md font-medium text-gray-800"
+                                  >
+                                    {selectedJobFromGroup.lowerRate}
+                                  </label>
+                                  <p className=" text-md font-medium">
+                                    /hour - $
+                                  </p>
+                                  <label
+                                    for="hs-pro-dactmt"
+                                    class="block  text-md font-medium text-gray-800 "
+                                  >
+                                    {selectedJobFromGroup.upperRate}
+                                  </label>
+                                  <p className=" text-md font-medium">/hour</p>
+                                </div>
+                              </div>
                             )
-                          
                           ) : null}
 
                           {selectedJobFromGroup.isSalaried ? (
@@ -1217,11 +1412,8 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                             </span>{" "}
                             {selectedJobFromGroup.datePosted}
                           </p>
-                         
-                          <div className="flex">
-                         
-                         
-                          </div>
+
+                          <div className="flex"></div>
                         </div>
 
                         <div class="space-y-2 mt-10 mb-4 ">
@@ -1624,16 +1816,16 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                               {businessPostedJobs.employerProfilePicture ? (
                                 <>
                                   <div class="flex flex-row items-center">
-                                    <div className="justify-center items-center"> 
-                                    <img
-                                      src={
-                                        businessPostedJobs.employerProfilePicture
-                                      }
-                                      class="flex-shrink-0 size-[56px] rounded-full"
-                                      alt="company logo"
-                                    />
+                                    <div className="justify-center items-center">
+                                      <img
+                                        src={
+                                          businessPostedJobs.employerProfilePicture
+                                        }
+                                        class="flex-shrink-0 size-[56px] rounded-full"
+                                        alt="company logo"
+                                      />
                                     </div>
-                                    
+
                                     <p class="font-semibold ml-2 text-xl text-gray-800 cursor-pointer">
                                       {businessPostedJobs.companyName}
                                     </p>
@@ -1751,20 +1943,20 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                                 {businessPostedJobs.datePosted}
                               </p>
                             </div>
-                            {businessPostedJobs.companyBio ? (  <div class="space-y-2 mt-10 mb-4 ">
-                              <label
-                                for="dactmi"
-                                class="block mb-2 text-lg font-medium text-gray-900 "
-                              >
-                                About us
-                              </label>
-                              <div className="w-full prose prose-li  font-inter marker:text-black mb-4 ">
-                            
+                            {businessPostedJobs.companyBio ? (
+                              <div class="space-y-2 mt-10 mb-4 ">
+                                <label
+                                  for="dactmi"
+                                  class="block mb-2 text-lg font-medium text-gray-900 "
+                                >
+                                  About us
+                                </label>
+                                <div className="w-full prose prose-li  font-inter marker:text-black mb-4 ">
                                   {businessPostedJobs.companyBio}
-                              
+                                </div>
                               </div>
-                            </div>) : null}
-                          
+                            ) : null}
+
                             <div class="space-y-2 mt-10 mb-4 ">
                               <label
                                 for="dactmi"
@@ -2649,13 +2841,15 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                         </label>
                       </div>
                     </div>
-                        {/* this used to be an input, not a button. If anything is jacked up here this is why. */}
+                    {/* this used to be an input, not a button. If anything is jacked up here this is why. */}
                     <button
                       type="button"
                       onClick={validate}
                       // value="Sign up"
                       className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    >Sign up</button>
+                    >
+                      Sign up
+                    </button>
                     <p class="mt-2 text-center text-sm text-gray-600">
                       Already have an account?
                       <button
@@ -2902,7 +3096,7 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
         </ModalContent>
       </Modal> */}
 
-{/* <Modal
+      {/* <Modal
         isCentered
         isOpen={isOpenEmailSignUp}
         onClose={onCloseEmailSignUp}

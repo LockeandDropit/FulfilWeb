@@ -133,7 +133,10 @@ const DoerAddProfileInfo = () => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: user.email }),
+        body: JSON.stringify({ email: user.email,
+          firstName: firstName,
+          lastName: lastName,
+         }),
       }
     );
 

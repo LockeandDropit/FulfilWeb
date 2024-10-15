@@ -13,7 +13,7 @@ const CostComparison = () => {
             Get the resources you need to succeed.
           </h2>
           <p class="mt-3 text-gray-800 ">
-            We help businesses bring ideas to life in the digital world, by designing and implementing the technology tools that they need to win.
+            We help connect individuals with the resources they need in order to find and thrive in a new, promising career.
           </p>
           <p class="mt-5">
             {/* <a class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500" href="#">

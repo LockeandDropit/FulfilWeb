@@ -59,11 +59,13 @@ const Landing = () => {
 {/* <MainHero /> */}
 
 <WhatWeOffer />
-<LocallyFocused />
-<NoDegreeNoProblem />
-
+{/* <LocallyFocused /> */}
 <CostComparison />
+<NoDegreeNoProblem />
 <CostWithChart />
+
+
+
 
 <EmployerCTAMobileOnly />
 

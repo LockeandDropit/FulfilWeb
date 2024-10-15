@@ -512,7 +512,7 @@ const Dashboard = () => {
       <Modal isOpen={isOpen} onClose={onClose} size={"lg"}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Level up!</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <p>Interested in leveling up your career?</p>

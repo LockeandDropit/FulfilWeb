@@ -251,6 +251,7 @@ const UserProfile = () => {
         setUserBio(snapshot.data().bio);
         if (snapshot.data().resume) {
           setResume(snapshot.data().resume);
+          console.log("got it")
         }
       });
     } else {
@@ -905,21 +906,9 @@ const UserProfile = () => {
   const uploadResumeToFirebase = async (x) => {
     const storage = getStorage();
     const resumeRef = ref(storage, "users/" + user.uid + "/resume.pdf");
-    console.log("resume", x);
 
-    // const img = await fetch(newResume);
-
-    // console.log("resume img",img)
-
-    // const file = await x.blob();
     const file = x;
-
-    //   const metadata = {
-    //     contentType: "image/jpeg",
-    // };
-
     await uploadBytes(resumeRef, file).then((snapshot) => {});
-
     await getDownloadURL(resumeRef).then((response) => {
       updateDoc(doc(db, "users", user.uid), {
         resume: response,
@@ -927,6 +916,7 @@ const UserProfile = () => {
       })
         .then(() => {
           setResume(response);
+          console.log("this is resume response", response)
         })
         .catch((error) => {
           // no bueno
@@ -972,7 +962,7 @@ const UserProfile = () => {
       if (!snapshot.data().resume) {
       } else {
         setResume(snapshot.data().resume);
-        console.log("resume", snapshot.data().resume);
+        console.log("from firestore resume", snapshot.data().resume);
       }
     });
   };

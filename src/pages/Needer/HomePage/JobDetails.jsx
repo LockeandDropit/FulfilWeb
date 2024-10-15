@@ -1450,7 +1450,7 @@ const JobDetails = () => {
                                                 )} */}
                                                 {applicant ? (
                                                   <p class="text-sm text-gray-800 ml-0.5">
-                                                        <img
+                                                        {/* <img
                                                     class="flex-shrink-0 size-[38px] rounded-full"
                                                     src={
                                                       applicant.profilePictureResponse
@@ -1481,7 +1481,7 @@ const JobDetails = () => {
                                                       d="M11.818 10.5975C10.2992 12.6412 7.42106 13.0631 5.37731 11.5537C5.01171 11.2818 4.69296 10.9631 4.42107 10.5975C4.28982 10.4006 4.27107 10.1475 4.37419 9.94123L4.51482 9.65059C4.84296 8.95684 5.53671 8.51624 6.30546 8.51624H9.95231C10.7023 8.51624 11.3867 8.94749 11.7242 9.62249L11.8742 9.93184C11.968 10.1475 11.9586 10.4006 11.818 10.5975Z"
                                                       fill="currentColor"
                                                     ></path>
-                                                  </svg>
+                                                  </svg> */}
                                                     {applicant.firstName}{" "}
                                                     {applicant.lastName}
                                                   </p>

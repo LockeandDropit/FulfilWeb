@@ -80,21 +80,21 @@ const MainHero = () => {
           <div class=" max-h-[800px] min-h-96 ml-0 lg:ml-20 rounded-md  ">
 
 
-        
+{/*         
         <LazyLoadImage
       effect="blur"
       height={"700px"}
       src="./landingImages/pexels-fauxels-3182831.jpg"
-  />
+  /> */}
     </div>
-          {/* <img
+          <img
           loading="lazy"
             class=" max-h-[800px] md:ml-20 rounded-md"
               //credit fauxels https://www.pexels.com/photo/photo-of-men-shaking-hands-3182831/
               src="./landingImages/pexels-fauxels-3182831.jpg"
          
           
-          /> */}
+          />
           <div class="absolute inset-0 -z-[1] bg-gradient-to-tr from-gray-200 via-white/0 to-white/0 size-full rounded-md mt-4 -mb-4 me-4 -ms-4 lg:mt-6 lg:-mb-6 lg:me-6 lg:-ms-6"></div>
         </div>
         

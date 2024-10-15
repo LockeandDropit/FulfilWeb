@@ -29,7 +29,7 @@ import { doc, getDoc } from "firebase/firestore";
 
 import { Spinner } from "@chakra-ui/react";
 
-import Hero from "./components/Hero.jsx";
+import Hero from "./components/Landing/Hero.jsx";
 import LandingPageMap from "./components/LandingPageMap.jsx";
 import Footer from "./components/Footer.jsx";
 import LoggedOutHeader from "./components/Landing/LoggedOutHeader.jsx";
@@ -55,7 +55,8 @@ const Landing = () => {
   return (
     <>
 <LoggedOutHeader />
-<MainHero />
+<Hero />
+{/* <MainHero /> */}
 
 <WhatWeOffer />
 <LocallyFocused />

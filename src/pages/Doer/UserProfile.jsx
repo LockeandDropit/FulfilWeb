@@ -904,24 +904,25 @@ const UserProfile = () => {
   // }, [newResume])
 
   const uploadResumeToFirebase = async (x) => {
-    const storage = getStorage();
-    const resumeRef = ref(storage, "users/" + user.uid + "/resume.pdf");
+    console.log("this is the file being passed", x)
+    // const storage = getStorage();
+    // const resumeRef = ref(storage, "users/" + user.uid + "/resume.pdf");
 
-    const file = x;
-    await uploadBytes(resumeRef, file).then((snapshot) => {});
-    await getDownloadURL(resumeRef).then((response) => {
-      updateDoc(doc(db, "users", user.uid), {
-        resume: response,
-        resumeUploaded: true
-      })
-        .then(() => {
-          setResume(response);
-          console.log("this is resume response", response)
-        })
-        .catch((error) => {
-          // no bueno
-        });
-    });
+    // const file = x;
+    // await uploadBytes(resumeRef, file).then((snapshot) => {});
+    // await getDownloadURL(resumeRef).then((response) => {
+    //   updateDoc(doc(db, "users", user.uid), {
+    //     resume: response,
+    //     resumeUploaded: true
+    //   })
+    //     .then(() => {
+    //       setResume(response);
+    //       console.log("this is resume response", response)
+    //     })
+    //     .catch((error) => {
+    //       // no bueno
+    //     });
+    // });
   };
 
   //   const testPDFtype = async () => {

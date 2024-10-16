@@ -13,6 +13,7 @@ import {
   Textarea,
   Image,
 } from "@chakra-ui/react";
+import Iframe from 'react-iframe'
 import {
   FormControl,
   FormLabel,
@@ -904,25 +905,31 @@ const UserProfile = () => {
   // }, [newResume])
 
   const uploadResumeToFirebase = async (x) => {
-    console.log("this is the file being passed", x)
-    // const storage = getStorage();
-    // const resumeRef = ref(storage, "users/" + user.uid + "/resume.pdf");
+   
+    const storage = getStorage();
+    const resumeRef = ref(storage, "users/" + user.uid + "/resume.pdf");
 
-    // const file = x;
-    // await uploadBytes(resumeRef, file).then((snapshot) => {});
-    // await getDownloadURL(resumeRef).then((response) => {
-    //   updateDoc(doc(db, "users", user.uid), {
-    //     resume: response,
-    //     resumeUploaded: true
-    //   })
-    //     .then(() => {
-    //       setResume(response);
-    //       console.log("this is resume response", response)
-    //     })
-    //     .catch((error) => {
-    //       // no bueno
-    //     });
-    // });
+    const file = x;
+
+    await uploadBytes(resumeRef, file).then((snapshot) => {
+      console.log("good to go")
+    })
+    .catch((e) => {
+      console.log(e)
+    })
+
+    await getDownloadURL(resumeRef).then((response) => {
+      updateDoc(doc(db, "users", user.uid), {
+        resume: response,
+        resumeUploaded: true
+      })
+        .then(() => {
+          setResume(response);
+        })
+        .catch((error) => {
+        });
+    });
+    
   };
 
   //   const testPDFtype = async () => {
@@ -2063,8 +2070,8 @@ const UserProfile = () => {
                       >
                         <ModalOverlay />
                         <ModalContent>
-                          <div>
-                            <Document
+                         
+                            {/* <Document
                               className=""
                               file={resume ? resume : null}
                               onLoadSuccess={onDocumentLoadSuccess}
@@ -2075,12 +2082,15 @@ const UserProfile = () => {
                                 width="1000"
                                 pageNumber={pageNumber}
                               />
-                            </Document>
-                            {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
-                            <p>
-                              Page {pageNumber} of {numPages}
-                            </p>
-                          </div>
+                            </Document> */}
+                            {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="100%" /> */}
+                            <Iframe src={resume ? resume : null}
+        width="66%"
+        height="80%"
+        display="block"
+        position="fixed"/>
+                            
+                         
                         </ModalContent>
                       </Modal>
                     </div>
@@ -2813,6 +2823,11 @@ const UserProfile = () => {
                           </svg>
                         </div>
                         <div class="items-center align-center justify-center text-center">
+                        {/* <Iframe src={resume ? resume : null}
+        width="100%"
+        height="50%"
+        display="block"
+        position="relative"/> */}
                           <div class="items-center p-5   flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
                             <div class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none ">
                               <button onClick={() => onOpenResume()}>

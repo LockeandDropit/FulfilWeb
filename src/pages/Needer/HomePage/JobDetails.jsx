@@ -7,6 +7,7 @@ import { db } from "../../../firebaseConfig";
 import star_corner from "../../../images/star_corner.png";
 import star_filled from "../../../images/star_filled.png";
 import ApplicantCard from "./ApplicantCard";
+import Iframe from 'react-iframe'
 import {
   Accordion,
   AccordionItem,
@@ -358,7 +359,13 @@ const JobDetails = () => {
 
   const [selectedApplicantResume, setSelectedApplicantResume] = useState(null);
 
+
+  const [ , ] = useState(null)
+
+
   const viewResume = (x) => {
+    //add another step where you call updated info from db
+    console.log("this si what it's feeding the iframe", x)
     setSelectedApplicantResume(x.resume);
     onOpenResume();
   };
@@ -1992,23 +1999,13 @@ const JobDetails = () => {
       <Modal isOpen={isOpenResume} onClose={onCloseResume} size="5xl">
         <ModalOverlay />
         <ModalContent>
-          <div>
-            <Document
-              className=""
-              file={selectedApplicantResume}
-              onLoadSuccess={onDocumentLoadSuccess}
-            >
-              <Page
-              renderTextLayer={false}
-                // className=""
-                // height="250"
-                width="1000"
-                pageNumber={1}
-              />
-            </Document>
-            {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
-           
-          </div>
+        
+        <Iframe src={selectedApplicantResume ? selectedApplicantResume : null}
+        width="66%"
+        height="80%"
+        display="block"
+        position="fixed"/>
+                            
         </ModalContent>
       </Modal>
 

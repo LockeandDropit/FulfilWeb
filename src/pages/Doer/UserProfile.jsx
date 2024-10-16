@@ -2071,19 +2071,7 @@ const UserProfile = () => {
                         <ModalOverlay />
                         <ModalContent>
                          
-                            {/* <Document
-                              className=""
-                              file={resume ? resume : null}
-                              onLoadSuccess={onDocumentLoadSuccess}
-                            >
-                              <Page
-                                className=""
-                                height="500"
-                                width="1000"
-                                pageNumber={pageNumber}
-                              />
-                            </Document> */}
-                            {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="100%" /> */}
+                   
                             <Iframe src={resume ? resume : null}
         width="66%"
         height="80%"
@@ -2823,11 +2811,7 @@ const UserProfile = () => {
                           </svg>
                         </div>
                         <div class="items-center align-center justify-center text-center">
-                        {/* <Iframe src={resume ? resume : null}
-        width="100%"
-        height="50%"
-        display="block"
-        position="relative"/> */}
+                      
                           <div class="items-center p-5   flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
                             <div class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none ">
                               <button onClick={() => onOpenResume()}>

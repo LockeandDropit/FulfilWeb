@@ -473,7 +473,7 @@ sm:w-[286px]
                                 </span>
                                 <div>
                                   {chat.isSeen ? null : (
-                                    <span class="relative min-w-[18px] min-h-[18px] inline-flex justify-center items-center text-[10px] bg-blue-500 text-blue-500 rounded-full px-1">
+                                     <span class="mb-2 relative min-w-[12px] min-h-[12px] inline-flex justify-center items-center text-[6px] bg-blue-500 text-blue-500 rounded-full px-1">
                                       1
                                     </span>
                                   )}

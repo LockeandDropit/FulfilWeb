@@ -325,7 +325,7 @@ const ChatPlaceholder = () => {
   if (isJobLoading) return <div className="loading">Loading...</div>;
   return (
     <>
-      <body class="hs-overlay-body-open lg:ml-[296px] lg:w-[calc(100vw-316px)] sm:h-[calc(100vh-100px)] mt-16 bg-gray-100">
+      <body class="hs-overlay-body-open lg:ml-[296px] lg:w-[calc(100vw-316px)] sm:h-[calc(100vh-100px)]  bg-white">
         <main
           id="content"
           class="2xl:hs-overlay-layout-open:pe-96 xl:ps-72 transition-all duration-300 "
@@ -336,8 +336,8 @@ const ChatPlaceholder = () => {
             aria-labelledby="hs-pro-tabs-chct-item-1"
           >
             <div class="relative h-dvh flex flex-col justify-end">
-              <header class="sticky h-24 top-12 inset-x-0 z-20 py-2 px-4 flex justify-between gap-x-2 xl:grid xl:grid-cols-2 bg-white border-b border-gray-200">
-                <div class="lg:hidden w-20 sm:w-auto flex items-center">
+            <header class="w-full sticky h-[120px] mt-16 inset-x-0 z-20 py-2 px-4 flex justify-between gap-x-2 xl:grid xl:grid-cols-2 bg-white border-b border-gray-200">
+                <div class="lg:hidden w-20 sm:w-auto flex items-center justify-center">
                   <div class="-ms-3">
                     <button
                       onClick={() => resetChat()}
@@ -366,9 +366,9 @@ const ChatPlaceholder = () => {
                   </div>
                 </div>
 
-                <div>
+                <div className="flex items-center ">
                   <div
-                    onClick={() => onOpenDetails()}
+        
                     class="truncate flex items-center gap-x-3.5 focus:outline-none cursor-default"
                     data-hs-overlay="#hs-pro-chhds1"
                     aria-controls="hs-pro-chhds1"
@@ -412,11 +412,14 @@ const ChatPlaceholder = () => {
                       <span class="truncate block font-semibold text-lg leading-4 text-gray-800 ">
                         {user.firstName} {user.lastName}
                       </span>
-                      {isDesktop ? null : (
+                      <span class="truncate block text-sm leading-4 mt-1 text-gray-500 ">
+                        {user.companyName} 
+                      </span>
+                      {/* {isDesktop ? null : (
                         <span class="truncate block text-xs text-blue-600 leading-4">
                           See details
                         </span>
-                      )}
+                      )} */}
                     </span>
                   </div>
                 </div>
@@ -504,11 +507,11 @@ const ChatPlaceholder = () => {
 
                               <div class="space-y-1">
                                 <div class="group flex justify-end gap-x-2 word-break: break-word">
-                                  <div class="order-2 text-start bg-blue-100 inline-block rounded-xl pt-2 pb-1.5 px-2.5">
-                                    <div class="text-sm text-gray-800">
+                                  <div class="order-2 text-start bg-blue-500 inline-block rounded-xl pt-2 pb-1.5 px-2.5">
+                                    <div class=" text-white">
                                       {message.text}
                                     </div>
-                                    <span class="text-[11px] text-end text-blue-600 italic">
+                                    <span class="text-[11px] text-end text-white italic">
                                       {" "}
                                       {format(message.createdAt.toDate())}
                                     </span>
@@ -596,12 +599,12 @@ const ChatPlaceholder = () => {
 
                               <div class="space-y-1">
                                 <div class="group flex justify-start gap-x-2 word-break: break-word">
-                                  <div class="order-1 bg-white shadow-sm inline-block rounded-xl pt-2 pb-1.5 px-2.5">
-                                    <div class="text-sm text-gray-800">
+                                  <div class="order-1 bg-gray-100 shadow-sm inline-block rounded-xl pt-2 pb-1.5 px-2.5">
+                                    <div class=" text-gray-800">
                                       {message.text}
                                     </div>
                                     <span>
-                                      <span class="text-[11px] text-gray-400 italic">
+                                      <span class="text-[11px] text-gray-600 italic">
                                         {" "}
                                         {format(message.createdAt.toDate())}
                                       </span>

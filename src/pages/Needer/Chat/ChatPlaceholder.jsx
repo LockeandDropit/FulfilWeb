@@ -450,16 +450,16 @@ endOfMessagesRef.current?.scrollIntoView({
                           <div class="max-w-md ms-auto text-end flex justify-end gap-x-2">
                             <div>
                               <p class="mb-1.5 pe-2.5 text-xs text-gray-400">
-                                {currentUser.firstName} xcsdf
+                                {currentUser.firstName}
                               </p>
 
                               <div class="space-y-1">
                                 <div class="group flex justify-end gap-x-2 word-break: break-word">
-                                  <div class="order-2 text-start bg-blue-100 inline-block rounded-xl pt-2 pb-1.5 px-2.5">
-                                    <div class="text-sm text-gray-800">
+                                  <div class="order-2 text-start bg-blue-500 inline-block rounded-xl pt-2 pb-1.5 px-2.5">
+                                    <div class=" text-white">
                                       {message.text}
                                     </div>
-                                    <span class="text-[11px] text-end text-blue-600 italic">
+                                    <span class="text-[11px] text-end text-white italic">
                                       {" "}
                                       {format(message.createdAt.toDate())}
                                     </span>
@@ -547,12 +547,12 @@ endOfMessagesRef.current?.scrollIntoView({
 
                               <div class="space-y-1">
                                 <div class="group flex justify-start gap-x-2 word-break: break-word">
-                                  <div class="order-1 bg-white shadow-sm inline-block rounded-xl pt-2 pb-1.5 px-2.5">
-                                    <div class="text-sm text-gray-800">
+                                  <div class="order-1 bg-gray-100 shadow-sm inline-block rounded-xl pt-2 pb-1.5 px-2.5">
+                                    <div class=" text-gray-800">
                                       {message.text}
                                     </div>
                                     <span>
-                                      <span class="text-[11px] text-gray-400 italic">
+                                      <span class="text-[11px] text-gray-600 italic">
                                         {" "}
                                         {format(message.createdAt.toDate())}
                                       </span>

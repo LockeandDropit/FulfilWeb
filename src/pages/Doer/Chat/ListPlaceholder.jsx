@@ -820,28 +820,38 @@ sm:w-[286px]
                   </span>
                 </div>
               </div>
-              <div class="grow truncate ml-1">
-                <div class="flex justify-between align-center  items-center gap-x-1">
-                  <span class="truncate font-semibold text-base text-gray-800 flex">{chat.user.firstName} {chat.user.lastName} <p className="mx-2 text-gray-600 text-xl" >&#x2022;</p> {chat.jobTitle}</span>
-                  <div>
-                  {chat.isSeen ? (null) :( <span class="relative min-w-[18px] min-h-[18px] inline-flex justify-center items-center text-[10px] bg-blue-500 text-white rounded-full px-1">
-                    1
-                  </span>
-                  )}
-                  </div>
-                </div>
-                <div class="truncate me-5">
-                  <div class="flex items-center gap-x-1.5">
-                  
-                    <div class="grow truncate">
-                      <p class="truncate text-gray-800 text-sm">{chat.lastMessage ? chat.lastMessage : <p>No messages yet</p>}</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="hs-tab-active:hidden absolute bottom-3.5 end-2.5">
-              
-                </div>
-              </div>
+              <div class="grow truncate">
+                              <div class="flex justify-between align-center  items-center gap-x-1">
+                                <span class="justify-center items-center align-center truncate font-semibold text-sm text-gray-800 flex">
+                                  {chat.user.firstName} {chat.user.lastName}{" "}
+                                  <p className="mx-1 text-gray-600 text-lg">
+                                    &#x2022;
+                                  </p>{" "}
+                                  {chat.jobTitle}
+                                </span>
+                                <div>
+                                  {chat.isSeen ? null : (
+                                    <span class="mb-2 relative min-w-[12px] min-h-[12px] inline-flex justify-center items-center text-[6px] bg-blue-500 text-blue-500 rounded-full px-1">
+                                      1
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <div class="truncate me-5">
+                                <div class="flex items-center gap-x-1.5">
+                                  <div class="grow truncate">
+                                    <p class="truncate text-gray-800 text-sm">
+                                      {chat.lastMessage ? (
+                                        chat.lastMessage
+                                      ) : (
+                                        <p>No messages yet</p>
+                                      )}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="hs-tab-active:hidden absolute bottom-3.5 end-2.5"></div>
+                            </div>
             </div>
           </div>
                    ))

@@ -599,7 +599,8 @@ const JobDetails = () => {
           setIsLoading(false);
           navigate("/ChatHolder", {
             state: {
-              selectedChannel: newChatRef.id,
+              selectedChannel: newChatRef.id, applicant: x , job: job
+             
             },
           });
         }, 1000);

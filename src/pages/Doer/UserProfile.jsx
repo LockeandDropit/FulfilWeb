@@ -13,7 +13,7 @@ import {
   Textarea,
   Image,
 } from "@chakra-ui/react";
-import Iframe from 'react-iframe'
+import Iframe from "react-iframe";
 import {
   FormControl,
   FormLabel,
@@ -252,7 +252,7 @@ const UserProfile = () => {
         setUserBio(snapshot.data().bio);
         if (snapshot.data().resume) {
           setResume(snapshot.data().resume);
-          console.log("got it")
+          console.log("got it");
         }
       });
     } else {
@@ -436,7 +436,7 @@ const UserProfile = () => {
     onOpen: onOpenResume,
     onClose: onCloseResume,
   } = useDisclosure();
-  
+
   //firebase submission after edit
 
   // const handleAddQualificationOpen = () => {
@@ -905,31 +905,29 @@ const UserProfile = () => {
   // }, [newResume])
 
   const uploadResumeToFirebase = async (x) => {
-   
     const storage = getStorage();
     const resumeRef = ref(storage, "users/" + user.uid + "/resume.pdf");
 
     const file = x;
 
-    await uploadBytes(resumeRef, file).then((snapshot) => {
-      console.log("good to go")
-    })
-    .catch((e) => {
-      console.log(e)
-    })
+    await uploadBytes(resumeRef, file)
+      .then((snapshot) => {
+        console.log("good to go");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
 
     await getDownloadURL(resumeRef).then((response) => {
       updateDoc(doc(db, "users", user.uid), {
         resume: response,
-        resumeUploaded: true
+        resumeUploaded: true,
       })
         .then(() => {
           setResume(response);
         })
-        .catch((error) => {
-        });
+        .catch((error) => {});
     });
-    
   };
 
   //   const testPDFtype = async () => {
@@ -1518,7 +1516,7 @@ const UserProfile = () => {
                       <div class="xl:pe-4 mt-3 space-y-5 divide-y divide-gray-200 ">
                         <div class="pt-4 first:pt-0">
                           <h2 class="text-sm font-semibold text-gray-800 ">
-                            Details 
+                            Details
                           </h2>
 
                           <ul class="mt-3 space-y-2">
@@ -2041,27 +2039,28 @@ const UserProfile = () => {
                         </li>
                       </ul>
 
-                      {resume ? // <button onClick={() => onOpenResume()}>
-                      //   view resume
-                      // </button>
-                      null : ( null
-                        // <label
-                        //   for="resume-upload"
-                        //   class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
-                        // >
-                        //   Upload Resume
-                        //   <input
-                        //     id="resume-upload"
-                        //     className="hidden"
-                        //     type="file"
-                        //     accept=".pdf"
-                        //     // onChange={(event) => setNewResume({ selectedFile: event.target.files[0] })}
-                        //     onChange={(event) =>
-                        //       uploadResumeToFirebase(event.target.files[0])
-                        //     }
-                        //   />
-                        // </label>
-                      )}
+                      {resume // <button onClick={() => onOpenResume()}>
+                        ? //   view resume
+                          // </button>
+                          null
+                        : null
+                          // <label
+                          //   for="resume-upload"
+                          //   class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
+                          // >
+                          //   Upload Resume
+                          //   <input
+                          //     id="resume-upload"
+                          //     className="hidden"
+                          //     type="file"
+                          //     accept=".pdf"
+                          //     // onChange={(event) => setNewResume({ selectedFile: event.target.files[0] })}
+                          //     onChange={(event) =>
+                          //       uploadResumeToFirebase(event.target.files[0])
+                          //     }
+                          //   />
+                          // </label>
+                      }
 
                       <Modal
                         isOpen={isOpenResume}
@@ -2070,15 +2069,13 @@ const UserProfile = () => {
                       >
                         <ModalOverlay />
                         <ModalContent>
-                         
-                   
-                            <Iframe src={resume ? resume : null}
-        width="66%"
-        height="80%"
-        display="block"
-        position="fixed"/>
-                            
-                         
+                          <Iframe
+                            src={resume ? resume : null}
+                            width="66%"
+                            height="80%"
+                            display="block"
+                            position="fixed"
+                          />
                         </ModalContent>
                       </Modal>
                     </div>
@@ -2811,7 +2808,6 @@ const UserProfile = () => {
                           </svg>
                         </div>
                         <div class="items-center align-center justify-center text-center">
-                      
                           <div class="items-center p-5   flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
                             <div class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none ">
                               <button onClick={() => onOpenResume()}>
@@ -2982,7 +2978,6 @@ const UserProfile = () => {
                             </p>
                             <p class="mb-5 text-sm text-gray-500 "></p>
                           </div>
-                        
                           <p className="cursor-pointer mt-2">
                             upload your resume{" "}
                             <label
@@ -3016,430 +3011,431 @@ const UserProfile = () => {
                             >
                               here.
                             </label>
-                            <p className="cursor-pointer mt-2">(Make sure you download the file as a pdf)</p>
+                            <p className="cursor-pointer mt-2">
+                              (Make sure you download the file as a pdf)
+                            </p>
                           </p>
                         </div>
                       )}
-                    
 
-                      {userExperience ? (
-                        userExperience.map((userExperience) => (
-                          <>
-                            <div class="p-3">
-                              <div class=" text-left flex justify-start w-full  bg-white border   border-gray-200 rounded-xl ">
-                                <div
-                                  class="h-full p-6 "
-                                  key={userExperience.id}
-                                >
-                                  <h2 class="text-xl font-semibold text-gray-800 0">
-                                    {userExperience.Title}
-                                    <button
-                                      onClick={() =>
-                                        handleOpenEditExperienceModal(
-                                          userExperience.id
-                                        )
-                                      }
-                                    >
-                                      <svg
-                                        type="button"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="#5D5D5D"
-                                        class="w-4 h-4 ml-2 mb-2 hover:text-gray-700"
+                      {userExperience
+                        ? userExperience.map((userExperience) => (
+                            <>
+                              <div class="p-3">
+                                <div class=" text-left flex justify-start w-full  bg-white border   border-gray-200 rounded-xl ">
+                                  <div
+                                    class="h-full p-6 "
+                                    key={userExperience.id}
+                                  >
+                                    <h2 class="text-xl font-semibold text-gray-800 0">
+                                      {userExperience.Title}
+                                      <button
+                                        onClick={() =>
+                                          handleOpenEditExperienceModal(
+                                            userExperience.id
+                                          )
+                                        }
                                       >
-                                        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
-                                        <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
-                                      </svg>
-                                    </button>
-                                  </h2>
+                                        <svg
+                                          type="button"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          viewBox="0 0 24 24"
+                                          fill="#5D5D5D"
+                                          class="w-4 h-4 ml-2 mb-2 hover:text-gray-700"
+                                        >
+                                          <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                                          <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+                                        </svg>
+                                      </button>
+                                    </h2>
 
-                                  {/* <p class=" text-md  text-gray-500 ">Business</p> */}
-                                  <p class=" text-sm  text-gray-500 ">
-                                    {userExperience.Years}
-                                  </p>
+                                    {/* <p class=" text-md  text-gray-500 ">Business</p> */}
+                                    <p class=" text-sm  text-gray-500 ">
+                                      {userExperience.Years}
+                                    </p>
 
-                                  <p class=" text-md  text-black ">
-                                    {userExperience.Description}
-                                  </p>
+                                    <p class=" text-md  text-black ">
+                                      {userExperience.Description}
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
 
-                            {openModalID === userExperience.id ? (
-                              <Modal
-                                isOpen={isOpen}
-                                onClose={onClose}
-                                size="xl"
-                                key={userExperience.id}
-                              >
-                                <ModalOverlay />
-                                <ModalContent>
-                                  <div
-                                    id="hs-pro-dasadpm"
-                                    class=" size-full fixed top-0 start-0 z-[80]  overflow-y-auto pointer-events-none [--close-when-click-inside:true] "
-                                  >
-                                    <div class="mt-7 opacity-100 duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
-                                      <div class="w-full max-h-full flex flex-col bg-white rounded-xl pointer-events-auto shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)] ">
-                                        <div class="py-3 px-4 flex justify-between items-center border-b ">
-                                          <h3 class="font-semibold text-gray-800 ">
-                                            Experience
-                                          </h3>
-                                          <button
-                                            type="button"
-                                            onClick={() => onClose()}
-                                            class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
-                                            data-hs-overlay="#hs-pro-dasadpm"
-                                          >
-                                            <span class="sr-only">Close</span>
-                                            <svg
-                                              class="flex-shrink-0 size-4"
-                                              xmlns="http://www.w3.org/2000/svg"
-                                              width="24"
-                                              height="24"
-                                              viewBox="0 0 24 24"
-                                              fill="none"
-                                              stroke="currentColor"
-                                              stroke-width="2"
-                                              stroke-linecap="round"
-                                              stroke-linejoin="round"
+                              {openModalID === userExperience.id ? (
+                                <Modal
+                                  isOpen={isOpen}
+                                  onClose={onClose}
+                                  size="xl"
+                                  key={userExperience.id}
+                                >
+                                  <ModalOverlay />
+                                  <ModalContent>
+                                    <div
+                                      id="hs-pro-dasadpm"
+                                      class=" size-full fixed top-0 start-0 z-[80]  overflow-y-auto pointer-events-none [--close-when-click-inside:true] "
+                                    >
+                                      <div class="mt-7 opacity-100 duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto h-[calc(100%-3.5rem)] min-h-[calc(100%-3.5rem)] flex items-center">
+                                        <div class="w-full max-h-full flex flex-col bg-white rounded-xl pointer-events-auto shadow-[0_10px_40px_10px_rgba(0,0,0,0.08)] ">
+                                          <div class="py-3 px-4 flex justify-between items-center border-b ">
+                                            <h3 class="font-semibold text-gray-800 ">
+                                              Experience
+                                            </h3>
+                                            <button
+                                              type="button"
+                                              onClick={() => onClose()}
+                                              class="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none "
+                                              data-hs-overlay="#hs-pro-dasadpm"
                                             >
-                                              <path d="M18 6 6 18" />
-                                              <path d="m6 6 12 12" />
-                                            </svg>
-                                          </button>
-                                        </div>
-
-                                        <form>
-                                          <div class="p-4 space-y-5">
-                                            <div>
-                                              <label
-                                                for="hs-pro-dalpn"
-                                                class="block mb-2 text-sm font-medium text-gray-800 "
+                                              <span class="sr-only">Close</span>
+                                              <svg
+                                                class="flex-shrink-0 size-4"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
                                               >
-                                                Title
-                                              </label>
-
-                                              <input
-                                                type="text"
-                                                defaultValue={
-                                                  userExperience.Title
-                                                }
-                                                onChange={(e) =>
-                                                  setExperienceTitle1(
-                                                    e.target.value
-                                                  )
-                                                }
-                                                class="py-2.5 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                                                placeholder="ex: Landscaping"
-                                              />
-                                            </div>
-                                            <div>
-                                              <label
-                                                for="hs-pro-dalpn"
-                                                class="block mb-2 text-sm font-medium text-gray-800 "
-                                              >
-                                                Length
-                                              </label>
-
-                                              <input
-                                                type="text"
-                                                defaultValue={
-                                                  userExperience.Years
-                                                }
-                                                onChange={(e) =>
-                                                  setExperienceYears(
-                                                    e.target.value
-                                                  )
-                                                }
-                                                class="py-2.5 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                                                placeholder="ex: 2 years"
-                                              />
-                                            </div>
-                                            <div>
-                                              <label
-                                                for="hs-pro-dalpn"
-                                                class="block mb-2 text-sm font-medium text-gray-800 "
-                                              >
-                                                Description
-                                              </label>
-
-                                              <textarea
-                                                type="text"
-                                                defaultValue={
-                                                  userExperience.Description
-                                                }
-                                                onChange={(e) =>
-                                                  setExperienceDescription(
-                                                    e.target.value
-                                                  )
-                                                }
-                                                idrows="5"
-                                                class="  sm:p-5 py-3 px-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                                                placeholder="ex: I am a dedicated landscaper with over 10 years of experience in the field."
-                                              />
-                                            </div>
+                                                <path d="M18 6 6 18" />
+                                                <path d="m6 6 12 12" />
+                                              </svg>
+                                            </button>
                                           </div>
 
-                                          <div class="p-4 flex justify-end gap-x-2">
-                                            <div class="w-full flex justify-end items-center gap-x-2">
-                                              <button
-                                                type="button"
-                                                onClick={() =>
-                                                  handleDeleteExperience(
+                                          <form>
+                                            <div class="p-4 space-y-5">
+                                              <div>
+                                                <label
+                                                  for="hs-pro-dalpn"
+                                                  class="block mb-2 text-sm font-medium text-gray-800 "
+                                                >
+                                                  Title
+                                                </label>
+
+                                                <input
+                                                  type="text"
+                                                  defaultValue={
                                                     userExperience.Title
-                                                  )
-                                                }
-                                                class="py-2 px-3  inline-flex justify-center items-center text-start bg-white border border-gray-200 text-gray-800 text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-gray-50 "
-                                                data-hs-overlay="#hs-pro-dasadpm"
-                                              >
-                                                Delete
-                                              </button>
+                                                  }
+                                                  onChange={(e) =>
+                                                    setExperienceTitle1(
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  class="py-2.5 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                                                  placeholder="ex: Landscaping"
+                                                />
+                                              </div>
+                                              <div>
+                                                <label
+                                                  for="hs-pro-dalpn"
+                                                  class="block mb-2 text-sm font-medium text-gray-800 "
+                                                >
+                                                  Length
+                                                </label>
 
-                                              <button
-                                                type="button"
-                                                onClick={() =>
-                                                  updateUserExperience(
-                                                    userExperience
-                                                  )
-                                                }
-                                                class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-blue-600 border border-blue-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
-                                                data-hs-overlay="#hs-pro-dasadpm"
-                                              >
-                                                Save
-                                              </button>
+                                                <input
+                                                  type="text"
+                                                  defaultValue={
+                                                    userExperience.Years
+                                                  }
+                                                  onChange={(e) =>
+                                                    setExperienceYears(
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  class="py-2.5 px-3 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                                                  placeholder="ex: 2 years"
+                                                />
+                                              </div>
+                                              <div>
+                                                <label
+                                                  for="hs-pro-dalpn"
+                                                  class="block mb-2 text-sm font-medium text-gray-800 "
+                                                >
+                                                  Description
+                                                </label>
+
+                                                <textarea
+                                                  type="text"
+                                                  defaultValue={
+                                                    userExperience.Description
+                                                  }
+                                                  onChange={(e) =>
+                                                    setExperienceDescription(
+                                                      e.target.value
+                                                    )
+                                                  }
+                                                  idrows="5"
+                                                  class="  sm:p-5 py-3 px-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                                                  placeholder="ex: I am a dedicated landscaper with over 10 years of experience in the field."
+                                                />
+                                              </div>
                                             </div>
-                                          </div>
-                                        </form>
+
+                                            <div class="p-4 flex justify-end gap-x-2">
+                                              <div class="w-full flex justify-end items-center gap-x-2">
+                                                <button
+                                                  type="button"
+                                                  onClick={() =>
+                                                    handleDeleteExperience(
+                                                      userExperience.Title
+                                                    )
+                                                  }
+                                                  class="py-2 px-3  inline-flex justify-center items-center text-start bg-white border border-gray-200 text-gray-800 text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-gray-50 "
+                                                  data-hs-overlay="#hs-pro-dasadpm"
+                                                >
+                                                  Delete
+                                                </button>
+
+                                                <button
+                                                  type="button"
+                                                  onClick={() =>
+                                                    updateUserExperience(
+                                                      userExperience
+                                                    )
+                                                  }
+                                                  class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-blue-600 border border-blue-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                                                  data-hs-overlay="#hs-pro-dasadpm"
+                                                >
+                                                  Save
+                                                </button>
+                                              </div>
+                                            </div>
+                                          </form>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </ModalContent>
-                              </Modal>
-                            ) : null}
-                          </>
-                        ))
-                      ) : ( null
-                        // <div class="p-5 min-h-[328px] flex flex-col justify-center items-center text-center">
-                        //   <svg
-                        //     class="w-48 mx-auto mb-4"
-                        //     width="178"
-                        //     height="90"
-                        //     viewBox="0 0 178 90"
-                        //     fill="none"
-                        //     xmlns="http://www.w3.org/2000/svg"
-                        //   >
-                        //     <rect
-                        //       x="27"
-                        //       y="50.5"
-                        //       width="124"
-                        //       height="39"
-                        //       rx="7.5"
-                        //       fill="currentColor"
-                        //       class="fill-white "
-                        //     />
-                        //     <rect
-                        //       x="27"
-                        //       y="50.5"
-                        //       width="124"
-                        //       height="39"
-                        //       rx="7.5"
-                        //       stroke="currentColor"
-                        //       class="stroke-gray-50 "
-                        //     />
-                        //     <rect
-                        //       x="34.5"
-                        //       y="58"
-                        //       width="24"
-                        //       height="24"
-                        //       rx="4"
-                        //       fill="currentColor"
-                        //       class="fill-gray-50 "
-                        //     />
-                        //     <rect
-                        //       x="66.5"
-                        //       y="61"
-                        //       width="60"
-                        //       height="6"
-                        //       rx="3"
-                        //       fill="currentColor"
-                        //       class="fill-gray-50 "
-                        //     />
-                        //     <rect
-                        //       x="66.5"
-                        //       y="73"
-                        //       width="77"
-                        //       height="6"
-                        //       rx="3"
-                        //       fill="currentColor"
-                        //       class="fill-gray-50 "
-                        //     />
-                        //     <rect
-                        //       x="19.5"
-                        //       y="28.5"
-                        //       width="139"
-                        //       height="39"
-                        //       rx="7.5"
-                        //       fill="currentColor"
-                        //       class="fill-white "
-                        //     />
-                        //     <rect
-                        //       x="19.5"
-                        //       y="28.5"
-                        //       width="139"
-                        //       height="39"
-                        //       rx="7.5"
-                        //       stroke="currentColor"
-                        //       class="stroke-gray-100 "
-                        //     />
-                        //     <rect
-                        //       x="27"
-                        //       y="36"
-                        //       width="24"
-                        //       height="24"
-                        //       rx="4"
-                        //       fill="currentColor"
-                        //       class="fill-gray-100 "
-                        //     />
-                        //     <rect
-                        //       x="59"
-                        //       y="39"
-                        //       width="60"
-                        //       height="6"
-                        //       rx="3"
-                        //       fill="currentColor"
-                        //       class="fill-gray-100 "
-                        //     />
-                        //     <rect
-                        //       x="59"
-                        //       y="51"
-                        //       width="92"
-                        //       height="6"
-                        //       rx="3"
-                        //       fill="currentColor"
-                        //       class="fill-gray-100 "
-                        //     />
-                        //     <g filter="url(#filter13)">
-                        //       <rect
-                        //         x="12"
-                        //         y="6"
-                        //         width="154"
-                        //         height="40"
-                        //         rx="8"
-                        //         fill="currentColor"
-                        //         class="fill-white "
-                        //         shape-rendering="crispEdges"
-                        //       />
-                        //       <rect
-                        //         x="12.5"
-                        //         y="6.5"
-                        //         width="153"
-                        //         height="39"
-                        //         rx="7.5"
-                        //         stroke="currentColor"
-                        //         class="stroke-gray-100 "
-                        //         shape-rendering="crispEdges"
-                        //       />
-                        //       <rect
-                        //         x="20"
-                        //         y="14"
-                        //         width="24"
-                        //         height="24"
-                        //         rx="4"
-                        //         fill="currentColor"
-                        //         class="fill-gray-200  "
-                        //       />
-                        //       <rect
-                        //         x="52"
-                        //         y="17"
-                        //         width="60"
-                        //         height="6"
-                        //         rx="3"
-                        //         fill="currentColor"
-                        //         class="fill-gray-200 "
-                        //       />
-                        //       <rect
-                        //         x="52"
-                        //         y="29"
-                        //         width="106"
-                        //         height="6"
-                        //         rx="3"
-                        //         fill="currentColor"
-                        //         class="fill-gray-200 "
-                        //       />
-                        //     </g>
-                        //     <defs>
-                        //       <filter
-                        //         id="filter13"
-                        //         x="0"
-                        //         y="0"
-                        //         width="178"
-                        //         height="64"
-                        //         filterUnits="userSpaceOnUse"
-                        //         color-interpolation-filters="sRGB"
-                        //       >
-                        //         <feFlood
-                        //           flood-opacity="0"
-                        //           result="BackgroundImageFix"
-                        //         />
-                        //         <feColorMatrix
-                        //           in="SourceAlpha"
-                        //           type="matrix"
-                        //           values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                        //           result="hardAlpha"
-                        //         />
-                        //         <feOffset dy="6" />
-                        //         <feGaussianBlur stdDeviation="6" />
-                        //         <feComposite in2="hardAlpha" operator="out" />
-                        //         <feColorMatrix
-                        //           type="matrix"
-                        //           values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.03 0"
-                        //         />
-                        //         <feBlend
-                        //           mode="normal"
-                        //           in2="BackgroundImageFix"
-                        //           result="effect1_dropShadow_1187_14810"
-                        //         />
-                        //         <feBlend
-                        //           mode="normal"
-                        //           in="SourceGraphic"
-                        //           in2="effect1_dropShadow_1187_14810"
-                        //           result="shape"
-                        //         />
-                        //       </filter>
-                        //     </defs>
-                        //   </svg>
+                                  </ModalContent>
+                                </Modal>
+                              ) : null}
+                            </>
+                          ))
+                        : null
+                          // <div class="p-5 min-h-[328px] flex flex-col justify-center items-center text-center">
+                          //   <svg
+                          //     class="w-48 mx-auto mb-4"
+                          //     width="178"
+                          //     height="90"
+                          //     viewBox="0 0 178 90"
+                          //     fill="none"
+                          //     xmlns="http://www.w3.org/2000/svg"
+                          //   >
+                          //     <rect
+                          //       x="27"
+                          //       y="50.5"
+                          //       width="124"
+                          //       height="39"
+                          //       rx="7.5"
+                          //       fill="currentColor"
+                          //       class="fill-white "
+                          //     />
+                          //     <rect
+                          //       x="27"
+                          //       y="50.5"
+                          //       width="124"
+                          //       height="39"
+                          //       rx="7.5"
+                          //       stroke="currentColor"
+                          //       class="stroke-gray-50 "
+                          //     />
+                          //     <rect
+                          //       x="34.5"
+                          //       y="58"
+                          //       width="24"
+                          //       height="24"
+                          //       rx="4"
+                          //       fill="currentColor"
+                          //       class="fill-gray-50 "
+                          //     />
+                          //     <rect
+                          //       x="66.5"
+                          //       y="61"
+                          //       width="60"
+                          //       height="6"
+                          //       rx="3"
+                          //       fill="currentColor"
+                          //       class="fill-gray-50 "
+                          //     />
+                          //     <rect
+                          //       x="66.5"
+                          //       y="73"
+                          //       width="77"
+                          //       height="6"
+                          //       rx="3"
+                          //       fill="currentColor"
+                          //       class="fill-gray-50 "
+                          //     />
+                          //     <rect
+                          //       x="19.5"
+                          //       y="28.5"
+                          //       width="139"
+                          //       height="39"
+                          //       rx="7.5"
+                          //       fill="currentColor"
+                          //       class="fill-white "
+                          //     />
+                          //     <rect
+                          //       x="19.5"
+                          //       y="28.5"
+                          //       width="139"
+                          //       height="39"
+                          //       rx="7.5"
+                          //       stroke="currentColor"
+                          //       class="stroke-gray-100 "
+                          //     />
+                          //     <rect
+                          //       x="27"
+                          //       y="36"
+                          //       width="24"
+                          //       height="24"
+                          //       rx="4"
+                          //       fill="currentColor"
+                          //       class="fill-gray-100 "
+                          //     />
+                          //     <rect
+                          //       x="59"
+                          //       y="39"
+                          //       width="60"
+                          //       height="6"
+                          //       rx="3"
+                          //       fill="currentColor"
+                          //       class="fill-gray-100 "
+                          //     />
+                          //     <rect
+                          //       x="59"
+                          //       y="51"
+                          //       width="92"
+                          //       height="6"
+                          //       rx="3"
+                          //       fill="currentColor"
+                          //       class="fill-gray-100 "
+                          //     />
+                          //     <g filter="url(#filter13)">
+                          //       <rect
+                          //         x="12"
+                          //         y="6"
+                          //         width="154"
+                          //         height="40"
+                          //         rx="8"
+                          //         fill="currentColor"
+                          //         class="fill-white "
+                          //         shape-rendering="crispEdges"
+                          //       />
+                          //       <rect
+                          //         x="12.5"
+                          //         y="6.5"
+                          //         width="153"
+                          //         height="39"
+                          //         rx="7.5"
+                          //         stroke="currentColor"
+                          //         class="stroke-gray-100 "
+                          //         shape-rendering="crispEdges"
+                          //       />
+                          //       <rect
+                          //         x="20"
+                          //         y="14"
+                          //         width="24"
+                          //         height="24"
+                          //         rx="4"
+                          //         fill="currentColor"
+                          //         class="fill-gray-200  "
+                          //       />
+                          //       <rect
+                          //         x="52"
+                          //         y="17"
+                          //         width="60"
+                          //         height="6"
+                          //         rx="3"
+                          //         fill="currentColor"
+                          //         class="fill-gray-200 "
+                          //       />
+                          //       <rect
+                          //         x="52"
+                          //         y="29"
+                          //         width="106"
+                          //         height="6"
+                          //         rx="3"
+                          //         fill="currentColor"
+                          //         class="fill-gray-200 "
+                          //       />
+                          //     </g>
+                          //     <defs>
+                          //       <filter
+                          //         id="filter13"
+                          //         x="0"
+                          //         y="0"
+                          //         width="178"
+                          //         height="64"
+                          //         filterUnits="userSpaceOnUse"
+                          //         color-interpolation-filters="sRGB"
+                          //       >
+                          //         <feFlood
+                          //           flood-opacity="0"
+                          //           result="BackgroundImageFix"
+                          //         />
+                          //         <feColorMatrix
+                          //           in="SourceAlpha"
+                          //           type="matrix"
+                          //           values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                          //           result="hardAlpha"
+                          //         />
+                          //         <feOffset dy="6" />
+                          //         <feGaussianBlur stdDeviation="6" />
+                          //         <feComposite in2="hardAlpha" operator="out" />
+                          //         <feColorMatrix
+                          //           type="matrix"
+                          //           values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.03 0"
+                          //         />
+                          //         <feBlend
+                          //           mode="normal"
+                          //           in2="BackgroundImageFix"
+                          //           result="effect1_dropShadow_1187_14810"
+                          //         />
+                          //         <feBlend
+                          //           mode="normal"
+                          //           in="SourceGraphic"
+                          //           in2="effect1_dropShadow_1187_14810"
+                          //           result="shape"
+                          //         />
+                          //       </filter>
+                          //     </defs>
+                          //   </svg>
 
-                        //    <div class="max-w-sm mx-auto">
-                        //     <p class="mt-2 font-medium text-gray-800 ">
-                        //       Nothing here
-                        //     </p>
-                        //     <p class="mb-5 text-sm text-gray-500 "></p>
-                        //   </div> 
-                        //    <button
-                        //     type="button"
-                        //     class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
-                        //     data-hs-overlay="#hs-pro-dasadpm"
-                        //     onClick={() => onOpenAddExperience()}
-                        //   >
-                        //     <svg
-                        //       class="hidden sm:block flex-shrink-0 size-4"
-                        //       xmlns="http://www.w3.org/2000/svg"
-                        //       width="24"
-                        //       height="24"
-                        //       viewBox="0 0 24 24"
-                        //       fill="none"
-                        //       stroke="currentColor"
-                        //       stroke-width="2"
-                        //       stroke-linecap="round"
-                        //       stroke-linejoin="round"
-                        //     >
-                        //       <path d="M5 12h14" />
-                        //       <path d="M12 5v14" />
-                        //     </svg>
-                        //     Add experience
-                        //   </button> 
-                        // </div>
-                      )}
+                          //    <div class="max-w-sm mx-auto">
+                          //     <p class="mt-2 font-medium text-gray-800 ">
+                          //       Nothing here
+                          //     </p>
+                          //     <p class="mb-5 text-sm text-gray-500 "></p>
+                          //   </div>
+                          //    <button
+                          //     type="button"
+                          //     class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
+                          //     data-hs-overlay="#hs-pro-dasadpm"
+                          //     onClick={() => onOpenAddExperience()}
+                          //   >
+                          //     <svg
+                          //       class="hidden sm:block flex-shrink-0 size-4"
+                          //       xmlns="http://www.w3.org/2000/svg"
+                          //       width="24"
+                          //       height="24"
+                          //       viewBox="0 0 24 24"
+                          //       fill="none"
+                          //       stroke="currentColor"
+                          //       stroke-width="2"
+                          //       stroke-linecap="round"
+                          //       stroke-linejoin="round"
+                          //     >
+                          //       <path d="M5 12h14" />
+                          //       <path d="M12 5v14" />
+                          //     </svg>
+                          //     Add experience
+                          //   </button>
+                          // </div>
+                      }
 
                       {(userExperienceLength < 3) &
                       (userExperienceLength !== 0) ? (
@@ -3742,83 +3738,83 @@ const UserProfile = () => {
                                 </div>
                               </div>
                             </>
-                          ) : ( null
-                            // <div class="p-12 mx-5 mb-5 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl ">
-                            //   <div class="text-center">
-                            //     <svg
-                            //       class="w-16 text-gray-400 mx-auto "
-                            //       width="70"
-                            //       height="46"
-                            //       viewBox="0 0 70 46"
-                            //       fill="none"
-                            //       xmlns="http://www.w3.org/2000/svg"
-                            //     >
-                            //       <path
-                            //         d="M6.05172 9.36853L17.2131 7.5083V41.3608L12.3018 42.3947C9.01306 43.0871 5.79705 40.9434 5.17081 37.6414L1.14319 16.4049C0.515988 13.0978 2.73148 9.92191 6.05172 9.36853Z"
-                            //         fill="currentColor"
-                            //         stroke="currentColor"
-                            //         stroke-width="2"
-                            //         class="fill-white stroke-gray-400 "
-                            //       />
-                            //       <path
-                            //         d="M63.9483 9.36853L52.7869 7.5083V41.3608L57.6982 42.3947C60.9869 43.0871 64.203 40.9434 64.8292 37.6414L68.8568 16.4049C69.484 13.0978 67.2685 9.92191 63.9483 9.36853Z"
-                            //         fill="currentColor"
-                            //         stroke="currentColor"
-                            //         stroke-width="2"
-                            //         class="fill-white stroke-gray-400 "
-                            //       />
-                            //       <rect
-                            //         x="17.0656"
-                            //         y="1.62305"
-                            //         width="35.8689"
-                            //         height="42.7541"
-                            //         rx="5"
-                            //         fill="currentColor"
-                            //         stroke="currentColor"
-                            //         stroke-width="2"
-                            //         class="fill-white stroke-gray-400 "
-                            //       />
-                            //       <path
-                            //         d="M47.9344 44.3772H22.0655C19.3041 44.3772 17.0656 42.1386 17.0656 39.3772L17.0656 35.9161L29.4724 22.7682L38.9825 33.7121C39.7832 34.6335 41.2154 34.629 42.0102 33.7025L47.2456 27.5996L52.9344 33.7209V39.3772C52.9344 42.1386 50.6958 44.3772 47.9344 44.3772Z"
-                            //         stroke="currentColor"
-                            //         stroke-width="2"
-                            //         class="stroke-gray-400 "
-                            //       />
-                            //       <circle
-                            //         cx="39.5902"
-                            //         cy="14.9672"
-                            //         r="4.16393"
-                            //         stroke="currentColor"
-                            //         stroke-width="2"
-                            //         class="stroke-gray-400 dark:stroke-neutral-500"
-                            //       />
-                            //     </svg>
+                          ) : null
+                          // <div class="p-12 mx-5 mb-5 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl ">
+                          //   <div class="text-center">
+                          //     <svg
+                          //       class="w-16 text-gray-400 mx-auto "
+                          //       width="70"
+                          //       height="46"
+                          //       viewBox="0 0 70 46"
+                          //       fill="none"
+                          //       xmlns="http://www.w3.org/2000/svg"
+                          //     >
+                          //       <path
+                          //         d="M6.05172 9.36853L17.2131 7.5083V41.3608L12.3018 42.3947C9.01306 43.0871 5.79705 40.9434 5.17081 37.6414L1.14319 16.4049C0.515988 13.0978 2.73148 9.92191 6.05172 9.36853Z"
+                          //         fill="currentColor"
+                          //         stroke="currentColor"
+                          //         stroke-width="2"
+                          //         class="fill-white stroke-gray-400 "
+                          //       />
+                          //       <path
+                          //         d="M63.9483 9.36853L52.7869 7.5083V41.3608L57.6982 42.3947C60.9869 43.0871 64.203 40.9434 64.8292 37.6414L68.8568 16.4049C69.484 13.0978 67.2685 9.92191 63.9483 9.36853Z"
+                          //         fill="currentColor"
+                          //         stroke="currentColor"
+                          //         stroke-width="2"
+                          //         class="fill-white stroke-gray-400 "
+                          //       />
+                          //       <rect
+                          //         x="17.0656"
+                          //         y="1.62305"
+                          //         width="35.8689"
+                          //         height="42.7541"
+                          //         rx="5"
+                          //         fill="currentColor"
+                          //         stroke="currentColor"
+                          //         stroke-width="2"
+                          //         class="fill-white stroke-gray-400 "
+                          //       />
+                          //       <path
+                          //         d="M47.9344 44.3772H22.0655C19.3041 44.3772 17.0656 42.1386 17.0656 39.3772L17.0656 35.9161L29.4724 22.7682L38.9825 33.7121C39.7832 34.6335 41.2154 34.629 42.0102 33.7025L47.2456 27.5996L52.9344 33.7209V39.3772C52.9344 42.1386 50.6958 44.3772 47.9344 44.3772Z"
+                          //         stroke="currentColor"
+                          //         stroke-width="2"
+                          //         class="stroke-gray-400 "
+                          //       />
+                          //       <circle
+                          //         cx="39.5902"
+                          //         cy="14.9672"
+                          //         r="4.16393"
+                          //         stroke="currentColor"
+                          //         stroke-width="2"
+                          //         class="stroke-gray-400 dark:stroke-neutral-500"
+                          //       />
+                          //     </svg>
 
-                            //     <div class="mt-4 flex flex-wrap justify-center text-sm leading-6 text-gray-600">
-                            //       <span class="pe-1 font-medium text-gray-800 ">
-                            //         Drop your files here or
-                            //       </span>
-                            //       <label
-                            //         for="hs-pro-upcebb"
-                            //         class="relative cursor-pointer bg-white font-semibold text-blue-600 hover:text-blue-700 rounded-lg decoration-2 hover:underline focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 "
-                            //       >
-                            //         <button onClick={() => onOpenProject()}>
-                            //           browse
-                            //         </button>
-                            //         <input
-                            //           id="hs-pro-upcebb"
-                            //           type="file"
-                            //           class="sr-only"
-                            //         />
-                            //       </label>
-                            //     </div>
+                          //     <div class="mt-4 flex flex-wrap justify-center text-sm leading-6 text-gray-600">
+                          //       <span class="pe-1 font-medium text-gray-800 ">
+                          //         Drop your files here or
+                          //       </span>
+                          //       <label
+                          //         for="hs-pro-upcebb"
+                          //         class="relative cursor-pointer bg-white font-semibold text-blue-600 hover:text-blue-700 rounded-lg decoration-2 hover:underline focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 "
+                          //       >
+                          //         <button onClick={() => onOpenProject()}>
+                          //           browse
+                          //         </button>
+                          //         <input
+                          //           id="hs-pro-upcebb"
+                          //           type="file"
+                          //           class="sr-only"
+                          //         />
+                          //       </label>
+                          //     </div>
 
-                            //     <p class="mt-1 text-xs text-gray-400 ">
-                            //       JPEG, IMAGES
-                            //     </p>
-                            //   </div>
-                            // </div>
-                          )}
+                          //     <p class="mt-1 text-xs text-gray-400 ">
+                          //       JPEG, IMAGES
+                          //     </p>
+                          //   </div>
+                          // </div>
+                          }
                         </div>
                       </div>
                     </div>

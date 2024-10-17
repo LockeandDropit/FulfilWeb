@@ -9,6 +9,7 @@ import {
   query,
   collection,
 } from "firebase/firestore";
+import Iframe from "react-iframe";
 import { db } from "../../../firebaseConfig";
 import { useChatStore } from "./lib/chatStore";
 import { useUserStore } from "./lib/userStore";
@@ -323,8 +324,8 @@ endOfMessagesRef.current?.scrollIntoView({
   if (job)
   return (
     <>
-  
-  <body class="hs-overlay-body-open lg:ml-[296px] lg:w-[calc(100vw-316px)] sm:h-[calc(100vh-100px)] mt-16 bg-gray-100">
+    <body class="hs-overlay-body-open lg:ml-[296px] lg:w-[calc(100vw-316px)] sm:h-[calc(100vh-100px)] ">
+  {/* <body class="hs-overlay-body-open lg:ml-[296px] lg:w-[calc(100vw-316px)] sm:h-[calc(100vh-100px)] mt-16 bg-gray-100"> */}
         <main
           id="content"
        class="2xl:hs-overlay-layout-open:pe-96 xl:ps-72 transition-all duration-300 "
@@ -335,8 +336,8 @@ endOfMessagesRef.current?.scrollIntoView({
             aria-labelledby="hs-pro-tabs-chct-item-1"
           >
             <div class="relative h-dvh flex flex-col justify-end">
-            <header class="sticky h-24 top-12 inset-x-0 z-20 py-2 px-4 flex justify-between gap-x-2 xl:grid xl:grid-cols-2 bg-white border-b border-gray-200">
-                <div class="lg:hidden w-20 sm:w-auto flex items-center">
+            <header class="sticky h-[120px] mt-16 inset-x-0 z-20 py-2 px-4 flex justify-between gap-x-2 xl:grid xl:grid-cols-2 bg-white border-b border-gray-200">
+                <div class="lg:hidden w-20 sm:w-auto flex items-center justify-center">
                   <div class="-ms-3">
                     <button
                     onClick={() => resetChat()}
@@ -365,7 +366,7 @@ endOfMessagesRef.current?.scrollIntoView({
                   </div>
                 </div>
 
-                <div>
+                <div className="flex items-center ">
                   <div
                   onClick={() => onOpenDetails()}
                     class="truncate flex items-center gap-x-3.5 focus:outline-none cursor-default"
@@ -424,70 +425,19 @@ endOfMessagesRef.current?.scrollIntoView({
                 </div>
                       {isDesktop ? (   <div class="w-20 sm:w-auto flex justify-end items-center gap-x-0.5">
                   {/* add here if you want anything in the end of the internal header */}
-                  <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
+                  <span class="py-1.5 px-2 inline-flex items-center gap-x-1.5 text-sm font-medium bg-sky-100 text-sky-700 rounded-full">
                 
                 Interviewing
               </span>
-                  {/* {jobHiringState.isJobOffered === true &&
-                      jobHiringState.isHired === false ? (
-                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
-                
-                        Offer pending
-                      </span>
-                      ) : jobHiringState.isHired === true &&
-                        jobHiringState.isMarkedCompleteDoer === false ? (
-                          <span class="py-1.5 ps-1.5  px-1 inline-flex items-center  text-xs font-medium bg-green-100 text-green-700 rounded-full">
-                          <svg
-                            class="flex-shrink-0 size-3.5"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                          Job Accepted!
-                        </span>
-                      ) : jobHiringState.isMarkedCompleteDoer === true ? (
-                        <span class="py-1.5 ps-1.5 w-[160px] pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-blue-600 text-white rounded-full">
-                 <svg
-                            class="flex-shrink-0 size-3.5"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                       Awaiting confirmation
-                      </span>
-                      ) : (
-                        <span class="py-1.5 ps-1.5 pe-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">
-                
-                        Interviewing
-                      </span>
-                      )} */}
-                  
-             
                 </div>) : (null)}
              
               </header>
 
               <div class="h-full overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-sm [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
-                <div class="p-4 space-y-5">
-                  <div class="relative">
+                <div class="p-4 space-y-5 mt-12">
+                  <div class="relative ">
                     <div class="sticky top-16 inset-x-0 z-10 max-w-lg mx-auto text-center">
-                      <span class="py-0.5 px-1.5 bg-gray-100 text-xs text-gray-500 rounded-full">
+                      <span class="py-0.5 px-1.5 bg-gray-100 text-xs text-gray-500 rounded-full ">
                         {/* {chat?.messages ? <p>Today</p> : null} */}
                       </span>
                     </div>
@@ -500,7 +450,7 @@ endOfMessagesRef.current?.scrollIntoView({
                           <div class="max-w-md ms-auto text-end flex justify-end gap-x-2">
                             <div>
                               <p class="mb-1.5 pe-2.5 text-xs text-gray-400">
-                                {currentUser.firstName}
+                                {currentUser.firstName} xcsdf
                               </p>
 
                               <div class="space-y-1">
@@ -6548,24 +6498,11 @@ endOfMessagesRef.current?.scrollIntoView({
                       >
                         <ModalOverlay />
                         <ModalContent>
-                          <div>
-                            <Document
-                              className=""
-                              file={user.resume ? user.resume : null}
-                              onLoadSuccess={onDocumentLoadSuccess}
-                            >
-                              <Page
-                                className=""
-                                height="500"
-                                width="1000"
-                                pageNumber={pageNumber}
-                              />
-                            </Document>
-                            {/* <iframe title="pds" src={resume ? resume : null} width="100%" height="500px" /> */}
-                            <p>
-                              Page {pageNumber} of {numPages}
-                            </p>
-                          </div>
+                        <Iframe src={user.resume ? user.resume : null}
+        width="66%"
+        height="80%"
+        display="block"
+        position="fixed"/>
                         </ModalContent>
                       </Modal>
      

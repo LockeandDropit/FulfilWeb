@@ -848,151 +848,175 @@ const DoerListViewLoggedOut = (props) => {
 
                               <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
                                 <div class="p-4 ">
-                                  <div class="">
-                                    <div className="flex">
-                                      <label
-                                        for="hs-pro-dactmt"
-                                        class="block mb-2 text-xl font-medium text-gray-900"
-                                      >
-                                        {businessPostedJobs.jobTitle}
-                                      </label>
+                                <div class=" ">
+                              <div className="flex">
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block mb-2 text-2xl font-medium text-gray-900"
+                                >
+                                  {businessPostedJobs.jobTitle}
+                                </label>
 
-                                      <label onClick={() => onOpenShare()}>
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          fill="none"
-                                          viewBox="0 0 24 24"
-                                          strokeWidth={1.5}
-                                          stroke="currentColor"
-                                          className="size-4 ml-1 cursor-pointer"
-                                        >
-                                          <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
-                                          />
-                                        </svg>
-                                      </label>
+                                <label onClick={() => onOpenShare()}>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="size-4 ml-1 cursor-pointer"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
+                                    />
+                                  </svg>
+                                </label>
+                              </div>
+                              {businessPostedJobs.employerProfilePicture ? (
+                                <>
+                                  <div class="flex flex-row items-center">
+                                    <div className="justify-center items-center">
+                                      <img
+                                        src={
+                                          businessPostedJobs.employerProfilePicture
+                                        }
+                                        class="flex-shrink-0 size-[56px] rounded-full"
+                                        alt="company logo"
+                                      />
                                     </div>
-                                    {businessPostedJobs.isFullTimePosition ===
-                                    true ? (
-                                      <label
-                                        for="hs-pro-dactmt"
-                                        class="block  text-lg font-medium text-gray-800"
-                                      >
-                                        Full-time
-                                      </label>
-                                    ) : (
-                                      <label
-                                        for="hs-pro-dactmt"
-                                        class="block  text-lg font-medium text-gray-800 "
-                                      >
-                                        Part-time
-                                      </label>
-                                    )}
 
-                                    {businessPostedJobs.isHourly ? (
-                                      <div class="space-y-1 ">
-                                        <div class="flex align-items-center">
-                                          <p className=" text-md font-medium">
-                                            $
-                                          </p>
-                                          <label
-                                            for="hs-pro-dactmt"
-                                            class="block text-md font-medium text-gray-800 "
-                                          >
-                                            {businessPostedJobs.lowerRate}
-                                          </label>
-                                          <p className=" text-md font-medium">
-                                            /hour - $
-                                          </p>
-                                          <label
-                                            for="hs-pro-dactmt"
-                                            class="block  text-md font-medium text-gray-800 "
-                                          >
-                                            {businessPostedJobs.upperRate}
-                                          </label>
-                                          <p className=" text-md font-medium">
-                                            /hour
-                                          </p>
-                                        </div>
-                                      </div>
-                                    ) : null}
-
-                                    {businessPostedJobs.isSalaried ? (
-                                      <div class="space-y-2 ">
-                                        <div class="flex align-items-center">
-                                          <p className=" text-md font-medium">
-                                            $
-                                          </p>
-                                          <label
-                                            for="hs-pro-dactmt"
-                                            class="block  text-md font-medium text-gray-800 "
-                                          >
-                                            {businessPostedJobs.lowerRate}
-                                          </label>
-                                          <p className="ml-1 text-md font-medium ">
-                                            yearly - $
-                                          </p>
-                                          <label
-                                            for="hs-pro-dactmt"
-                                            class="block  text-md font-medium text-gray-800 "
-                                          >
-                                            {businessPostedJobs.upperRate}
-                                          </label>
-                                          <p className=" ml-1 c font-medium">
-                                            yearly
-                                          </p>
-                                        </div>
-                                      </div>
-                                    ) : null}
-                                    <p class="block  text-md font-medium text-gray-800 ">
-                                      {businessPostedJobs.streetAddress},{" "}
-                                      {businessPostedJobs.city},{" "}
-                                      {businessPostedJobs.state}
+                                    <p class="font-semibold ml-2 text-xl text-gray-800 cursor-pointer">
+                                      {businessPostedJobs.companyName}
                                     </p>
-                                    <p class="font-semibold text-md text-gray-500  cursor-default">
-                                      <span className="font-semibold text-md text-slate-700">
-                                        {" "}
-                                        Posted:
-                                      </span>{" "}
-                                      {businessPostedJobs.datePosted}
-                                    </p>
-                                    <p class="font-semibold text-md text-slate-700  mt-2 cursor-pointer">
-                                      Employer:
-                                    </p>
-                                    <div className="flex">
-                                      {businessPostedJobs.employerProfilePicture ? (
-                                        <>
-                                          <div class="flex flex-col justify-center items-center size-[56px]  ">
-                                            <img
-                                              src={
-                                                businessPostedJobs.employerProfilePicture
-                                              }
-                                              class="flex-shrink-0 size-[64px] rounded-full"
-                                            />
-
-                                            <div className="flex flex-col ml-4">
-                                              <p class="font-semibold text-md text-gray-500  mt-2 cursor-pointer">
-                                                {
-                                                  businessPostedJobs.businessName
-                                                }
-                                              </p>
-                                              <p class="font-semibold text-md text-gray-500 cursor-default ">
-                                                {businessPostedJobs.city},
-                                                Minnesota
-                                              </p>
-                                            </div>
-                                          </div>
-                                        </>
-                                      ) : null}
-                                      <div className="flex flex-col">
-                                        <p class="font-semibold text-md text-gray-500  mt-1 cursor-pointer">
-                                          {businessPostedJobs.companyName}
-                                        </p>
-                                      </div>
-                                    </div>
                                   </div>
+                                  {/* <div className="flex flex-col">
+                                    <p class="font-semibold text-xl text-gray-800 cursor-pointer">
+                                      {businessPostedJobs.companyName}
+                                    </p>
+                                  </div> */}
+                                </>
+                              ) : (
+                                <div className="flex flex-col">
+                                  <p class="font-semibold text-xl text-gray-800 cursor-pointer">
+                                    {businessPostedJobs.companyName}
+                                  </p>
+                                </div>
+                              )}
+                              {businessPostedJobs.isFullTimePosition ===
+                              true ? (
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block mt-1 text-lg font-medium text-gray-800"
+                                >
+                                  Full-time
+                                </label>
+                              ) : (
+                                <label
+                                  for="hs-pro-dactmt"
+                                  class="block  text-lg font-medium text-gray-800 "
+                                >
+                                  Part-time
+                                </label>
+                              )}
+
+                              {businessPostedJobs.isHourly ? (
+                                <div class="space-y-1 ">
+                                  <div class="flex align-items-center">
+                                    <p className=" text-md font-medium">$</p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block text-md font-medium text-gray-800 "
+                                    >
+                                      {businessPostedJobs.lowerRate}
+                                    </label>
+                                    <p className=" text-md font-medium">
+                                      /hour - $
+                                    </p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block  text-md font-medium text-gray-800 "
+                                    >
+                                      {businessPostedJobs.upperRate}
+                                    </label>
+                                    <p className=" text-md font-medium">
+                                      /hour
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : null}
+
+                              {businessPostedJobs.isSalaried ? (
+                                <div class="space-y-2 ">
+                                  <div class="flex align-items-center">
+                                    <p className=" text-md font-medium">$</p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block  text-md font-medium text-gray-800 "
+                                    >
+                                      {businessPostedJobs.lowerRate}
+                                    </label>
+                                    <p className="ml-1 text-md font-medium ">
+                                      yearly - $
+                                    </p>
+                                    <label
+                                      for="hs-pro-dactmt"
+                                      class="block  text-md font-medium text-gray-800 "
+                                    >
+                                      {businessPostedJobs.upperRate}
+                                    </label>
+                                    <p className=" ml-1 c font-medium">
+                                      yearly
+                                    </p>
+                                    {businessPostedJobs.isEstimatedPay ? (
+                                      <p>*</p>
+                                    ) : null}
+                                  </div>
+                                </div>
+                              ) : null}
+                              {businessPostedJobs.isEstimatedPay ? (
+                                <div className="mb-2 flex flex-col w-full text-sm ">
+                                  <a href="https://www.glassdoor.com/index.htm">
+                                    *Estimate. Powered by{" "}
+                                    <img
+                                      src="https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png"
+                                      title="Job Search"
+                                    />
+                                  </a>
+                                </div>
+                              ) : null}
+                              <p class="block  text-md font-medium text-gray-800 ">
+                                {businessPostedJobs.streetAddress},{" "}
+                                {businessPostedJobs.city},{" "}
+                                {businessPostedJobs.state}
+                              </p>
+                              {businessPostedJobs.isEstimatedAddress ? (
+                                <p class="block italic text-sm  text-gray-800 ">
+                                  Address may not be exact
+                                </p>
+                              ) : null}
+                              <p class="font-semibold text-md text-gray-500  cursor-default">
+                                <span className="font-semibold text-md text-slate-700">
+                                  {" "}
+                                  Posted:
+                                </span>{" "}
+                                {businessPostedJobs.datePosted}
+                              </p>
+                            </div>
+                            {businessPostedJobs.companyBio ? (
+                              <div class="space-y-2 mt-10 mb-4 ">
+                                <label
+                                  for="dactmi"
+                                  class="block mb-2 text-lg font-medium text-gray-900 "
+                                >
+                                  About us
+                                </label>
+                                <div className="w-full prose prose-li  font-inter marker:text-black mb-4 ">
+                                  {businessPostedJobs.companyBio}
+                                </div>
+                              </div>
+                            ) : null}
 
                                   <div class="space-y-2 mt-10 mb-4 ">
                                     <label

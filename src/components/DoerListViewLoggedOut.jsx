@@ -693,7 +693,7 @@ const DoerListViewLoggedOut = (props) => {
                         {businessPostedJobs.jobTitle} 
                       </h3>
                       <div className="flex">
-                        {businessPostedJobs.employerProfilePicture ? (
+                        {/* {businessPostedJobs.employerProfilePicture ? (
                           <>
                             <div class="flex flex-col justify-center items-center size-[56px]  ">
                               <img
@@ -711,7 +711,7 @@ const DoerListViewLoggedOut = (props) => {
                               </div>
                             </div>
                           </>
-                        ) : null}
+                        ) : null} */}
                         <div className="flex flex-col">
                           <p class="font-semibold text-sm text-gray-500  mt-1 cursor-pointer">
                             {businessPostedJobs.companyName}

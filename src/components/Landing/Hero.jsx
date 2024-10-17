@@ -11,13 +11,13 @@ const Hero = () => {
   };
   const navigate = useNavigate();
   return (
-    <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 mt-16">
       <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
         <div>
-          <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-6xl lg:leading-tight ">
+          <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
             <span class="text-black">No degree?</span>{" "}
           </h1>
-          <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-6xl lg:leading-tight">
+          <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight">
             <span class="text-black">No problem.</span>{" "}
         
           </h1>
@@ -49,12 +49,18 @@ const Hero = () => {
           </div>
         </div>
 
-        <div class="relative ms-4">
+        <div class="relative">
                  
-        <LazyLoadImage
+        {/* <LazyLoadImage
+      height={"600px"}
       effect="blur"
       src="./landingImages/pexels-fauxels-3182831.jpg"
-  />
+  /> */}
+  <img 
+    loading="lazy"
+    class=" rounded-md"
+      src="./landingImages/shake2.jpg"/>
+
           <div class="absolute inset-0 -z-[1] bg-gradient-to-tr from-sky-200 via-white/0 to-white/0 size-full rounded-md mt-4 -mb-4 me-4 -ms-4 lg:mt-6 lg:-mb-6 lg:me-6 lg:-ms-6"></div>
         </div>
       </div>

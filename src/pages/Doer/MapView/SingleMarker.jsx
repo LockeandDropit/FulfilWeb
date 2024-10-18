@@ -45,7 +45,7 @@ export const SingleMarker = (props) => {
     >
       <button
         type="button"
-        class=" -z-30 py-1 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
+        class=" -z-30 py-1 px-3 inline-flex items-center gap-x-2 text-xs font-semibold rounded-2xl border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none"
       >
         {tree.isVolunteer ? (
           <p>Volunteer!</p>

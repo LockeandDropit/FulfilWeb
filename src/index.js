@@ -118,7 +118,7 @@ import DoerListViewLoggedOut from "./components/DoerListViewLoggedOut"
 import NeederMapView from "./pages/Needer/MapView/NeederMapView";
 import DoerMapView from "./pages/Doer/MapView/DoerMapView";
 import TestLanding from "./components/Landing/TestLanding";
-
+import ResumeDashboard from "./pages/Doer/ResumeBuilder/ResumeDashboard";
 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebaseConfig"
@@ -129,6 +129,8 @@ import { doc, getDoc } from "firebase/firestore";
 
 import posthog from 'posthog-js';
 import { PostHogProvider} from 'posthog-js/react'
+import BuildResume from "./pages/Doer/ResumeBuilder/BuildResume";
+import About from "./components/About/About";
 
 
 
@@ -498,7 +500,18 @@ const router = createBrowserRouter([
     path: "/ResetPasswordLoggedOut",
     element: <ResetPasswordLoggedOut />,
   },
-  
+  {
+    path: "/ResumeDashboard",
+    element: <ResumeDashboard />,
+  },
+  {
+    path: "/About",
+    element: <About/>,
+  },
+  {
+    path: "/BuildResume",
+    element: <BuildResume />,
+  },
   {
     path: "/TestLanding",
     element: <TestLanding />,

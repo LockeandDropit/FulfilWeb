@@ -266,79 +266,36 @@ const LoggedOutHeader = (props) => {
     <>
       {isDesktop ? (
         <>
+  
           <header class="flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm ">
             <nav
-              class="mt-6 relative max-w-[85rem] w-full bg-white  mx-2 py-3 px-4 md:flex md:items-center md:justify-between md:py-0 md:px-6 lg:px-8 xl:mx-auto"
+              class="mt-6 relative max-w-[85rem] w-full bg-white  mx-2 py-3 px-4 md:flex md:items-center md:justify-between md:py-0 md:px-6 lg:px-8 xl:mx-auto "
               aria-label="Global"
             >
-              <div class="flex items-center justify-between">
-                <a
-                  class="flex-none text-4xl font-sans font-bold text-sky-400 cursor-default"
+           <div class="md:col-span-3 align-center items-center justify-center">
+      {/* <!-- Logo --> */}
+      <a
+                  class="flex-none text-4xl font-sans font-bold text-sky-400 cursor-pointer"
                   aria-label="Brand"
                   onClick={() => navigate("/")}
                 >
                   Fulfil
                 </a>
-                <div class="md:hidden">
-                  <button
-                    type="button"
-                    id="dropdown"
-                    onClick={() => handleToggle()}
-                    className="hs-collapse-toggle size-8 flex justify-center items-center text-sm font-semibold rounded-full border border-gray-200 text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
-                    data-hs-collapse="#navbar-collapse-with-animation"
-                    aria-controls="navbar-collapse-with-animation"
-                    aria-label="Toggle navigation"
-                  >
-                    <svg
-                      class="hs-collapse-open:hidden flex-shrink-0 size-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <line x1="3" x2="21" y1="6" y2="6" />
-                      <line x1="3" x2="21" y1="12" y2="12" />
-                      <line x1="3" x2="21" y1="18" y2="18" />
-                    </svg>
-                    <svg
-                      class="hs-collapse-open:block hidden flex-shrink-0 size-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M18 6 6 18" />
-                      <path d="m6 6 12 12" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div
-                id="navbar-collapse-with-animation"
-                class="hs-collapse  overflow-hidden transition-all duration-300 basis-full grow md:block"
-              >
-                <div class="flex flex-col gap-y-4 gap-x-0 mt-5 md:flex-row md:items-center md:justify-end md:gap-y-0 md:gap-x-7 md:mt-0 md:ps-7">
-                
-                  <button
+      {/* <!-- End Logo --> */}
+    </div>
+
+    {/* <!-- Button Group --> */}
+    <div class="flex items-center align-center justify-center md:order-3 md:col-span-3 mt-4">
+      <div className="md:space-x-3 ">
+    <button
                     class="font-medium text-gray-500 hover:text-gray-400 md:py-6"
                     onClick={() => onOpen()}
                   >
                     Log In
                   </button>
-
-                  <button
+      <button
                     type="button"
-                    className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                    className="py-2.5 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
                   
                     onClick={() => navigate("/OnboardingOne")}
                   >
@@ -359,8 +316,25 @@ const LoggedOutHeader = (props) => {
                     </svg>
                     Employer/Post job
                   </button>
-                </div>
-              </div>
+                  </div>
+    </div>
+    {/* <!-- End Button Group -->
+
+    <!-- Collapse --> */}
+    <div id="hs-navbar-hcail" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow md:block md:w-auto md:basis-auto md:order-2 md:col-span-6" aria-labelledby="hs-navbar-hcail-collapse">
+      <div class="ml-8 flex flex-col gap-y-4 gap-x-0 md:flex-row md:justify-center md:items-center md:gap-y-0 md:gap-x-7 text-base">
+     
+        <div>
+          <a class="inline-block text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-600 mt-2 cursor-pointer" onClick={() => navigate("/About")}>About</a>
+        </div>
+        <div>
+          <a class="inline-block text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-600 mt-2" href="#">Partners</a>
+        </div>
+        <div>
+          <a class="inline-block text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-600 mt-2" href="#">Careers</a>
+        </div>
+      </div>
+    </div>
             </nav>
           </header>
         </>

@@ -46,7 +46,7 @@ import { StreamChat } from "stream-chat";
 import { FcGoogle } from "react-icons/fc";
 import { useMediaQuery } from "@chakra-ui/react";
 
-const LoggedOutHeader = (props) => {
+const LoggedOutHeaderAbout = (props) => {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -267,7 +267,7 @@ const LoggedOutHeader = (props) => {
       {isDesktop ? (
         <>
   
-          <header class=" flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm ">
+          <header class="flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm ">
             <nav
               class="mt-6 relative max-w-[85rem] w-full bg-white  mx-2 py-3 px-4 md:flex md:items-center md:justify-between md:py-0 md:px-6 lg:px-8 xl:mx-auto "
               aria-label="Global"
@@ -387,7 +387,7 @@ const LoggedOutHeader = (props) => {
         <div class="max-w-[85rem] mx-auto pt-12 pb-10 px-4 sm:px-6 lg:px-8 md:pt-24"></div>
       </main> */}
          <main id="content">
-        <div class="max-w-[85rem] mx-auto pt-6 pb-5 px-4 sm:px-6 lg:px-8 md:pt-28"></div>
+        <div class="max-w-[85rem] mx-auto pt-6 pb-5 px-4 sm:px-6 lg:px-8 md:pt-8"></div>
       </main>
       <Modal
         isOpen={isOpen}
@@ -558,4 +558,4 @@ const LoggedOutHeader = (props) => {
   );
 };
 
-export default LoggedOutHeader;
+export default LoggedOutHeaderAbout;

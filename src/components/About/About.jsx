@@ -1,14 +1,14 @@
 import React from 'react'
-import LoggedOutHeader from '../Landing/LoggedOutHeader'
+import LoggedOutHeaderAbout from '../Landing/LoggedOutHeaderAbout.jsx'
 import AboutHero from './AboutHero'
 import WhatUsersGet from './WhatUsersGet'
 import TylerFeature from './TylerFeature'
+import Footer from "../../components/Footer.jsx"
 
-// import Footer from "../Landing/Footer"
 const About = () => {
   return (
   <>
-        <LoggedOutHeader />
+        <LoggedOutHeaderAbout />
         <div className='max-w-[85rem] mx-auto'>
         <AboutHero />
         <WhatUsersGet />
@@ -16,7 +16,7 @@ const About = () => {
    
 
     
-        {/* <Footer /> */}
+        <Footer />
     </div>
     </>
   )

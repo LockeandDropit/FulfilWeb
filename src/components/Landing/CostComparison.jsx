@@ -5,7 +5,7 @@ const CostComparison = () => {
   return (
    
 
-    <div className='w-full bg-sky-100'>
+    <div className='w-full  bg-sky-100 rounded-md ">'>
     <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto sm:mt-20 ">
       <div class="grid md:grid-cols-2 gap-12">
         <div class="lg:w-3/4">

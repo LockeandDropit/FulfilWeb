@@ -1,12 +1,13 @@
 import React from "react";
 
-
 const WhatUsersGet = () => {
   return (
     <div class="max-sm:p-6">
       <div class=" mx-auto text-center mb-10 lg:mb-14 sm:mt-16">
         <h2 class="text-3xl text-start sm:text-center font-semibold md:text-3xl md:leading-tight text-gray-800 ">
-          When using <span className="text-sky-400 text-4xl font-bold">Fulfil</span> our users get:
+          When using{" "}
+          <span className="text-sky-400 text-4xl font-bold">Fulfil</span> our
+          users get:
         </h2>
       </div>
 
@@ -15,7 +16,7 @@ const WhatUsersGet = () => {
           <div className="relative">
             <img
               src="/landingImages/verticalClarity.jpg"
-              alt=""
+              loading="lazy"
               className="rounded-lg"
             />
             <div class="absolute inset-0 -z-[1] bg-gradient-to-tr from-sky-200 via-white/0 to-white/0 size-full rounded-md mt-4 -mb-4 me-4 -ms-4 lg:mt-6 lg:-mb-6 lg:me-6 lg:-ms-6"></div>
@@ -52,7 +53,7 @@ const WhatUsersGet = () => {
               <div className=" sm:hidden relative sm:mb-16 sm:mt-16">
                 <img
                   src="/landingImages/verticalGuidance.jpg"
-                  alt=""
+                  loading="lazy"
                   className="rounded-lg md:mt-6"
                 />
                 <div class="absolute inset-0 -z-[1] bg-gradient-to-tl from-white via-white/0 to-white/0 size-full rounded-md mt-4 -mb-4 me-4 -ms-4 lg:mt-6 lg:-mb-6 lg:me-6 lg:ms-6"></div>

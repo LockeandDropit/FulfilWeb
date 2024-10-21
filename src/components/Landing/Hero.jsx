@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import posthog from "posthog-js";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const Hero = () => {
   const handleNavigateAndCaptureFunnel = () => {
@@ -11,7 +11,8 @@ const Hero = () => {
   };
   const navigate = useNavigate();
   return (
-    <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+    <div className="w-full h-[calc(100vh-80px)] sm:bg-landingHeroWave bg-no-repeat bg-bottom ">
+    <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 ">
       <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
         <div>
           <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
@@ -19,11 +20,10 @@ const Hero = () => {
           </h1>
           <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight">
             <span class="text-black">No problem.</span>{" "}
-        
           </h1>
           <p class="mt-3 text-lg text-gray-800 w-full lg:w-4/5">
-            Find entry level positions that provide on-the-job
-            training so you can earn money while developing your skills.
+            Find entry level positions that provide on-the-job training so you
+            can earn money while developing your skills.
           </p>
           <div
             class="mt-7 grid gap-3 w-full sm:inline-flex"
@@ -50,20 +50,26 @@ const Hero = () => {
         </div>
 
         <div class="relative">
-                 
-        {/* <LazyLoadImage
+          {/* <LazyLoadImage
       height={"600px"}
       effect="blur"
       src="./landingImages/pexels-fauxels-3182831.jpg"
   /> */}
-  <img 
-    loading="lazy"
-    class=" rounded-md"
-      src="./landingImages/shake2.jpg"/>
+          {/* <img
+            loading="lazy"
+            class=" rounded-md"
+            src="./landingImages/shake2.jpg"
+          /> */}
+                <img
+            loading="lazy"
+            class=" rounded-md max-h-[700px] ml-auto"
+           src="./landingImages/businessman-portrait-teamwork-as-employee-with-diversity-internship-candidates-opportunity-group-about-us-pride-office-company-training-as-creative-consultant-community.jpg"
+          />
 
           <div class="absolute inset-0 -z-[1] bg-gradient-to-tr from-sky-200 via-white/0 to-white/0 size-full rounded-md mt-4 -mb-4 me-4 -ms-4 lg:mt-6 lg:-mb-6 lg:me-6 lg:-ms-6"></div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

@@ -11,6 +11,8 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
+        landingHeroWave: "url('/public/landingImages/wave1.svg')",
+        upsideDownWave: "url('/public/landingImages/waveUpsidedown.svg')",
         aboutHero: "url('/public/landingImages/horizontal-portrait-people-sit-queue-have-pleasant-conversation-with-each-other.jpg')",
         careerHero: "url('/public/landingImages/people-working-as-team-company.jpg')"
       }

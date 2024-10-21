@@ -7,13 +7,11 @@ const NoDegreeNoProblem = () => {
   const navigate = useNavigate();
   return (
    <>
-    <div class="bg-white  mt-10 sm:mt-24 rounded-md ">
-    {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className=''>
-  <path fill="#E0F2FE" fill-opacity="1" d="M0,192L48,181.3C96,171,192,149,288,128C384,107,480,85,576,106.7C672,128,768,192,864,202.7C960,213,1056,171,1152,138.7C1248,107,1344,85,1392,74.7L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
-</svg> */}
-    <div class="w-full px-4  sm:mt-0 sm:px-6 lg:px-8 pb-10 mx-auto">
+    <div class="bg-white  sm:bg-upsideDownWave bg-no-repeat bg-top  mt-10 sm:mt-0 rounded-md ">
+   
+    <div class="w-full px-4 sm:mt-0 sm:px-6 lg:px-8 pb-10 mx-auto">
       <div class="md:grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32">
-        <div>
+        <div className='mt-16'>
         <LazyLoadImage
       effect="blur"
       src="landingImages/positive-diverse-workers-unloading-boxes-warehouse.jpg"

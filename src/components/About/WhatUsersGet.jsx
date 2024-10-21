@@ -4,9 +4,9 @@ import wave2 from "../../components/svgs/wave2.svg";
 const WhatUsersGet = () => {
   return (
     <div class="max-sm:p-6">
-      <div class=" mx-auto text-center mb-10 lg:mb-14">
-        <h2 class="text-3xl text-start sm:text-center font-bold md:text-3xl md:leading-tight text-gray-800 ">
-          When using Fulfil, our users get:
+      <div class=" mx-auto text-center mb-10 lg:mb-14 sm:mt-16">
+        <h2 class="text-3xl text-start sm:text-center font-semibold md:text-3xl md:leading-tight text-gray-800 ">
+          When using <span className="text-sky-400 text-4xl font-bold">Fulfil</span> our users get:
         </h2>
       </div>
 
@@ -57,6 +57,9 @@ const WhatUsersGet = () => {
                 />
                 <div class="absolute inset-0 -z-[1] bg-gradient-to-tl from-white via-white/0 to-white/0 size-full rounded-md mt-4 -mb-4 me-4 -ms-4 lg:mt-6 lg:-mb-6 lg:me-6 lg:ms-6"></div>
               </div>
+              <h2 class="text-3xl font-semibold sm:text-white max-sm:mt-6 max-sm:mb-6 sm: mb-6">
+                We strive to provide:
+              </h2>
               <h3 class="text-2xl font-semibold sm:text-white max-sm:mt-6">
                 Opportunity
               </h3>

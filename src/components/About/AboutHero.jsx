@@ -30,8 +30,8 @@ const AboutHero = () => {
           </p>
         </div>
       </div>
-      <div class="max-sm:hidden px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-        <div className={"flex min-h-[35vh] md:min-h-[75vh] bg-aboutHero bg-center bg-cover bg-no-repeat  rounded-xl"}>
+      <div class="max-sm:hidden max-sm:px-4 py-10 lg:py-14 mx-auto">
+        <div className={"flex min-h-[35vh] md:min-h-[75vh] bg-aboutHero bg-center bg-cover bg-no-repeat  rounded-lg"}>
           {/* <div class="ml-auto mt-auto w-1/2  text-center  p-6  md:text-start md:mx-0 opacity-90">
             <div class="px-5 py-4  bg-white rounded-lg md:p-7 ">
               <h3 class="text-lg font-bold text-gray-800 sm:text-2xl ">
@@ -54,7 +54,7 @@ const AboutHero = () => {
           </div> */}
           <div class=" flex align-center items-center justify-center w-1/2  text-center p-6   mx-auto mt-auto opacity-95">
             <div class="px-5 py-4  bg-white rounded-lg md:p-7 ">
-              <h3 class="text-lg font-bold text-gray-800 sm:text-2xl ">
+              <h3 class="text-lg font-bold text-gray-800 sm:text-3xl ">
                 About us
               </h3>
               <p className="mt-4 text-lg text-black">

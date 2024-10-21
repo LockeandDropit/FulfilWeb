@@ -9,7 +9,11 @@ module.exports = {
     './node_modules/preline/preline.js',
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        aboutHero: "url('/public/landingImages/horizontal-portrait-people-sit-queue-have-pleasant-conversation-with-each-other.jpg')"
+      }
+    },
   
   },
   plugins: [

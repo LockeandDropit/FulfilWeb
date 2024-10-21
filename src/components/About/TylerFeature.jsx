@@ -3,7 +3,7 @@ import React from 'react'
 const TylerFeature = () => {
   return (
 
-<div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<div class="max-w-6xl px-4 sm:mt-6 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto max-sm:p-6">
 
   <div class="md:grid md:grid-cols-2 md:gap-10 lg:gap-16 md:items-center">
     <div class="hidden md:block mb-24 md:mb-0 sm:px-6">
@@ -93,9 +93,9 @@ or desired profession. When people are underutilized, it hurts not just them, bu
             <div class="md:hidden shrink-0">
               <img class="size-12 rounded-full" src="/landingImages/HeadshotGood.jpg" alt="Avatar" />
             </div>
-            <div class="ms-4 md:ms-0">
+            <div class="ms-4 md:ms-6">
               <div class="text-base font-semibold text-gray-800 ">Tyler Bradley</div>
-              <div class="text-xs text-gray-500 ">Founder | Fulfil</div>
+              <div class="text-xs text-gray-500 ">Founder & CEO | Fulfil</div>
             </div>
           </div>
         </footer>

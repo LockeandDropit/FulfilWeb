@@ -272,7 +272,7 @@ const LoggedOutHeaderAbout = (props) => {
               class="mt-6 relative max-w-[85rem] w-full bg-white  mx-2 py-3 px-4 md:flex md:items-center md:justify-between md:py-0 md:px-6 lg:px-8 xl:mx-auto "
               aria-label="Global"
             >
-           <div class="md:col-span-3 align-center items-center justify-center">
+           <div class="flex align-center items-center justify-center">
       {/* <!-- Logo --> */}
       <a
                   class="flex-none text-4xl font-sans font-bold text-sky-400 cursor-pointer"
@@ -281,6 +281,24 @@ const LoggedOutHeaderAbout = (props) => {
                 >
                   Fulfil
                 </a>
+                <div class="ml-[32px] flex flex-col align-bottom items-baseline md:flex-row  md:gap-y-0 md:gap-x-7 text-base bottom-0 mt-auto">
+                  <div>
+                    <a
+                      class="inline-block text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-600 cursor-pointer"
+                      onClick={() => navigate("/About")}
+                    >
+                      About
+                    </a>
+                  </div>
+                  <div>
+                    <a
+                      class="inline-block text-gray-500 hover:text-gray-700 cursor-pointer focus:outline-none focus:text-gray-600 "
+                      onClick={() => navigate("/Careers")}
+                    >
+                      Careers
+                    </a>
+                  </div>
+                </div>
       {/* <!-- End Logo --> */}
     </div>
 
@@ -321,20 +339,7 @@ const LoggedOutHeaderAbout = (props) => {
     {/* <!-- End Button Group -->
 
     <!-- Collapse --> */}
-    <div id="hs-navbar-hcail" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow md:block md:w-auto md:basis-auto md:order-2 md:col-span-6" aria-labelledby="hs-navbar-hcail-collapse">
-      <div class="ml-[80px] flex flex-col gap-y-4 gap-x-0 md:flex-row md:justify-center md:items-center md:gap-y-0 md:gap-x-7 text-base">
-     
-        <div>
-          <a class="inline-block text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-600 mt-2 cursor-pointer" onClick={() => navigate("/About")}>About</a>
-        </div>
-        <div>
-          <a class="inline-block text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-600 mt-2" href="#">Partners</a>
-        </div>
-        <div>
-          <a class="inline-block text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-600 mt-2" href="#">Careers</a>
-        </div>
-      </div>
-    </div>
+    
             </nav>
           </header>
         </>

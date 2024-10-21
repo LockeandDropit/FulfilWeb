@@ -1,5 +1,5 @@
 import React from "react";
-import wave2 from "../../components/svgs/wave2.svg";
+
 
 const WhatUsersGet = () => {
   return (
@@ -45,7 +45,7 @@ const WhatUsersGet = () => {
           </div>
         </div>
       </div>
-      <div class="sm:bg-sky-600 rounded-md mt-8 sm:mt-[80px] sm:mb-16">
+      <div class="sm:bg-sky-100 -z-[1] rounded-md mt-8 sm:mt-[80px] sm:mb-16    ">
         <div class="max-w-5xl mx-auto">
           <div class=" grid sm:grid-cols-2 gap-6 md:gap-12 items-center justify-center align-cented">
             <div className="md:mt-6 items-center justify-center align-center">
@@ -57,20 +57,20 @@ const WhatUsersGet = () => {
                 />
                 <div class="absolute inset-0 -z-[1] bg-gradient-to-tl from-white via-white/0 to-white/0 size-full rounded-md mt-4 -mb-4 me-4 -ms-4 lg:mt-6 lg:-mb-6 lg:me-6 lg:ms-6"></div>
               </div>
-              <h2 class="text-3xl font-semibold sm:text-white max-sm:mt-6 max-sm:mb-6 sm: mb-6">
+              <h2 class="text-3xl font-semibold text-black max-sm:mt-6 max-sm:mb-6 sm: mb-6">
                 We strive to provide:
               </h2>
-              <h3 class="text-2xl font-semibold sm:text-white max-sm:mt-6">
+              <h3 class="text-2xl font-semibold text-black max-sm:mt-6">
                 Opportunity
               </h3>
-              <p class="mt-2 sm:text-white text-lg">
+              <p class="mt-2 text-black text-lg">
                 We don’t just connect you with jobs, we connect you with
                 opportunities that match your passions, strengths, and goals.
                 Fulfil is here to open doors to careers that truly fit who you
                 are and where you want to go.
               </p>
-              <h3 class="mt-6 text-2xl font-semibold sm:text-white ">Growth</h3>
-              <p class="mt-2 sm:text-white text-lg">
+              <h3 class="mt-6 text-2xl font-semibold text-black">Growth</h3>
+              <p class="mt-2 text-black text-lg">
                 When you've been in the same place in your career for too long,
                 we can help you take that next step. Whether it's upskilling for
                 a promotion or transitioning to a new industry, Fulfil provides
@@ -83,9 +83,9 @@ const WhatUsersGet = () => {
               <img
                 src="/landingImages/verticalGuidance.jpg"
                 alt=""
-                className="rounded-lg md:mt-6"
+                className="rounded-lg md:mt-6 z-[1]"
               />
-              <div class="absolute inset-0 -z-[1] bg-gradient-to-tl from-white via-white/0 to-white/0 size-full rounded-md mt-4 -mb-4 me-4 -ms-4 lg:mt-6 lg:-mb-6 lg:me-6 lg:ms-6"></div>
+              {/* <div class="absolute inset-0 -z-[0] bg-gradient-to-tl from-sky-500 via-white/0 to-white/0 size-full rounded-md mt-4 -mb-4 me-4 -ms-4 lg:mt-6 lg:-mb-6 lg:me-6 lg:ms-6"></div> */}
             </div>
           </div>
         </div>

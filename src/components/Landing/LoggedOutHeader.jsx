@@ -72,15 +72,15 @@ const LoggedOutHeader = (props) => {
   const [password, setPassword] = useState(null);
   const [isSignedIn, setIsSignedIn] = useState(false);
 
-  const test =() => {
-    console.log("test")
-  }
+  const test = () => {
+    console.log("test");
+  };
 
   const logIn = () => {
-    setIsLoading(true)
-    console.log("logging in")
+    setIsLoading(true);
+    console.log("logging in");
     const auth = getAuth();
-    console.log("logging in")
+    console.log("logging in");
     setPersistence(auth, browserLocalPersistence).then(() => {
       // New sign-in will be persisted with local persistence.
       signInWithEmailAndPassword(auth, email, password)
@@ -92,7 +92,6 @@ const LoggedOutHeader = (props) => {
             getDoc(doc(db, "employers", response.user.uid)),
           ])
             .then((results) =>
-            
               navigate(
                 results[0]._document !== null &&
                   results[0]._document.data.value.mapValue.fields.isEmployer
@@ -101,17 +100,17 @@ const LoggedOutHeader = (props) => {
               )
             )
             .catch();
-            setIsLoading(false)
+          setIsLoading(false);
         })
         .catch((error) => {
           // Handle Errors here.
           const errorCode = error.code;
           const errorMessage = error.message;
           setPasswordValidationMessage("Oops! Wrong email or password");
-          setIsLoading(false)
+          setIsLoading(false);
         });
     });
-    setIsLoading(false)
+    setIsLoading(false);
     // template credit simple log in card https://chakra-templates.vercel.app/forms/authentication
   };
 
@@ -153,7 +152,6 @@ const LoggedOutHeader = (props) => {
           )
           .catch();
 
-          
         //check if user is already in DB
         //if so, navigate accordingly
         //if not, navigate to new profile register
@@ -206,23 +204,23 @@ const LoggedOutHeader = (props) => {
   // };
 
   useEffect(() => {
-    console.log("email", email)
-  }, [email])
-  
-  const [isLoading, setIsLoading] = useState(false)
+    console.log("email", email);
+  }, [email]);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const modalValidate = () => {
-     setIsLoading(true)
+    setIsLoading(true);
     setEmailValidationBegun(true);
     const isValid = emailRegex.test(email);
     if (!isValid) {
       setValidationMessage("Please enter a valid email");
-      console.log(" email", email, isValid)
+      console.log(" email", email, isValid);
     } else {
       setValidationMessage();
       setEmail(email);
-  
-      console.log("email good")
+
+      console.log("email good");
     }
     setPasswordValidationBegun(true);
     const isValidPassword = passwordRegex.test(password);
@@ -230,14 +228,13 @@ const LoggedOutHeader = (props) => {
     } else {
       setPasswordValidationMessage();
 
-      console.log("password good")
+      console.log("password good");
     }
 
     if (isValid && isValidPassword) {
-      logIn()
-
+      logIn();
     } else {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -260,43 +257,57 @@ const LoggedOutHeader = (props) => {
     setMobileOpen(!mobileOpen);
   };
 
-
   // credit Sreenath H B input instead of button for submission/log in https://stackoverflow.com/questions/23420795/why-would-a-button-click-event-cause-site-to-reload-in-a-bootstrap-form
   return (
     <>
       {isDesktop ? (
         <>
-  
           <header class=" flex flex-wrap md:justify-start md:flex-nowrap z-50 w-full text-sm ">
             <nav
               class="mt-6 relative max-w-[85rem] w-full bg-white  mx-2 py-3 px-4 md:flex md:items-center md:justify-between md:py-0 md:px-6 lg:px-8 xl:mx-auto "
               aria-label="Global"
             >
-           <div class="md:col-span-3 align-center items-center justify-center">
-      {/* <!-- Logo --> */}
-      <a
+              <div class="flex align-center items-center justify-center ">
+                {/* <!-- Logo --> */}
+                <a
                   class="flex-none text-4xl font-sans font-bold text-sky-400 cursor-pointer"
                   aria-label="Brand"
                   onClick={() => navigate("/")}
                 >
                   Fulfil
                 </a>
-      {/* <!-- End Logo --> */}
-    </div>
-
-    {/* <!-- Button Group --> */}
-    <div class="flex items-center align-center justify-center md:order-3 md:col-span-3 mt-4">
-      <div className="md:space-x-3 ">
-    <button
+                <div class="ml-[32px] flex flex-col align-bottom items-baseline md:flex-row  md:gap-y-0 md:gap-x-7 text-base bottom-0 mt-auto">
+                  <div>
+                    <a
+                      class="inline-block text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-600 cursor-pointer"
+                      onClick={() => navigate("/About")}
+                    >
+                      About
+                    </a>
+                  </div>
+                  <div>
+                    <a
+                      class="inline-block text-gray-500 hover:text-gray-700 cursor-pointer focus:outline-none focus:text-gray-600 "
+                      onClick={() => navigate("/Careers")}
+                    >
+                      Careers
+                    </a>
+                  </div>
+                </div>
+                {/* <!-- End Logo --> */}
+              </div>
+              {/* <!-- Button Group --> */}
+              <div class="flex items-center align-center justify-center md:order-3 md:col-span-3 mt-4">
+                <div className="md:space-x-3 ">
+                  <button
                     class="font-medium text-gray-500 hover:text-gray-400 md:py-6"
                     onClick={() => onOpen()}
                   >
                     Log In
                   </button>
-      <button
+                  <button
                     type="button"
                     className="py-2.5 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                  
                     onClick={() => navigate("/OnboardingOne")}
                   >
                     <svg
@@ -316,12 +327,12 @@ const LoggedOutHeader = (props) => {
                     </svg>
                     Employer/Post job
                   </button>
-                  </div>
-    </div>
-    {/* <!-- End Button Group -->
+                </div>
+              </div>
+              {/* <!-- End Button Group -->
 
     <!-- Collapse --> */}
-    <div id="hs-navbar-hcail" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow md:block md:w-auto md:basis-auto md:order-2 md:col-span-6" aria-labelledby="hs-navbar-hcail-collapse">
+              {/* <div id="hs-navbar-hcail" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow md:block md:w-auto md:basis-auto md:order-2 md:col-span-6" aria-labelledby="hs-navbar-hcail-collapse">
       <div class="ml-[80px] flex flex-col gap-y-4 gap-x-0 md:flex-row md:justify-center md:items-center md:gap-y-0 md:gap-x-7 text-base">
      
         <div>
@@ -334,7 +345,7 @@ const LoggedOutHeader = (props) => {
           <a class="inline-block text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-600 mt-2" href="#">Careers</a>
         </div>
       </div>
-    </div>
+    </div> */}
             </nav>
           </header>
         </>
@@ -386,7 +397,7 @@ const LoggedOutHeader = (props) => {
       {/* <main id="content">
         <div class="max-w-[85rem] mx-auto pt-12 pb-10 px-4 sm:px-6 lg:px-8 md:pt-24"></div>
       </main> */}
-         <main id="content">
+      <main id="content">
         <div class="max-w-[85rem] mx-auto pt-6 pb-5 px-4 sm:px-6 lg:px-8 md:pt-28"></div>
       </main>
       <Modal
@@ -401,10 +412,7 @@ const LoggedOutHeader = (props) => {
             <div class="p-4 sm:p-7">
               <div class="text-center">
                 <h1 class="block text-2xl font-bold text-gray-800">Sign in</h1>
-                <p class="mt-2 text-sm text-gray-600">
-                  It's fast and free
-                 
-                </p>
+                <p class="mt-2 text-sm text-gray-600">It's fast and free</p>
               </div>
 
               <div class="mt-5">
@@ -459,11 +467,12 @@ const LoggedOutHeader = (props) => {
                           required
                           aria-describedby="email-error"
                         />
-                         {emailValidationBegun === true ? (
-                <p class="block text-sm mb-2 text-red-500">{validationMessage}</p>
-              ) : null}
+                        {emailValidationBegun === true ? (
+                          <p class="block text-sm mb-2 text-red-500">
+                            {validationMessage}
+                          </p>
+                        ) : null}
                       </div>
-                      
                     </div>
 
                     <div>
@@ -476,15 +485,16 @@ const LoggedOutHeader = (props) => {
                       <div class="relative">
                         <input
                           type="password"
-                        
-                  onChange={(e) => setPassword(e.target.value)}
-                  className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
+                          onChange={(e) => setPassword(e.target.value)}
+                          className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
                           required
                           aria-describedby="password-error"
                         />
-                         {passwordValidationBegun === true ? (
-                <p class="block text-sm mb-2 text-red-500">{passwordValidationMessage}</p>
-              ) : null}
+                        {passwordValidationBegun === true ? (
+                          <p class="block text-sm mb-2 text-red-500">
+                            {passwordValidationMessage}
+                          </p>
+                        ) : null}
                       </div>
                       <p
                         class="hidden text-xs text-red-600 mt-2"
@@ -510,43 +520,43 @@ const LoggedOutHeader = (props) => {
                       </div>
                     </div>
 
-              {isLoading ? (  <button
-                     
-                     
-                      className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    >
-                   <div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full " role="status" aria-label="loading">
-  <span class="sr-only">Loading...</span>
-</div>
-                    </button>) : (
-                  <input type="button"
-                  onClick={() => modalValidate()}
-                  value="Sign In"
-                   className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                 >
-                
-                 </input>
-              )}
+                    {isLoading ? (
+                      <button className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none">
+                        <div
+                          class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full "
+                          role="status"
+                          aria-label="loading"
+                        >
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </button>
+                    ) : (
+                      <input
+                        type="button"
+                        onClick={() => modalValidate()}
+                        value="Sign In"
+                        className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                      ></input>
+                    )}
 
-                 
                     <p class="mt-2 text-sm text-gray-600">
-                  Don't have an account yet?
-                  <button
-                    class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
-                    onClick={() => navigate("/DoerEmailRegister")}
-                  >
-                    Sign up here
-                  </button>
-                </p>
-                <p class="mt-2 text-sm text-gray-600">
-                  Forgot your password?
-                  <button
-                    class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
-                    onClick={() => navigate("/ResetPasswordLoggedOut")}
-                  >
-                    Reset your password
-                  </button>
-                </p>
+                      Don't have an account yet?
+                      <button
+                        class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
+                        onClick={() => navigate("/DoerEmailRegister")}
+                      >
+                        Sign up here
+                      </button>
+                    </p>
+                    <p class="mt-2 text-sm text-gray-600">
+                      Forgot your password?
+                      <button
+                        class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
+                        onClick={() => navigate("/ResetPasswordLoggedOut")}
+                      >
+                        Reset your password
+                      </button>
+                    </p>
                   </div>
                 </form>
               </div>

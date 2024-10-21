@@ -131,6 +131,7 @@ import posthog from 'posthog-js';
 import { PostHogProvider} from 'posthog-js/react'
 import BuildResume from "./pages/Doer/ResumeBuilder/BuildResume";
 import About from "./components/About/About";
+import Careers from "./components/Careers";
 
 
 
@@ -511,6 +512,10 @@ const router = createBrowserRouter([
   {
     path: "/BuildResume",
     element: <BuildResume />,
+  },
+  {
+    path: "/Careers",
+    element: <Careers />,
   },
   {
     path: "/TestLanding",

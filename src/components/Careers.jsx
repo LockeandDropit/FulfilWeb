@@ -30,7 +30,7 @@ const Careers = () => {
             aria-label="Global"
           >
             <h1 className="text-3xl font-bold">Open Positions</h1>
-            <p class="mt-4">There are currently no open Positions.</p>
+            <p class="mt-4">We are not actively hiring.</p>
             <p>
               If you think you'd be a good fit for our team, email{" "}
               <span className="font-semibold">tyler@getfulfil.com</span> with

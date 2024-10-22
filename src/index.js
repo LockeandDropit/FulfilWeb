@@ -129,7 +129,8 @@ import { doc, getDoc } from "firebase/firestore";
 
 import posthog from 'posthog-js';
 import { PostHogProvider} from 'posthog-js/react'
-import BuildResume from "./pages/Doer/ResumeBuilder/BuildResume";
+import BuildResume from "./pages/Doer/ResumeBuilder/Forms/BuildResume";
+import FormHolder from "./pages/Doer/ResumeBuilder/Forms/FormHolder";
 import About from "./components/About/About";
 import Careers from "./components/Careers";
 
@@ -512,6 +513,10 @@ const router = createBrowserRouter([
   {
     path: "/BuildResume",
     element: <BuildResume />,
+  },
+  {
+    path: "/FormHolder",
+    element: <FormHolder />,
   },
   {
     path: "/Careers",

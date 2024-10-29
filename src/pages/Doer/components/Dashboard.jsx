@@ -291,7 +291,8 @@ const Dashboard = () => {
 
   const createResumeAI = async () => {
     setLoading(true);
-    const response = await fetch("https://openaiapi-c7qc.onrender.com/aiResumeCreation", {
+
+    const response = await fetch("http://localhost:8000/aiResumeCreation", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -302,6 +303,17 @@ const Dashboard = () => {
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
+    // const response = await fetch("https://openaiapi-c7qc.onrender.com/aiResumeCreation", {
+    //   method: "POST",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ userInput: userResumeInformation }),
+    // });
+    // if (!response.ok) {
+    //   throw new Error(`Response status: ${response.status}`);
+    // }
 
     const json = await response.json()
     console.log("json resopnse", json.message.content);
@@ -622,7 +634,7 @@ const Dashboard = () => {
             {completedResume && (
               <div>
                 <h2 className="text-lg text-black font-semibold mt-3">
-                  Career advice:
+                  Resume outline:
                 </h2>
                 <p className="mt-1">
                   <Markdown>{completedResume}</Markdown>

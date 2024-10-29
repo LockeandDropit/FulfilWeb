@@ -292,7 +292,7 @@ const Dashboard = () => {
   const createResumeAI = async () => {
     setLoading(true);
 
-    const response = await fetch("http://localhost:8000/aiResumeCreation", {
+    const response = await fetch("https://openaiapi-c7qc.onrender.com/aiResumeCreation", {
       method: "POST",
       headers: {
         Accept: "application/json",

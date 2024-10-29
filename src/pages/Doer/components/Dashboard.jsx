@@ -99,7 +99,11 @@ const Dashboard = () => {
 
   //modal control
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const {
+    isOpen: isOpenResume,
+    onOpen: onOpenResume,
+    onClose: onCloseResume,
+  } = useDisclosure();
   const {
     isOpen: isOpenSuccess,
     onOpen: onOpenSuccess,
@@ -278,6 +282,31 @@ const Dashboard = () => {
     console.log("json resopnse", json.message.content);
 
     setResponse(json.message.content)
+    setLoading(false)
+  };
+
+  const [ userResumeInformation, setUserResumeInformation] = useState(null);
+
+  const [completedResume, setCompletedResume] = useState(null)
+
+  const createResumeAI = async () => {
+    setLoading(true);
+    const response = await fetch("https://openaiapi-c7qc.onrender.com/aiResumeCreation", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userInput: userResumeInformation }),
+    });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const json = await response.json()
+    console.log("json resopnse", json.message.content);
+
+    setCompletedResume(json.message.content)
     setLoading(false)
   };
 
@@ -527,12 +556,82 @@ const Dashboard = () => {
                   >
                     Career advisor
                   </button>
+                  <button
+                    type="button"
+                    class="mt-3 py-2 w-full px-11 text-center items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                    onClick={() => onOpenResume()}
+                    // onClick={() => navigate('/ResumeDashboard')}
+                    // onClick={() => testAI()}
+                  >
+                    Create resume
+                  </button>
                 </li>
               </ul>
             </nav>
           </div>
         </div>
       </aside>
+
+      <Modal isOpen={isOpenResume} onClose={onCloseResume} size="4xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Build a Resume</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p></p>
+            <p>
+              Tell us about your experience in a few sentences and we'll create a resume.
+            </p>
+
+            <div class="w-full space-y-3 mt-4">
+              <textarea
+                onChange={(e) => setUserResumeInformation(e.target.value)}
+                class=" py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                rows="4"
+                placeholder="ex: I worked at a local coffee shop for 2 years and was promoted to shift lead. I completed a 2 year associates degree in psychology from Normandale Community College."
+              ></textarea>
+            </div>
+            {/* {validationMessage ? (
+              <p className="text-red-500 mt-1 ml-1">{validationMessage}</p>
+            ) : null} */}
+
+            <div className="w-full flex mt-6">
+              {loading ? (
+                <button
+                  type="button"
+                  class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  <div
+                    class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full"
+                    role="status"
+                    aria-label="loading"
+                  >
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </button>
+              ) : (
+                <button
+                  onClick={() => createResumeAI()}
+                  type="button"
+                  class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  Submit
+                </button>
+              )}
+            </div>
+            {completedResume && (
+              <div>
+                <h2 className="text-lg text-black font-semibold mt-3">
+                  Career advice:
+                </h2>
+                <p className="mt-1">
+                  <Markdown>{completedResume}</Markdown>
+                </p>
+              </div>
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
 
       <Modal isOpen={isOpen} onClose={onClose} size="4xl">
         <ModalOverlay />

@@ -4,6 +4,7 @@ import { StreamChat } from "stream-chat";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { auth, logout, db } from "../../../firebaseConfig";
+import Markdown from "react-markdown";
 import {
   Drawer,
   DrawerBody,
@@ -133,10 +134,10 @@ const Dashboard = () => {
 
   //laoding control
 
-  const [loading, setLoading] = useState(true);
-  setTimeout(() => {
-    setLoading(false);
-  }, 1000);
+  const [loading, setLoading] = useState(false);
+  // setTimeout(() => {
+  //   setLoading(false);
+  // }, 1000);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isPremium, setIsPremium] = useState(null);
@@ -179,11 +180,11 @@ const Dashboard = () => {
         email: user.email,
         submission: userSubmission,
         hasBeenViewed: false,
-        id: user.uid
+        id: user.uid,
       });
 
-      onClose()
-      onOpenSuccess()
+      onClose();
+      onOpenSuccess();
       //open success modal
     }
   };
@@ -245,20 +246,42 @@ const Dashboard = () => {
               unreadMessages++;
             }
           });
-
           console.log(unreadMessages);
-
           if (unreadMessages > 0) {
             setUnseenMessages(unreadMessages);
           }
         }
       );
-
       return () => {
         unSub();
       };
     }
   }, [currentUser]);
+
+  const [response, setResponse] = useState(null);
+
+  const testAI = async () => {
+    setLoading(true);
+    const response = await fetch("https://openaiapi-c7qc.onrender.com/careerPathGeneration", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userInput: userSubmission }),
+    });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const json = await response.json()
+    console.log("json resopnse", json.message.content);
+
+    setResponse(json.message.content)
+    setLoading(false)
+  };
+
+
 
   return (
     <div>
@@ -499,8 +522,10 @@ const Dashboard = () => {
                     type="button"
                     class="py-2 w-full px-11 text-center items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
                     onClick={() => onOpen()}
+                    // onClick={() => navigate('/ResumeDashboard')}
+                    // onClick={() => testAI()}
                   >
-                    Level up!
+                    Career advisor
                   </button>
                 </li>
               </ul>
@@ -509,16 +534,16 @@ const Dashboard = () => {
         </div>
       </aside>
 
-      <Modal isOpen={isOpen} onClose={onClose} size={"lg"}>
+      <Modal isOpen={isOpen} onClose={onClose} size="4xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Level up!</ModalHeader>
+          <ModalHeader>Career advisor</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p>Interested in leveling up your career?</p>
+            <p></p>
             <p>
               Tell us what you're interested in and we'll help you find the
-              right path. Completely free.
+              right path.
             </p>
 
             <div class="w-full space-y-3 mt-4">
@@ -529,42 +554,64 @@ const Dashboard = () => {
                 placeholder="ex: I've recently graduated from highschool and want to work with my hands. I'd like to do something mechanical, but don;t know where to get started."
               ></textarea>
             </div>
-            {validationMessage ? (
+            {/* {validationMessage ? (
               <p className="text-red-500 mt-1 ml-1">{validationMessage}</p>
-            ) : null}
+            ) : null} */}
 
             <div className="w-full flex mt-6">
-              <button
-                onClick={() => addCareerCoachingInitiation()}
-                type="button"
-                class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-              >
-                Submit
-              </button>
+              {loading ? (
+                <button
+                  type="button"
+                  class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  <div
+                    class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full"
+                    role="status"
+                    aria-label="loading"
+                  >
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </button>
+              ) : (
+                <button
+                  onClick={() => testAI()}
+                  type="button"
+                  class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  Submit
+                </button>
+              )}
             </div>
+            {response && (
+              <div>
+                <h2 className="text-lg text-black font-semibold mt-3">
+                  Career advice:
+                </h2>
+                <p className="mt-1">
+                  <Markdown>{response}</Markdown>
+                </p>
+              </div>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>
 
-      <Modal isOpen={isOpenSuccess} onClose={onCloseSuccess} size={"lg"}>
+      <Modal isOpen={isOpenSuccess} onClose={onCloseSuccess} size={"2xl"}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Success!</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <p>We'll get back to you in the next 48 hours.</p>
-          
-
-            
           </ModalBody>
           <ModalFooter>
-          <button
-                onClick={() => onCloseSuccess()}
-                type="button"
-                class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-              >
-                Close
-              </button>
+            <button
+              onClick={() => onCloseSuccess()}
+              type="button"
+              class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              Close
+            </button>
           </ModalFooter>
         </ModalContent>
       </Modal>

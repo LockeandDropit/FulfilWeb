@@ -699,7 +699,7 @@ if (e.key === "Enter") {
 
               <Box
               mt={2}
-              h={{ base: "100vh", lg: "92vh" }}
+              h={{ base: "100vh", lg: "91vh" }}
               w={{ base: "100vw", lg: "100vw" }}
             > 
       {/* <NewMapTest props={businessPostedJobs}/> */}

@@ -2,6 +2,7 @@
 
 import { forwardRef } from "react";
 import { EditorProps } from "react-draft-wysiwyg";
+import { EditorState } from 'draft-js';
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
@@ -10,17 +11,18 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 //also i dont think this is subject to copyright
 
 export default forwardRef(
-  function RichTextEditor(props, ref) {
+  function RichTextEditor(props, ref, editorState) {
     return (
       <Editor
         editorClassName=
-          "py-3 px-4 block w-full border-gray-200 z-0 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none min-h-[160px]"
+          "py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none min-h-[160px] -z-50"
         toolbar={{
           options: ["inline", "list",],
           inline: {
             options: ["bold", "italic", "underline"],
           },
         }}
+  
         editorRef={(r) => {
           if (typeof ref === "function") {
             ref(r);

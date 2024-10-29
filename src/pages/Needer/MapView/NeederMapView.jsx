@@ -116,7 +116,7 @@ const [hasRun, setHasRun] = useState(false);
             <Box
               h={{ base: "100vh", lg: "96vh" }}
               w={{ base: "100vw", lg: "100vw" }}
-              mt={10}
+              mt={9}
             >
             <Map
                 // center={{ lat: selectedLat ? selectedLat : defaultLat, lng: selectedLng ? selectedLng : defaultLong }}

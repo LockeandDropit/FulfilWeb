@@ -384,10 +384,10 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
     }
     if (upperRate) {
       setDisplayUpperRate(numberUpperRate.toLocaleString());
-      console.log("lower rate 1", upperRate);
+  
     } else {
       setDisplayUpperRate(null);
-      console.log("lower rate 2", upperRate);
+
     }
   };
 

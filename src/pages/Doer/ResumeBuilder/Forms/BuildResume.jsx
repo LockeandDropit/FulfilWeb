@@ -1,9 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../components/Header";
 import Dashboard from "../../components/Dashboard";
+import { useUserStore } from "../../Chat/lib/userStore";
+import {
+  setDoc,
+  arrayUnion,
+  collection,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../../../firebaseConfig";
+const BuildResume = ({ handleIncrementFormIndex }) => {
+  const { currentUser } = useUserStore();
 
-const BuildResume = ({handleIncrementFormIndex}) => {
+  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [aboutDescription, setAboutDescription] = useState(null);
 
+  const updloadEducation = async () => {
+    const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
+    //make resume1 dynamic
+    await updateDoc(doc(userChatsRef, "Resume1"), {
+      firstName: currentUser.firstName,
+      lastName: currentUser.lastName,
+      phoneNumber: phoneNumber ? phoneNumber : null,
+      aboutDescription: aboutDescription ? aboutDescription : null,
+      email: currentUser.email,
+      city: currentUser.city,
+      state: currentUser.state,
+    })
+      .then(() => {
+        handleIncrementFormIndex();
+      })
+      .catch((e) => alert(e));
+  };
 
   return (
     <div>
@@ -17,7 +46,8 @@ const BuildResume = ({handleIncrementFormIndex}) => {
               <div class="mb-8">
                 <h2 class="text-xl font-bold text-gray-800 ">About</h2>
                 <p class="text-sm text-gray-600 ">
-                  Provide general contact information, along with a few sentences to describe yourself.
+                  Provide general contact information, along with a few
+                  sentences to describe yourself.
                 </p>
               </div>
 
@@ -52,17 +82,8 @@ const BuildResume = ({handleIncrementFormIndex}) => {
 
                 <div class="sm:col-span-9">
                   <div class="sm:flex">
-                    <input
-                      id="af-account-full-name"
-                      type="text"
-                      class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      placeholder="Maria"
-                    />
-                    <input
-                      type="text"
-                      class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      placeholder="Boone"
-                    />
+                    <p className="mr-1">{currentUser.firstName}</p>
+                    <p>{currentUser.lastName}</p>
                   </div>
                 </div>
 
@@ -76,14 +97,21 @@ const BuildResume = ({handleIncrementFormIndex}) => {
                 </div>
 
                 <div class="sm:col-span-9">
-                  <input
-                    id="af-account-email"
-                    type="email"
-                    class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                    placeholder="maria@site.com"
-                  />
+                  <p>{currentUser.email}</p>
+                </div>
+                <div class="sm:col-span-3">
+                  <label
+                    for="af-account-email"
+                    class="inline-block text-sm text-gray-800 mt-2.5 "
+                  >
+                    Location
+                  </label>
                 </div>
 
+                <div class="flex sm:col-span-9">
+                  <p className="mr-1">{currentUser.city},</p>
+                  <p>{currentUser.state}</p>
+                </div>
                 <div class="sm:col-span-3">
                   <div class="inline-block">
                     <label
@@ -92,13 +120,18 @@ const BuildResume = ({handleIncrementFormIndex}) => {
                     >
                       Phone
                     </label>
-                    <span class="text-sm text-gray-400 "> (Optional)</span>
+                    <span class="text-sm text-gray-400 "> (optional)</span>
                   </div>
                 </div>
                 <div class="sm:flex">
-            <input id="af-account-phone" type="text" class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="(xxx)xxx-xx-xx" />
-            
-          </div>
+                  <input
+                    id="af-account-phone"
+                    type="text"
+                    class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                    placeholder="(xxx)xxx-xx-xx"
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                  />
+                </div>
                 <div class="sm:col-span-3">
                   <label
                     for="af-account-bio"
@@ -106,6 +139,7 @@ const BuildResume = ({handleIncrementFormIndex}) => {
                   >
                     About you
                   </label>
+                  <span class="text-sm text-gray-400 "> (optional)</span>
                 </div>
 
                 <div class="sm:col-span-9">
@@ -114,6 +148,7 @@ const BuildResume = ({handleIncrementFormIndex}) => {
                     class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                     rows="6"
                     placeholder="I am a hardworking individual who strives to create a thriving environment. I have strong communication skills and work well with others."
+                    onChange={(e) => setAboutDescription(e.target.value)}
                   ></textarea>
                 </div>
 
@@ -127,7 +162,7 @@ const BuildResume = ({handleIncrementFormIndex}) => {
                   <button
                     type="button"
                     class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                  onClick={handleIncrementFormIndex}
+                    onClick={updloadEducation}
                   >
                     Next
                   </button>

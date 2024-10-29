@@ -133,6 +133,7 @@ import BuildResume from "./pages/Doer/ResumeBuilder/Forms/BuildResume";
 import FormHolder from "./pages/Doer/ResumeBuilder/Forms/FormHolder";
 import About from "./components/About/About";
 import Careers from "./components/Careers";
+import ResumePreview from "./pages/Doer/ResumeBuilder/ResumePreview";
 
 
 
@@ -521,6 +522,10 @@ const router = createBrowserRouter([
   {
     path: "/Careers",
     element: <Careers />,
+  },
+  {
+    path: "/ResumePreview",
+    element: <ResumePreview />,
   },
   {
     path: "/TestLanding",

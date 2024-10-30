@@ -55,21 +55,21 @@ const Hero = () => {
           </div>
 
           <div class="relative">
-            {/* <LazyLoadImage
-      height={"600px"}
+            <LazyLoadImage
+      // height={"600px"}
       effect="blur"
-      src="./landingImages/pexels-fauxels-3182831.jpg"
-  /> */}
+      src="./landingImages//businessman-portrait-teamwork-as-employee-with-diversity-internship-candidates-opportunity-group-about-us-pride-office-company-training-as-creative-consultant-community.jpg"
+  />
             {/* <img
             loading="lazy"
             class=" rounded-md"
             src="./landingImages/shake2.jpg"
           /> */}
-            <img
+            {/* <img
               loading="lazy"
               class=" rounded-md max-h-[700px] ml-auto"
               src="./landingImages/businessman-portrait-teamwork-as-employee-with-diversity-internship-candidates-opportunity-group-about-us-pride-office-company-training-as-creative-consultant-community.jpg"
-            />
+            /> */}
 
             <div class="absolute inset-0 -z-[1] bg-gradient-to-tr from-sky-200 via-white/0 to-white/0 size-full rounded-md mt-4 -mb-4 me-4 -ms-4 lg:mt-6 lg:-mb-6 lg:me-6 lg:-ms-6"></div>
           </div>

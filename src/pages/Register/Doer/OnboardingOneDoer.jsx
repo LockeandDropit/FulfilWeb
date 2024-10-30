@@ -48,6 +48,9 @@ import LoggedOutHeader from "../../../components/Landing/LoggedOutHeader.jsx";
 import posthog from "posthog-js"
 import { useMediaQuery } from "@chakra-ui/react";
 import LoggedOutHeaderNoGap from "../../../components/Landing/LoggedOutHeaderNoGap.jsx";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
 
 const OnboardingOneDoer = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -291,7 +294,8 @@ const OnboardingOneDoer = () => {
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-center">
       <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
-        <img class="w-full object-cover rounded-xl" loading="lazy" src="./landingImages/unrecognizable-male-welder-work.jpg" />
+      <LazyLoadImage src="./landingImages/unrecognizable-male-welder-work.jpg"   effect="blur"/>
+        {/* <img class="w-full object-cover rounded-xl" loading="lazy" src="./landingImages/unrecognizable-male-welder-work.jpg" /> */}
       </div>
 
       <div>

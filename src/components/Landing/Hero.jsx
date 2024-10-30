@@ -35,7 +35,7 @@ const Hero = () => {
               onClick={handleNavigateAndCaptureFunnel}
             >
               <a class="py-3 px-4 inline-flex justify-center cursor-pointer items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-non">
-                Browse Careers
+                Let's Get Started
                 <svg
                   class="shrink-0 size-4"
                   xmlns="http://www.w3.org/2000/svg"

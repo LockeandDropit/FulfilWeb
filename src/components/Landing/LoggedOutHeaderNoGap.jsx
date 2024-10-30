@@ -432,7 +432,7 @@ const [isLoading, setIsLoading] = useState(false)
               </div>
 
               <div class="mt-5">
-                <button
+                {/* <button
                   type="button"
                   class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
                   onClick={() => handleGoogleSignUp()}
@@ -466,7 +466,7 @@ const [isLoading, setIsLoading] = useState(false)
 
                 <div class="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6">
                   Or
-                </div>
+                </div> */}
 
                 <form>
                   <div class="grid gap-y-4">

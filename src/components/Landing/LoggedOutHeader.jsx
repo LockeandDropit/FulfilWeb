@@ -407,7 +407,7 @@ const LoggedOutHeader = (props) => {
             <div class="p-4 sm:p-7">
               <div class="text-center">
                 <h1 class="block text-2xl font-bold text-gray-800">Sign in</h1>
-                <p class="mt-2 text-sm text-gray-600">It's fast and free</p>
+                <p class="mt-2 text-sm text-gray-600">Your career is too important to settle</p>
               </div>
 
               <div class="mt-5">

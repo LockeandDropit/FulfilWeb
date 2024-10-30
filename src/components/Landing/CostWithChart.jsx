@@ -5,7 +5,7 @@ const CostWithChart = () => {
   const navigate = useNavigate();
   return (
     <div className="w-full bg-white mt-16 py-10">
-      <div class="max-w-[85rem] mx-auto bg-white flex align-center items-center justify-center mt-2 ">
+      <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 bg-white flex align-center items-center justify-center mt-2 ">
         {/* <img src="/landingImages/CanvaGraph3.png" alt="" className="mt-20" /> */}
         <div class="grid md:grid-cols-2 gap-12   ">
           <div class="flex  space-y-6 lg:space-y-10 mt-10">

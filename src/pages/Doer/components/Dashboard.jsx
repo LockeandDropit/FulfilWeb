@@ -266,40 +266,46 @@ const Dashboard = () => {
 
   const testAI = async () => {
     setLoading(true);
-    const response = await fetch("https://openaiapi-c7qc.onrender.com/careerPathGeneration", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userInput: userSubmission }),
-    });
+    const response = await fetch(
+      "https://openaiapi-c7qc.onrender.com/careerPathGeneration",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userInput: userSubmission }),
+      }
+    );
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
 
-    const json = await response.json()
+    const json = await response.json();
     console.log("json resopnse", json.message.content);
 
-    setResponse(json.message.content)
-    setLoading(false)
+    setResponse(json.message.content);
+    setLoading(false);
   };
 
-  const [ userResumeInformation, setUserResumeInformation] = useState(null);
+  const [userResumeInformation, setUserResumeInformation] = useState(null);
 
-  const [completedResume, setCompletedResume] = useState(null)
+  const [completedResume, setCompletedResume] = useState(null);
 
   const createResumeAI = async () => {
     setLoading(true);
 
-    const response = await fetch("https://openaiapi-c7qc.onrender.com/aiResumeCreation", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userInput: userResumeInformation }),
-    });
+    const response = await fetch(
+      "https://openaiapi-c7qc.onrender.com/aiResumeCreation",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userInput: userResumeInformation }),
+      }
+    );
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
@@ -315,14 +321,12 @@ const Dashboard = () => {
     //   throw new Error(`Response status: ${response.status}`);
     // }
 
-    const json = await response.json()
+    const json = await response.json();
     console.log("json resopnse", json.message.content);
 
-    setCompletedResume(json.message.content)
-    setLoading(false)
+    setCompletedResume(json.message.content);
+    setLoading(false);
   };
-
-
 
   return (
     <div>
@@ -587,13 +591,41 @@ const Dashboard = () => {
       <Modal isOpen={isOpenResume} onClose={onCloseResume} size="4xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Build a Resume</ModalHeader>
+          <ModalHeader>Let's make a professional resume!</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p></p>
             <p>
-              Tell us about your experience in a few sentences and we'll create a resume.
+              You can speak to me in plain English and I will create a polished
+              and professional resume for each of your applications.  If you
+              need to apply to a different job, feel free to upload your resume
+              and just ask to make it for a different position!
             </p>
+            <p className="mt-3">
+              Here are a few things you should consider adding:
+            </p>
+            <ul className="list-disc mx-6 mt-4">
+              <li className="list-disc">Contact Information</li>
+              <li className="list-disc">Professional Summary</li>
+              <li className="list-disc">Work Experience</li>
+              <li className="list-disc">Education</li>
+              <li className="list-disc">Skills</li>
+              <li className="list-disc">Certifications and Licenses</li>
+              <li className="list-disc">
+                Volunteer Experience{" "}
+                <span className="italic">(if relevant)</span>
+              </li>
+              <li className="list-disc">
+                Projects <span className="italic">(if relevant)</span>
+              </li>
+              <li className="list-disc">
+                Languages <span className="italic">(if applicable)</span>
+              </li>
+              <li className="list-disc">
+                Professional Affiliations{" "}
+                <span className="italic">(if applicable)</span>
+              </li>
+              <li className="list-disc italic">What job you are applying to</li>
+            </ul>
 
             <div class="w-full space-y-3 mt-4">
               <textarea
@@ -648,14 +680,43 @@ const Dashboard = () => {
       <Modal isOpen={isOpen} onClose={onClose} size="4xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Career advisor</ModalHeader>
+          <ModalHeader>Let's Find the Right Fit for You!</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p></p>
             <p>
-              Tell us what you're interested in and we'll help you find the
-              right path.
+              The more information you give me on your career desires, the
+              better I can serve you.
             </p>
+            <p className="mt-1">
+              Some examples of information are:
+            </p>
+
+            <ul className="list-disc mx-6 mt-4">
+              <li className="list-disc">Ideal pay range</li>
+              <li className="list-disc">What are a few of your interests?</li>
+              <li className="list-disc">
+                Do you like working with your hands / solving problems, etc.
+              </li>
+              <li className="list-disc">
+                Do you want to move up quickly or find your niche and maintain.
+              </li>
+              <li className="list-disc">
+                Are there any barriers that are slowing you down currently?  
+              </li>
+              <li className="list-disc">
+                How hard are you willing to work to meet your goals?
+              </li>
+              <li className="list-disc">What is your ideal company culture?</li>
+              <li className="list-disc">
+                Do you want to learn something and get better over time?
+              </li>
+              <li className="list-disc">
+                How do you want your work work-life balance to look like?
+              </li>
+              <li className="list-disc">
+                Do you have a long-term career vision?
+              </li>
+            </ul>
 
             <div class="w-full space-y-3 mt-4">
               <textarea

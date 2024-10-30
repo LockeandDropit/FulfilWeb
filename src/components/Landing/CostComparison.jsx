@@ -10,10 +10,10 @@ const CostComparison = () => {
       <div class="grid md:grid-cols-2 gap-12">
         <div class="lg:w-3/4">
           <h2 class="text-3xl text-gray-800 font-bold lg:text-4xl ">
-            Get the resources you need to succeed.
+          Your Career is Too Important to Settle
           </h2>
           <p class="mt-3 text-gray-800 ">
-            We help connect individuals with the resources they need in order to find and thrive in a new, promising career.
+          Don’t look back in regret in 10 years.  Let’s get you into a fulfilling career that realizes your potential today.
           </p>
           <p class="mt-5">
             {/* <a class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-none focus:underline font-medium dark:text-blue-500" href="#">
@@ -33,10 +33,10 @@ const CostComparison = () => {
             </span>
             <div class="grow">
               <h3 class="text-base sm:text-lg font-semibold text-gray-800 ">
-                Access to grants and scholarships
+              We eliminate barriers to move up in your career
               </h3>
               <p class="mt-1 text-gray-600 ">
-                We provide information on grants and scholarships in your area that you're eligable to apply for. You could save thousands on tuition.
+              Fulfil does everything we can to make moving up easy.
               </p>
             </div>
           </div>
@@ -49,10 +49,10 @@ const CostComparison = () => {
             </span>
             <div class="grow">
               <h3 class="text-base sm:text-lg font-semibold text-gray-800 ">
-                Pay transparency
+              Let’s see what your highest and best looks like
               </h3>
               <p class="mt-1 text-gray-600 ">
-                All of our job postings require employers to list their salary or hourly range for the position.
+              Operating at your best doesn’t just benefit you, it benefits everyone around you.
               </p>
             </div>
           </div>
@@ -64,10 +64,10 @@ const CostComparison = () => {
             </span>
             <div class="grow">
               <h3 class="text-base sm:text-lg font-semibold text-gray-800">
-                We support you
+              Continued Support
               </h3>
               <p class="mt-1 text-gray-600 ">
-                We offer 1:1 career coaching for those who are searching for a  great career path.
+              We help make sure you are always moving up.
               </p>
             </div>
           </div>

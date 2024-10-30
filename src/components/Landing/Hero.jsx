@@ -16,15 +16,18 @@ const Hero = () => {
       <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
         <div>
           <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
-            <span class="text-black">No degree?</span>{" "}
+            <span class="text-black">Fulfil is Your  </span>{" "}
           </h1>
-          <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight">
+          <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
+            <span class="text-black">Career Search Assistant. </span>{" "}
+          </h1>
+          {/* <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight">
             <span class="text-black">No problem.</span>{" "}
-          </h1>
+          </h1> */}
           <p class="mt-3 text-lg text-gray-800 w-full lg:w-4/5">
-            Find entry level positions that provide on-the-job training so you
-            can earn money while developing your skills.
+          Get guidance on the career path that fits your strengths and income desires, make a resume with ease, and apply for jobs all in one place. No degree required.
           </p>
+          
           <div
             class="mt-7 grid gap-3 w-full sm:inline-flex"
             onClick={handleNavigateAndCaptureFunnel}

@@ -82,14 +82,11 @@ export default function LargeWithLogoLeft() {
 
   const [issueID, setIssueID] = useState(null);
 
-useEffect(() => {
+  useEffect(() => {
     setIssueID(uuidv4());
-},[])
-
+  }, []);
 
   const submitMessage = () => {
-
-
     setTimeout(() => {
       if (!message) {
         alert("Please fill out all fields before submitting");
@@ -103,10 +100,10 @@ useEffect(() => {
             setIssueSubmitted(true);
           })
           .catch((error) => {
-            console.log(error)
+            console.log(error);
           });
 
-          setIssueSubmitted(true);
+        setIssueSubmitted(true);
       }
     }, 500);
   };
@@ -123,13 +120,14 @@ useEffect(() => {
     }
   };
 
-const fbURL = "https://www.facebook.com/profile.php?id=61557901443175&mibextid=PINXYD"
+  const fbURL =
+    "https://www.facebook.com/profile.php?id=61557901443175&mibextid=PINXYD";
 
-const handleOpenFBPage = () => {
-    window.open(fbURL, "_blank")
-}
+  const handleOpenFBPage = () => {
+    window.open(fbURL, "_blank");
+  };
 
-// for personal reference https://opensource.stackexchange.com/questions/4713/can-i-use-a-apache-v2-licensed-driver-for-a-commercial-project-without-revealing
+  // for personal reference https://opensource.stackexchange.com/questions/4713/can-i-use-a-apache-v2-licensed-driver-for-a-commercial-project-without-revealing
   return (
     <>
       {/* <Box marginTop="40px" borderTopWidth="2px" borderTopColor="#e1e1e1">
@@ -170,96 +168,172 @@ const handleOpenFBPage = () => {
         </Container>
       </Box> */}
       <footer class="mt-auto bg-white w-full ">
-  <div class="mt-auto w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 lg:pt-20 mx-auto">
+        <div class="mt-auto w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 lg:pt-20 mx-auto">
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            <div class="col-span-full lg:col-span-1">
+              <a
+                class="flex-none text-4xl font-sans font-bold text-sky-400 cursor-pointer"
+                aria-label="Brand"
+              >
+                Fulfil
+              </a>
+            </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-      <div class="col-span-full lg:col-span-1">
-      <a
-                  class="flex-none text-4xl font-sans font-bold text-sky-400 cursor-pointer"
-                  aria-label="Brand"
-               
+            <div class="col-span-1">
+              <h4 class="font-semibold text-gray-800">Social</h4>
+
+              <div class="mt-3 grid space-y-3">
+                <p>
+                  <a
+                    class="inline-flex gap-x-2 text-gray-800 hover:text-gray-900 cursor-pointer"
+                    onClick={() => handleOpenFBPage()}
+                  >
+                    Facebook
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            <div class="col-span-1">
+              <h4 class="font-semibold text-gray-800">Company</h4>
+
+              <div class="mt-3 grid space-y-3">
+                <p>
+                  <a
+                    class="inline-flex gap-x-2 text-gray-800 hover:text-gray-900 cursor-pointer"
+                    onClick={() => onOpen()}
+                  >
+                    Privacy Policy
+                  </a>
+                </p>
+                <p>
+                  <a
+                    class="inline-flex gap-x-2 text-gray-800 hover:text-gray-900 cursor-pointer"
+                    onClick={() => onOpenLicenses()}
+                  >
+                    Legal
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            <div class="col-span-2">
+              <h4 class="font-semibold text-gray-800">Support</h4>
+              <div class="mt-3 grid space-y-3">
+                <p>
+                  <a
+                    class="inline-flex gap-x-2 text-gray-800 hover:text-gray-900 cursor-pointer"
+                    onClick={() => onOpenContact()}
+                  >
+                    Contact us
+                  </a>
+                </p>
+                <p>
+                  <a
+                    class="inline-flex gap-x-2 text-gray-800 hover:text-gray-900 cursor-pointer"
+                    onClick={() => onOpenTOS()}
+                  >
+                    Terms of Service
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 sm:mt-12 grid gap-y-2 sm:gap-y-0 sm:flex sm:justify-between sm:items-center">
+            <div class="flex justify-between items-center">
+              <p class="text-sm text-gray-400 ">
+                © 2024 Fulfil Inc. All rights reserved.
+              </p>
+            </div>
+
+            <div>
+              <a
+                class="size-10 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-1 focus:ring-gray-600"
+                href="#"
+              >
+                <svg
+                  class="flex-shrink-0 size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
                 >
-                  Fulfil
-                </a>
-      </div>
-   
-
-      <div class="col-span-1">
-        <h4 class="font-semibold text-gray-800">Social</h4>
-
-        <div class="mt-3 grid space-y-3">
-        <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-900 cursor-pointer"  onClick={() => handleOpenFBPage()}>Facebook</a></p>
+                  <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
+                </svg>
+              </a>
+              <a
+                class="size-10 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-1 focus:ring-gray-600"
+                href="#"
+              >
+                <svg
+                  class="flex-shrink-0 size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z" />
+                </svg>
+              </a>
+              <a
+                class="size-10 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-1 focus:ring-gray-600"
+                href="#"
+              >
+                <svg
+                  class="flex-shrink-0 size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z" />
+                </svg>
+              </a>
+              <a
+                class="size-10 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-1 focus:ring-gray-600"
+                href="#"
+              >
+                <svg
+                  class="flex-shrink-0 size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+                </svg>
+              </a>
+              <a
+                class="size-10 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-1 focus:ring-gray-600"
+                href="#"
+              >
+                <svg
+                  class="flex-shrink-0 size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M3.362 10.11c0 .926-.756 1.681-1.681 1.681S0 11.036 0 10.111C0 9.186.756 8.43 1.68 8.43h1.682v1.68zm.846 0c0-.924.756-1.68 1.681-1.68s1.681.756 1.681 1.68v4.21c0 .924-.756 1.68-1.68 1.68a1.685 1.685 0 0 1-1.682-1.68v-4.21zM5.89 3.362c-.926 0-1.682-.756-1.682-1.681S4.964 0 5.89 0s1.68.756 1.68 1.68v1.682H5.89zm0 .846c.924 0 1.68.756 1.68 1.681S6.814 7.57 5.89 7.57H1.68C.757 7.57 0 6.814 0 5.89c0-.926.756-1.682 1.68-1.682h4.21zm6.749 1.682c0-.926.755-1.682 1.68-1.682.925 0 1.681.756 1.681 1.681s-.756 1.681-1.68 1.681h-1.681V5.89zm-.848 0c0 .924-.755 1.68-1.68 1.68A1.685 1.685 0 0 1 8.43 5.89V1.68C8.43.757 9.186 0 10.11 0c.926 0 1.681.756 1.681 1.68v4.21zm-1.681 6.748c.926 0 1.682.756 1.682 1.681S11.036 16 10.11 16s-1.681-.756-1.681-1.68v-1.682h1.68zm0-.847c-.924 0-1.68-.755-1.68-1.68 0-.925.756-1.681 1.68-1.681h4.21c.924 0 1.68.756 1.68 1.68 0 .926-.756 1.681-1.68 1.681h-4.21z" />
+                </svg>
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
-  
+      </footer>
 
-      <div class="col-span-1">
-        <h4 class="font-semibold text-gray-800">Company</h4>
-
-        <div class="mt-3 grid space-y-3">
-        <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-900 cursor-pointer"  onClick={() => onOpen()}>Privacy Policy</a></p>
-        <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-900 cursor-pointer"  onClick={() => onOpenLicenses()}>Legal</a></p>
-        </div>
-      </div>
-     
-
-      <div class="col-span-2">
-        <h4 class="font-semibold text-gray-800">Support</h4>
-        <div class="mt-3 grid space-y-3">
-        <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-900 cursor-pointer"  onClick={() => onOpenContact()}>Contact us</a></p>
-        <p><a class="inline-flex gap-x-2 text-gray-800 hover:text-gray-900 cursor-pointer" onClick={() => onOpenTOS()}>Terms of Service</a></p>
-
-      </div>
-      </div>
-     
-    </div>
-  
-
-    <div class="mt-5 sm:mt-12 grid gap-y-2 sm:gap-y-0 sm:flex sm:justify-between sm:items-center">
-      <div class="flex justify-between items-center">
-        <p class="text-sm text-gray-400 ">© 2024 Fulfil Inc. All rights reserved.</p>
-      </div>
-    
-
-    
-      <div>
-        <a class="size-10 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-1 focus:ring-gray-600" href="#">
-          <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
-          </svg>
-        </a>
-        <a class="size-10 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-1 focus:ring-gray-600" href="#">
-          <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
-          </svg>
-        </a>
-        <a class="size-10 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-1 focus:ring-gray-600" href="#">
-          <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
-          </svg>
-        </a>
-        <a class="size-10 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-1 focus:ring-gray-600" href="#">
-          <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-        </a>
-        <a class="size-10 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-white hover:bg-white/10 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:ring-1 focus:ring-gray-600" href="#">
-          <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M3.362 10.11c0 .926-.756 1.681-1.681 1.681S0 11.036 0 10.111C0 9.186.756 8.43 1.68 8.43h1.682v1.68zm.846 0c0-.924.756-1.68 1.681-1.68s1.681.756 1.681 1.68v4.21c0 .924-.756 1.68-1.68 1.68a1.685 1.685 0 0 1-1.682-1.68v-4.21zM5.89 3.362c-.926 0-1.682-.756-1.682-1.681S4.964 0 5.89 0s1.68.756 1.68 1.68v1.682H5.89zm0 .846c.924 0 1.68.756 1.68 1.681S6.814 7.57 5.89 7.57H1.68C.757 7.57 0 6.814 0 5.89c0-.926.756-1.682 1.68-1.682h4.21zm6.749 1.682c0-.926.755-1.682 1.68-1.682.925 0 1.681.756 1.681 1.681s-.756 1.681-1.68 1.681h-1.681V5.89zm-.848 0c0 .924-.755 1.68-1.68 1.68A1.685 1.685 0 0 1 8.43 5.89V1.68C8.43.757 9.186 0 10.11 0c.926 0 1.681.756 1.681 1.68v4.21zm-1.681 6.748c.926 0 1.682.756 1.682 1.681S11.036 16 10.11 16s-1.681-.756-1.681-1.68v-1.682h1.68zm0-.847c-.924 0-1.68-.755-1.68-1.68 0-.925.756-1.681 1.68-1.681h4.21c.924 0 1.68.756 1.68 1.68 0 .926-.756 1.681-1.68 1.681h-4.21z"/>
-          </svg>
-        </a>
-      </div>
-   
-    </div>
-  </div>
-</footer>
-
-      <Modal isOpen={isOpenContact} onClose={onCloseContact} >
+      <Modal isOpen={isOpenContact} onClose={onCloseContact}>
         <ModalOverlay />
-        <ModalContent >
+        <ModalContent>
           <ModalHeader fontSize="16px">Contact Us</ModalHeader>
           <ModalCloseButton />
-          <ModalBody >
+          <ModalBody>
             {/* {issueSubmitted ? (
               <Center>
                 <Text>
@@ -300,7 +374,10 @@ const handleOpenFBPage = () => {
                 ></Textarea>
               </>
             )} */}
-             <h4 class="font-semibold text-gray-800">Please email us at tyler@getfulfil.com if you have any questions, comments, or concerns</h4>
+            <h4 class="font-semibold text-gray-800">
+              Please email us at tyler@getfulfil.com if you have any questions,
+              comments, or concerns
+            </h4>
           </ModalBody>
 
           <ModalFooter>
@@ -321,7 +398,7 @@ const handleOpenFBPage = () => {
           <ModalCloseButton />
           <ModalBody overflowY="scroll">
             <Text marginTop="8">
-              Last Updated: [07/28/23] FULFIL INC. PRIVACY POLICY This policy
+              Last Updated: [10/30/24] FULFIL INC. PRIVACY POLICY This policy
               explains our information practices, defines your privacy options
               and describes how your information is collected and used. This
               policy covers the websites and the various mobile, web and desktop
@@ -464,7 +541,28 @@ const handleOpenFBPage = () => {
               links to other websites or other mobile applications. FULFIL is
               not responsible for the privacy practices of these other sites or
               applications. This policy only applies to information collected by
-              FULFIL.
+              FULFIL. 1. Information Collection and Use When using the ChatGPT
+              feature, user input may be processed by third-party services, such
+              as OpenAI, to generate responses. Fulfil may collect and use this
+              data for purposes of improving the ChatGPT service and enhancing
+              user experience. By using the ChatGPT feature, you consent to the
+              processing of your input data as outlined in this Privacy Policy.
+              2. Third-Party Access To facilitate the ChatGPT feature, Fulfil
+              may share anonymized data with third-party providers, such as
+              OpenAI. This data sharing is strictly for operational purposes,
+              and all data processed by third-party services is handled in
+              accordance with Fulfil’s data protection policies. Users should
+              review OpenAI’s Privacy Policy for further details on data
+              handling practices. 3. Data Security and Retention Fulfil takes
+              data privacy seriously and applies appropriate measures to protect
+              user input data. Input data submitted through ChatGPT will be
+              retained only as necessary to improve the service or as required
+              by applicable laws. Users may contact us to request the deletion
+              of data submitted through ChatGPT. 4. Age Restriction The ChatGPT
+              feature is intended for use by individuals aged 16 and older. If
+              you are under the age of 16, please refrain from using this
+              feature. Fulfil does not knowingly collect or retain data from
+              users under this age in connection with the ChatGPT feature.
             </Text>
           </ModalBody>
 
@@ -482,7 +580,7 @@ const handleOpenFBPage = () => {
           <ModalCloseButton />
           <ModalBody overflowY="scroll">
             <Text marginTop="8">
-              Fulfil Global Terms of Service Last updated 10/18/2023 These Terms
+              Fulfil Global Terms of Service Last updated 10/30/2024 These Terms
               of Service reprsesent a binding agreement between you and Fulfil,
               Inc. (“Fulfil”) concerning your use of the Fulfil Platform. The
               Fulfil Platform encompasses Fulfil's websites, mobile
@@ -869,38 +967,68 @@ const handleOpenFBPage = () => {
               return receipt requested; when the receipt is electronically
               confirmed if sent by facsimile or email; or the day it is shown as
               delivered based on the tracking information of a recognized
-              overnight delivery service, if sent for next-day delivery.
-
-              DMCA Notice and Takedown Procedure
-
-DMCA Compliance Fulfil respects the intellectual property rights of others and expects users to do the same. It is our policy to respond to clear notices of alleged copyright infringement that comply with the Digital Millennium Copyright Act (DMCA).
-
-Designated Agent If you believe that your work has been copied in a way that constitutes copyright infringement, please provide our Designated Copyright Agent with the following information:
-
-Identification of the copyrighted work that you claim has been infringed.
-Identification of the material that is claimed to be infringing and where it is located on the site.
-Your contact information, including your address, telephone number, and email address.
-A statement by you that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law.
-A statement by you, made under penalty of perjury, that the above information in your notice is accurate and that you are the copyright owner or authorized to act on the copyright owner’s behalf.
-Your physical or electronic signature.
-Please send your notice of claimed infringement to:
-
-Tyler Bradley
-DMCA Designated Agent
-Email: tyler@getfulfil.com
-
-Counter-Notice by Accused User If you receive a notice from us that material you have posted has been removed or access to it has been disabled and you believe this was done mistakenly or that you have the right to post the material, you may submit a counter-notice to our DMCA Designated Agent with the following information:
-
-Identification of the material that has been removed or to which access has been disabled and the location where the material appeared before it was removed or disabled.
-A statement, under penalty of perjury, that you have a good faith belief that the material was removed or disabled as a result of mistake or misidentification of the material.
-Your name, address, telephone number, and email address.
-A statement that you consent to the jurisdiction of the federal court in your district or, if your address is outside the United States, for any judicial district in which the service provider may be found, and that you will accept service of process from the person who provided the original notification or an agent of such person.
-Your physical or electronic signature.
-Upon receiving a valid counter-notice, we may restore the material in question.
-
-Repeat Infringer Policy Fulfil reserves the right to terminate users who are found to be repeat infringers.
-
-Modifications to Policy We reserve the right to amend this policy at any time by posting a revised version on our website.
+              overnight delivery service, if sent for next-day delivery. DMCA
+              Notice and Takedown Procedure DMCA Compliance Fulfil respects the
+              intellectual property rights of others and expects users to do the
+              same. It is our policy to respond to clear notices of alleged
+              copyright infringement that comply with the Digital Millennium
+              Copyright Act (DMCA). Designated Agent If you believe that your
+              work has been copied in a way that constitutes copyright
+              infringement, please provide our Designated Copyright Agent with
+              the following information: Identification of the copyrighted work
+              that you claim has been infringed. Identification of the material
+              that is claimed to be infringing and where it is located on the
+              site. Your contact information, including your address, telephone
+              number, and email address. A statement by you that you have a good
+              faith belief that the disputed use is not authorized by the
+              copyright owner, its agent, or the law. A statement by you, made
+              under penalty of perjury, that the above information in your
+              notice is accurate and that you are the copyright owner or
+              authorized to act on the copyright owner’s behalf. Your physical
+              or electronic signature. Please send your notice of claimed
+              infringement to: Tyler Bradley DMCA Designated Agent Email:
+              tyler@getfulfil.com Counter-Notice by Accused User If you receive
+              a notice from us that material you have posted has been removed or
+              access to it has been disabled and you believe this was done
+              mistakenly or that you have the right to post the material, you
+              may submit a counter-notice to our DMCA Designated Agent with the
+              following information: Identification of the material that has
+              been removed or to which access has been disabled and the location
+              where the material appeared before it was removed or disabled. A
+              statement, under penalty of perjury, that you have a good faith
+              belief that the material was removed or disabled as a result of
+              mistake or misidentification of the material. Your name, address,
+              telephone number, and email address. A statement that you consent
+              to the jurisdiction of the federal court in your district or, if
+              your address is outside the United States, for any judicial
+              district in which the service provider may be found, and that you
+              will accept service of process from the person who provided the
+              original notification or an agent of such person. Your physical or
+              electronic signature. Upon receiving a valid counter-notice, we
+              may restore the material in question. Repeat Infringer Policy
+              Fulfil reserves the right to terminate users who are found to be
+              repeat infringers. Modifications to Policy We reserve the right to
+              amend this policy at any time by posting a revised version on our
+              website. 1. Use of ChatGPT and Disclaimer of Accuracy The ChatGPT
+              feature provided on the Fulfil website is designed to offer
+              general information and guidance only. All responses generated by
+              ChatGPT are based on AI algorithms and may not always reflect
+              accurate, complete, or up-to-date information. Users are advised
+              to verify the information before acting on it. Fulfil disclaims
+              any responsibility for the accuracy, reliability, or suitability
+              of responses provided by ChatGPT. 2. Limitation of Liability By
+              using the ChatGPT feature on Fulfil, you acknowledge that any
+              reliance on information provided by ChatGPT is at your own risk.
+              Fulfil is not liable for any direct, indirect, incidental,
+              consequential, or punitive damages arising from the use of
+              ChatGPT, including any outcomes of employment decisions or job
+              placements. Fulfil is not responsible for any advice, suggestions,
+              or information provided by ChatGPT. 3. User Responsibility Users
+              agree that they are solely responsible for evaluating and
+              verifying any information or advice provided by ChatGPT. Fulfil
+              does not endorse or guarantee the accuracy of any response and
+              encourages users to seek additional information or professional
+              advice before making decisions.
             </Text>
           </ModalBody>
 
@@ -917,246 +1045,201 @@ Modifications to Policy We reserve the right to amend this policy at any time by
           <ModalHeader fontSize="16px">Software Licenses</ModalHeader>
           <ModalCloseButton />
           <ModalBody overflowY="scroll">
-
             <Text marginTop="8">
-            MIT License
-
-Copyright (c) 2023 Vis.gl contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+              MIT License Copyright (c) 2023 Vis.gl contributors Permission is
+              hereby granted, free of charge, to any person obtaining a copy of
+              this software and associated documentation files (the "Software"),
+              to deal in the Software without restriction, including without
+              limitation the rights to use, copy, modify, merge, publish,
+              distribute, sublicense, and/or sell copies of the Software, and to
+              permit persons to whom the Software is furnished to do so, subject
+              to the following conditions: The above copyright notice and this
+              permission notice shall be included in all copies or substantial
+              portions of the Software. THE SOFTWARE IS PROVIDED "AS IS",
+              WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+              NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+              PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+              AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+              OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+              OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+              OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             </Text>
             <Text marginTop="2">
-dotenv. BSD-2-Clause License.
-Copyright (c) 2015, Scott Motte
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-* Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
-
-* Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-        </Text>
-        <Text marginTop="2">
-              ChakraUI.
-              MIT License
-
-Copyright (c) 2019 Segun Adebayo
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-              </Text>
-              <Text marginTop="2">
-              Emotion.
-              MIT License
-
-Copyright (c) Emotion team and other contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-              </Text>
-              <Text marginTop="2">
-              Copyright 2024 Google Maps / Fulfil?
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-              </Text>
-              <Text marginTop="2">
-              Stripe 
-              MIT License
-
-Copyright (c) 2017 Stripe
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-              </Text>
-              <Text marginTop="2">
-                Copyright crypto-browserify. MIT. License year not available.
+              dotenv. BSD-2-Clause License. Copyright (c) 2015, Scott Motte All
+              rights reserved. Redistribution and use in source and binary
+              forms, with or without modification, are permitted provided that
+              the following conditions are met: * Redistributions of source code
+              must retain the above copyright notice, this list of conditions
+              and the following disclaimer. * Redistributions in binary form
+              must reproduce the above copyright notice, this list of conditions
+              and the following disclaimer in the documentation and/or other
+              materials provided with the distribution. THIS SOFTWARE IS
+              PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+              EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+              IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+              PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+              CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+              SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+              LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+              USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+              AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+              LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+              ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+              POSSIBILITY OF SUCH DAMAGE.
+            </Text>
+            <Text marginTop="2">
+              ChakraUI. MIT License Copyright (c) 2019 Segun Adebayo Permission
+              is hereby granted, free of charge, to any person obtaining a copy
+              of this software and associated documentation files (the
+              "Software"), to deal in the Software without restriction,
+              including without limitation the rights to use, copy, modify,
+              merge, publish, distribute, sublicense, and/or sell copies of the
+              Software, and to permit persons to whom the Software is furnished
+              to do so, subject to the following conditions: The above copyright
+              notice and this permission notice shall be included in all copies
+              or substantial portions of the Software. THE SOFTWARE IS PROVIDED
+              "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+              INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+              FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+              SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+              DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+              OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+              SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+            </Text>
+            <Text marginTop="2">
+              Emotion. MIT License Copyright (c) Emotion team and other
+              contributors Permission is hereby granted, free of charge, to any
+              person obtaining a copy of this software and associated
+              documentation files (the "Software"), to deal in the Software
+              without restriction, including without limitation the rights to
+              use, copy, modify, merge, publish, distribute, sublicense, and/or
+              sell copies of the Software, and to permit persons to whom the
+              Software is furnished to do so, subject to the following
+              conditions: The above copyright notice and this permission notice
+              shall be included in all copies or substantial portions of the
+              Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+              ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+              WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+              AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+              HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+              WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+              OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+              DEALINGS IN THE SOFTWARE.
+            </Text>
+            <Text marginTop="2">
+              Copyright 2024 Google Maps / Fulfil? Licensed under the Apache
+              License, Version 2.0 (the "License"); you may not use this file
+              except in compliance with the License. You may obtain a copy of
+              the License at http://www.apache.org/licenses/LICENSE-2.0 Unless
+              required by applicable law or agreed to in writing, software
+              distributed under the License is distributed on an "AS IS" BASIS,
+              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+              implied. See the License for the specific language governing
+              permissions and limitations under the License.
+            </Text>
+            <Text marginTop="2">
+              Stripe MIT License Copyright (c) 2017 Stripe Permission is hereby
+              granted, free of charge, to any person obtaining a copy of this
+              software and associated documentation files (the "Software"), to
+              deal in the Software without restriction, including without
+              limitation the rights to use, copy, modify, merge, publish,
+              distribute, sublicense, and/or sell copies of the Software, and to
+              permit persons to whom the Software is furnished to do so, subject
+              to the following conditions: The above copyright notice and this
+              permission notice shall be included in all copies or substantial
+              portions of the Software. THE SOFTWARE IS PROVIDED "AS IS",
+              WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+              NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+              PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+              AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+              OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+              OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+              OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+            </Text>
+            <Text marginTop="2">
+              Copyright crypto-browserify. MIT. License year not available.
               https://www.npmjs.com/package/crypto-browserify
-              </Text>
-              <Text marginTop="2">
-              embla-carousel
-              MIT License
+            </Text>
+            <Text marginTop="2">
+              embla-carousel MIT License Copyright (c) David Jerleke. Permission
+              is hereby granted, free of charge, to any person obtaining a copy
+              of this software and associated documentation files (the
+              "Software"), to deal in the Software without restriction,
+              including without limitation the rights to use, copy, modify,
+              merge, publish, distribute, sublicense, and/or sell copies of the
+              Software, and to permit persons to whom the Software is furnished
+              to do so, subject to the following conditions: The above copyright
+              notice and this permission notice shall be included in all copies
+              or substantial portions of the Software. THE SOFTWARE IS PROVIDED
+              "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+              INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+              FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+              SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+              DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+              OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+              SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+            </Text>
 
-Copyright (c) David Jerleke.
+            <Text marginTop="2">
+              Firebase. Apache 2.0 Copyright Google /Fulfil? Licensed under the
+              Apache License, Version 2.0 (the "License"); you may not use this
+              file except in compliance with the License. You may obtain a copy
+              of the License at http://www.apache.org/licenses/LICENSE-2.0
+              Unless required by applicable law or agreed to in writing,
+              software distributed under the License is distributed on an "AS
+              IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+              express or implied. See the License for the specific language
+              governing permissions and limitations under the License.
+              -------------------------------------------------------------------------------
+              For tslib. file: [source code root]/packages/firebase Permission
+              to use, copy, modify, and/or distribute this software for any
+              purpose with or without fee is hereby granted. THE SOFTWARE IS
+              PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+              REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+              MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE
+              LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES
+              OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR
+              PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+              TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+              PERFORMANCE OF THIS SOFTWARE.
+              ------------------------------------------------------------------------------
+              For Google protobuf source. file: [source code
+              root]/packages/firestore/src/protos/google/protobuf/any.proto //
+              Protocol Buffers - Google's data interchange format // Copyright
+              2008 Google Inc. All rights reserved. //
+              https://developers.google.com/protocol-buffers/ // //
+              Redistribution and use in source and binary forms, with or without
+              // modification, are permitted provided that the following
+              conditions are // met: // // * Redistributions of source code must
+              retain the above copyright // notice, this list of conditions and
+              the following disclaimer. // * Redistributions in binary form must
+              reproduce the above // copyright notice, this list of conditions
+              and the following disclaimer // in the documentation and/or other
+              materials provided with the // distribution. // * Neither the name
+              of Google Inc. nor the names of its // contributors may be used to
+              endorse or promote products derived from // this software without
+              specific prior written permission. // // THIS SOFTWARE IS PROVIDED
+              BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS // "AS IS" AND ANY
+              EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT // LIMITED TO,
+              THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR // A
+              PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+              // OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+              INCIDENTAL, // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+              (INCLUDING, BUT NOT // LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+              OR SERVICES; LOSS OF USE, // DATA, OR PROFITS; OR BUSINESS
+              INTERRUPTION) HOWEVER CAUSED AND ON ANY // THEORY OF LIABILITY,
+              WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT // (INCLUDING
+              NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE // OF
+              THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+            </Text>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+            <Text marginTop="2"></Text>
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+            <Text marginTop="2"></Text>
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-              </Text>
+            <Text marginTop="2"></Text>
 
-              <Text marginTop="2">
-        Firebase. Apache 2.0
-
-        Copyright Google /Fulfil?
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
--------------------------------------------------------------------------------
-
-For tslib.
-
-file: [source code root]/packages/firebase
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-
-------------------------------------------------------------------------------
-
-For Google protobuf source.
-
-file: [source code root]/packages/firestore/src/protos/google/protobuf/any.proto
-
-// Protocol Buffers - Google's data interchange format
-// Copyright 2008 Google Inc.  All rights reserved.
-// https://developers.google.com/protocol-buffers/
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-        </Text>
-
-        <Text marginTop="2">
-        
-        </Text>
-
-        <Text marginTop="2">
-        
-        </Text>
-
-        <Text marginTop="2">
-        
-        </Text>
-
-        <Text marginTop="2">
-        
-        </Text>
+            <Text marginTop="2"></Text>
           </ModalBody>
 
           <ModalFooter>

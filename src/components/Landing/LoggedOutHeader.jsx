@@ -135,19 +135,14 @@ const LoggedOutHeader = (props) => {
           getDoc(doc(db, "employers", result.user.uid)),
         ])
           .then((results) =>
-            //   results[0]._document === null && results[1]._document === null
-            // ? console.log("new")
-            // : ( results[0]._document !== null &&
-            //   results[0]._document.data.value.mapValue.fields.isEmployer)
-            // ? console.log("doer")
-            // : console.log("needer")
+         
             navigate(
               results[0]._document === null && results[1]._document === null
                 ? "/DoerAddProfileInfo"
-                : results[0]._document !== null &&
-                  results[0]._document.data.value.mapValue.fields.isEmployer
-                ? "/DoerMapView"
-                : "/Homepage"
+                : ( results[0]._document !== null &&
+                  results[0]._document.data.value.mapValue.fields.isEmployer)
+                ? "/DoerMapScreen"
+                : "/NeederMapScreen"
             )
           )
           .catch();
@@ -543,7 +538,7 @@ const LoggedOutHeader = (props) => {
                       Don't have an account yet?
                       <button
                         class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
-                        onClick={() => navigate("/DoerEmailRegister")}
+                        onClick={() => navigate("/OnboardingOneDoer")}
                       >
                         Sign up here
                       </button>

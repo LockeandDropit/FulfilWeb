@@ -14,11 +14,10 @@ const WhatWeOffer = () => {
           <div class=" p-5 sm:p-1 grid lg:grid-cols-3 gap-8 lg:gap-12 mb-10">
             <div class="lg:col-span-1">
               <h2 class="font-bold text-2xl md:text-3xl text-gray-800 ">
-                Find employment in growing fields
+              We are obsessed with your success
               </h2>
               <p class="mt-2 md:mt-4 text-gray-500 ">
-                Join one of countless growing industries that have great pay and
-                a lot of open positions.
+              With our tools on your side, we can get you into high paying careers that will reward your hard work.
               </p>
             </div>
 
@@ -45,10 +44,10 @@ const WhatWeOffer = () => {
                   </svg>
                   <div class="grow">
                     <h3 class="text-lg font-semibold text-gray-800 ">
-                      Rewarding work
+                    Find employment in growing fields
                     </h3>
                     <p class="mt-1 text-gray-600 ">
-                      Work with your hands and your mind at the same time.
+                    Join one of countless growing industries that have great pay and a lot of open positions.
                     </p>
                   </div>
                 </div>
@@ -71,10 +70,10 @@ const WhatWeOffer = () => {
                   </svg>
                   <div class="grow">
                     <h3 class="text-lg font-semibold text-gray-800 ">
-                      Earn while you learn
+                    Access resources
                     </h3>
                     <p class="mt-1 text-gray-600 ">
-                      Many entry level positions offer on-the-job training
+                    We connect you with resources that help you get into the career you want
                     </p>
                   </div>
                 </div>
@@ -97,11 +96,10 @@ const WhatWeOffer = () => {
                   </svg>
                   <div class="grow">
                     <h3 class="text-lg font-semibold text-gray-800 ">
-                      Access resources
+                    Earn while you learn
                     </h3>
                     <p class="mt-1 text-gray-600 ">
-                      We connect you with resources that help you get into the
-                      career you want.
+                    Many entry level positions offer on-the-job training
                     </p>
                   </div>
                 </div>
@@ -126,11 +124,10 @@ const WhatWeOffer = () => {
                   </svg>
                   <div class="grow">
                     <h3 class="text-lg font-semibold text-gray-800 ">
-                      Union & non-union positions
+                    Guidance
                     </h3>
                     <p class="mt-1 text-gray-600 ">
-                      Be part of a larger community searching for better
-                      employment opprotunities.
+                    We help you every step of the way.  No more boundaries between you and your career goals.
                     </p>
                   </div>
                 </div>

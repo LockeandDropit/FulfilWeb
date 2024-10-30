@@ -134,6 +134,8 @@ import FormHolder from "./pages/Doer/ResumeBuilder/Forms/FormHolder";
 import About from "./components/About/About";
 import Careers from "./components/Careers";
 import ResumePreview from "./pages/Doer/ResumeBuilder/ResumePreview";
+import OnboardingOneDoer from "./pages/Register/Doer/OnboardingOneDoer";
+import DoerPayment from "./pages/Register/Doer/DoerPayment";
 
 
 
@@ -522,6 +524,14 @@ const router = createBrowserRouter([
   {
     path: "/Careers",
     element: <Careers />,
+  },
+  {
+    path: "/OnboardingOneDoer",
+    element: <OnboardingOneDoer />,
+  },
+  {
+    path: "/DoerPayment",
+    element: <DoerPayment />,
   },
   {
     path: "/ResumePreview",

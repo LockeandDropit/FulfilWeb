@@ -2996,10 +2996,10 @@ export const ClusteredTreeMarkers = ({ trees, sameLocationJobs }) => {
                       Don't have an account yet?
                       <button
                         class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
-                        onClick={() => navigate("/DoerEmailRegister")}
+                        onClick={() => navigate("/OnboardingOneDoer")}
                       >
                         Sign up here
-                      </button>
+                      </button> 
                     </p>
                     <p class="mt-2 text-sm text-gray-600">
                       Forgot your password?

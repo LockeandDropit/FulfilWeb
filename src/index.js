@@ -136,7 +136,13 @@ import Careers from "./components/Careers";
 import ResumePreview from "./pages/Doer/ResumeBuilder/ResumePreview";
 import OnboardingOneDoer from "./pages/Register/Doer/OnboardingOneDoer";
 import DoerPayment from "./pages/Register/Doer/DoerPayment";
-
+import TagManager from 'react-gtm-module'
+ 
+const tagManagerArgs = {
+    gtmId: 'AW-16521233370'
+}
+ 
+TagManager.initialize(tagManagerArgs)
 
 
 

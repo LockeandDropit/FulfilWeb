@@ -661,7 +661,7 @@ useEffect(() => {
           // console.log(thisLocation, treeLocation)
         }
         setNewTrees(trees);
-        console.log("new treess", newTrees);
+        // console.log("new treess", newTrees);
       });
     });
     //with each one check it against all other listed positions in singlePostedJobs.

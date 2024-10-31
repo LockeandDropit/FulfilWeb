@@ -114,14 +114,15 @@ const DoerEmailRegister = () => {
           getDoc(doc(db, "employers", result.user.uid)),
         ])
           .then((results) =>
-         
+         // uhhhhh
             navigate(
               results[0]._document === null && results[1]._document === null
                 ? "/DoerAddProfileInfo"
-                : ( results[0]._document !== null &&
-                  results[0]._document.data.value.mapValue.fields.isEmployer)
-                ? "/DoerMapScreen"
-                : "/NeederMapScreen"
+                : results[0]._document !== null &&
+                results[0]._document.data.value.mapValue.fields.isEmployer.booleanValue === false && results[0]._document.data.value.mapValue.fields.isPremium.booleanValue === true
+              ? "/DoerMapView"
+              : results[0]._document !== null &&
+              results[0]._document.data.value.mapValue.fields.isEmployer ? "/DoerPayment" : "/Homepage"
             )
           )
           .catch();

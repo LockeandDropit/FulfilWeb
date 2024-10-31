@@ -499,7 +499,7 @@ const DoerAddProfileInfo = () => {
             <div className="mt-6 flex items-center justify-center sm:justify-end gap-x-6">
               <input
                 type="button"
-                value="Sign Up"
+                value="Continue"
                 onClick={() => checkLength()}
                 class="cursor-pointer w-full sm:w-auto py-2.5 px-4 inline-flex justify-center mb-12 items-center gap-x-2 text-center bg-sky-500  hover:bg-sky-600 text-white text-lg font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
                 data-hs-overlay="#"

@@ -20,14 +20,13 @@ import { useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 
 import { Spinner, Center } from "@chakra-ui/react";
-import TagManager from 'react-gtm-module'
- 
-const tagManagerArgs = {
-    gtmId: 'GTM-000000'
-}
- 
-TagManager.initialize(tagManagerArgs)
+import TagManager from "react-gtm-module";
 
+const tagManagerArgs = {
+  gtmId: "GTM-000000",
+};
+
+TagManager.initialize(tagManagerArgs);
 
 function App() {
   //idk if this auth check is actually doing anything. can delete it right now and have no issues with any other part of the app.
@@ -35,17 +34,14 @@ function App() {
   const [user, setUser] = useState(null);
   const [userID, setUserID] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [hasCheckedUser, setHasCheckedUser] = useState(false)
+  const [hasCheckedUser, setHasCheckedUser] = useState(false);
 
   const [hasRun, setHasRun] = useState(false);
   useEffect(() => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
-       
-        // console.log(currentUser.uid);
       });
-
       setHasRun(true);
     } else {
       setHasRun(true);
@@ -53,30 +49,30 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (user ) {
+    if (user) {
       Promise.all([
         getDoc(doc(db, "users", user.uid)),
         getDoc(doc(db, "employers", user.uid)),
       ])
         .then((results) =>
+          // console.log("log in results", results[0]._document.data.value.mapValue.fields.isEmployer, results[0]._document.data.value.mapValue.fields.isPremium === true)
           navigate(
             results[0]._document === null && results[1]._document === null
-              ? "/AddProfileInfo"
+              ? "/"
               : results[0]._document !== null &&
-                results[0]._document.data.value.mapValue.fields.isEmployer
+                results[0]._document.data.value.mapValue.fields.isEmployer.booleanValue === false && results[0]._document.data.value.mapValue.fields.isPremium.booleanValue === true
               ? "/DoerMapView"
-              : "/Homepage"
+              : results[0]._document !== null &&
+              results[0]._document.data.value.mapValue.fields.isEmployer ? "/DoerPayment" : "/Homepage"
           )
-          
         )
-  
+
         .catch(console.log("issue"));
     } else {
-     
       setTimeout(() => {
         setLoading(false);
-       
-      }, 2000);
+        //was 2000. This would be where to look if log ins act weird
+      }, 1000);
     }
   }, [user]);
 

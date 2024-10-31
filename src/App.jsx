@@ -20,7 +20,13 @@ import { useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 
 import { Spinner, Center } from "@chakra-ui/react";
-
+import TagManager from 'react-gtm-module'
+ 
+const tagManagerArgs = {
+    gtmId: 'GTM-000000'
+}
+ 
+TagManager.initialize(tagManagerArgs)
 
 
 function App() {

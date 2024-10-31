@@ -365,10 +365,10 @@ const OnboardingOneDoer = () => {
         
         </div>
    
-      
+
    
 
-        <button onClick={() =>  navigate("/DoerEmailRegister")} className="mt-4 py-2 px-4 inline-flex items-center gap-x-2 text-lg font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none">
+        <button onClick={() =>  navigate("/DoerEmailRegister")} className=" mt-4 py-2.5 px-3 inline-flex items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none">
           Start your profile
           <svg
                 class="flex-shrink-0 size-5 mt-0.5"

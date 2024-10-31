@@ -293,12 +293,18 @@ const LoggedOutHeader = (props) => {
               </div>
               {/* <!-- Button Group --> */}
               <div class="flex items-center align-center justify-center md:order-3 md:col-span-3 mt-4">
-                <div className="md:space-x-3 ">
-                  <button
+                <div className="md:space-x-3">
+                  {/* <button
                     class="font-medium text-gray-500 hover:text-gray-400 md:py-6"
                     onClick={() => onOpen()}
                   >
                     Log In
+                  </button> */}
+                    <button
+                    class="sm:mr-2 font-medium text-gray-500 hover:text-gray-400 md:py-6"
+                    onClick={() => navigate("/OnboardingOneDoer")}
+                  >
+                    Sign up
                   </button>
                   <button
                     type="button"
@@ -409,7 +415,6 @@ const LoggedOutHeader = (props) => {
                 <h1 class="block text-2xl font-bold text-gray-800">Sign in</h1>
                 <p class="mt-2 text-sm text-gray-600">Your career is too important to settle</p>
               </div>
-
               <div class="mt-5">
                 {/* <button
                   type="button"

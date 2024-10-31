@@ -36,9 +36,9 @@ const NoDegreeNoProblem = () => {
                 <div class="mt-7 grid gap-3 w-full sm:inline-flex">
             <button
               class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-              onClick={() => navigate("/DoerMapLoggedOutClusterTest")}
+              onClick={() => navigate("/OnboardingOneDoer")}
             >
-              Browse careers
+              Let's get started
               <svg
                 class="flex-shrink-0 size-4"
                 xmlns="http://www.w3.org/2000/svg"

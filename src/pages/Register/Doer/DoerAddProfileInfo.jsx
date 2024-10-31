@@ -206,8 +206,8 @@ const DoerAddProfileInfo = () => {
       isNonEnglishSpeaking: isNonEnglishSpeaking,
     });
     // IN USE
-    createChatSlotInDB();
-    handleSendEmail()
+    createChatSlotInDB()
+    // handleSendEmail()
       //depreciated, remove when able
 
       .then(() => {

@@ -47,8 +47,32 @@ const DoerMapView = () => {
     } else if (location.state.firstVisit === true) {
       console.log("")
 onOpen()
+handleSendEmail()
+
     } 
   }, [location]);
+
+  const handleSendEmail = async () => {
+    const response = await fetch(
+      "https://emailapi-qi7k.onrender.com/sendDoerWelcomeEmail",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        }),
+      }
+    );
+
+    const { data, error } = await response.json();
+    console.log("Any issues?", error);
+  };
 
   const {
     isOpen: isOpen,

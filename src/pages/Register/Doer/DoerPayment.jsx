@@ -336,9 +336,9 @@ const DoerPayment = () => {
     <>
       {/* <Header props={openModal}/> */}
 
-      {/* <LoggedOutHeader props={openModal} /> */}
+      <LoggedOutHeader props={openModal} />
 
-      <div class="overflow-hidden">
+      <div className="w-full h-[calc(100vh-160px)] sm:bg-landingHeroWave bg-no-repeat bg-bottom ">
         <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
           <div class="mx-auto max-w-2xl mb-8 lg:mb-14 text-center">
             <h2 class="text-3xl lg:text-4xl text-gray-800 font-bold ">
@@ -356,7 +356,7 @@ const DoerPayment = () => {
                   <div class="mt-5">
                     <span class="text-6xl font-bold text-gray-800 ">$14</span>
 
-                    <span class="ms-3 text-gray-500 ">/ month</span>
+                    <span class="ms-3 text-gray-500 ">/month</span>
                   </div>
 
                   <div class="mt-5 grid sm:grid-cols-2 gap-y-2 py-4 first:pt-0 last:pb-0 sm:gap-x-6 sm:gap-y-0">
@@ -495,9 +495,12 @@ const DoerPayment = () => {
                   </span>
 
                   <div class="mt-5">
-                    <span class="text-6xl font-bold text-gray-800 ">$99</span>
+                    <span class="text-6xl font-bold text-gray-800 ">$10</span>
                     <span class="text-lg font-bold text-gray-800 "></span>
-                    <span class="ms-3 text-gray-500 ">/ year</span>
+                    <span class="ms-3 text-gray-500 ">/month*</span>
+                  </div>
+                  <div>
+                 
                   </div>
 
                   <div class="mt-5 grid sm:grid-cols-2 gap-y-2 py-4 first:pt-0 last:pb-0 sm:gap-x-6 sm:gap-y-0">
@@ -610,7 +613,7 @@ const DoerPayment = () => {
 
                   <div class="mt-5 grid grid-cols-2 gap-x-4 py-4 first:pt-0 last:pb-0">
                     <div>
-                      <p class="text-sm text-gray-500 ">Cancel anytime.</p>
+                      <p class="text-sm text-gray-500 ">*Charged annually</p>
                     </div>
 
                     <div class="flex justify-end">
@@ -628,7 +631,7 @@ const DoerPayment = () => {
             </div>
 
             <div class="hidden md:block absolute top-0 end-0 translate-y-16 translate-x-16">
-              <svg
+              {/* <svg
                 class="w-16 h-auto text-orange-500"
                 width="121"
                 height="135"
@@ -654,11 +657,11 @@ const DoerPayment = () => {
                   stroke-width="10"
                   stroke-linecap="round"
                 />
-              </svg>
+              </svg> */}
             </div>
 
             <div class="hidden md:block absolute bottom-0 start-0 translate-y-16 -translate-x-16">
-              <svg
+              {/* <svg
                 class="w-56 h-auto text-cyan-500"
                 width="347"
                 height="188"
@@ -672,7 +675,7 @@ const DoerPayment = () => {
                   stroke-width="7"
                   stroke-linecap="round"
                 />
-              </svg>
+              </svg> */}
             </div>
           </div>
 
@@ -703,6 +706,7 @@ const DoerPayment = () => {
         <AnnualSubscriptionModal user={user.uid}/>
         
       )}
+     
     </>
   );
 };

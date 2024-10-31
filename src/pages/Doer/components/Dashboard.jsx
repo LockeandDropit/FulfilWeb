@@ -530,11 +530,11 @@ const Dashboard = () => {
                   </svg>
                   Account Settings
                 </button>
-                {/* <li class="pt-5 px-8 mt-5 mb-1.5 border-t border-gray-200 first:border-transparent first:pt-0">
+                <li class=" pt-2 px-8 mt-5 border-t border-gray-200 first:border-transparent first:pt-0">
                   <span class="block text-xs uppercase text-gray-500">
-                    Actions
+                   Tools
                   </span>
-                </li> */}
+                </li>
 
                 {/* <li class="px-5 mb-0.5">
                   <button
@@ -562,10 +562,10 @@ const Dashboard = () => {
                     Find A Pro
                   </button>
                 </li> */}
-                <li class="px-8 mb-0.5 mt-10">
+                <li class="px-8 mb-0.5 mt-4">
                   <button
                     type="button"
-                    class="py-2 w-full px-11 text-center items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                    class="py-2 w-full px-11 text-center text-sm items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
                     onClick={() => onOpen()}
                     // onClick={() => navigate('/ResumeDashboard')}
                     // onClick={() => testAI()}
@@ -574,12 +574,12 @@ const Dashboard = () => {
                   </button>
                   <button
                     type="button"
-                    class="mt-3 py-2 w-full px-11 text-center items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                    class="mt-3 py-2 w-full px-11 text-center items-center gap-x-2 text-sm  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
                     onClick={() => onOpenResume()}
                     // onClick={() => navigate('/ResumeDashboard')}
                     // onClick={() => testAI()}
                   >
-                    Create resume
+                    Resume builder
                   </button>
                 </li>
               </ul>
@@ -603,31 +603,37 @@ const Dashboard = () => {
             <p className="mt-3">
               Here are a few things you should consider adding:
             </p>
-            <ul className="list-disc mx-6 mt-4">
-              <li className="list-disc">Contact Information</li>
-              <li className="list-disc">Professional Summary</li>
-              <li className="list-disc">Work Experience</li>
-              <li className="list-disc">Education</li>
-              <li className="list-disc">Skills</li>
-              <li className="list-disc">Certifications and Licenses</li>
-              <li className="list-disc">
-                Volunteer Experience{" "}
-                <span className="italic">(if relevant)</span>
-              </li>
-              <li className="list-disc">
-                Projects <span className="italic">(if relevant)</span>
-              </li>
-              <li className="list-disc">
-                Languages <span className="italic">(if applicable)</span>
-              </li>
-              <li className="list-disc">
-                Professional Affiliations{" "}
-                <span className="italic">(if applicable)</span>
-              </li>
-              <li className="list-disc italic">What job you are applying to</li>
-            </ul>
+            <div class="sm:grid sm:grid-cols-2 sm:gap-2  ">
+              <ul className="list-disc mx-6 mt-4">
+                <li className="list-disc mt-1">Contact Information </li>
+                <li className="list-disc mt-1">Professional Summary</li>
+                <li className="list-disc mt-1">Work Experience</li>
+                <li className="list-disc mt-1">Education</li>
+                <li className="list-disc mt-1">Skills</li>
+              </ul>
 
-            <div class="w-full space-y-3 mt-4">
+              <ul className="max-sm:hidden list-disc mx-6 mt-4">
+                <li className="list-disc mt-1">
+                  {" "}
+                  Volunteer Experience{" "}
+                  <span className="italic">(if relevant)</span>
+                </li>
+                <li className="list-disc mt-1">
+                  Projects <span className="italic">(if relevant)</span>
+                </li>
+
+                <li className="list-disc mt-1">
+                  Languages <span className="italic">(if applicable)</span>
+                </li>
+                <li className="list-disc mt-1">
+                  Professional Affiliations{" "}
+                  <span className="italic">(if applicable)</span>
+                </li>
+                <li className="list-disc mt-1">What job you are applying to</li>
+              </ul>
+            </div>
+
+            <div class="w-full space-y-3 mt-4 sm:mt-6">
               <textarea
                 onChange={(e) => setUserResumeInformation(e.target.value)}
                 class=" py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
@@ -687,38 +693,47 @@ const Dashboard = () => {
               The more information you give me on your career desires, the
               better I can serve you.
             </p>
-            <p className="mt-1">
-              Some examples of information are:
-            </p>
+            <p className="mt-1">Some examples of information are:</p>
 
-            <ul className="list-disc mx-6 mt-4">
-              <li className="list-disc">Ideal pay range</li>
-              <li className="list-disc">What are a few of your interests?</li>
-              <li className="list-disc">
-                Do you like working with your hands / solving problems, etc.
-              </li>
-              <li className="list-disc">
-                Do you want to move up quickly or find your niche and maintain.
-              </li>
-              <li className="list-disc">
-                Are there any barriers that are slowing you down currently?  
-              </li>
-              <li className="list-disc">
-                How hard are you willing to work to meet your goals?
-              </li>
-              <li className="list-disc">What is your ideal company culture?</li>
-              <li className="list-disc">
-                Do you want to learn something and get better over time?
-              </li>
-              <li className="list-disc">
-                How do you want your work work-life balance to look like?
-              </li>
-              <li className="list-disc">
-                Do you have a long-term career vision?
-              </li>
-            </ul>
+            <div class="sm:grid sm:grid-cols-2 sm:gap-2  ">
+              <ul className="list-disc mx-6 mt-4">
+                <li className="list-disc mt-1">Ideal pay range</li>
+                <li className="list-disc mt-1">
+                  What is your ideal company culture?
+                </li>
+                <li className="list-disc mt-1">
+                  How hard are you willing to work to meet your goals?
+                </li>
+                <li className="list-disc mt-1">
+                  Do you like working with your hands / solving problems, etc?
+                </li>
+                <li className="list-disc mt-1">
+                  Do you want to move up quickly or find your niche and
+                  maintain.
+                </li>
+              </ul>
 
-            <div class="w-full space-y-3 mt-4">
+              <ul className="max-sm:hidden list-disc mx-6 mt-4">
+                <li className="list-disc mt-1">
+                  What are a few of your interests?
+                </li>
+                <li className="list-disc mt-1">
+                  Do you have a long-term career vision?
+                </li>
+
+                <li className="list-disc mt-1">
+                  Do you want to learn something and get better over time?
+                </li>
+                <li className="list-disc mt-1">
+                  How do you want your work work-life balance to look like?
+                </li>
+                <li className="list-disc mt-1">
+                  Are there any barriers that are slowing you down currently?  
+                </li>
+              </ul>
+            </div>
+
+            <div class="w-full space-y-3 mt-4 sm:mt-6">
               <textarea
                 onChange={(e) => setUserSubmission(e.target.value)}
                 class=" py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "

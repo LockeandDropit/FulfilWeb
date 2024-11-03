@@ -119,7 +119,7 @@ import NeederMapView from "./pages/Needer/MapView/NeederMapView";
 import DoerMapView from "./pages/Doer/MapView/DoerMapView";
 import TestLanding from "./components/Landing/TestLanding";
 import ResumeDashboard from "./pages/Doer/ResumeBuilder/ResumeDashboard";
-
+import InternalDoerPayment from "./pages/Doer/InternalDoerPayment";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebaseConfig"
 import { useNavigate } from "react-router-dom";
@@ -544,6 +544,10 @@ const router = createBrowserRouter([
   {
     path: "/ResumePreview",
     element: <ResumePreview />,
+  },
+  {
+    path: "/InternalDoerPayment",
+    element: <InternalDoerPayment />,
   },
   {
     path: "/TestLanding",

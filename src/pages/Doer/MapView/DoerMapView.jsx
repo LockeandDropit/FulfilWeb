@@ -18,7 +18,12 @@ import { useSearchResults } from "../Chat/lib/searchResults.js";
 import useJobFetch from "../../../hooks/useJobFetch.js";
 import useDoerJobFetch from "../../../hooks/useDoerJobFetch copy.js";
 import { auth } from "../../../firebaseConfig.js";
-import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signOut,
+  getAuth,
+  checkActionCode,
+} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../Chat/lib/userStore.js";
 import {
@@ -31,25 +36,22 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
+import InternalDoerPayment from "../InternalDoerPayment.jsx";
 const DoerMapView = () => {
   const [trees, setTrees] = useState();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
-
-
 
   const location = useLocation();
 
   useEffect(() => {
     console.log("location", location.state);
     if (location.state === null) {
-      
     } else if (location.state.firstVisit === true) {
-      console.log("")
-onOpen()
-handleSendEmail()
-
-    } 
+      console.log("");
+      onOpen();
+      handleSendEmail();
+    }
   }, [location]);
 
   const handleSendEmail = async () => {
@@ -74,12 +76,7 @@ handleSendEmail()
     console.log("Any issues?", error);
   };
 
-  const {
-    isOpen: isOpen,
-    onOpen: onOpen,
-    onClose: onClose,
-  } = useDisclosure();
-
+  const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclosure();
 
   const navigate = useNavigate();
 
@@ -101,6 +98,21 @@ handleSendEmail()
     } else {
     }
   }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      checkIfPremium();
+    }
+  }, [currentUser]);
+
+  const checkIfPremium = () => {
+    if (currentUser?.isPremium === false) {
+      setPaymentOpen(true);
+    } else {
+    }
+  };
+
+  const [paymentOpen, setPaymentOpen] = useState(false);
 
   const { searchResults, searchIsMobile, setSearchIsMobile } =
     useSearchResults();
@@ -260,23 +272,34 @@ handleSendEmail()
       ) : (
         <p>nah</p>
       )}
-    <Modal
-          isOpen={isOpen}
-          onClose={onClose}
-          size="xl"
-        >
-        
-          <ModalOverlay />
-          <ModalContent>
+
+      {paymentOpen && <InternalDoerPayment user={user} />}
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay />
+        <ModalContent>
           <ModalHeader>Welcome to Fulfil!</ModalHeader>
-            <ModalCloseButton />
-<ModalBody>
-  <p>Most of our jobs are currently listed in Minnesota, but we will be expanding to the rest of the U.S. shortlty.</p>
-  <p>While we get more jobs on our site, please visit <span className="font-semibold underline" onClick={() => window.open("https://www.careeronestop.org/")}>Career One Stop</span> or email us at <span className="font-bold">tyler@getfulfil.com</span>, tell us what kind of job you're looking for and we will find you a curated list of opporutunities we think would be a good fit.</p>
-</ModalBody>
-          
-          </ModalContent>
-        </Modal>
+          <ModalCloseButton />
+          <ModalBody>
+            <p>
+              Most of our jobs are currently listed in Minnesota, but we will be
+              expanding to the rest of the U.S. shortlty.
+            </p>
+            <p>
+              While we get more jobs on our site, please visit{" "}
+              <span
+                className="font-semibold underline"
+                onClick={() => window.open("https://www.careeronestop.org/")}
+              >
+                Career One Stop
+              </span>{" "}
+              or email us at{" "}
+              <span className="font-bold">tyler@getfulfil.com</span>, tell us
+              what kind of job you're looking for and we will find you a curated
+              list of opporutunities we think would be a good fit.
+            </p>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

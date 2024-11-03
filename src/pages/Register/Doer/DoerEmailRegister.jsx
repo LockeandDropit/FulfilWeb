@@ -78,7 +78,8 @@ const DoerEmailRegister = () => {
     
     await createUserWithEmailAndPassword(authentication, email, password)
       .then(() => {
-        trackEvent('Doer Register')
+        trackEvent('Doer Register');
+        handleSendEmail();
         navigate("/DoerAddProfileInfo");
       })
       .catch((error) => {
@@ -90,13 +91,14 @@ const DoerEmailRegister = () => {
   };
 
 
+
   const handleGoogleSignUp = async () => {
     const provider = await new GoogleAuthProvider();
 
   
 
     return signInWithPopup(auth, provider)
-      .then((result) => {
+      .then( async (result) => {
         trackEvent('Doer Register')
         console.log("result", result);
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -106,7 +108,28 @@ const DoerEmailRegister = () => {
         const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
         // ...
-
+      
+        
+          const response = await fetch(
+            "https://emailapi-qi7k.onrender.com/sendDoerWelcomeEmail",
+      
+            {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+              }),
+            }
+          );
+      
+          const { data, error } = await response.json();
+          console.log("Any issues?", error);
+      
         console.log("google user", user);
 
         Promise.all([
@@ -141,6 +164,27 @@ const DoerEmailRegister = () => {
         const credential = GoogleAuthProvider.credentialFromError(error);
         console.log("hello", error);
       });
+  };
+
+
+  const handleSendEmail = async () => {
+    const response = await fetch(
+      "https://emailapi-qi7k.onrender.com/sendDoerWelcomeEmail",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email
+        }),
+      }
+    );
+
+    const { data, error } = await response.json();
+    console.log("Any issues?", error);
   };
 
   const [validationMessage, setValidationMessage] = useState();

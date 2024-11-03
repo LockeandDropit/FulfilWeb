@@ -49,30 +49,30 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (user) {
+    if (user ) {
       Promise.all([
         getDoc(doc(db, "users", user.uid)),
         getDoc(doc(db, "employers", user.uid)),
       ])
         .then((results) =>
-          // console.log("log in results", results[0]._document.data.value.mapValue.fields.isEmployer, results[0]._document.data.value.mapValue.fields.isPremium === true)
           navigate(
             results[0]._document === null && results[1]._document === null
-              ? "/"
+              ? "/AddProfileInfo"
               : results[0]._document !== null &&
-                results[0]._document.data.value.mapValue.fields.isEmployer.booleanValue === false && results[0]._document.data.value.mapValue.fields.isPremium.booleanValue === true
+                results[0]._document.data.value.mapValue.fields.isEmployer
               ? "/DoerMapView"
-              : results[0]._document !== null &&
-              results[0]._document.data.value.mapValue.fields.isEmployer ? "/DoerPayment" : "/Homepage"
+              : "/Homepage"
           )
+
         )
 
         .catch(console.log("issue"));
     } else {
+
       setTimeout(() => {
         setLoading(false);
-        //was 2000. This would be where to look if log ins act weird
-      }, 1000);
+
+      }, 2000);
     }
   }, [user]);
 

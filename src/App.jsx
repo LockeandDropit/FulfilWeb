@@ -49,7 +49,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (user ) {
+    if (user) {
       Promise.all([
         getDoc(doc(db, "users", user.uid)),
         getDoc(doc(db, "employers", user.uid)),
@@ -57,7 +57,7 @@ function App() {
         .then((results) =>
           navigate(
             results[0]._document === null && results[1]._document === null
-              ? "/AddProfileInfo"
+              ? "/DoerAddProfileInfo"
               : results[0]._document !== null &&
                 results[0]._document.data.value.mapValue.fields.isEmployer
               ? "/DoerMapView"

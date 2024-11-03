@@ -111,7 +111,7 @@ const DoerEmailRegister = () => {
       
         
           const response = await fetch(
-            "https://emailapi-qi7k.onrender.com/sendDoerWelcomeEmail",
+            "https://emailapi-qi7k.onrender.com/sendDoerNotSubscribed",
       
             {
               method: "POST",
@@ -169,7 +169,7 @@ const DoerEmailRegister = () => {
 
   const handleSendEmail = async () => {
     const response = await fetch(
-      "https://emailapi-qi7k.onrender.com/sendDoerWelcomeEmail",
+      "https://emailapi-qi7k.onrender.com/sendDoerNotSubscribed",
 
       {
         method: "POST",

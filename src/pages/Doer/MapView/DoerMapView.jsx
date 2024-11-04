@@ -3,6 +3,8 @@ import Header from "../components/Header.jsx";
 import Dashboard from "../components/Dashboard.jsx";
 import { Box } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
+import { updateDoc, doc } from "firebase/firestore";
+import { db } from "../../../firebaseConfig.js";
 import {
   APIProvider,
   Map,
@@ -76,6 +78,9 @@ const DoerMapView = () => {
     console.log("Any issues?", error);
   };
 
+  
+
+
   const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclosure();
 
   const navigate = useNavigate();
@@ -98,6 +103,41 @@ const DoerMapView = () => {
     } else {
     }
   }, []);
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const sessionId = urlParams.get("session_id");
+
+    if (sessionId && user !== null) {
+      if (!user.isPremium) {
+        //this call actually checks for all types of subscription, not just monthly
+        fetch(
+          `https://fulfil-api.onrender.com/doer-monthly-subscription-session-status?session_id=${sessionId}`
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "complete") {
+              console.log(data);
+              console.log(user.uid);
+              updateDoc(doc(db, "users", user.uid), {
+                isPremium: true,
+              })
+              .then(() =>  navigate("/DoerMapView", { state: { firstVisit: true } })).catch((error) => console.log(error));
+
+              //set user as premium
+            } else {
+              alert(
+                "There was an error processing your payment. Please try again later."
+              );
+              // addJobInfo(null)
+            }
+          });
+      } else {
+      }
+    } else {
+    }
+  }, [user]);
 
   useEffect(() => {
     if (currentUser) {

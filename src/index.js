@@ -120,6 +120,9 @@ import DoerMapView from "./pages/Doer/MapView/DoerMapView";
 import TestLanding from "./components/Landing/TestLanding";
 import ResumeDashboard from "./pages/Doer/ResumeBuilder/ResumeDashboard";
 import InternalDoerPayment from "./pages/Doer/InternalDoerPayment";
+import DoerFreeTrial from "./pages/Doer/DoerFreeTrial";
+
+
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebaseConfig"
 import { useNavigate } from "react-router-dom";
@@ -540,6 +543,10 @@ const router = createBrowserRouter([
   {
     path: "/DoerPayment",
     element: <DoerPayment />,
+  },
+  {
+    path: "/DoerFreeTrial",
+    element: <DoerFreeTrial />,
   },
   {
     path: "/ResumePreview",

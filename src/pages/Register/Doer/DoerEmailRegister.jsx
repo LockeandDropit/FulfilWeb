@@ -128,9 +128,6 @@ const DoerEmailRegister = () => {
           );
       
           const { data, error } = await response.json();
-          console.log("Any issues?", error);
-      
-        console.log("google user", user);
 
         Promise.all([
           getDoc(doc(db, "users", result.user.uid)),

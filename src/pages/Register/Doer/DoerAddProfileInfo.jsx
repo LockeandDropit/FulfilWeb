@@ -271,9 +271,9 @@ const DoerAddProfileInfo = () => {
   };
 
   //handle check agreements
-  const [termsOfService, setTermsOfService] = useState(false);
-  const [privacyPolicy, setPrivacyPolicy] = useState(false);
-  const [ageAgreement, setAgeAgreement] = useState(false);
+  const [termsOfService, setTermsOfService] = useState(true);
+  const [privacyPolicy, setPrivacyPolicy] = useState(true);
+  const [ageAgreement, setAgeAgreement] = useState(true);
   const [taxAgreementConfirmed, setTaxAgreementConfirmed] = useState(null);
 
   useEffect(() => {
@@ -456,7 +456,7 @@ const DoerAddProfileInfo = () => {
                 </div>
               </div> */}
 
-              <div className=" pb-12">
+              {/* <div className=" pb-12">
                 <div className="mt-10 space-y-10">
                   <fieldset>
                     <legend className="text-xl font-semibold leading-6 text-gray-900">
@@ -493,7 +493,7 @@ const DoerAddProfileInfo = () => {
                     </div>
                   </fieldset>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="mt-6 flex items-center justify-center sm:justify-end gap-x-6">

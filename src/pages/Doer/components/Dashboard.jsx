@@ -581,6 +581,15 @@ const Dashboard = () => {
                   >
                     Resume builder
                   </button>
+                  {/* <button
+                    type="button"
+                    class="mt-3 py-2 w-full px-11 text-center items-center gap-x-2 text-sm  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+             
+                    onClick={() => navigate('/ResumeDashboard')}
+                    // onClick={() => testAI()}
+                  >
+                    Resume builder test
+                  </button> */}
                 </li>
               </ul>
             </nav>

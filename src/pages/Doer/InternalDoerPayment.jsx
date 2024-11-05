@@ -20,6 +20,9 @@ import {
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
 import AnnualSubscriptionModal from "../Register/Doer/components/AnnualSubscriptionModal";
+import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import { logout, auth } from "../../firebaseConfig";
+
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 
@@ -47,6 +50,20 @@ const InternalDoerPayment = ({user}) => {
     navigate("/DoerMapView", { state: { firstVisit: true } })
     
   }
+
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const handleLogOut = async () => {
+    setLoggingOut(true);
+
+    await signOut(auth)
+      .then(
+        setTimeout(() => {
+          navigate("/");
+        }, 2000)
+      ) // undefined
+      .catch((e) => console.log(e));
+  };
 
   const [stripeOpen, setStripeOpen] = useState(false);
   const [stripeOpenAnnual, setStripeOpenAnnual] = useState(false);
@@ -480,8 +497,15 @@ const InternalDoerPayment = ({user}) => {
             </div>
           </div>
 
-          <div class="mt-7 text-center" onClick={() => firstVisitTest()}>
+          <div class="mt-7 text-center" >
             <p class="text-xs text-gray-400">Prices in USD. Taxes may apply.</p>
+          </div>
+          <div class="mt-7 text-center flex" >
+            <p class="text-xs text-gray-400">Not what you're looking for? </p>
+            {loggingOut ? (<div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-red-600 rounded-full " role="status" aria-label="loading">
+  <span class="sr-only">Loading...</span>
+</div>) : (<button className="text-red-500 ml-1" onClick={() => handleLogOut()}>Log out</button>)}
+           
           </div>
         </div>
 

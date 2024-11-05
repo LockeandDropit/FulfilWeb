@@ -49,10 +49,12 @@ const DoerMapView = () => {
   useEffect(() => {
     console.log("location", location.state);
     if (location.state === null) {
+      checkIfPremium();
     } else if (location.state.firstVisit === true) {
       console.log("");
       onOpen();
       handleSendEmail();
+     
     }
   }, [location]);
 
@@ -123,7 +125,7 @@ const DoerMapView = () => {
               updateDoc(doc(db, "users", user.uid), {
                 isPremium: true,
               })
-              .then(() =>  navigate("/DoerMapView", { state: { firstVisit: true } })).catch((error) => console.log(error));
+              .then(() =>  navigate("/DoerMapView", { state: { firstVisit: true , isPremium: true } })).catch((error) => console.log(error));
 
               //set user as premium
             } else {
@@ -139,11 +141,11 @@ const DoerMapView = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (currentUser) {
-      checkIfPremium();
-    }
-  }, [currentUser]);
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     checkIfPremium();
+  //   }
+  // }, [currentUser]);
 
   const checkIfPremium = () => {
     if (currentUser?.isPremium === false) {

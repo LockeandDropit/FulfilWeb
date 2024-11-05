@@ -500,9 +500,9 @@ const InternalDoerPayment = ({user}) => {
           <div class="mt-7 text-center" >
             <p class="text-xs text-gray-400">Prices in USD. Taxes may apply.</p>
           </div>
-          <div class="mt-7 text-center flex" >
-            <p class="text-xs text-gray-400">Not what you're looking for? </p>
-            {loggingOut ? (<div class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-red-600 rounded-full " role="status" aria-label="loading">
+          <div class="mt-7 text-center flex align-center justify-center sm:justify-end items-center" >
+            <p class="text-sm text-gray-400">Not what you're looking for? </p>
+            {loggingOut ? (<div class="ml-1 animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-red-600 rounded-full " role="status" aria-label="loading">
   <span class="sr-only">Loading...</span>
 </div>) : (<button className="text-red-500 ml-1" onClick={() => handleLogOut()}>Log out</button>)}
            

@@ -46,10 +46,10 @@ const ExperiencePreview = ({ resumeInfo }) => {
                 {experience.workSummery}
             </p> */}
           <div
-            className="w-full text-sm prose prose-li  font-inter marker:text-black mb-4  my-2"
+            className="w-full"
             // dangerouslySetInnerHTML={{ __html: experience?.description }}
           />
-          <p className="text-sm prose prose-li  font-inter marker:text-black mb-4  my-2">
+          <p className="text-sm prose prose-li  font-inter marker:text-black my-2 align-center items-center">
           <Markdown>
             {experience?.description}
           </Markdown>

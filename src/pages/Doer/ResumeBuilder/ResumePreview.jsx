@@ -11,16 +11,19 @@ import ExperiencePreview from "./Preview/ExperiencePreview.jsx";
 import SkillPreview from "./Preview/SkillPreview.jsx";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useResumeStore } from "./lib/resumeStore.js";
+
 const ResumePreview = () => {
   const { currentUser } = useUserStore();
 
   console.log("current user", currentUser);
 
   const [resumeInfo, setResumeInfo] = useState(null);
+  const {currentResumeName} = useResumeStore();
 
   useEffect(() => {
-    if (currentUser) {
-      getDoc(doc(db, "users", currentUser.uid, "Resumes", "Resume1")).then(
+    if (currentUser && currentResumeName) {
+      getDoc(doc(db, "users", currentUser.uid, "Resumes", currentResumeName)).then(
         (snapshot) => {
           if (!snapshot.data()) {
           } else {
@@ -30,55 +33,66 @@ const ResumePreview = () => {
         }
       );
     }
-  }, [currentUser]);
+  }, [currentUser, currentResumeName]);
+
+  console.log(currentResumeName)
 
   const handleDownload = () => {
     window.print();
   };
 
-
   const contentRef = useRef();
-  const generatePdf = () => {
+
+  // https://medium.com/@wathsaradesilva2000/create-pdfs-in-react-using-jspdf-and-html2canvas-aa59667438fc
+  const handleDownloadPdf = async () => {
     const input = contentRef.current;
-    html2canvas(input, { scale: 1 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF();
-        pdf.addImage(imgData, 'PNG', 0, 0);
-        pdf.save('download.pdf');
-      });
+    html2canvas(input, { scale: 1 }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      //https://github.com/niklasvh/html2canvas/issues/3009
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      // end code attribution
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("MyResume.pdf");
+    });
   };
   return (
     <>
       <div id="no-print">
         <Header />
         <Dashboard />
-
-        <div className="my-10 mx-10 md:mx-20 lg:mx-80 mt-20 lg:ml-26">
-          <h2 className="text-center text-2xl font-medium">
-            Your Resume is ready!{" "}
-          </h2>
-          <p className="text-center text-gray-400">
-            Now you are ready to download your resume and you can share unique
-            resume url with your friends and family{" "}
-          </p>
-          <div className="flex justify-between px-44 my-10">
-            <button onClick={generatePdf}>Download</button>
+        <div className="items-center justify-center align-center">
+          <div className="w-fit flex flex-col align-center items-center justify-center my-10 mx-10 md:mx-20 lg:mx-auto mt-20">
+            <h2 className="text-center text-2xl font-medium items-center justify-center">
+              Your Resume is ready!{" "}
+            </h2>
+            <p className="text-center text-gray-400">
+              Now you are ready to download your resume and you can share unique
+              resume url with your friends and family{" "}
+            </p>
+            <button
+              onClick={handleDownloadPdf}
+               class="mt-3 py-2 w-full px-11 text-center items-center gap-x-2 text-sm  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+            >
+              Download
+            </button>
           </div>
-        </div>
-      </div>
-      <div ref={contentRef} className="my-10 mx-10 md:mx-20 lg:mx-80">
-        <div id="print-area">
-          <AboutPreview resumeInfo={resumeInfo} />
-          {resumeInfo?.education?.length > 0 && (
-            <EducationPreview resumeInfo={resumeInfo} />
-          )}
-          {resumeInfo?.experience?.length > 0 && (
-            <ExperiencePreview resumeInfo={resumeInfo} />
-          )}
-          {resumeInfo?.skills?.length > 0 && (
-            <SkillPreview resumeInfo={resumeInfo} />
-          )}
+{resumeInfo ? (<div className="mt-6 my-10 mx-10 md:mx-20 lg:mx-auto  flex items-center justify-center">
+            <div ref={contentRef} className="w-[900px] h-[1250px] px-10 py-3">
+              <AboutPreview resumeInfo={resumeInfo} />
+              {resumeInfo?.education?.length > 0 && (
+                <EducationPreview resumeInfo={resumeInfo} />
+              )}
+              {resumeInfo?.experience?.length > 0 && (
+                <ExperiencePreview resumeInfo={resumeInfo} />
+              )}
+              {resumeInfo?.skills?.length > 0 && (
+                <SkillPreview resumeInfo={resumeInfo} />
+              )}
+            </div>
+          </div>) : (<p>Loading</p>)}
+          
         </div>
       </div>
       {/* <div className="no-print">

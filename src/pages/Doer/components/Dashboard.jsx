@@ -536,32 +536,7 @@ const Dashboard = () => {
                   </span>
                 </li>
 
-                {/* <li class="px-5 mb-0.5">
-                  <button
-                    class="flex items-center gap-x-2 py-2 px-3 text-sm text-gray-800 rounded-lg hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
-                    onClick={() => navigate(`/NeederAllCategories`)}
-                  >
-                    <span class="flex justify-center items-center size-6 bg-sky-400 text-white rounded-md">
-                      <svg
-                        class="flex-shrink-0 size-3"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <rect width="18" height="7" x="3" y="3" rx="1" />
-                        <rect width="9" height="7" x="3" y="14" rx="1" />
-                        <rect width="5" height="7" x="16" y="14" rx="1" />
-                      </svg>
-                    </span>
-                    Find A Pro
-                  </button>
-                </li> */}
+            
                 <li class="px-8 mb-0.5 mt-4">
                   <button
                     type="button"
@@ -581,7 +556,7 @@ const Dashboard = () => {
                   >
                     Resume builder
                   </button>
-                  {/* <button
+                  <button
                     type="button"
                     class="mt-3 py-2 w-full px-11 text-center items-center gap-x-2 text-sm  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
              
@@ -589,7 +564,7 @@ const Dashboard = () => {
                     // onClick={() => testAI()}
                   >
                     Resume builder test
-                  </button> */}
+                  </button>
                 </li>
               </ul>
             </nav>

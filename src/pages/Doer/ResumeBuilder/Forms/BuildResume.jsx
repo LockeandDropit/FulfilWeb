@@ -46,7 +46,7 @@ const BuildResume = ({ handleIncrementFormIndex }) => {
       <Header />
       <Dashboard />
 
-      <main id="content" class=" pt-[59px]">
+      <main id="content" class="pt-[59px]">
         <div class="max-w-6xl mx-auto ">
           <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 mx-auto">
             <div class="bg-white rounded-xl shadow p-4 sm:p-7 ">

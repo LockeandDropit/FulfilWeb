@@ -10,8 +10,15 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
+import { useResumeStore } from "../lib/resumeStore";
+
+
+
+
 const BuildResume = ({ handleIncrementFormIndex }) => {
   const { currentUser } = useUserStore();
+  const {currentResumeName} = useResumeStore();
+  console.log("resume name", currentResumeName)
 
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [aboutDescription, setAboutDescription] = useState(null);
@@ -19,7 +26,7 @@ const BuildResume = ({ handleIncrementFormIndex }) => {
   const updloadEducation = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
-    await updateDoc(doc(userChatsRef, "Resume1"), {
+    await updateDoc(doc(userChatsRef, currentResumeName), {
       firstName: currentUser.firstName,
       lastName: currentUser.lastName,
       phoneNumber: phoneNumber ? phoneNumber : null,

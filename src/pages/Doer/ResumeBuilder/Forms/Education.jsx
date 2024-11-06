@@ -11,6 +11,7 @@ import RichTextEditor from "../../../Needer/Components/RichTextEditor";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { draftToMarkdown } from "markdown-draft-js";
+import { useResumeStore } from "../lib/resumeStore";
 
 const Education = ({ handleIncrementFormIndex, resetEducationForm }) => {
 
@@ -20,7 +21,7 @@ const Education = ({ handleIncrementFormIndex, resetEducationForm }) => {
   const [institutionTitle, setInstitutionTitle] = useState(null)
   const [major, setMajor] = useState(null)
 
-
+  const {currentResumeName} = useResumeStore();
   const { currentUser } = useUserStore();
 
   const handleSaveAndClearData = () => {
@@ -37,7 +38,7 @@ const Education = ({ handleIncrementFormIndex, resetEducationForm }) => {
   
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
-    await updateDoc(doc(userChatsRef, "Resume1"), {
+    await updateDoc(doc(userChatsRef, currentResumeName), {
       education: arrayUnion({
         institutionName: institutionTitle,
         startDate: startDate.toLocaleDateString(),

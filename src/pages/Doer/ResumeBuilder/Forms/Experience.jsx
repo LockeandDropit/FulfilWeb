@@ -17,7 +17,7 @@ import RichTextEditor from "../../../Needer/Components/RichTextEditor";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { draftToMarkdown } from "markdown-draft-js";
-
+import { useResumeStore } from "../lib/resumeStore";
 
 const Experience = ({ handleIncrementFormIndex, resetExperienceForm }) => {
 
@@ -28,6 +28,7 @@ const Experience = ({ handleIncrementFormIndex, resetExperienceForm }) => {
   const [companyName, setCompanyName] = useState(null);
   
   const { currentUser } = useUserStore();
+  const {currentResumeName} = useResumeStore();
   
   const handleSaveAndClearData = () => {
 
@@ -40,7 +41,7 @@ const Experience = ({ handleIncrementFormIndex, resetExperienceForm }) => {
   const updloadExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
-    await updateDoc(doc(userChatsRef, "Resume1"), {
+    await updateDoc(doc(userChatsRef, currentResumeName), {
       experience: arrayUnion({
         positionTitle: positionTitle,
         companyName: companyName,

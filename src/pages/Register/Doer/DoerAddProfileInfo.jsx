@@ -249,8 +249,7 @@ const DoerAddProfileInfo = () => {
       !state ||
       privacyPolicy !== true ||
       ageAgreement !== true ||
-      termsOfService !== true ||
-      taxAgreementConfirmed !== true
+      termsOfService !== true 
     ) {
       onOpenIncomplete();
     } else if (phoneNumber ? !phoneNumberValid : null) {
@@ -276,9 +275,9 @@ const DoerAddProfileInfo = () => {
   const [ageAgreement, setAgeAgreement] = useState(true);
   const [taxAgreementConfirmed, setTaxAgreementConfirmed] = useState(null);
 
-  useEffect(() => {
-    console.log(termsOfService, privacyPolicy, ageAgreement);
-  }, [termsOfService, privacyPolicy, ageAgreement]);
+  // useEffect(() => {
+  //   console.log(termsOfService, privacyPolicy, ageAgreement);
+  // }, [termsOfService, privacyPolicy, ageAgreement]);
 
   //modal control
   const { isOpen, onOpen, onClose } = useDisclosure();

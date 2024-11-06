@@ -18,11 +18,13 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
+import { useResumeStore } from "../lib/resumeStore";
 
 const Skills = ({ handleIncrementFormIndex, resetSkillsForm }) => {
   const [skillName, setSkillName] = useState(null);
 
   const { currentUser } = useUserStore();
+  const {currentResumeName} = useResumeStore();
 
   const handleSaveAndClearData = () => {
     //POST all data
@@ -34,7 +36,7 @@ const Skills = ({ handleIncrementFormIndex, resetSkillsForm }) => {
   const updloadExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
-    await updateDoc(doc(userChatsRef, "Resume1"), {
+    await updateDoc(doc(userChatsRef, currentResumeName), {
       skills: arrayUnion({
         skillName: skillName,
       }),

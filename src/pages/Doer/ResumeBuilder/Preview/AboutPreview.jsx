@@ -19,7 +19,7 @@ const AboutPreview = ({ resumeInfo }) => {
         {resumeInfo?.jobTitle}
       </h2> */}
       <h2
-        className="text-center font-normal text-xs"
+        className="text-center font-normal text-sm"
         style={
           {
             // color:resumeInfo?.themeColor
@@ -31,7 +31,7 @@ const AboutPreview = ({ resumeInfo }) => {
 
       <div className="flex justify-between">
         <h2
-          className="font-normal text-xs"
+          className="font-normal text-sm"
           style={
             {
               // color:resumeInfo?.themeColor
@@ -41,7 +41,7 @@ const AboutPreview = ({ resumeInfo }) => {
           {resumeInfo?.phoneNumber} 
         </h2>
         <h2
-          className="font-normal text-xs"
+          className="font-normal text-sm"
           style={
             {
               // color:resumeInfo?.themeColor

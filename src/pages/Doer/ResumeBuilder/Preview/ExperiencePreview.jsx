@@ -6,7 +6,7 @@ const ExperiencePreview = ({ resumeInfo }) => {
   return (
     <div className="my-6">
       <h2
-        className="text-center font-bold text-sm mb-2"
+        className="text-start font-bold mb-1"
         style={
           {
             // color: resumeInfo?.themeColor,
@@ -18,7 +18,7 @@ const ExperiencePreview = ({ resumeInfo }) => {
       <hr
         style={
           {
-            // borderColor: resumeInfo?.themeColor,
+            borderColor: "black",
           }
         }
       />
@@ -46,12 +46,14 @@ const ExperiencePreview = ({ resumeInfo }) => {
                 {experience.workSummery}
             </p> */}
           <div
-            className="w-full prose prose-li  font-inter marker:text-black mb-4  my-2"
+            className="w-full text-sm prose prose-li  font-inter marker:text-black mb-4  my-2"
             // dangerouslySetInnerHTML={{ __html: experience?.description }}
           />
+          <p className="text-sm prose prose-li  font-inter marker:text-black mb-4  my-2">
           <Markdown>
             {experience?.description}
           </Markdown>
+          </p>
         </div>
       ))}
     </div>

@@ -6,7 +6,7 @@ const EducationPreview = ({ resumeInfo }) => {
   return (
     <div className="my-6">
       <h2
-        className="text-center font-bold text-sm mb-2"
+        className="text-start font-bold mb-1"
         style={{
           color: "Black",
         }}
@@ -15,12 +15,12 @@ const EducationPreview = ({ resumeInfo }) => {
       </h2>
       <hr
         style={{
-          borderColor: "blue",
+          borderColor: "black",
         }}
       />
 
       {resumeInfo?.education.map((education, index) => (
-        <div key={index} className="my-5">
+        <div key={index} className="my-5 mb-2">
           <h2
             className="text-sm font-bold"
             style={{

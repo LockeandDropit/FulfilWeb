@@ -19,6 +19,17 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { draftToMarkdown } from "markdown-draft-js";
 import { useResumeStore } from "../lib/resumeStore";
 
+import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalCloseButton,
+  ModalOverlay,
+  ModalContent,
+  ModalFooter,
+} from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
+
 const Experience = ({ handleIncrementFormIndex, resetExperienceForm }) => {
 
   const [startDate, setStartDate] = useState(null);
@@ -38,6 +49,19 @@ const Experience = ({ handleIncrementFormIndex, resetExperienceForm }) => {
     //navigate to a new blank form
     resetExperienceForm();
   };
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const checkIfValid = () => {
+    if (!positionTitle || !companyName || !startDate || description) {
+onOpen();
+    } else if (!endDate && isEnrolled === false) {
+      onOpen();
+    } else {
+      handleUploadAndContinue();
+    }
+    
+  }
 
   const updloadExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");

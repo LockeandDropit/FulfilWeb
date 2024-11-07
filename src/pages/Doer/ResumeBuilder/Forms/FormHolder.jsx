@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import Dashboard from "../../components/Dashboard";
 import BuildResume from "./BuildResume";
@@ -7,12 +7,22 @@ import Education from "./Education";
 import Skills from "./Skills";
 import { Navigate } from "react-router-dom";
 import { useUserStore } from "../../Chat/lib/userStore";
+import { useLocation } from "react-router-dom";
 
 const FormHolder = () => {
   const [activeFormIndex, setActiveFormIndex] = useState(1);
   const [enableNext, setEnableNext] = useState(true);
-
+  const [isEdit, setIsEdit] = useState(false)
   const { currentUser } = useUserStore();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state.isEdit === true) {
+setActiveFormIndex(location.state.index)
+setIsEdit(true)
+    }
+  },[])
+
 
   console.log("current user form holder", currentUser);
 
@@ -75,7 +85,7 @@ const FormHolder = () => {
         ) : activeFormIndex === 1 ? (
           <>
       
-          <BuildResume handleIncrementFormIndex={handleIncrementFormIndex} 
+          <BuildResume handleIncrementFormIndex={handleIncrementFormIndex} isEdit={isEdit}
            />
            </>
         ) : activeFormIndex === 2 ? (

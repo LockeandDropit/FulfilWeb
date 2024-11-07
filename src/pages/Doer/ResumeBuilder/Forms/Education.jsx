@@ -18,6 +18,16 @@ import "react-datepicker/dist/react-datepicker.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { draftToMarkdown } from "markdown-draft-js";
 import { useResumeStore } from "../lib/resumeStore";
+import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalCloseButton,
+  ModalOverlay,
+  ModalContent,
+  ModalFooter,
+} from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
 
 const Education = ({ handleIncrementFormIndex, resetEducationForm }) => {
   const [startDate, setStartDate] = useState(null);
@@ -25,17 +35,28 @@ const Education = ({ handleIncrementFormIndex, resetEducationForm }) => {
   const [degree, setDegree] = useState(null);
   const [institutionTitle, setInstitutionTitle] = useState(null);
   const [major, setMajor] = useState(null);
-  const [isEnrolled, setIsEnrolled] = useState(false)
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
   const { currentResumeName } = useResumeStore();
   const { currentUser } = useUserStore();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSaveAndClearData = () => {
     //POST all data
     updloadEducation();
     //navigate to a new blank form
-
     resetEducationForm();
+  };
+
+  const checkIfValid = () => {
+    if (!institutionTitle || !startDate || !degree || !major) {
+      onOpen();
+    } else if (!endDate && isEnrolled === false) {
+      onOpen();
+    } else {
+      uploadAndNavigate();
+      console.log("got em");
+    }
   };
 
   const updloadEducation = async () => {
@@ -53,13 +74,11 @@ const Education = ({ handleIncrementFormIndex, resetEducationForm }) => {
     });
   };
 
-
-
   useEffect(() => {
-if (isEnrolled === true)
-  setEndDate(null);
-
-  }, [])
+    if (isEnrolled === true) {
+      setEndDate(null);
+    }
+  }, []);
 
   const uploadAndNavigate = () => {
     updloadEducation().then(() => {
@@ -74,19 +93,17 @@ if (isEnrolled === true)
         ref={ref}
         value={value}
         onClick={onClick}
-    
       />
     )
   );
 
-  const ExampleCustomInput2= forwardRef(
+  const ExampleCustomInput2 = forwardRef(
     ({ value, onClick, className }, onChange, ref) => (
       <input
         className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
         ref={ref}
         value={value}
         onClick={onClick}
-    
       />
     )
   );
@@ -216,14 +233,14 @@ if (isEnrolled === true)
                       <DatePicker
                         selected={startDate}
                         onChange={(date) => setStartDate(date)}
-                        customInput={<ExampleCustomInput  />}
+                        customInput={<ExampleCustomInput />}
                       />
                     </div>
                     <div class="relative inline-block text-left ml-auto">
                       <DatePicker
                         selected={endDate}
                         onChange={(date) => setEndDate(date)}
-                        customInput={<ExampleCustomInput2  />}
+                        customInput={<ExampleCustomInput2 />}
                       />
                     </div>
                   </div>
@@ -233,7 +250,7 @@ if (isEnrolled === true)
                     <input
                       type="checkbox"
                       class="mr-2 ml-auto shrink-0 border-gray-200 rounded text-blue-600"
-                    onChange={() => setIsEnrolled(!isEnrolled)}
+                      onChange={() => setIsEnrolled(!isEnrolled)}
                     />
                     <label
                       for="af-account-full-name"
@@ -269,12 +286,24 @@ if (isEnrolled === true)
                   <button
                     type="button"
                     class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                    onClick={uploadAndNavigate}
+                    // onClick={uploadAndNavigate}
+                    onClick={checkIfValid}
                   >
                     Next
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-3">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-</svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      class="size-3"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                      />
+                    </svg>
                   </button>
                 </div>
               </form>
@@ -282,6 +311,28 @@ if (isEnrolled === true)
           </div>
         </div>
       </main>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Oops!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p className="text-gray-800 text-base">
+              Looks like you left something blank. Please make sure you've
+              filled out all fields.
+            </p>
+          </ModalBody>
+          <ModalFooter>
+            <button
+              type="button"
+              class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+              onClick={onClose}
+            >
+              Continue
+            </button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

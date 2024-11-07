@@ -2808,24 +2808,24 @@ const UserProfile = () => {
                           </svg>
                         </div>
                         <div class="items-center align-center justify-center text-center">
-                          <div class="items-center p-5   flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
-                            <div class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none ">
+                          <div class="items-center p-5    sm:justify-between sm:items-center">
+                            <div class="mt-4 px-6 py-2 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none ">
                               <button onClick={() => onOpenResume()}>
                                 View
                               </button>
                             </div>
                           </div>
-                          <div class="px-5  flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
+                          <div class="px-5 sm:justify-between sm:items-center">
                             <div className="items-center justify-center">
                               <button>or</button>
                             </div>
                           </div>
                           {/* help from Nexo & Josh Crozier https://stackoverflow.com/questions/572768/styling-an-input-type-file-button */}
-                          <div class="px-5   flex flex-column sm:flex sm:justify-between sm:items-center gap-2">
+                          <div class="px-5 sm:justify-between sm:items-center">
                             <div className="items-center justify-center">
                               <label
                                 for="resume-upload"
-                                class="mt-4 py-2  inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-sky-500 hover:text-sky-600 underline cursor-pointer disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
+                                class="mt-2 py-2  inline-flex items-center gap-x-2 text-base font-semibold rounded-lg border border-transparent text-sky-500 hover:text-sky-600 underline cursor-pointer disabled:opacity-50 disabled:pointer-events-none focus:outline-none "
                               >
                                 Upload new resume
                                 <input

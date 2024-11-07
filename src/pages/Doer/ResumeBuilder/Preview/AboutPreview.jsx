@@ -28,8 +28,8 @@ const AboutPreview = ({ resumeInfo }) => {
       >
         {resumeInfo?.city}, {resumeInfo?.state}
       </h2>
+      <div className="text-center">
 
-      <div className="flex justify-between">
         <h2
           className="font-normal text-sm"
           style={
@@ -38,7 +38,7 @@ const AboutPreview = ({ resumeInfo }) => {
             }
           }
         >
-          {resumeInfo?.phoneNumber} 
+          {resumeInfo?.phoneNumber}
         </h2>
         <h2
           className="font-normal text-sm"
@@ -51,14 +51,27 @@ const AboutPreview = ({ resumeInfo }) => {
           {resumeInfo?.email}
         </h2>
       </div>
-      <hr
-        className="border-[1.5px] my-2"
-        style={
-          {
-            // borderColor:resumeInfo?.themeColor
-          }
-        }
-      />
+
+      
+
+      {resumeInfo?.aboutDescription && (
+        <>
+          <hr
+            className="border-[1.5px] my-2"
+            style={
+              {
+                // borderColor:resumeInfo?.themeColor
+              }
+            }
+          />
+          <div className="flex flex-col justify-start mt-2 mb-1">
+            {/* <h2 className="text-base font-bold text-black">About</h2> */}
+            <h2 className="font-normal text-sm">
+              {resumeInfo?.aboutDescription}
+            </h2>
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import Dashboard from "../../components/Dashboard";
 import { useUserStore } from "../../Chat/lib/userStore";
@@ -8,11 +8,12 @@ import {
   collection,
   doc,
   updateDoc,
+  getDoc,
 } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
 import { useResumeStore } from "../lib/resumeStore";
 
-const BuildResume = ({ handleIncrementFormIndex }) => {
+const BuildResume = ({ handleIncrementFormIndex, isEdit }) => {
   const { currentUser } = useUserStore();
   const { currentResumeName } = useResumeStore();
   console.log("resume name", currentResumeName);
@@ -37,6 +38,25 @@ const BuildResume = ({ handleIncrementFormIndex }) => {
       })
       .catch((e) => alert(e));
   };
+
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (isEdit === true && currentUser && currentResumeName) {
+      setLoading(true)
+      //fetch about && phone # from fb
+      getDoc(
+        doc(db, "users", currentUser.uid, "Resumes", currentResumeName)
+      ).then((snapshot) => {
+        if (!snapshot.data()) {
+        } else {
+          console.log("from firestore", snapshot.data().aboutDescription);
+          setAboutDescription(snapshot.data().aboutDescription);
+        }
+        
+      });
+    } else {setLoading(false) }
+  }, [currentUser, currentResumeName, isEdit]);
 
   return (
     <div>
@@ -137,45 +157,63 @@ const BuildResume = ({ handleIncrementFormIndex }) => {
                   <p className="mr-1">{currentUser.city},</p>
                   <p>{currentUser.state}</p>
                 </div>
-                <div class="sm:col-span-3">
-                  <div class="inline-block">
-                    <label
-                      for="af-account-phone"
-                      class="inline-block text-sm text-gray-800 mt-4 sm:mt-5 "
-                    >
-                      Phone
-                    </label>
-                    <span class="text-sm text-gray-400 "> (optional)</span>
-                  </div>
-                </div>
-                <div class="sm:flex mt-1">
-                  <input
-                    id="af-account-phone"
-                    type="text"
-                    class="py-2 px-3 pe-11 block w-1/2 border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                    placeholder="(xxx)xxx-xx-xx"
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                  />
-                </div>
-                <div class="sm:col-span-3">
-                  <label
-                    for="af-account-bio"
-                    class="inline-block text-sm text-gray-800 mt-4 sm:mt-7"
-                  >
-                    About you
-                  </label>
-                  <span class="text-sm text-gray-400 "> (optional)</span>
-                </div>
 
-                <div class="sm:col-span-9 mt-1">
-                  <textarea
-                    id="af-account-bio"
-                    class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                    rows="6"
-                    placeholder="I am a hardworking individual who strives to create a thriving environment. I have strong communication skills and work well with others."
-                    onChange={(e) => setAboutDescription(e.target.value)}
-                  ></textarea>
-                </div>
+                {loading ? (
+                  <>
+                     <div class="sm:col-span-3">
+                     <div class="inline-block">
+                       <label
+                         for="af-account-phone"
+                         class="inline-block text-sm text-gray-800 mt-4 sm:mt-5 "
+                       >
+                         Phone
+                       </label>
+                       <span class="text-sm text-gray-400 "> (optional)</span>
+                     </div>
+                   </div>
+                   <div class="sm:flex mt-1">
+                     <input
+                       id="af-account-phone"
+                       type="text"
+                       class="py-2 px-3 pe-11 block w-1/2 border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                       placeholder="(xxx)xxx-xx-xx"
+                       onChange={(e) => setPhoneNumber(e.target.value)}
+                     />
+                   </div>
+                   <div class="sm:col-span-3">
+                     <label
+                       for="af-account-bio"
+                       class="inline-block text-sm text-gray-800 mt-4 sm:mt-7"
+                     >
+                       About you
+                     </label>
+                     <span class="text-sm text-gray-400 "> (optional)</span>
+                   </div>
+   
+                   <div class="sm:col-span-9 mt-1">
+                     {isEdit ? (
+                       <textarea
+                         id="af-account-bio"
+                         class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                         rows="6"
+                         value={aboutDescription ? aboutDescription : null}
+                         onChange={(e) => setAboutDescription(e.target.value)}
+                       >
+                       
+                       </textarea>
+                     ) : (
+                       <textarea
+                         id="af-account-bio"
+                         class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                         rows="6"
+                         placeholder="I am a hard working, focused individual who is set on self-improvement."
+                         onChange={(e) => setAboutDescription(e.target.value)}
+                       ></textarea>
+                     )}
+                   </div>
+                   </>
+                ) : (<p>spinner</p>)}
+             
 
                 <div class="mt-5 flex justify-end gap-x-2">
                   {/* <button

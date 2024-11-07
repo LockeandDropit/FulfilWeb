@@ -31,8 +31,8 @@ const EducationPreview = ({ resumeInfo }) => {
           </h2>
           <h2 className="text-xs flex justify-between">
             {education?.degree} in {education?.major}
-            <span>
-              {education?.startDate} - {education?.endDate}
+            <span className="flex">
+              {education?.startDate} - {education?.endDate ? (<p>{education?.endDate}</p>) : (<p className="text-gray-700 ml-1">Currently attending</p>)}
             </span>
           </h2>
         </div>

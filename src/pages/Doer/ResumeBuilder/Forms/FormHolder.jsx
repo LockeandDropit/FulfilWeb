@@ -24,14 +24,14 @@ const FormHolder = () => {
   const resetExperienceForm = () => {
     setActiveFormIndex(0);
     setTimeout(() => {
-      setActiveFormIndex(2);
+      setActiveFormIndex(3);
     }, 400);
   };
 
   const resetEducationForm = () => {
     setActiveFormIndex(0);
     setTimeout(() => {
-      setActiveFormIndex(3);
+      setActiveFormIndex(2);
     }, 400);
   };
 
@@ -79,14 +79,14 @@ const FormHolder = () => {
            />
            </>
         ) : activeFormIndex === 2 ? (
-          <Experience
-            handleIncrementFormIndex={handleIncrementFormIndex}
-            resetExperienceForm={resetExperienceForm}
-          />
-        ) : activeFormIndex === 3 ? (
           <Education
             handleIncrementFormIndex={handleIncrementFormIndex}
             resetEducationForm={resetEducationForm}
+          />
+        ) : activeFormIndex === 3 ? (
+          <Experience
+            handleIncrementFormIndex={handleIncrementFormIndex}
+            resetExperienceForm={resetExperienceForm}
           />
         ) : activeFormIndex === 4 ? <Skills
         handleIncrementFormIndex={handleIncrementFormIndex}

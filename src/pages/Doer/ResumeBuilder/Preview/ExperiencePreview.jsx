@@ -39,7 +39,7 @@ const ExperiencePreview = ({ resumeInfo }) => {
             {experience?.companyName}
             <span>
               {experience?.startDate} -{" "}
-              {experience?.currentlyWorking ? "Present" : experience.endDate}{" "}
+              {experience?.isCurrentlyEmployed ? "Present" : experience.endDate}{" "}
             </span>
           </h2>
           {/* <p className='text-xs my-2'>

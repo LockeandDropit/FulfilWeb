@@ -46,7 +46,7 @@ const ResumeDashboard = () => {
       resumeName
     );
     await setDoc(resumeDocRef, {
-      id: resumeName
+      id: resumeName,
     }).then(() => {
       setNewResumeName(resumeName);
       navigate("/FormHolder");
@@ -57,7 +57,7 @@ const ResumeDashboard = () => {
     if (currentUser) {
       getResumes();
     }
-  }, [currentUser])
+  }, [currentUser]);
 
   const [resumes, setResumes] = useState(null);
 
@@ -68,24 +68,22 @@ const ResumeDashboard = () => {
 
     let resumeHolder = [];
 
-    console.group("firing dashboard")
+    console.group("firing dashboard");
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       resumeHolder.push(doc.data());
-   
     });
 
     setResumes(resumeHolder);
   };
- 
 
   const handleNavigateToPreviousResume = (x) => {
-    setNewResumeName(x).then(() => navigate("/ResumePreview"))
-  }
+    setNewResumeName(x).then(() => navigate("/ResumePreview"));
+  };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  console.log("resumesssss,", resumes)
+
 
   return (
     <div>
@@ -100,34 +98,61 @@ const ResumeDashboard = () => {
           <div className=" flex space-x-6 cursor-pointer mt-4">
             <div
               className="p-14 py-24 border 
-        items-center flex 
+        items-center flex flex-col
         justify-center bg-secondary
         rounded-lg h-[280px]
         hover:scale-105 transition-all hover:shadow-md
         cursor-pointer border-dashed"
               onClick={() => onOpen()}
             >
-              New Resume
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+
+              <p className="text-base text-gray-800 mt-1">New Resume</p>
             </div>
 
             {/* onclick, this will open a modal that will require the user to name their resume before starting... or I could just create a uid for it...? or both Idk. */}
 
-{resumes?.map((resume) => (
-   <div
-   className="p-14 py-24 border 
-items-center flex 
+            {resumes?.map((resume) => (
+              <div
+                className="p-14 py-24 border 
+items-center flex flex-col
 justify-center bg-secondary
 rounded-lg h-[280px]
 hover:scale-105 transition-all hover:shadow-md
 cursor-pointer border-dashed"
-   onClick={() => handleNavigateToPreviousResume(resume.id)}
- >
-   {resume.id}
- </div>
-))}
+                onClick={() => handleNavigateToPreviousResume(resume.id)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                  />
+                </svg>
 
-
-         
+                <p className="text-base text-gray-800 mt-1">{resume.id}</p>
+              </div>
+            ))}
           </div>
         </div>
       </main>
@@ -138,7 +163,7 @@ cursor-pointer border-dashed"
           <ModalHeader>Create Resume</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p>Enter the name of your resume</p>
+            <p>Enter the name of your resume:</p>
             <div class=" mt-2">
               <input
                 type="text"
@@ -151,7 +176,7 @@ cursor-pointer border-dashed"
           <ModalFooter>
             <button
               type="button"
-              class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+              class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
               onClick={() => startNewResume()}
             >
               Create

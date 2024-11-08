@@ -12,11 +12,14 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
 import { useResumeStore } from "../lib/resumeStore";
+import { useNavigate } from "react-router-dom";
+
 
 const BuildResume = ({ handleIncrementFormIndex, isEdit }) => {
   const { currentUser } = useUserStore();
   const { currentResumeName } = useResumeStore();
   console.log("resume name", currentResumeName);
+  const navigate = useNavigate();
 
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [aboutDescription, setAboutDescription] = useState(null);
@@ -39,6 +42,24 @@ const BuildResume = ({ handleIncrementFormIndex, isEdit }) => {
       .catch((e) => alert(e));
   };
 
+  const updloadEducationEdit = async () => {
+    const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
+    //make resume1 dynamic
+    await updateDoc(doc(userChatsRef, currentResumeName), {
+      firstName: currentUser.firstName,
+      lastName: currentUser.lastName,
+      phoneNumber: phoneNumber ? phoneNumber : null,
+      aboutDescription: aboutDescription ? aboutDescription : null,
+      email: currentUser.email,
+      city: currentUser.city,
+      state: currentUser.state,
+    })
+      .then(() => {
+        navigate("/ResumePreview")
+      })
+      .catch((e) => alert(e));
+  };
+
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -53,8 +74,9 @@ const BuildResume = ({ handleIncrementFormIndex, isEdit }) => {
           console.log("from firestore", snapshot.data().aboutDescription);
           setAboutDescription(snapshot.data().aboutDescription);
         }
-        
+        setLoading(false);
       });
+      setLoading(false);
     } else {setLoading(false) }
   }, [currentUser, currentResumeName, isEdit]);
 
@@ -159,60 +181,60 @@ const BuildResume = ({ handleIncrementFormIndex, isEdit }) => {
                 </div>
 
                 {loading ? (
-                  <>
-                     <div class="sm:col-span-3">
-                     <div class="inline-block">
-                       <label
-                         for="af-account-phone"
-                         class="inline-block text-sm text-gray-800 mt-4 sm:mt-5 "
-                       >
-                         Phone
-                       </label>
-                       <span class="text-sm text-gray-400 "> (optional)</span>
-                     </div>
-                   </div>
-                   <div class="sm:flex mt-1">
-                     <input
-                       id="af-account-phone"
-                       type="text"
-                       class="py-2 px-3 pe-11 block w-1/2 border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                       placeholder="(xxx)xxx-xx-xx"
-                       onChange={(e) => setPhoneNumber(e.target.value)}
-                     />
-                   </div>
-                   <div class="sm:col-span-3">
-                     <label
-                       for="af-account-bio"
-                       class="inline-block text-sm text-gray-800 mt-4 sm:mt-7"
-                     >
-                       About you
-                     </label>
-                     <span class="text-sm text-gray-400 "> (optional)</span>
-                   </div>
-   
-                   <div class="sm:col-span-9 mt-1">
-                     {isEdit ? (
-                       <textarea
-                         id="af-account-bio"
-                         class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                         rows="6"
-                         value={aboutDescription ? aboutDescription : null}
-                         onChange={(e) => setAboutDescription(e.target.value)}
-                       >
-                       
-                       </textarea>
-                     ) : (
-                       <textarea
-                         id="af-account-bio"
-                         class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                         rows="6"
-                         placeholder="I am a hard working, focused individual who is set on self-improvement."
-                         onChange={(e) => setAboutDescription(e.target.value)}
-                       ></textarea>
-                     )}
-                   </div>
-                   </>
-                ) : (<p>spinner</p>)}
+                <p>spinner</p>
+                ) : (<>
+                  <div class="sm:col-span-3">
+                  <div class="inline-block">
+                    <label
+                      for="af-account-phone"
+                      class="inline-block text-sm text-gray-800 mt-4 sm:mt-5 "
+                    >
+                      Phone
+                    </label>
+                    <span class="text-sm text-gray-400 "> (optional)</span>
+                  </div>
+                </div>
+                <div class="sm:flex mt-1">
+                  <input
+                    id="af-account-phone"
+                    type="text"
+                    class="py-2 px-3 pe-11 block w-1/2 border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                    placeholder="(xxx)xxx-xx-xx"
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                  />
+                </div>
+                <div class="sm:col-span-3">
+                  <label
+                    for="af-account-bio"
+                    class="inline-block text-sm text-gray-800 mt-4 sm:mt-7"
+                  >
+                    About you
+                  </label>
+                  <span class="text-sm text-gray-400 "> (optional)</span>
+                </div>
+
+                <div class="sm:col-span-9 mt-1">
+                  {isEdit ? (
+                    <textarea
+                      id="af-account-bio"
+                      class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                      rows="6"
+                      value={aboutDescription ? aboutDescription : null}
+                      onChange={(e) => setAboutDescription(e.target.value)}
+                    >
+                    
+                    </textarea>
+                  ) : (
+                    <textarea
+                      id="af-account-bio"
+                      class="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                      rows="6"
+                      placeholder="I am a hard working, focused individual who is set on self-improvement."
+                      onChange={(e) => setAboutDescription(e.target.value)}
+                    ></textarea>
+                  )}
+                </div>
+                </>)}
              
 
                 <div class="mt-5 flex justify-end gap-x-2">
@@ -222,13 +244,20 @@ const BuildResume = ({ handleIncrementFormIndex, isEdit }) => {
                   >
                     Cancel
                   </button> */}
-                  <button
+                  {isEdit ? (<button
+                    type="button"
+                    class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                    onClick={updloadEducationEdit}
+                  >
+                    Finish Editing
+                  </button>) : (<button
                     type="button"
                     class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                     onClick={updloadEducation}
                   >
                     Next
-                  </button>
+                  </button>)}
+                  
                 </div>
               </form>
             </div>

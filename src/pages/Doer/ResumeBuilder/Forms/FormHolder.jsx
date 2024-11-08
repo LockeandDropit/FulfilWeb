@@ -92,15 +92,18 @@ setIsEdit(true)
           <Education
             handleIncrementFormIndex={handleIncrementFormIndex}
             resetEducationForm={resetEducationForm}
+            isEdit={isEdit}
           />
         ) : activeFormIndex === 3 ? (
           <Experience
             handleIncrementFormIndex={handleIncrementFormIndex}
             resetExperienceForm={resetExperienceForm}
+            isEdit={isEdit}
           />
         ) : activeFormIndex === 4 ? <Skills
         handleIncrementFormIndex={handleIncrementFormIndex}
         resetSkillsForm={resetSkillsForm}
+        isEdit={isEdit}
       /> : activeFormIndex ===
           5 ? <Navigate to={'/ResumePreview'} /> : activeFormIndex === 6 ? null : null}
       </div>

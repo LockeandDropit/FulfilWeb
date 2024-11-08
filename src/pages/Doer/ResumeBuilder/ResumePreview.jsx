@@ -164,7 +164,11 @@ const ResumePreview = () => {
               >
                 About Me
               </button>
-              <button class="mt-2 py-2 w-1/2 px-4 text-center items-center gap-x-2 text-base  font-semibold rounded-lg border  bg-gray-100 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none">
+              <button 
+                onClick={() =>
+                  navigate("/FormHolder", { state: { index: 2, isEdit: true } })
+                }
+              class="mt-2 py-2 w-1/2 px-4 text-center items-center gap-x-2 text-base  font-semibold rounded-lg border  bg-gray-100 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none">
                 Education
               </button>
               <button class="mt-2 py-2 w-1/2 px-4 text-center items-center gap-x-2 text-base  font-semibold rounded-lg border  bg-gray-100 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none">

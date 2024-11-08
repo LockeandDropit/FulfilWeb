@@ -155,30 +155,25 @@ const ResumePreview = () => {
           <ModalHeader>What part would you like to edit?</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <button
-              class="mt-3 py-2 w-1/2 flex px-4 text-start items-center gap-x-2 text-base  font-semibold rounded-lg border  bg-gray-100 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none"
-             onClick={() => navigate("/FormHolder", { state: { index: 1, isEdit: true } })}
-            >
-              About Me
-            </button>
-            <button
-              class="mt-2 py-2 w-1/2 flex px-4 text-start items-center gap-x-2 text-base  font-semibold rounded-lg border  bg-gray-100 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none"
-           
-            >
-              Education
-            </button>
-            <button
-              class="mt-2 py-2 w-1/2 flex px-4 text-start items-center gap-x-2 text-base  font-semibold rounded-lg border  bg-gray-100 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none"
-        
-            >
-              Experience
-            </button>
-            <button
-              class="mt-2 py-2 w-1/2 flex px-4 text-start items-center gap-x-2 text-base  font-semibold rounded-lg border  bg-gray-100 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none"
-          
-            >
-              Skills
-            </button>
+            <div className="flex flex-col items-center justify-center">
+              <button
+                class="mt-3 py-2 w-1/2 px-4 text-center items-center align-center gap-x-2 text-base  font-semibold rounded-lg border  bg-gray-100 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none"
+                onClick={() =>
+                  navigate("/FormHolder", { state: { index: 1, isEdit: true } })
+                }
+              >
+                About Me
+              </button>
+              <button class="mt-2 py-2 w-1/2 px-4 text-center items-center gap-x-2 text-base  font-semibold rounded-lg border  bg-gray-100 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none">
+                Education
+              </button>
+              <button class="mt-2 py-2 w-1/2 px-4 text-center items-center gap-x-2 text-base  font-semibold rounded-lg border  bg-gray-100 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none">
+                Experience
+              </button>
+              <button class="mt-2 py-2 w-1/2 px-4 text-center items-center gap-x-2 text-base  font-semibold rounded-lg border  bg-gray-100 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none">
+                Skills
+              </button>
+            </div>
           </ModalBody>
           <ModalFooter>
             <button

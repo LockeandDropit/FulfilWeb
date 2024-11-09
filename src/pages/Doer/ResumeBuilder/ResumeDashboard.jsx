@@ -78,7 +78,7 @@ const ResumeDashboard = () => {
   };
 
   const handleNavigateToPreviousResume = (x) => {
-    setNewResumeName(x).then(() => navigate("/ResumePreview"));
+    setNewResumeName(x).then(() => navigate("/ResumePreview", ));
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();

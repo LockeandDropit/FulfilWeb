@@ -53,6 +53,7 @@ const BuildResume = ({ handleIncrementFormIndex, isEdit }) => {
       email: currentUser.email,
       city: currentUser.city,
       state: currentUser.state,
+      id: currentResumeName
     })
       .then(() => {
         navigate("/ResumePreview")
@@ -73,6 +74,7 @@ const BuildResume = ({ handleIncrementFormIndex, isEdit }) => {
         } else {
           console.log("from firestore", snapshot.data().aboutDescription);
           setAboutDescription(snapshot.data().aboutDescription);
+          setPhoneNumber(snapshot.data().phoneNumber)
         }
         setLoading(false);
       });
@@ -199,7 +201,8 @@ const BuildResume = ({ handleIncrementFormIndex, isEdit }) => {
                     id="af-account-phone"
                     type="text"
                     class="py-2 px-3 pe-11 block w-1/2 border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
-                    placeholder="(xxx)xxx-xx-xx"
+                    value={phoneNumber ? phoneNumber : null}
+                    placeholder="xxx-xxx-xxxx"
                     onChange={(e) => setPhoneNumber(e.target.value)}
                   />
                 </div>

@@ -17,7 +17,7 @@ const FormHolder = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.state.isEdit === true) {
+    if (location.state?.isEdit === true) {
 setActiveFormIndex(location.state.index)
 setIsEdit(true)
     }
@@ -31,7 +31,8 @@ setIsEdit(true)
   };
 
   // absolutely DISGUSTING work around for not being able to access Editor state. But this is the price of a mid-range IQ.
-  const resetExperienceForm = () => {
+  const resetExperienceForm = (x) => {
+    console.log("x", x)
     setActiveFormIndex(0);
     setTimeout(() => {
       setActiveFormIndex(3);

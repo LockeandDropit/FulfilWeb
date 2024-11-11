@@ -33,7 +33,8 @@ import { useDisclosure } from "@chakra-ui/react";
 import Experience from "./Experience";
 import { useNavigate } from "react-router-dom";
 
-import { v4 as uuidv4 } from 'uuid';
+
+import { v4 as uuidv4 } from "uuid";
 
 const Education = ({
   handleIncrementFormIndex,
@@ -62,11 +63,10 @@ const Education = ({
   const handleSaveAndClearData = () => {
     //POST all data
 
-
     //unmute +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     updloadEducation();
 
-//if isEdit {}
+    //if isEdit {}
     //navigate to a new blank form
     resetEducationForm();
   };
@@ -142,29 +142,35 @@ const Education = ({
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
 
-    const resumeSnapshot = await getDoc(doc(db, "users", currentUser.uid, "Resumes", currentResumeName));
+    const resumeSnapshot = await getDoc(
+      doc(db, "users", currentUser.uid, "Resumes", currentResumeName)
+    );
 
     const resumeData = resumeSnapshot.data();
 
-    const resumeIndex = resumeData.education.findIndex(
-      (x) => x.id = id
-    )
+    const resumeIndex = resumeData.education.findIndex((x) => (x.id = id));
 
-    console.log("id",id, resumeData.education[resumeIndex])
- 
-    console.log("all checks", institutionTitle, degree, major, isEnrolled)
+    console.log("id", id, resumeData.education[resumeIndex]);
+
+    console.log("all checks", institutionTitle, degree, major, isEnrolled);
 
     resumeData.education[resumeIndex].institutionName = institutionTitle;
     resumeData.education[resumeIndex].degree = degree;
     resumeData.education[resumeIndex].major = major;
-    resumeData.education[resumeIndex].startDate = editedStartDate ? editedStartDate.toLocaleDateString() : startDate;
-    resumeData.education[resumeIndex].endDate = editedEndDate ? editedEndDate.toLocaleDateString() : (endDate ? endDate : null);
+    resumeData.education[resumeIndex].startDate = editedStartDate
+      ? editedStartDate.toLocaleDateString()
+      : startDate;
+    resumeData.education[resumeIndex].endDate = editedEndDate
+      ? editedEndDate.toLocaleDateString()
+      : endDate
+      ? endDate
+      : null;
     resumeData.education[resumeIndex].isEnrolled = isEnrolled;
 
     // resumeData.education[id].institutionName = institutionTitle;
 
     await updateDoc(doc(userChatsRef, currentResumeName), {
-      education: resumeData.education
+      education: resumeData.education,
     });
   };
 
@@ -172,21 +178,29 @@ const Education = ({
   //   const educationIndex = x
   // }
 
-  const [isEditAndNew, setIsEditAndNew] = useState(false)
+  const [isEditAndNew, setIsEditAndNew] = useState(false);
 
   const handleAddEducationWhileEditing = () => {
-    setIsEditAndNew(true)
+    setIsEditAndNew(true);
     setSelectedEducation(null);
     setInstitutionTitle(null);
     setStartDate(null);
     setDegree(null);
     setMajor(null);
-    setEndDate(null)
+    setEndDate(null);
     setIsEnrolled(false);
     onCloseChoose();
 
-    console.log("tester tesrtyyyy", selectedEducation, institutionTitle, startDate, degree, major, endDate)
-  }
+    console.log(
+      "tester tesrtyyyy",
+      selectedEducation,
+      institutionTitle,
+      startDate,
+      degree,
+      major,
+      endDate
+    );
+  };
 
   const handleChooseEducation = (x) => {
     console.log("passed edu", x);
@@ -216,9 +230,7 @@ const Education = ({
     });
   };
 
-  const handleIsEnrolled = () => {
-
-  }
+  const handleIsEnrolled = () => {};
 
   const ExampleCustomInput = forwardRef(
     ({ value, onClick, className }, onChange, ref) => (
@@ -378,7 +390,13 @@ const Education = ({
                         </div>
                         <div class="relative inline-block text-left ml-auto">
                           <DatePicker
-                            selected={editedEndDate ? editedEndDate : (endDate ? endDate : null)}
+                            selected={
+                              editedEndDate
+                                ? editedEndDate
+                                : endDate
+                                ? endDate
+                                : null
+                            }
                             onChange={(date) => setEditedEndDate(date)}
                             customInput={<ExampleCustomInput2 />}
                           />
@@ -404,115 +422,116 @@ const Education = ({
                   </form>
                 </div>
               </div>
-            ) : isEdit && !selectedEducation ? (  <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 mx-auto">
-              <div class="bg-white rounded-xl shadow p-4 sm:p-7 ">
-                <div class="mb-8">
-                  <h2 class="text-xl font-bold text-gray-800 ">Education</h2>
-                  <p class="text-sm text-gray-600 ">
-                    Provide general contact information, along with a few
-                    sentences to describe yourself.
-                  </p>
-                </div>
-
-                <form>
-                  <div class="sm:col-span-3">
-                    <label
-                      for="af-account-email"
-                      class="inline-block text-sm text-gray-800 mt-2.5 "
-                    >
-                      Degree
-                    </label>
+            ) : isEdit && !selectedEducation ? (
+              <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 mx-auto">
+                <div class="bg-white rounded-xl shadow p-4 sm:p-7 ">
+                  <div class="mb-8">
+                    <h2 class="text-xl font-bold text-gray-800 ">Education</h2>
+                    <p class="text-sm text-gray-600 ">
+                      Provide general contact information, along with a few
+                      sentences to describe yourself.
+                    </p>
                   </div>
 
-                  <div class="sm:col-span-9">
-                    <input
-                      id="af-account-email"
-                      type="email"
-                      class="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      placeholder="Major, Minor, associates, etc."
-                      onChange={(e) => setDegree(e.target.value)}
-                    />
-                  </div>
-                  <div class="sm:col-span-3 mt-4 sm:mt-5">
-                    <label
-                      for="af-account-email"
-                      class="inline-block text-sm text-gray-800 mt-2.5 "
-                    >
-                      Major
-                    </label>
-                  </div>
-
-                  <div class="sm:col-span-9 mt-1">
-                    <input
-                      id="af-account-email"
-                      type="email"
-                      class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      placeholder="Engineering, English, Management, etc."
-                      onChange={(e) => setMajor(e.target.value)}
-                    />
-                  </div>
-                  <div class="sm:col-span-3 mt-4 sm:mt-5">
-                    <label
-                      for="af-account-email"
-                      class="inline-block text-sm text-gray-800 mt-2.5 "
-                    >
-                      Institution
-                    </label>
-                  </div>
-
-                  <div class="sm:col-span-9">
-                    <input
-                      id="af-account-email"
-                      type="email"
-                      class="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      placeholder="ex: Hennepin Technical College"
-                      onChange={(e) => setInstitutionTitle(e.target.value)}
-                    />
-                  </div>
-                  <div class="flex mb-1 mt-4 sm:mt-5">
-                    <label
-                      for="af-account-full-name"
-                      class="inline-block text-sm text-gray-800 mt-2.5 "
-                    >
-                      Attendance
-                    </label>
-                  </div>
-
-                  <div class="sm:col-span-9">
-                    <div class="sm:flex">
-                      <div class="relative  text-left">
-                        <DatePicker
-                          selected={startDate}
-                          onChange={(date) => setStartDate(date)}
-                          customInput={<ExampleCustomInput />}
-                        />
-                      </div>
-                      <div class="relative inline-block text-left ml-auto">
-                        <DatePicker
-                          selected={endDate}
-                          onChange={(date) => setEndDate(date)}
-                          customInput={<ExampleCustomInput2 />}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex mb-1">
-                    <div className="ml-auto mt-2.5">
-                      <input
-                        type="checkbox"
-                        class="mr-2 ml-auto shrink-0 border-gray-200 rounded text-blue-600"
-                        onChange={() => setIsEnrolled(!isEnrolled)}
-                      />
+                  <form>
+                    <div class="sm:col-span-3">
                       <label
-                        for="af-account-full-name"
-                        class="inline-block text-sm text-gray-600"
+                        for="af-account-email"
+                        class="inline-block text-sm text-gray-800 mt-2.5 "
                       >
-                        Currently enrolled
+                        Degree
                       </label>
                     </div>
-                  </div>
 
-                  {/* <div class="mt-8 flex justify-center gap-x-2">
+                    <div class="sm:col-span-9">
+                      <input
+                        id="af-account-email"
+                        type="email"
+                        class="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                        placeholder="Major, Minor, associates, etc."
+                        onChange={(e) => setDegree(e.target.value)}
+                      />
+                    </div>
+                    <div class="sm:col-span-3 mt-4 sm:mt-5">
+                      <label
+                        for="af-account-email"
+                        class="inline-block text-sm text-gray-800 mt-2.5 "
+                      >
+                        Major
+                      </label>
+                    </div>
+
+                    <div class="sm:col-span-9 mt-1">
+                      <input
+                        id="af-account-email"
+                        type="email"
+                        class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                        placeholder="Engineering, English, Management, etc."
+                        onChange={(e) => setMajor(e.target.value)}
+                      />
+                    </div>
+                    <div class="sm:col-span-3 mt-4 sm:mt-5">
+                      <label
+                        for="af-account-email"
+                        class="inline-block text-sm text-gray-800 mt-2.5 "
+                      >
+                        Institution
+                      </label>
+                    </div>
+
+                    <div class="sm:col-span-9">
+                      <input
+                        id="af-account-email"
+                        type="email"
+                        class="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                        placeholder="ex: Hennepin Technical College"
+                        onChange={(e) => setInstitutionTitle(e.target.value)}
+                      />
+                    </div>
+                    <div class="flex mb-1 mt-4 sm:mt-5">
+                      <label
+                        for="af-account-full-name"
+                        class="inline-block text-sm text-gray-800 mt-2.5 "
+                      >
+                        Attendance
+                      </label>
+                    </div>
+
+                    <div class="sm:col-span-9">
+                      <div class="sm:flex">
+                        <div class="relative  text-left">
+                          <DatePicker
+                            selected={startDate}
+                            onChange={(date) => setStartDate(date)}
+                            customInput={<ExampleCustomInput />}
+                          />
+                        </div>
+                        <div class="relative inline-block text-left ml-auto">
+                          <DatePicker
+                            selected={endDate}
+                            onChange={(date) => setEndDate(date)}
+                            customInput={<ExampleCustomInput2 />}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex mb-1">
+                      <div className="ml-auto mt-2.5">
+                        <input
+                          type="checkbox"
+                          class="mr-2 ml-auto shrink-0 border-gray-200 rounded text-blue-600"
+                          onChange={() => setIsEnrolled(!isEnrolled)}
+                        />
+                        <label
+                          for="af-account-full-name"
+                          class="inline-block text-sm text-gray-600"
+                        >
+                          Currently enrolled
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* <div class="mt-8 flex justify-center gap-x-2">
                 
                     <button
                       type="button"
@@ -547,164 +566,167 @@ const Education = ({
                       </svg>
                     </button>
                   </div> */}
-                </form>
-              </div>
-            </div>) : (  <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 mx-auto">
-              <div class="bg-white rounded-xl shadow p-4 sm:p-7 ">
-                <div class="mb-8">
-                  <h2 class="text-xl font-bold text-gray-800 ">Education</h2>
-                  <p class="text-sm text-gray-600 ">
-                    Provide general contact information, along with a few
-                    sentences to describe yourself.
-                  </p>
+                  </form>
                 </div>
-
-                <form>
-                  <div class="sm:col-span-3">
-                    <label
-                      for="af-account-email"
-                      class="inline-block text-sm text-gray-800 mt-2.5 "
-                    >
-                      Degree
-                    </label>
+              </div>
+            ) : (
+              <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 mx-auto">
+                <div class="bg-white rounded-xl shadow p-4 sm:p-7 ">
+                  <div class="mb-8">
+                    <h2 class="text-xl font-bold text-gray-800 ">Education</h2>
+                    <p class="text-sm text-gray-600 ">
+                      Provide general contact information, along with a few
+                      sentences to describe yourself.
+                    </p>
                   </div>
 
-                  <div class="sm:col-span-9">
-                    <input
-                      id="af-account-email"
-                      type="email"
-                      class="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      placeholder="Major, Minor, associates, etc."
-                      onChange={(e) => setDegree(e.target.value)}
-                    />
-                  </div>
-                  <div class="sm:col-span-3 mt-4 sm:mt-5">
-                    <label
-                      for="af-account-email"
-                      class="inline-block text-sm text-gray-800 mt-2.5 "
-                    >
-                      Major
-                    </label>
-                  </div>
-
-                  <div class="sm:col-span-9 mt-1">
-                    <input
-                      id="af-account-email"
-                      type="email"
-                      class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      placeholder="Engineering, English, Management, etc."
-                      onChange={(e) => setMajor(e.target.value)}
-                    />
-                  </div>
-                  <div class="sm:col-span-3 mt-4 sm:mt-5">
-                    <label
-                      for="af-account-email"
-                      class="inline-block text-sm text-gray-800 mt-2.5 "
-                    >
-                      Institution
-                    </label>
-                  </div>
-
-                  <div class="sm:col-span-9">
-                    <input
-                      id="af-account-email"
-                      type="email"
-                      class="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      placeholder="ex: Hennepin Technical College"
-                      onChange={(e) => setInstitutionTitle(e.target.value)}
-                    />
-                  </div>
-                  <div class="flex mb-1 mt-4 sm:mt-5">
-                    <label
-                      for="af-account-full-name"
-                      class="inline-block text-sm text-gray-800 mt-2.5 "
-                    >
-                      Attendance
-                    </label>
-                  </div>
-
-                  <div class="sm:col-span-9">
-                    <div class="sm:flex">
-                      <div class="relative  text-left">
-                        <DatePicker
-                          selected={startDate}
-                          onChange={(date) => setStartDate(date)}
-                          customInput={<ExampleCustomInput />}
-                        />
-                      </div>
-                      <div class="relative inline-block text-left ml-auto">
-                        <DatePicker
-                          selected={endDate}
-                          onChange={(date) => setEndDate(date)}
-                          customInput={<ExampleCustomInput2 />}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex mb-1">
-                    <div className="ml-auto mt-2.5">
-                      <input
-                        type="checkbox"
-                        class="mr-2 ml-auto shrink-0 border-gray-200 rounded text-blue-600"
-                        onChange={() => setIsEnrolled(!isEnrolled)}
-                      />
+                  <form>
+                    <div class="sm:col-span-3">
                       <label
-                        for="af-account-full-name"
-                        class="inline-block text-sm text-gray-600"
+                        for="af-account-email"
+                        class="inline-block text-sm text-gray-800 mt-2.5 "
                       >
-                        Currently enrolled
+                        Degree
                       </label>
                     </div>
-                  </div>
 
-                  <div class="mt-8 flex justify-center gap-x-2">
-                    {/* <button
-              type="button"
-              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50"
-            >
-              Cancel
-            </button> */}
-                    <button
-                      type="button"
-                      class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                      onClick={handleSaveAndClearData}
-                    >
-                      Add Education
-                    </button>
-                  </div>
-                  <div class="mt-10 flex justify-end gap-x-2">
-                    {/* <button
-              type="button"
-              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50"
-            >
-              Cancel
-            </button> */}
-                    <button
-                      type="button"
-                      class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                      // onClick={uploadAndNavigate}
-                      onClick={checkIfValid}
-                    >
-                      Next
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        class="size-3"
+                    <div class="sm:col-span-9">
+                      <input
+                        id="af-account-email"
+                        type="email"
+                        class="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                        placeholder="Major, Minor, associates, etc."
+                        onChange={(e) => setDegree(e.target.value)}
+                      />
+                    </div>
+                    <div class="sm:col-span-3 mt-4 sm:mt-5">
+                      <label
+                        for="af-account-email"
+                        class="inline-block text-sm text-gray-800 mt-2.5 "
                       >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                        Major
+                      </label>
+                    </div>
+
+                    <div class="sm:col-span-9 mt-1">
+                      <input
+                        id="af-account-email"
+                        type="email"
+                        class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                        placeholder="Engineering, English, Management, etc."
+                        onChange={(e) => setMajor(e.target.value)}
+                      />
+                    </div>
+                    <div class="sm:col-span-3 mt-4 sm:mt-5">
+                      <label
+                        for="af-account-email"
+                        class="inline-block text-sm text-gray-800 mt-2.5 "
+                      >
+                        Institution
+                      </label>
+                    </div>
+
+                    <div class="sm:col-span-9">
+                      <input
+                        id="af-account-email"
+                        type="email"
+                        class="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                        placeholder="ex: Hennepin Technical College"
+                        onChange={(e) => setInstitutionTitle(e.target.value)}
+                      />
+                    </div>
+                    <div class="flex mb-1 mt-4 sm:mt-5">
+                      <label
+                        for="af-account-full-name"
+                        class="inline-block text-sm text-gray-800 mt-2.5 "
+                      >
+                        Attendance
+                      </label>
+                    </div>
+
+                    <div class="sm:col-span-9">
+                      <div class="sm:flex">
+                        <div class="relative  text-left">
+                          <DatePicker
+                            selected={startDate}
+                            onChange={(date) => setStartDate(date)}
+                            customInput={<ExampleCustomInput />}
+                          />
+                        </div>
+                        <div class="relative inline-block text-left ml-auto">
+                          <DatePicker
+                            selected={endDate}
+                            onChange={(date) => setEndDate(date)}
+                            customInput={<ExampleCustomInput2 />}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex mb-1">
+                      <div className="ml-auto mt-2.5">
+                        <input
+                          type="checkbox"
+                          class="mr-2 ml-auto shrink-0 border-gray-200 rounded text-blue-600"
+                          onChange={() => setIsEnrolled(!isEnrolled)}
                         />
-                      </svg>
-                    </button>
-                  </div>
-                </form>
+                        <label
+                          for="af-account-full-name"
+                          class="inline-block text-sm text-gray-600"
+                        >
+                          Currently enrolled
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex justify-center gap-x-2">
+                      {/* <button
+              type="button"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50"
+            >
+              Cancel
+            </button> */}
+                      <button
+                        type="button"
+                        class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                        onClick={handleSaveAndClearData}
+                      >
+                        Add Education
+                      </button>
+                    </div>
+                    <div class="mt-10 flex justify-end gap-x-2">
+                      {/* <button
+              type="button"
+              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50"
+            >
+              Cancel
+            </button> */}
+                      <button
+                        type="button"
+                        class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                        // onClick={uploadAndNavigate}
+                        onClick={checkIfValid}
+                      >
+                        Next
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          class="size-3"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
-            </div>) }
+            )}
 
             {isEdit && (
               <>
@@ -744,7 +766,7 @@ const Education = ({
                     // onClick={uploadAndNavigate}
                     onClick={checkIfValid}
                   >
-                    Finish 
+                    Finish
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -763,6 +785,42 @@ const Education = ({
                 </div>
               </>
             )}
+          </div>
+          <div className="flex items-center justify-center w-full">
+            <div
+              class=" max-w-xs bg-teal-100 border border-teal-200 text-sm text-teal-800 rounded-lg"
+              role="alert"
+              tabindex="-1"
+              aria-labelledby="hs-toast-soft-color-teal-label"
+            >
+              <div id="hs-toast-soft-color-teal-label" class="flex p-4">
+                Success! Your education has been added
+                <div class="ms-auto">
+                  <button
+                    type="button"
+                    class="inline-flex shrink-0 justify-center items-center size-5 rounded-lg text-teal-800 opacity-50 hover:opacity-100 focus:outline-none focus:opacity-100 dark:text-teal-200"
+                    aria-label="Close"
+                  >
+                    <span class="sr-only">Close</span>
+                    <svg
+                      class="shrink-0 size-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M18 6 6 18"></path>
+                      <path d="m6 6 12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </main>
       )}
@@ -783,12 +841,12 @@ const Education = ({
                 </button>
               ))}
               <button
-                    type="button"
-                    class="mt-3 py-2 px-6 w-1/2 text-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
-                    onClick={handleAddEducationWhileEditing}
-                  >
-                    Add More Education
-                  </button>
+                type="button"
+                class="mt-3 py-2 px-6 w-1/2 text-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
+                onClick={handleAddEducationWhileEditing}
+              >
+                Add More Education
+              </button>
             </div>
           </ModalBody>
           <ModalFooter>

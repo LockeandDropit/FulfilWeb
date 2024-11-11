@@ -15,7 +15,7 @@ import JobFilter from "../../../pages/Doer/components/JobFilter.jsx";
 import { Center, Card } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
 import { useSearchResults } from "../../../pages/Doer/Chat/lib/searchResults";
-import useJobFetch from "../../../hooks/useJobFetch.js";
+
 import useNeederJobFetch from "../../../hooks/useNeederJobFetch.js";
 import { auth } from "../../../firebaseConfig";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";

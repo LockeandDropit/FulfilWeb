@@ -55,6 +55,7 @@ import {
 } from "@stripe/react-stripe-js";
 import Plausible from "plausible-tracker";
 import AnnualSubscriptionModal from "./components/AnnualSubscriptionModal.jsx";
+import ReactPlayer from 'react-player'
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const DoerPayment = () => {
@@ -331,6 +332,11 @@ const DoerPayment = () => {
     navigate("/DoerMapView", { state: { firstVisit: true } });
   };
 
+  const url = "https://www.youtube.com/watch?v=E1kAt7DLyg8";
+
+
+
+
   //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
@@ -353,34 +359,14 @@ const DoerPayment = () => {
                 Find the first steps to a fulfilling career
               </p>
             </div>
-
+         
             <div class="mt-10 relative max-w-5xl mx-auto">
-              <div class="w-full object-cover h-96 sm:h-[480px] bg-[url('https://images.unsplash.com/photo-1606868306217-dbf5046868d2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1020&q=80')] bg-no-repeat bg-center bg-cover rounded-xl"></div>
-
-              <div class="absolute inset-0 size-full">
-                <div class="flex flex-col justify-center items-center size-full">
-                  <a
-                    class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none "
-                    href="#"
-                  >
-                    <svg
-                      class="shrink-0 size-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <polygon points="5 3 19 12 5 21 5 3" />
-                    </svg>
-                    Play the overview
-                  </a>
-                </div>
+              <div class="w-full object-cover h-96 sm:h-[480px]  rounded-xl">
+              <ReactPlayer url={url} width="100%"
+             height="100%"
+             controls={true} />
               </div>
+
 
            
             </div>

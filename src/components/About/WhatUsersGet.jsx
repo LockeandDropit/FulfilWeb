@@ -82,7 +82,7 @@ const WhatUsersGet = () => {
 
             <div className=" max-sm:hidden relative sm:mb-16 sm:mt-16">
               <img
-                src="/landingImages/aboutGrowth.jpg"
+                src="/landingImages/aboutTest.jpg"
                 alt=""
                 className="rounded-lg md:mt-6 z-[1]"
               />

@@ -58,7 +58,7 @@ const Hero = () => {
             <LazyLoadImage
       // height={"600px"}
       effect="blur"
-      src="./landingImages//businessman-portrait-teamwork-as-employee-with-diversity-internship-candidates-opportunity-group-about-us-pride-office-company-training-as-creative-consultant-community.jpg"
+      src="./landingImages/mediumHero.jpg"
   />
             {/* <img
             loading="lazy"

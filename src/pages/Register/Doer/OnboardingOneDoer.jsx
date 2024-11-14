@@ -294,7 +294,7 @@ const OnboardingOneDoer = () => {
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-center">
       <div class="aspect-w-16 aspect-h-9 lg:aspect-none">
-      <LazyLoadImage src="./landingImages/unrecognizable-male-welder-work.jpg"   effect="blur"/>
+      <LazyLoadImage src="./landingImages/mediumWelder.jpg"   effect="blur"/>
         {/* <img class="w-full object-cover rounded-xl" loading="lazy" src="./landingImages/unrecognizable-male-welder-work.jpg" /> */}
       </div>
 

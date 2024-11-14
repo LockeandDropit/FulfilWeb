@@ -15,7 +15,7 @@ const WhatUsersGet = () => {
         <div class="grid sm:grid-cols-2 gap-6 md:gap-12 items-center justify-center align-center ">
           <div className="relative">
             <img
-              src="/landingImages/verticalClarity.jpg"
+              src="/landingImages/mediumAbout1.jpg"
               loading="lazy"
               className="rounded-lg"
             />
@@ -52,7 +52,7 @@ const WhatUsersGet = () => {
             <div className="md:mt-6 items-center justify-center align-center">
               <div className=" sm:hidden relative sm:mb-16 sm:mt-16">
                 <img
-                  src="/landingImages/verticalGuidance.jpg"
+                  src="/landingImages/aboutTest.jpg"
                   loading="lazy"
                   className="rounded-lg md:mt-6"
                 />

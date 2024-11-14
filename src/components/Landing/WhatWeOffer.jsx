@@ -137,7 +137,7 @@ const WhatWeOffer = () => {
           <div class="aspect-w-16 aspect-h-7 ">
             <LazyLoadImage
               effect="blur"
-              src="/landingImages/car-care-woman.jpg"
+              src="/landingImages/mediumMechanic.jpg"
             />
             {/* <img class="w-full object-cover sm:rounded-xl"  src="/landingImages/car-care-woman.jpg" alt="Features Image" loading="lazy"  /> */}
           </div>

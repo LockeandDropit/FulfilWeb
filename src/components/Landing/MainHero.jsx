@@ -91,7 +91,7 @@ const MainHero = () => {
           loading="lazy"
             class=" max-h-[800px] md:ml-20 rounded-md"
               //credit fauxels https://www.pexels.com/photo/photo-of-men-shaking-hands-3182831/
-              src="./landingImages/pexels-fauxels-3182831.jpg"
+              src="./landingImages/mediumHero.jpg"
          
           
           />

@@ -14,7 +14,7 @@ const NoDegreeNoProblem = () => {
         <div className='mt-16'>
         <LazyLoadImage
       effect="blur"
-      src="landingImages/positive-diverse-workers-unloading-boxes-warehouse.jpg"
+      src="landingImages/mediumWarehouse.jpg"
   />
         </div>
         <div class="mt-5 sm:mt-10 lg:mt-0">

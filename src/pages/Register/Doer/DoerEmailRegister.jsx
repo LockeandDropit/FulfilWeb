@@ -147,25 +147,8 @@ const DoerEmailRegister = () => {
         // IdP data available using getAdditionalUserInfo(result)
         // ...
       
-        
-          const response = await fetch(
-            "https://emailapi-qi7k.onrender.com/sendDoerNotSubscribed",
-      
-            {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-              }),
-            }
-          );
-      
-          const { data, error } = await response.json();
+       
+        //used to have send email here but moved it to the next page
 
         Promise.all([
           getDoc(doc(db, "users", result.user.uid)),
@@ -181,8 +164,10 @@ const DoerEmailRegister = () => {
               ? "/DoerMapView"
               : "/Homepage"
             )
+            // console.log("here?",results)
+            
           )
-          .catch();
+          .catch((e) =>console.log("error is ",e));
 
         //check if user is already in DB
         //if so, navigate accordingly
@@ -359,7 +344,7 @@ setCloseInfoWindow(false)
                 fill="#EB4335"
               />
             </svg>
-            Sign in with Google
+            Sign up with Google
           </button>
 
           <div class="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6">

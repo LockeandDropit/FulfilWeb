@@ -163,6 +163,32 @@ const DoerAddProfileInfo = () => {
     setDateJoined(new Date().toLocaleString());
   }, []);
 
+
+  const handelSendNotSubscribedEmail = async () => {
+    const response = await fetch(
+      "https://emailapi-qi7k.onrender.com/sendDoerNotSubscribed",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        }),
+      }
+    );
+
+    const { data, error } = await response.json();
+  }
+
+  useEffect(() => {
+handelSendNotSubscribedEmail();
+  }, [])
+
   const sendTylerEmail = () => {
     setDoc(doc(db, "Tyler Dashboard", user.uid), {
       firstName: firstName ? firstName : null,

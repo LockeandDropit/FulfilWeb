@@ -55,7 +55,7 @@ import {
 } from "@stripe/react-stripe-js";
 import Plausible from "plausible-tracker";
 import AnnualSubscriptionModal from "./components/AnnualSubscriptionModal.jsx";
-import ReactPlayer from 'react-player'
+import ReactPlayer from "react-player";
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const DoerPayment = () => {
@@ -257,7 +257,8 @@ const DoerPayment = () => {
 
     return (
       fetch(
-        "https://fulfil-api.onrender.com/create-individual-subscription-monthly",
+        // "https://fulfil-api.onrender.com/create-individual-subscription-monthly",
+        "https://fulfil-api.onrender.com/create-doer-free-trial",
 
         {
           method: "POST",
@@ -334,9 +335,6 @@ const DoerPayment = () => {
 
   const url = "https://www.youtube.com/watch?v=E1kAt7DLyg8";
 
-
-
-
   //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
@@ -345,42 +343,44 @@ const DoerPayment = () => {
       <LoggedOutHeader props={openModal} />
 
       <div className="w-full h-[calc(100vh-160px)] sm:bg-landingHeroWave bg-no-repeat bg-bottom ">
-      {/* <div className="w-full h-[calc(100vh-160px)] ">
-  */}
+        {/* <div className="w-full h-[calc(100vh-160px)] ">
+         */}
         <div class="max-w-[85rem] px-4  sm:px-6 lg:px-8  mx-auto">
-       
           {/* <div class="mx-auto max-w-2xl mb-8 lg:mb-14 text-center sm:mt-20">
             <h2 class="text-3xl lg:text-4xl text-gray-800 font-bold ">
               Let’s see what your highest and best looks like.
             </h2>
           </div> */}
 
-<div class="max-w-2xl text-center mx-auto">
-              <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl ">
-                Let's see what you can{" "}
-                <span class="text-sky-400">achieve</span>
-              </h1>
-              <p class="mt-3 text-lg text-gray-800 ">
-                Find the first steps to a fulfilling career
-              </p>
-            </div>
-
+          <div class="max-w-2xl text-center mx-auto mt-20">
+            <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl ">
+              Let's see what you can <span class="text-sky-400">achieve.</span>
+            </h1>
+            <p class="mt-3 text-lg text-gray-800 ">
+              Find the first steps to a fulfilling career
+            </p>
+          </div>
+          {/* //here */}
           <div class="relative xl:w-10/12 xl:mx-auto mt-6 sm:mt-16">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
               <div>
                 <div class="p-4 relative z-10 bg-white border rounded-xl md:p-10 ">
-                  <h3 class="text-xl font-bold text-gray-800 ">Monthly</h3>
-                  <div class="text-sm text-gray-500 ">Take things slow.</div>
+                  {/* <h3 class="text-xl font-bold text-gray-800 ">Monthly</h3>
+                  <div class="text-sm text-gray-500 ">Take things slow.</div> */}
 
                   <div class="mt-5">
-                    <span class="text-6xl font-bold text-gray-800 ">$14</span>
+                    <span class="text-4xl font-bold text-gray-800 ">Free trial</span>
 
-                    <span class="ms-3 text-gray-500 ">/month</span>
+                    {/* <span class="ms-3 text-gray-500 ">renews at $14/month</span> */}
                   </div>
-
+                  <div className="flex flex-col">
+                  <span class=" text-gray-500 ">30 days free</span>
+                  <span class=" text-gray-500 ">Renews at $14/month</span>
+                  </div>
+                 
                   <div class="mt-5 grid sm:grid-cols-2 gap-y-2 py-4 first:pt-0 last:pb-0 sm:gap-x-6 sm:gap-y-0">
-                  <ul class="space-y-2 text-sm sm:text-base">
-                  <li class="flex gap-x-3">
+                    <ul class="space-y-2 text-sm sm:text-base">
+                      <li class="flex gap-x-3">
                         <span class="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 ">
                           <svg
                             class="shrink-0 size-3.5"
@@ -398,7 +398,7 @@ const DoerPayment = () => {
                           </svg>
                         </span>
                         <span class="text-gray-800 ">
-                        Easy access to job openings
+                          Easy access to job openings
                         </span>
                       </li>
                       <li class="flex gap-x-3">
@@ -419,7 +419,7 @@ const DoerPayment = () => {
                           </svg>
                         </span>
                         <span class="text-gray-800 ">
-                      Access to Referral Bonuses
+                          Access to Referral Bonuses
                         </span>
                       </li>
 
@@ -440,10 +440,11 @@ const DoerPayment = () => {
                             <polyline points="20 6 9 17 4 12" />
                           </svg>
                         </span>
-                        <span class="text-gray-800 ">Resources to find the first steps into high paying Industries</span>
+                        <span class="text-gray-800 ">
+                          Resources to find the first steps into high paying
+                          Industries
+                        </span>
                       </li>
-
-                  
                     </ul>
 
                     <ul class="space-y-2 text-sm sm:text-base">
@@ -486,7 +487,9 @@ const DoerPayment = () => {
                             <polyline points="20 6 9 17 4 12" />
                           </svg>
                         </span>
-                        <span class="text-gray-800 ">Access to a career guidance tool</span>
+                        <span class="text-gray-800 ">
+                          Access to a career guidance tool
+                        </span>
                       </li>
                       <li class="flex gap-x-3">
                         <span class="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 ">
@@ -505,9 +508,10 @@ const DoerPayment = () => {
                             <polyline points="20 6 9 17 4 12" />
                           </svg>
                         </span>
-                        <span class="text-gray-800 ">Quickly tailor your resume for each application.</span>
+                        <span class="text-gray-800 ">
+                          Quickly tailor your resume for each application.
+                        </span>
                       </li>
-               
                     </ul>
                   </div>
 
@@ -520,16 +524,16 @@ const DoerPayment = () => {
                       <button
                         type="button"
                         onClick={() => handleOpenStripeMonthly()}
-                        class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
+                        class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border  bg-blue-500 text-white shadow-sm  disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
                       >
-                        Sign up
+                        Start free trial
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div>
+              {/* <div>
                 <div class="shadow-xl shadow-gray-200 p-5 relative z-10 bg-white border rounded-xl md:p-10 ">
                   <h3 class="text-xl font-bold text-gray-800 ">Annual</h3>
                   <div class="text-sm text-gray-500 ">For the best price.</div>
@@ -545,8 +549,8 @@ const DoerPayment = () => {
                   <div></div>
 
                   <div class="mt-5 grid sm:grid-cols-2 gap-y-2 py-4 first:pt-0 last:pb-0 sm:gap-x-6 sm:gap-y-0">
-                  <ul class="space-y-2 text-sm sm:text-base">
-                  <li class="flex gap-x-3">
+                    <ul class="space-y-2 text-sm sm:text-base">
+                      <li class="flex gap-x-3">
                         <span class="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 ">
                           <svg
                             class="shrink-0 size-3.5"
@@ -564,7 +568,7 @@ const DoerPayment = () => {
                           </svg>
                         </span>
                         <span class="text-gray-800 ">
-                        Easy access to job openings
+                          Easy access to job openings
                         </span>
                       </li>
                       <li class="flex gap-x-3">
@@ -585,7 +589,7 @@ const DoerPayment = () => {
                           </svg>
                         </span>
                         <span class="text-gray-800 ">
-                      Access to Referral Bonuses
+                          Access to Referral Bonuses
                         </span>
                       </li>
 
@@ -606,10 +610,11 @@ const DoerPayment = () => {
                             <polyline points="20 6 9 17 4 12" />
                           </svg>
                         </span>
-                        <span class="text-gray-800 ">Resources to find the first steps into high paying Industries</span>
+                        <span class="text-gray-800 ">
+                          Resources to find the first steps into high paying
+                          Industries
+                        </span>
                       </li>
-
-                  
                     </ul>
 
                     <ul class="space-y-2 text-sm sm:text-base">
@@ -652,7 +657,9 @@ const DoerPayment = () => {
                             <polyline points="20 6 9 17 4 12" />
                           </svg>
                         </span>
-                        <span class="text-gray-800 ">Access to a career guidance tool</span>
+                        <span class="text-gray-800 ">
+                          Access to a career guidance tool
+                        </span>
                       </li>
                       <li class="flex gap-x-3">
                         <span class="mt-0.5 size-5 flex justify-center items-center rounded-full bg-blue-50 text-blue-600 ">
@@ -671,13 +678,14 @@ const DoerPayment = () => {
                             <polyline points="20 6 9 17 4 12" />
                           </svg>
                         </span>
-                        <span class="text-gray-800 ">Quickly tailor your resume for each application.</span>
+                        <span class="text-gray-800 ">
+                          Quickly tailor your resume for each application.
+                        </span>
                       </li>
-               
                     </ul>
                   </div>
 
-                  <div class="mt-5 grid grid-cols-2 gap-x-4 py-4 first:pt-0 last:pb-0" >
+                  <div class="mt-5 grid grid-cols-2 gap-x-4 py-4 first:pt-0 last:pb-0">
                     <div>
                       <p class="text-sm text-gray-500 ">*Charged annually</p>
                     </div>
@@ -693,7 +701,7 @@ const DoerPayment = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div class="hidden md:block absolute top-0 end-0 translate-y-16 translate-x-16">
@@ -743,17 +751,15 @@ const DoerPayment = () => {
                 />
               </svg> */}
             </div>
-
-          
           </div>
 
-          <div class="mt-7 text-center mb-10" >
+          <div class="mt-7 text-center mb-10">
             <p class="text-xs text-gray-400">Prices in USD. Taxes may apply.</p>
           </div>
 
           <div class="relative overflow-hidden mb-8 sm:mb-16">
-          <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-2">
-            {/* <div class="max-w-2xl text-center mx-auto">
+            <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 py-2">
+              {/* <div class="max-w-2xl text-center mx-auto">
               <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl ">
                 Let's see what you can{" "}
                 <span class="text-sky-400">achieve</span>
@@ -762,19 +768,19 @@ const DoerPayment = () => {
                 Find the first steps to a fulfilling career
               </p>
             </div> */}
-         
-            <div class="mt-12 sm:mt-24 relative max-w-5xl mx-auto mb-8 sm:mb-14">
-              <div class="w-full object-cover h-96 sm:h-[480px]  rounded-xl">
-              <ReactPlayer url={url} width="100%"
-             height="100%"
-             controls={true} />
+
+              <div class="mt-12 sm:mt-24 relative max-w-5xl mx-auto mb-8 sm:mb-14">
+                <div class="w-full object-cover h-96 sm:h-[480px]  rounded-xl">
+                  <ReactPlayer
+                    url={url}
+                    width="100%"
+                    height="100%"
+                    controls={true}
+                  />
+                </div>
               </div>
-
-
-           
             </div>
           </div>
-        </div>
         </div>
       </div>
 

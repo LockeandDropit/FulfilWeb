@@ -7,7 +7,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 const Hero = () => {
   const handleNavigateAndCaptureFunnel = () => {
     posthog.capture("logged_out_click_to_map");
-    navigate("/OnboardingOneDoer");
+    navigate("/DoerEmailRegister");
   };
   const navigate = useNavigate();
   return (
@@ -16,18 +16,16 @@ const Hero = () => {
         <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
           <div>
             <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
-              <span class="text-black">Fulfil is Your  </span>{" "}
+              <span class="text-black">No degree? </span>{" "}
             </h1>
             <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
-              <span class="text-black">Career Search Assistant. </span>{" "}
+              <span class="text-black">No problem.</span>{" "}
             </h1>
             {/* <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight">
             <span class="text-black">No problem.</span>{" "}
           </h1> */}
             <p class="mt-3 text-lg text-gray-800 w-full lg:w-4/5">
-              Get guidance on the career path that fits your strengths and
-              income desires, make a resume with ease, and apply for jobs all in
-              one place. No degree required.
+              Fulfil connects you with companies & careers in Minnesota that pay you to learn you in-demand, high value skills.
             </p>
 
             <div
@@ -35,7 +33,7 @@ const Hero = () => {
               onClick={handleNavigateAndCaptureFunnel}
             >
               <a class="py-3 px-4 inline-flex justify-center cursor-pointer items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-non">
-                Let's Get Started
+                Browse careers
                 <svg
                   class="shrink-0 size-4"
                   xmlns="http://www.w3.org/2000/svg"

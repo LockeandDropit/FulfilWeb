@@ -366,10 +366,10 @@ const OnboardingOneDoer = () => {
         </div>
    
 
-   
+   <div className=" w-full flex items-center justify-center">
 
-        <button onClick={() =>  navigate("/DoerEmailRegister")} className=" mt-4 py-2.5 px-3 inline-flex items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none">
-          Start your profile
+        <button onClick={() =>  navigate("/DoerEmailRegister")} className="w-2/3 mb-6 mt-4 py-2.5 px-3 inline-flex items-center align-center justify-center gap-x-2  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none">
+          Continue
           <svg
                 class="flex-shrink-0 size-5 mt-0.5"
                 xmlns="http://www.w3.org/2000/svg"
@@ -385,6 +385,7 @@ const OnboardingOneDoer = () => {
                 <path d="m9 18 6-6-6-6" />
               </svg>
         </button>
+        </div>
       </div>
   
     </div>

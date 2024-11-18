@@ -32,9 +32,9 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import Experience from "./Experience";
 import { useNavigate } from "react-router-dom";
-
-
 import { v4 as uuidv4 } from "uuid";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Education = ({
   handleIncrementFormIndex,
@@ -253,6 +253,14 @@ const Education = ({
       />
     )
   );
+
+  const contextClass = {
+  default: "bg-green-600",
+};
+
+
+  const notify = () =>
+    toast("Success! Your education has been updated", );
 
   return (
     <div>
@@ -764,6 +772,7 @@ const Education = ({
                     type="button"
                     class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                     // onClick={uploadAndNavigate}
+                    // onClick={notify}
                     onClick={checkIfValid}
                   >
                     Finish
@@ -787,40 +796,15 @@ const Education = ({
             )}
           </div>
           <div className="flex items-center justify-center w-full">
-            <div
-              class=" max-w-xs bg-teal-100 border border-teal-200 text-sm text-teal-800 rounded-lg"
-              role="alert"
-              tabindex="-1"
-              aria-labelledby="hs-toast-soft-color-teal-label"
-            >
-              <div id="hs-toast-soft-color-teal-label" class="flex p-4">
-                Success! Your education has been added
-                <div class="ms-auto">
-                  <button
-                    type="button"
-                    class="inline-flex shrink-0 justify-center items-center size-5 rounded-lg text-teal-800 opacity-50 hover:opacity-100 focus:outline-none focus:opacity-100 dark:text-teal-200"
-                    aria-label="Close"
-                  >
-                    <span class="sr-only">Close</span>
-                    <svg
-                      class="shrink-0 size-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="M18 6 6 18"></path>
-                      <path d="m6 6 12 12"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
+            <ToastContainer
+            toastClassName={(context) =>
+          contextClass[context?.type || "default"] +
+          " relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer"
+        }
+              position="bottom-center"
+              autoClose={1500}
+               bodyClassName={() => "text-sm font-white font-med block p-3"}
+            />
           </div>
         </main>
       )}

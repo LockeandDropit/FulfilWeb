@@ -16,16 +16,12 @@ const Hero = () => {
         <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
           <div>
             <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
-              <span class="text-black">No degree? </span>{" "}
+              <span class="text-black">Fulfil is your career search assistant.</span>{" "}
             </h1>
-            <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
-              <span class="text-black">No problem.</span>{" "}
-            </h1>
-            {/* <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight">
-            <span class="text-black">No problem.</span>{" "}
-          </h1> */}
+           
+           
             <p class="mt-3 text-lg text-gray-800 w-full lg:w-4/5">
-              Fulfil connects you with companies & careers in Minnesota that pay you to learn you in-demand, high value skills.
+              Fulfil connects you with companies & careers in that pay you from day one to learn in-demand, high value skills.
             </p>
 
             <div

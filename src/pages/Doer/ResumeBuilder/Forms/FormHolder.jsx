@@ -15,6 +15,7 @@ const FormHolder = () => {
   const [isEdit, setIsEdit] = useState(false)
   const { currentUser } = useUserStore();
   const location = useLocation();
+  const [isReset, setIsReset] = useState(false)
 
   useEffect(() => {
     if (location.state?.isEdit === true) {
@@ -40,10 +41,12 @@ setIsEdit(true)
   };
 
   const resetEducationForm = () => {
+    setIsReset(true)
     setActiveFormIndex(0);
     setTimeout(() => {
       setActiveFormIndex(2);
     }, 400);
+    setTimeout(() => {setIsReset(false)}, 1000)
   };
 
   const resetSkillsForm = () => {
@@ -93,6 +96,7 @@ setIsEdit(true)
           <Education
             handleIncrementFormIndex={handleIncrementFormIndex}
             resetEducationForm={resetEducationForm}
+            isReset={isReset}
             isEdit={isEdit}
           />
         ) : activeFormIndex === 3 ? (

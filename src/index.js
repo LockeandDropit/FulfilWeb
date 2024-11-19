@@ -73,6 +73,7 @@ import DoerMapLoggedOutClusterTest from "./components/DoerMapLoggedOutClusterTes
 import ResetPasswordLoggedOut from "./components/Landing/ResetPasswordLoggedOut";
 import DoerListView from "./pages/Doer/MapView/DoerListView";
 import NotFound404 from "./components/NotFound404";
+import DoerHomepage from "./pages/Doer/Dashboard/Homepage";
 
 //Stream Chat
 import {
@@ -555,6 +556,10 @@ const router = createBrowserRouter([
   {
     path: "/InternalDoerPayment",
     element: <InternalDoerPayment />,
+  },
+  {
+    path: "/DoerHomepage",
+    element: <DoerHomepage />,
   },
   {
     path: "/TestLanding",

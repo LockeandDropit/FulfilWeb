@@ -369,7 +369,7 @@ const LoggedOutHeader = (props) => {
                   <button
                     type="button"
                     className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    onClick={() => onOpen()}
+                    onClick={() => navigate("/OnboardingOneDoer")}
                   >
                     <svg
                       class="flex-shrink-0 size-4"
@@ -386,7 +386,7 @@ const LoggedOutHeader = (props) => {
                       <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                       <circle cx="12" cy="7" r="4" />
                     </svg>
-                    Log in
+                    Sign up
                   </button>
                 </div>
               </div>

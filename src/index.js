@@ -73,7 +73,7 @@ import DoerMapLoggedOutClusterTest from "./components/DoerMapLoggedOutClusterTes
 import ResetPasswordLoggedOut from "./components/Landing/ResetPasswordLoggedOut";
 import DoerListView from "./pages/Doer/MapView/DoerListView";
 import NotFound404 from "./components/NotFound404";
-import DoerHomepage from "./pages/Doer/Dashboard/Homepage";
+import DoerHomepage from "./pages/Doer/Dashboard/DoerHomepage";
 
 //Stream Chat
 import {

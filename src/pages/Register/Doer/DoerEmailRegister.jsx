@@ -96,11 +96,11 @@ const DoerEmailRegister = () => {
 
   const handleAgreeAll = () => {
     setAgreedAll(!agreedAll)
-    setTaxAgreementConfirmed(true);
-    setTermsOfService(true);
-    setPrivacyPolicy(true);
+    // setTaxAgreementConfirmed(true);
+    setTermsOfService(!termsOfService);
+    setPrivacyPolicy(!privacyPolicy);
     //this is depreciated, only kept for now so I dont need to fiddle with all that other code
-    setAgeAgreement(true);
+    setAgeAgreement(!ageAgreement);
   };
 
   //handle check agreements
@@ -283,6 +283,11 @@ setCloseInfoWindow(false)
    }, 200)
   };
 
+
+  const handleDivCheckIfTrue = () => {
+ handleAgreeAll(!handleAgreeAll)
+  }
+
  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
@@ -447,10 +452,11 @@ setCloseInfoWindow(false)
                             name="candidates"
                             onChange={(e) => handleAgreeAll(e.target.checked)}
                             type="checkbox"
+                            checked={agreedAll}
                             className="cursor-pointer h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
                           />
                         </div>
-                        <div className="text-sm leading-6">
+                        <div className="text-sm leading-6" onClick={(e) => handleAgreeAll(e.target.checked)}>
                           <label className="font-medium text-gray-900">
                             I have read and agree to the{" "}
                             <span class="text-sky-400" onClick={() => onOpen()}>
@@ -459,11 +465,12 @@ setCloseInfoWindow(false)
                             </span>
                             ,{" "}
                             <span
-                              class="text-sky-400"
+                              class="text-sky-400 mr-1"
                               onClick={() => onOpenTOS()}
                             >
-                              Terms of Service.
+                              Terms of Service 
                             </span>
+                            and am at least 16 years old.
                           </label>
                         </div>
                       </div>

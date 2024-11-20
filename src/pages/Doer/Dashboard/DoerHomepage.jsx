@@ -13,7 +13,7 @@ const DoerHomepage = () => {
       <Greeting />
       <HomepageJobs />
       <HomepageEducation />
-      <Footer />
+    
     </div>
   );
 };

@@ -22,7 +22,7 @@ const Hero = () => {
            
            
             <p class="mt-3 text-lg text-gray-800 w-full lg:w-4/5">
-              Fulfil connects you with companies & careers in that pay you from day one to learn in-demand, high value skills.
+              Fulfil connects you with high-paying entry-level jobs that are the start to great career paths. No experience needed.
             </p>
 
             <div

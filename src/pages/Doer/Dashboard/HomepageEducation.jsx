@@ -2,7 +2,7 @@ import React from 'react'
 
 const HomepageEducation = () => {
   return (
-    <div className='w-full  py-6 py-12'>
+    <div className='w-full  py-6 py-12 mb-16'>
 
    
     <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 ">

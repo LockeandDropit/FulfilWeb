@@ -309,17 +309,6 @@ const Dashboard = () => {
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-    // const response = await fetch("https://openaiapi-c7qc.onrender.com/aiResumeCreation", {
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ userInput: userResumeInformation }),
-    // });
-    // if (!response.ok) {
-    //   throw new Error(`Response status: ${response.status}`);
-    // }
 
     const json = await response.json();
     console.log("json resopnse", json.message.content);
@@ -538,6 +527,15 @@ const Dashboard = () => {
 
             
                 <li class="px-8 mb-0.5 mt-4">
+                <button
+                    type="button"
+                    class="mb-3 py-2 w-full px-11 text-center text-sm items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+
+                    onClick={() => navigate('/DoerHomepage')}
+                
+                  >
+                   New Dashboard
+                  </button>
                   <button
                     type="button"
                     class="py-2 w-full px-11 text-center text-sm items-center gap-x-2  font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"

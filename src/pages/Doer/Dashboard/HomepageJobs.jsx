@@ -72,7 +72,7 @@ const HomepageJobs = () => {
   console.log(typeof returnedJobs);
 
   useEffect(() => {
-    getJobs();
+    // getJobs();
   }, []);
 
   useEffect(() => {

@@ -65,10 +65,10 @@ const HomepageEducation = () => {
     // setLoading(false);
   };
 
-  console.log(typeof returnedJobs);
+
 
   useEffect(() => {
-    getEdu();
+    // getEdu();
   }, []);
 
   useEffect(() => {

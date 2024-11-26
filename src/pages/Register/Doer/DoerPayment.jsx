@@ -361,8 +361,8 @@ const DoerPayment = () => {
             </p>
           </div>
           {/* //here */}
-          <div class="relative xl:w-10/12 xl:mx-auto mt-6 sm:mt-16">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+          <div class="relative sm:w-1/2 lg:mx-auto mt-6 sm:mt-16">
+            <div class="grid grid-cols-1  gap-6 lg:gap-8">
               <div>
                 <div class="p-4 relative z-10 bg-white border rounded-xl md:p-10 ">
                   {/* <h3 class="text-xl font-bold text-gray-800 ">Monthly</h3>
@@ -374,7 +374,7 @@ const DoerPayment = () => {
                     {/* <span class="ms-3 text-gray-500 ">renews at $14/month</span> */}
                   </div>
                   <div className="flex flex-col">
-                  <span class=" text-gray-500 ">30 days free</span>
+                  <span class="text-gray-500 ">30 days free</span>
                   <span class=" text-gray-500 ">Renews at $14/month</span>
                   </div>
                  

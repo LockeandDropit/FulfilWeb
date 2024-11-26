@@ -5,24 +5,8 @@ import { useUserStore } from "../../../Doer/Chat/lib/userStore";
 import { db } from "../../../../firebaseConfig";
 import { updateDoc, doc } from "firebase/firestore";
 
-const CurrentIncome = ({ handleIncrementFormIndex }) => {
+const GoalIncome = ( {handleIncrementFormIndex}) => {
   const { currentUser } = useUserStore();
-
-  const [income, setIncome] = useState(null);
-  const [finalIncome, setFinalIncome] = useState(null);
-  console.log()
-
-  useEffect(() => {
-    if (income) {
-      setFinalIncome(income.label);
-    }
-  }, [income]);
-
-  const uploadAnswer = async () => {
-    await updateDoc(doc(db, "users", currentUser.uid), {
-      currentIncome: finalIncome,
-    });
-  };
 
   const incomeValues = [
     { label: "10,000", id: 1 },
@@ -138,45 +122,66 @@ const CurrentIncome = ({ handleIncrementFormIndex }) => {
     { label: "120,000", id: 111 },
   ];
 
+  const [goalIncome, setGoalIncome] = useState(null);
+  const [finalGoalIncome, setGoalFinalIncome] = useState(null);
+
+  useEffect(() => {
+    if (goalIncome) {
+      setGoalFinalIncome(goalIncome.label);
+    }
+  }, [goalIncome]);
+
   const [isClearable, setIsClearable] = useState(true);
   const [isSearchable, setIsSearchable] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRtl, setIsRtl] = useState(false);
 
-  console.log(income, finalIncome);
+ 
+
+  const uploadAnswer = async () => {
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      goalIncome: finalGoalIncome,
+    });
+  };
+
 
   const submit = () => {
-    uploadAnswer().then(() => handleIncrementFormIndex());
-    //increment form
-
-  };
+    //
+uploadAnswer()
+//increment form   
+handleIncrementFormIndex();
+  }
 
   return (
     <div className=" max-w-[85rem] w-full h-[calc(500px-20px)]  mx-auto flex flex-col  justify-center md:gap-3 pt-4 pb-2 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto flex flex-col items-center justify-center">
         <h1 className="font-medium text-gray-800 text-center text-2xl">
-          What's your current yearly income?
+          How much would you like to make a year?
         </h1>
         <Select
-          className="w-full mt-4 sm: mt-10"
+          className="w-full mt-4 sm:mt-10"
           isClearable={isClearable}
           isSearchable={isSearchable}
           options={incomeValues}
-          onSelect={(e) => setIncome(e.target.value)}
-          onChange={setIncome}
+          onSelect={(e) => setGoalIncome(e.target.value)}
+          onChange={setGoalIncome}
         />
 
-        {finalIncome ? (
+        {finalGoalIncome ? (
           <button
             type="button"
             class=" w-full sm:w-1/2 text-center justify-center mt-6 lg:mt-10 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
             onClick={submit}
-          >
+        >
             Next
           </button>
         ) : (
           <button
             type="button"
             class=" w-full sm:w-1/2 text-center justify-center mt-6 lg:mt-10 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-200 text-white hove focus:outline-none  pointer-events-none disabled:opacity-50 disabled:pointer-events-none"
-          >
+  
+         >
             Next
           </button>
         )}
@@ -185,4 +190,4 @@ const CurrentIncome = ({ handleIncrementFormIndex }) => {
   );
 };
 
-export default CurrentIncome;
+export default GoalIncome;

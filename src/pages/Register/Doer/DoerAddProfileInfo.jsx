@@ -8,10 +8,11 @@ import {
   Box,
   Container,
   Textarea,
-  Select,
+
   Checkbox,
   Progress,
 } from "@chakra-ui/react";
+import Select from "react-select";
 import {
   FormControl,
   FormLabel,
@@ -80,6 +81,9 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { geocodeByPlaceId } from "react-google-places-autocomplete";
 import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 import { StreamChat } from "stream-chat";
+import { useUserStore } from "../../Doer/Chat/lib/userStore";
+
+
 
 const DoerAddProfileInfo = () => {
   const [user, setUser] = useState(null);
@@ -96,6 +100,8 @@ const DoerAddProfileInfo = () => {
 
   const [isConvictedFelon, setIsConvictedFelon] = useState(false);
   const [isNonEnglishSpeaking, setIsNonEnglishSpeaking] = useState(false);
+
+  const { fetchUserInfo } = useUserStore();
 
   const [hasRun, setHasRun] = useState(false);
   useEffect(() => {
@@ -163,7 +169,6 @@ const DoerAddProfileInfo = () => {
     setDateJoined(new Date().toLocaleString());
   }, []);
 
-
   const handelSendNotSubscribedEmail = async () => {
     const response = await fetch(
       "https://emailapi-qi7k.onrender.com/sendDoerNotSubscribed",
@@ -183,11 +188,11 @@ const DoerAddProfileInfo = () => {
     );
 
     const { data, error } = await response.json();
-  }
+  };
 
   useEffect(() => {
-handelSendNotSubscribedEmail();
-  }, [])
+    handelSendNotSubscribedEmail();
+  }, []);
 
   const sendTylerEmail = () => {
     setDoc(doc(db, "Tyler Dashboard", user.uid), {
@@ -211,7 +216,7 @@ handelSendNotSubscribedEmail();
       lastName: lastName,
       businessName: businessName ? businessName : null,
       city: city,
-      state: state,
+      state: finalState,
       test: test,
       uid: user.uid,
       idStreamChat: user.uid,
@@ -233,23 +238,14 @@ handelSendNotSubscribedEmail();
     });
     // IN USE
     createChatSlotInDB()
-    // handleSendEmail()
-      //depreciated, remove when able
-
       .then(() => {
-        //all good
-
+        fetchUserInfo(user.uid);
         console.log("data submitted, new chat profile created");
+        navigate("/OnboardingFormHolder");
       })
       .catch((error) => {
-        // no bueno
         console.log(error);
       });
-
-    // navigate("/StripeSetUp");
-    navigate("/DoerPayment");
-
-    // navigate("/DoerMapView", { state: { firstVisit: true } });
   };
 
   const phoneRegex =
@@ -275,7 +271,7 @@ handelSendNotSubscribedEmail();
       !state ||
       privacyPolicy !== true ||
       ageAgreement !== true ||
-      termsOfService !== true 
+      termsOfService !== true
     ) {
       onOpenIncomplete();
     } else if (phoneNumber ? !phoneNumberValid : null) {
@@ -318,12 +314,76 @@ handelSendNotSubscribedEmail();
     onClose: onCloseIncomplete,
   } = useDisclosure();
 
+  const [isClearable, setIsClearable] = useState(true);
+  const [isSearchable, setIsSearchable] = useState(true);
+
+  const stateOptions = [
+    { label: "Alabama", id: 1 },
+    { label: "Alaska", id: 2 },
+    { label: "Arizona", id: 3 },
+    { label: "Arkansas", id: 4 },
+    { label: "California", id: 5 },
+    { label: "Colorado", id: 6 },
+    { label: "Connecticut", id: 7 },
+    { label: "Delaware", id: 8 },
+    { label: "Florida", id: 9 },
+    { label: "Georgia", id: 10 },
+    { label: "Hawaii", id: 11 },
+    { label: "Idaho", id: 12 },
+    { label: "Illinois", id: 13 },
+    { label: "Indiana", id: 14 },
+    { label: "Iowa", id: 15 },
+    { label: "Kansas", id: 16 },
+    { label: "Kentucky", id: 17 },
+    { label: "Louisiana", id: 18 },
+    { label: "Maine", id: 19 },
+    { label: "Maryland", id: 20 },
+    { label: "Massachusetts", id: 21 },
+    { label: "Michigan", id: 22 },
+    { label: "Minnesota", id: 23 },
+    { label: "Mississippi", id: 24 },
+    { label: "Missouri", id: 25 },
+    { label: "Montana", id: 26 },
+    { label: "Nebraska", id: 27 },
+    { label: "Nevada", id: 28 },
+    { label: "New Hampshire", id: 29 },
+    { label: "New Jersey", id: 30 },
+    { label: "New Mexico", id: 31 },
+    { label: "New York", id: 32 },
+    { label: "North Carolina", id: 33 },
+    { label: "North Dakota", id: 34 },
+    { label: "Ohio", id: 35 },
+    { label: "Oklahoma", id: 36 },
+    { label: "Oregon", id: 37 },
+    { label: "Pennsylvania", id: 38 },
+    { label: "Rhode Island", id: 39 },
+    { label: "South Carolina", id: 40 },
+    { label: "South Dakota", id: 41 },
+    { label: "Tennessee", id: 42 },
+    { label: "Texas", id: 43 },
+    { label: "Utah", id: 44 },
+    { label: "Vermont", id: 45 },
+    { label: "Virginia", id: 46 },
+    { label: "Washington", id: 47 },
+    { label: "West Virginia", id: 48 },
+    { label: "Wisconsin", id: 49 },
+    { label: "Wyoming", id: 50 }
+  ]
+  
+const [finalState, setFinalState] = useState(null)
+
+useEffect(() => {
+  if (state) {
+    setFinalState(state.label)
+  }
+}, [state])
+
   return (
     <>
       <LoggedOutHeader />
 
       <Center>
-        <div class="w-full p-4 md:w-1/3 sm:p-1 ">
+        <div class="w-full p-4 sm:w-1/2 lg:w-1/3 sm:p-1 ">
           <form>
             <div className="space-y-12">
               <div className=" border-gray-900/10 pb-0">
@@ -334,398 +394,88 @@ handelSendNotSubscribedEmail();
                   {" "}
                   We just need a few pieces of information to get started
                 </p>
-
-                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="sm:col-span-3">
-                    <label
-                      htmlFor="first-name"
-                      className="block text-lg font-medium leading-6 text-gray-900"
-                    >
-                      First name
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="text"
-                        name="first-name"
-                        id="first-name"
-                        autoComplete="given-name"
-                        onChange={(e) => setFirstName(e.target.value)}
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-                      />
+                <form>
+                  <div class="mt-6 grid gap-4 lg:gap-6">
+                    <div class="grid grid-cols-1 gap-4 lg:gap-6">
+                      <div>
+                        <label
+                          for="hs-firstname-hire-us-1"
+                          class="block mb-2 text-sm text-gray-700 font-medium "
+                        >
+                          First Name
+                        </label>
+                        <input
+                          onChange={(e) => setFirstName(e.target.value)}
+                          type="text"
+                          name="hs-firstname-hire-us-1"
+                          id="hs-firstname-hire-us-1"
+                          class="py-3 px-4 block w-full xl:w-1/2 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                        />
+                      </div>
+                      <div>
+                        <label
+                          for="hs-lastname-hire-us-1"
+                          class="block mb-2 text-sm text-gray-700 font-medium "
+                        >
+                          Last Name
+                        </label>
+                        <input
+                          onChange={(e) => setLastName(e.target.value)}
+                          type="text"
+                          name="hs-lastname-hire-us-1"
+                          id="hs-lastname-hire-us-1"
+                          class="py-3 px-4 block w-full xl:w-1/2 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                        />
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
+                      <div>
+                        <label
+                          for="hs-company-hire-us-1"
+                          class="block mb-2 text-sm text-gray-700 font-medium "
+                        >
+                          City
+                        </label>
+                        <input
+                         onChange={(e) => setCity(e.target.value)}
+                          type="text"
+                          name="hs-company-hire-us-1"
+                          id="hs-company-hire-us-1"
+                          class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                        />
+                      </div>
+                      <div>
+                        <label
+                          for="hs-company-website-hire-us-1"
+                          class="block mb-2 text-sm text-gray-700 font-medium "
+                        >
+                         State
+                        </label>
+                        <Select
+          className="w-full mt-4 sm: mt-10"
+          isClearable={isClearable}
+          isSearchable={isSearchable}
+          options={stateOptions}
+          onSelect={(e) => setState(e.target.value)}
+          onChange={setState}
+        />
+                      </div>
                     </div>
                   </div>
-
-                  <div className="sm:col-span-3">
-                    <label
-                      htmlFor="last-name"
-                      className="block text-lg font-medium leading-6 text-gray-900"
-                    >
-                      Last name
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="text"
-                        name="last-name"
-                        id="last-name"
-                        onChange={(e) => setLastName(e.target.value)}
-                        autoComplete="family-name"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="sm:col-span-2 sm:col-start-1">
-                    <label
-                      htmlFor="city"
-                      className="block text-lg font-medium leading-6 text-gray-900"
-                    >
-                      City
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="text"
-                        name="city"
-                        id="city"
-                        onChange={(e) => setCity(e.target.value)}
-                        autoComplete="address-level2"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label
-                      htmlFor="region"
-                      className="block text-lg font-medium leading-6 text-gray-900"
-                    >
-                      State / Province
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="text"
-                        name="region"
-                        id="region"
-                        onChange={(e) => setState(e.target.value)}
-                        autoComplete="address-level1"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
-
-                  {/* <div className="sm:col-span-4">
-                    <label className="block text-lg font-medium leading-6 text-gray-900">
-                      Phone Number (optional)
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        className=" block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-sky-500 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div> */}
-                </div>
+                </form>
               </div>
-              {/* <div className="border-b border-gray-900/10 pb-12">
-                <div className="mt-10 space-y-10">
-                  <fieldset>
-                    <legend className="text-lg font-semibold leading-6 text-gray-900">
-                      Indicate if you are:
-                    </legend>
-                    <legend className="text-sm  leading-6 text-gray-900">
-                      (This will not effect your ability to find a position, we
-                      use this information to help tailor your search)
-                    </legend>
-                    <div className="mt-6 space-y-6">
-                      <div className="relative flex gap-x-3">
-                        <div className="flex h-6 items-center">
-                          <input
-                            id="candidates"
-                            name="candidates"
-                            onChange={(e) =>
-                              setIsConvictedFelon(e.target.checked)
-                            }
-                            type="checkbox"
-                            className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
-                          />
-                        </div>
-                        <div className="text-sm leading-6">
-                          <label className="font-medium text-gray-900">
-                            Convicted of a felony.
-                          </label>
-                        </div>
-                      </div>
-                      <div className="relative flex gap-x-3">
-                        <div className="flex h-6 items-center">
-                          <input
-                            id="candidates"
-                            name="candidates"
-                            onChange={(e) =>
-                              setIsNonEnglishSpeaking(e.target.checked)
-                            }
-                            type="checkbox"
-                            className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
-                          />
-                        </div>
-                        <div className="text-sm leading-6">
-                          <label className="font-medium text-gray-900">
-                            Non-english speaking.
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </div>
-              </div> */}
-
-              {/* <div className=" pb-12">
-                <div className="mt-10 space-y-10">
-                  <fieldset>
-                    <legend className="text-xl font-semibold leading-6 text-gray-900">
-                      User Agreements
-                    </legend>
-                    <div className="mt-6 space-y-6">
-                      <div className="relative flex gap-x-3">
-                        <div className="flex h-6 items-center">
-                          <input
-                            id="candidates"
-                            name="candidates"
-                            onChange={(e) => handleAgreeAll(e.target.checked)}
-                            type="checkbox"
-                            className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
-                          />
-                        </div>
-                        <div className="text-sm leading-6">
-                          <label className="font-medium text-gray-900">
-                            I have read and agree to the{" "}
-                            <span class="text-sky-400" onClick={() => onOpen()}>
-                              {" "}
-                              Privacy Policy
-                            </span>
-                            ,{" "}
-                            <span
-                              class="text-sky-400"
-                              onClick={() => onOpenTOS()}
-                            >
-                              Terms of Service.
-                            </span>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </fieldset>
-                </div>
-              </div> */}
             </div>
-
             <div className="mt-6 flex items-center justify-center sm:justify-end gap-x-6">
               <input
                 type="button"
                 value="Continue"
                 onClick={() => checkLength()}
-                class="cursor-pointer w-full sm:w-auto py-2.5 px-4 inline-flex justify-center mb-12 items-center gap-x-2 text-center bg-sky-500  hover:bg-sky-600 text-white text-lg font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 "
+                class="w-full sm:w-1/4 text-center justify-center mt-6 lg:mt-10 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
                 data-hs-overlay="#"
               ></input>
             </div>
           </form>
 
-          {/* 
-<div class="my-5 flex gap-x-3 ">
-  <svg class="flex-shrink-0 size-10 text-gray-400 " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
-
-  <div class="grow">
-    <h1 class="font-semibold text-xl text-gray-800 ">
-      Create your profile
-    </h1>
-
-    <p class="text-sm text-gray-500 ">
-      We just need a few pieces of information to get started
-    </p>
-  </div>
-</div>
-<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="sm:col-span-4">
-              <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
-                Username
-              </label>
-              <div className="mt-2">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                  <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">workcation.com/</span>
-                  <input
-                    type="text"
-                    name="username"
-                    id="username"
-                    autoComplete="username"
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                    placeholder="janesmith"
-                  />
-                </div>
-              </div>
-            </div>
-            </div> */}
-          {/* <div class="bg-white  shadow-sm rounded-xl  ">
-  <form>
-    <div class="py-2 sm:py-4 px-2">
-      <div class="p-4 space-y-5">
-     
-      
-
-  
-        <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
-          <div class="sm:col-span-3">
-            <label for="hs-pro-daufnm" class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
-              First Name
-            </label>
-          </div>
-      
-          <div class="sm:col-span-9">
-            <input id="hs-pro-daufnm"  onChange={(e) => setFirstName(e.target.value)} type="text" class="py-2 px-3 block w-full  rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="First Name"  />
-          </div>
-        
-        </div>
-        <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
-          <div class="sm:col-span-3">
-            <label for="hs-pro-daufnm" class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
-              Last Name
-            </label>
-          </div>
-      
-          <div class="sm:col-span-9">
-            <input id="hs-pro-daufnm"  onChange={(e) => setLastName(e.target.value)} type="text" class="py-2 px-3 block w-full  rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="Last Name"  />
-          </div>
-        
-        </div>
-    
-        <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
-          <div class="sm:col-span-3">
-            <label for="hs-pro-daufnm" class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
-              Business Name (optional)
-            </label>
-          </div>
-  
-
-          <div class="sm:col-span-9">
-            <input id="hs-pro-daufem" type="email" class="py-2 px-3 block w-full  rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="My Business Inc."  />
-          </div>
-   
-        </div>
-    
-
-  
-        <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
-          <div class="sm:col-span-3">
-            <label for="hs-pro-daufph" class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
-              Phone (optional)
-            </label>
-          </div>
-      
-
-          <div class="sm:col-span-9">
-            <div id="hs-wrapper-for-copy" class="space-y-3">
-              <div id="hs-content-for-copy" class="grid grid-cols-12 gap-2">
-                
-                <div class="col-span-9">
-                  <input type="text"   onChange={(e) => setPhoneNumber(e.target.value)} class="py-2 px-3 block w-full  rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="Phone"  />
-                </div>
-              </div>
-            </div>
-
-           
-       
-          </div>
-   
-        </div>
-  
-        <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
-          <div class="sm:col-span-3">
-            <label for="hs-pro-daufad" class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
-              Address
-            </label>
-          </div>
-   
-
-          <div class="sm:col-span-9 space-y-3">
-            <div class="space-y-3">
-              <input id="hs-pro-daufad" type="text" class="py-2 px-3 block w-full  rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="City"  onChange={(e) => setCity(e.target.value)} />
-              
-            </div>
-
-            <div class="grid grid-cols-2 gap-x-3">
-              <div>
-                <input type="text" class="py-2 px-3 block w-full  rounded-lg text-sm placeholder:text-gray-400 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none " placeholder="State"  onChange={(e) => setState(e.target.value)}/>
-              </div>
-              
-            </div>
-
-            
-          </div>
-       
-        </div>
-       
-      </div>
-
-    </div>
-    <ul class="max-w-lg flex flex-col">
- 
-    <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white  text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg ">
-    <div class="relative flex items-start w-full">
-      <div class="flex items-center h-5">
-        <input  name="hs-list-group-item-checkbox-2" type="checkbox"  onChange={(e) => setTermsOfService(e.target.checked)}/>
-      </div>
-      <label onClick={() => onOpenTOS()} for="hs-list-group-item-checkbox-2" class="ms-3.5 block w-full text-sm text-gray-600 ">
-      I have read and agree to the <span class="text-sky-400">Terms of Service.</span>
-      </label>
-    </div>
-  </li>
-  <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-    <div class="relative flex items-start w-full">
-      <div class="flex items-center h-5">
-        <input  name="hs-list-group-item-checkbox-2" type="checkbox"  onChange={(e) => setPrivacyPolicy(e.target.checked)}/>
-      </div>
-      <label onClick={() => onOpen()} type="button" for="hs-list-group-item-checkbox-2" class="ms-3.5 block w-full text-sm text-gray-600 ">
-      I have read and agree to the  <span class="text-sky-400">Privacy Policy.</span>
-      </label>
-    </div>
-  </li>
-  <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white  text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg  ">
-    <div class="relative flex items-start w-full">
-      <div class="flex items-center h-5">
-        <input  name="hs-list-group-item-checkbox-2" type="checkbox"  onChange={(e) => setAgeAgreement(e.target.checked)}/>
-      </div>
-      <label for="hs-list-group-item-checkbox-2" class="ms-3.5 block w-full text-sm text-gray-600 0">
-        I am over 18 years of age
-      </label>
-    </div>
-  </li>
-
-  <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white  text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg">
-    <div class="relative flex items-start w-full">
-      <div class="flex items-center h-5">
-        <input  name="hs-list-group-item-checkbox-3" type="checkbox"  onChange={(e) => setTaxAgreementConfirmed(e.target.checked)}/>
-      </div>
-      <label for="hs-list-group-item-checkbox-3" class="ms-3.5 block w-full text-sm text-gray-600">
-      By continuing I agree and understand that I am an independent contractor and not an employee of Fulfil.
-      </label>
-    </div>
-  </li>
-</ul>
-
-
-    <div class="p-6 pt-0 flex justify-end gap-x-2">
-      <div class="w-full flex justify-end items-center gap-x-2">
-        
-
-        <input type="button"  value="Sign Up" onClick={() => checkLength()} class="py-2 px-3 inline-flex justify-center items-center gap-x-2 text-start bg-sky-500  hover:bg-sky-600 text-white text-sm font-medium rounded-lg shadow-sm align-middle hover:bg-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-300 " data-hs-overlay="#">
-          
-        </input>
-      </div>
-    </div>
-   
-  </form>
-</div> */}
         </div>
       </Center>
 
@@ -919,62 +669,62 @@ handelSendNotSubscribedEmail();
           <ModalCloseButton />
           <ModalBody overflowY="scroll">
             <Text marginTop="8">
-              Fulfil Global Terms of Service Last updated 10/30/2024. These Terms
-              of Service reprsesent a binding agreement between you and Fulfil,
-              Inc. (“Fulfil”) concerning your use of the Fulfil Platform. The
-              Fulfil Platform encompasses Fulfil's websites, mobile
-              applications, and associated services and content. All personal
-              data you provide to the Fulfil Platform, or that we gather, is
-              subject to our Global Privacy Policy ("Privacy Policy"). By
-              utilizing the Fulfil Platform, you confirm that you've reviewed
-              our Privacy Policy. By acknowledging the Terms of Service and/or
-              using the Fulfil platform, you expressly confirm that you have
-              read, understand, and unconditionally agree to be bound by this
-              Agreement and all of its terms. If you do not accept and agree to
-              be bound by this Agreement, you must not use or access the Fulfil
-              platform No agency, partnership, joint venture, employer-employee
-              or franchiser-franchisee relationship is intended or created by
-              this Agreement. The Fulfil Platform: Connecting Doers and Needers
-              The Fulfil Platform is a digital marketplace linking Needers
-              seeking services and Doers offering them. Both Needers and Doers
-              are termed "Users". When both parties agree on a task. Doers'
-              Independent Status: Doers are independent contractors, not
-              affiliates or employees of Fulfil. Fulfil merely acts as a bridge,
-              linking service seekers (Needers) with providers (Doers) and does
-              not undertake any tasks itself. Disclaimer: Fulfil doesn't
-              oversee, direct, or control a Doer's work and disclaims any
-              responsibility for their performance, ensuring neither quality nor
-              compliance with laws or regulations. No Endorsement of Doers:
-              References to a Doer's credentials or descriptions only indicate
-              they've met registration processes or criteria on our platform and
-              have received ratings from other users. Such labels aren't
-              endorsements or guarantees by Fulfil about the Doer's skills,
-              qualifications, or trustworthiness. Needers must make their
-              judgments about Doers' suitability. Fulfil does not directly
-              endorse any Doer. Limitations: Fulfil isn't liable for any
-              interactions, quality, legality, or outcomes of tasks, nor does it
-              vouch for the integrity or qualifications of Users. Fulfil doesn't
-              guarantee the accuracy, timeliness, or reliability of services
-              requested or provided by Users. 2. Contract between Users When a
-              Needer and a Doer agree on a task's terms, they enter into a
-              binding contract (the “Service Agreement”). This agreement
-              comprises the terms in this Section 2, the terms agreed upon on
-              the Fulfil Platform, and other accepted contractual terms, as long
-              as they don't conflict with this Agreement or limit Fulfil’s
-              rights. Importantly, Fulfil isn't a party to this Service
-              Agreement and never has an employment relationship with Doers
-              because of it. Needers must pay Doers in full using the payment
-              methods specified on the Fulfil Platform, based on the agreed
-              rates in the Service Agreement. All Users should adhere to both
-              the Service Agreement and this overarching Agreement during task
-              engagement and completion. 3. Doer Background Checks & User
-              Responsibilities Doer Background Checks: Doers may undergo
-              reviews, possibly including identity verification and criminal
-              background checks, termed “Background Checks”. While Fulfil
-              conducts these checks, it cannot guarantee the complete
-              authenticity of a user's identity or background. It’s always
-              recommended to use caution and common sense for safety, as you
-              would with strangers. Fulfil won't be responsible for
+              Fulfil Global Terms of Service Last updated 10/30/2024. These
+              Terms of Service reprsesent a binding agreement between you and
+              Fulfil, Inc. (“Fulfil”) concerning your use of the Fulfil
+              Platform. The Fulfil Platform encompasses Fulfil's websites,
+              mobile applications, and associated services and content. All
+              personal data you provide to the Fulfil Platform, or that we
+              gather, is subject to our Global Privacy Policy ("Privacy
+              Policy"). By utilizing the Fulfil Platform, you confirm that
+              you've reviewed our Privacy Policy. By acknowledging the Terms of
+              Service and/or using the Fulfil platform, you expressly confirm
+              that you have read, understand, and unconditionally agree to be
+              bound by this Agreement and all of its terms. If you do not accept
+              and agree to be bound by this Agreement, you must not use or
+              access the Fulfil platform No agency, partnership, joint venture,
+              employer-employee or franchiser-franchisee relationship is
+              intended or created by this Agreement. The Fulfil Platform:
+              Connecting Doers and Needers The Fulfil Platform is a digital
+              marketplace linking Needers seeking services and Doers offering
+              them. Both Needers and Doers are termed "Users". When both parties
+              agree on a task. Doers' Independent Status: Doers are independent
+              contractors, not affiliates or employees of Fulfil. Fulfil merely
+              acts as a bridge, linking service seekers (Needers) with providers
+              (Doers) and does not undertake any tasks itself. Disclaimer:
+              Fulfil doesn't oversee, direct, or control a Doer's work and
+              disclaims any responsibility for their performance, ensuring
+              neither quality nor compliance with laws or regulations. No
+              Endorsement of Doers: References to a Doer's credentials or
+              descriptions only indicate they've met registration processes or
+              criteria on our platform and have received ratings from other
+              users. Such labels aren't endorsements or guarantees by Fulfil
+              about the Doer's skills, qualifications, or trustworthiness.
+              Needers must make their judgments about Doers' suitability. Fulfil
+              does not directly endorse any Doer. Limitations: Fulfil isn't
+              liable for any interactions, quality, legality, or outcomes of
+              tasks, nor does it vouch for the integrity or qualifications of
+              Users. Fulfil doesn't guarantee the accuracy, timeliness, or
+              reliability of services requested or provided by Users. 2.
+              Contract between Users When a Needer and a Doer agree on a task's
+              terms, they enter into a binding contract (the “Service
+              Agreement”). This agreement comprises the terms in this Section 2,
+              the terms agreed upon on the Fulfil Platform, and other accepted
+              contractual terms, as long as they don't conflict with this
+              Agreement or limit Fulfil’s rights. Importantly, Fulfil isn't a
+              party to this Service Agreement and never has an employment
+              relationship with Doers because of it. Needers must pay Doers in
+              full using the payment methods specified on the Fulfil Platform,
+              based on the agreed rates in the Service Agreement. All Users
+              should adhere to both the Service Agreement and this overarching
+              Agreement during task engagement and completion. 3. Doer
+              Background Checks & User Responsibilities Doer Background Checks:
+              Doers may undergo reviews, possibly including identity
+              verification and criminal background checks, termed “Background
+              Checks”. While Fulfil conducts these checks, it cannot guarantee
+              the complete authenticity of a user's identity or background. It’s
+              always recommended to use caution and common sense for safety, as
+              you would with strangers. Fulfil won't be responsible for
               misrepresentations by users. Furthermore, neither Fulfil nor its
               associates are liable for user conduct. By using the platform, you
               release Fulfil and its affiliates from any claims related to user

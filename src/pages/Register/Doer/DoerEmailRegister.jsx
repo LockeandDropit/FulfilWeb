@@ -115,7 +115,9 @@ const DoerEmailRegister = () => {
     const authentication = getAuth();
     
     await createUserWithEmailAndPassword(authentication, email, password)
-      .then(() => {
+      .then((userCredential) => {
+        const user = userCredential.user;
+        
         trackEvent('Doer Register');
         handleSendEmail();
         navigate("/DoerAddProfileInfo");

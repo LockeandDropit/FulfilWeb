@@ -86,6 +86,8 @@ const LoggedOutHeaderAbout = (props) => {
       signInWithEmailAndPassword(auth, email, password)
         .then((response) => {
           setIsSignedIn(true);
+          
+
           // Thanks Jake :)
           Promise.all([
             getDoc(doc(db, "users", response.user.uid)),
@@ -96,7 +98,7 @@ const LoggedOutHeaderAbout = (props) => {
               navigate(
                 results[0]._document !== null &&
                   results[0]._document.data.value.mapValue.fields.isEmployer
-                  ? "/DoerMapView"
+                  ? "/DoerHomepage"
                   : "/Homepage"
               )
             )

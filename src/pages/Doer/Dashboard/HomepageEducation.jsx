@@ -1,45 +1,21 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 
-const HomepageEducation = () => {
+const HomepageEducation = ({user}) => {
   const [userResumeInformation, setUserResumeInformation] = useState(null);
 
-  //   const [returnedJobs, setReturnedJobs] = useState( [  {
-  //     "company": "3M",
-  //     "job_title": "Manufacturing Production Operator",
-  //     "location": "Maplewood, MN",
-  //     "pay_rate": "$38 per hour",
-  //     "description": "Responsible for operating machinery to meet production goals, ensuring safety protocols are followed, and collaborating with team members to optimize production efficiency.",
-  //     "link": "https://jobs.3m.com/job/Maplewood-Manufacturing-Production-Operator"
-  //   },
-  //   {
-  //     "company": "Honeywell",
-  //     "job_title": "Field Service Technician",
-  //     "location": "Golden Valley, MN",
-  //     "pay_rate": "$40 per hour",
-  //     "description": "Work directly with customers to install, maintain, and repair industrial equipment. Strong focus on customer service and teamwork.",
-  //     "link": "https://careers.honeywell.com/en/jobs/golden-valley-mn-field-service-technician"
-  //   },
-  //   {
-  //     "company": "Graco",
-  //     "job_title": "Machine Operator",
-  //     "location": "Rogers, MN",
-  //     "pay_rate": "$39 per hour",
-  //     "description": "Operate various types of machinery, ensure product quality standards, and engage in continuous improvement activities with co-workers.",
-  //     "link": "https://careers.graco.com/job/Rogers-Machine-Operator"
-  //   }]);
 
   const [returnedJobs, setReturnedJobs] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [city, setCity] = useState("minneapolis");
-  const [state, setState] = useState("MN");
-  const [currentPay, setCurrentPay] = useState("$37 an hour");
-  const [currentPayType, setCurrentPayType] = useState(null);
-  const [fieldsOfInterest, setFieldsOfInterest] = useState(
-    "working with machines, working with peopl, welding"
-  );
-  const [interestFreeType, setInterestFreeType] = useState(null);
+  // const [city, setCity] = useState("minneapolis");
+  // const [state, setState] = useState("MN");
+  // const [currentPay, setCurrentPay] = useState("$37 an hour");
+  // const [currentPayType, setCurrentPayType] = useState(null);
+  // const [fieldsOfInterest, setFieldsOfInterest] = useState(
+  //   "working with machines, working with peopl, welding"
+  // );
+  // const [interestFreeType, setInterestFreeType] = useState(null);
 
   const getEdu = async () => {
     setLoading(true);
@@ -51,7 +27,7 @@ const HomepageEducation = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userInput: `The user's location is ${city}, ${state}. The user's current pay is ${currentPay}. The user is interested in ${fieldsOfInterest}`,
+        userInput: `The user's location is ${user.city}, ${user.state}. The user's current pay is ${user.currentIncome}. The user is interested in ${user.userInterests}`,
       }),
     });
     if (!response.ok) {
@@ -68,7 +44,7 @@ const HomepageEducation = () => {
 
 
   useEffect(() => {
-    // getEdu();
+    getEdu();
   }, []);
 
   useEffect(() => {

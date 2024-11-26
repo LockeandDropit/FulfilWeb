@@ -19,6 +19,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
 import { useResumeStore } from "../lib/resumeStore";
+import DoerHeader from "../../components/DoerHeader";
 
 const Skills = ({ handleIncrementFormIndex, resetSkillsForm }) => {
   const [skillName, setSkillName] = useState(null);
@@ -55,8 +56,11 @@ const Skills = ({ handleIncrementFormIndex, resetSkillsForm }) => {
 
   return (
     <div>
-      <Header />
-      <Dashboard />
+      {/* <Header />
+      <Dashboard /> */}
+
+ 
+
       <main id="content" class=" pt-[59px]">
         <div class="max-w-6xl mx-auto mt-5">
           <ol class="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base">

@@ -35,6 +35,7 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DoerHeader from "../../components/DoerHeader";
 
 const Education = ({
   handleIncrementFormIndex,
@@ -264,8 +265,10 @@ const Education = ({
 
   return (
     <div>
-      <Header />
-      <Dashboard />
+      {/* <Header />
+      <Dashboard /> */}
+
+  
       {loading ? (
         <p>spinner</p>
       ) : (

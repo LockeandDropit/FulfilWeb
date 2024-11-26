@@ -26,6 +26,7 @@ import {
 import { db } from "../../../firebaseConfig";
 import { useUserStore } from "../Chat/lib/userStore";
 import { useResumeStore } from "./lib/resumeStore";
+import DoerHeader from "../components/DoerHeader";
 
 const ResumeDashboard = () => {
   const navigate = useNavigate();
@@ -78,31 +79,31 @@ const ResumeDashboard = () => {
   };
 
   const handleNavigateToPreviousResume = (x) => {
-    setNewResumeName(x).then(() => navigate("/ResumePreview", ));
+    setNewResumeName(x).then(() => navigate("/ResumePreview"));
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-
-
   return (
     <div>
-      <Header />
-      <Dashboard />
+      {/* <Header />
+      <Dashboard /> */}
 
-      <main id="content" class="lg:ps-[260px] pt-[59px]">
+      <DoerHeader />
+
+      <main id="content" class="pt-[59px]">
         <div class="max-w-6xl mx-auto ">
           <header className="mt-20">
             <h1 className="text-xl font-semibold">My Resumes</h1>
           </header>
-          <div className=" flex space-x-6 cursor-pointer mt-4">
+          <div className=" flex flex-wrap space-x-6 cursor-pointer mt-4">
             <div
               className="p-14 py-24 border 
-        items-center flex flex-col
-        justify-center bg-secondary
-        rounded-lg h-[280px]
-        hover:scale-105 transition-all hover:shadow-md
-        cursor-pointer border-dashed"
+                items-center flex flex-col
+                justify-center bg-secondary
+                rounded-lg h-[280px] min-w-[200px]
+                hover:scale-105 transition-all hover:shadow-md
+                cursor-pointer border-dashed"
               onClick={() => onOpen()}
             >
               <svg
@@ -127,12 +128,12 @@ const ResumeDashboard = () => {
 
             {resumes?.map((resume) => (
               <div
-                className="p-14 py-24 border 
-items-center flex flex-col
-justify-center bg-secondary
-rounded-lg h-[280px]
-hover:scale-105 transition-all hover:shadow-md
-cursor-pointer border-dashed"
+                                  className=" my-2 p-14 py-24 border 
+                  items-center flex flex-col 
+                  justify-center bg-secondary
+                  rounded-lg h-[280px] min-w-[200px]
+                  hover:scale-105 transition-all hover:shadow-md
+                  cursor-pointer border-dashed"
                 onClick={() => handleNavigateToPreviousResume(resume.id)}
               >
                 <svg

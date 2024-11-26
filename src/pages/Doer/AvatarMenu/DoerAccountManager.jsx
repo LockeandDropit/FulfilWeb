@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import DoerHeader from "../DoerHeader";
+
 import DoerDashboard from "../DoerDashboard";
 import Header from "../components/Header";
 import Dashboard from "../components/Dashboard";
@@ -41,6 +41,7 @@ import { Spinner } from "@chakra-ui/react";
 import { StreamChat } from "stream-chat";
 
 import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
+import DoerHeader from "../components/DoerHeader";
 
 const DoerAccountManager = () => {
   const [hasRun, setHasRun] = useState(false);
@@ -306,12 +307,13 @@ const DoerAccountManager = () => {
   //text flex end credit (margin-left: auto) https://www.glennstovall.com/flex-row-end-position/
   return (
     <>
-      <Header />
+      {/* <Header />
 
-      <Dashboard />
-      <main id="content" class="lg:ps-[260px] pt-[59px]">
+      <Dashboard /> */}
+        <DoerHeader />
+      <main id="content" class="pt-[59px]">
        
-        <div class="p-2 sm:p-5 sm:py-0 md:pt-5 space-y-3">
+        <div class="max-w-6xl mx-auto sm:mt-5  sm:py-0 md:pt-5 space-y-3">
          
 
           <div class="p-5 md:p-8 bg-white border border-gray-200 shadow-sm rounded-xl ">

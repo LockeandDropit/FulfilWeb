@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 
-const HomepageJobs = () => {
+const HomepageJobs = ({user}) => {
   //fetch info from chatGPT
   const [userResumeInformation, setUserResumeInformation] = useState(null);
 
@@ -30,17 +30,19 @@ const HomepageJobs = () => {
   //     "link": "https://careers.graco.com/job/Rogers-Machine-Operator"
   //   }]);
 
+
+
+  // const [city, setCity] = useState("minneapolis");
+  // const [state, setState] = useState("MN");
+  // const [currentPay, setCurrentPay] = useState("$37 an hour");
+  // const [currentPayType, setCurrentPayType] = useState(null);
+  // const [fieldsOfInterest, setFieldsOfInterest] = useState(
+  //   "working with machines, working with people, welding"
+  // );
+  // const [interestFreeType, setInterestFreeType] = useState(null);
+
   const [returnedJobs, setReturnedJobs] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const [city, setCity] = useState("minneapolis");
-  const [state, setState] = useState("MN");
-  const [currentPay, setCurrentPay] = useState("$37 an hour");
-  const [currentPayType, setCurrentPayType] = useState(null);
-  const [fieldsOfInterest, setFieldsOfInterest] = useState(
-    "working with machines, working with people, welding"
-  );
-  const [interestFreeType, setInterestFreeType] = useState(null);
 
   const getJobs = async () => {
     setLoading(true);
@@ -54,7 +56,7 @@ const HomepageJobs = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userInput: `The user's location is ${city}, ${state}. The user's current pay is ${currentPay}. The user is interested in ${fieldsOfInterest}`,
+          userInput: `The user's location is ${user.city}, ${user.state}. The user's current pay is ${user.currentIncome} a year. The user is interested in ${user.userInterests}`,
         }),
       }
     );
@@ -72,7 +74,7 @@ const HomepageJobs = () => {
   console.log(typeof returnedJobs);
 
   useEffect(() => {
-    // getJobs();
+    getJobs();
   }, []);
 
   useEffect(() => {

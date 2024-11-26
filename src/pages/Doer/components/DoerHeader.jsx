@@ -16,6 +16,8 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
+  ModalHeader,
+  ModalBody,
   ModalCloseButton,
   Menu,
   MenuButton,
@@ -47,7 +49,9 @@ import {
   Box,
   Heading,
 } from "@chakra-ui/react";
+import Markdown from "react-markdown";
 import { CheckIcon } from "@chakra-ui/icons";
+
 
 const DoerHeader = () => {
   const [user, setUser] = useState(null);
@@ -200,18 +204,46 @@ const DoerHeader = () => {
     onClose: onCloseMobileDash,
   } = useDisclosure();
 
+
+  const [response, setResponse] = useState(null);
+  const [userSubmission, setUserSubmission] = useState(null);
+
+  const testAI = async () => {
+    setLoading(true);
+    const response = await fetch(
+      "https://openaiapi-c7qc.onrender.com/careerPathGeneration",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userInput: userSubmission }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    const json = await response.json();
+    console.log("json resopnse", json.message.content);
+
+    setResponse(json.message.content);
+    setLoading(false);
+  };
+
   return (
     <>
       <header class="flex flex-wrap  md:justify-start md:flex-nowrap z-50 w-full bg-white  ">
         <nav class="relative max-w-[85rem] w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 pt-4 pb-2 px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between items-center gap-x-1">
-            <a
+            <button
               class="flex-none font-bold text-4xl focus:outline-none text-sky-400"
-              href="#"
+              onClick={() => navigate("/DoerHomepage")}
               aria-label="Brand"
             >
               Fulfil
-            </a>
+            </button>
           </div>
           <div
             id="hs-header-base"
@@ -222,9 +254,9 @@ const DoerHeader = () => {
               <div class="py-2 md:py-0  flex flex-col md:flex-row md:items-center gap-0.5 md:gap-1">
                 <div class="grow">
                   <div class="flex flex-col md:flex-row md:justify-end md:items-center gap-0.5 md:gap-1">
-                    <a
-                      class="pt-2  px-2 flex items-center font-medium  text-gray-800 hover:underline  rounded-lg   "
-                      href="#"
+                    <button
+                      class="pt-2  px-2 flex items-center font-medium pointer-default text-gray-800 hover:underline  rounded-lg   "
+                      onClick={() => navigate("/DoerHomepage")}
                       aria-current="page"
                     >
                       <svg
@@ -243,8 +275,8 @@ const DoerHeader = () => {
                         <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                       </svg>
                       Home
-                    </a>
-                    <a
+                    </button>
+                    {/* <a
                       class="pt-2  px-2 flex items-center font-medium  text-gray-800 hover:underline  rounded-lg   "
                   onClick={() => navigate("/OnboardingFormHolder")}
                       aria-current="page"
@@ -265,10 +297,11 @@ const DoerHeader = () => {
                         <circle cx="12" cy="7" r="4" />
                       </svg>
                       My Jobs
-                    </a>
-                    <a
+                    </a> */}
+                    <Menu>
+                  <MenuButton _hover={{ textDecoration: "underline" }}>
+                  <a
                       class="pt-2  px-2 flex items-center font-medium  text-gray-800 hover:underline  rounded-lg   "
-                      href="#"
                       aria-current="page"
                     >
                       <svg
@@ -290,16 +323,35 @@ const DoerHeader = () => {
                       </svg>
                       Tools
                     </a>
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem onClick={() => navigate("/ResumeDashboard")}>
+                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                        {" "}
+                        Resume Builder
+                      </p>
+                    </MenuItem>
+                    <MenuItem onClick={() => onOpen()}>
+                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                        {" "}
+                        Career Coach
+                      </p>
+                    </MenuItem>
+                    {/* <MenuItem onClick={() => navigate("/DoerPaymentHistory")}>Payment History</MenuItem> */}
+
+                 
+                  </MenuList>
+                </Menu>
+                  
                   </div>
                 </div>
                 <div class="mt-2 md:mt-2 md:mx-2">
                   <div class="w-full h-px md:w-px md:h-4 bg-gray-100 md:bg-gray-300 dark:bg-neutral-700"></div>
                 </div>
                 <Menu>
-                  <MenuButton>
+                <MenuButton _hover={{ textDecoration: "underline" }}>
                     <a
-                      class="pt-2  px-2 flex items-center font-medium  text-gray-800 hover:underline  rounded-lg   "
-                      href="#"
+                      class="pt-2  px-2 flex items-center font-medium  text-gray-800 hover:underline  rounded-lg"
                       aria-current="page"
                     >
                       <svg
@@ -329,7 +381,7 @@ const DoerHeader = () => {
                         Account Settings
                       </p>
                     </MenuItem>
-                    <MenuItem onClick={() => navigate("/UserProfile")}>
+                    <MenuItem onClick={() => navigate("/NewUserProfile")}>
                       <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
                         {" "}
                         My Profile
@@ -361,6 +413,106 @@ const DoerHeader = () => {
           </div>
         </nav>
       </header>
+
+      <Modal isOpen={isOpen} onClose={onClose} size="4xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Let's Find the Right Fit for You!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p>
+              The more information you give me on your career desires, the
+              better I can serve you.
+            </p>
+            <p className="mt-1">Some examples of information are:</p>
+
+            <div class="sm:grid sm:grid-cols-2 sm:gap-2  ">
+              <ul className="list-disc mx-6 mt-4">
+                <li className="list-disc mt-1">Ideal pay range</li>
+                <li className="list-disc mt-1">
+                  What is your ideal company culture?
+                </li>
+                <li className="list-disc mt-1">
+                  How hard are you willing to work to meet your goals?
+                </li>
+                <li className="list-disc mt-1">
+                  Do you like working with your hands / solving problems, etc?
+                </li>
+                <li className="list-disc mt-1">
+                  Do you want to move up quickly or find your niche and
+                  maintain.
+                </li>
+              </ul>
+
+              <ul className="max-sm:hidden list-disc mx-6 mt-4">
+                <li className="list-disc mt-1">
+                  What are a few of your interests?
+                </li>
+                <li className="list-disc mt-1">
+                  Do you have a long-term career vision?
+                </li>
+
+                <li className="list-disc mt-1">
+                  Do you want to learn something and get better over time?
+                </li>
+                <li className="list-disc mt-1">
+                  How do you want your work work-life balance to look like?
+                </li>
+                <li className="list-disc mt-1">
+                  Are there any barriers that are slowing you down currently?  
+                </li>
+              </ul>
+            </div>
+
+            <div class="w-full space-y-3 mt-4 sm:mt-6">
+              <textarea
+                onChange={(e) => setUserSubmission(e.target.value)}
+                class=" py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                rows="4"
+                placeholder="ex: I've recently graduated from highschool and want to work with my hands. I'd like to do something mechanical, but don;t know where to get started."
+              ></textarea>
+            </div>
+            {/* {validationMessage ? (
+              <p className="text-red-500 mt-1 ml-1">{validationMessage}</p>
+            ) : null} */}
+
+            <div className="w-full flex mt-6">
+              {loading ? (
+                <button
+                  type="button"
+                  class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  <div
+                    class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full"
+                    role="status"
+                    aria-label="loading"
+                  >
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </button>
+              ) : (
+                <button
+                  onClick={() => testAI()}
+                  type="button"
+                  class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  Submit
+                </button>
+              )}
+            </div>
+            {response && (
+              <div>
+                <h2 className="text-lg text-black font-semibold mt-3">
+                  Career advice:
+                </h2>
+                <p className="mt-1">
+                  <Markdown>{response}</Markdown>
+                </p>
+              </div>
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

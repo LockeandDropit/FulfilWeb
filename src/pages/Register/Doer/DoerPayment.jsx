@@ -353,9 +353,12 @@ const DoerPayment = () => {
           </div> */}
 
           <div class="max-w-2xl text-center mx-auto mt-20">
-            <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl ">
-              Let's see what you can <span class="text-sky-400">achieve.</span>
+          <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl ">
+              Access your results with a <span class="text-sky-400">free trial!</span>
             </h1>
+            {/* <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl ">
+              Let's see what you can <span class="text-sky-400">achieve.</span>
+            </h1> */}
             <p class="mt-3 text-lg text-gray-800 ">
               Find the first steps to a fulfilling career
             </p>

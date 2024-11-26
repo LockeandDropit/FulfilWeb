@@ -24,6 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import DoerHeader from "../components/DoerHeader.jsx";
 
 const ResumePreview = () => {
   const { currentUser } = useUserStore();
@@ -75,8 +76,9 @@ const ResumePreview = () => {
   return (
     <>
       <div id="no-print">
-        <Header />
-        <Dashboard />
+        {/* <Header />
+        <Dashboard /> */}
+        <DoerHeader />
         <div className="items-center justify-center align-center">
           <div className="w-fit flex flex-col align-center items-center justify-center my-10 mx-10 md:mx-20 lg:mx-auto mt-20">
             <h2 className="text-center text-2xl font-medium items-center justify-center">

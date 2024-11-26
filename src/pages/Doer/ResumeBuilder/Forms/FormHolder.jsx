@@ -8,6 +8,7 @@ import Skills from "./Skills";
 import { Navigate } from "react-router-dom";
 import { useUserStore } from "../../Chat/lib/userStore";
 import { useLocation } from "react-router-dom";
+import DoerHeader from "../../components/DoerHeader";
 
 const FormHolder = () => {
   const [activeFormIndex, setActiveFormIndex] = useState(1);
@@ -67,8 +68,10 @@ setIsEdit(true)
 
   return (
     <div>
-      <Header />
-      <Dashboard />
+      {/* <Header />
+      <Dashboard /> */}
+
+      <DoerHeader />
     
 
       <div className="flex justify-center w-full h-dvh">

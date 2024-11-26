@@ -29,6 +29,7 @@ import {
   ModalFooter,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
+import DoerHeader from "../../components/DoerHeader";
 
 const Experience = ({ handleIncrementFormIndex, resetExperienceForm }) => {
 
@@ -119,8 +120,10 @@ onOpen();
 
   return (
     <div>
-      <Header />
-      <Dashboard />
+      {/* <Header />
+      <Dashboard /> */}
+
+
 
       <main id="content" class=" pt-[59px]">
         <div class="max-w-6xl mx-auto mt-5">

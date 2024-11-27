@@ -67,7 +67,7 @@ const Education = ({
     //unmute +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     updloadEducation();
 
-    //if isEdit {}
+    //if isEdit 
     //navigate to a new blank form
     resetEducationForm();
   };
@@ -260,8 +260,8 @@ const Education = ({
 };
 
 
-  const notify = () =>
-    toast("Success! Your education has been updated", );
+  const notify = () => {
+    toast("Success! Your education has been updated", ) }
 
   return (
     <div>

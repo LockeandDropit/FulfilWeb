@@ -11,19 +11,19 @@ const Greeting = ({user}) => {
 
   <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center ">
     <div className='mt-6 md:mt-16  '>
-      <h1 class="block text-3xl font-bold text-gray-800 sm:text-3xl lg:text-3xl lg:leading-tight ">Welcome, {user.firstName} </h1>
+      <h1 class="block text-3xl font-bold text-gray-800 sm:text-3xl lg:text-3xl lg:leading-tight ">Welcome, {user?.firstName} </h1>
       <p className=' text-gray-500 mt-3'>Snapshot:</p>
       <div className='flex flex-row'>
       <p class="mt-2 text-lg font-medium text-gray-800">Current Income:</p>
-      <p class="mt-2 text-lg text-gray-800 ml-2">${user.currentIncome}/year</p>
+      <p class="mt-2 text-lg text-gray-800 ml-2">${user?.currentIncome}/year</p>
       </div>
       <div className='flex flex-row'>
       <p class="mt-2 text-lg font-medium text-gray-800">Location:</p>
-      <p class="mt-2 text-lg text-gray-800 ml-2">${user.city}, {user.state}</p>
+      <p class="mt-2 text-lg text-gray-800 ml-2">{user?.city}, {user?.state}</p>
       </div>
       <div className='flex flex-row'>
       <p class="mt-2 text-lg font-medium text-gray-800">My Interests:</p>
-      <p class="mt-2 text-lg text-gray-800 ml-2">{user.userInterests}</p>
+      <p class="mt-2 text-lg text-gray-800 ml-2">{user?.userInterests}</p>
       </div>
      
      
@@ -37,7 +37,7 @@ const Greeting = ({user}) => {
     <div className='border border-sky-100 shadow-md w-2/3 h-full rounded-lg flex flex-col items-center justify-center bg-sky-100 py-24 px-10'>
       <h4 class="text-lg sm:text-2xl font-semibold text-gray-800">My Income Goal</h4>
       <div className="flex">
-      <p class="mt-2 sm:mt-3 text-5xl sm:text-6xl font-bold text-green-500">{user.goalIncome}</p>
+      <p class="mt-2 sm:mt-3 text-5xl sm:text-6xl font-bold text-green-500">${user.goalIncome}</p>
       <p class="ml-2 mt-auto text-gray-500">a year</p>
       </div>
     </div>

@@ -54,8 +54,7 @@ import { FcGoogle } from "react-icons/fc";
 import LoggedOutHeader from "../../../components/Landing/LoggedOutHeader.jsx";
 import { useMediaQuery } from "@chakra-ui/react";
 
-import Plausible from 'plausible-tracker'
-
+import Plausible from "plausible-tracker";
 
 const DoerEmailRegister = () => {
   // navigation Ibad Shaikh https://stackoverflow.com/questions/37295377/how-to-navigate-from-one-page-to-another-in-react-js
@@ -90,12 +89,10 @@ const DoerEmailRegister = () => {
     onClose: onCloseIncomplete,
   } = useDisclosure();
 
-
-
-  const [agreedAll, setAgreedAll] = useState(false)
+  const [agreedAll, setAgreedAll] = useState(false);
 
   const handleAgreeAll = () => {
-    setAgreedAll(!agreedAll)
+    setAgreedAll(!agreedAll);
     // setTaxAgreementConfirmed(true);
     setTermsOfService(!termsOfService);
     setPrivacyPolicy(!privacyPolicy);
@@ -109,16 +106,16 @@ const DoerEmailRegister = () => {
   const [ageAgreement, setAgeAgreement] = useState(false);
   const [taxAgreementConfirmed, setTaxAgreementConfirmed] = useState(null);
 
-  const { trackEvent } = Plausible()
+  const { trackEvent } = Plausible();
 
   const onSignUp = async () => {
     const authentication = getAuth();
-    
+
     await createUserWithEmailAndPassword(authentication, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        
-        trackEvent('Doer Register');
+
+        trackEvent("Doer Register");
         handleSendEmail();
         navigate("/DoerAddProfileInfo");
       })
@@ -130,16 +127,12 @@ const DoerEmailRegister = () => {
       });
   };
 
-
-
   const handleGoogleSignUp = async () => {
     const provider = await new GoogleAuthProvider();
 
-  
-
     return signInWithPopup(auth, provider)
-      .then( async (result) => {
-        trackEvent('Doer Register')
+      .then(async (result) => {
+        trackEvent("Doer Register");
         console.log("result", result);
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -148,28 +141,27 @@ const DoerEmailRegister = () => {
         const user = result.user;
         // IdP data available using getAdditionalUserInfo(result)
         // ...
-      
-       
+
         //used to have send email here but moved it to the next page
 
         Promise.all([
           getDoc(doc(db, "users", result.user.uid)),
           getDoc(doc(db, "employers", result.user.uid)),
         ])
-          .then((results) =>
-         // uhhhhh change this
-            navigate(
-              results[0]._document === null && results[1]._document === null
-              ? "/DoerAddProfileInfo"
-              : results[0]._document !== null &&
-                results[0]._document.data.value.mapValue.fields.isEmployer
-              ? "/DoerMapView"
-              : "/Homepage"
-            )
+          .then(
+            (results) =>
+              // uhhhhh change this
+              navigate(
+                results[0]._document === null && results[1]._document === null
+                  ? "/DoerAddProfileInfo"
+                  : results[0]._document !== null &&
+                    results[0]._document.data.value.mapValue.fields.isEmployer
+                  ? "/DoerMapView"
+                  : "/Homepage"
+              )
             // console.log("here?",results)
-            
           )
-          .catch((e) =>console.log("error is ",e));
+          .catch((e) => console.log("error is ", e));
 
         //check if user is already in DB
         //if so, navigate accordingly
@@ -187,7 +179,6 @@ const DoerEmailRegister = () => {
       });
   };
 
-
   const handleSendEmail = async () => {
     const response = await fetch(
       "https://emailapi-qi7k.onrender.com/sendDoerNotSubscribed",
@@ -199,7 +190,7 @@ const DoerEmailRegister = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: email
+          email: email,
         }),
       }
     );
@@ -225,7 +216,9 @@ const DoerEmailRegister = () => {
     setPasswordValidationBegun(true);
     const isValidPassword = passwordRegex.test(password);
     if (!isValidPassword) {
-      setPasswordValidationMessage( "Password Invalid. Must be at least 6 characters, have 1 uppercase letter, 1 lowercase letter, and 1 number");
+      setPasswordValidationMessage(
+        "Password Invalid. Must be at least 6 characters, have 1 uppercase letter, 1 lowercase letter, and 1 number"
+      );
     } else {
       setPasswordValidationMessage();
     }
@@ -239,7 +232,7 @@ const DoerEmailRegister = () => {
   //credit https://www.sitepoint.com/using-regular-expressions-to-check-string-length/
 
   //credit Vivek S. & xanatos https://stackoverflow.com/questions/5058416/regular-expressions-how-to-accept-any-symbol
-  
+
   // https://regexr.com/3bfsi
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/gm;
   const [passwordValidationBegun, setPasswordValidationBegun] = useState(false);
@@ -264,252 +257,275 @@ const DoerEmailRegister = () => {
     }
   };
 
-  const [openModal, setOpenModal] = useState(null)
+  const [openModal, setOpenModal] = useState(null);
 
   const handleOpenModal = () => {
-    setOpenModal(true)
+    setOpenModal(true);
     setTimeout(() => {
-      setOpenModal(false)
-    }, 200)
-  }
-
+      setOpenModal(false);
+    }, 200);
+  };
 
   //this is here to circumnavigate the bug where if the info marker is open and the user tries to enter their email they are stopped after enetering one letter and redirected to the infomarker
 
-const [closeInfoWindow, setCloseInfoWindow] = useState(false)
-  
-const handleFocus = () => {
-   setCloseInfoWindow(true)
-   setTimeout(() => {
-setCloseInfoWindow(false)
-   }, 200)
+  const [closeInfoWindow, setCloseInfoWindow] = useState(false);
+
+  const handleFocus = () => {
+    setCloseInfoWindow(true);
+    setTimeout(() => {
+      setCloseInfoWindow(false);
+    }, 200);
   };
 
-
   const handleDivCheckIfTrue = () => {
- handleAgreeAll(!handleAgreeAll)
-  }
+    handleAgreeAll(!handleAgreeAll);
+  };
 
- //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
+  const [isVisible, setIsVisible] = useState(false);
+
+  //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
       {/* <Header props={openModal}/> */}
 
       <LoggedOutHeader props={openModal} />
 
-<div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-  <div class="sm:w-1/3 md:items-center ">
-    <div class=" bg-white  mt-4 rounded-xl shadow-sm ">
-      <div class="p-4 sm:p-7">
-        <div class="text-center">
-          <h1 class="block text-4xl font-bold text-gray-800">
-            Looking for work?
-           
-          </h1>
-          <h1 class="block text-3xl font-bold text-gray-800">
-          We make it <span className="text-sky-400">easy.</span> 
-           
-          </h1>
-          <p class="mt-2 text-sm text-gray-600">
-            Already have an account?
-            <button
-              class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
-              onClick={() => handleOpenModal()}
-            >
-              Sign in here
-            </button>
-          </p>
-        </div>
-
-        <div class="mt-5">
-          <button
-            type="button"
-            class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-            onClick={() => handleGoogleSignUp()}
-          >
-            <svg
-              class="w-4 h-auto"
-              width="46"
-              height="47"
-              viewBox="0 0 46 47"
-              fill="none"
-            >
-              <path
-                d="M46 24.0287C46 22.09 45.8533 20.68 45.5013 19.2112H23.4694V27.9356H36.4069C36.1429 30.1094 34.7347 33.37 31.5957 35.5731L31.5663 35.8669L38.5191 41.2719L38.9885 41.3306C43.4477 37.2181 46 31.1669 46 24.0287Z"
-                fill="#4285F4"
-              />
-              <path
-                d="M23.4694 47C29.8061 47 35.1161 44.9144 39.0179 41.3012L31.625 35.5437C29.6301 36.9244 26.9898 37.8937 23.4987 37.8937C17.2793 37.8937 12.0281 33.7812 10.1505 28.1412L9.88649 28.1706L2.61097 33.7812L2.52296 34.0456C6.36608 41.7125 14.287 47 23.4694 47Z"
-                fill="#34A853"
-              />
-              <path
-                d="M10.1212 28.1413C9.62245 26.6725 9.32908 25.1156 9.32908 23.5C9.32908 21.8844 9.62245 20.3275 10.0918 18.8588V18.5356L2.75765 12.8369L2.52296 12.9544C0.909439 16.1269 0 19.7106 0 23.5C0 27.2894 0.909439 30.8731 2.49362 34.0456L10.1212 28.1413Z"
-                fill="#FBBC05"
-              />
-              <path
-                d="M23.4694 9.07688C27.8699 9.07688 30.8622 10.9863 32.5344 12.5725L39.1645 6.11C35.0867 2.32063 29.8061 0 23.4694 0C14.287 0 6.36607 5.2875 2.49362 12.9544L10.0918 18.8588C11.9987 13.1894 17.25 9.07688 23.4694 9.07688Z"
-                fill="#EB4335"
-              />
-            </svg>
-            Sign up with Google
-          </button>
-
-          <div class="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6">
-            Or
-          </div>
-
-          <form>
-            <div class="grid gap-y-4">
-              <div>
-                <label for="email" class="block text-sm mb-2">
-                  Email address
-                </label>
-                <div class="relative">
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                    required
-                    aria-describedby="email-error"
-                  />
-                   {emailValidationBegun === true ? (
-                <p class="block text-sm mb-2 text-red-500">{validationMessage}</p>
-              ) : null}
-                  <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
-                    <svg
-                      class="size-5 text-red-500"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                      aria-hidden="true"
-                    >
-                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                    </svg>
-                  </div>
-                </div>
-                <p
-                  class="hidden text-xs text-red-600 mt-2"
-                  id="email-error"
-                >
-                  Please include a valid email address so we can get back
-                  to you
+      <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+        <div class="sm:w-1/3 md:items-center ">
+          <div class=" bg-white  mt-4 rounded-xl shadow-sm ">
+            <div class="p-4 sm:p-7">
+              <div class="text-center">
+                <h1 class="block text-4xl font-bold text-gray-800">
+                  Looking for work?
+                </h1>
+                <h1 class="block text-3xl font-bold text-gray-800">
+                  We make it <span className="text-sky-400">easy.</span>
+                </h1>
+                <p class="mt-2 text-sm text-gray-600">
+                  Already have an account?
+                  <button
+                    class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
+                    onClick={() => handleOpenModal()}
+                  >
+                    Sign in here
+                  </button>
                 </p>
               </div>
 
-              <div>
-                <div class="flex justify-between items-center">
-                  <label for="password" class="block text-sm mb-2">
-                    Password
-                  </label>
-                  {/* <a class="text-sm text-blue-600 decoration-2 hover:underline font-medium" href="../examples/html/recover-account.html">Forgot password?</a> */}
-                </div>
-                <div class="relative">
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                    required
-                    aria-describedby="password-error"
-                  />
-                  {passwordValidationBegun === true ? (
-                <p class="block text-sm mb-2 text-red-500">{passwordValidationMessage}</p>
-              ) : null}
-                  <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
-                    <svg
-                      class="size-5 text-red-500"
-                      width="16"
-                      height="16"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                      aria-hidden="true"
-                    >
-                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                    </svg>
-                  </div>
-                </div>
-                <p
-                  class="hidden text-xs text-red-600 mt-2"
-                  id="password-error"
+              <div class="mt-5">
+                <button
+                  type="button"
+                  class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
+                  onClick={() => handleGoogleSignUp()}
                 >
-                  8+ characters required
-                </p>
-              </div>
+                  <svg
+                    class="w-4 h-auto"
+                    width="46"
+                    height="47"
+                    viewBox="0 0 46 47"
+                    fill="none"
+                  >
+                    <path
+                      d="M46 24.0287C46 22.09 45.8533 20.68 45.5013 19.2112H23.4694V27.9356H36.4069C36.1429 30.1094 34.7347 33.37 31.5957 35.5731L31.5663 35.8669L38.5191 41.2719L38.9885 41.3306C43.4477 37.2181 46 31.1669 46 24.0287Z"
+                      fill="#4285F4"
+                    />
+                    <path
+                      d="M23.4694 47C29.8061 47 35.1161 44.9144 39.0179 41.3012L31.625 35.5437C29.6301 36.9244 26.9898 37.8937 23.4987 37.8937C17.2793 37.8937 12.0281 33.7812 10.1505 28.1412L9.88649 28.1706L2.61097 33.7812L2.52296 34.0456C6.36608 41.7125 14.287 47 23.4694 47Z"
+                      fill="#34A853"
+                    />
+                    <path
+                      d="M10.1212 28.1413C9.62245 26.6725 9.32908 25.1156 9.32908 23.5C9.32908 21.8844 9.62245 20.3275 10.0918 18.8588V18.5356L2.75765 12.8369L2.52296 12.9544C0.909439 16.1269 0 19.7106 0 23.5C0 27.2894 0.909439 30.8731 2.49362 34.0456L10.1212 28.1413Z"
+                      fill="#FBBC05"
+                    />
+                    <path
+                      d="M23.4694 9.07688C27.8699 9.07688 30.8622 10.9863 32.5344 12.5725L39.1645 6.11C35.0867 2.32063 29.8061 0 23.4694 0C14.287 0 6.36607 5.2875 2.49362 12.9544L10.0918 18.8588C11.9987 13.1894 17.25 9.07688 23.4694 9.07688Z"
+                      fill="#EB4335"
+                    />
+                  </svg>
+                  Sign up with Google
+                </button>
 
-              <div className="">
-                <div className="mt-5 space-y-10">
-                  <fieldset>
-                    <legend className="text-lg font-semibold leading-6 text-gray-900">
-                      User Agreements
-                    </legend>
-                    <div className="mt-6 space-y-6">
-                      <div className="relative flex gap-x-3">
-                        <div className="flex h-6 items-center">
-                          <input
-                            id="candidates"
-                            name="candidates"
-                            onChange={(e) => handleAgreeAll(e.target.checked)}
-                            type="checkbox"
-                            checked={agreedAll}
-                            className="cursor-pointer h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
-                          />
-                        </div>
-                        <div className="text-sm leading-6" onClick={(e) => handleAgreeAll(e.target.checked)}>
-                          <label className="font-medium text-gray-900">
-                            I have read and agree to the{" "}
-                            <span class="text-sky-400" onClick={() => onOpen()}>
-                              {" "}
-                              Privacy Policy
-                            </span>
-                            ,{" "}
-                            <span
-                              class="text-sky-400 mr-1"
-                              onClick={() => onOpenTOS()}
-                            >
-                              Terms of Service 
-                            </span>
-                            and am at least 16 years old.
-                          </label>
-                        </div>
+                <div class="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6">
+                  Or
+                </div>
+
+                <form>
+                  <div class="grid gap-y-4">
+                    <div>
+                      <label for="email" class="block text-sm mb-2">
+                        Email address
+                      </label>
+                      <div class="relative">
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          onChange={(e) => setEmail(e.target.value)}
+                          class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                          required
+                          aria-describedby="email-error"
+                        />
+                        {emailValidationBegun === true ? (
+                          <p class="mt-1 block text-sm mb-2 text-red-500">
+                            {validationMessage}
+                          </p>
+                        ) : null}
+                    
                       </div>
+                    
                     </div>
-                  </fieldset>
-                </div>
-              </div>
 
+                    <div>
+                      <div class="flex justify-between items-center">
+                        <label for="password" class="block text-sm mb-2">
+                          Password
+                        </label>
+                        {/* <a class="text-sm text-blue-600 decoration-2 hover:underline font-medium" href="../examples/html/recover-account.html">Forgot password?</a> */}
+                      </div>
+                      <div class="relative">
+                    
+                        <input
+                          type={isVisible ? "text" : "password"}
+                          id="password"
+                          name="password"
+                          onChange={(e) => setPassword(e.target.value)}
+                          class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                          required
+                          aria-describedby="password-error "
+                        />
+                         {isVisible ? (
 
-{agreedAll === true ? ( <input type="button"
-                     onClick={() => validate()}
-                     value="Sign Up"
-                      className="cursor-pointer w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    >
-                   
-                    </input>) : ( <input type="button"
-                 
-                     value="Sign Up"
-                      className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-200 text-white  disabled:opacity-50 disabled:pointer-events-none"
-                    >
-                   
-                    </input>)}
-             
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-  
-  </div>
-
-  
- 
+<div onClick={() => setIsVisible(!isVisible)} className="absolute inset-y-0 end-2 flex items-center ps-4 ">
+<svg
+ xmlns="http://www.w3.org/2000/svg"
+ fill="none"
+ viewBox="0 0 24 24"
+ strokeWidth={1.5}
+ stroke="currentColor"
+ className="size-5 flex-end"
+>
+ <path
+   strokeLinecap="round"
+   strokeLinejoin="round"
+   d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+ />
+ <path
+   strokeLinecap="round"
+   strokeLinejoin="round"
+   d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+ />
+</svg>{" "}
 </div>
 
-<Modal isOpen={isOpen} onClose={onClose} size="xl">
+
+) : (
+<div onClick={() => setIsVisible(!isVisible)} className="absolute inset-y-0 end-2 flex items-center ps-4 ">
+<svg
+ xmlns="http://www.w3.org/2000/svg"
+ fill="none"
+ viewBox="0 0 24 24"
+ strokeWidth={1.5}
+ stroke="currentColor"
+ className="size-5 flex-end"
+>
+ <path
+   strokeLinecap="round"
+   strokeLinejoin="round"
+   d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+ />
+ <path
+   strokeLinecap="round"
+   strokeLinejoin="round"
+   d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+ />
+</svg>{" "}
+</div>
+)}
+
+                     
+                       
+                      </div>
+                      {passwordValidationBegun === true ? (
+                          <p class="mt-1 block text-sm mb-2 text-red-500">
+                            {passwordValidationMessage}
+                          </p>
+                        ) : null}
+                    </div>
+
+                    <div className="">
+                      <div className="mt-5 space-y-10">
+                        <fieldset>
+                          <legend className="text-lg font-semibold leading-6 text-gray-900">
+                            User Agreements
+                          </legend>
+                          <div className="mt-6 space-y-6">
+                            <div className="relative flex gap-x-3">
+                              <div className="flex h-6 items-center">
+                                <input
+                                  id="candidates"
+                                  name="candidates"
+                                  onChange={(e) =>
+                                    handleAgreeAll(e.target.checked)
+                                  }
+                                  type="checkbox"
+                                  checked={agreedAll}
+                                  className="cursor-pointer h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                                />
+                              </div>
+                              <div
+                                className="text-sm leading-6"
+                                onClick={(e) =>
+                                  handleAgreeAll(e.target.checked)
+                                }
+                              >
+                                <label className="font-medium text-gray-900">
+                                  I have read and agree to the{" "}
+                                  <span
+                                    class="text-sky-400"
+                                    onClick={() => onOpen()}
+                                  >
+                                    {" "}
+                                    Privacy Policy
+                                  </span>
+                                  ,{" "}
+                                  <span
+                                    class="text-sky-400 mr-1"
+                                    onClick={() => onOpenTOS()}
+                                  >
+                                    Terms of Service
+                                  </span>
+                                  and am at least 16 years old.
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    {agreedAll === true ? (
+                      <input
+                        type="button"
+                        onClick={() => validate()}
+                        value="Sign Up"
+                        className="cursor-pointer w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
+                      ></input>
+                    ) : (
+                      <input
+                        type="button"
+                        value="Sign Up"
+                        className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-200 text-white  disabled:opacity-50 disabled:pointer-events-none"
+                      ></input>
+                    )}
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
         <ModalContent height="66vh">
           <ModalHeader fontSize="16px">Privacy Policy</ModalHeader>
@@ -699,62 +715,62 @@ setCloseInfoWindow(false)
           <ModalCloseButton />
           <ModalBody overflowY="scroll">
             <Text marginTop="8">
-              Fulfil Global Terms of Service Last updated 10/30/2024. These Terms
-              of Service reprsesent a binding agreement between you and Fulfil,
-              Inc. (“Fulfil”) concerning your use of the Fulfil Platform. The
-              Fulfil Platform encompasses Fulfil's websites, mobile
-              applications, and associated services and content. All personal
-              data you provide to the Fulfil Platform, or that we gather, is
-              subject to our Global Privacy Policy ("Privacy Policy"). By
-              utilizing the Fulfil Platform, you confirm that you've reviewed
-              our Privacy Policy. By acknowledging the Terms of Service and/or
-              using the Fulfil platform, you expressly confirm that you have
-              read, understand, and unconditionally agree to be bound by this
-              Agreement and all of its terms. If you do not accept and agree to
-              be bound by this Agreement, you must not use or access the Fulfil
-              platform No agency, partnership, joint venture, employer-employee
-              or franchiser-franchisee relationship is intended or created by
-              this Agreement. The Fulfil Platform: Connecting Doers and Needers
-              The Fulfil Platform is a digital marketplace linking Needers
-              seeking services and Doers offering them. Both Needers and Doers
-              are termed "Users". When both parties agree on a task. Doers'
-              Independent Status: Doers are independent contractors, not
-              affiliates or employees of Fulfil. Fulfil merely acts as a bridge,
-              linking service seekers (Needers) with providers (Doers) and does
-              not undertake any tasks itself. Disclaimer: Fulfil doesn't
-              oversee, direct, or control a Doer's work and disclaims any
-              responsibility for their performance, ensuring neither quality nor
-              compliance with laws or regulations. No Endorsement of Doers:
-              References to a Doer's credentials or descriptions only indicate
-              they've met registration processes or criteria on our platform and
-              have received ratings from other users. Such labels aren't
-              endorsements or guarantees by Fulfil about the Doer's skills,
-              qualifications, or trustworthiness. Needers must make their
-              judgments about Doers' suitability. Fulfil does not directly
-              endorse any Doer. Limitations: Fulfil isn't liable for any
-              interactions, quality, legality, or outcomes of tasks, nor does it
-              vouch for the integrity or qualifications of Users. Fulfil doesn't
-              guarantee the accuracy, timeliness, or reliability of services
-              requested or provided by Users. 2. Contract between Users When a
-              Needer and a Doer agree on a task's terms, they enter into a
-              binding contract (the “Service Agreement”). This agreement
-              comprises the terms in this Section 2, the terms agreed upon on
-              the Fulfil Platform, and other accepted contractual terms, as long
-              as they don't conflict with this Agreement or limit Fulfil’s
-              rights. Importantly, Fulfil isn't a party to this Service
-              Agreement and never has an employment relationship with Doers
-              because of it. Needers must pay Doers in full using the payment
-              methods specified on the Fulfil Platform, based on the agreed
-              rates in the Service Agreement. All Users should adhere to both
-              the Service Agreement and this overarching Agreement during task
-              engagement and completion. 3. Doer Background Checks & User
-              Responsibilities Doer Background Checks: Doers may undergo
-              reviews, possibly including identity verification and criminal
-              background checks, termed “Background Checks”. While Fulfil
-              conducts these checks, it cannot guarantee the complete
-              authenticity of a user's identity or background. It’s always
-              recommended to use caution and common sense for safety, as you
-              would with strangers. Fulfil won't be responsible for
+              Fulfil Global Terms of Service Last updated 10/30/2024. These
+              Terms of Service reprsesent a binding agreement between you and
+              Fulfil, Inc. (“Fulfil”) concerning your use of the Fulfil
+              Platform. The Fulfil Platform encompasses Fulfil's websites,
+              mobile applications, and associated services and content. All
+              personal data you provide to the Fulfil Platform, or that we
+              gather, is subject to our Global Privacy Policy ("Privacy
+              Policy"). By utilizing the Fulfil Platform, you confirm that
+              you've reviewed our Privacy Policy. By acknowledging the Terms of
+              Service and/or using the Fulfil platform, you expressly confirm
+              that you have read, understand, and unconditionally agree to be
+              bound by this Agreement and all of its terms. If you do not accept
+              and agree to be bound by this Agreement, you must not use or
+              access the Fulfil platform No agency, partnership, joint venture,
+              employer-employee or franchiser-franchisee relationship is
+              intended or created by this Agreement. The Fulfil Platform:
+              Connecting Doers and Needers The Fulfil Platform is a digital
+              marketplace linking Needers seeking services and Doers offering
+              them. Both Needers and Doers are termed "Users". When both parties
+              agree on a task. Doers' Independent Status: Doers are independent
+              contractors, not affiliates or employees of Fulfil. Fulfil merely
+              acts as a bridge, linking service seekers (Needers) with providers
+              (Doers) and does not undertake any tasks itself. Disclaimer:
+              Fulfil doesn't oversee, direct, or control a Doer's work and
+              disclaims any responsibility for their performance, ensuring
+              neither quality nor compliance with laws or regulations. No
+              Endorsement of Doers: References to a Doer's credentials or
+              descriptions only indicate they've met registration processes or
+              criteria on our platform and have received ratings from other
+              users. Such labels aren't endorsements or guarantees by Fulfil
+              about the Doer's skills, qualifications, or trustworthiness.
+              Needers must make their judgments about Doers' suitability. Fulfil
+              does not directly endorse any Doer. Limitations: Fulfil isn't
+              liable for any interactions, quality, legality, or outcomes of
+              tasks, nor does it vouch for the integrity or qualifications of
+              Users. Fulfil doesn't guarantee the accuracy, timeliness, or
+              reliability of services requested or provided by Users. 2.
+              Contract between Users When a Needer and a Doer agree on a task's
+              terms, they enter into a binding contract (the “Service
+              Agreement”). This agreement comprises the terms in this Section 2,
+              the terms agreed upon on the Fulfil Platform, and other accepted
+              contractual terms, as long as they don't conflict with this
+              Agreement or limit Fulfil’s rights. Importantly, Fulfil isn't a
+              party to this Service Agreement and never has an employment
+              relationship with Doers because of it. Needers must pay Doers in
+              full using the payment methods specified on the Fulfil Platform,
+              based on the agreed rates in the Service Agreement. All Users
+              should adhere to both the Service Agreement and this overarching
+              Agreement during task engagement and completion. 3. Doer
+              Background Checks & User Responsibilities Doer Background Checks:
+              Doers may undergo reviews, possibly including identity
+              verification and criminal background checks, termed “Background
+              Checks”. While Fulfil conducts these checks, it cannot guarantee
+              the complete authenticity of a user's identity or background. It’s
+              always recommended to use caution and common sense for safety, as
+              you would with strangers. Fulfil won't be responsible for
               misrepresentations by users. Furthermore, neither Fulfil nor its
               associates are liable for user conduct. By using the platform, you
               release Fulfil and its affiliates from any claims related to user
@@ -1178,8 +1194,6 @@ setCloseInfoWindow(false)
           </ModalFooter>
         </ModalContent>
       </Modal>
- 
-      
     </>
   );
 };

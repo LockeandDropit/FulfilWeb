@@ -21,9 +21,9 @@ const Greeting = ({user}) => {
       <p class="mt-2 text-lg font-medium text-gray-800">Location:</p>
       <p class="mt-2 text-lg text-gray-800 ml-2">{user?.city}, {user?.state}</p>
       </div>
-      <div className='flex flex-row'>
-      <p class="mt-2 text-lg font-medium text-gray-800">My Interests:</p>
-      <p class="mt-2 text-lg text-gray-800 ml-2">{user?.userInterests}</p>
+      <div className='flex flex-row '>
+     
+      <p class="mt-2 text-lg text-gray-800 "><span class="text-lg font-medium text-gray-800 mr-2">My interests:</span>{user?.userInterests}</p>
       </div>
      
      

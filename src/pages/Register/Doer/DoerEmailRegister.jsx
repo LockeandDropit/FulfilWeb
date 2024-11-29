@@ -281,7 +281,9 @@ const DoerEmailRegister = () => {
     handleAgreeAll(!handleAgreeAll);
   };
 
+  // help from Can Küçükyılmaz per https://stackoverflow.com/questions/71679442/show-hide-multiple-password-in-react-js
   const [isVisible, setIsVisible] = useState(false);
+
 
   //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (

@@ -143,6 +143,7 @@ import DoerPayment from "./pages/Register/Doer/DoerPayment";
 import TagManager from 'react-gtm-module'
 import OnboardingFormHolder from "./pages/Register/Doer/NewOnboarding/OnboardingFormHolder";
 import NewUserProfile from "./pages/Doer/NewUserProfile";
+import MyProfile from "./pages/Doer/MyProfile";
  
 const tagManagerArgs = {
     gtmId: 'AW-16521233370'
@@ -566,6 +567,10 @@ const router = createBrowserRouter([
   {
     path: "/DoerHomepage",
     element: <DoerHomepage />,
+  },
+  {
+    path: "/MyProfile",
+    element: <MyProfile />,
   },
   {
     path: "/OnboardingFormHolder",

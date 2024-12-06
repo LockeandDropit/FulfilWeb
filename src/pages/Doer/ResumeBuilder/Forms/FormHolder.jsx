@@ -34,11 +34,13 @@ setIsEdit(true)
 
   // absolutely DISGUSTING work around for not being able to access Editor state. But this is the price of a mid-range IQ.
   const resetExperienceForm = (x) => {
+    setIsReset(true)
     console.log("x", x)
     setActiveFormIndex(0);
     setTimeout(() => {
       setActiveFormIndex(3);
     }, 400);
+    setTimeout(() => {setIsReset(false)}, 1000)
   };
 
   const resetEducationForm = () => {
@@ -107,6 +109,7 @@ setIsEdit(true)
             handleIncrementFormIndex={handleIncrementFormIndex}
             resetExperienceForm={resetExperienceForm}
             isEdit={isEdit}
+            isReset={isReset}
           />
         ) : activeFormIndex === 4 ? <Skills
         handleIncrementFormIndex={handleIncrementFormIndex}

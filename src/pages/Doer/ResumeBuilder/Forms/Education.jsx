@@ -41,6 +41,7 @@ const Education = ({
   handleIncrementFormIndex,
   resetEducationForm,
   isEdit,
+  isReset,
 }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -61,13 +62,26 @@ const Education = ({
 
   const navigate = useNavigate();
 
+  const notify = () => {
+    toast("Success! Your education has been updated", {
+      autoClose: 3000,
+      type: "success",
+    });
+  };
+
+  useEffect(() => {
+    if (isReset === true) {
+      notify();
+    }
+  }, []);
+
   const handleSaveAndClearData = () => {
     //POST all data
 
     //unmute +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     updloadEducation();
 
-    //if isEdit 
+    //if isEdit
     //navigate to a new blank form
     resetEducationForm();
   };
@@ -75,8 +89,27 @@ const Education = ({
   const checkIfValid = () => {
     if (!institutionTitle || !startDate || !degree || !major) {
       onOpen();
+      console.log("1");
     } else if (!endDate && isEnrolled === false) {
       onOpen();
+      console.log("2", endDate);
+    } else if (isEdit && !isEditAndNew) {
+      updloadEditedEducation().then(() => navigate("/ResumePreview"));
+    } else if (isEdit && isEditAndNew) {
+      updloadEducation().then(() => navigate("/ResumePreview"));
+    } else {
+      uploadAndNavigate();
+      console.log("got em");
+    }
+  };
+
+  const checkIfValidEdited = () => {
+    if (!institutionTitle || !startDate || !degree || !major) {
+      onOpen();
+      console.log("1");
+    } else if (!editedEndDate && isEnrolled === false) {
+      onOpen();
+      console.log("2", endDate);
     } else if (isEdit && !isEditAndNew) {
       updloadEditedEducation().then(() => navigate("/ResumePreview"));
     } else if (isEdit && isEditAndNew) {
@@ -96,7 +129,6 @@ const Education = ({
   useEffect(() => {
     if (isEdit === true && currentUser && currentResumeName) {
       setLoading(true);
-
       onOpenChoose();
 
       let intermediateHold = [];
@@ -110,7 +142,10 @@ const Education = ({
         }
       );
 
+
       // setEducation(intermediateHold)
+
+
 
       return () => {
         unSub();
@@ -233,16 +268,16 @@ const Education = ({
 
   const handleIsEnrolled = () => {};
 
-  const ExampleCustomInput = forwardRef(
-    ({ value, onClick, className }, onChange, ref) => (
-      <input
-        className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-        ref={ref}
-        value={value}
-        onClick={onClick}
-      />
-    )
-  );
+  const ExampleCustomInput = forwardRef(({ value, onClick }, onChange, ref) => (
+    <input
+      className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+      ref={ref}
+      value={(date) => setEndDate(date)}
+      onClick={onClick}
+      selected={endDate}
+      onChange={(date) => setEndDate(date)}
+    />
+  ));
 
   const ExampleCustomInput2 = forwardRef(
     ({ value, onClick, className }, onChange, ref) => (
@@ -256,19 +291,14 @@ const Education = ({
   );
 
   const contextClass = {
-  default: "bg-green-600",
-};
-
-
-  const notify = () => {
-    toast("Success! Your education has been updated", ) }
+    default: "bg-green-600",
+  };
 
   return (
     <div>
       {/* <Header />
       <Dashboard /> */}
 
-  
       {loading ? (
         <p>spinner</p>
       ) : (
@@ -323,7 +353,6 @@ const Education = ({
                       sentences to describe yourself.
                     </p>
                   </div>
-
                   <form>
                     <div class="sm:col-span-3">
                       <label
@@ -333,7 +362,6 @@ const Education = ({
                         Degree
                       </label>
                     </div>
-
                     <div class="sm:col-span-9">
                       <input
                         id="af-account-email"
@@ -351,7 +379,6 @@ const Education = ({
                         Major
                       </label>
                     </div>
-
                     <div class="sm:col-span-9 mt-1">
                       <input
                         id="af-account-email"
@@ -369,7 +396,6 @@ const Education = ({
                         Institution
                       </label>
                     </div>
-
                     <div class="sm:col-span-9">
                       <input
                         id="af-account-email"
@@ -387,7 +413,6 @@ const Education = ({
                         Attendance
                       </label>
                     </div>
-
                     <div class="sm:col-span-9">
                       <div class="sm:flex">
                         <div class="relative  text-left">
@@ -396,7 +421,7 @@ const Education = ({
                               editedStartDate ? editedStartDate : startDate
                             }
                             onChange={(date) => setEditedStartDate(date)}
-                            customInput={<ExampleCustomInput />}
+                            className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                           />
                         </div>
                         <div class="relative inline-block text-left ml-auto">
@@ -409,7 +434,7 @@ const Education = ({
                                 : null
                             }
                             onChange={(date) => setEditedEndDate(date)}
-                            customInput={<ExampleCustomInput2 />}
+                            className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                           />
                         </div>
                       </div>
@@ -443,7 +468,6 @@ const Education = ({
                       sentences to describe yourself.
                     </p>
                   </div>
-
                   <form>
                     <div class="sm:col-span-3">
                       <label
@@ -453,7 +477,6 @@ const Education = ({
                         Degree
                       </label>
                     </div>
-
                     <div class="sm:col-span-9">
                       <input
                         id="af-account-email"
@@ -471,7 +494,6 @@ const Education = ({
                         Major
                       </label>
                     </div>
-
                     <div class="sm:col-span-9 mt-1">
                       <input
                         id="af-account-email"
@@ -507,21 +529,20 @@ const Education = ({
                         Attendance
                       </label>
                     </div>
-
                     <div class="sm:col-span-9">
                       <div class="sm:flex">
                         <div class="relative  text-left">
                           <DatePicker
                             selected={startDate}
                             onChange={(date) => setStartDate(date)}
-                            customInput={<ExampleCustomInput />}
+                            className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                           />
                         </div>
                         <div class="relative inline-block text-left ml-auto">
                           <DatePicker
                             selected={endDate}
                             onChange={(date) => setEndDate(date)}
-                            customInput={<ExampleCustomInput2 />}
+                            className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                           />
                         </div>
                       </div>
@@ -541,42 +562,6 @@ const Education = ({
                         </label>
                       </div>
                     </div>
-
-                    {/* <div class="mt-8 flex justify-center gap-x-2">
-                
-                    <button
-                      type="button"
-                      class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                      onClick={handleSaveAndClearData}
-                    >
-                      Add More Education
-                    </button>
-                  </div>
-                  <div class="mt-10 flex justify-end gap-x-2">
-              
-                    <button
-                      type="button"
-                      class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                      // onClick={uploadAndNavigate}
-                      onClick={checkIfValid}
-                    >
-                      Finish
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        class="size-3"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                        />
-                      </svg>
-                    </button>
-                  </div> */}
                   </form>
                 </div>
               </div>
@@ -590,7 +575,6 @@ const Education = ({
                       sentences to describe yourself.
                     </p>
                   </div>
-
                   <form>
                     <div class="sm:col-span-3">
                       <label
@@ -654,21 +638,20 @@ const Education = ({
                         Attendance
                       </label>
                     </div>
-
                     <div class="sm:col-span-9">
                       <div class="sm:flex">
                         <div class="relative  text-left">
                           <DatePicker
                             selected={startDate}
                             onChange={(date) => setStartDate(date)}
-                            customInput={<ExampleCustomInput />}
+                            className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                           />
                         </div>
                         <div class="relative inline-block text-left ml-auto">
                           <DatePicker
                             selected={endDate}
                             onChange={(date) => setEndDate(date)}
-                            customInput={<ExampleCustomInput2 />}
+                            className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                           />
                         </div>
                       </div>
@@ -688,14 +671,7 @@ const Education = ({
                         </label>
                       </div>
                     </div>
-
                     <div class="mt-8 flex justify-center gap-x-2">
-                      {/* <button
-              type="button"
-              class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50"
-            >
-              Cancel
-            </button> */}
                       <button
                         type="button"
                         class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -776,7 +752,7 @@ const Education = ({
                     class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                     // onClick={uploadAndNavigate}
                     // onClick={notify}
-                    onClick={checkIfValid}
+                    onClick={checkIfValidEdited}
                   >
                     Finish
                     <svg
@@ -800,13 +776,13 @@ const Education = ({
           </div>
           <div className="flex items-center justify-center w-full">
             <ToastContainer
-            toastClassName={(context) =>
-          contextClass[context?.type || "default"] +
-          " relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer"
-        }
+              toastClassName={(context) =>
+                contextClass[context?.type || "default"] +
+                " relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer"
+              }
               position="bottom-center"
-              autoClose={1500}
-               bodyClassName={() => "text-sm font-white font-med block p-3"}
+              autoClose={3000}
+              bodyClassName={() => "text-sm text-gray-800 font-med block p-3"}
             />
           </div>
         </main>

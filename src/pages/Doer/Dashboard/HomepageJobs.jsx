@@ -5,30 +5,30 @@ const HomepageJobs = ({user}) => {
   //fetch info from chatGPT
   const [userResumeInformation, setUserResumeInformation] = useState(null);
 
-  //   const [returnedJobs, setReturnedJobs] = useState( [  {
-  //     "company": "3M",
-  //     "job_title": "Manufacturing Production Operator",
-  //     "location": "Maplewood, MN",
-  //     "pay_rate": "$38 per hour",
-  //     "description": "Responsible for operating machinery to meet production goals, ensuring safety protocols are followed, and collaborating with team members to optimize production efficiency.",
-  //     "link": "https://jobs.3m.com/job/Maplewood-Manufacturing-Production-Operator"
-  //   },
-  //   {
-  //     "company": "Honeywell",
-  //     "job_title": "Field Service Technician",
-  //     "location": "Golden Valley, MN",
-  //     "pay_rate": "$40 per hour",
-  //     "description": "Work directly with customers to install, maintain, and repair industrial equipment. Strong focus on customer service and teamwork.",
-  //     "link": "https://careers.honeywell.com/en/jobs/golden-valley-mn-field-service-technician"
-  //   },
-  //   {
-  //     "company": "Graco",
-  //     "job_title": "Machine Operator",
-  //     "location": "Rogers, MN",
-  //     "pay_rate": "$39 per hour",
-  //     "description": "Operate various types of machinery, ensure product quality standards, and engage in continuous improvement activities with co-workers.",
-  //     "link": "https://careers.graco.com/job/Rogers-Machine-Operator"
-  //   }]);
+    // const [returnedJobs, setReturnedJobs] = useState( [  {
+    //   "company": "3M",
+    //   "job_title": "Manufacturing Production Operator",
+    //   "location": "Maplewood, MN",
+    //   "pay_rate": "$38 per hour",
+    //   "job_description": "Responsible for operating machinery to meet production goals, ensuring safety protocols are followed, and collaborating with team members to optimize production efficiency.",
+    //   "link": "https://jobs.3m.com/job/Maplewood-Manufacturing-Production-Operator"
+    // },
+    // {
+    //   "company": "Honeywell",
+    //   "job_title": "Field Service Technician",
+    //   "location": "Golden Valley, MN",
+    //   "pay_rate": "$40 per hour",
+    //   "job_description": "Work directly with customers to install, maintain, and repair industrial equipment. Strong focus on customer service and teamwork.",
+    //   "link": "https://careers.honeywell.com/en/jobs/golden-valley-mn-field-service-technician"
+    // },
+    // {
+    //   "company": "Graco",
+    //   "job_title": "Machine Operator",
+    //   "location": "Rogers, MN",
+    //   "pay_rate": "$39 per hour",
+    //   "job_description": "Operate various types of machinery, ensure product quality standards, and engage in continuous improvement activities with co-workers.",
+    //   "link": "https://careers.graco.com/job/Rogers-Machine-Operator"
+    // }]);
 
 
 
@@ -74,7 +74,7 @@ const HomepageJobs = ({user}) => {
   console.log(typeof returnedJobs);
 
   useEffect(() => {
-    // getJobs();
+    getJobs();
   }, []);
 
   useEffect(() => {

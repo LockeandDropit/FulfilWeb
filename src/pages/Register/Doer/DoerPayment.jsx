@@ -527,7 +527,7 @@ const DoerPayment = () => {
                       <button
                         type="button"
                         onClick={() => handleOpenStripeMonthly()}
-                        class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border  bg-blue-500 text-white shadow-sm  disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
+                        class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border  bg-blue-500 text-white shadow-sm"
                       >
                         Start free trial
                       </button>

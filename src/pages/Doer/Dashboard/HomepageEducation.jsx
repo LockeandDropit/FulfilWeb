@@ -44,7 +44,7 @@ const HomepageEducation = ({user}) => {
 
 
   useEffect(() => {
-    // getEdu();
+    getEdu();
   }, []);
 
   useEffect(() => {
@@ -120,7 +120,7 @@ const HomepageEducation = ({user}) => {
                   <h3 class="text-sm text-gray-500">{edu.location}</h3>
                   <div className="mt-1 flex ">
                     <h3 class="text-sm text-gray-500 line-clamp-1">
-                      {edu.salary_after_completion}
+                      <p className="mr-1 font-medium text-sm text-gray-800">Avg. Salary:</p> ${edu.salary_after_completion}
                     </h3>
                     <span class="ml-1 inline-flex items-center gap-x-1 text-xs font-medium text-green-500 rounded-full">
                       <svg

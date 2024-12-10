@@ -184,11 +184,10 @@ const MyProfile = () => {
     if (!userInterests || !currentIncome || !goalIncome) {
       setFormValidationMessage("Please fill out all fields");
     } else {
-        setUpdateIsLoading(true);
-        //update firestore
-        uploadToFirebase();
+      setUpdateIsLoading(true);
+      //update firestore
+      uploadToFirebase();
     }
-
   };
 
   return (
@@ -643,97 +642,15 @@ const MyProfile = () => {
                                   </button>
                                 </div>
                               ) : null}
-                              {formValidationMessage ? (<p className="text-red-500 text-sm">{formValidationMessage}</p>) : (null)}
+                              {formValidationMessage ? (
+                                <p className="text-red-500 text-sm">
+                                  {formValidationMessage}
+                                </p>
+                              ) : null}
                             </div>
                           </AccordionPanel>
                         </AccordionItem>
-                              <WorkExperience />
-                        <AccordionItem>
-                          <h2>
-                            <AccordionButton>
-                              <Box as="span" flex="1" textAlign="left">
-                                <label
-                                  for="hs-pro-epdsku"
-                                  class="block  font-medium text-stone-800 "
-                                >
-                                  Work Experience
-                                </label>
-                              </Box>
-                              <AccordionIcon />
-                            </AccordionButton>
-                          </h2>
-                          <AccordionPanel pb={4}>
-                            <div className="flex flex-col  space-y-6">
-                              <div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Position Title:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-
-                                  <div className=" text-sm ml-auto cursor-pointer ">
-                                    <span className="text-blue-400 hover:text-blue-600 hover:underline ">
-                                      Edit
-                                    </span>
-                                  </div>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Company:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Dates employed:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Description
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                              </div>
-                              <div className="">
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Position Title:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-
-                                  <div className=" text-sm ml-auto cursor-pointer ">
-                                    <span className="text-blue-400 hover:text-blue-600 hover:underline ">
-                                      Edit
-                                    </span>
-                                  </div>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Company:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Dates employed:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Description
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                              </div>
-                              <div className=" text-sm ml-auto cursor-pointer text-blue-400 hover:text-blue-600 hover:underline">
-                                Add more
-                              </div>
-                            </div>
-                          </AccordionPanel>
-                        </AccordionItem>
+                        <WorkExperience />
 
                         <AccordionItem>
                           <h2>

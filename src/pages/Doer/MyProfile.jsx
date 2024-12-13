@@ -15,7 +15,9 @@ import Select from "react-select";
 import { useUserStore } from "./Chat/lib/userStore";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
-import WorkExperience from "../ProfileComponents/WorkExperience";
+import Education from "./ProfileComponents/Education";
+import Work from "./ProfileComponents/Work";
+import Skills from "./ProfileComponents/Skills";
 
 const MyProfile = () => {
   const { currentUser } = useUserStore();
@@ -287,7 +289,7 @@ const MyProfile = () => {
 
                   <div class="mt-3 text-center">
                     <h1 class="text-xl font-semibold text-gray-800 ">
-                      name name
+                      {currentUser.firstName} {currentUser.lastName}
                     </h1>
                     {/* <p class="text-gray-500 ">
                        iam_amanda
@@ -354,7 +356,7 @@ const MyProfile = () => {
                                     <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                                     <circle cx="12" cy="10" r="3" />
                                   </svg>
-                                  city
+                                  {currentUser.city}, {currentUser.state}
                                 </div>
                               </li>
 
@@ -381,7 +383,7 @@ const MyProfile = () => {
                                     />
                                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                                   </svg>
-                                  email
+                                  {currentUser.email}
                                 </div>
                               </li>
                             </ul>
@@ -477,7 +479,7 @@ const MyProfile = () => {
                                 <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                                 <circle cx="12" cy="10" r="3" />
                               </svg>
-                              city
+                              {currentUser.city}, {currentUser.state}
                             </div>
                           </li>
 
@@ -504,7 +506,7 @@ const MyProfile = () => {
                                 />
                                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                               </svg>
-                              email
+                              {currentUser.email}
                             </div>
                           </li>
                         </ul>
@@ -650,176 +652,11 @@ const MyProfile = () => {
                             </div>
                           </AccordionPanel>
                         </AccordionItem>
-                        <WorkExperience />
+                        <Work />
 
-                        <AccordionItem>
-                          <h2>
-                            <AccordionButton>
-                              <Box as="span" flex="1" textAlign="left">
-                                <label
-                                  for="hs-pro-epdsku"
-                                  class="block  font-medium text-stone-800 "
-                                >
-                                  Education
-                                </label>
-                              </Box>
-                              <AccordionIcon />
-                            </AccordionButton>
-                          </h2>
-                          <AccordionPanel pb={4}>
-                            <div className="flex flex-col  space-y-6">
-                              <div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Institution Name:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-
-                                  <div className=" text-sm ml-auto cursor-pointer ">
-                                    <span className="text-blue-400 hover:text-blue-600 hover:underline ">
-                                      Edit
-                                    </span>
-                                  </div>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Graduation Year:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Major/Certification (optional):
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                              </div>
-                              <div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Institution Name:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-
-                                  <div className=" text-sm ml-auto cursor-pointer ">
-                                    <span className="text-blue-400 hover:text-blue-600 hover:underline">
-                                      Edit
-                                    </span>
-                                  </div>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Graduation Year:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Major/Certification (optional):
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                              </div>
-                              <div className=" text-sm ml-auto cursor-pointer text-blue-400 hover:text-blue-600 hover:underline">
-                                Add more
-                              </div>
-                            </div>
-                          </AccordionPanel>
-                        </AccordionItem>
-                        <AccordionItem>
-                          <h2>
-                            <AccordionButton>
-                              <Box as="span" flex="1" textAlign="left">
-                                <label
-                                  for="hs-pro-epdsku"
-                                  class="block  font-medium text-stone-800 "
-                                >
-                                  Skills & Certifications
-                                </label>
-                              </Box>
-                              <AccordionIcon />
-                            </AccordionButton>
-                          </h2>
-                          <AccordionPanel pb={4}>
-                            <div className="flex flex-col  space-y-6">
-                              <div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Position Title:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-
-                                  <div className=" text-sm ml-auto cursor-pointer ">
-                                    <span className="text-red-500 hover:text-red-600 hover:underline mr-2">
-                                      Delete
-                                    </span>
-
-                                    <span className="text-blue-400 hover:text-blue-600 hover:underline ">
-                                      Edit
-                                    </span>
-                                  </div>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Company:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Dates employed:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Description
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                              </div>
-                              <div className="">
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Position Title:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-
-                                  <div className=" text-sm ml-auto cursor-pointer ">
-                                    <span className="text-red-500 hover:text-red-600 hover:underline mr-2">
-                                      Delete
-                                    </span>
-
-                                    <span className="text-blue-400 hover:text-blue-600 hover:underline ">
-                                      Edit
-                                    </span>
-                                  </div>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Company:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Dates employed:
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                                <div className="flex flex-row">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Description
-                                  </p>
-                                  <p className="text-sm ml-2"> jksadfh</p>
-                                </div>
-                              </div>
-                              <div className=" text-sm ml-auto cursor-pointer text-blue-400 hover:text-blue-600 hover:underline">
-                                Add more
-                              </div>
-                            </div>
-                          </AccordionPanel>
-                        </AccordionItem>
+                      <Education />
+                      <Skills />
+                  
                       </Accordion>
                     </div>
                   </div>

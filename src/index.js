@@ -144,6 +144,7 @@ import TagManager from 'react-gtm-module'
 import OnboardingFormHolder from "./pages/Register/Doer/NewOnboarding/OnboardingFormHolder";
 import NewUserProfile from "./pages/Doer/NewUserProfile";
 import MyProfile from "./pages/Doer/MyProfile";
+import CareerPaths from "./pages/Doer/CareerPaths/CareerPaths";
  
 const tagManagerArgs = {
     gtmId: 'AW-16521233370'
@@ -575,6 +576,10 @@ const router = createBrowserRouter([
   {
     path: "/OnboardingFormHolder",
     element: <OnboardingFormHolder />,
+  },
+  {
+    path: "/CareerPaths",
+    element: <CareerPaths />,
   },
   {
     path: "/TestLanding",

@@ -656,7 +656,7 @@ const MyProfile = () => {
 
                       <Education />
                       <Skills />
-                  
+                    
                       </Accordion>
                     </div>
                   </div>

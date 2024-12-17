@@ -390,7 +390,7 @@ const Education = () => {
                 <div class="sm:col-span-2 align-center items-center">
                   {isEditCareerGoals &&
                   experience.id === selectedExperience.id ? (
-                    < div className='w-full border border-red-500'>
+                    < div className='w-full'>
                       <div className="flex align-center items-center">
                         <DatePicker
                           selected={

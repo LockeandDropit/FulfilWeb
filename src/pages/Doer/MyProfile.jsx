@@ -18,6 +18,7 @@ import { db } from "../../firebaseConfig";
 import Education from "./ProfileComponents/Education";
 import Work from "./ProfileComponents/Work";
 import Skills from "./ProfileComponents/Skills";
+import StepperComponent from "./ProfileComponents/StepperComponent";
 
 const MyProfile = () => {
   const { currentUser } = useUserStore();
@@ -390,6 +391,8 @@ const MyProfile = () => {
                           </div>
                         </div>
                       </div>
+                      {/* stepper component */}
+                      <StepperComponent />
                     </div>
                   </div>
                 </>
@@ -509,10 +512,20 @@ const MyProfile = () => {
                               {currentUser.email}
                             </div>
                           </li>
+
+                        
                         </ul>
+                     
+                        <h2 class="text-sm font-semibold text-gray-800 mt-4 mb-3">
+                          Profile Progress
+                        </h2>                            {/* stepper component */}
+                         <StepperComponent />
                       </div>
+                    
                     </div>
+                       
                   </div>
+                 
 
                   <div class="xl:ps-5 grow space-y-1 mt-2">
                     <div class="flex flex-col bg-white rounded-xl shadow-sm xl:shadow-none ">

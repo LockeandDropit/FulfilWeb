@@ -66,6 +66,9 @@ const TreeTest = () => {
             name: "$150k/year",
             attributes: {
               jobTitle: "Hub Manager",
+              bullet1: " asdfasdfsfafsfa sasd f",
+              bullet2: "a fasdfasdf adf dfgadfg ",
+              bullet3: " asdf fg adf asfadsg sd",
               snippet:
                 "The Hub Manager facilitates transportation, logistics, schedules of hubs where trucks load and dock. ",
               timeCommitment: "5-7 years",
@@ -187,10 +190,21 @@ const TreeTest = () => {
                         {nodeDatum.attributes.timeCommitment}
                       </p>
                     </div>
-
-                    <p class="mt-1 text-gray-800 text-clip line-clamp-4">
-                      {nodeDatum.attributes.snippet}
-                    </p>
+           
+           <ul className="list-disc px-4">
+           <li class="mt-1 text-gray-800 ">
+                      {nodeDatum.attributes.bullet1}
+                    </li>
+                    <li class=" text-gray-800 ">
+                      {nodeDatum.attributes.bullet2}
+                    </li>
+                    <li class=" text-gray-800">
+                      {nodeDatum.attributes.bullet3}
+                    </li>
+           </ul>
+             
+                
+                  
                     <a
                       class="w-full mt-2 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 "
                       href="#"

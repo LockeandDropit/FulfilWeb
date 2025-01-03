@@ -38,7 +38,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import DatePicker from "react-datepicker";
 
-const Work = () => {
+const Work = ({ changeListener}) => {
   const { currentUser } = useUserStore();
   useEffect(() => {
     if (currentUser) {
@@ -79,6 +79,7 @@ const Work = () => {
         id: uuidv4(),
       }),
     }).then(() => {
+      changeListener();
       setUpdateIsLoading(false);
       setIsAddNew(!isAddNew);
     });
@@ -138,6 +139,7 @@ const Work = () => {
     await updateDoc(doc(userChatsRef, "My Resume"), {
       experience: resumeData.experience,
     }).then(() => {
+      changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
       setTextEditorLoading(true);
@@ -185,21 +187,30 @@ const Work = () => {
   };
 
   const handleUpdate = () => {
-    if (!userInterests || !currentIncome || !goalIncome) {
+    if (!companyName || !startDate || !description || !positionTitle) {
       setFormValidationMessage("Please fill out all fields");
     } else {
       // check if it has an id, if it has an id it exists, so route to uploadEditedWorkExperience(). Else route to uploadEorkExperience().
-
-      if (selectedExperience) {
         uploadEditedWorkExperience();
-        console.log("edited handle");
-      } else {
-        setUpdateIsLoading(true);
-        //update firestore
-        uploadWorkExperience();
-      }
+        setFormValidationMessage();
     }
   };
+
+  
+  const addExperience = () => {
+
+    if (!companyName || !startDate || !description || !positionTitle) {
+      setFormValidationMessage("Please fill out all fields");
+    } else {
+      setUpdateIsLoading(true);
+      setFormValidationMessage();
+      //update firestore
+      uploadWorkExperience();
+    }
+
+  };
+
+  
 
   const [loading, setLoading] = useState(false);
   const [workExperience, setWorkExperience] = useState(null);
@@ -251,9 +262,7 @@ const Work = () => {
 
     const resumeData = resumeSnapshot.data();
 
-    console.log("resume data", resumeData);
-    console.log("selected id", selectedExperience.id);
-    console.log("isEmployed", isEmployed);
+
 
     //ty https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu credit Pablo Francisco Perez Hidalgo 04/19/2013
     const resumeIndex = resumeData.experience
@@ -262,26 +271,16 @@ const Work = () => {
       })
       .indexOf(selectedExperience.id);
 
+      //DO NOT REMOVE THESE CONSOLE LOGS. THEY ARE HANDLING THE REMOVAL OF THE SELECTED ITEM??????
     console.log("resume Index", resumeIndex);
-    console.log("data", resumeData.experience)
-
+    console.log("data", resumeData)
     console.log("splice", resumeData.experience.splice(resumeIndex, 1))
-
-    let newData = resumeData.experience.splice(resumeIndex, 1);
-
     console.log("new data", resumeData.experience)
-
-    // let finalResume = resumeData.experience.splice(resumeIndex, 1);
-
-    // setWorkExperience(finalResume)
-
-    // console.log("final resume", finalResume);
-
-    //  resumeData.experience[resumeIndex].id = "deleted"
 
     await updateDoc(doc(userChatsRef, "My Resume"), {
       experience: resumeData.experience
     }).then(() => {
+      changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
       setTextEditorLoading(true);
@@ -540,7 +539,7 @@ const Work = () => {
                   </button>
                   <button
                     type="button"
-                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                     onClick={() => handleUpdate()}
                   >
                     Update
@@ -651,7 +650,7 @@ const Work = () => {
                 <button
                   type="button"
                   class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                  onClick={() => handleUpdate()}
+                  onClick={() => addExperience()}
                 >
                   Add
                 </button>

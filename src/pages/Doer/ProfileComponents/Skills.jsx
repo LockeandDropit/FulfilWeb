@@ -38,7 +38,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import DatePicker from "react-datepicker";
 
-const Skills = () => {
+const Skills = ({changeListener}) => {
   const { currentUser } = useUserStore();
   useEffect(() => {
     if (currentUser) {
@@ -80,6 +80,7 @@ const Skills = () => {
         id: uuidv4(),
       }),
     }).then(() => {
+      changeListener();
       setUpdateIsLoading(false);
       setIsAddNew(!isAddNew);
     });
@@ -124,6 +125,7 @@ const Skills = () => {
     await updateDoc(doc(userChatsRef, "My Resume"), {
       skills: resumeData.skills,
     }).then(() => {
+      changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
       setSelectedExperience(null);
@@ -226,6 +228,7 @@ const Skills = () => {
     await updateDoc(doc(userChatsRef, "My Resume"), {
       skills: resumeData.skills,
     }).then(() => {
+      changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
       setSelectedExperience(null);
@@ -242,7 +245,7 @@ const Skills = () => {
 
   const handleNew = () => {
     setSelectedExperience(null);
-setSkillName(null)
+    setSkillName(null);
     setIsAddNew(!isAddNew);
   };
 

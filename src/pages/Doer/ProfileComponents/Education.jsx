@@ -1,7 +1,7 @@
-import React from 'react'
-import { useUserStore } from '../Chat/lib/userStore'
-import { db } from '../../../firebaseConfig'
-import RichTextEditor from '../../Needer/Components/RichTextEditor'
+import React from "react";
+import { useUserStore } from "../Chat/lib/userStore";
+import { db } from "../../../firebaseConfig";
+import RichTextEditor from "../../Needer/Components/RichTextEditor";
 import { useState, useEffect } from "react";
 import {
   Accordion,
@@ -38,8 +38,9 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import DatePicker from "react-datepicker";
 
-const Education = () => {
+const Education = ({ changeListener }) => {
   const { currentUser } = useUserStore();
+
   useEffect(() => {
     if (currentUser) {
       setCurrentIncome(currentUser.currentIncome);
@@ -64,12 +65,11 @@ const Education = () => {
 
   const [positionTitle, setPositionTitle] = useState(null);
 
-
-  // new 
-  const [degree, setDegree] = useState(null)
-  const [institutionName, setInstitutionName] = useState(null)
+  // new
+  const [degree, setDegree] = useState(null);
+  const [institutionName, setInstitutionName] = useState(null);
   const [isEmployed, setIsEmployed] = useState(false);
-  const [isEnrolled, setIsEnrolled] = useState(false)
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
   const uploadWorkExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
@@ -84,6 +84,7 @@ const Education = () => {
         id: uuidv4(),
       }),
     }).then(() => {
+      changeListener();
       setUpdateIsLoading(false);
       setIsAddNew(!isAddNew);
     });
@@ -92,13 +93,10 @@ const Education = () => {
   const uploadEditedWorkExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
-
     const resumeSnapshot = await getDoc(
       doc(db, "users", currentUser.uid, "Resumes", "My Resume")
     );
-
     const resumeData = resumeSnapshot.data();
-
     console.log("resume data", resumeData);
     console.log("selected id", selectedExperience.id);
     console.log("isEmployed", isEmployed);
@@ -110,12 +108,12 @@ const Education = () => {
       })
       .indexOf(selectedExperience.id);
 
-    console.log("resume Index", resumeIndex);
-
     // go back live
     resumeData.education[resumeIndex].degree = degree
       ? degree
-      : selectedExperience.degree ? selectedExperience.degree : null;
+      : selectedExperience.degree
+      ? selectedExperience.degree
+      : null;
     resumeData.education[resumeIndex].institutionName = institutionName
       ? institutionName
       : selectedExperience.institutionName;
@@ -127,9 +125,8 @@ const Education = () => {
       : selectedExperience.endDate
       ? selectedExperience.endDate
       : null;
-    resumeData.education[resumeIndex].isEnrolled = isEnrolled === true
-      ? true
-      : false;
+    resumeData.education[resumeIndex].isEnrolled =
+      isEnrolled === true ? true : false;
 
     //test conmditions
     // setUpdateIsLoading(false);
@@ -139,6 +136,7 @@ const Education = () => {
     await updateDoc(doc(userChatsRef, "My Resume"), {
       education: resumeData.education,
     }).then(() => {
+      changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
       setSelectedExperience(null);
@@ -146,27 +144,29 @@ const Education = () => {
       setStartDate(null);
       setDegree(null);
       setInstitutionName(null);
-      setIsEnrolled(false)
+      setIsEnrolled(false);
       setIsEditCareerGoals(!isEditCareerGoals);
     });
   };
 
   const handleCancel = () => {
     setSelectedExperience(null);
+    setFormValidationMessage();
     setEndDate(null);
     setStartDate(null);
     setDegree(null);
     setInstitutionName(null);
-    setIsEnrolled(false)
+    setIsEnrolled(false);
     setIsEditCareerGoals(!isEditCareerGoals);
   };
   const handleCancelNew = () => {
+    setFormValidationMessage();
     setSelectedExperience(null);
     setEndDate(null);
     setStartDate(null);
     setDegree(null);
     setInstitutionName(null);
-    setIsEnrolled(false)
+    setIsEnrolled(false);
     setIsAddNew(!isAddNew);
   };
 
@@ -178,19 +178,23 @@ const Education = () => {
   };
 
   const handleUpdate = () => {
-    if (!userInterests || !currentIncome || !goalIncome) {
+    if (!institutionName || !startDate) {
       setFormValidationMessage("Please fill out all fields");
     } else {
       // check if it has an id, if it has an id it exists, so route to uploadEditedWorkExperience(). Else route to uploadEorkExperience().
+      uploadEditedWorkExperience();
+      setFormValidationMessage();
+    }
+  };
 
-      if (selectedExperience) {
-        uploadEditedWorkExperience();
-        console.log("edited handle");
-      } else {
-        setUpdateIsLoading(true);
-        //update firestore
-        uploadWorkExperience();
-      }
+  const addEducation = () => {
+    if (!institutionName || !startDate) {
+      setFormValidationMessage("Please fill out all fields");
+    } else {
+      setUpdateIsLoading(true);
+      setFormValidationMessage();
+      //update firestore
+      uploadWorkExperience();
     }
   };
 
@@ -232,8 +236,6 @@ const Education = () => {
 
     const resumeData = resumeSnapshot.data();
 
-
-
     //ty https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu credit Pablo Francisco Perez Hidalgo 04/19/2013
     const resumeIndex = resumeData.education
       .map(function (x) {
@@ -241,11 +243,9 @@ const Education = () => {
       })
       .indexOf(selectedExperience.id);
 
-
-
     let newData = resumeData.education.splice(resumeIndex, 1);
 
-    console.log("new data", resumeData.education)
+    console.log("new data", resumeData.education);
 
     // let finalResume = resumeData.experience.splice(resumeIndex, 1);
 
@@ -256,8 +256,9 @@ const Education = () => {
     //  resumeData.experience[resumeIndex].id = "deleted"
 
     await updateDoc(doc(userChatsRef, "My Resume"), {
-      education: resumeData.education
+      education: resumeData.education,
     }).then(() => {
+      changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
       setSelectedExperience(null);
@@ -265,7 +266,7 @@ const Education = () => {
       setStartDate(null);
       setDegree(null);
       setInstitutionName(null);
-      setIsEnrolled(false)
+      setIsEnrolled(false);
       setIsEditCareerGoals(!isEditCareerGoals);
     });
   };
@@ -275,18 +276,16 @@ const Education = () => {
   //thgis handles toggling back and forth between the person being currently employed/having an end date.
 
   useEffect(() => {
-
     if (isEnrolled) {
-      setEndDate(null)
+      setEndDate(null);
     }
-  }, [ isEnrolled])
+  }, [isEnrolled]);
 
   useEffect(() => {
-
     if (endDate) {
-      setIsEnrolled(false)
+      setIsEnrolled(false);
     }
-  }, [endDate])
+  }, [endDate]);
 
   const handleNew = () => {
     setSelectedExperience(null);
@@ -294,14 +293,11 @@ const Education = () => {
     setStartDate(null);
     setDegree(null);
     setInstitutionName(null);
-    setIsEnrolled(false)
+    setIsEnrolled(false);
     setIsAddNew(!isAddNew);
   };
 
-
   const [selectedExperience, setSelectedExperience] = useState(null);
-
-
 
   return (
     <AccordionItem>
@@ -325,7 +321,7 @@ const Education = () => {
               <div class="grid sm:grid-cols-4  align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
                   <p className="font-medium text-sm text-gray-800">
-                    Institution Name
+                    Institution Name:
                   </p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
@@ -360,7 +356,9 @@ const Education = () => {
               <div className="flex flex-row align-center items-center"></div>
               <div class="grid sm:grid-cols-4  align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">Degree (optional)</p>
+                  <p className="font-medium text-sm text-gray-800">
+                    Degree (optional):
+                  </p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
                   {isEditCareerGoals &&
@@ -370,11 +368,7 @@ const Education = () => {
                       onChange={(e) => setDegree(e.target.value)}
                       className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                       placeholder="This is placeholder"
-                      value={
-                        degree !== null
-                          ? degree
-                          : experience.degree
-                      }
+                      value={degree !== null ? degree : experience.degree}
                     />
                   ) : (
                     <p className="text-sm ">{experience.degree}</p>
@@ -390,7 +384,7 @@ const Education = () => {
                 <div class="sm:col-span-2 align-center items-center">
                   {isEditCareerGoals &&
                   experience.id === selectedExperience.id ? (
-                    < div className='w-full'>
+                    <div className="w-full">
                       <div className="flex align-center items-center">
                         <DatePicker
                           selected={
@@ -415,7 +409,10 @@ const Education = () => {
                         />
                       </div>
                       <div className="ml-auto">
-                        <div className="ml-auto mt-2.5" onClick={() => setIsEnrolled(!isEnrolled)}>
+                        <div
+                          className="ml-auto mt-2.5"
+                          onClick={() => setIsEnrolled(!isEnrolled)}
+                        >
                           <input
                             type="checkbox"
                             class="mr-2 ml-auto shrink-0 border-gray-200 rounded text-blue-600 cursor-pointer"
@@ -425,14 +422,12 @@ const Education = () => {
                           <label
                             for="af-account-full-name"
                             class="inline-block text-sm text-gray-600 ml-auto"
-                         
                           >
                             Currently Enrolled
                           </label>
                         </div>
                       </div>
-                      </div>
-             
+                    </div>
                   ) : (
                     <div className="flex align-center items-center">
                       <p className="text-sm">{experience.startDate}</p>
@@ -465,7 +460,7 @@ const Education = () => {
                   </button>
                   <button
                     type="button"
-                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                     onClick={() => handleUpdate()}
                   >
                     Update
@@ -499,7 +494,9 @@ const Education = () => {
               <div className="flex flex-row align-center items-center"></div>
               <div class="grid sm:grid-cols-4  align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">Degree (optional):</p>
+                  <p className="font-medium text-sm text-gray-800">
+                    Degree (optional):
+                  </p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
                   <input
@@ -551,7 +548,6 @@ const Education = () => {
                   </div>
                 </div>
               </div>
-             
 
               <div className="ml-auto space-x-2 mt-2">
                 <button
@@ -564,7 +560,7 @@ const Education = () => {
                 <button
                   type="button"
                   class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                  onClick={() => handleUpdate()}
+                  onClick={() => addEducation()}
                 >
                   Add
                 </button>
@@ -576,7 +572,7 @@ const Education = () => {
             </div>
           ) : null}
 
-          {isAddNew  || isEditCareerGoals ? null : (
+          {isAddNew || isEditCareerGoals ? null : (
             <div className="ml-auto mt-3">
               <button
                 type="button"

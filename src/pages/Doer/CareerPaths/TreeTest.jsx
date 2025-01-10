@@ -12,6 +12,7 @@ import {
   DrawerCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
+import "./treeStyles.css"; // Custom CSS for thicker lines
 
 const TreeTest = () => {
   const shouldRecenterTreeRef = useRef(true);
@@ -48,6 +49,10 @@ const TreeTest = () => {
         name: "$70k/year",
         attributes: {
           jobTitle: "Class A CDL Driver",
+          bullet1:
+            "Transport goods from warehouse to warehouse or store locations.",
+          bullet2: "Drive in a safe and efficient manner.",
+          bullet3: "Navigate through unknown areas and interpret directions.",
           snippet:
             "Class A CDLs are in high demand in Minnesota, offer competitive pay, and a great career path.",
           timeCommitment: "1 month training",
@@ -57,8 +62,12 @@ const TreeTest = () => {
             name: "$120k/year",
             attributes: {
               jobTitle: "Class A CDL Driver",
-              snippet:
-                "After working for several years, some truck drivers can make up to 120k/year. These jobs would include long-hauls, perishables, and other in-demand transportation services",
+              bullet1:
+                "Transport goods from warehouse to warehouse or store locations.",
+              bullet2: "Drive in a safe and efficient manner.",
+              bullet3:
+                "Navigate through unknown areas and interpret directions.",
+
               timeCommitment: "5-7 years",
             },
           },
@@ -66,11 +75,10 @@ const TreeTest = () => {
             name: "$150k/year",
             attributes: {
               jobTitle: "Hub Manager",
-              bullet1: " asdfasdfsfafsfa sasd f",
-              bullet2: "a fasdfasdf adf dfgadfg ",
-              bullet3: " asdf fg adf asfadsg sd",
-              snippet:
-                "The Hub Manager facilitates transportation, logistics, schedules of hubs where trucks load and dock. ",
+              bullet1: "Oversee logistics of truck dispatching.",
+              bullet2: "Responsible for operations are running smoothly.",
+              bullet3:
+                "Communicate well with management and be clear about responsibilities.",
               timeCommitment: "5-7 years",
             },
           },
@@ -78,8 +86,10 @@ const TreeTest = () => {
             name: "$250K+/year",
             attributes: {
               jobTitle: "Owner/Operator",
-              snippet:
-                "Owning a fleet of trucks and a hub can be extremely profitable. Focus on local or national trucking. Oversee all operations, hire for key roles that push your business forward.",
+              bullet1: "Hire good staff to operate the trucks.",
+              bullet2:
+                "Source profitable materials/goods for your drivers to transport.",
+              bullet3: "Manage operations and expenses at a high-level.",
               timeCommitment: "5-7 years",
             },
           },
@@ -98,7 +108,7 @@ const TreeTest = () => {
   const handleClick = (x) => {
     setPopOverVisible(!popOverVisible);
     console.log("pspsps", popOverVisible, x);
-    handleOpenDrawer(x)
+    handleOpenDrawer(x);
     // if (popOverVisible === false) {
     //   //   setSelectedNodeName(null);
     // } else {
@@ -162,7 +172,7 @@ const TreeTest = () => {
         <>
           <div
             onMouseOver={() => handleMouseOver(nodeDatum.name)}
-            className="w-[160px]  py-2 px-3 inline-flex items-center justify-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 "
+            className="w-[160px]  py-2 px-3 inline-flex items-center justify-center gap-x-2 text-md font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600"
           >
             {nodeDatum.name}
           </div>
@@ -183,30 +193,30 @@ const TreeTest = () => {
                       {nodeDatum.attributes.jobTitle}
                     </h3>
                     <div className="flex flex-row">
-                      <p className="text-sm text-gray-800">
-                        Experience Required:
-                      </p>
+                      <p className="text-sm text-gray-800">Experience:</p>
                       <p className="ml-1 text-sm text-gray-600">
                         {nodeDatum.attributes.timeCommitment}
                       </p>
                     </div>
-           
-           <ul className="list-disc px-4">
-           <li class="mt-1 text-gray-800 ">
-                      {nodeDatum.attributes.bullet1}
-                    </li>
-                    <li class=" text-gray-800 ">
-                      {nodeDatum.attributes.bullet2}
-                    </li>
-                    <li class=" text-gray-800">
-                      {nodeDatum.attributes.bullet3}
-                    </li>
-           </ul>
-             
-                
-                  
+                    <ul className="list-disc px-3 text-sm">
+                      <li class="mt-1 text-gray-700">
+                        <p className="text-sm">
+                          {nodeDatum.attributes.bullet1}
+                        </p>
+                      </li>
+                      <li class=" text-gray-700">
+                        <p className="text-sm">
+                          {nodeDatum.attributes.bullet2}
+                        </p>
+                      </li>
+                      <li class=" text-gray-700">
+                        <p className="text-sm">
+                          {nodeDatum.attributes.bullet3}
+                        </p>
+                      </li>
+                    </ul>
                     <a
-                      class="w-full mt-2 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 "
+                      class="w-full mt-2 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 "
                       href="#"
                       onClick={() => handleOpenDrawer(nodeDatum.name)}
                     >
@@ -242,7 +252,7 @@ const TreeTest = () => {
                     <div class="w-full max-h-full flex flex-col right-0 bg-white rounded-xl pointer-events-auto ">
                       <div class="overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
                         <div class="p-4">
-                          <div class=" ">
+                          <div class=" cursor-default">
                             <div className="flex">
                               <label
                                 for="hs-pro-dactmt"
@@ -254,35 +264,76 @@ const TreeTest = () => {
 
                             <div class="space-y-2 ">
                               <div class="flex align-items-center">
-                                <p className="text-lg font-medium ">Average Salary:</p>
-                                <p className="ml-1 text-lg font-medium ">
+                                <p className="text-md font-medium ">
+                                  Average Salary:
+                                </p>
+                                <p className="ml-1 text-md font-medium ">
                                   $80,000 - $
                                 </p>
                                 <label
                                   for="hs-pro-dactmt"
-                                  class="block  text-lg font-medium text-gray-800 "
+                                  class="block  text-md font-medium text-gray-800 "
                                 >
                                   120,000
                                 </label>
-                               
                               </div>
                             </div>
                             <div class="space-y-2 ">
-                              <div class="flex align-items-center">
-                                <p className="text-lg font-medium ">Industry Growth:</p>
-                                <p className="ml-1 text-lg font-medium ">
+                              <div class="flex align-center  items-center">
+                                <p className="text-md font-medium ">
+                                  Industry Growth:
+                                </p>
+                                <p className="ml-1 text-md font-medium text-green-600">
                                   4.5%
-                          
-                               </p>
+                                </p>
+
+                                <svg
+                                  class="shrink-0 size-5 ml-1"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="#48bb78"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                                  <polyline points="16 7 22 7 22 13"></polyline>
+                                </svg>
                               </div>
                             </div>
                             <div class="space-y-2 ">
-                              <div class="flex align-items-center">
-                                <p className="text-lg font-medium ">Openings Near You:</p>
-                                <p className="ml-1 text-lg font-medium ">
+                              <div class="flex align-center items-center">
+                                <p className="text-md font-medium ">
+                                  Openings Near You:
+                                </p>
+
+                                <p
+                                  className="ml-1 text-md text-gray-800 hover:text-gray-900 font-medium cursor-pointer hover:underline"
+                                  onClick={() =>
+                                    window.open(
+                                      "https://www.indeed.com/jobs?q=class+a+cdl+driver&l=Minneapolis%2C+MN&from=searchOnDesktopSerp%2Cwhatautocomplete&vjk=cb01c123a1e663fa"
+                                    )
+                                  }
+                                >
                                   2,490
-                          
-                               </p>
+                                </p>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.25"
+                                  stroke="currentColor"
+                                  class="size-3 ml-1 hover:underline"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                                  />
+                                </svg>
                               </div>
                             </div>
 
@@ -296,7 +347,7 @@ const TreeTest = () => {
                             >
                               What you'll be doing
                             </label>
-                            <div className="w-full prose prose-li  font-inter marker:text-black mb-4 ">
+                            <div className="w-full prose prose-li  marker:text-black mb-4 ">
                               A Class A CDL Truck Driver operates large
                               vehicles, such as tractor-trailers, across local,
                               regional, or long-haul routes. They are
@@ -315,46 +366,102 @@ const TreeTest = () => {
                             </label>
 
                             <div class="mb-4">
-                              Driving and Transporting: Operate
-                              tractor-trailers, tankers, or flatbed trucks to
-                              transport goods. Inspection and Maintenance:
-                              Perform pre-trip and post-trip vehicle inspections
-                              to ensure safety compliance. Load Management:
-                              Secure and manage cargo to prevent damage during
-                              transit. Documentation: Maintain accurate records,
-                              including logs of hours driven and delivery
-                              receipts. Regulation Compliance: Adhere to
-                              Department of Transportation (DOT) rules and
-                              safety standards, including HOS (Hours of Service)
-                              regulations.
+                              <ul className="list-disc px-3 ">
+                                <li class="mt-1 text-gray-700">
+                                  <p className="">
+                                    <span className="font-medium mr-1">
+                                      Driving and Transporting:
+                                    </span>
+                                    Operate tractor-trailers, tankers, or
+                                    flatbed trucks to transport goods.
+                                  </p>
+                                </li>
+                                <li class=" text-gray-700">
+                                  <p className="">
+                                    <span className="font-medium mr-1">
+                                      Inspection and Maintenance:
+                                    </span>
+                                    Perform pre-trip and post-trip vehicle
+                                    inspections to ensure safety compliance.
+                                  </p>
+                                </li>
+                                <li class=" text-gray-700">
+                                  <p className="">
+                                    <span className="font-medium mr-1">
+                                      Load Management:
+                                    </span>
+                                    Secure and manage cargo to prevent damage
+                                    during transit.
+                                  </p>
+                                </li>
+                                <li class=" text-gray-700">
+                                  <p className="">
+                                    <span className="font-medium mr-1">
+                                      Documentation:
+                                    </span>
+                                    Maintain accurate records, including logs of
+                                    hours driven and delivery receipts.
+                                  </p>
+                                </li>
+                                <li class=" text-gray-700">
+                                  <p className="">
+                                    <span className="font-medium mr-1">
+                                      Regulation Compliance:
+                                    </span>
+                                    Adhere to Department of Transportation (DOT)
+                                    rules and safety standards, including HOS
+                                    (Hours of Service) regulations.
+                                  </p>
+                                </li>
+                              </ul>
                             </div>
                           </div>
-
-                          <div class="space-y-2 mb-4 ">
+                          <div class="space-y-2 mt-6 mb-4">
                             <label
                               for="dactmi"
-                              class="block mb-2 text-lg font-medium text-gray-900 "
+                              class="block mb-2 text-lg font-medium text-gray-800 "
                             >
                               Qualifications
                             </label>
 
-                            <div className="prose prose-li  font-inter marker:text-black mb-4">
-                              CDL Certification: Obtain a Class A Commercial
-                              Driver's License (CDL) by completing: A truck
-                              driving program approved by the FMCSA (Federal
-                              Motor Carrier Safety Administration) CDL written
-                              and skills test (includes vehicle inspection and
-                              driving tests) Additional Requirements: Minimum
-                              age: 18 for intrastate, 21 for interstate routes
-                              Clean driving record Pass a DOT physical and drug
-                              screening Endorsements (optional): Hazmat, Tanker,
-                              Doubles/Triples for specialized roles
+                            <div class="mb-4">
+                              <ul className="list-disc px-3 ">
+                                <li class="mt-1 text-gray-700">
+                                  <p className="">
+                                    <span className="font-medium mr-1">
+                                      CDL Certification:
+                                    </span>
+                                    Obtain a Class A Commercial Driver's License
+                                    (CDL) by completing: A truck driving program
+                                    approved by the FMCSA (Federal Motor Carrier
+                                    Safety Administration) CDL written and
+                                    skills test (includes vehicle inspection and
+                                    driving tests).
+                                  </p>
+                                </li>
+                                <li class=" text-gray-700">
+                                  <p className="">
+                                    <span className="font-medium mr-1">
+                                      Additional Requirements:
+                                    </span>
+                                    Minimum age: 18 for intrastate, 21 for
+                                    interstate routes Clean driving record Pass
+                                    a DOT physical and drug screening.
+                                  </p>
+                                </li>
+                                <li class=" text-gray-700">
+                                  <p className="">
+                                    <span className="font-medium mr-1">
+                                      Endorsements (optional):
+                                    </span>
+                                    Hazmat, Tanker, Doubles/Triples for
+                                    specialized roles.
+                                  </p>
+                                </li>
+                              </ul>
                             </div>
                           </div>
-              
                         </div>
-
-                      
                       </div>
                     </div>
                   </div>
@@ -388,7 +495,7 @@ const TreeTest = () => {
                     data-hs-overlay="#hs-pro-datm"
                     // onClick={() => onOpen()}
                   >
-                   Get Started
+                    Get Started
                   </button>
                 </DrawerFooter>
               </DrawerContent>
@@ -423,6 +530,7 @@ const TreeTest = () => {
         draggable={false}
         orientation="vertical"
         depthFactor={-300}
+        pathClassFunc={() => "custom-link"}
         onNodeClick={handleClick}
         renderCustomNodeElement={(rd3tProps) =>
           renderForeignObjectNode({ ...rd3tProps, foreignObjectProps })

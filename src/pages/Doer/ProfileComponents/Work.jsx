@@ -256,11 +256,11 @@ const Work = ({ changeListener}) => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
 
-    const resumeSnapshot = await getDoc(
+  const resumeSnapshot = await getDoc(
       doc(db, "users", currentUser.uid, "Resumes", "My Resume")
     );
 
-    const resumeData = resumeSnapshot.data();
+  const resumeData = resumeSnapshot.data();
 
 
 
@@ -300,7 +300,7 @@ const Work = ({ changeListener}) => {
   //thgis handles toggling back and forth between the person being currently employed/having an end date.
 
   useEffect(() => {
-
+    
     if (isEmployed) {
       setEndDate(null)
     }

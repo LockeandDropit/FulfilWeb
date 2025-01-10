@@ -145,6 +145,7 @@ import OnboardingFormHolder from "./pages/Register/Doer/NewOnboarding/Onboarding
 import NewUserProfile from "./pages/Doer/NewUserProfile";
 import MyProfile from "./pages/Doer/MyProfile";
 import CareerPaths from "./pages/Doer/CareerPaths/CareerPaths";
+import Resources from "./pages/Doer/Resources";
  
 const tagManagerArgs = {
     gtmId: 'AW-16521233370'
@@ -580,6 +581,10 @@ const router = createBrowserRouter([
   {
     path: "/CareerPaths",
     element: <CareerPaths />,
+  },
+  {
+    path: "/Resources",
+    element: <Resources />,
   },
   {
     path: "/TestLanding",

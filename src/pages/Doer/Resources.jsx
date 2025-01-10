@@ -76,7 +76,7 @@ const Resources = () => {
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/threepersonmeeting.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/threepersonmeeting.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -106,7 +106,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/mediumWarehouse.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/mediumWarehouse.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -135,7 +135,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/apronsmeeting.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/apronsmeeting.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -165,7 +165,7 @@ const Resources = () => {
                 
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/womansmiling.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/womansmiling.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -194,7 +194,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/people-working-as-team-company.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/people-working-as-team-company.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -222,7 +222,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/1.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/1.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -251,7 +251,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/2.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/2.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -279,7 +279,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/3.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/3.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -309,7 +309,7 @@ const Resources = () => {
               
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/4.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/4.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -345,7 +345,7 @@ const Resources = () => {
 
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/5.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/5.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -372,7 +372,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/6.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/6.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -399,7 +399,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/6.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/mediumMechanic.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -426,7 +426,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/7.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/7.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -454,7 +454,7 @@ const Resources = () => {
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
                   
-                 <img src="/landingImages/8.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                 <img src="/landingImages/8.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -481,7 +481,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/9.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/9.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -508,7 +508,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/10.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/10.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -536,7 +536,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/forklift.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/forklift.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -563,7 +563,7 @@ const Resources = () => {
                 </div>
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/warehouse2.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/warehouse2.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -592,7 +592,7 @@ const Resources = () => {
 
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/elderlyman.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/elderlyman.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">
@@ -620,7 +620,7 @@ const Resources = () => {
 
                 <div className="group flex flex-col h-full bg-white border border-gray-200 shadow-sm rounded-xl">
                   <div className="h-58 flex flex-col justify-center items-center bg-blue-600 rounded-t-xl">
-                  <img src="/landingImages/warehouseresource.jpg" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
+                  <img src="/landingImages/warehouseresource.jpg"   loading="lazy" className="h-full w-full flex flex-col justify-center items-center bg-blue-600 rounded-t-xl" />
                   </div>
                   <div className="p-4 md:p-6">
                     <span className="block mb-1 text-xs font-semibold uppercase text-gray-500">

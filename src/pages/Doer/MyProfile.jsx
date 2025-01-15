@@ -35,7 +35,6 @@ const MyProfile = () => {
   const [isEditGoalIncome, setIsEditGoalIncome] = useState(false);
   const [isEditCurrentIncome, setIsEditCurrentIncome] = useState(false);
 
-
   useEffect(() => {
     if (currentUser) {
       setCurrentIncome(currentUser.currentIncome);
@@ -55,8 +54,6 @@ const MyProfile = () => {
     }
   }, [goalIncome]);
 
-
-
   const [isClearable, setIsClearable] = useState(true);
   const [isSearchable, setIsSearchable] = useState(true);
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
@@ -74,53 +71,47 @@ const MyProfile = () => {
   };
 
   // regex credit Rogit Jain 8/3/2013 https://stackoverflow.com/questions/18033088/javascript-function-need-allow-numbers-dot-and-comma
-  let regex = /^[0-9.,]+$/; 
-
-
-
+  let regex = /^[0-9.,]+$/;
 
   const handleUpdate = () => {
+    let currentIncomeTest = regex.test(currentIncome);
+    let goalIncomeTest = regex.test(goalIncome);
 
-    let currentIncomeTest = regex.test(currentIncome)
-    let goalIncomeTest = regex.test(goalIncome)
-
-
-    console.log("refex test", regex.test(currentIncome))
+    console.log("refex test", regex.test(currentIncome));
     if (!userInterests || !currentIncomeTest || !goalIncomeTest) {
       setFormValidationMessage("Please fill out all fields");
     } else {
       setUpdateIsLoading(true);
       //update firestore
       uploadToFirebase();
-    setFormValidationMessage()
+      setFormValidationMessage();
     }
   };
 
-
-  const [changeOccured, setChangeOccured] = useState(false)
+  const [changeOccured, setChangeOccured] = useState(false);
 
   const changeListener = () => {
-    setChangeOccured(!changeOccured)
+    setChangeOccured(!changeOccured);
     notify();
-  }
+  };
 
-    const notify = () => {
-      toast.success('Success! Your information has been updated.', {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        theme: "light",
-        type: "success"
-        });
-    };
+  const notify = () => {
+    toast.success("Success! Your information has been updated.", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: "light",
+      type: "success",
+    });
+  };
 
-    const contextClass = {
-      default: "bg-green-600",
-    };
+  const contextClass = {
+    default: "bg-green-600",
+  };
 
   return (
     <>
@@ -153,15 +144,15 @@ const MyProfile = () => {
                         x="1"
                         width="1112"
                         height="348"
-                        fill="#D9DEEA"
+                        fill="#A7E1FC"
                       ></rect>
                       <path
                         d="M512.694 359.31C547.444 172.086 469.835 34.2204 426.688 -11.3096H1144.27V359.31H512.694Z"
-                        fill="#C0CBDD"
+                        fill="#56C4F9"
                       ></path>
                       <path
                         d="M818.885 185.745C703.515 143.985 709.036 24.7949 726.218 -29.5801H1118.31V331.905C1024.49 260.565 963.098 237.945 818.885 185.745Z"
-                        fill="#8192B0"
+                        fill="#0BA5EE"
                       ></path>
                     </g>
                     <defs>
@@ -321,7 +312,10 @@ const MyProfile = () => {
                         </div>
                       </div>
                       {/* stepper component */}
-                      <StepperComponent currentUser={currentUser} changeListener={changeListener}/>
+                      <StepperComponent
+                        currentUser={currentUser}
+                        changeListener={changeListener}
+                      />
                     </div>
                   </div>
                 </>
@@ -365,7 +359,6 @@ const MyProfile = () => {
                         <h2 class="text-sm font-semibold text-gray-800 ">
                           Details
                         </h2>
-
                         <ul class="mt-3 space-y-2">
                           {businessName ? (
                             <li>
@@ -441,38 +434,35 @@ const MyProfile = () => {
                               {currentUser.email}
                             </div>
                           </li>
-
-                        
                         </ul>
-                     
                         <h2 class="text-sm font-semibold text-gray-800 mt-4 mb-3">
                           Profile Progress
-                        </h2>                            {/* stepper component */}
-                         <StepperComponent currentUser={currentUser} changeListener={changeListener} changeOccured={changeOccured}/>
+                        </h2>{" "}
+                        {/* stepper component */}
+                        <StepperComponent
+                          currentUser={currentUser}
+                          changeListener={changeListener}
+                          changeOccured={changeOccured}
+                        />
                       </div>
-                    
                     </div>
-                       
                   </div>
-                 
 
-                  <div class="xl:ps-5 grow space-y-1 mt-2">
-                    <div class="flex flex-col bg-white rounded-xl shadow-sm xl:shadow-none ">
+                  <div class="xl:ps-5  w-full sm:w-3/4 space-y-1 mt-2">
+                    <div class="flex flex-col bg-white rounded-xl shadow-sm xl:shadow-none  w-full ml-auto">
                       <Accordion allowMultiple>
                         <AccordionItem>
-                         
-                            <AccordionButton>
-                              <Box flex="1" textAlign="left">
-                                <label
-                                  for="hs-pro-epdsku"
-                                  class="block font-medium text-stone-800 "
-                                >
-                                  Career Goals
-                                </label>
-                              </Box>
-                              <AccordionIcon />
-                            </AccordionButton>
-                          
+                          <AccordionButton>
+                            <Box flex="1" textAlign="left">
+                              <label
+                                for="hs-pro-epdsku"
+                                class="block font-medium text-stone-800 "
+                              >
+                                Career Goals
+                              </label>
+                            </Box>
+                            <AccordionIcon />
+                          </AccordionButton>
                           <AccordionPanel pb={4}>
                             <div className="flex flex-col  space-y-1 z-50">
                               <div class="grid sm:grid-cols-4  align-center items-center">
@@ -514,7 +504,6 @@ const MyProfile = () => {
                                   )}
                                 </div>
                               </div>
-                             
                               <div class="grid sm:grid-cols-4  align-center items-center">
                                 <div class="sm:col-span-1 2xl:col-span-1">
                                   <p className="font-medium text-sm text-gray-800">
@@ -595,10 +584,8 @@ const MyProfile = () => {
                           </AccordionPanel>
                         </AccordionItem>
                         <Work changeListener={changeListener} />
-
-                      <Education changeListener={changeListener} />
-                      <Skills changeListener={changeListener} />
-                    
+                        <Education changeListener={changeListener} />
+                        <Skills changeListener={changeListener} />
                       </Accordion>
                     </div>
                   </div>
@@ -606,17 +593,17 @@ const MyProfile = () => {
               </div>
             </div>
           </div>
-            <div className="flex items-center justify-center w-full">
-                      <ToastContainer
-                        toastClassName={(context) =>
-                          contextClass[context?.type || "default"] +
-                          " relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer"
-                        }
-                        position="bottom-center"
-                        autoClose={3000}
-                        bodyClassName={() => "text-sm text-gray-800 font-med block p-3"}
-                      />
-                    </div>
+          <div className="flex items-center justify-center w-full">
+            <ToastContainer
+              toastClassName={(context) =>
+                contextClass[context?.type || "default"] +
+                " relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer"
+              }
+              position="bottom-center"
+              autoClose={3000}
+              bodyClassName={() => "text-sm text-gray-800 font-med block p-3"}
+            />
+          </div>
         </main>
       )}
     </>

@@ -19,9 +19,11 @@ const CareerPaths = () => {
           <h1 className="text-2xl font-semibold">Career Paths</h1>
           <select class="mt-2 py-3 px-4 pe-9 block sm:w-1/4 w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none">
             <option selected="">Open this select menu</option>
+            <option>Carpentry</option>
+            <option>HVAC</option>
+            <option>Plumbing</option>
             <option>Trucking</option>
-            <option>2</option>
-            <option>3</option>
+            <option>Welding & Metal Fabrication</option>
           </select>
         </div>
         <div className="p-2 mt-4 border rounded-md flex flex-col align-center justify-center items-center w-3/4">

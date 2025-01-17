@@ -12,22 +12,15 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const HubManagerDrawer = ({toggle, open}) => {
-
-    
+const PlumberBusinessOwner = ({ toggle, open }) => {
   const handleClose = () => {
     toggle();
-  }
-    
-
-
-
-
+  };
 
   return (
     <div>
       {" "}
-     <Drawer onClose={() => handleClose()} isOpen={open} size={"lg"}>
+      <Drawer onClose={() => handleClose()} isOpen={open} size={"lg"}>
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader></DrawerHeader>
@@ -42,24 +35,17 @@ const HubManagerDrawer = ({toggle, open}) => {
                           for="hs-pro-dactmt"
                           class="block mb-2 text-2xl font-medium text-gray-900"
                         >
-                         Truck Hub Manager
+                          Plumbing Business Owner/Contractor
                         </label>
                       </div>
-
                       <div class="space-y-2 ">
                         <div class="flex align-items-center">
                           <p className="text-md font-medium ">
                             Average Salary:
                           </p>
                           <p className="ml-1 text-md font-medium ">
-                            $80,000 - $
+                            $80,000 - $150,000+
                           </p>
-                          <label
-                            for="hs-pro-dactmt"
-                            class="block  text-md font-medium text-gray-800 "
-                          >
-                            120,000
-                          </label>
                         </div>
                       </div>
                       <div class="space-y-2 ">
@@ -70,7 +56,6 @@ const HubManagerDrawer = ({toggle, open}) => {
                           <p className="ml-1 text-md font-medium text-green-600">
                             4.5%
                           </p>
-
                           <svg
                             class="shrink-0 size-5 ml-1"
                             xmlns="http://www.w3.org/2000/svg"
@@ -89,11 +74,10 @@ const HubManagerDrawer = ({toggle, open}) => {
                         </div>
                       </div>
                       <div class="space-y-2 ">
-                        <div class="flex align-center items-center">
+                        {/* <div class="flex align-center items-center">
                           <p className="text-md font-medium ">
                             Openings Near You:
                           </p>
-
                           <p
                             className="ml-1 text-md text-gray-800 hover:text-gray-900 font-medium cursor-pointer hover:underline"
                             onClick={() =>
@@ -118,12 +102,10 @@ const HubManagerDrawer = ({toggle, open}) => {
                               d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
                             />
                           </svg>
-                        </div>
+                        </div> */}
                       </div>
-
                       <div className="flex"></div>
                     </div>
-
                     <div class="space-y-2 mt-6 mb-4 ">
                       <label
                         for="dactmi"
@@ -132,10 +114,10 @@ const HubManagerDrawer = ({toggle, open}) => {
                         What you'll be doing
                       </label>
                       <div className="w-full prose prose-li  marker:text-black mb-4 ">
-                      A Truck Hub Operator oversees the coordination and management of trucking logistics at a distribution or trucking hub. They ensure that trucks are dispatched, loaded, unloaded, and maintained efficiently while adhering to schedules and safety regulations. This role is critical for smooth freight movement and supply chain operations.
+                        A licensed plumber who owns and operates their own
+                        plumbing business or contracting firm.{" "}
                       </div>
                     </div>
-
                     <div class="space-y-2 mt-6 mb-4">
                       <label
                         for="dactmi"
@@ -143,49 +125,19 @@ const HubManagerDrawer = ({toggle, open}) => {
                       >
                         Key Responsibilities
                       </label>
-
                       <div class="mb-4">
                         <ul className="list-disc px-3 ">
                           <li class="mt-1 text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                              Hub Operations:
-
-                              </span>
-                              Manage the arrival and departure of trucks, ensuring efficient scheduling.
+                              Manage all aspects of the business, including
+                              hiring, client acquisition, and project
+                              management.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                              Load and Unload Supervision:
-                              </span>
-                              Oversee the loading and unloading of cargo, ensuring proper handling and compliance with weight regulations.
-                            </p>
-                          </li>
-                          <li class=" text-gray-700">
-                            <p className="">
-                              <span className="font-medium mr-1">
-                              Inventory and Documentation:
-                              </span>
-                              Track shipments, maintain records of deliveries and pickups, and update inventory databases.
-                            </p>
-                          </li>
-                          <li class=" text-gray-700">
-                            <p className="">
-                              <span className="font-medium mr-1">
-                                Documentation:
-                              </span>
-                              Maintain accurate records, including logs of hours
-                              driven and delivery receipts.
-                            </p>
-                          </li>
-                          <li class=" text-gray-700">
-                            <p className="">
-                              <span className="font-medium mr-1">
-                              Safety and Maintenance Oversight:
-                              </span>
-                              Ensure trucks meet safety standards before departure, including inspection compliance
+                              Provide quotes, bid on contracts, and oversee
+                              large-scale plumbing installations.
                             </p>
                           </li>
                         </ul>
@@ -198,31 +150,18 @@ const HubManagerDrawer = ({toggle, open}) => {
                       >
                         Qualifications
                       </label>
-
                       <div class="mb-4">
                         <ul className="list-disc px-3 ">
                           <li class="mt-1 text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                              Minimum Education:
-                              </span>
-                              High school diploma or equivalent
+                              Master plumber license and strong business
+                              management skills.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                                Prefered Experience:
-                              </span>
-                              1-3 years of experience in logistics, transportation, or warehouse operations
-                            </p>
-                          </li>
-                          <li class=" text-gray-700">
-                            <p className="">
-                              <span className="font-medium mr-1">
-                              Certifications (Optional):
-                              </span>
-                              OSHA certification for warehouse safety, forklift operator certification if required.
+                              Knowledge of marketing, accounting, and customer
+                              service.{" "}
                             </p>
                           </li>
                         </ul>
@@ -271,4 +210,4 @@ const HubManagerDrawer = ({toggle, open}) => {
   );
 };
 
-export default HubManagerDrawer;
+export default PlumberBusinessOwner;

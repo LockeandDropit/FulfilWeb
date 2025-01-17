@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const HubManagerDrawer = ({toggle, open}) => {
+const OwnerOperatorDrawer = ({toggle, open}) => {
 
     
   const handleClose = () => {
@@ -42,7 +42,7 @@ const HubManagerDrawer = ({toggle, open}) => {
                           for="hs-pro-dactmt"
                           class="block mb-2 text-2xl font-medium text-gray-900"
                         >
-                         Truck Hub Manager
+                          Owner/Operator
                         </label>
                       </div>
 
@@ -132,7 +132,11 @@ const HubManagerDrawer = ({toggle, open}) => {
                         What you'll be doing
                       </label>
                       <div className="w-full prose prose-li  marker:text-black mb-4 ">
-                      A Truck Hub Operator oversees the coordination and management of trucking logistics at a distribution or trucking hub. They ensure that trucks are dispatched, loaded, unloaded, and maintained efficiently while adhering to schedules and safety regulations. This role is critical for smooth freight movement and supply chain operations.
+                        A Class A CDL Truck Driver operates large vehicles, such
+                        as tractor-trailers, across local, regional, or
+                        long-haul routes. They are responsible for transporting
+                        goods efficiently and safely while adhering to federal
+                        and state regulations.
                       </div>
                     </div>
 
@@ -149,26 +153,28 @@ const HubManagerDrawer = ({toggle, open}) => {
                           <li class="mt-1 text-gray-700">
                             <p className="">
                               <span className="font-medium mr-1">
-                              Hub Operations:
-
+                                Driving and Transporting:
                               </span>
-                              Manage the arrival and departure of trucks, ensuring efficient scheduling.
+                              Operate tractor-trailers, tankers, or flatbed
+                              trucks to transport goods.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
                               <span className="font-medium mr-1">
-                              Load and Unload Supervision:
+                                Inspection and Maintenance:
                               </span>
-                              Oversee the loading and unloading of cargo, ensuring proper handling and compliance with weight regulations.
+                              Perform pre-trip and post-trip vehicle inspections
+                              to ensure safety compliance.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
                               <span className="font-medium mr-1">
-                              Inventory and Documentation:
+                                Load Management:
                               </span>
-                              Track shipments, maintain records of deliveries and pickups, and update inventory databases.
+                              Secure and manage cargo to prevent damage during
+                              transit.
                             </p>
                           </li>
                           <li class=" text-gray-700">
@@ -183,9 +189,11 @@ const HubManagerDrawer = ({toggle, open}) => {
                           <li class=" text-gray-700">
                             <p className="">
                               <span className="font-medium mr-1">
-                              Safety and Maintenance Oversight:
+                                Regulation Compliance:
                               </span>
-                              Ensure trucks meet safety standards before departure, including inspection compliance
+                              Adhere to Department of Transportation (DOT) rules
+                              and safety standards, including HOS (Hours of
+                              Service) regulations.
                             </p>
                           </li>
                         </ul>
@@ -204,25 +212,32 @@ const HubManagerDrawer = ({toggle, open}) => {
                           <li class="mt-1 text-gray-700">
                             <p className="">
                               <span className="font-medium mr-1">
-                              Minimum Education:
+                                CDL Certification:
                               </span>
-                              High school diploma or equivalent
+                              Obtain a Class A Commercial Driver's License (CDL)
+                              by completing: A truck driving program approved by
+                              the FMCSA (Federal Motor Carrier Safety
+                              Administration) CDL written and skills test
+                              (includes vehicle inspection and driving tests).
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
                               <span className="font-medium mr-1">
-                                Prefered Experience:
+                                Additional Requirements:
                               </span>
-                              1-3 years of experience in logistics, transportation, or warehouse operations
+                              Minimum age: 18 for intrastate, 21 for interstate
+                              routes Clean driving record Pass a DOT physical
+                              and drug screening.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
                               <span className="font-medium mr-1">
-                              Certifications (Optional):
+                                Endorsements (optional):
                               </span>
-                              OSHA certification for warehouse safety, forklift operator certification if required.
+                              Hazmat, Tanker, Doubles/Triples for specialized
+                              roles.
                             </p>
                           </li>
                         </ul>
@@ -271,4 +286,4 @@ const HubManagerDrawer = ({toggle, open}) => {
   );
 };
 
-export default HubManagerDrawer;
+export default OwnerOperatorDrawer;

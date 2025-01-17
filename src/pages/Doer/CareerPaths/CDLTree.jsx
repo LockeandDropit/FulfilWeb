@@ -16,17 +16,15 @@ import "./treeStyles.css"; // Custom CSS for thicker lines
 import CDLDriverDrawer from "./cdl_drawers/CDLDriverDrawer";
 import HubManagerDrawer from "./cdl_drawers/HubManagerDrawer";
 import OwnerOperatorDrawer from "./cdl_drawers/OwnerOperatorDrawer";
+import CDLStarterDrawer from "./cdl_drawers/CDLStarterDrawer";
 
-const TreeTest = () => {
+const CDLTree = () => {
   const shouldRecenterTreeRef = useRef(true);
   const [treeTranslate, setTreeTranslate] = useState({ x: 0, y: 0 });
   const treeContainerRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true)
 
-  const {
-    isOpen: isOpenDrawer,
-    onOpen: onOpenDrawer,
-    onClose: onCloseDrawer,
-  } = useDisclosure();
+
 
   useEffect(() => {
     if (treeContainerRef.current && shouldRecenterTreeRef.current) {
@@ -38,8 +36,17 @@ const TreeTest = () => {
         // x: dimensions.width / 3,
         y: dimensions.height - 50,
       });
+
+
+      // isLoading is here because the div ref to center the container is not set in time 
+      // and results in a split second flash of the Start Here blue button on the left side of the screen.
+      // sorry :/.
+      setIsLoading(false)
     }
-  });
+
+  }, []);
+
+
   const orgChart = {
     name: "Start Here",
     attributes: {
@@ -104,9 +111,7 @@ const TreeTest = () => {
     ],
   };
 
-  const handleHover = () => {
-    console.log("hovering");
-  };
+
 
   const [popOverVisible, setPopOverVisible] = useState(false);
   const [selectedNodeName, setSelectedNodeName] = useState(null);
@@ -115,33 +120,9 @@ const TreeTest = () => {
     setPopOverVisible(!popOverVisible);
     console.log("pspsps", popOverVisible, x);
     handleOpenDrawer(x);
-    // if (popOverVisible === false) {
-    //   //   setSelectedNodeName(null);
-    // } else {
-    //   setSelectedNodeName(x);
-    // }
   };
 
-  //hover
 
-  // const HoverableDiv = ({ handleMouseOver, handleMouseOut }) => {
-  //   return (
-  //   //   <div onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
-  //   //     <span></span>
-  //   //   </div>
-  //   );
-  // };
-
-  const HoverText = () => {
-    return (
-      <div>
-        Hovering right meow!
-        <span role="img" aria-label="cat">
-          🐱
-        </span>
-      </div>
-    );
-  };
 
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseOver = (x) => {
@@ -153,20 +134,17 @@ const TreeTest = () => {
     setSelectedNodeName(null);
     setIsHovering(false);
   };
-
-
 const [open, setOpen] = useState(false)
 const toggleModal = () => {
   setOpen(!open)
 }
   const [selectedNodeNameDrawer, setSelectedNodeNameDrawer] = useState(null);
-  
+
   const handleOpenDrawer = (x) => {
     setSelectedNodeNameDrawer(x);
     // onOpenDrawer();
     setOpen(!open)
   };
-
   // Here we're using `renderCustomNodeElement` render a component that uses
   // both SVG and HTML tags side-by-side.
   // This is made possible by `foreignObject`, which wraps the HTML tags to
@@ -189,7 +167,6 @@ const toggleModal = () => {
           >
             {nodeDatum.name}
           </div>
-
           {/* hovering credit https://codesandbox.io/p/sandbox/react-hover-example-hooks-0to7u?file=%2Findex.js%3A34%2C3-41%2C11 */}
           {isHovering & (nodeDatum.name === selectedNodeName) ? (
             <>
@@ -240,9 +217,8 @@ const toggleModal = () => {
               </div>
             </>
           ) : null}
-
           {nodeDatum.name === selectedNodeNameDrawer && selectedNodeNameDrawer === "Start Here" ? (
-         <CDLDriverDrawer open={open} toggle={toggleModal}/>
+         <CDLStarterDrawer open={open} toggle={toggleModal}/>
           ) : nodeDatum.name === selectedNodeNameDrawer && selectedNodeNameDrawer === "$70k/year" ? (
          <CDLDriverDrawer open={open} toggle={toggleModal}/>
           ) : nodeDatum.name === selectedNodeNameDrawer && selectedNodeNameDrawer === "$120k/year" ? (
@@ -251,7 +227,6 @@ const toggleModal = () => {
         
         : nodeDatum.name === selectedNodeNameDrawer && selectedNodeNameDrawer === "$250k+/year" ? (<OwnerOperatorDrawer open={open} toggle={toggleModal}/>) : null}
         </>
-
       </foreignObject>
     </>
   );
@@ -303,27 +278,37 @@ const toggleModal = () => {
   //           ${target.x},${target.y}`;
   // };
 
+
+
+
   return (
-    <div ref={treeContainerRef} style={{ height: "75vh", width: "100vw" }}>
-      <Tree
-        separation={nodeSeparation}
-        translate={treeTranslate}
-        data={processedData}
-        // data={orgChart}
-        collapsible={false}
-        zoomable={false}
-        draggable={false}
-        orientation="vertical"
-        depthFactor={-300}
-        // pathFunc={customPathFunc}
-        pathClassFunc={() => "custom-link"}
-        onNodeClick={handleClick}
-        renderCustomNodeElement={(rd3tProps) =>
-          renderForeignObjectNode({ ...rd3tProps, foreignObjectProps })
-        }
-      />
-    </div>
+    <>
+
+      <div ref={treeContainerRef} style={{ height: "75vh", width: "100vw" }}>
+        {isLoading ?  (<p></p>) : (
+           <Tree
+           separation={nodeSeparation}
+           translate={treeTranslate}
+           data={processedData}
+           // data={orgChart}
+           collapsible={false}
+           zoomable={false}
+           draggable={false}
+           orientation="vertical"
+           depthFactor={-300}
+           // pathFunc={customPathFunc}
+           pathClassFunc={() => "custom-link"}
+           onNodeClick={handleClick}
+           renderCustomNodeElement={(rd3tProps) =>
+             renderForeignObjectNode({ ...rd3tProps, foreignObjectProps })
+           }
+         />
+        )}
+       
+      </div>
+      </>
+    
   );
 };
 
-export default TreeTest;
+export default CDLTree;

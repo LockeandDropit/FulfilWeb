@@ -12,9 +12,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const HubManagerDrawer = ({toggle, open}) => {
+const PlumberMasterDrawer = ({toggle, open}) => {
 
-    
+
   const handleClose = () => {
     toggle();
   }
@@ -22,12 +22,10 @@ const HubManagerDrawer = ({toggle, open}) => {
 
 
 
-
-
   return (
     <div>
       {" "}
-     <Drawer onClose={() => handleClose()} isOpen={open} size={"lg"}>
+      <Drawer onClose={() => handleClose()} isOpen={open} size={"lg"}>
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader></DrawerHeader>
@@ -42,7 +40,7 @@ const HubManagerDrawer = ({toggle, open}) => {
                           for="hs-pro-dactmt"
                           class="block mb-2 text-2xl font-medium text-gray-900"
                         >
-                         Truck Hub Manager
+                       Master Plumber
                         </label>
                       </div>
 
@@ -52,14 +50,9 @@ const HubManagerDrawer = ({toggle, open}) => {
                             Average Salary:
                           </p>
                           <p className="ml-1 text-md font-medium ">
-                            $80,000 - $
+                          $70,000 - $90,000
                           </p>
-                          <label
-                            for="hs-pro-dactmt"
-                            class="block  text-md font-medium text-gray-800 "
-                          >
-                            120,000
-                          </label>
+                       
                         </div>
                       </div>
                       <div class="space-y-2 ">
@@ -132,8 +125,7 @@ const HubManagerDrawer = ({toggle, open}) => {
                         What you'll be doing
                       </label>
                       <div className="w-full prose prose-li  marker:text-black mb-4 ">
-                      A Truck Hub Operator oversees the coordination and management of trucking logistics at a distribution or trucking hub. They ensure that trucks are dispatched, loaded, unloaded, and maintained efficiently while adhering to schedules and safety regulations. This role is critical for smooth freight movement and supply chain operations.
-                      </div>
+                      The highest level of licensing for a plumber, allowing them to take on large-scale projects, run businesses, and oversee plumbing teams.                      </div>
                     </div>
 
                     <div class="space-y-2 mt-6 mb-4">
@@ -148,44 +140,17 @@ const HubManagerDrawer = ({toggle, open}) => {
                         <ul className="list-disc px-3 ">
                           <li class="mt-1 text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                              Hub Operations:
-
-                              </span>
-                              Manage the arrival and departure of trucks, ensuring efficient scheduling.
+                            Design and install complex plumbing systems for large-scale projects.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                              Load and Unload Supervision:
-                              </span>
-                              Oversee the loading and unloading of cargo, ensuring proper handling and compliance with weight regulations.
+                            Train and supervise journeymen and apprentices.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                              Inventory and Documentation:
-                              </span>
-                              Track shipments, maintain records of deliveries and pickups, and update inventory databases.
-                            </p>
-                          </li>
-                          <li class=" text-gray-700">
-                            <p className="">
-                              <span className="font-medium mr-1">
-                                Documentation:
-                              </span>
-                              Maintain accurate records, including logs of hours
-                              driven and delivery receipts.
-                            </p>
-                          </li>
-                          <li class=" text-gray-700">
-                            <p className="">
-                              <span className="font-medium mr-1">
-                              Safety and Maintenance Oversight:
-                              </span>
-                              Ensure trucks meet safety standards before departure, including inspection compliance
+                            Apply for permits and ensure compliance with state and local codes.
                             </p>
                           </li>
                         </ul>
@@ -198,33 +163,17 @@ const HubManagerDrawer = ({toggle, open}) => {
                       >
                         Qualifications
                       </label>
-
                       <div class="mb-4">
                         <ul className="list-disc px-3 ">
                           <li class="mt-1 text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                              Minimum Education:
-                              </span>
-                              High school diploma or equivalent
-                            </p>
+                            Additional experience (1-2 years as a journeyman) and passing the master plumber licensing exam.                        </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                                Prefered Experience:
-                              </span>
-                              1-3 years of experience in logistics, transportation, or warehouse operations
-                            </p>
+                            Leadership and project management skills.                      </p>
                           </li>
-                          <li class=" text-gray-700">
-                            <p className="">
-                              <span className="font-medium mr-1">
-                              Certifications (Optional):
-                              </span>
-                              OSHA certification for warehouse safety, forklift operator certification if required.
-                            </p>
-                          </li>
+                         
                         </ul>
                       </div>
                     </div>
@@ -271,4 +220,4 @@ const HubManagerDrawer = ({toggle, open}) => {
   );
 };
 
-export default HubManagerDrawer;
+export default PlumberMasterDrawer;

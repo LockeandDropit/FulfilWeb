@@ -12,9 +12,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const HubManagerDrawer = ({toggle, open}) => {
+const HVACEngineerDesignerDrawer = ({toggle, open}) => {
 
-    
+
   const handleClose = () => {
     toggle();
   }
@@ -22,12 +22,10 @@ const HubManagerDrawer = ({toggle, open}) => {
 
 
 
-
-
   return (
     <div>
       {" "}
-     <Drawer onClose={() => handleClose()} isOpen={open} size={"lg"}>
+      <Drawer onClose={() => handleClose()} isOpen={open} size={"lg"}>
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader></DrawerHeader>
@@ -42,7 +40,7 @@ const HubManagerDrawer = ({toggle, open}) => {
                           for="hs-pro-dactmt"
                           class="block mb-2 text-2xl font-medium text-gray-900"
                         >
-                         Truck Hub Manager
+                       HVAC Engineer or System Designer
                         </label>
                       </div>
 
@@ -52,14 +50,9 @@ const HubManagerDrawer = ({toggle, open}) => {
                             Average Salary:
                           </p>
                           <p className="ml-1 text-md font-medium ">
-                            $80,000 - $
+                          $85,000 - $120,000
                           </p>
-                          <label
-                            for="hs-pro-dactmt"
-                            class="block  text-md font-medium text-gray-800 "
-                          >
-                            120,000
-                          </label>
+                       
                         </div>
                       </div>
                       <div class="space-y-2 ">
@@ -132,8 +125,7 @@ const HubManagerDrawer = ({toggle, open}) => {
                         What you'll be doing
                       </label>
                       <div className="w-full prose prose-li  marker:text-black mb-4 ">
-                      A Truck Hub Operator oversees the coordination and management of trucking logistics at a distribution or trucking hub. They ensure that trucks are dispatched, loaded, unloaded, and maintained efficiently while adhering to schedules and safety regulations. This role is critical for smooth freight movement and supply chain operations.
-                      </div>
+                      A technical expert who designs, develops, and optimizes HVAC systems for large-scale or specialized applications, often incorporating energy-efficient technologies.                      </div>
                     </div>
 
                     <div class="space-y-2 mt-6 mb-4">
@@ -148,44 +140,16 @@ const HubManagerDrawer = ({toggle, open}) => {
                         <ul className="list-disc px-3 ">
                           <li class="mt-1 text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                              Hub Operations:
-
-                              </span>
-                              Manage the arrival and departure of trucks, ensuring efficient scheduling.
+                            Design HVAC systems for commercial or industrial buildings.                            </p>
+                          </li>
+                          <li class=" text-gray-700">
+                            <p className="">
+                            Evaluate system performance and recommend improvements.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                              Load and Unload Supervision:
-                              </span>
-                              Oversee the loading and unloading of cargo, ensuring proper handling and compliance with weight regulations.
-                            </p>
-                          </li>
-                          <li class=" text-gray-700">
-                            <p className="">
-                              <span className="font-medium mr-1">
-                              Inventory and Documentation:
-                              </span>
-                              Track shipments, maintain records of deliveries and pickups, and update inventory databases.
-                            </p>
-                          </li>
-                          <li class=" text-gray-700">
-                            <p className="">
-                              <span className="font-medium mr-1">
-                                Documentation:
-                              </span>
-                              Maintain accurate records, including logs of hours
-                              driven and delivery receipts.
-                            </p>
-                          </li>
-                          <li class=" text-gray-700">
-                            <p className="">
-                              <span className="font-medium mr-1">
-                              Safety and Maintenance Oversight:
-                              </span>
-                              Ensure trucks meet safety standards before departure, including inspection compliance
+                            Collaborate with architects, builders, and other engineers on project specifications.
                             </p>
                           </li>
                         </ul>
@@ -198,31 +162,20 @@ const HubManagerDrawer = ({toggle, open}) => {
                       >
                         Qualifications
                       </label>
-
                       <div class="mb-4">
                         <ul className="list-disc px-3 ">
                           <li class="mt-1 text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                              Minimum Education:
-                              </span>
-                              High school diploma or equivalent
+                            Bachelor’s degree in mechanical engineering or a related field.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                                Prefered Experience:
-                              </span>
-                              1-3 years of experience in logistics, transportation, or warehouse operations
-                            </p>
+                            Extensive field experience in HVAC installation or system design.                           </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                              <span className="font-medium mr-1">
-                              Certifications (Optional):
-                              </span>
-                              OSHA certification for warehouse safety, forklift operator certification if required.
+                            Proficiency in CAD and simulation tools for HVAC design.
                             </p>
                           </li>
                         </ul>
@@ -271,4 +224,4 @@ const HubManagerDrawer = ({toggle, open}) => {
   );
 };
 
-export default HubManagerDrawer;
+export default HVACEngineerDesignerDrawer;

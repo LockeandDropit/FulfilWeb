@@ -1294,9 +1294,9 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
  
   }
 
-  const handleClosePostTest = () => {
-    toggle();
-  }
+  // const handleClosePostTest = () => {
+  //   toggle();
+  // }
  
 
   // if (isLoading === true) {
@@ -1323,7 +1323,8 @@ const AddJobBusiness = ({ heldSelected, toggle, modalOpen}) => {
         size={"xl"}
       > */}
       <Drawer
-        onClose={() => handleClosePostTest()}
+      //this was removed because it was saying it was not defined... This component is no longer in use.
+        // onClose={handleClosePostTest}
         isOpen={modalOpen}
         size={"xl"}
       >

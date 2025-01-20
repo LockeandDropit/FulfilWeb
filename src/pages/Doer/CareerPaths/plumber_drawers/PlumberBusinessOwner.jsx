@@ -167,43 +167,89 @@ const PlumberBusinessOwner = ({ toggle, open }) => {
                         </ul>
                       </div>
                     </div>
+                    <div class="space-y-2 mt-6 mb-4">
+                      <label
+                        for="dactmi"
+                        class="block mb-2 text-lg font-medium text-gray-800 "
+                      >
+                       Open Positions{" "}
+                        <span
+                          className="cursor-pointer hover:underline text-base text-gray-700 "
+                          onClick={() =>
+                            window.open(
+                              "https://www.indeed.com/jobs?q=HVAC&l=Minneapolis&from=searchOnDesktopSerp&cf-turnstile-response=0.WHO9ovb5eWqV7caFbf8UAcvFnO9ZAs50_sU8E1e39HRo7pwY5lBg-EXYJsvX3cxPe_3O0JyNx4I-zwmNrxqXuu1kZAbTGV75say_j6oAUR5d2-jVAyT-aedz7dGrj3Dr6yu-r5ha-xbMZgolvvh-DkL8WzEHM4ADBzR9q0069qK_pAyP0XXPmpVMkSS0-3wuHXjw8NM1bQ7dPovXpXkruwiwk04aD3uQ3maTXBDll9agtU220zThwhIkmAnfbNQ6TrZo1aZtrWSgs9aMceI9efvV6bym4ruOTlLcPIFc3Du0JRnELzGWto-iaSThCszZbhTEkjOlBPIZpi-Lm3KcKUwuzC8S-9bLT17z5AZLyBbfwNFSGESLiZBaCB3hX-deMKnMtDotvbclK2FM5Xbh7LebI_z_ZmNMYkMQ6Bjxzf3vdQR6EmPPE_z2T8Ma8b9MY2fuB62gUrg3hW0Rq2O5r4OvF6L82Kl_ilMk13q6398FTotwwCZnw6PIuSPNdOtFe_zvXjcT8DcI-kHtN2_y9Au142TIOYP9hrWvvo1GwxbqdKhKl8ZgHwaDejXPTjLPgC5lOdHVKLODvhaqu8_YoPPtTsxgJic7ENPw8-WSnkh44lU7I4s_XwcY5oWKzEM-CoGfqH8D3W3v-rYIuM7RB-lv8-36dopsFnx-rTI7n6Y-4oAcqFTTXEQ6I-Lm8qL9UycczSc7KTkVoSbImalR4hRjc24tuYEGWKpGA6pNCzO5l-Jd5WjTJsjeUv-DfpF6squ3tq3bBaNwQPb5qRsuUkj0NHpZG8kqF65p3Zl45vouwnC9TsdvEjLd_QXAUEmxP8v0nWDNCUoG7QQubhuDig.-PfwiIIk69nGYIdnLIBHYA.d09c29160fd89317ea68cfe4a3335b6aeeecff30ccb75ccebeaae3458972ea94&vjk=ec90ab1d9df762bf"
+                            )
+                          }
+                        >
+                          (See more)
+                        </span>
+                      </label>
+                      <div class="mb-4">
+                        <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
+                          <div class="flex justify-between">
+                            <div class="flex flex-col justify-center items-center size-[38px] border border-gray-200 rounded-lg ">
+                              <img
+                                src="/landingImages/streetplumbinglogo.jpg"
+                                alt=""
+                                class="shrink-0 size-6  "
+                                width="32"
+                                height="32"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <h3 class="font-medium text-gray-800">
+                              Plumbing Apprentice
+                            </h3>
+                            <h3 class="font-medium text-gray-800">
+                              Street Plumbing Inc.
+                            </h3>
+                            <h3 class="text-sm text-gray-500">
+                              Burnsville, MN
+                            </h3>
+                        
+                            <p class="mt-3 text-gray-700 line-clamp-4">
+                              Apply to open positions that provide on the job
+                              training. Learn to install, repair, deal with
+                              waste, vents, and water piping.
+                            </p>
+                          </div>
+                          <div className="flex items-center justify-center mt-auto mb-1">
+                            <button
+                              type="button"
+                              class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
+                              onClick={() =>
+                                window.open(
+                                  "https://www.streetplumbinginc.com/careers.html"
+                                )
+                              }
+                            >
+                              Apply
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.25"
+                                stroke="currentColor"
+                                class="size-3 hover:underline"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </DrawerBody>
-          <DrawerFooter>
-            <button
-              type="button"
-              class="py-3 px-6 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800  lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-              data-hs-overlay="#hs-pro-datm"
-              // onClick={() => onOpen()}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                />
-              </svg>
-              Save
-            </button>
-            <button
-              type="button"
-              class="py-2 px-8 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-              data-hs-overlay="#hs-pro-datm"
-              // onClick={() => onOpen()}
-            >
-              Get Started
-            </button>
-          </DrawerFooter>
+         
         </DrawerContent>
       </Drawer>
     </div>

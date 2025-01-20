@@ -11,11 +11,13 @@ import {
   DrawerCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
+import ReactPlayer from "react-player";
 
 const PlumberStarterDrawer = ({ toggle, open }) => {
   const handleClose = () => {
     toggle();
   };
+  const url = "https://www.youtube.com/shorts/r3wnCzSd8Ow";
 
   return (
     <div>
@@ -49,12 +51,19 @@ const PlumberStarterDrawer = ({ toggle, open }) => {
                         </div>
                       </div>
                       <div class="space-y-2 ">
-                        <div class="flex align-center  items-center">
+                        <div
+                          class="flex align-center items-center hover:underline cursor-pointer"
+                          onClick={() =>
+                            window.open(
+                              "https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm"
+                            )
+                          }
+                        >
                           <p className="text-md font-medium ">
                             Industry Growth:
                           </p>
                           <p className="ml-1 text-md font-medium text-green-600">
-                            4.5%
+                            6%
                           </p>
                           <svg
                             class="shrink-0 size-5 ml-1"
@@ -74,18 +83,18 @@ const PlumberStarterDrawer = ({ toggle, open }) => {
                         </div>
                       </div>
                       <div class="space-y-2 ">
-                        <div class="flex align-center items-center">
+                        <div
+                          class="flex align-center items-center cursor-pointer hover:underline"
+                          onClick={() =>
+                            window.open(
+                              "https://www.indeed.com/jobs?q=HVAC&l=Minneapolis&from=searchOnDesktopSerp&cf-turnstile-response=0.WHO9ovb5eWqV7caFbf8UAcvFnO9ZAs50_sU8E1e39HRo7pwY5lBg-EXYJsvX3cxPe_3O0JyNx4I-zwmNrxqXuu1kZAbTGV75say_j6oAUR5d2-jVAyT-aedz7dGrj3Dr6yu-r5ha-xbMZgolvvh-DkL8WzEHM4ADBzR9q0069qK_pAyP0XXPmpVMkSS0-3wuHXjw8NM1bQ7dPovXpXkruwiwk04aD3uQ3maTXBDll9agtU220zThwhIkmAnfbNQ6TrZo1aZtrWSgs9aMceI9efvV6bym4ruOTlLcPIFc3Du0JRnELzGWto-iaSThCszZbhTEkjOlBPIZpi-Lm3KcKUwuzC8S-9bLT17z5AZLyBbfwNFSGESLiZBaCB3hX-deMKnMtDotvbclK2FM5Xbh7LebI_z_ZmNMYkMQ6Bjxzf3vdQR6EmPPE_z2T8Ma8b9MY2fuB62gUrg3hW0Rq2O5r4OvF6L82Kl_ilMk13q6398FTotwwCZnw6PIuSPNdOtFe_zvXjcT8DcI-kHtN2_y9Au142TIOYP9hrWvvo1GwxbqdKhKl8ZgHwaDejXPTjLPgC5lOdHVKLODvhaqu8_YoPPtTsxgJic7ENPw8-WSnkh44lU7I4s_XwcY5oWKzEM-CoGfqH8D3W3v-rYIuM7RB-lv8-36dopsFnx-rTI7n6Y-4oAcqFTTXEQ6I-Lm8qL9UycczSc7KTkVoSbImalR4hRjc24tuYEGWKpGA6pNCzO5l-Jd5WjTJsjeUv-DfpF6squ3tq3bBaNwQPb5qRsuUkj0NHpZG8kqF65p3Zl45vouwnC9TsdvEjLd_QXAUEmxP8v0nWDNCUoG7QQubhuDig.-PfwiIIk69nGYIdnLIBHYA.d09c29160fd89317ea68cfe4a3335b6aeeecff30ccb75ccebeaae3458972ea94&vjk=ec90ab1d9df762bf"
+                            )
+                          }
+                        >
                           <p className="text-md font-medium ">
                             Openings Near You:
                           </p>
-                          <p
-                            className="ml-1 text-md text-gray-800 hover:text-gray-900 font-medium cursor-pointer hover:underline"
-                            onClick={() =>
-                              window.open(
-                                "https://www.indeed.com/jobs?q=HVAC&l=Minneapolis&from=searchOnDesktopSerp&cf-turnstile-response=0.WHO9ovb5eWqV7caFbf8UAcvFnO9ZAs50_sU8E1e39HRo7pwY5lBg-EXYJsvX3cxPe_3O0JyNx4I-zwmNrxqXuu1kZAbTGV75say_j6oAUR5d2-jVAyT-aedz7dGrj3Dr6yu-r5ha-xbMZgolvvh-DkL8WzEHM4ADBzR9q0069qK_pAyP0XXPmpVMkSS0-3wuHXjw8NM1bQ7dPovXpXkruwiwk04aD3uQ3maTXBDll9agtU220zThwhIkmAnfbNQ6TrZo1aZtrWSgs9aMceI9efvV6bym4ruOTlLcPIFc3Du0JRnELzGWto-iaSThCszZbhTEkjOlBPIZpi-Lm3KcKUwuzC8S-9bLT17z5AZLyBbfwNFSGESLiZBaCB3hX-deMKnMtDotvbclK2FM5Xbh7LebI_z_ZmNMYkMQ6Bjxzf3vdQR6EmPPE_z2T8Ma8b9MY2fuB62gUrg3hW0Rq2O5r4OvF6L82Kl_ilMk13q6398FTotwwCZnw6PIuSPNdOtFe_zvXjcT8DcI-kHtN2_y9Au142TIOYP9hrWvvo1GwxbqdKhKl8ZgHwaDejXPTjLPgC5lOdHVKLODvhaqu8_YoPPtTsxgJic7ENPw8-WSnkh44lU7I4s_XwcY5oWKzEM-CoGfqH8D3W3v-rYIuM7RB-lv8-36dopsFnx-rTI7n6Y-4oAcqFTTXEQ6I-Lm8qL9UycczSc7KTkVoSbImalR4hRjc24tuYEGWKpGA6pNCzO5l-Jd5WjTJsjeUv-DfpF6squ3tq3bBaNwQPb5qRsuUkj0NHpZG8kqF65p3Zl45vouwnC9TsdvEjLd_QXAUEmxP8v0nWDNCUoG7QQubhuDig.-PfwiIIk69nGYIdnLIBHYA.d09c29160fd89317ea68cfe4a3335b6aeeecff30ccb75ccebeaae3458972ea94&vjk=ec90ab1d9df762bf"
-                              )
-                            }
-                          >
+                          <p className="ml-1 text-md text-gray-800 hover:text-gray-900 font-medium cursor-pointer hover:underline">
                             300+
                           </p>
                           <svg
@@ -104,14 +113,25 @@ const PlumberStarterDrawer = ({ toggle, open }) => {
                           </svg>
                         </div>
                       </div>
-                      <div className="flex"></div>
+                    </div>
+                    <div>
+                      <div class="mt-4 relative max-w-5xl mx-auto mb-1 ">
+                        <div class="w-full object-cover h-[480px] sm:h-80 rounded-xl">
+                          <ReactPlayer
+                            url={url}
+                            width="100%"
+                            height="100%"
+                            controls={true}
+                          />
+                        </div>
+                      </div>
                     </div>
                     <div class="space-y-2 mt-6 mb-4">
                       <label
                         for="dactmi"
-                        class="block mb-2 text-lg font-medium text-gray-800 "
+                        class="block mb-2 text-xl font-medium text-gray-800 "
                       >
-                        Education
+                        Get Started!
                       </label>
                       <div class="mb-4">
                         <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
@@ -128,12 +148,14 @@ const PlumberStarterDrawer = ({ toggle, open }) => {
                           </div>
                           <div>
                             <h3 class="font-medium text-gray-800">
-                            Plumbing Pre-Apprenticeship
+                              Plumbing Pre-Apprenticeship
                             </h3>
                             <h3 class="font-medium text-gray-800">
                               Hennepin Technical College
                             </h3>
-                            <h3 class="text-sm text-gray-500">Minneapolis, MN</h3>
+                            <h3 class="text-sm text-gray-500">
+                              Minneapolis, MN
+                            </h3>
                             {/* <div className="mt-1 flex ">
                               <h3 class="text-sm text-gray-500 line-clamp-1">
                                 <p className="mr-1 font-medium text-sm text-gray-800">
@@ -161,7 +183,18 @@ const PlumberStarterDrawer = ({ toggle, open }) => {
                               </span>
                             </div> */}
                             <p class="mt-3 text-gray-700 line-clamp-4">
-                            The Plumbing Pre-Apprenticeship program at Hennepin Technical College equips students with the foundational skills needed to launch a career as a plumber or pipefitter. Participants gain hands-on experience in safety practices, understanding plumbing codes, tool usage, blueprint reading, and plumbing system installation. Train to work on advanced systems like rooftop units, high-efficiency furnaces, hydronic boilers, chillers, energy management systems, and refrigeration equipment like ice machines, walk-in coolers, and display cases.
+                              The Plumbing Pre-Apprenticeship program at
+                              Hennepin Technical College equips students with
+                              the foundational skills needed to launch a career
+                              as a plumber or pipefitter. Participants gain
+                              hands-on experience in safety practices,
+                              understanding plumbing codes, tool usage,
+                              blueprint reading, and plumbing system
+                              installation. Train to work on advanced systems
+                              like rooftop units, high-efficiency furnaces,
+                              hydronic boilers, chillers, energy management
+                              systems, and refrigeration equipment like ice
+                              machines, walk-in coolers, and display cases.
                             </p>
                           </div>
                           <div className="flex items-center justify-center mt-auto mb-1">
@@ -199,7 +232,17 @@ const PlumberStarterDrawer = ({ toggle, open }) => {
                         for="dactmi"
                         class="block mb-2 text-lg font-medium text-gray-800 "
                       >
-                        Jobs with Training
+                        Jobs with Training{" "}
+                        <span
+                          className="cursor-pointer hover:underline text-base text-gray-700 "
+                          onClick={() =>
+                            window.open(
+                              "https://www.indeed.com/jobs?q=HVAC&l=Minneapolis&from=searchOnDesktopSerp&cf-turnstile-response=0.WHO9ovb5eWqV7caFbf8UAcvFnO9ZAs50_sU8E1e39HRo7pwY5lBg-EXYJsvX3cxPe_3O0JyNx4I-zwmNrxqXuu1kZAbTGV75say_j6oAUR5d2-jVAyT-aedz7dGrj3Dr6yu-r5ha-xbMZgolvvh-DkL8WzEHM4ADBzR9q0069qK_pAyP0XXPmpVMkSS0-3wuHXjw8NM1bQ7dPovXpXkruwiwk04aD3uQ3maTXBDll9agtU220zThwhIkmAnfbNQ6TrZo1aZtrWSgs9aMceI9efvV6bym4ruOTlLcPIFc3Du0JRnELzGWto-iaSThCszZbhTEkjOlBPIZpi-Lm3KcKUwuzC8S-9bLT17z5AZLyBbfwNFSGESLiZBaCB3hX-deMKnMtDotvbclK2FM5Xbh7LebI_z_ZmNMYkMQ6Bjxzf3vdQR6EmPPE_z2T8Ma8b9MY2fuB62gUrg3hW0Rq2O5r4OvF6L82Kl_ilMk13q6398FTotwwCZnw6PIuSPNdOtFe_zvXjcT8DcI-kHtN2_y9Au142TIOYP9hrWvvo1GwxbqdKhKl8ZgHwaDejXPTjLPgC5lOdHVKLODvhaqu8_YoPPtTsxgJic7ENPw8-WSnkh44lU7I4s_XwcY5oWKzEM-CoGfqH8D3W3v-rYIuM7RB-lv8-36dopsFnx-rTI7n6Y-4oAcqFTTXEQ6I-Lm8qL9UycczSc7KTkVoSbImalR4hRjc24tuYEGWKpGA6pNCzO5l-Jd5WjTJsjeUv-DfpF6squ3tq3bBaNwQPb5qRsuUkj0NHpZG8kqF65p3Zl45vouwnC9TsdvEjLd_QXAUEmxP8v0nWDNCUoG7QQubhuDig.-PfwiIIk69nGYIdnLIBHYA.d09c29160fd89317ea68cfe4a3335b6aeeecff30ccb75ccebeaae3458972ea94&vjk=ec90ab1d9df762bf"
+                            )
+                          }
+                        >
+                          (See more)
+                        </span>
                       </label>
                       <div class="mb-4">
                         <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
@@ -216,9 +259,11 @@ const PlumberStarterDrawer = ({ toggle, open }) => {
                           </div>
                           <div>
                             <h3 class="font-medium text-gray-800">
-                            Plumbing Apprentice
+                              Plumbing Apprentice
                             </h3>
-                            <h3 class="font-medium text-gray-800">Street Plumbing Inc.</h3>
+                            <h3 class="font-medium text-gray-800">
+                              Street Plumbing Inc.
+                            </h3>
                             <h3 class="text-sm text-gray-500">
                               Burnsville, MN
                             </h3>
@@ -249,7 +294,9 @@ const PlumberStarterDrawer = ({ toggle, open }) => {
                               </span>
                             </div> */}
                             <p class="mt-3 text-gray-700 line-clamp-4">
-                            Apply to open positions that provide on the job training. Learn to install, repair, deal with waste, vents, and water piping. 
+                              Apply to open positions that provide on the job
+                              training. Learn to install, repair, deal with
+                              waste, vents, and water piping.
                             </p>
                           </div>
                           <div className="flex items-center justify-center mt-auto mb-1">

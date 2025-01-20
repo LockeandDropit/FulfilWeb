@@ -12,15 +12,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const PlumberMasterDrawer = ({toggle, open}) => {
-
-
+const PlumberMasterDrawer = ({ toggle, open }) => {
   const handleClose = () => {
     toggle();
-  }
-    
-
-
+  };
 
   return (
     <div>
@@ -40,7 +35,7 @@ const PlumberMasterDrawer = ({toggle, open}) => {
                           for="hs-pro-dactmt"
                           class="block mb-2 text-2xl font-medium text-gray-900"
                         >
-                       Master Plumber
+                          Master Plumber
                         </label>
                       </div>
 
@@ -50,20 +45,25 @@ const PlumberMasterDrawer = ({toggle, open}) => {
                             Average Salary:
                           </p>
                           <p className="ml-1 text-md font-medium ">
-                          $70,000 - $90,000
+                            $70,000 - $90,000
                           </p>
-                       
                         </div>
                       </div>
                       <div class="space-y-2 ">
-                        <div class="flex align-center  items-center">
+                        <div
+                          class="flex align-center items-center hover:underline cursor-pointer"
+                          onClick={() =>
+                            window.open(
+                              "https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm"
+                            )
+                          }
+                        >
                           <p className="text-md font-medium ">
                             Industry Growth:
                           </p>
                           <p className="ml-1 text-md font-medium text-green-600">
-                            4.5%
+                            6%
                           </p>
-
                           <svg
                             class="shrink-0 size-5 ml-1"
                             xmlns="http://www.w3.org/2000/svg"
@@ -82,20 +82,19 @@ const PlumberMasterDrawer = ({toggle, open}) => {
                         </div>
                       </div>
                       <div class="space-y-2 ">
-                        <div class="flex align-center items-center">
+                        <div
+                          class="flex align-center items-center cursor-pointer hover:underline"
+                          onClick={() =>
+                            window.open(
+                              "https://www.indeed.com/jobs?q=HVAC&l=Minneapolis&from=searchOnDesktopSerp&cf-turnstile-response=0.WHO9ovb5eWqV7caFbf8UAcvFnO9ZAs50_sU8E1e39HRo7pwY5lBg-EXYJsvX3cxPe_3O0JyNx4I-zwmNrxqXuu1kZAbTGV75say_j6oAUR5d2-jVAyT-aedz7dGrj3Dr6yu-r5ha-xbMZgolvvh-DkL8WzEHM4ADBzR9q0069qK_pAyP0XXPmpVMkSS0-3wuHXjw8NM1bQ7dPovXpXkruwiwk04aD3uQ3maTXBDll9agtU220zThwhIkmAnfbNQ6TrZo1aZtrWSgs9aMceI9efvV6bym4ruOTlLcPIFc3Du0JRnELzGWto-iaSThCszZbhTEkjOlBPIZpi-Lm3KcKUwuzC8S-9bLT17z5AZLyBbfwNFSGESLiZBaCB3hX-deMKnMtDotvbclK2FM5Xbh7LebI_z_ZmNMYkMQ6Bjxzf3vdQR6EmPPE_z2T8Ma8b9MY2fuB62gUrg3hW0Rq2O5r4OvF6L82Kl_ilMk13q6398FTotwwCZnw6PIuSPNdOtFe_zvXjcT8DcI-kHtN2_y9Au142TIOYP9hrWvvo1GwxbqdKhKl8ZgHwaDejXPTjLPgC5lOdHVKLODvhaqu8_YoPPtTsxgJic7ENPw8-WSnkh44lU7I4s_XwcY5oWKzEM-CoGfqH8D3W3v-rYIuM7RB-lv8-36dopsFnx-rTI7n6Y-4oAcqFTTXEQ6I-Lm8qL9UycczSc7KTkVoSbImalR4hRjc24tuYEGWKpGA6pNCzO5l-Jd5WjTJsjeUv-DfpF6squ3tq3bBaNwQPb5qRsuUkj0NHpZG8kqF65p3Zl45vouwnC9TsdvEjLd_QXAUEmxP8v0nWDNCUoG7QQubhuDig.-PfwiIIk69nGYIdnLIBHYA.d09c29160fd89317ea68cfe4a3335b6aeeecff30ccb75ccebeaae3458972ea94&vjk=ec90ab1d9df762bf"
+                            )
+                          }
+                        >
                           <p className="text-md font-medium ">
                             Openings Near You:
                           </p>
-
-                          <p
-                            className="ml-1 text-md text-gray-800 hover:text-gray-900 font-medium cursor-pointer hover:underline"
-                            onClick={() =>
-                              window.open(
-                                "https://www.indeed.com/jobs?q=class+a+cdl+driver&l=Minneapolis%2C+MN&from=searchOnDesktopSerp%2Cwhatautocomplete&vjk=cb01c123a1e663fa"
-                              )
-                            }
-                          >
-                            2,490
+                          <p className="ml-1 text-md text-gray-800 hover:text-gray-900 font-medium cursor-pointer hover:underline">
+                            300+
                           </p>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -125,7 +124,10 @@ const PlumberMasterDrawer = ({toggle, open}) => {
                         What you'll be doing
                       </label>
                       <div className="w-full prose prose-li  marker:text-black mb-4 ">
-                      The highest level of licensing for a plumber, allowing them to take on large-scale projects, run businesses, and oversee plumbing teams.                      </div>
+                        The highest level of licensing for a plumber, allowing
+                        them to take on large-scale projects, run businesses,
+                        and oversee plumbing teams.{" "}
+                      </div>
                     </div>
 
                     <div class="space-y-2 mt-6 mb-4">
@@ -140,17 +142,19 @@ const PlumberMasterDrawer = ({toggle, open}) => {
                         <ul className="list-disc px-3 ">
                           <li class="mt-1 text-gray-700">
                             <p className="">
-                            Design and install complex plumbing systems for large-scale projects.
+                              Design and install complex plumbing systems for
+                              large-scale projects.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                            Train and supervise journeymen and apprentices.
+                              Train and supervise journeymen and apprentices.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                            Apply for permits and ensure compliance with state and local codes.
+                              Apply for permits and ensure compliance with state
+                              and local codes.
                             </p>
                           </li>
                         </ul>
@@ -167,14 +171,93 @@ const PlumberMasterDrawer = ({toggle, open}) => {
                         <ul className="list-disc px-3 ">
                           <li class="mt-1 text-gray-700">
                             <p className="">
-                            Additional experience (1-2 years as a journeyman) and passing the master plumber licensing exam.                        </p>
+                              Additional experience (1-2 years as a journeyman)
+                              and passing the master plumber licensing exam.{" "}
+                            </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                            Leadership and project management skills.                      </p>
+                              Leadership and project management skills.{" "}
+                            </p>
                           </li>
-                         
                         </ul>
+                      </div>
+                    </div>
+                    <div class="space-y-2 mt-6 mb-4">
+                      <label
+                        for="dactmi"
+                        class="block mb-2 text-lg font-medium text-gray-800 "
+                      >
+                       Open Positions{" "}
+                        <span
+                          className="cursor-pointer hover:underline text-base text-gray-700 "
+                          onClick={() =>
+                            window.open(
+                              "https://www.indeed.com/jobs?q=master+plumber&l=Minneapolis&from=searchOnDesktopSerp%2Cwhatautocomplete&cf-turnstile-response=0.JpSAvAFAYiFRZqdhdep5bxTbluLY6oGj-hQuzpJATTtrrZcsmovt6Ayjjryf5mg3EqtFdhIw-UqDAOE0Xn4-1cCT_tUKiCOKPVQV8A5vQajKcdnLPewx-CHQyc48htGowajXJGoKWOtGYoKHgC6vaRsmgQnnx8G220YQ_MZXPWbslTVkz8ZXMDwOVqInXGQ_pYdR47axhnxnJ1YYRW1wqollhliDcBXZarVLW1EY51rQz3PEXw461pSd4im7nWy9U-iU3y3O2zdndkOa2u-lEkwysiYm_0NL8by6rj1fMTMlmgol-iRXeYB9YwToaV_jebgr7x0-81OCdgV5FY7txPSLV8g8Kjo9XVioKHRRNImyfVahE78qlRURq7oKPblbPEUoyVbXtWQqMEbizauOHJwPFQmisH0UDehTM0kmyXReNbn06DaN-D6t_nER_c9sDoUJEcD2gtX_e-9fWct-nQl2GBalTdenZMH-atWu7WD-a2Z_9W27iK1Jbd7sivQYI3e_Iwmel_J3pQWklJq21CvtvRYJ3-tyUxYlF-4l_7HKIPBngSCq7f8KtTKIKKe32m2-qU85U9LpzjcwHUR_eAxamZr6RovK8mKDpp0g55QHl4ulGUC4FJf3SkZQsdpRuYkuq25jCNs8FF-Hi_CUxu5vet8Uo6AQpzvANLVUF6rlUXE1bRWx3J9TUERzH5IVc36YCY5cavNYFDLb2IRFOz-kZw7y60z1WbWnadyiCAwt7DuxNP93V_wdghv9LfHtbm1hq-l9zleVn0x8wigcDfNzmjmLAndjdN6VHVP2fOjhAlNq55wLK8XfVPk1tm3leJmPLj9uJ3JoPTfGY4xEUg.TNGwiUw5FCt0I6XTWwJ_uA.3f5a59d0741b449a94fad863e9d71cb4a9a366b5c2cf1aaf292a31b7b830aaa9&vjk=b63d3b8cf977117a"
+                            )
+                          }
+                        >
+                          (See more)
+                        </span>
+                      </label>
+                      <div class="mb-4">
+                        <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
+                          <div class="flex justify-between">
+                            <div class="flex flex-col justify-center items-center size-[38px] border border-gray-200 rounded-lg ">
+                              <img
+                                src="/landingImages/streetplumbinglogo.jpg"
+                                alt=""
+                                class="shrink-0 size-6  "
+                                width="32"
+                                height="32"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <h3 class="font-medium text-gray-800">
+                              Plumbing Apprentice
+                            </h3>
+                            <h3 class="font-medium text-gray-800">
+                              Street Plumbing Inc.
+                            </h3>
+                            <h3 class="text-sm text-gray-500">
+                              Burnsville, MN
+                            </h3>
+                        
+                            <p class="mt-3 text-gray-700 line-clamp-4">
+                              Apply to open positions that provide on the job
+                              training. Learn to install, repair, deal with
+                              waste, vents, and water piping.
+                            </p>
+                          </div>
+                          <div className="flex items-center justify-center mt-auto mb-1">
+                            <button
+                              type="button"
+                              class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
+                              onClick={() =>
+                                window.open(
+                                  "https://www.streetplumbinginc.com/careers.html"
+                                )
+                              }
+                            >
+                              Apply
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.25"
+                                stroke="currentColor"
+                                class="size-3 hover:underline"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -182,38 +265,7 @@ const PlumberMasterDrawer = ({toggle, open}) => {
               </div>
             </div>
           </DrawerBody>
-          <DrawerFooter>
-            <button
-              type="button"
-              class="py-3 px-6 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800  lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-              data-hs-overlay="#hs-pro-datm"
-              // onClick={() => onOpen()}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                />
-              </svg>
-              Save
-            </button>
-            <button
-              type="button"
-              class="py-2 px-8 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
-              data-hs-overlay="#hs-pro-datm"
-              // onClick={() => onOpen()}
-            >
-              Get Started
-            </button>
-          </DrawerFooter>
+        
         </DrawerContent>
       </Drawer>
     </div>

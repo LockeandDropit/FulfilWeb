@@ -66,10 +66,8 @@ const PlumberTree = () => {
         name: "$35k/year",
         attributes: {
           jobTitle: "Plumbing Apprentice",
-          bullet1:
-            "Assist with pipe installation, repairs, and maintenance.",
-          bullet2:
-            "Learn to read blueprints and understand plumbing systems.",
+          bullet1: "Assist with pipe installation, repairs, and maintenance.",
+          bullet2: "Learn to read blueprints and understand plumbing systems.",
 
           timeCommitment: "6 months to 2 years (certification)",
         },
@@ -92,22 +90,23 @@ const PlumberTree = () => {
                   jobTitle: "Master Plumber",
                   bullet1:
                     "Design and install complex plumbing systems for large-scale projects.",
-                  bullet2:
-                    "Train and supervise journeymen and apprentices.",
-        
+                  bullet2: "Train and supervise journeymen and apprentices.",
+
                   timeCommitment: "5+ years ",
                 },
               },
             ],
           },
-         
+
           {
             name: "$60k-85k/year",
             attributes: {
               jobTitle: "Specialist Roles",
-              bullet1: "Pipefitting/Steamfitting: Working with high-pressure systems.",
-              bullet2: "Service and Repair: Focusing on residential and commercial plumbing repairs.",
-           
+              bullet1:
+                "Pipefitting/Steamfitting: Working with high-pressure systems.",
+              bullet2:
+                "Service and Repair: Focusing on residential and commercial plumbing repairs.",
+
               timeCommitment: "5+ years",
             },
           },
@@ -121,7 +120,6 @@ const PlumberTree = () => {
               timeCommitment: "Master plumber license",
             },
           },
-          
         ],
       },
     ],
@@ -211,7 +209,6 @@ const PlumberTree = () => {
                           {nodeDatum.attributes.bullet2}
                         </p>
                       </li>
-                     
                     </ul>
                     <a
                       class="w-full mt-2 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 "
@@ -240,10 +237,10 @@ const PlumberTree = () => {
           ) : nodeDatum.name === selectedNodeNameDrawer &&
             selectedNodeNameDrawer === "$60k-85k/year" ? (
             <PlumberSpecialistDrawer open={open} toggle={toggleModal} />
-          ) :  nodeDatum.name === selectedNodeNameDrawer &&
-      selectedNodeNameDrawer === "$80k-150k+/year" ? (
-      <PlumberBusinessOwner open={open} toggle={toggleModal} />
-    ) :  null}
+          ) : nodeDatum.name === selectedNodeNameDrawer &&
+            selectedNodeNameDrawer === "$80k-150k+/year" ? (
+            <PlumberBusinessOwner open={open} toggle={toggleModal} />
+          ) : null}
         </>
       </foreignObject>
     </>
@@ -284,8 +281,8 @@ const PlumberTree = () => {
 
   // const customPathFunc = (linkData, orientation) => {
   //   const { source, target } = linkData;
+  // Example of using offsets
 
-  //   // Example of using offsets
   //   const xOffset = target.data.attributes?.xOffset || 0;
   //   const yOffset = target.data.attributes?.yOffset || 0;
 
@@ -293,10 +290,10 @@ const PlumberTree = () => {
   //           C${source.x + xOffset},${(source.y + target.y) / 2 + yOffset}
   //           ${target.x - xOffset},${(source.y + target.y) / 2 - yOffset}
   //           ${target.x},${target.y}`;
-  // };
+  //  };
 
   return (
-    <div ref={treeContainerRef} style={{ height: "85vh", width: "100vw" }}>
+    <div ref={treeContainerRef} className="md:h-[calc(100vh+60px)] w-full">
       <Tree
         separation={nodeSeparation}
         translate={treeTranslate}

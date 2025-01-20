@@ -6,7 +6,7 @@ import HVACTree from "./HVACTree";
 import PlumberTree from "./PlumberTree";
 
 const CareerPaths = () => {
-  const [selectedTree, setSelectedTree] = useState("trucking");
+  const [selectedTree, setSelectedTree] = useState("plumbing");
 
   return (
     <>
@@ -217,7 +217,8 @@ const CareerPaths = () => {
                 height="24"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#808080"
+                // stroke="#808080"
+                  stroke="#48bb78"
                 stroke-width="3"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -236,7 +237,8 @@ const CareerPaths = () => {
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
-                stroke="#C70039"
+                // stroke="#C70039"
+                  stroke="#48bb78"
                 className="size-5"
               >
                 <path

@@ -229,9 +229,13 @@ const DoerHeader = () => {
     console.log("json resopnse", json.message.content);
 
     setResponse(json.message.content);
-    setLoading(false);
+ 
   };
 
+useEffect(() => {
+  if (response) {
+    setLoading(false);
+  }}, [response])
   return (
     <>
       <header class="flex flex-wrap  md:justify-start md:flex-nowrap z-50 w-full bg-white  ">

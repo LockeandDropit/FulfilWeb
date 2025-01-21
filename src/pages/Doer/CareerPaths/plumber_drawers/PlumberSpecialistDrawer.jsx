@@ -12,15 +12,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const PlumberSpecialistDrawer = ({toggle, open}) => {
-
-
+const PlumberSpecialistDrawer = ({ toggle, open }) => {
   const handleClose = () => {
     toggle();
-  }
-    
-
-
+  };
 
   return (
     <div>
@@ -40,7 +35,7 @@ const PlumberSpecialistDrawer = ({toggle, open}) => {
                           for="hs-pro-dactmt"
                           class="block mb-2 text-2xl font-medium text-gray-900"
                         >
-                     Plumber Specialist Roles
+                          Plumber Specialist Roles
                         </label>
                       </div>
 
@@ -50,13 +45,19 @@ const PlumberSpecialistDrawer = ({toggle, open}) => {
                             Average Salary:
                           </p>
                           <p className="ml-1 text-md font-medium ">
-                          $60,000 - $85,000
+                            $60,000 - $85,000
                           </p>
-                       
                         </div>
                       </div>
                       <div class="space-y-2 ">
-                        <div class="flex align-center items-center hover:underline cursor-pointer" onClick={() => window.open("https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm")}>
+                        <div
+                          class="flex align-center items-center hover:underline cursor-pointer"
+                          onClick={() =>
+                            window.open(
+                              "https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm"
+                            )
+                          }
+                        >
                           <p className="text-md font-medium ">
                             Industry Growth:
                           </p>
@@ -81,17 +82,18 @@ const PlumberSpecialistDrawer = ({toggle, open}) => {
                         </div>
                       </div>
                       <div class="space-y-2 ">
-                        <div class="flex align-center items-center cursor-pointer hover:underline"  onClick={() =>
-                              window.open(
-                                "https://www.indeed.com/jobs?q=HVAC&l=Minneapolis&from=searchOnDesktopSerp&cf-turnstile-response=0.WHO9ovb5eWqV7caFbf8UAcvFnO9ZAs50_sU8E1e39HRo7pwY5lBg-EXYJsvX3cxPe_3O0JyNx4I-zwmNrxqXuu1kZAbTGV75say_j6oAUR5d2-jVAyT-aedz7dGrj3Dr6yu-r5ha-xbMZgolvvh-DkL8WzEHM4ADBzR9q0069qK_pAyP0XXPmpVMkSS0-3wuHXjw8NM1bQ7dPovXpXkruwiwk04aD3uQ3maTXBDll9agtU220zThwhIkmAnfbNQ6TrZo1aZtrWSgs9aMceI9efvV6bym4ruOTlLcPIFc3Du0JRnELzGWto-iaSThCszZbhTEkjOlBPIZpi-Lm3KcKUwuzC8S-9bLT17z5AZLyBbfwNFSGESLiZBaCB3hX-deMKnMtDotvbclK2FM5Xbh7LebI_z_ZmNMYkMQ6Bjxzf3vdQR6EmPPE_z2T8Ma8b9MY2fuB62gUrg3hW0Rq2O5r4OvF6L82Kl_ilMk13q6398FTotwwCZnw6PIuSPNdOtFe_zvXjcT8DcI-kHtN2_y9Au142TIOYP9hrWvvo1GwxbqdKhKl8ZgHwaDejXPTjLPgC5lOdHVKLODvhaqu8_YoPPtTsxgJic7ENPw8-WSnkh44lU7I4s_XwcY5oWKzEM-CoGfqH8D3W3v-rYIuM7RB-lv8-36dopsFnx-rTI7n6Y-4oAcqFTTXEQ6I-Lm8qL9UycczSc7KTkVoSbImalR4hRjc24tuYEGWKpGA6pNCzO5l-Jd5WjTJsjeUv-DfpF6squ3tq3bBaNwQPb5qRsuUkj0NHpZG8kqF65p3Zl45vouwnC9TsdvEjLd_QXAUEmxP8v0nWDNCUoG7QQubhuDig.-PfwiIIk69nGYIdnLIBHYA.d09c29160fd89317ea68cfe4a3335b6aeeecff30ccb75ccebeaae3458972ea94&vjk=ec90ab1d9df762bf"
-                              )
-                            }>
+                        <div
+                          class="flex align-center items-center cursor-pointer hover:underline"
+                          onClick={() =>
+                            window.open(
+                              "https://www.indeed.com/jobs?q=HVAC&l=Minneapolis&from=searchOnDesktopSerp&cf-turnstile-response=0.WHO9ovb5eWqV7caFbf8UAcvFnO9ZAs50_sU8E1e39HRo7pwY5lBg-EXYJsvX3cxPe_3O0JyNx4I-zwmNrxqXuu1kZAbTGV75say_j6oAUR5d2-jVAyT-aedz7dGrj3Dr6yu-r5ha-xbMZgolvvh-DkL8WzEHM4ADBzR9q0069qK_pAyP0XXPmpVMkSS0-3wuHXjw8NM1bQ7dPovXpXkruwiwk04aD3uQ3maTXBDll9agtU220zThwhIkmAnfbNQ6TrZo1aZtrWSgs9aMceI9efvV6bym4ruOTlLcPIFc3Du0JRnELzGWto-iaSThCszZbhTEkjOlBPIZpi-Lm3KcKUwuzC8S-9bLT17z5AZLyBbfwNFSGESLiZBaCB3hX-deMKnMtDotvbclK2FM5Xbh7LebI_z_ZmNMYkMQ6Bjxzf3vdQR6EmPPE_z2T8Ma8b9MY2fuB62gUrg3hW0Rq2O5r4OvF6L82Kl_ilMk13q6398FTotwwCZnw6PIuSPNdOtFe_zvXjcT8DcI-kHtN2_y9Au142TIOYP9hrWvvo1GwxbqdKhKl8ZgHwaDejXPTjLPgC5lOdHVKLODvhaqu8_YoPPtTsxgJic7ENPw8-WSnkh44lU7I4s_XwcY5oWKzEM-CoGfqH8D3W3v-rYIuM7RB-lv8-36dopsFnx-rTI7n6Y-4oAcqFTTXEQ6I-Lm8qL9UycczSc7KTkVoSbImalR4hRjc24tuYEGWKpGA6pNCzO5l-Jd5WjTJsjeUv-DfpF6squ3tq3bBaNwQPb5qRsuUkj0NHpZG8kqF65p3Zl45vouwnC9TsdvEjLd_QXAUEmxP8v0nWDNCUoG7QQubhuDig.-PfwiIIk69nGYIdnLIBHYA.d09c29160fd89317ea68cfe4a3335b6aeeecff30ccb75ccebeaae3458972ea94&vjk=ec90ab1d9df762bf"
+                            )
+                          }
+                        >
                           <p className="text-md font-medium ">
                             Openings Near You:
                           </p>
-                          <p
-                            className="ml-1 text-md text-gray-800 hover:text-gray-900 font-medium cursor-pointer hover:underline"
-                          >
+                          <p className="ml-1 text-md text-gray-800 hover:text-gray-900 font-medium cursor-pointer hover:underline">
                             300+
                           </p>
                           <svg
@@ -122,7 +124,10 @@ const PlumberSpecialistDrawer = ({toggle, open}) => {
                         What you'll be doing
                       </label>
                       <div className="w-full prose prose-li  marker:text-black mb-4 ">
-                      Focuses on complex system installations or specializes in specific areas, such as refrigeration, geothermal systems, or energy-efficient HVAC solutions.                      </div>
+                        Focuses on complex system installations or specializes
+                        in specific areas, such as refrigeration, geothermal
+                        systems, or energy-efficient HVAC solutions.{" "}
+                      </div>
                     </div>
 
                     <div class="space-y-2 mt-6 mb-4">
@@ -137,21 +142,22 @@ const PlumberSpecialistDrawer = ({toggle, open}) => {
                         <ul className="list-disc px-3 ">
                           <li class="mt-1 text-gray-700">
                             <p className="">
-                             
-                            Pipefitting/Steamfitting: Working with high-pressure systems in industrial settings.
+                              Pipefitting/Steamfitting: Working with
+                              high-pressure systems in industrial settings.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                           
-                            Service and Repair: Focusing on residential and commercial plumbing repairs.                            </p>
+                              Service and Repair: Focusing on residential and
+                              commercial plumbing repairs.
+                            </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                            Green Plumbing: Specializing in energy-efficient systems, such as solar water heating.
+                              Green Plumbing: Specializing in energy-efficient
+                              systems, such as solar water heating.
                             </p>
                           </li>
-                         
                         </ul>
                       </div>
                     </div>
@@ -167,15 +173,13 @@ const PlumberSpecialistDrawer = ({toggle, open}) => {
                         <ul className="list-disc px-3 ">
                           <li class="mt-1 text-gray-700">
                             <p className="">
-                            Additional certifications in the specialized area (e.g., ASSE certifications for green plumbing).
+                              Additional certifications in the specialized area
+                              (e.g., ASSE certifications for green plumbing).
                             </p>
                           </li>
                           <li class=" text-gray-700">
-                            <p className="">
-                            5+ years of experience 
-                            </p>
+                            <p className="">5+ years of experience</p>
                           </li>
-                         
                         </ul>
                       </div>
                     </div>
@@ -184,7 +188,7 @@ const PlumberSpecialistDrawer = ({toggle, open}) => {
                         for="dactmi"
                         class="block mb-2 text-lg font-medium text-gray-800 "
                       >
-                       Open Positions{" "}
+                        Open Positions{" "}
                         <span
                           className="cursor-pointer hover:underline text-base text-gray-700 "
                           onClick={() =>
@@ -211,7 +215,7 @@ const PlumberSpecialistDrawer = ({toggle, open}) => {
                           </div>
                           <div>
                             <h3 class="font-medium text-gray-800">
-                              Plumbing Apprentice
+                              Licensed Plumber
                             </h3>
                             <h3 class="font-medium text-gray-800">
                               Street Plumbing Inc.
@@ -219,7 +223,7 @@ const PlumberSpecialistDrawer = ({toggle, open}) => {
                             <h3 class="text-sm text-gray-500">
                               Burnsville, MN
                             </h3>
-                        
+
                             <p class="mt-3 text-gray-700 line-clamp-4">
                               Apply to open positions that provide on the job
                               training. Learn to install, repair, deal with
@@ -261,7 +265,6 @@ const PlumberSpecialistDrawer = ({toggle, open}) => {
               </div>
             </div>
           </DrawerBody>
-       
         </DrawerContent>
       </Drawer>
     </div>

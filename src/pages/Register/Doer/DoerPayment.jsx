@@ -126,7 +126,7 @@ const DoerPayment = () => {
                 ? "/DoerAddProfileInfo"
                 : results[0]._document !== null &&
                   results[0]._document.data.value.mapValue.fields.isEmployer
-                ? "/DoerMapScreen"
+                ? "/DoerHomepage"
                 : "/NeederMapScreen"
             )
           )
@@ -299,7 +299,8 @@ const DoerPayment = () => {
                 isPremium: true,
               })
                 .then(() =>
-                  navigate("/DoerMapView", { state: { firstVisit: true } })
+                  // navigate("/DoerMapView", { state: { firstVisit: true } })
+                navigate("/DoerHomepage", { state: { firstVisit: true } })
                 )
                 .catch((error) => console.log(error));
 

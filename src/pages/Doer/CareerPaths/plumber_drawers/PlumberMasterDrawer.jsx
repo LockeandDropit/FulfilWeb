@@ -215,7 +215,7 @@ const PlumberMasterDrawer = ({ toggle, open }) => {
                           </div>
                           <div>
                             <h3 class="font-medium text-gray-800">
-                              Plumbing Apprentice
+                            Licenced Plumber
                             </h3>
                             <h3 class="font-medium text-gray-800">
                               Street Plumbing Inc.

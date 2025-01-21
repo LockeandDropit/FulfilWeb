@@ -44,7 +44,7 @@ const HomepageEducation = ({user}) => {
 
 
   useEffect(() => {
-    getEdu();
+    // getEdu();
   }, []);
 
   useEffect(() => {

@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
 
 const HomepageJobs = ({user}) => {
   //fetch info from chatGPT
@@ -74,7 +76,7 @@ const HomepageJobs = ({user}) => {
   console.log(typeof returnedJobs);
 
   useEffect(() => {
-    getJobs();
+    // getJobs();
   }, []);
 
   useEffect(() => {
@@ -86,6 +88,19 @@ const HomepageJobs = ({user}) => {
   const handleOpenJob = (x) => {
     window.open(x.link);
   };
+
+    useEffect(() => {
+      if (user != null) {
+        const docRef = doc(db, "users", user.uid);
+  
+        getDoc(docRef).then((snapshot) => {
+          // console.log(snapshot.data());
+         setReturnedJobs(snapshot.data().returnedJobs)
+        });
+      } else {
+        console.log("oops!");
+      }
+    }, [user]);
 
   return (
     <div className="w-full bg-sky-400 py-6 py-12">

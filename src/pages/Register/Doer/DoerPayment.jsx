@@ -74,6 +74,7 @@ const DoerPayment = () => {
 
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [userInfo, setUserInfo] = useState(null)
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userID, setUserID] = useState(null);
   const [isEmployer1, setIsEmployer1] = useState(null);
@@ -232,6 +233,7 @@ const DoerPayment = () => {
     if (hasRun === false) {
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
+        console.log("currentUser",currentUser)
       });
       setHasRun(true);
     } else {
@@ -355,7 +357,7 @@ const DoerPayment = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userInput: `The user's location is ${user.city}, ${user.state}. The user's current pay is ${user.currentIncome} a year. The user is interested in ${user.userInterests}`,
+            userInput: `The user's location is ${userInfo.city}, ${userInfo.state}. The user's current pay is ${userInfo.currentIncome} a year. The user is interested in ${userInfo.userInterests}`,
           }),
         }
       );
@@ -371,12 +373,25 @@ const DoerPayment = () => {
     };
   
   
+        useEffect(() => {
+          if (user != null) {
+            const docRef = doc(db, "users", user.uid);
+      
+            getDoc(docRef).then((snapshot) => {
+              // console.log(snapshot.data());
+             setUserInfo(snapshot.data())
+            });
+          } else {
+            console.log("oops!");
+          }
+        }, [user]);
+
     useEffect(() => {
-      if (user) { 
+      if (userInfo) { 
+        console.log("userInfo", userInfo)
         getJobs();   
       }
-     
-    }, [user]);
+    }, [userInfo]);
 
  
       const uploadJobs = async () => {

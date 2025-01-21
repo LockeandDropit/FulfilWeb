@@ -18,8 +18,7 @@ const PlumberBusinessOwner = ({ toggle, open }) => {
     toggle();
   };
 
-
-  const url = "https://www.youtube.com/watch?v=9MhagGqLaFk"
+  const url = "https://www.youtube.com/watch?v=9MhagGqLaFk";
 
   return (
     <div>
@@ -176,26 +175,27 @@ const PlumberBusinessOwner = ({ toggle, open }) => {
                         for="dactmi"
                         class="block mb-2 text-lg font-medium text-gray-800 "
                       >
-                      About The Business
-                 
+                        About The Business
                       </label>
-                     <div class="mt-4 relative max-w-5xl mx-auto mb-1 ">
-                                           <div class="w-full object-cover h-[480px] sm:h-80 rounded-xl">
-                                             <ReactPlayer
-                                               url={url}
-                                               width="100%"
-                                               height="100%"
-                                               controls={true}
-                                             />
-                                           </div>
-                                         </div>
+                      <div class="mt-4 relative max-w-5xl mx-auto mb-1 ">
+                        <div class="w-full object-cover h-[480px] sm:h-80 rounded-xl">
+                          <iframe
+                            className="w-full h-full"
+                            src="https://www.youtube.com/embed/9MhagGqLaFk"
+                            title="So You Want to Start a Plumbing Company... Here&#39;s How!"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen
+                          ></iframe>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </DrawerBody>
-         
         </DrawerContent>
       </Drawer>
     </div>

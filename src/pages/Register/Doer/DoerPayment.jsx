@@ -334,6 +334,67 @@ const DoerPayment = () => {
     navigate("/DoerMapView", { state: { firstVisit: true } });
   };
 
+
+
+  //this is the first openAI API fetch to get jobs info so it doesn't take so long to get the data on Load the first time they go to the home page
+  // the hope is that the amount of time it takes them to enter their payment information for the FT is longer than the API call.
+
+    const [returnedJobs, setReturnedJobs] = useState(null);
+    const [loading, setLoading] = useState(true);
+  
+    const getJobs = async () => {
+      
+      setLoading(true);
+  
+      const response = await fetch(
+        "https://openaiapi-c7qc.onrender.com/getJobs",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userInput: `The user's location is ${user.city}, ${user.state}. The user's current pay is ${user.currentIncome} a year. The user is interested in ${user.userInterests}`,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+  
+      const json = await response.json();
+      console.log("json resopnse w array", JSON.parse(json.message.content));
+  
+      setReturnedJobs(JSON.parse(json.message.content));
+      // setLoading(false);
+    };
+  
+  
+    useEffect(() => {
+      if (user) { 
+        getJobs();   
+      }
+     
+    }, [user]);
+
+ 
+      const uploadJobs = async () => {
+        await updateDoc(doc(db, "users", user.uid), {
+          returnedJobs: returnedJobs
+        });
+      };
+  
+  
+    useEffect(() => {
+      if (returnedJobs) {
+        uploadJobs()
+        setLoading(false);
+        //upload to FB here
+        
+      }
+    }, [returnedJobs]);
+
   const url = "https://www.youtube.com/watch?v=E1kAt7DLyg8";
 
   //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication

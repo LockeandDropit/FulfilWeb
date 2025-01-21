@@ -111,7 +111,11 @@ const HVACStarterDrawer = ({ toggle, open }) => {
 
                       <div className="flex"></div>
                     </div>
-
+                    <div class="mt-4 relative max-w-5xl mx-auto mb-1 ">
+                    <div class="w-full object-cover h-[480px] sm:h-80 rounded-xl">
+                    <iframe className="w-full h-full" src="https://www.youtube.com/embed/wBGd60OlF_4" title="A Day In The Life Of An HVAC Technician" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    </div>
                     <div class="space-y-2 mt-6 mb-4">
                       <label
                         for="dactmi"

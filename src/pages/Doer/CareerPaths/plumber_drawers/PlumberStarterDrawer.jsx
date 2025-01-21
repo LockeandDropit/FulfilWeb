@@ -117,12 +117,7 @@ const PlumberStarterDrawer = ({ toggle, open }) => {
                     <div>
                       <div class="mt-4 relative max-w-5xl mx-auto mb-1 ">
                         <div class="w-full object-cover h-[480px] sm:h-80 rounded-xl">
-                          <ReactPlayer
-                            url={url}
-                            width="100%"
-                            height="100%"
-                            controls={true}
-                          />
+                        <iframe className="w-full h-full" src="https://www.youtube.com/embed/Fbp5KltYAXk" title="A Day in the Life of a Plumber: Installing a Sink Faucet with Anthony (SUMMER VIDEO SERIES]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         </div>
                       </div>
                     </div>

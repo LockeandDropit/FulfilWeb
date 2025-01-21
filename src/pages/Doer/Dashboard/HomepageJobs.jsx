@@ -107,9 +107,9 @@ const HomepageJobs = ({user}) => {
               <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
               <div class="flex justify-between">
                   <div class="flex flex-col justify-center items-center  ">
-                  <span class="ml-1 inline-flex items-center gap-x-1 text-sm font-medium text-green-500 rounded-full">
+                  <span class="ml-1 inline-flex items-center gap-x-1 text-base font-medium text-green-500 rounded-full">
                     
-                      {job.percent_increase} pay increase
+                      {job.percent_increase}% pay increase
                       <svg
                         class="shrink-0 size-4"
                         xmlns="http://www.w3.org/2000/svg"

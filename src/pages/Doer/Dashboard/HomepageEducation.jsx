@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-
+import { db } from "../../../firebaseConfig";
+import { getDoc, doc } from "firebase/firestore";
 const HomepageEducation = ({user}) => {
   const [userResumeInformation, setUserResumeInformation] = useState(null);
 
@@ -46,6 +47,19 @@ const HomepageEducation = ({user}) => {
   useEffect(() => {
     // getEdu();
   }, []);
+
+    useEffect(() => {
+        if (user != null) {
+          const docRef = doc(db, "users", user.uid);
+    
+          getDoc(docRef).then((snapshot) => {
+            // console.log(snapshot.data());
+           setReturnedJobs(snapshot.data().returnedEducation)
+          });
+        } else {
+          console.log("oops!");
+        }
+      }, [user]);
 
   useEffect(() => {
     if (returnedJobs) {

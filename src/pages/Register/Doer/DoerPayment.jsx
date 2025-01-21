@@ -74,7 +74,8 @@ const DoerPayment = () => {
 
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
-  const [userInfo, setUserInfo] = useState(null)
+  const [userInfo, setUserInfo] = useState(null);
+  const [isPremium, setIsPremium] = useState(false)
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userID, setUserID] = useState(null);
   const [isEmployer1, setIsEmployer1] = useState(null);
@@ -302,7 +303,8 @@ const DoerPayment = () => {
               })
                 .then(() =>
                   // navigate("/DoerMapView", { state: { firstVisit: true } })
-                navigate("/DoerHomepage", { state: { firstVisit: true } })
+                setIsPremium(true)
+                
                 )
                 .catch((error) => console.log(error));
 
@@ -342,6 +344,7 @@ const DoerPayment = () => {
   // the hope is that the amount of time it takes them to enter their payment information for the FT is longer than the API call.
 
     const [returnedJobs, setReturnedJobs] = useState(null);
+    const [returnedEducation, setReturnedEducation] = useState(null);
     const [loading, setLoading] = useState(true);
   
     const getJobs = async () => {
@@ -371,6 +374,31 @@ const DoerPayment = () => {
       setReturnedJobs(JSON.parse(json.message.content));
       // setLoading(false);
     };
+
+    const getEdu = async () => {
+      setLoading(true);
+  
+      const response = await fetch("https://openaiapi-c7qc.onrender.com/getEdu", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userInput: `The user's location is ${userInfo.city}, ${userInfo.state}. The user's current pay is ${userInfo.currentIncome}. The user is interested in ${userInfo.userInterests}`,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+  
+      const json = await response.json();
+      console.log("json resopnse w array EDU", JSON.parse(json.message.content));
+  
+      setReturnedEducation(JSON.parse(json.message.content));
+      // setLoading(false);
+    };
+  
   
   
         useEffect(() => {
@@ -390,25 +418,30 @@ const DoerPayment = () => {
       if (userInfo) { 
         console.log("userInfo", userInfo)
         getJobs();   
+        getEdu();
       }
     }, [userInfo]);
 
  
-      const uploadJobs = async () => {
+      const uploadJobsAndEdu = async () => {
         await updateDoc(doc(db, "users", user.uid), {
-          returnedJobs: returnedJobs
+          returnedJobs: returnedJobs,
+          returnedEducation: returnedEducation
         });
       };
+    
   
   
     useEffect(() => {
-      if (returnedJobs) {
-        uploadJobs()
-        setLoading(false);
-        //upload to FB here
+      if (returnedJobs && returnedEducation && isPremium) {
+        uploadJobsAndEdu();
+    
+        navigate("/DoerHomepage", { state: { firstVisit: true } })
+        // setLoading(false);
+        
         
       }
-    }, [returnedJobs]);
+    }, [returnedJobs, returnedEducation, isPremium]);
 
   const url = "https://www.youtube.com/watch?v=E1kAt7DLyg8";
 
@@ -834,7 +867,7 @@ const DoerPayment = () => {
           </div>
 
           <div class="mt-7 text-center mb-10">
-            <p class="text-xs text-gray-400">Prices in USD. Taxes may apply.</p>
+            <p class="text-xs text-gray-400" onClick={() => setIsPremium(true)}>Prices in USD. Taxes may apply.</p>
           </div>
 
           <div class="relative overflow-hidden mb-8 sm:mb-16">

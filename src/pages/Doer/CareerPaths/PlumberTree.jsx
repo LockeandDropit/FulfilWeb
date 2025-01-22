@@ -303,7 +303,7 @@ const PlumberTree = () => {
         zoomable={false}
         draggable={false}
         orientation="vertical"
-        depthFactor={-250}
+        depthFactor={-260}
         // pathFunc={customPathFunc}
         pathClassFunc={() => "custom-link"}
         onNodeClick={handleClick}

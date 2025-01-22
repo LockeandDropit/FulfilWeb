@@ -24,8 +24,15 @@ import HVACSupervisorManagerDrawer from "./hvac_drawers/HVACSupervisorManagerDra
 import HVACEngineerDesignerDrawer from "./hvac_drawers/HVACEngineerDesignerDrawer";
 import HVACBusinessOwner from "./hvac_drawers/HVACBusinessOwner";
 import HVACStarterDrawer from "./hvac_drawers/HVACStarterDrawer";
+import PlumberStarterDrawer from "./plumber_drawers/PlumberStarterDrawer";
+import PlumberApprenticeDrawer from "./plumber_drawers/PlumberApprenticeDrawer";
+import PlumberJourneymanDrawer from "./plumber_drawers/PlumberJourneymanDrawer";
+import PlumberMasterDrawer from "./plumber_drawers/PlumberMasterDrawer";
+import PlumberSpecialistDrawer from "./plumber_drawers/PlumberSpecialistDrawer";
+import PlumberBusinessOwner from "./plumber_drawers/PlumberBusinessOwner";
+import EntryLevelCarpenterDrawer from "./carpenter_drawers/EnteryLevelCarpenterDrawer";
 
-const HVACTree = () => {
+const CarpenterTree = () => {
   const shouldRecenterTreeRef = useRef(true);
   const [treeTranslate, setTreeTranslate] = useState({ x: 0, y: 0 });
   const treeContainerRef = useRef(null);
@@ -59,70 +66,59 @@ const HVACTree = () => {
       {
         name: "$35k/year",
         attributes: {
-          jobTitle: "HVAC Apprentice",
-          bullet1:
-            "Work under a licensed HVAC technician to learn the trade.",
-          bullet2:
-            "Assist with installations, maintenance, basic repairs.",
+          jobTitle: "Plumbing Apprentice",
+          bullet1: "Assist with pipe installation, repairs, and maintenance.",
+          bullet2: "Learn to read blueprints and understand plumbing systems.",
 
-          timeCommitment: "6-12 months (certification)",
+          timeCommitment: "6 months to 2 years (certification)",
         },
         children: [
           {
-            name: "$45k-65k/year",
+            name: "$50k-70k/year",
             attributes: {
-              jobTitle: "HVAC Technician",
+              jobTitle: "Journeyman Plumber",
               bullet1:
-                "Perform installations, maintenance, and repair of HVAC systems",
-              bullet2: "May specialize in residential, commercial, or industrial.",
-              timeCommitment: "2-4 years",
+                "Install, maintain, and repair water, gas, and drainage systems.",
+              bullet2: "Troubleshoot complex plumbing issues.",
+              timeCommitment: "4-5 years",
 
               yOffset: 20,
             },
             children: [
               {
-                name: "$55k-75k/year",
+                name: "$70k-90k/year",
                 attributes: {
-                  jobTitle: "HVAC Specialist or Installer",
+                  jobTitle: "Master Plumber",
                   bullet1:
-                    "Focus on more complex installations, retrofits, and system designs.",
-                  bullet2:
-                    "Specialize in areas like refrigeration or geothermal systems.",
-        
+                    "Design and install complex plumbing systems for large-scale projects.",
+                  bullet2: "Train and supervise journeymen and apprentices.",
+
                   timeCommitment: "5+ years ",
                 },
               },
             ],
           },
-         
+
           {
-            name: "$70k-90k/year",
+            name: "$60k-85k/year",
             attributes: {
-              jobTitle: "HVAC Supervisor/Manager",
-              bullet1: "Oversee a team of technicians and manage projects.",
-              bullet2: "Scheduling, budgeting, and ensuring saftey regulation compliance.",
-           
-              timeCommitment: "7-10 years",
-            },
-          },
-          {
-            name: "$85k-120k/year",
-            attributes: {
-              jobTitle: "HVAC Engineer/Designer",
-              bullet1: "Design and engineer HVAC systems for large buildings/industrial settings.",
+              jobTitle: "Specialist Roles",
+              bullet1:
+                "Pipefitting/Steamfitting: Working with high-pressure systems.",
               bullet2:
-                "May involve advanced energy-efficient systems and custom solutions.",
-              timeCommitment: "Degree in ME + experience.",
-            },
-          },
-          {
-            name: "$85k-150k+/year",
-            attributes: {
-              jobTitle: "Business Owner or Contractor",
-              bullet1: "Start and operate your own HVAC business or contracting firm.",
-              bullet2:
-                "Oversee operations, manage teams, and handle business development.",
+                "Service and Repair: Focusing on residential and commercial plumbing repairs.",
+
               timeCommitment: "5+ years",
+            },
+          },
+          {
+            name: "$80k-150k+/year",
+            attributes: {
+              jobTitle: "Business Owner/Contractor",
+              bullet1: "Manage hiring, client acquisition, project management.",
+              bullet2:
+                "Provide quotes, bid on contracts, and oversee large-scale plumbing installations.",
+              timeCommitment: "Master plumber license",
             },
           },
         ],
@@ -214,7 +210,6 @@ const HVACTree = () => {
                           {nodeDatum.attributes.bullet2}
                         </p>
                       </li>
-                     
                     </ul>
                     <a
                       class="w-full mt-2 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 "
@@ -230,29 +225,23 @@ const HVACTree = () => {
           ) : null}
           {nodeDatum.name === selectedNodeNameDrawer &&
           selectedNodeNameDrawer === "Start Here" ? (
-            <HVACStarterDrawer open={open} toggle={toggleModal} />
+            <PlumberStarterDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
             selectedNodeNameDrawer === "$35k/year" ? (
-            <HVACApprenticeDrawer open={open} toggle={toggleModal} />
+            <EntryLevelCarpenterDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$45k-65k/year" ? (
-            <HVACTechnicianDrawer open={open} toggle={toggleModal} />
-          ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$55k-75k/year" ? (
-            <HVACSpecialistInstallerDrawer open={open} toggle={toggleModal} />
+            selectedNodeNameDrawer === "$50k-70k/year" ? (
+            <PlumberJourneymanDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
             selectedNodeNameDrawer === "$70k-90k/year" ? (
-            <HVACSupervisorManagerDrawer open={open} toggle={toggleModal} />
+            <PlumberMasterDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-          selectedNodeNameDrawer === "$70k-90k/year" ? (
-          <HVACSupervisorManagerDrawer open={open} toggle={toggleModal} />
-        ) : nodeDatum.name === selectedNodeNameDrawer &&
-        selectedNodeNameDrawer === "$85k-120k/year" ? (
-        <HVACEngineerDesignerDrawer open={open} toggle={toggleModal} />
-      ) : nodeDatum.name === selectedNodeNameDrawer &&
-      selectedNodeNameDrawer === "$85k-150k+/year" ? (
-      <HVACBusinessOwner open={open} toggle={toggleModal} />
-    ) :  null}
+            selectedNodeNameDrawer === "$60k-85k/year" ? (
+            <PlumberSpecialistDrawer open={open} toggle={toggleModal} />
+          ) : nodeDatum.name === selectedNodeNameDrawer &&
+            selectedNodeNameDrawer === "$80k-150k+/year" ? (
+            <PlumberBusinessOwner open={open} toggle={toggleModal} />
+          ) : null}
         </>
       </foreignObject>
     </>
@@ -293,8 +282,8 @@ const HVACTree = () => {
 
   // const customPathFunc = (linkData, orientation) => {
   //   const { source, target } = linkData;
+  // Example of using offsets
 
-  //   // Example of using offsets
   //   const xOffset = target.data.attributes?.xOffset || 0;
   //   const yOffset = target.data.attributes?.yOffset || 0;
 
@@ -302,7 +291,7 @@ const HVACTree = () => {
   //           C${source.x + xOffset},${(source.y + target.y) / 2 + yOffset}
   //           ${target.x - xOffset},${(source.y + target.y) / 2 - yOffset}
   //           ${target.x},${target.y}`;
-  // };
+  //  };
 
   return (
     <div ref={treeContainerRef} className="md:h-[calc(100vh+60px)] w-full">
@@ -315,7 +304,7 @@ const HVACTree = () => {
         zoomable={false}
         draggable={false}
         orientation="vertical"
-        depthFactor={-250}
+        depthFactor={-260}
         // pathFunc={customPathFunc}
         pathClassFunc={() => "custom-link"}
         onNodeClick={handleClick}
@@ -327,4 +316,4 @@ const HVACTree = () => {
   );
 };
 
-export default HVACTree;
+export default CarpenterTree;

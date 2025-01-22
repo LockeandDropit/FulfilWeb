@@ -12,7 +12,7 @@ const Greeting = ({user}) => {
   <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center ">
     <div className='mt-6 md:mt-16  '>
       <h1 class="block text-3xl font-bold text-gray-800 sm:text-3xl lg:text-3xl lg:leading-tight ">Welcome, {user?.firstName} </h1>
-      <p className=' text-gray-500 mt-3'>Snapshot:</p>
+      {/* <p className=' text-gray-500 mt-3'>Snapshot:</p> */}
       <div className='flex flex-row'>
       <p class="mt-2 text-lg font-medium text-gray-800">Current Income:</p>
       <p class="mt-2 text-lg text-gray-800 ml-2">${user?.currentIncome}/year</p>

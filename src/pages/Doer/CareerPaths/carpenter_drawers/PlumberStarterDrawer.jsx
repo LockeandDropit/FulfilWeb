@@ -11,11 +11,13 @@ import {
   DrawerCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
+import ReactPlayer from "react-player";
 
-const CDLStarterDrawer = ({ toggle, open }) => {
+const PlumberStarterDrawer = ({ toggle, open }) => {
   const handleClose = () => {
     toggle();
   };
+  const url = "https://www.youtube.com/watch?v=Fbp5KltYAXk";
 
   return (
     <div>
@@ -35,35 +37,34 @@ const CDLStarterDrawer = ({ toggle, open }) => {
                           for="hs-pro-dactmt"
                           class="block mb-2 text-2xl font-medium text-gray-900"
                         >
-                          Become a truck driver!
+                          Become A Plumbing Professional
                         </label>
                       </div>
-
                       <div class="space-y-2 ">
                         <div class="flex align-items-center">
                           <p className="text-md font-medium ">
                             Average Salary:
                           </p>
                           <p className="ml-1 text-md font-medium ">
-                            $80,000 - $
+                            $55,000 - $75,000
                           </p>
-                          <label
-                            for="hs-pro-dactmt"
-                            class="block  text-md font-medium text-gray-800 "
-                          >
-                            120,000
-                          </label>
                         </div>
                       </div>
                       <div class="space-y-2 ">
-                        <div class="flex align-center  items-center">
+                        <div
+                          class="flex align-center items-center hover:underline cursor-pointer"
+                          onClick={() =>
+                            window.open(
+                              "https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm"
+                            )
+                          }
+                        >
                           <p className="text-md font-medium ">
                             Industry Growth:
                           </p>
                           <p className="ml-1 text-md font-medium text-green-600">
-                            4.5%
+                            6%
                           </p>
-
                           <svg
                             class="shrink-0 size-5 ml-1"
                             xmlns="http://www.w3.org/2000/svg"
@@ -82,20 +83,19 @@ const CDLStarterDrawer = ({ toggle, open }) => {
                         </div>
                       </div>
                       <div class="space-y-2 ">
-                        <div class="flex align-center items-center">
+                        <div
+                          class="flex align-center items-center cursor-pointer hover:underline"
+                          onClick={() =>
+                            window.open(
+                              "https://www.indeed.com/jobs?q=HVAC&l=Minneapolis&from=searchOnDesktopSerp&cf-turnstile-response=0.WHO9ovb5eWqV7caFbf8UAcvFnO9ZAs50_sU8E1e39HRo7pwY5lBg-EXYJsvX3cxPe_3O0JyNx4I-zwmNrxqXuu1kZAbTGV75say_j6oAUR5d2-jVAyT-aedz7dGrj3Dr6yu-r5ha-xbMZgolvvh-DkL8WzEHM4ADBzR9q0069qK_pAyP0XXPmpVMkSS0-3wuHXjw8NM1bQ7dPovXpXkruwiwk04aD3uQ3maTXBDll9agtU220zThwhIkmAnfbNQ6TrZo1aZtrWSgs9aMceI9efvV6bym4ruOTlLcPIFc3Du0JRnELzGWto-iaSThCszZbhTEkjOlBPIZpi-Lm3KcKUwuzC8S-9bLT17z5AZLyBbfwNFSGESLiZBaCB3hX-deMKnMtDotvbclK2FM5Xbh7LebI_z_ZmNMYkMQ6Bjxzf3vdQR6EmPPE_z2T8Ma8b9MY2fuB62gUrg3hW0Rq2O5r4OvF6L82Kl_ilMk13q6398FTotwwCZnw6PIuSPNdOtFe_zvXjcT8DcI-kHtN2_y9Au142TIOYP9hrWvvo1GwxbqdKhKl8ZgHwaDejXPTjLPgC5lOdHVKLODvhaqu8_YoPPtTsxgJic7ENPw8-WSnkh44lU7I4s_XwcY5oWKzEM-CoGfqH8D3W3v-rYIuM7RB-lv8-36dopsFnx-rTI7n6Y-4oAcqFTTXEQ6I-Lm8qL9UycczSc7KTkVoSbImalR4hRjc24tuYEGWKpGA6pNCzO5l-Jd5WjTJsjeUv-DfpF6squ3tq3bBaNwQPb5qRsuUkj0NHpZG8kqF65p3Zl45vouwnC9TsdvEjLd_QXAUEmxP8v0nWDNCUoG7QQubhuDig.-PfwiIIk69nGYIdnLIBHYA.d09c29160fd89317ea68cfe4a3335b6aeeecff30ccb75ccebeaae3458972ea94&vjk=ec90ab1d9df762bf"
+                            )
+                          }
+                        >
                           <p className="text-md font-medium ">
                             Openings Near You:
                           </p>
-
-                          <p
-                            className="ml-1 text-md text-gray-800 hover:text-gray-900 font-medium cursor-pointer hover:underline"
-                            onClick={() =>
-                              window.open(
-                                "https://www.indeed.com/jobs?q=class+a+cdl+driver&l=Minneapolis%2C+MN&from=searchOnDesktopSerp%2Cwhatautocomplete&vjk=cb01c123a1e663fa"
-                              )
-                            }
-                          >
-                            2,490
+                          <p className="ml-1 text-md text-gray-800 hover:text-gray-900 font-medium cursor-pointer hover:underline">
+                            300+
                           </p>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -113,52 +113,45 @@ const CDLStarterDrawer = ({ toggle, open }) => {
                           </svg>
                         </div>
                       </div>
-
-                      <div className="flex"></div>
                     </div>
-                    <div class="mt-4 relative max-w-5xl mx-auto mb-1 ">
-                    <label
-                        for="dactmi"
-                        class="block mb-2 text-lg font-medium text-gray-800 "
-                      >
-                        Day In The Life
-                      </label>
+                    <div>
+                      <div class="mt-4 relative max-w-5xl mx-auto mb-1 ">
                         <div class="w-full object-cover h-[480px] sm:h-80 rounded-xl">
-                        <iframe className="w-full h-full" src="https://www.youtube.com/embed/31Wj5TrIdDE" title="Day In The Life Of A ROOKIE Truck Driver" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <iframe className="w-full h-full" src="https://www.youtube.com/embed/Fbp5KltYAXk" title="A Day in the Life of a Plumber: Installing a Sink Faucet with Anthony (SUMMER VIDEO SERIES]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         </div>
                       </div>
-                   
+                    </div>
                     <div class="space-y-2 mt-6 mb-4">
                       <label
                         for="dactmi"
-                        class="block mb-2 text-lg font-medium text-gray-800 "
+                        class="block mb-2 text-xl font-medium text-gray-800 "
                       >
-                        Education
+                        Get Started!
                       </label>
-
                       <div class="mb-4">
                         <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                           <div class="flex justify-between">
                             <div class="flex flex-col justify-center items-center size-[38px] border border-gray-200 rounded-lg ">
                               <img
-                                src="/landingImages/dctclogo.jpg"
+                                src="/landingImages/HTClogo.jpg"
                                 alt=""
-                                class="shrink-0 size-16  "
+                                class="shrink-0 size-7  "
                                 width="32"
                                 height="32"
                               />
                             </div>
                           </div>
-
                           <div>
                             <h3 class="font-medium text-gray-800">
-                              CDL Training
+                              Plumbing Pre-Apprenticeship
                             </h3>
                             <h3 class="font-medium text-gray-800">
-                              Dakota County Technical College
+                              Hennepin Technical College
                             </h3>
-                            <h3 class="text-sm text-gray-500">Rosemount, MN</h3>
-                            <div className="mt-1 flex ">
+                            <h3 class="text-sm text-gray-500">
+                              Minneapolis, MN
+                            </h3>
+                            {/* <div className="mt-1 flex ">
                               <h3 class="text-sm text-gray-500 line-clamp-1">
                                 <p className="mr-1 font-medium text-sm text-gray-800">
                                   Avg. Salary:
@@ -183,24 +176,29 @@ const CDLStarterDrawer = ({ toggle, open }) => {
                                 </svg>
                                 25% pay increase
                               </span>
-                            </div>
+                            </div> */}
                             <p class="mt-3 text-gray-700 line-clamp-4">
-                              This six-week program offers training for a Class
-                              A CDL (automatic transmission), equipping
-                              participants to successfully pass the Class A CDL
-                              driving exam while fully adhering to Federal Motor
-                              Carrier Safety Administration (FMCSA)
-                              requirements.
+                              The Plumbing Pre-Apprenticeship program at
+                              Hennepin Technical College equips students with
+                              the foundational skills needed to launch a career
+                              as a plumber or pipefitter. Participants gain
+                              hands-on experience in safety practices,
+                              understanding plumbing codes, tool usage,
+                              blueprint reading, and plumbing system
+                              installation. Train to work on advanced systems
+                              like rooftop units, high-efficiency furnaces,
+                              hydronic boilers, chillers, energy management
+                              systems, and refrigeration equipment like ice
+                              machines, walk-in coolers, and display cases.
                             </p>
                           </div>
-
                           <div className="flex items-center justify-center mt-auto mb-1">
                             <button
                               type="button"
                               class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
                               onClick={() =>
                                 window.open(
-                                  "https://www.dctc.edu/academics/short-term-programs/"
+                                  "https://hennepintech.edu/academic-programs/architecture-construction/plumbing-pre-apprenticeship.html"
                                 )
                               }
                             >
@@ -229,15 +227,24 @@ const CDLStarterDrawer = ({ toggle, open }) => {
                         for="dactmi"
                         class="block mb-2 text-lg font-medium text-gray-800 "
                       >
-                        Jobs with Training
+                        Jobs with Training{" "}
+                        <span
+                          className="cursor-pointer hover:underline text-base text-gray-700 "
+                          onClick={() =>
+                            window.open(
+                              "https://www.indeed.com/jobs?q=HVAC&l=Minneapolis&from=searchOnDesktopSerp&cf-turnstile-response=0.WHO9ovb5eWqV7caFbf8UAcvFnO9ZAs50_sU8E1e39HRo7pwY5lBg-EXYJsvX3cxPe_3O0JyNx4I-zwmNrxqXuu1kZAbTGV75say_j6oAUR5d2-jVAyT-aedz7dGrj3Dr6yu-r5ha-xbMZgolvvh-DkL8WzEHM4ADBzR9q0069qK_pAyP0XXPmpVMkSS0-3wuHXjw8NM1bQ7dPovXpXkruwiwk04aD3uQ3maTXBDll9agtU220zThwhIkmAnfbNQ6TrZo1aZtrWSgs9aMceI9efvV6bym4ruOTlLcPIFc3Du0JRnELzGWto-iaSThCszZbhTEkjOlBPIZpi-Lm3KcKUwuzC8S-9bLT17z5AZLyBbfwNFSGESLiZBaCB3hX-deMKnMtDotvbclK2FM5Xbh7LebI_z_ZmNMYkMQ6Bjxzf3vdQR6EmPPE_z2T8Ma8b9MY2fuB62gUrg3hW0Rq2O5r4OvF6L82Kl_ilMk13q6398FTotwwCZnw6PIuSPNdOtFe_zvXjcT8DcI-kHtN2_y9Au142TIOYP9hrWvvo1GwxbqdKhKl8ZgHwaDejXPTjLPgC5lOdHVKLODvhaqu8_YoPPtTsxgJic7ENPw8-WSnkh44lU7I4s_XwcY5oWKzEM-CoGfqH8D3W3v-rYIuM7RB-lv8-36dopsFnx-rTI7n6Y-4oAcqFTTXEQ6I-Lm8qL9UycczSc7KTkVoSbImalR4hRjc24tuYEGWKpGA6pNCzO5l-Jd5WjTJsjeUv-DfpF6squ3tq3bBaNwQPb5qRsuUkj0NHpZG8kqF65p3Zl45vouwnC9TsdvEjLd_QXAUEmxP8v0nWDNCUoG7QQubhuDig.-PfwiIIk69nGYIdnLIBHYA.d09c29160fd89317ea68cfe4a3335b6aeeecff30ccb75ccebeaae3458972ea94&vjk=ec90ab1d9df762bf"
+                            )
+                          }
+                        >
+                          (See more)
+                        </span>
                       </label>
-
                       <div class="mb-4">
                         <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                           <div class="flex justify-between">
                             <div class="flex flex-col justify-center items-center size-[38px] border border-gray-200 rounded-lg ">
                               <img
-                                src="/landingImages/schniederlogo.jpg"
+                                src="/landingImages/streetplumbinglogo.jpg"
                                 alt=""
                                 class="shrink-0 size-6  "
                                 width="32"
@@ -245,21 +252,22 @@ const CDLStarterDrawer = ({ toggle, open }) => {
                               />
                             </div>
                           </div>
-
                           <div>
                             <h3 class="font-medium text-gray-800">
-                              Paid CDL Training
+                              Plumbing Apprentice
                             </h3>
-                            <h3 class="font-medium text-gray-800">Schnieder</h3>
+                            <h3 class="font-medium text-gray-800">
+                              Street Plumbing Inc.
+                            </h3>
                             <h3 class="text-sm text-gray-500">
-                              Various locations
+                              Burnsville, MN
                             </h3>
-                            <div className="mt-1 flex flex-row">
+                            {/* <div className="mt-1 flex flex-row">
                               <h3 class="text-sm text-gray-500 line-clamp-1">
                                 <span className=" font-medium text-sm text-gray-800">
-                                  Avg. Salary:
+                                   Salary:
                                 </span>{" "}
-                                $65,000
+                                $75,000 - $135,000
                               </h3>
                               <span class="ml-1 inline-flex items-center gap-x-1 text-xs font-medium text-green-500 rounded-full">
                                 <svg
@@ -279,21 +287,20 @@ const CDLStarterDrawer = ({ toggle, open }) => {
                                 </svg>
                                 25% pay increase
                               </span>
-                            </div>
+                            </div> */}
                             <p class="mt-3 text-gray-700 line-clamp-4">
-                              This is a compensated training program lasting
-                              five to seven and a half weeks, conducted at one
-                              of Schneider's training facilities.
+                              Apply to open positions that provide on the job
+                              training. Learn to install, repair, deal with
+                              waste, vents, and water piping.
                             </p>
                           </div>
-
                           <div className="flex items-center justify-center mt-auto mb-1">
                             <button
                               type="button"
                               class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
                               onClick={() =>
                                 window.open(
-                                  "https://schneiderjobs.com/truck-driving-jobs/inexperienced/paid-cdl-training"
+                                  "https://www.streetplumbinginc.com/careers.html"
                                 )
                               }
                             >
@@ -328,4 +335,4 @@ const CDLStarterDrawer = ({ toggle, open }) => {
   );
 };
 
-export default CDLStarterDrawer;
+export default PlumberStarterDrawer;

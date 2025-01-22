@@ -136,9 +136,16 @@ const HomepageEducation = ({user}) => {
                   >
                     Save
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
+                    onClick={() => handleOpenJob(edu)}
+                  >
+                    Apply
+                  </button> */}
+                    <button
+                    type="button"
+                    class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
                     onClick={() => handleOpenJob(edu)}
                   >
                     Apply

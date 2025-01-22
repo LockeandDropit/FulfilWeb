@@ -22,6 +22,8 @@ const uploadAnswer = async () => {
     uploadAnswer();
     navigate("/DoerPayment")
   }
+
+
   
 
   return (

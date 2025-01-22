@@ -285,8 +285,15 @@ const Dashboard = () => {
     console.log("json resopnse", json.message.content);
 
     setResponse(json.message.content);
-    setLoading(false);
+ 
   };
+
+  useEffect(() => {
+    if (response) {
+      setLoading(false);
+    }
+  }, [response])
+
 
   const [userResumeInformation, setUserResumeInformation] = useState(null);
 

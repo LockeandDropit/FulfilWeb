@@ -292,8 +292,9 @@ const PlumberTree = () => {
   //           ${target.x},${target.y}`;
   //  };
 
+  //className="md:h-[calc(100vh+60px)] w-full"
   return (
-    <div ref={treeContainerRef} className="md:h-[calc(100vh+60px)] w-full">
+    <div ref={treeContainerRef} className="md:h-dvh w-full">
       <Tree
         separation={nodeSeparation}
         translate={treeTranslate}
@@ -303,7 +304,7 @@ const PlumberTree = () => {
         zoomable={false}
         draggable={false}
         orientation="vertical"
-        depthFactor={-260}
+        depthFactor={-270}
         // pathFunc={customPathFunc}
         pathClassFunc={() => "custom-link"}
         onNodeClick={handleClick}

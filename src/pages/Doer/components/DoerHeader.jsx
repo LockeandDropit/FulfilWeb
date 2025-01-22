@@ -126,9 +126,9 @@ const DoerHeader = () => {
   //laoding control
 
   const [loading, setLoading] = useState(true);
-  setTimeout(() => {
-    setLoading(false);
-  }, 1000);
+  // setTimeout(() => {
+  //   setLoading(false);
+  // }, 1000);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isPremium, setIsPremium] = useState(null);

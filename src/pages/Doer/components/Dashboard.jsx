@@ -288,14 +288,14 @@ const Dashboard = () => {
  
   };
 
-  useEffect(() => {
-    if (response) {
-      setTimeout(() => {
-        setLoading(false);
-      }, 4000)
+  // useEffect(() => {
+  //   if (response) {
+  //     setTimeout(() => {
+  //       setLoading(false);
+  //     }, 4000)
      
-    }
-  }, [response])
+  //   }
+  // }, [response])
 
 
   const [userResumeInformation, setUserResumeInformation] = useState(null);

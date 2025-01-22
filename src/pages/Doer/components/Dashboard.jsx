@@ -290,7 +290,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (response) {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 4000)
+     
     }
   }, [response])
 
@@ -321,7 +324,7 @@ const Dashboard = () => {
     console.log("json resopnse", json.message.content);
 
     setCompletedResume(json.message.content);
-    setLoading(false);
+    // setLoading(false);
   };
 
   return (

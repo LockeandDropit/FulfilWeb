@@ -125,7 +125,7 @@ const DoerHeader = () => {
 
   //laoding control
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   // setTimeout(() => {
   //   setLoading(false);
   // }, 1000);

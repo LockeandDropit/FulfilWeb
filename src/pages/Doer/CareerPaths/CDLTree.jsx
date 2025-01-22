@@ -284,7 +284,7 @@ const toggleModal = () => {
   return (
     <>
 
-      <div ref={treeContainerRef} className="md:h-[calc(100vh+60px)] w-full">
+      <div ref={treeContainerRef} className="md:h-[calc(100vh*.75)] w-full">
         {isLoading ?  (<p></p>) : (
            <Tree
            separation={nodeSeparation}

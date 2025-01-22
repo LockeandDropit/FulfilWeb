@@ -30,7 +30,13 @@ import PlumberJourneymanDrawer from "./plumber_drawers/PlumberJourneymanDrawer";
 import PlumberMasterDrawer from "./plumber_drawers/PlumberMasterDrawer";
 import PlumberSpecialistDrawer from "./plumber_drawers/PlumberSpecialistDrawer";
 import PlumberBusinessOwner from "./plumber_drawers/PlumberBusinessOwner";
-import EntryLevelCarpenterDrawer from "./carpenter_drawers/EnteryLevelCarpenterDrawer";
+import EntryLevelCarpenterDrawer from "./carpenter_drawers/CarpenterApprenticeDrawer";
+import CarpenterApprenticeDrawer from "./carpenter_drawers/CarpenterApprenticeDrawer";
+import CarpenterJourneymanDrawer from "./carpenter_drawers/CarpenterJourneymanDrawer";
+import CarpenterMasterDrawer from "./carpenter_drawers/CarpenterMasterDrawer";
+import CarpenterSpecialistDrawer from "./carpenter_drawers/CarpenterSpecialistDrawer";
+import CarpenterBusinessOwner from "./carpenter_drawers/CarpenterBusinessOwner";
+import CarpenterStarterDrawer from "./carpenter_drawers/CarpenterStarterDrawer";
 
 const CarpenterTree = () => {
   const shouldRecenterTreeRef = useRef(true);
@@ -66,59 +72,62 @@ const CarpenterTree = () => {
       {
         name: "$35k/year",
         attributes: {
-          jobTitle: "Plumbing Apprentice",
-          bullet1: "Assist with pipe installation, repairs, and maintenance.",
+          jobTitle: "Carpenter Apprentice",
+          bullet1: "Apprentices learn foundational carpentry skills while working under experienced professionals.",
           bullet2: "Learn to read blueprints and understand plumbing systems.",
 
-          timeCommitment: "6 months to 2 years (certification)",
+          timeCommitment: "None, some education",
         },
         children: [
           {
-            name: "$50k-70k/year",
+            name: "$45k-60k/year",
             attributes: {
-              jobTitle: "Journeyman Plumber",
+              jobTitle: "Journeyman Carpenter",
               bullet1:
-                "Install, maintain, and repair water, gas, and drainage systems.",
-              bullet2: "Troubleshoot complex plumbing issues.",
-              timeCommitment: "4-5 years",
+                "Journeyman carpenters can work independently on construction, renovation, and finishing tasks.",
+             
+              timeCommitment: "3-4 years",
 
               yOffset: 20,
             },
             children: [
               {
-                name: "$70k-90k/year",
-                attributes: {
-                  jobTitle: "Master Plumber",
-                  bullet1:
-                    "Design and install complex plumbing systems for large-scale projects.",
-                  bullet2: "Train and supervise journeymen and apprentices.",
-
-                  timeCommitment: "5+ years ",
-                },
+              
+                  name: "$70k-90k/year",
+                  attributes: {
+                    jobTitle: "Master Carpenter",
+                    bullet1:
+                      "Master carpenters are experts in the trade who lead teams, manage projects, and work on complex or high-value tasks.",
+                   
+                    timeCommitment: "7-10+ years",
+      
+                    yOffset: 20,
+                  },
               },
             ],
           },
 
           {
-            name: "$60k-85k/year",
+              
+            name: "$55k-75k/year",
             attributes: {
               jobTitle: "Specialist Roles",
               bullet1:
-                "Pipefitting/Steamfitting: Working with high-pressure systems.",
-              bullet2:
-                "Service and Repair: Focusing on residential and commercial plumbing repairs.",
+                "Finish Carpentry, Framing Carpentry, Cabinetmaking, Commercial.",
+             
+              timeCommitment: "5+ years ",
 
-              timeCommitment: "5+ years",
+              yOffset: 20,
             },
-          },
+        },
           {
             name: "$80k-150k+/year",
             attributes: {
               jobTitle: "Business Owner/Contractor",
-              bullet1: "Manage hiring, client acquisition, project management.",
+              bullet1: "Carpenters with entrepreneurial skills may start their own construction or carpentry businesses, taking on large-scale contracts or custom projects.",
               bullet2:
                 "Provide quotes, bid on contracts, and oversee large-scale plumbing installations.",
-              timeCommitment: "Master plumber license",
+              timeCommitment: "5+ years (reccomended)",
             },
           },
         ],
@@ -205,11 +214,7 @@ const CarpenterTree = () => {
                           {nodeDatum.attributes.bullet1}
                         </p>
                       </li>
-                      <li class=" text-gray-700">
-                        <p className="text-sm">
-                          {nodeDatum.attributes.bullet2}
-                        </p>
-                      </li>
+                    
                     </ul>
                     <a
                       class="w-full mt-2 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 "
@@ -225,22 +230,22 @@ const CarpenterTree = () => {
           ) : null}
           {nodeDatum.name === selectedNodeNameDrawer &&
           selectedNodeNameDrawer === "Start Here" ? (
-            <PlumberStarterDrawer open={open} toggle={toggleModal} />
+            <CarpenterStarterDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
             selectedNodeNameDrawer === "$35k/year" ? (
-            <EntryLevelCarpenterDrawer open={open} toggle={toggleModal} />
+            <CarpenterApprenticeDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$50k-70k/year" ? (
-            <PlumberJourneymanDrawer open={open} toggle={toggleModal} />
+            selectedNodeNameDrawer === "$45k-60k/year" ? (
+            <CarpenterJourneymanDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
             selectedNodeNameDrawer === "$70k-90k/year" ? (
-            <PlumberMasterDrawer open={open} toggle={toggleModal} />
+            <CarpenterMasterDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$60k-85k/year" ? (
-            <PlumberSpecialistDrawer open={open} toggle={toggleModal} />
+            selectedNodeNameDrawer === "$55k-75k/year" ? (
+            <CarpenterSpecialistDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
             selectedNodeNameDrawer === "$80k-150k+/year" ? (
-            <PlumberBusinessOwner open={open} toggle={toggleModal} />
+            <CarpenterBusinessOwner open={open} toggle={toggleModal} />
           ) : null}
         </>
       </foreignObject>
@@ -294,7 +299,7 @@ const CarpenterTree = () => {
   //  };
 
   return (
-    <div ref={treeContainerRef} className="md:h-[calc(100vh+60px)] w-full">
+    <div ref={treeContainerRef} className="md:h-[calc(100vh-100px)] w-full">
       <Tree
         separation={nodeSeparation}
         translate={treeTranslate}

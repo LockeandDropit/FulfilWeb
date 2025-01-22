@@ -24,8 +24,27 @@ import HVACSupervisorManagerDrawer from "./hvac_drawers/HVACSupervisorManagerDra
 import HVACEngineerDesignerDrawer from "./hvac_drawers/HVACEngineerDesignerDrawer";
 import HVACBusinessOwner from "./hvac_drawers/HVACBusinessOwner";
 import HVACStarterDrawer from "./hvac_drawers/HVACStarterDrawer";
+import PlumberStarterDrawer from "./plumber_drawers/PlumberStarterDrawer";
+import PlumberApprenticeDrawer from "./plumber_drawers/PlumberApprenticeDrawer";
+import PlumberJourneymanDrawer from "./plumber_drawers/PlumberJourneymanDrawer";
+import PlumberMasterDrawer from "./plumber_drawers/PlumberMasterDrawer";
+import PlumberSpecialistDrawer from "./plumber_drawers/PlumberSpecialistDrawer";
+import PlumberBusinessOwner from "./plumber_drawers/PlumberBusinessOwner";
+import EntryLevelCarpenterDrawer from "./carpenter_drawers/CarpenterApprenticeDrawer";
+import CarpenterApprenticeDrawer from "./carpenter_drawers/CarpenterApprenticeDrawer";
+import CarpenterJourneymanDrawer from "./carpenter_drawers/CarpenterJourneymanDrawer";
+import CarpenterMasterDrawer from "./carpenter_drawers/CarpenterMasterDrawer";
+import CarpenterSpecialistDrawer from "./carpenter_drawers/CarpenterSpecialistDrawer";
+import CarpenterBusinessOwner from "./carpenter_drawers/CarpenterBusinessOwner";
+import CarpenterStarterDrawer from "./carpenter_drawers/CarpenterStarterDrawer";
+import WelderStarterDrawer from "./welding_drawers/WelderStarterDrawer";
+import WeldingApprenticeDrawer from "./welding_drawers/WeldingApprenticeDrawer";
+import WelderCertifiedDrawer from "./welding_drawers/WelderCertifiedDrawer";
+import WelderSpecialistDrawer from "./welding_drawers/WelderSpecialistDrawer";
+import WelderBusinessOwner from "./welding_drawers/WelderBusinessOwner";
+import WelderSupervisorDrawer from "./welding_drawers/WelderSupervisorDrawer";
 
-const HVACTree = () => {
+const WelderTree = () => {
   const shouldRecenterTreeRef = useRef(true);
   const [treeTranslate, setTreeTranslate] = useState({ x: 0, y: 0 });
   const treeContainerRef = useRef(null);
@@ -59,70 +78,61 @@ const HVACTree = () => {
       {
         name: "$35k/year",
         attributes: {
-          jobTitle: "HVAC Apprentice",
-          bullet1:
-            "Work under a licensed HVAC technician to learn the trade.",
-          bullet2:
-            "Assist with installations, maintenance, basic repairs.",
+          jobTitle: "Welding Apprentice",
+          bullet1: "Learn fundamental welding techniques and safety protocols under the guidance of experienced welders. Apprentices gain on-the-job experience and classroom instruction.",
+   
 
-          timeCommitment: "6-12 months (certification)",
+          timeCommitment: "None",
         },
         children: [
           {
-            name: "$45k-65k/year",
+            name: "$40k-60k/year",
             attributes: {
-              jobTitle: "HVAC Technician",
+              jobTitle: "Certified Welder",
               bullet1:
-                "Perform installations, maintenance, and repair of HVAC systems",
-              bullet2: "May specialize in residential, commercial, or industrial.",
-              timeCommitment: "2-4 years",
+                "Skilled welders who are certified to work on various projects independently or as part of a team.",
+             
+              timeCommitment: "3-4 years",
 
               yOffset: 20,
             },
             children: [
               {
-                name: "$55k-75k/year",
-                attributes: {
-                  jobTitle: "HVAC Specialist or Installer",
-                  bullet1:
-                    "Focus on more complex installations, retrofits, and system designs.",
-                  bullet2:
-                    "Specialize in areas like refrigeration or geothermal systems.",
-        
-                  timeCommitment: "5+ years ",
-                },
+              
+                  name: "$70k-90k/year",
+                  attributes: {
+                    jobTitle: "Welding Supervisor",
+                    bullet1:
+                      "Supervisors oversee welding teams and ensure projects meet quality, safety, and compliance standards.",
+                   
+                    timeCommitment: "7-10 years",
+      
+                    yOffset: 20,
+                  },
               },
             ],
           },
-         
+
           {
-            name: "$70k-90k/year",
+              
+            name: "$60k-90k/year",
             attributes: {
-              jobTitle: "HVAC Supervisor/Manager",
-              bullet1: "Oversee a team of technicians and manage projects.",
-              bullet2: "Scheduling, budgeting, and ensuring saftey regulation compliance.",
-           
-              timeCommitment: "7-10 years",
+              jobTitle: "Specialist Roles",
+              bullet1:
+                "Pipe welding, structural Welding, underwater welding, and more",
+             
+              timeCommitment: "5+ years ",
+
+              yOffset: 20,
             },
-          },
+        },
           {
-            name: "$85k-120k/year",
+            name: "$80k-150k+/year",
             attributes: {
-              jobTitle: "HVAC Engineer/Designer",
-              bullet1: "Design and engineer HVAC systems for large buildings/industrial settings.",
-              bullet2:
-                "May involve advanced energy-efficient systems and custom solutions.",
-              timeCommitment: "Degree in ME + experience.",
-            },
-          },
-          {
-            name: "$85k-150k+/year",
-            attributes: {
-              jobTitle: "Business Owner or Contractor",
-              bullet1: "Start and operate your own HVAC business or contracting firm.",
-              bullet2:
-                "Oversee operations, manage teams, and handle business development.",
-              timeCommitment: "5+ years",
+              jobTitle: "Business Owner/Contractor",
+              bullet1: "Experienced welders may start their own business, offering specialized welding services to industrial, commercial, or residential clients.",
+              
+              timeCommitment: "5+ years (reccomended)",
             },
           },
         ],
@@ -209,12 +219,7 @@ const HVACTree = () => {
                           {nodeDatum.attributes.bullet1}
                         </p>
                       </li>
-                      <li class=" text-gray-700">
-                        <p className="text-sm">
-                          {nodeDatum.attributes.bullet2}
-                        </p>
-                      </li>
-                     
+                    
                     </ul>
                     <a
                       class="w-full mt-2 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 "
@@ -230,29 +235,23 @@ const HVACTree = () => {
           ) : null}
           {nodeDatum.name === selectedNodeNameDrawer &&
           selectedNodeNameDrawer === "Start Here" ? (
-            <HVACStarterDrawer open={open} toggle={toggleModal} />
+            <WelderStarterDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
             selectedNodeNameDrawer === "$35k/year" ? (
-            <HVACApprenticeDrawer open={open} toggle={toggleModal} />
+            <WeldingApprenticeDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$45k-65k/year" ? (
-            <HVACTechnicianDrawer open={open} toggle={toggleModal} />
+            selectedNodeNameDrawer === "$40k-60k/year" ? (
+            <WelderCertifiedDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$55k-75k/year" ? (
-            <HVACSpecialistInstallerDrawer open={open} toggle={toggleModal} />
-          ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$70k-90k/year" ? (
-            <HVACSupervisorManagerDrawer open={open} toggle={toggleModal} />
+            selectedNodeNameDrawer === "$60k-90k/year" ? (
+            <WelderSpecialistDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
           selectedNodeNameDrawer === "$70k-90k/year" ? (
-          <HVACSupervisorManagerDrawer open={open} toggle={toggleModal} />
+          <WelderSupervisorDrawer open={open} toggle={toggleModal} />
         ) : nodeDatum.name === selectedNodeNameDrawer &&
-        selectedNodeNameDrawer === "$85k-120k/year" ? (
-        <HVACEngineerDesignerDrawer open={open} toggle={toggleModal} />
-      ) : nodeDatum.name === selectedNodeNameDrawer &&
-      selectedNodeNameDrawer === "$85k-150k+/year" ? (
-      <HVACBusinessOwner open={open} toggle={toggleModal} />
-    ) :  null}
+            selectedNodeNameDrawer === "$80k-150k+/year" ? (
+            <WelderBusinessOwner open={open} toggle={toggleModal} />
+          )  : null}
         </>
       </foreignObject>
     </>
@@ -293,8 +292,8 @@ const HVACTree = () => {
 
   // const customPathFunc = (linkData, orientation) => {
   //   const { source, target } = linkData;
+  // Example of using offsets
 
-  //   // Example of using offsets
   //   const xOffset = target.data.attributes?.xOffset || 0;
   //   const yOffset = target.data.attributes?.yOffset || 0;
 
@@ -302,10 +301,10 @@ const HVACTree = () => {
   //           C${source.x + xOffset},${(source.y + target.y) / 2 + yOffset}
   //           ${target.x - xOffset},${(source.y + target.y) / 2 - yOffset}
   //           ${target.x},${target.y}`;
-  // };
+  //  };
 
   return (
-    <div ref={treeContainerRef} className="md:h-[calc(100vh-80px)] w-full">
+    <div ref={treeContainerRef} className="md:h-[calc(100vh-100px)] w-full">
       <Tree
         separation={nodeSeparation}
         translate={treeTranslate}
@@ -315,7 +314,7 @@ const HVACTree = () => {
         zoomable={false}
         draggable={false}
         orientation="vertical"
-        depthFactor={-270}
+        depthFactor={-260}
         // pathFunc={customPathFunc}
         pathClassFunc={() => "custom-link"}
         onNodeClick={handleClick}
@@ -327,4 +326,4 @@ const HVACTree = () => {
   );
 };
 
-export default HVACTree;
+export default WelderTree;

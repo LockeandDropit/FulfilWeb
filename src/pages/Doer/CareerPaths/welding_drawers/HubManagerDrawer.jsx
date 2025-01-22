@@ -11,19 +11,23 @@ import {
   DrawerCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import ReactPlayer from "react-player";
 
-const PlumberBusinessOwner = ({ toggle, open }) => {
+const HubManagerDrawer = ({toggle, open}) => {
+
+    
   const handleClose = () => {
     toggle();
-  };
+  }
+    
 
-  const url = "https://www.youtube.com/watch?v=9MhagGqLaFk";
+
+
+
 
   return (
     <div>
       {" "}
-      <Drawer onClose={() => handleClose()} isOpen={open} size={"lg"}>
+     <Drawer onClose={() => handleClose()} isOpen={open} size={"lg"}>
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader></DrawerHeader>
@@ -38,17 +42,24 @@ const PlumberBusinessOwner = ({ toggle, open }) => {
                           for="hs-pro-dactmt"
                           class="block mb-2 text-2xl font-medium text-gray-900"
                         >
-                          Plumbing Business Owner/Contractor
+                         Truck Hub Manager
                         </label>
                       </div>
+
                       <div class="space-y-2 ">
                         <div class="flex align-items-center">
                           <p className="text-md font-medium ">
                             Average Salary:
                           </p>
                           <p className="ml-1 text-md font-medium ">
-                            $80,000 - $150,000+
+                            $80,000 - $
                           </p>
+                          <label
+                            for="hs-pro-dactmt"
+                            class="block  text-md font-medium text-gray-800 "
+                          >
+                            120,000
+                          </label>
                         </div>
                       </div>
                       <div class="space-y-2 ">
@@ -59,6 +70,7 @@ const PlumberBusinessOwner = ({ toggle, open }) => {
                           <p className="ml-1 text-md font-medium text-green-600">
                             4.5%
                           </p>
+
                           <svg
                             class="shrink-0 size-5 ml-1"
                             xmlns="http://www.w3.org/2000/svg"
@@ -77,10 +89,11 @@ const PlumberBusinessOwner = ({ toggle, open }) => {
                         </div>
                       </div>
                       <div class="space-y-2 ">
-                        {/* <div class="flex align-center items-center">
+                        <div class="flex align-center items-center">
                           <p className="text-md font-medium ">
                             Openings Near You:
                           </p>
+
                           <p
                             className="ml-1 text-md text-gray-800 hover:text-gray-900 font-medium cursor-pointer hover:underline"
                             onClick={() =>
@@ -105,10 +118,12 @@ const PlumberBusinessOwner = ({ toggle, open }) => {
                               d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
                             />
                           </svg>
-                        </div> */}
+                        </div>
                       </div>
+
                       <div className="flex"></div>
                     </div>
+
                     <div class="space-y-2 mt-6 mb-4 ">
                       <label
                         for="dactmi"
@@ -117,10 +132,10 @@ const PlumberBusinessOwner = ({ toggle, open }) => {
                         What you'll be doing
                       </label>
                       <div className="w-full prose prose-li  marker:text-black mb-4 ">
-                        A licensed plumber who owns and operates their own
-                        plumbing business or contracting firm.{" "}
+                      A Truck Hub Operator oversees the coordination and management of trucking logistics at a distribution or trucking hub. They ensure that trucks are dispatched, loaded, unloaded, and maintained efficiently while adhering to schedules and safety regulations. This role is critical for smooth freight movement and supply chain operations.
                       </div>
                     </div>
+
                     <div class="space-y-2 mt-6 mb-4">
                       <label
                         for="dactmi"
@@ -128,19 +143,49 @@ const PlumberBusinessOwner = ({ toggle, open }) => {
                       >
                         Key Responsibilities
                       </label>
+
                       <div class="mb-4">
                         <ul className="list-disc px-3 ">
                           <li class="mt-1 text-gray-700">
                             <p className="">
-                              Manage all aspects of the business, including
-                              hiring, client acquisition, and project
-                              management.
+                              <span className="font-medium mr-1">
+                              Hub Operations:
+
+                              </span>
+                              Manage the arrival and departure of trucks, ensuring efficient scheduling.
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                              Provide quotes, bid on contracts, and oversee
-                              large-scale plumbing installations.
+                              <span className="font-medium mr-1">
+                              Load and Unload Supervision:
+                              </span>
+                              Oversee the loading and unloading of cargo, ensuring proper handling and compliance with weight regulations.
+                            </p>
+                          </li>
+                          <li class=" text-gray-700">
+                            <p className="">
+                              <span className="font-medium mr-1">
+                              Inventory and Documentation:
+                              </span>
+                              Track shipments, maintain records of deliveries and pickups, and update inventory databases.
+                            </p>
+                          </li>
+                          <li class=" text-gray-700">
+                            <p className="">
+                              <span className="font-medium mr-1">
+                                Documentation:
+                              </span>
+                              Maintain accurate records, including logs of hours
+                              driven and delivery receipts.
+                            </p>
+                          </li>
+                          <li class=" text-gray-700">
+                            <p className="">
+                              <span className="font-medium mr-1">
+                              Safety and Maintenance Oversight:
+                              </span>
+                              Ensure trucks meet safety standards before departure, including inspection compliance
                             </p>
                           </li>
                         </ul>
@@ -153,42 +198,34 @@ const PlumberBusinessOwner = ({ toggle, open }) => {
                       >
                         Qualifications
                       </label>
+
                       <div class="mb-4">
                         <ul className="list-disc px-3 ">
                           <li class="mt-1 text-gray-700">
                             <p className="">
-                              Master plumber license and strong business
-                              management skills.
+                              <span className="font-medium mr-1">
+                              Minimum Education:
+                              </span>
+                              High school diploma or equivalent
                             </p>
                           </li>
                           <li class=" text-gray-700">
                             <p className="">
-                              Knowledge of marketing, accounting, and customer
-                              service.{" "}
+                              <span className="font-medium mr-1">
+                                Prefered Experience:
+                              </span>
+                              1-3 years of experience in logistics, transportation, or warehouse operations
+                            </p>
+                          </li>
+                          <li class=" text-gray-700">
+                            <p className="">
+                              <span className="font-medium mr-1">
+                              Certifications (Optional):
+                              </span>
+                              OSHA certification for warehouse safety, forklift operator certification if required.
                             </p>
                           </li>
                         </ul>
-                      </div>
-                    </div>
-                    <div class="space-y-2 mt-6 mb-4">
-                      <label
-                        for="dactmi"
-                        class="block mb-2 text-lg font-medium text-gray-800 "
-                      >
-                        About The Business
-                      </label>
-                      <div class="mt-4 relative max-w-5xl mx-auto mb-1 ">
-                        <div class="w-full object-cover h-[480px] sm:h-80 rounded-xl">
-                          <iframe
-                            className="w-full h-full"
-                            src="https://www.youtube.com/embed/9MhagGqLaFk"
-                            title="So You Want to Start a Plumbing Company... Here&#39;s How!"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin"
-                            allowfullscreen
-                          ></iframe>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -196,10 +233,42 @@ const PlumberBusinessOwner = ({ toggle, open }) => {
               </div>
             </div>
           </DrawerBody>
+          <DrawerFooter>
+            <button
+              type="button"
+              class="py-3 px-6 inline-flex justify-center items-center gap-x-2 text-start bg-white hover:bg-gray-100 text-slate-800  lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              // onClick={() => onOpen()}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                />
+              </svg>
+              Save
+            </button>
+            <button
+              type="button"
+              class="py-2 px-8 inline-flex justify-center items-center gap-x-2 text-start bg-sky-400 hover:bg-sky-500 text-white lg:text-md font-medium rounded-lg shadow-sm align-middle  focus:outline-none focus:ring-1 focus:ring-blue-300 "
+              data-hs-overlay="#hs-pro-datm"
+              // onClick={() => onOpen()}
+            >
+              Get Started
+            </button>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </div>
   );
 };
 
-export default PlumberBusinessOwner;
+export default HubManagerDrawer;

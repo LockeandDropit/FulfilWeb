@@ -294,7 +294,7 @@ const PlumberTree = () => {
 
   //className="md:h-[calc(100vh+60px)] w-full"
   return (
-    <div ref={treeContainerRef} className="md:h-dvh w-full">
+    <div ref={treeContainerRef} className="md:h-[calc(100vh-100px)] w-full">
       <Tree
         separation={nodeSeparation}
         translate={treeTranslate}

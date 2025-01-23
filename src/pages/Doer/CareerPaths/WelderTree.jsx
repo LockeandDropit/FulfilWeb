@@ -304,7 +304,7 @@ const WelderTree = () => {
   //  };
 
   return (
-    <div ref={treeContainerRef} className="md:h-1366px w-full">
+    <div ref={treeContainerRef} className="md:h-[860px] w-full">
       <Tree
         separation={nodeSeparation}
         translate={treeTranslate}

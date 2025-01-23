@@ -12,25 +12,22 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const OwnerOperatorDrawer = () => {
+const OwnerOperatorDrawer = ({toggle, open}) => {
 
-  
-  
-  
-  const {
-    isOpen: isOpenDrawer,
-    onOpen: onOpenDrawer,
-    onClose: onCloseDrawer,
-  } = useDisclosure();
+    
+  const handleClose = () => {
+    toggle();
+  }
+    
 
 
 
 
 
-  return (  
+  return (
     <div>
       {" "}
-      <Drawer onClose={onCloseDrawer} isOpen={isOpenDrawer} size={"lg"}>
+     <Drawer onClose={() => handleClose()} isOpen={open} size={"lg"}>
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader></DrawerHeader>
@@ -45,7 +42,7 @@ const OwnerOperatorDrawer = () => {
                           for="hs-pro-dactmt"
                           class="block mb-2 text-2xl font-medium text-gray-900"
                         >
-                          Class A CDL Truck Driver
+                          Owner/Operator
                         </label>
                       </div>
 

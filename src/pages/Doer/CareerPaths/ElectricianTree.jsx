@@ -37,8 +37,14 @@ import CarpenterMasterDrawer from "./carpenter_drawers/CarpenterMasterDrawer";
 import CarpenterSpecialistDrawer from "./carpenter_drawers/CarpenterSpecialistDrawer";
 import CarpenterBusinessOwner from "./carpenter_drawers/CarpenterBusinessOwner";
 import CarpenterStarterDrawer from "./carpenter_drawers/CarpenterStarterDrawer";
+import WelderStarterDrawer from "./welding_drawers/WelderStarterDrawer";
+import WeldingApprenticeDrawer from "./welding_drawers/WeldingApprenticeDrawer";
+import WelderCertifiedDrawer from "./welding_drawers/WelderCertifiedDrawer";
+import WelderSpecialistDrawer from "./welding_drawers/WelderSpecialistDrawer";
+import WelderBusinessOwner from "./welding_drawers/WelderBusinessOwner";
+import WelderSupervisorDrawer from "./welding_drawers/WelderSupervisorDrawer";
 
-const CarpenterTree = () => {
+const WelderTree = () => {
   const shouldRecenterTreeRef = useRef(true);
   const [treeTranslate, setTreeTranslate] = useState({ x: 0, y: 0 });
   const treeContainerRef = useRef(null);
@@ -72,34 +78,34 @@ const CarpenterTree = () => {
       {
         name: "$35k/year",
         attributes: {
-          jobTitle: "Carpenter Apprentice",
-          bullet1: "Apprentices learn foundational carpentry skills while working under experienced professionals.",
-          bullet2: "Learn to read blueprints and understand plumbing systems.",
+          jobTitle: "Electrical Apprentice",
+          bullet1: "Apprentices learn the fundamentals of electrical systems through a combination of classroom instruction and on-the-job training under the guidance of a licensed electrician.",
+   
 
-          timeCommitment: "None, some education",
+          timeCommitment: "None",
         },
         children: [
           {
-            name: "$45k-60k/year",
+            name: "$50k-700k/year",
             attributes: {
-              jobTitle: "Journeyman Carpenter",
+              jobTitle: "Journeyman Electrician",
               bullet1:
-                "Journeyman carpenters can work independently on construction, renovation, and finishing tasks.",
+                "Journeyman electricians are fully licensed and can work independently on various electrical systems, from residential to commercial projects.",
              
-              timeCommitment: "3-4 years",
+              timeCommitment: "4-5 years",
 
               yOffset: 20,
             },
             children: [
               {
               
-                  name: "$70k-90k/year",
+                  name: "$70k-100k/year",
                   attributes: {
-                    jobTitle: "Master Carpenter",
+                    jobTitle: "Master Electrician",
                     bullet1:
-                      "Master carpenters are experts in the trade who lead teams, manage projects, and work on complex or high-value tasks.",
+                      "Master electricians have the highest level of certification, allowing them to design, install, and oversee complex electrical projects. They often mentor journeymen and apprentices.",
                    
-                    timeCommitment: "7-10+ years",
+                    timeCommitment: "7-10 years",
       
                     yOffset: 20,
                   },
@@ -109,11 +115,11 @@ const CarpenterTree = () => {
 
           {
               
-            name: "$55k-75k/year",
+            name: "$60k-90k/year",
             attributes: {
               jobTitle: "Specialist Roles",
               bullet1:
-                "Finish Carpentry, Framing Carpentry, Cabinetmaking, Commercial.",
+                "Industrial electrician, maintinance electrician, lineworker",
              
               timeCommitment: "5+ years ",
 
@@ -124,9 +130,8 @@ const CarpenterTree = () => {
             name: "$80k-150k+/year",
             attributes: {
               jobTitle: "Business Owner/Contractor",
-              bullet1: "Carpenters with entrepreneurial skills may start their own construction or carpentry businesses, taking on large-scale contracts or custom projects.",
-              bullet2:
-                "Provide quotes, bid on contracts, and oversee large-scale plumbing installations.",
+              bullet1: "Experienced electricians may choose to start their own electrical business, bidding on projects and overseeing teams of electricians.",
+              
               timeCommitment: "5+ years (reccomended)",
             },
           },
@@ -230,23 +235,23 @@ const CarpenterTree = () => {
           ) : null}
           {nodeDatum.name === selectedNodeNameDrawer &&
           selectedNodeNameDrawer === "Start Here" ? (
-            <CarpenterStarterDrawer open={open} toggle={toggleModal} />
+            <WelderStarterDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
             selectedNodeNameDrawer === "$35k/year" ? (
-            <CarpenterApprenticeDrawer open={open} toggle={toggleModal} />
+            <WeldingApprenticeDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$45k-60k/year" ? (
-            <CarpenterJourneymanDrawer open={open} toggle={toggleModal} />
+            selectedNodeNameDrawer === "$40k-60k/year" ? (
+            <WelderCertifiedDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$70k-90k/year" ? (
-            <CarpenterMasterDrawer open={open} toggle={toggleModal} />
+            selectedNodeNameDrawer === "$60k-90k/year" ? (
+            <WelderSpecialistDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$55k-75k/year" ? (
-            <CarpenterSpecialistDrawer open={open} toggle={toggleModal} />
-          ) : nodeDatum.name === selectedNodeNameDrawer &&
+          selectedNodeNameDrawer === "$70k-90k/year" ? (
+          <WelderSupervisorDrawer open={open} toggle={toggleModal} />
+        ) : nodeDatum.name === selectedNodeNameDrawer &&
             selectedNodeNameDrawer === "$80k-150k+/year" ? (
-            <CarpenterBusinessOwner open={open} toggle={toggleModal} />
-          ) : null}
+            <WelderBusinessOwner open={open} toggle={toggleModal} />
+          )  : null}
         </>
       </foreignObject>
     </>
@@ -321,4 +326,4 @@ const CarpenterTree = () => {
   );
 };
 
-export default CarpenterTree;
+export default WelderTree;

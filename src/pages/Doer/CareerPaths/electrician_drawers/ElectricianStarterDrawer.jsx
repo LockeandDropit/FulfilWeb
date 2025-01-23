@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import ReactPlayer from "react-player";
 
-const WelderStarterDrawer = ({ toggle, open }) => {
+const ElectricianStarterDrawer = ({ toggle, open }) => {
   const handleClose = () => {
     toggle();
   };
@@ -37,7 +37,7 @@ const WelderStarterDrawer = ({ toggle, open }) => {
                           for="hs-pro-dactmt"
                           class="block text-2xl font-medium text-gray-900"
                         >
-                          Become A Welding Professional
+                          Become An Electrician
                         </label>
                         <label
                           for="hs-pro-dactmt"
@@ -59,7 +59,7 @@ const WelderStarterDrawer = ({ toggle, open }) => {
 
                               <div className="mt-1 flex items-center gap-x-2">
                                 <h3 className="text-xl sm:text-2xl font-medium text-gray-800">
-                                  $55,000
+                                  $60,000
                                 </h3>
                               
                               </div>
@@ -80,7 +80,7 @@ const WelderStarterDrawer = ({ toggle, open }) => {
 
                               <div className="mt-1 flex items-center gap-x-2">
                                 <h3 className="text-xl sm:text-2xl font-medium text-gray-800">
-                                 4%
+                                 5.7%
                                 </h3>
                               </div>
                             </div>
@@ -90,7 +90,7 @@ const WelderStarterDrawer = ({ toggle, open }) => {
                             className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer"
                             onClick={() =>
                               window.open(
-                                "https://www.indeed.com/jobs?q=carpenter&l=Minneapolis&radius=35&from=searchOnDesktopSerp%2Cwhatautocomplete&cf-turnstile-response=0.rHI7DH5U9Eud7zkFCVbrcpn6OTBSwH1zujL62LQPsX2y9gmuW7nSdMCwSM1LO_gawmfbJgsFT3FnsiGE5azd4uf-zEV4_Zox5HU45HtJrA0gpe9tRm89SBFlEHspW-WTdqLRIWHuJMBNh40nZNbZnjXzVv7S_qNMHkdJ2NRDkULC6YLhl3ZEE9mBcriYwgRmI0tqBSg4lLBiJlrM1lL1BkBbnf-e3OGjUUTQsJK-UJZNVjB6hWkKOrQKGoXo2qGERn21US2Et9k4Nq3PV5dxiIeXEG4MvElaqG3Bmvv19QIzr6sevcCh4UBJhgBuAwu6hysF4kX9VQj186cKDL-Oz6D-YI8A_UiVjvoxGJ2FKliFaqZ1solx8PQIyKmEr2aPYLPg5erQQXK9TKWlI9yWHVszfIQ0LpiKWRb4BGQYzoJ9H_BAUFlJThYpfAf_T5S9b6PlqjD9KD_-trHfRczFX7jQUwgnoCq9oePT1uIPsoTs40-TaYKjYYflcJjgxHeBakgfr-g0N9e7lUvm9YFh-X3NW1xPAEi_UlG9Y97lhPYXaDjiQbLp-cnfkJXpVSbROjodN0-gOfwLeMzqo3njWhiY897NX_p4WUef5cNfUvdT5IKD48FE8MtaPfZiMJVPRhAKiD_BwlkPCmdZSuk1RNAl2JJFA1kgh3iG10DVXgsW4GNR8yCngnN1JDHg-RGeOlt_foi9IMj9M38nxW75dwASaFX1cUYY5GH6ERJj92fbHdKO08SllYnHUaGRlaNodqhoL7XDyt152lBieRxHTz1kudGJEFuP15dXxMI6n2YRweZckboYRp9slfPWCseFh_U1DZuqoAVWG9wrosdBdw.nTjTTysgRNOf71i722GVTA.9b7a8cb491fbf1e21702ef7bfba4b264e38b7e89cabc2b6024d37cea8ed5431b&vjk=662a6100533e4397"
+                                "https://www.indeed.com/jobs?q=electrician&l=Minneapolis&radius=35&from=searchOnDesktopSerp%2Cwhatautocomplete&cf-turnstile-response=0.1VOlPTdlHLLed2mRuh9t6VOYUQv4gTuIbzNxYraccjQjTJF3_VINrmf_EOrY4bNkB9r7WVB9eBTjszBZE6i336i4IHBP-Mq-zYLqjgoh9LGnBRLrL-lLCw5ZlnoCPLIcaYvzeJW0D2lNXgItPIn3uGlSS-iEBy5p0uQfcH8dl3W1uQl7mbF3CGPxyedyQjA3ZVirq5_7A2Wt69dgG9W03N7x4SLDpabpenuN2ANzHxqXOJsPeB6uvUmmUUQX4QI2k1wNUdKZLdTPKjSLgTYyCIhCDOOB6mUL1yuNWBAOHXL6N5xL6z5z8NgJazpPpQFAeF7ADqlCasu4kV2O_I3sTRGsnO4akPNsaz1i12VPycSLY-mEbyqgod3QAELp3tM2TEsMZuLjOOR-96H-0Cib0JslzzeAdY87sOFyVgaXv4axIOPUUroCriFvJ_pZVcILSbkPQh1gZAMsRgSBPJUU9Fl2W5UCUGbdxNFtg1jyD_vVW4KZq4acdIRLFr-hS9PvCH29RUBSI7xtqFr3tiy7bsF80eI2Hzsuue5beoTEi25_uJMHlpYn_Y-3CCG094h2qme5wnhAR90V2zuceULNAg_dm1Wlrsvod2VnyIRj215SlvqJevj6RRwybmHsfIoLKFdJh9qoIfMGUygvI0TrUQG63rCGNa8ir31mwgWSSc7KU7y1WC5qsBbGPsLhwNXeAeIRtX5o0HJVyK9z86J23O14sDyqin8FiygsM2cON6xtiy4O7Nx8Eow4iF4-qpJlBxcYP1CbblQgVuwEQ-SNOZYlKo6eSn_x_iTqKPlibzzJqKWlaH4e6WQuVSKs4JYsGO1UA7eWee3e8Np13ZUkAg.3ZX1rnwDbss7I5dDiBKMKg.20516c5b4a5ae849ae8d893b9cc7a69a1139ee9b3fd8db9e3005572ad565ebc6&vjk=83c9ab6391446098"
                               )
                             }
                           >
@@ -103,7 +103,7 @@ const WelderStarterDrawer = ({ toggle, open }) => {
 
                               <div className="mt-1 flex items-center gap-x-2">
                                 <h3 className="text-xl sm:text-2xl font-medium text-gray-800">
-                                  75+
+                                  100+
                                 </h3>
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -136,7 +136,7 @@ const WelderStarterDrawer = ({ toggle, open }) => {
                       </label>
                       <div class="mt-4 relative max-w-5xl mx-auto mb-1 ">
                         <div class="w-full object-cover h-[480px] sm:h-80 rounded-xl">
-                        <iframe className="w-full h-full" src="https://www.youtube.com/embed/TwzFaCxz274" title="A Day In The Life As A Welder" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <iframe className="w-full h-full" src="https://www.youtube.com/embed/O7VmwkrhqiY" title="DAY IN THE LIFE OF AN ELECTRICIAN - Electrician Life" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         </div>
                       </div>
                     </div>
@@ -151,21 +151,21 @@ const WelderStarterDrawer = ({ toggle, open }) => {
                         <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                           <div class="flex justify-between">
                             <div class="flex flex-col justify-center items-center size-[38px] border border-gray-200 rounded-lg ">
-                              <img
+                              {/* <img
                                 src="/landingImages/HTClogo.jpg"
                                 alt=""
                                 class="shrink-0 size-7  "
                                 width="32"
                                 height="32"
-                              />
+                              /> */}
                             </div>
                           </div>
                           <div>
                             <h3 class="font-medium text-gray-800">
-                              Welding & Metals Fabrication Training
+                              Electrician Apprenticeship
                             </h3>
                             <h3 class="font-medium text-gray-800">
-                              Hennepin Technical College
+                             IBEW 292
                             </h3>
                             <h3 class="text-sm text-gray-500">
                               Minneapolis, MN
@@ -197,7 +197,7 @@ const WelderStarterDrawer = ({ toggle, open }) => {
                               </span>
                             </div> */}
                             <p class="mt-3 text-gray-700 line-clamp-4">
-                            Hennepin Tech’s Welding and Metal Fabrication program provides hands-on training and in-depth knowledge of welding techniques to prepare students for the workforce. The program covers a range of skills, from basic welding to advanced techniques like MIG, TIG, shielded metal arc, and plasma arc welding, taught by industry experts.
+                           Learn the foundations of the trade by applying for this pre-apprentice role. Get paid to increase your earning potential.
                             </p>
                           </div>
                           <div className="flex items-center justify-center mt-auto mb-1">
@@ -206,7 +206,7 @@ const WelderStarterDrawer = ({ toggle, open }) => {
                               class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-sky-400 text-white  shadow-sm hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
                               onClick={() =>
                                 window.open(
-                                  "https://hennepintech.edu/academic-programs/manufacturing-engineering/welding.html"
+                                  "https://mplsjatc.org/pre-apprentice/"
                                 )
                               }
                             >
@@ -242,4 +242,4 @@ const WelderStarterDrawer = ({ toggle, open }) => {
   );
 };
 
-export default WelderStarterDrawer;
+export default ElectricianStarterDrawer;

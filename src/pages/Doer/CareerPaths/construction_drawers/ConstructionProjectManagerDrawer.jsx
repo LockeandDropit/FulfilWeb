@@ -12,15 +12,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const ElectricianJourneymanDrawer = ({toggle, open}) => {
-
-
+const ConstructionProjectManagerDrawer = ({ toggle, open }) => {
   const handleClose = () => {
     toggle();
-  }
-    
-
-
+  };
 
   return (
     <div>
@@ -37,7 +32,7 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
         <div class="cursor-default">
           <div className="flex flex-col">
             <label for="hs-pro-dactmt" class="block text-2xl font-medium text-gray-900">
-              Journeyman Electrician
+              Construction Project Manager
             </label>
             <label for="hs-pro-dactmt" class="block mb-4 font-medium text-gray-700">
               Minneapolis, MN
@@ -53,27 +48,27 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
                     </p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">$50,000 - $70,000</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">$80,000 - $110,000</h3>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col cursor-pointer bg-white border shadow-sm rounded-xl" onClick={() => window.open("https://www.careeronestop.org/")}>
+              <div className="flex flex-col cursor-pointer bg-white border shadow-sm rounded-xl" onClick={() => window.open("https://www.bls.gov/ooh/management/construction-managers.htm")}>
                 <div className="p-4 md:p-5">
                   <div className="flex items-center gap-x-2">
                     <p className="text-xs uppercase tracking-wide font-medium text-sky-400">Industry growth</p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">5.7%</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">8%</h3>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer" onClick={() => window.open("https://www.indeed.com/jobs?q=journeyman+electrician&l=Minneapolis%2C+MN")}>
+              <div className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer" onClick={() => window.open("https://www.indeed.com/jobs?q=construction+project+manager&l=Minneapolis%2C+MN")}>
                 <div className="p-4 md:p-5">
                   <div className="flex items-center gap-x-2">
                     <p className="text-xs uppercase tracking-wide font-medium text-sky-400">Open Positions</p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">40+</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">60+</h3>
                   </div>
                 </div>
               </div>
@@ -84,18 +79,18 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
               What you'll be doing
             </label>
             <div className="w-full prose prose-li marker:text-black mb-4">
-              Install, maintain, and repair electrical systems for residential, commercial, and industrial projects. Work independently and ensure safety and compliance.
+              Oversee entire construction projects, manage budgets and schedules, and ensure compliance with building codes while coordinating with stakeholders.
             </div>
           </div>
           <div className="space-y-2 mt-6 mb-4">
             <label for="dactmi" class="block mb-2 text-lg font-medium text-gray-800">
               Key Responsibilities
             </label>
-            <div className="mb-4">
+            <div class="mb-4">
               <ul className="list-disc px-3">
-                <li class="mt-1 text-gray-700">Install and repair wiring, lighting, and electrical systems.</li>
-                <li class="text-gray-700">Troubleshoot and resolve electrical issues.</li>
-                <li class="text-gray-700">Ensure compliance with national and local codes.</li>
+                <li class="mt-1 text-gray-700">Develop project plans, schedules, and budgets.</li>
+                <li class="text-gray-700">Coordinate with architects, engineers, and contractors.</li>
+                <li class="text-gray-700">Ensure work meets building codes and safety regulations.</li>
               </ul>
             </div>
           </div>
@@ -103,11 +98,11 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
             <label for="dactmi" class="block mb-2 text-lg font-medium text-gray-800">
               Qualifications
             </label>
-            <div className="mb-4">
+            <div class="mb-4">
               <ul className="list-disc px-3">
-                <li class="mt-1 text-gray-700">Completion of an apprenticeship program.</li>
-                <li class="text-gray-700">Licensed journeyman electrician.</li>
-                <li class="text-gray-700">Strong troubleshooting and problem-solving skills.</li>
+                <li class="mt-1 text-gray-700">Bachelor's degree in construction management or a related field (preferred).</li>
+                <li class="text-gray-700">7-10 years of construction experience.</li>
+                <li class="text-gray-700">Proficiency in project management software and methods.</li>
               </ul>
             </div>
           </div>
@@ -118,11 +113,10 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
 </div>
 
           </DrawerBody>
-         
         </DrawerContent>
       </Drawer>
     </div>
   );
 };
 
-export default ElectricianJourneymanDrawer;
+export default ConstructionProjectManagerDrawer;

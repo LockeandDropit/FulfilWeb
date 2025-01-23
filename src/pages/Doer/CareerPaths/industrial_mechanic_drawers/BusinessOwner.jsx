@@ -11,11 +11,14 @@ import {
   DrawerCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
+import ReactPlayer from "react-player";
 
-const WelderSupervisorDrawer = ({ toggle, open }) => {
+const BusinessOwner = ({ toggle, open }) => {
   const handleClose = () => {
     toggle();
   };
+
+  const url = "https://www.youtube.com/watch?v=9MhagGqLaFk";
 
   return (
     <div>
@@ -32,7 +35,7 @@ const WelderSupervisorDrawer = ({ toggle, open }) => {
         <div class="cursor-default">
           <div className="flex flex-col">
             <label for="hs-pro-dactmt" class="block text-2xl font-medium text-gray-900">
-              Welding Supervisor
+              Maintenance Manager or Business Owner
             </label>
             <label for="hs-pro-dactmt" class="block mb-4 font-medium text-gray-700">
               Minneapolis, MN
@@ -48,27 +51,27 @@ const WelderSupervisorDrawer = ({ toggle, open }) => {
                     </p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">$70,000 - $90,000</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">$90,000 - $150,000+</h3>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col cursor-pointer bg-white border shadow-sm rounded-xl" onClick={() => window.open("https://www.careeronestop.org/")}>
+              <div className="flex flex-col cursor-pointer bg-white border shadow-sm rounded-xl" onClick={() => window.open("https://www.bls.gov/")}>
                 <div className="p-4 md:p-5">
                   <div className="flex items-center gap-x-2">
                     <p className="text-xs uppercase tracking-wide font-medium text-sky-400">Industry growth</p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">4.5%</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">3%</h3>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer" onClick={() => window.open("https://www.indeed.com/jobs?q=welding+supervisor&l=Minneapolis%2C+MN")}>
+              <div className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer" onClick={() => window.open("https://www.indeed.com/")}>
                 <div className="p-4 md:p-5">
                   <div className="flex items-center gap-x-2">
                     <p className="text-xs uppercase tracking-wide font-medium text-sky-400">Open Positions</p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">15+</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">25+</h3>
                   </div>
                 </div>
               </div>
@@ -79,18 +82,18 @@ const WelderSupervisorDrawer = ({ toggle, open }) => {
               What you'll be doing
             </label>
             <div className="w-full prose prose-li marker:text-black mb-4">
-              Oversee welding teams and ensure all projects meet safety, quality, and compliance standards while maintaining project schedules.
+              Oversee the maintenance operations for a facility or run an independent maintenance business, handling finances, contracts, and operational policies.
             </div>
           </div>
           <div className="space-y-2 mt-6 mb-4">
             <label for="dactmi" class="block mb-2 text-lg font-medium text-gray-800">
               Key Responsibilities
             </label>
-            <div className="mb-4">
+            <div class="mb-4">
               <ul className="list-disc px-3">
-                <li class="mt-1 text-gray-700">Supervise and manage welding schedules, resources, and teams.</li>
-                <li class="text-gray-700">Inspect welds to ensure quality and compliance with safety standards.</li>
-                <li class="text-gray-700">Provide mentorship and training to welding staff.</li>
+                <li class="mt-1 text-gray-700">Manage maintenance staff and budgets.</li>
+                <li class="text-gray-700">Develop policies and secure contracts.</li>
+                <li class="text-gray-700">Oversee financial operations for maintenance projects.</li>
               </ul>
             </div>
           </div>
@@ -98,11 +101,11 @@ const WelderSupervisorDrawer = ({ toggle, open }) => {
             <label for="dactmi" class="block mb-2 text-lg font-medium text-gray-800">
               Qualifications
             </label>
-            <div className="mb-4">
+            <div class="mb-4">
               <ul className="list-disc px-3">
-                <li class="mt-1 text-gray-700">7-10 years of welding experience.</li>
-                <li class="text-gray-700">Certified Welding Inspector (CWI) or equivalent certification.</li>
-                <li class="text-gray-700">Strong leadership and organizational skills.</li>
+                <li class="mt-1 text-gray-700">10+ years of industrial maintenance experience.</li>
+                <li class="text-gray-700">Strong business management and financial skills.</li>
+                <li class="text-gray-700">Proficiency in operational and regulatory compliance.</li>
               </ul>
             </div>
           </div>
@@ -112,13 +115,11 @@ const WelderSupervisorDrawer = ({ toggle, open }) => {
   </div>
 </div>
 
-
           </DrawerBody>
-        
         </DrawerContent>
       </Drawer>
     </div>
   );
 };
 
-export default WelderSupervisorDrawer;
+export default BusinessOwner;

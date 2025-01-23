@@ -12,15 +12,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const ElectricianJourneymanDrawer = ({toggle, open}) => {
-
-
+const MachinerySpecialistDrawer = ({ toggle, open }) => {
   const handleClose = () => {
     toggle();
-  }
-    
-
-
+  };
 
   return (
     <div>
@@ -37,7 +32,7 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
         <div class="cursor-default">
           <div className="flex flex-col">
             <label for="hs-pro-dactmt" class="block text-2xl font-medium text-gray-900">
-              Journeyman Electrician
+              Machinery Specialist
             </label>
             <label for="hs-pro-dactmt" class="block mb-4 font-medium text-gray-700">
               Minneapolis, MN
@@ -53,27 +48,27 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
                     </p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">$50,000 - $70,000</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">$65,000 - $85,000</h3>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col cursor-pointer bg-white border shadow-sm rounded-xl" onClick={() => window.open("https://www.careeronestop.org/")}>
+              <div className="flex flex-col cursor-pointer bg-white border shadow-sm rounded-xl" onClick={() => window.open("https://www.bls.gov/")}>
                 <div className="p-4 md:p-5">
                   <div className="flex items-center gap-x-2">
                     <p className="text-xs uppercase tracking-wide font-medium text-sky-400">Industry growth</p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">5.7%</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">6%</h3>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer" onClick={() => window.open("https://www.indeed.com/jobs?q=journeyman+electrician&l=Minneapolis%2C+MN")}>
+              <div className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer" onClick={() => window.open("https://www.indeed.com/")}>
                 <div className="p-4 md:p-5">
                   <div className="flex items-center gap-x-2">
                     <p className="text-xs uppercase tracking-wide font-medium text-sky-400">Open Positions</p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">40+</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">50+</h3>
                   </div>
                 </div>
               </div>
@@ -84,18 +79,18 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
               What you'll be doing
             </label>
             <div className="w-full prose prose-li marker:text-black mb-4">
-              Install, maintain, and repair electrical systems for residential, commercial, and industrial projects. Work independently and ensure safety and compliance.
+              Specialize in specific machinery, such as CNC machines or robotics, and perform advanced diagnostics, repairs, and system optimization.
             </div>
           </div>
           <div className="space-y-2 mt-6 mb-4">
             <label for="dactmi" class="block mb-2 text-lg font-medium text-gray-800">
               Key Responsibilities
             </label>
-            <div className="mb-4">
+            <div class="mb-4">
               <ul className="list-disc px-3">
-                <li class="mt-1 text-gray-700">Install and repair wiring, lighting, and electrical systems.</li>
-                <li class="text-gray-700">Troubleshoot and resolve electrical issues.</li>
-                <li class="text-gray-700">Ensure compliance with national and local codes.</li>
+                <li class="mt-1 text-gray-700">Install, maintain, and optimize specialized equipment.</li>
+                <li class="text-gray-700">Train others on using advanced machinery.</li>
+                <li class="text-gray-700">Perform complex diagnostics and system repairs.</li>
               </ul>
             </div>
           </div>
@@ -103,11 +98,11 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
             <label for="dactmi" class="block mb-2 text-lg font-medium text-gray-800">
               Qualifications
             </label>
-            <div className="mb-4">
+            <div class="mb-4">
               <ul className="list-disc px-3">
-                <li class="mt-1 text-gray-700">Completion of an apprenticeship program.</li>
-                <li class="text-gray-700">Licensed journeyman electrician.</li>
-                <li class="text-gray-700">Strong troubleshooting and problem-solving skills.</li>
+                <li class="mt-1 text-gray-700">5-7 years of experience in industrial maintenance.</li>
+                <li class="text-gray-700">Advanced certifications in specific machinery systems.</li>
+                <li class="text-gray-700">Expertise in automation or hydraulic systems.</li>
               </ul>
             </div>
           </div>
@@ -116,13 +111,11 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
     </div>
   </div>
 </div>
-
           </DrawerBody>
-         
         </DrawerContent>
       </Drawer>
     </div>
   );
 };
 
-export default ElectricianJourneymanDrawer;
+export default MachinerySpecialistDrawer;

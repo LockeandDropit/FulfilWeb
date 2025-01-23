@@ -12,15 +12,22 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const WelderSpecialistDrawer = ({ toggle, open }) => {
+const ConstructionOwnerContractorDrawer = ({toggle, open}) => {
+
+    
   const handleClose = () => {
     toggle();
-  };
+  }
+    
+
+
+
+
 
   return (
     <div>
       {" "}
-      <Drawer onClose={() => handleClose()} isOpen={open} size={"lg"}>
+     <Drawer onClose={() => handleClose()} isOpen={open} size={"lg"}>
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader></DrawerHeader>
@@ -32,7 +39,7 @@ const WelderSpecialistDrawer = ({ toggle, open }) => {
         <div class="cursor-default">
           <div className="flex flex-col">
             <label for="hs-pro-dactmt" class="block text-2xl font-medium text-gray-900">
-              Specialist Welder
+              Construction Business Owner/Contractor
             </label>
             <label for="hs-pro-dactmt" class="block mb-4 font-medium text-gray-700">
               Minneapolis, MN
@@ -48,7 +55,7 @@ const WelderSpecialistDrawer = ({ toggle, open }) => {
                     </p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">$60,000 - $90,000</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">$100,000 - $200,000+</h3>
                   </div>
                 </div>
               </div>
@@ -58,17 +65,17 @@ const WelderSpecialistDrawer = ({ toggle, open }) => {
                     <p className="text-xs uppercase tracking-wide font-medium text-sky-400">Industry growth</p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">5.0%</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">4%</h3>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer" onClick={() => window.open("https://www.indeed.com/jobs?q=specialist+welder&l=Minneapolis%2C+MN")}>
+              <div className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer" onClick={() => window.open("https://www.indeed.com/jobs?q=general+contractor&l=Minneapolis%2C+MN")}>
                 <div className="p-4 md:p-5">
                   <div className="flex items-center gap-x-2">
                     <p className="text-xs uppercase tracking-wide font-medium text-sky-400">Open Positions</p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">20+</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">30+</h3>
                   </div>
                 </div>
               </div>
@@ -79,18 +86,18 @@ const WelderSpecialistDrawer = ({ toggle, open }) => {
               What you'll be doing
             </label>
             <div className="w-full prose prose-li marker:text-black mb-4">
-              Perform specialized welding tasks in industries like oil and gas, aerospace, or underwater welding, requiring advanced techniques and precision.
+              Own and manage a construction business, secure contracts, oversee multiple projects, and ensure timely, high-quality project completion.
             </div>
           </div>
           <div className="space-y-2 mt-6 mb-4">
             <label for="dactmi" class="block mb-2 text-lg font-medium text-gray-800">
               Key Responsibilities
             </label>
-            <div className="mb-4">
+            <div class="mb-4">
               <ul className="list-disc px-3">
-                <li class="mt-1 text-gray-700">Execute complex welding tasks in high-pressure or precision environments.</li>
-                <li class="text-gray-700">Operate specialized equipment for tasks like underwater or pipe welding.</li>
-                <li class="text-gray-700">Collaborate with engineers to meet industry-specific standards.</li>
+                <li class="mt-1 text-gray-700">Secure contracts and manage client relationships.</li>
+                <li class="text-gray-700">Oversee projects, finances, and schedules.</li>
+                <li class="text-gray-700">Hire, train, and manage staff effectively.</li>
               </ul>
             </div>
           </div>
@@ -98,11 +105,11 @@ const WelderSpecialistDrawer = ({ toggle, open }) => {
             <label for="dactmi" class="block mb-2 text-lg font-medium text-gray-800">
               Qualifications
             </label>
-            <div className="mb-4">
+            <div class="mb-4">
               <ul className="list-disc px-3">
-                <li class="mt-1 text-gray-700">Advanced certifications (e.g., ASME Section IX, API 1104).</li>
-                <li class="text-gray-700">5+ years of welding experience in the chosen field.</li>
-                <li class="text-gray-700">Expertise in specialized tools and techniques.</li>
+                <li class="mt-1 text-gray-700">10+ years of construction experience.</li>
+                <li class="text-gray-700">Strong business management and financial skills.</li>
+                <li class="text-gray-700">Licenses and certifications as required in the region.</li>
               </ul>
             </div>
           </div>
@@ -113,10 +120,13 @@ const WelderSpecialistDrawer = ({ toggle, open }) => {
 </div>
 
           </DrawerBody>
+          <DrawerFooter>
+        
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </div>
   );
 };
 
-export default WelderSpecialistDrawer;
+export default ConstructionOwnerContractorDrawer;

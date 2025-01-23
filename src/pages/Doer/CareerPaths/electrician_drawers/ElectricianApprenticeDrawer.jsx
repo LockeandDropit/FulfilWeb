@@ -38,7 +38,7 @@ const ElectricianApprenticeDrawer = ({toggle, open}) => {
         <div class="cursor-default">
           <div className="flex flex-col">
             <label for="hs-pro-dactmt" class="block text-2xl font-medium text-gray-900">
-              Welding Apprentice
+              Electrical Apprentice
             </label>
             <label for="hs-pro-dactmt" class="block mb-4 font-medium text-gray-700">
               Minneapolis, MN
@@ -64,17 +64,17 @@ const ElectricianApprenticeDrawer = ({toggle, open}) => {
                     <p className="text-xs uppercase tracking-wide font-medium text-sky-400">Industry growth</p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">5.0%</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">5.7%</h3>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer" onClick={() => window.open("https://www.indeed.com/jobs?q=welding+apprentice&l=Minneapolis%2C+MN")}>
+              <div className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer" onClick={() => window.open("https://www.indeed.com/jobs?q=electrician+apprentice&l=Minneapolis%2C+MN")}>
                 <div className="p-4 md:p-5">
                   <div className="flex items-center gap-x-2">
                     <p className="text-xs uppercase tracking-wide font-medium text-sky-400">Open Positions</p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">40+</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">50+</h3>
                   </div>
                 </div>
               </div>
@@ -85,7 +85,7 @@ const ElectricianApprenticeDrawer = ({toggle, open}) => {
               What you'll be doing
             </label>
             <div className="w-full prose prose-li marker:text-black mb-4">
-              Learn basic welding techniques and safety protocols while gaining hands-on experience under the supervision of experienced welders.
+              Assist licensed electricians while learning the fundamentals of electrical work, including wiring, troubleshooting, and adhering to safety codes.
             </div>
           </div>
           <div className="space-y-2 mt-6 mb-4">
@@ -94,9 +94,9 @@ const ElectricianApprenticeDrawer = ({toggle, open}) => {
             </label>
             <div className="mb-4">
               <ul className="list-disc px-3">
-                <li class="mt-1 text-gray-700">Assist in preparing materials for welding tasks.</li>
-                <li class="text-gray-700">Practice welding techniques on various metals.</li>
-                <li class="text-gray-700">Maintain tools and ensure safety compliance on the job site.</li>
+                <li class="mt-1 text-gray-700">Assist in installing and repairing electrical systems.</li>
+                <li class="text-gray-700">Read and interpret blueprints and diagrams.</li>
+                <li class="text-gray-700">Ensure tools and equipment are maintained.</li>
               </ul>
             </div>
           </div>
@@ -107,19 +107,98 @@ const ElectricianApprenticeDrawer = ({toggle, open}) => {
             <div className="mb-4">
               <ul className="list-disc px-3">
                 <li class="mt-1 text-gray-700">High school diploma or GED.</li>
-                <li class="text-gray-700">Enrollment in an apprenticeship or vocational program.</li>
-                <li class="text-gray-700">Basic mechanical aptitude and attention to detail.</li>
+                <li class="text-gray-700">Enrollment in an apprenticeship program.</li>
+                <li class="text-gray-700">Mechanical aptitude and problem-solving skills.</li>
               </ul>
             </div>
           </div>
+          <div class="mb-4">
+                        <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
+                          <div class="flex justify-between">
+                            <div class="flex flex-col justify-center items-center size-[38px] border border-gray-200 rounded-lg ">
+                              {/* <img
+                                src="/landingImages/HTClogo.jpg"
+                                alt=""
+                                class="shrink-0 size-7  "
+                                width="32"
+                                height="32"
+                              /> */}
+                            </div>
+                          </div>
+                          <div>
+                            <h3 class="font-medium text-gray-800">
+                              Electrician Apprenticeship
+                            </h3>
+                            <h3 class="font-medium text-gray-800">
+                             IBEW 292
+                            </h3>
+                            <h3 class="text-sm text-gray-500">
+                              Minneapolis, MN
+                            </h3>
+                            {/* <div className="mt-1 flex ">
+                              <h3 class="text-sm text-gray-500 line-clamp-1">
+                                <p className="mr-1 font-medium text-sm text-gray-800">
+                                  Avg. Salary:
+                                </p>{" "}
+                                $65,000
+                              </h3>
+                              <span class="ml-1 inline-flex items-center gap-x-1 text-xs font-medium text-green-500 rounded-full">
+                                <svg
+                                  class="shrink-0 size-4"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                                  <polyline points="16 7 22 7 22 13"></polyline>
+                                </svg>
+                                25% pay increase
+                              </span>
+                            </div> */}
+                            <p class="mt-3 text-gray-700 line-clamp-4">
+                           Learn the foundations of the trade by applying for this pre-apprentice role. Get paid to increase your earning potential.
+                            </p>
+                          </div>
+                          <div className="flex items-center justify-center mt-auto mb-1">
+                            <button
+                              type="button"
+                              class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-sky-400 text-white  shadow-sm hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
+                              onClick={() =>
+                                window.open(
+                                  "https://mplsjatc.org/pre-apprentice/"
+                                )
+                              }
+                            >
+                              Apply
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.25"
+                                stroke="currentColor"
+                                class="size-3 hover:underline"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-
-        
 
           </DrawerBody>
   

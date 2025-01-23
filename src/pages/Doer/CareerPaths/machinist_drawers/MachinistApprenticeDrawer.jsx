@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const ElectricianJourneymanDrawer = ({toggle, open}) => {
+const MachinistApprenticeDrawer = ({toggle, open}) => {
 
 
   const handleClose = () => {
@@ -37,7 +37,7 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
         <div class="cursor-default">
           <div className="flex flex-col">
             <label for="hs-pro-dactmt" class="block text-2xl font-medium text-gray-900">
-              Journeyman Electrician
+              Machinist Apprentice
             </label>
             <label for="hs-pro-dactmt" class="block mb-4 font-medium text-gray-700">
               Minneapolis, MN
@@ -53,7 +53,7 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
                     </p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">$50,000 - $70,000</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">$30,000 - $40,000</h3>
                   </div>
                 </div>
               </div>
@@ -63,11 +63,11 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
                     <p className="text-xs uppercase tracking-wide font-medium text-sky-400">Industry growth</p>
                   </div>
                   <div className="mt-1 flex items-center gap-x-2">
-                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">5.7%</h3>
+                    <h3 className="text-xl sm:text-2xl font-medium text-gray-800">3.7%</h3>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer" onClick={() => window.open("https://www.indeed.com/jobs?q=journeyman+electrician&l=Minneapolis%2C+MN")}>
+              <div className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer" onClick={() => window.open("https://www.indeed.com/jobs?q=machinist+apprentice&l=Minneapolis%2C+MN")}>
                 <div className="p-4 md:p-5">
                   <div className="flex items-center gap-x-2">
                     <p className="text-xs uppercase tracking-wide font-medium text-sky-400">Open Positions</p>
@@ -84,7 +84,7 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
               What you'll be doing
             </label>
             <div className="w-full prose prose-li marker:text-black mb-4">
-              Install, maintain, and repair electrical systems for residential, commercial, and industrial projects. Work independently and ensure safety and compliance.
+              Learn the fundamentals of machining under experienced mentors, including operating manual and CNC machines, reading blueprints, and using measuring tools.
             </div>
           </div>
           <div className="space-y-2 mt-6 mb-4">
@@ -93,9 +93,9 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
             </label>
             <div className="mb-4">
               <ul className="list-disc px-3">
-                <li class="mt-1 text-gray-700">Install and repair wiring, lighting, and electrical systems.</li>
-                <li class="text-gray-700">Troubleshoot and resolve electrical issues.</li>
-                <li class="text-gray-700">Ensure compliance with national and local codes.</li>
+                <li class="mt-1 text-gray-700">Assist in operating machines to produce precision parts.</li>
+                <li class="text-gray-700">Perform basic setups and maintenance of machinery.</li>
+                <li class="text-gray-700">Learn to interpret technical drawings and specifications.</li>
               </ul>
             </div>
           </div>
@@ -105,9 +105,9 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
             </label>
             <div className="mb-4">
               <ul className="list-disc px-3">
-                <li class="mt-1 text-gray-700">Completion of an apprenticeship program.</li>
-                <li class="text-gray-700">Licensed journeyman electrician.</li>
-                <li class="text-gray-700">Strong troubleshooting and problem-solving skills.</li>
+                <li class="mt-1 text-gray-700">High school diploma or GED.</li>
+                <li class="text-gray-700">Enrollment in an apprenticeship or vocational program.</li>
+                <li class="text-gray-700">Mechanical aptitude and strong attention to detail.</li>
               </ul>
             </div>
           </div>
@@ -116,13 +116,12 @@ const ElectricianJourneymanDrawer = ({toggle, open}) => {
     </div>
   </div>
 </div>
-
           </DrawerBody>
-         
+  
         </DrawerContent>
       </Drawer>
     </div>
   );
 };
 
-export default ElectricianJourneymanDrawer;
+export default MachinistApprenticeDrawer;

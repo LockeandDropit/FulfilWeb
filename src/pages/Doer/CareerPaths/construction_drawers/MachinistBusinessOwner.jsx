@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import ReactPlayer from "react-player";
 
-const WelderBusinessOwner = ({ toggle, open }) => {
+const MachinistBusinessOwner = ({ toggle, open }) => {
   const handleClose = () => {
     toggle();
   };
@@ -38,7 +38,7 @@ const WelderBusinessOwner = ({ toggle, open }) => {
                           for="hs-pro-dactmt"
                           class="block text-2xl font-medium text-gray-900"
                         >
-                         Welding Business Owner/Contractor
+                          Business Owner/Tooling Contractor
                         </label>
                         <label
                           for="hs-pro-dactmt"
@@ -77,7 +77,7 @@ const WelderBusinessOwner = ({ toggle, open }) => {
                               </div>
                               <div className="mt-1 flex items-center gap-x-2">
                                 <h3 className="text-xl sm:text-2xl font-medium text-gray-800">
-                                  4.5%
+                                  3.7%
                                 </h3>
                               </div>
                             </div>
@@ -86,7 +86,7 @@ const WelderBusinessOwner = ({ toggle, open }) => {
                             className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer"
                             onClick={() =>
                               window.open(
-                                "https://www.indeed.com/jobs?q=welding+contractor&l=Minneapolis%2C+MN"
+                                "https://www.indeed.com/jobs?q=machining+contractor&l=Minneapolis%2C+MN"
                               )
                             }
                           >
@@ -113,9 +113,9 @@ const WelderBusinessOwner = ({ toggle, open }) => {
                           What you'll be doing
                         </label>
                         <div className="w-full prose prose-li marker:text-black mb-4">
-                          Manage a welding business, secure contracts, and
-                          oversee the delivery of high-quality welding services
-                          to clients.
+                          Own and operate a machining business, securing
+                          contracts, managing teams, and ensuring the production
+                          of high-quality machined parts for clients.
                         </div>
                       </div>
                       <div className="space-y-2 mt-6 mb-4">
@@ -128,13 +128,13 @@ const WelderBusinessOwner = ({ toggle, open }) => {
                         <div className="mb-4">
                           <ul className="list-disc px-3">
                             <li class="mt-1 text-gray-700">
-                              Secure and manage large-scale contracts.
+                              Bid on contracts and manage machining projects.
                             </li>
                             <li class="text-gray-700">
-                              Hire and train welding teams.
+                              Hire and train machinists to deliver quality work.
                             </li>
                             <li class="text-gray-700">
-                              Ensure profitability and maintain client
+                              Oversee production schedules and client
                               relationships.
                             </li>
                           </ul>
@@ -150,13 +150,13 @@ const WelderBusinessOwner = ({ toggle, open }) => {
                         <div className="mb-4">
                           <ul className="list-disc px-3">
                             <li class="mt-1 text-gray-700">
-                              10+ years of welding experience.
+                              10+ years of machining experience.
                             </li>
                             <li class="text-gray-700">
-                              Strong business and marketing skills.
+                              Business management and financial skills.
                             </li>
                             <li class="text-gray-700">
-                              Licensing as required by the industry.
+                              Knowledge of licensing and safety regulations.
                             </li>
                           </ul>
                         </div>
@@ -173,4 +173,4 @@ const WelderBusinessOwner = ({ toggle, open }) => {
   );
 };
 
-export default WelderBusinessOwner;
+export default MachinistBusinessOwner;

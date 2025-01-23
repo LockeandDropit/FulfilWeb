@@ -13,44 +13,21 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import "./treeStyles.css"; // Custom CSS for thicker lines
-import CDLDriverDrawer from "./cdl_drawers/CDLDriverDrawer";
-import HubManagerDrawer from "./cdl_drawers/HubManagerDrawer";
-import OwnerOperatorDrawer from "./cdl_drawers/OwnerOperatorDrawer";
-import CDLStarterDrawer from "./cdl_drawers/CDLStarterDrawer";
-import HVACApprenticeDrawer from "./hvac_drawers/HVACApprenticeDrawer";
-import HVACTechnicianDrawer from "./hvac_drawers/HVACTechnicianDrawer";
-import HVACSpecialistInstallerDrawer from "./hvac_drawers/HVACSpecialistInstallerDrawer";
-import HVACSupervisorManagerDrawer from "./hvac_drawers/HVACSupervisorManagerDrawer";
-import HVACEngineerDesignerDrawer from "./hvac_drawers/HVACEngineerDesignerDrawer";
-import HVACBusinessOwner from "./hvac_drawers/HVACBusinessOwner";
-import HVACStarterDrawer from "./hvac_drawers/HVACStarterDrawer";
-import PlumberStarterDrawer from "./plumber_drawers/PlumberStarterDrawer";
-import PlumberApprenticeDrawer from "./plumber_drawers/PlumberApprenticeDrawer";
-import PlumberJourneymanDrawer from "./plumber_drawers/PlumberJourneymanDrawer";
-import PlumberMasterDrawer from "./plumber_drawers/PlumberMasterDrawer";
-import PlumberSpecialistDrawer from "./plumber_drawers/PlumberSpecialistDrawer";
-import PlumberBusinessOwner from "./plumber_drawers/PlumberBusinessOwner";
-import EntryLevelCarpenterDrawer from "./carpenter_drawers/CarpenterApprenticeDrawer";
-import CarpenterApprenticeDrawer from "./carpenter_drawers/CarpenterApprenticeDrawer";
-import CarpenterJourneymanDrawer from "./carpenter_drawers/CarpenterJourneymanDrawer";
-import CarpenterMasterDrawer from "./carpenter_drawers/CarpenterMasterDrawer";
-import CarpenterSpecialistDrawer from "./carpenter_drawers/CarpenterSpecialistDrawer";
-import CarpenterBusinessOwner from "./carpenter_drawers/CarpenterBusinessOwner";
-import CarpenterStarterDrawer from "./carpenter_drawers/CarpenterStarterDrawer";
-import WelderStarterDrawer from "./welding_drawers/WelderStarterDrawer";
-import WeldingApprenticeDrawer from "./welding_drawers/WeldingApprenticeDrawer";
-import WelderCertifiedDrawer from "./welding_drawers/WelderCertifiedDrawer";
-import WelderSpecialistDrawer from "./welding_drawers/WelderSpecialistDrawer";
-import WelderBusinessOwner from "./welding_drawers/WelderBusinessOwner";
-import WelderSupervisorDrawer from "./welding_drawers/WelderSupervisorDrawer";
+
 import ElectricianStarterDrawer from "./electrician_drawers/ElectricianStarterDrawer";
 import ElectricianApprenticeDrawer from "./electrician_drawers/ElectricianApprenticeDrawer";
 import ElectricianJourneymanDrawer from "./electrician_drawers/ElectricianJourneymanDrawer";
 import ElectricianSpecialistDrawer from "./electrician_drawers/ElectricianSpecialistDrawer";
 import ElectricianMasterDrawer from "./electrician_drawers/ElectricianMasterDrawer";
 import ElectricianBusinessOwner from "./electrician_drawers/ElectricianBusinessOwner";
+import MachinistStarterDrawer from "./machinist_drawers/MachinistStarterDrawer";
+import MachinistApprenticeDrawer from "./machinist_drawers/MachinistApprenticeDrawer";
+import MachinistDrawer from "./machinist_drawers/MachinistDrawer";
+import MachinistSupervisorDrawer from "./machinist_drawers/MachinistSupervisorDrawer";
+import MachinistSpecialistDrawer from "./machinist_drawers/MachinistSpecialistDrawer";
+import MachinistBusinessOwner from "./machinist_drawers/MachinistBusinessOwner";
 
-const ElectricianTree = () => {
+const MachinistTree = () => {
   const shouldRecenterTreeRef = useRef(true);
   const [treeTranslate, setTreeTranslate] = useState({ x: 0, y: 0 });
   const treeContainerRef = useRef(null);
@@ -84,61 +61,60 @@ const ElectricianTree = () => {
       {
         name: "$35k/year",
         attributes: {
-          jobTitle: "Electrical Apprentice",
-          bullet1: "Apprentices learn the fundamentals of electrical systems through a combination of classroom instruction and on-the-job training under the guidance of a licensed electrician.",
-   
+          jobTitle: "Machinist Apprentice",
+          bullet1:
+            " Learn the basics of machining, including how to operate manual and CNC machines, under the guidance of experienced machinists. Gain hands-on experience through apprenticeship programs or vocational training.",
 
           timeCommitment: "None",
         },
         children: [
           {
-            name: "$50k-70k/year",
+            name: "$45k-65k/year",
             attributes: {
-              jobTitle: "Journeyman Electrician",
+              jobTitle: "Machinist",
               bullet1:
-                "Journeyman electricians are fully licensed and can work independently on various electrical systems, from residential to commercial projects.",
-             
-              timeCommitment: "4-5 years",
+                "Fully trained machinists capable of independently operating and programming manual and CNC machines to produce precision parts for various industries.",
+
+              timeCommitment: "3-4 years",
 
               yOffset: 20,
             },
             children: [
               {
-              
-                  name: "$70k-100k/year",
-                  attributes: {
-                    jobTitle: "Master Electrician",
-                    bullet1:
-                      "Master electricians have the highest level of certification, allowing them to design, install, and oversee complex electrical projects. They often mentor journeymen and apprentices.",
-                   
-                    timeCommitment: "7-10 years",
-      
-                    yOffset: 20,
-                  },
+                name: "$70k-90k/year",
+                attributes: {
+                  jobTitle: " Machinist Supervisor",
+                  bullet1:
+                    "Oversee machining teams, manage production schedules, ensure quality standards are met, and mentor junior machinists.",
+
+                  timeCommitment: "7-10 years",
+
+                  yOffset: 20,
+                },
               },
             ],
           },
 
           {
-              
-            name: "$60k-90k/year",
+            name: "$60k-80k/year",
             attributes: {
               jobTitle: "Specialist Roles",
               bullet1:
-                "Industrial electrician, maintinance electrician, lineworker",
-             
+                "CNC Programmer, Tool and Die Maker, Quality Control Specialist",
+
               timeCommitment: "5+ years ",
 
               yOffset: 20,
             },
-        },
+          },
           {
             name: "$80k-150k+/year",
             attributes: {
               jobTitle: "Business Owner/Contractor",
-              bullet1: "Experienced electricians may choose to start their own electrical business, bidding on projects and overseeing teams of electricians.",
-              
-              timeCommitment: "5+ years (reccomended)",
+              bullet1:
+                "Experienced machinists may establish their own machining businesses, providing precision machining and tooling services to industrial clients.",
+
+              timeCommitment: "5+ years (recomended)",
             },
           },
         ],
@@ -225,7 +201,6 @@ const ElectricianTree = () => {
                           {nodeDatum.attributes.bullet1}
                         </p>
                       </li>
-                    
                     </ul>
                     <a
                       class="w-full mt-2 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 "
@@ -241,23 +216,23 @@ const ElectricianTree = () => {
           ) : null}
           {nodeDatum.name === selectedNodeNameDrawer &&
           selectedNodeNameDrawer === "Start Here" ? (
-            <ElectricianStarterDrawer open={open} toggle={toggleModal} />
+            <MachinistStarterDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
             selectedNodeNameDrawer === "$35k/year" ? (
-            <ElectricianApprenticeDrawer open={open} toggle={toggleModal} />
+            <MachinistApprenticeDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$50k-70k/year" ? (
-            <ElectricianJourneymanDrawer open={open} toggle={toggleModal} />
+            selectedNodeNameDrawer === "$45k-65k/year" ? (
+            <MachinistDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$60k-90k/year" ? (
-            <ElectricianSpecialistDrawer open={open} toggle={toggleModal} />
+            selectedNodeNameDrawer === "$70k-90k/year" ? (
+            <MachinistSupervisorDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-          selectedNodeNameDrawer === "$70k-100k/year" ? (
-          <ElectricianMasterDrawer open={open} toggle={toggleModal} />
-        ) : nodeDatum.name === selectedNodeNameDrawer &&
+            selectedNodeNameDrawer === "$60k-80k/year" ? (
+            <MachinistSpecialistDrawer open={open} toggle={toggleModal} />
+          ) : nodeDatum.name === selectedNodeNameDrawer &&
             selectedNodeNameDrawer === "$80k-150k+/year" ? (
-            <ElectricianBusinessOwner open={open} toggle={toggleModal} />
-          )  : null}
+            <MachinistBusinessOwner open={open} toggle={toggleModal} />
+          ) : null}
         </>
       </foreignObject>
     </>
@@ -332,4 +307,4 @@ const ElectricianTree = () => {
   );
 };
 
-export default ElectricianTree;
+export default MachinistTree;

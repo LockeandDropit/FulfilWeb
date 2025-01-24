@@ -3,7 +3,7 @@ import { useState } from "react";
 import Select from "react-select";
 import { useUserStore } from "../../../Doer/Chat/lib/userStore";
 import { db } from "../../../../firebaseConfig";
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 const CareerInterests = () => {
@@ -11,21 +11,23 @@ const CareerInterests = () => {
   const navigate = useNavigate();
 
 const [interests, setInterests] = useState(null)
-
+const [userInfo, setUserInfo] = useState(null)
 const uploadAnswer = async () => {
   await updateDoc(doc(db, "users", currentUser.uid), {
     userInterests: interests,
-    industryReccomendation: industryReccomendation
+    industryReccomendation: industryReccomendation,
+    returnedJobs: returnedJobs,
+    returnedEducation: returnedEducation
   });
 };
 
   const submit = () => {
     uploadAnswer();
-    navigate("/DoerPayment")
+    navigate("/DoerHomepage")
   }
 
 
-      const [returnedJobs, setReturnedJobs] = useState(null);
+
       const [industryReccomendation, setIndustryRecommendation] = useState(null);
       const [loading, setLoading] = useState(false);
     
@@ -59,12 +61,99 @@ const uploadAnswer = async () => {
 
 
       useEffect(() => {
-      if (industryReccomendation) {
+      if (industryReccomendation && returnedEducation && returnedJobs) {
         submit()
       }
-      }, [industryReccomendation])
+      }, [industryReccomendation, returnedEducation, returnedJobs])
 
 
+
+          const [returnedJobs, setReturnedJobs] = useState(null);
+          const [returnedEducation, setReturnedEducation] = useState(null);
+         
+        
+          const getJobs = async () => {
+            
+            setLoading(true);
+        
+            const response = await fetch(
+              "https://openaiapi-c7qc.onrender.com/getJobs",
+              {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  userInput: `The user's location is ${userInfo.city}, ${userInfo.state}. The user's current pay is ${userInfo.currentIncome} a year. The user is interested in ${userInfo.userInterests}`,
+                }),
+              }
+            );
+            if (!response.ok) {
+              throw new Error(`Response status: ${response.status}`);
+            }
+        
+            const json = await response.json();
+            console.log("json resopnse w array", JSON.parse(json.message.content));
+        
+            setReturnedJobs(JSON.parse(json.message.content));
+            // setLoading(false);
+          };
+      
+          const getEdu = async () => {
+            setLoading(true);
+        
+            const response = await fetch("https://openaiapi-c7qc.onrender.com/getEdu", {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                userInput: `The user's location is ${userInfo.city}, ${userInfo.state}. The user's current pay is ${userInfo.currentIncome}. The user is interested in ${userInfo.userInterests}`,
+              }),
+            });
+            if (!response.ok) {
+              throw new Error(`Response status: ${response.status}`);
+            }
+        
+            const json = await response.json();
+            console.log("json resopnse w array EDU", JSON.parse(json.message.content));
+        
+            setReturnedEducation(JSON.parse(json.message.content));
+            // setLoading(false);
+          };
+        
+        
+        
+              useEffect(() => {
+                if (currentUser != null) {
+                  const docRef = doc(db, "users", currentUser.uid);
+            
+                  getDoc(docRef).then((snapshot) => {
+                    // console.log(snapshot.data());
+                   setUserInfo(snapshot.data())
+                  });
+                } else {
+                  console.log("oops!");
+                }
+              }, [currentUser]);
+      
+          useEffect(() => {
+            if (userInfo) { 
+              console.log("userInfo", userInfo)
+              getJobs();   
+              getEdu();
+            }
+          }, [userInfo]);
+      
+       
+            const uploadJobsAndEdu = async () => {
+              await updateDoc(doc(db, "users", currentUser.uid), {
+                returnedJobs: returnedJobs,
+                returnedEducation: returnedEducation
+              });
+            };
   
 
   return (

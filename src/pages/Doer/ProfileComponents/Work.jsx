@@ -228,7 +228,9 @@ const Work = ({ changeListener}) => {
       const unSub = onSnapshot(
         doc(db, "users", currentUser.uid, "Resumes", "My Resume"),
         async (res) => {
-          setWorkExperience(res.data().experience);
+          if (res.data()?.skills) {
+            setWorkExperience(res.data().skills);
+          }
 
           // res.data().experience.forEach((exp) => {
           //   console.log("here are ids", exp.id)

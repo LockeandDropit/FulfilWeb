@@ -15,6 +15,7 @@ const [interests, setInterests] = useState(null)
 const uploadAnswer = async () => {
   await updateDoc(doc(db, "users", currentUser.uid), {
     userInterests: interests,
+    industryReccomendation: industryReccomendation
   });
 };
 
@@ -22,6 +23,46 @@ const uploadAnswer = async () => {
     uploadAnswer();
     navigate("/DoerPayment")
   }
+
+
+      const [returnedJobs, setReturnedJobs] = useState(null);
+      const [industryReccomendation, setIndustryRecommendation] = useState(null);
+      const [loading, setLoading] = useState(true);
+    
+      const getRecommendation = async () => {
+        
+        setLoading(true);
+    
+        const response = await fetch(
+          "https://openaiapi-c7qc.onrender.com/getIndustryRecommendation",
+          {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userInput: `The user is interested in ${interests}`,
+            }),
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
+    
+        const json = await response.json();
+        console.log("json resopnse w array", JSON.parse(json.message.content));
+    
+        setIndustryRecommendation(JSON.parse(json.message.content));
+        // setLoading(false);
+      };
+
+
+      useEffect(() => {
+      if (industryReccomendation) {
+        submit()
+      }
+      }, [industryReccomendation])
 
 
   
@@ -33,7 +74,7 @@ const uploadAnswer = async () => {
          What do you want to do?
         </h1>
         <p className="mt-1 sm:mt-1 text-gray-800 text-center">
-         Describe your interests, hobbies, and the type of work you're interested in doing and we'll help generate some career options for you!
+         Describe your interests, hobbies, and the type of work you're interested in doing and we'll help generate some career options for you! The more you tell us the better.
         </p>
         <div class="w-full space-y-3 flex items-center justify-center">
   <textarea onChange={(e) => setInterests(e.target.value)} class=" mt-5 sm:mt-6 py-3 px-4 block w-full sm:w-3/4  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" rows="4" placeholder="e.g. I like to work with my hands and be outside. I like to work with people and problem solve."></textarea>
@@ -42,9 +83,19 @@ const uploadAnswer = async () => {
           <button
             type="button"
             class=" w-full sm:w-1/2 text-center justify-center mt-6 lg:mt-10 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
-            onClick={submit}
+            onClick={getRecommendation}
          >
             Finish
+          </button>
+        ) : loading ? (
+          <button
+            type="button"
+            class=" w-full sm:w-1/2 text-center justify-center mt-6 lg:mt-10 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
+        
+         >
+        <div className="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-wgite rounded-full" role="status" aria-label="loading">
+  <span className="sr-only">Loading...</span>
+</div>
           </button>
         ) : (
           <button

@@ -214,7 +214,10 @@ const Education = ({ changeListener }) => {
       const unSub = onSnapshot(
         doc(db, "users", currentUser.uid, "Resumes", "My Resume"),
         async (res) => {
-          setWorkExperience(res.data().education);
+          if (res.data()?.education) {
+            setWorkExperience(res.data().education);
+          }
+          
         }
       );
 

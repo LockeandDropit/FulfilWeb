@@ -92,7 +92,7 @@ const HomepageEducation = ({user}) => {
               <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                 <div class="flex justify-between">
                   <div class="flex flex-col justify-center items-center rounded-lg ">
-                  <span class="ml-1 inline-flex items-center gap-x-1 text-base font-medium text-green-500 rounded-full">
+                  <span class="ml-1 inline-flex items-center gap-x-1 text-base font-medium text-green-600 rounded-full">
                      
                       {edu.percent_increase}% pay increase
                       <svg
@@ -124,7 +124,7 @@ const HomepageEducation = ({user}) => {
                     </h3>
                  
                   </div>
-                  <p class="mt-3 text-gray-700 line-clamp-4">
+                  <p class="mt-3 text-gray-700 line-clamp-4 ">
                     {edu.description}
                   </p>
                 </div>
@@ -132,7 +132,7 @@ const HomepageEducation = ({user}) => {
                 <div className="flex mt-auto mb-1">
                   <button
                     type="button"
-                    class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
+                    class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50  "
                   >
                     Save
                   </button>
@@ -145,7 +145,7 @@ const HomepageEducation = ({user}) => {
                   </button> */}
                     <button
                     type="button"
-                    class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
+                    class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500 "
                     onClick={() => handleOpenJob(edu)}
                   >
                     Apply

@@ -63,7 +63,7 @@ const Resources = () => {
           <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center ">
             <div className="">
               <h1 class="block text-3xl font-semibold text-white sm:text-2xl lg:text-3xl lg:leading-tight ">
-                Resources
+                Resources 
               </h1>
               <p class="mt-2 text text-white">
                 Browse free resources that will help you find and prepare for a great career!

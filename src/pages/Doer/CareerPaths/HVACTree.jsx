@@ -305,7 +305,7 @@ const HVACTree = () => {
   // };
 
   return (
-    <div ref={treeContainerRef} className="md:h-[860px] w-full">
+    <div ref={treeContainerRef} className="md:h-[880px] w-full">
       <Tree
         separation={nodeSeparation}
         translate={treeTranslate}

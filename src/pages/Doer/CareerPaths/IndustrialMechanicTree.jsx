@@ -70,7 +70,7 @@ const IndustrialMechanicTree = () => {
             attributes: {
               jobTitle: "Industrial Machinery Mechanic",
               bullet1:
-                "Inspect, troubleshoot, and repair complex machinery using technical manuals, tools, and precision instruments.",
+                "Inspect, troubleshoot, and repair complex machinery using technical manuals and precision instruments.",
 
               timeCommitment: "2-4 years",
 
@@ -107,7 +107,7 @@ const IndustrialMechanicTree = () => {
           {
             name: "$90k-150k+/year",
             attributes: {
-              jobTitle: "Maintenance Manager or Business Owner",
+              jobTitle: "Manager/Business Owner",
               bullet1:
                 "Manage maintenance operations for a facility or run a maintenance business, handling contracts, team management, and financial oversight.",
 

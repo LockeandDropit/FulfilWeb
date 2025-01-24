@@ -6,7 +6,7 @@ const Greeting = ({ user }) => {
 
   console.log("greeting", user);
   return (
-    <div className="w-full pb-6 md:pb-12">
+    <div className="w-full pb-6 md:pb-20 pt-10">
       <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 mt-6 md:mt-16 ">
         <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center ">
           <div className="w-full mx-auto ">
@@ -51,7 +51,7 @@ const Greeting = ({ user }) => {
             </div>
             <div>
         <h3 class="text-lg font-semibold text-gray-800 mt-4 ">
-          Why {user?.industryReccomendation?.recommendation}?
+          Why the {user?.industryReccomendation?.recommendation}?
         </h3>
         <p class="mt-2 text-gray-600 ">
         {user?.industryReccomendation?.overview}

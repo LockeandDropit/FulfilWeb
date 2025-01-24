@@ -63,7 +63,7 @@ const MachinistTree = () => {
         attributes: {
           jobTitle: "Machinist Apprentice",
           bullet1:
-            " Learn the basics of machining, including how to operate manual and CNC machines, under the guidance of experienced machinists. Gain hands-on experience through apprenticeship programs or vocational training.",
+            " Learn the basics of machining, including how to operate manual and CNC machines, under the guidance of experienced machinists.",
 
           timeCommitment: "None",
         },

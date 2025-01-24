@@ -75,7 +75,7 @@ const ContructionEquipmentOperatorTree = () => {
             attributes: {
               jobTitle: "Experienced Equipment Operator",
               bullet1:
-                "Proficiently operating bulldozers, excavators, or cranes; reading and following blueprints; adhering to safety regulations.",
+                "Proficiently operating bulldozers, excavators, or cranes; adhering to safety regulations.",
 
               timeCommitment: "3-5 years",
 
@@ -112,7 +112,7 @@ const ContructionEquipmentOperatorTree = () => {
           {
             name: "$90k-150k+/year",
             attributes: {
-              jobTitle: "Equipment Manager or Business Owner",
+              jobTitle: "Manager/Business Owner",
               bullet1:
                 "Manages equipment fleets or owns an independent operation offering equipment rental or construction services.",
               timeCommitment: "10+ years (recomended)",

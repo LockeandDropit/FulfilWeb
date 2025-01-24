@@ -116,7 +116,7 @@ const ConstructionTree = () => {
           {
             name: "$100k-200k+/year",
             attributes: {
-              jobTitle: "Construction Business Owner/Contractor",
+              jobTitle: "Business Owner/Contractor",
               bullet1:
                 "Start and manage a construction company, bid for contracts, manage teams, and deliver projects for residential, commercial, or industrial clients.",
 

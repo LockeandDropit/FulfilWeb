@@ -27,7 +27,7 @@ const uploadAnswer = async () => {
 
       const [returnedJobs, setReturnedJobs] = useState(null);
       const [industryReccomendation, setIndustryRecommendation] = useState(null);
-      const [loading, setLoading] = useState(true);
+      const [loading, setLoading] = useState(false);
     
       const getRecommendation = async () => {
         

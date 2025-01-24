@@ -51,7 +51,7 @@ const Greeting = ({ user }) => {
             </div>
             <div>
         <h3 class="text-lg font-semibold text-gray-800 mt-4 ">
-          Overview:
+          Why {user?.industryReccomendation?.recommendation}?
         </h3>
         <p class="mt-2 text-gray-600 ">
         {user?.industryReccomendation?.overview}

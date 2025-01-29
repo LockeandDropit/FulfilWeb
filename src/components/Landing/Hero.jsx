@@ -12,17 +12,19 @@ const Hero = () => {
   };
   const navigate = useNavigate();
   return (
-    <div className="w-full h-[calc(100vh-80px)] sm:bg-landingHeroWave bg-no-repeat bg-bottom ">
+    <div className="w-full  ">
       <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 ">
         <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
           <div>
             <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
-              <span class="text-black">Fulfil is your career search assistant.</span>{" "}
+              <span class="text-black">
+                Fulfil is your career search assistant.
+              </span>{" "}
             </h1>
-           
-           
+
             <p class="mt-3 text-lg text-gray-800 w-full lg:w-4/5">
-              Fulfil connects you with high-paying entry-level jobs that are the start to great career paths. No experience needed.
+              Fulfil connects you with high-paying entry-level jobs that are the
+              start to great career paths. No experience needed.
             </p>
 
             <div
@@ -51,10 +53,10 @@ const Hero = () => {
 
           <div class="relative">
             <LazyLoadImage
-      // height={"600px"}
-      effect="blur"
-      src="./landingImages/mediumHero.jpg"
-  />
+              // height={"600px"}
+              effect="blur"
+              src="./landingImages/mediumHero.jpg"
+            />
             {/* <img
             loading="lazy"
             class=" rounded-md"
@@ -70,6 +72,7 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      {/* <div className="w-full lg:h-[calc(310px)] sm:bg-landingHeroWave bg-no-repeat bg-bottom "></div> */}
     </div>
   );
 };

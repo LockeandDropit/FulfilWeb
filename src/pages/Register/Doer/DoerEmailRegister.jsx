@@ -156,7 +156,7 @@ const DoerEmailRegister = () => {
                   ? "/DoerAddProfileInfo"
                   : results[0]._document !== null &&
                     results[0]._document.data.value.mapValue.fields.isEmployer
-                  ? "/DoerMapView"
+                  ? "/DoerHomepage"
                   : "/Homepage"
               )
             // console.log("here?",results)

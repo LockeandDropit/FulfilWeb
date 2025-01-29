@@ -95,7 +95,7 @@ const LoggedOutHeader = (props) => {
               navigate(
                 results[0]._document !== null &&
                   results[0]._document.data.value.mapValue.fields.isEmployer
-                  ? "/DoerMapView"
+                  ? "/DoerHomepage"
                   : "/Homepage"
               )
             )
@@ -135,13 +135,12 @@ const LoggedOutHeader = (props) => {
           getDoc(doc(db, "employers", result.user.uid)),
         ])
           .then((results) =>
-         
             navigate(
               results[0]._document === null && results[1]._document === null
                 ? "/DoerAddProfileInfo"
-                : ( results[0]._document !== null &&
-                  results[0]._document.data.value.mapValue.fields.isEmployer)
-                ? "/DoerMapScreen"
+                : results[0]._document !== null &&
+                  results[0]._document.data.value.mapValue.fields.isEmployer
+                ? "/DoerHomepage"
                 : "/Homepage"
             )
           )
@@ -300,16 +299,16 @@ const LoggedOutHeader = (props) => {
                   >
                     Log In
                   </button> */}
-                    <button
+                  <button
                     class="sm:mr-2 font-medium text-gray-500 hover:text-gray-400 md:py-6"
-                    onClick={() => navigate("/OnboardingOneDoer")}
+                    onClick={() => onOpen()}
                   >
-                    Sign up
+                    Sign in
                   </button>
                   <button
                     type="button"
                     className="py-2.5 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    onClick={() => navigate("/OnboardingOne")}
+                    onClick={() => navigate("/OnboardingOneDoer")}
                   >
                     <svg
                       class="flex-shrink-0 size-4"
@@ -326,16 +325,17 @@ const LoggedOutHeader = (props) => {
                       <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                       <circle cx="12" cy="7" r="4" />
                     </svg>
-                    Employer/Post job
+                    Sign up
                   </button>
                 </div>
               </div>
+
               {/* <!-- End Button Group -->
 
     <!-- Collapse --> */}
+
               {/* <div id="hs-navbar-hcail" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow md:block md:w-auto md:basis-auto md:order-2 md:col-span-6" aria-labelledby="hs-navbar-hcail-collapse">
       <div class="ml-[80px] flex flex-col gap-y-4 gap-x-0 md:flex-row md:justify-center md:items-center md:gap-y-0 md:gap-x-7 text-base">
-     
         <div>
           <a class="inline-block text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-600 mt-2 cursor-pointer" onClick={() => navigate("/About")}>About</a>
         </div>
@@ -347,6 +347,7 @@ const LoggedOutHeader = (props) => {
         </div>
       </div>
     </div> */}
+
             </nav>
           </header>
         </>
@@ -413,10 +414,12 @@ const LoggedOutHeader = (props) => {
             <div class="p-4 sm:p-7">
               <div class="text-center">
                 <h1 class="block text-2xl font-bold text-gray-800">Sign in</h1>
-                <p class="mt-2 text-sm text-gray-600">Your career is too important to settle</p>
+                <p class="mt-2 text-sm text-gray-600">
+                  Your career is too important to settle
+                </p>
               </div>
               <div class="mt-5">
-                {/* <button
+                <button
                   type="button"
                   class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
                   onClick={() => handleGoogleSignUp()}
@@ -446,11 +449,11 @@ const LoggedOutHeader = (props) => {
                     />
                   </svg>
                   Sign in with Google
-                </button> */}
+                </button>
 
-                {/* <div class="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6">
+                <div class="py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6">
                   Or
-                </div> */}
+                </div>
 
                 <form>
                   <div class="grid gap-y-4">

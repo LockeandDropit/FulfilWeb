@@ -326,7 +326,7 @@ const DoerHeader = () => {
   //   },
   // ]);
 
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState([]);
   const [userSubmission, setUserSubmission] = useState(null);
 
   const testAI = async () => {

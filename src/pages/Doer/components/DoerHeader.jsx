@@ -349,7 +349,11 @@ const DoerHeader = () => {
     const json = await response.json();
     console.log("json resopnse", json.message.content);
 
-    setResponse(json.message.content);
+    const obj = JSON.parse(json.message.content)
+
+    console.log("obj", obj)
+
+    setResponse(obj);
   };
 
   useEffect(() => {

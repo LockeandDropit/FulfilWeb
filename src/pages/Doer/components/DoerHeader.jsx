@@ -740,7 +740,7 @@ const DoerHeader = () => {
                   Career Options:
                 </h2>
                 <p className="mt-1">
-                  {response.map((resp) => (
+                  {response?.map((resp) => (
                     <div className="flex flex-col sm:flex-row mt-4 md:mt-2 p-1 w-full border rounded-lg shadow-sm mb-4">
                       <div class=" p-5 space-y-4 flex flex-col  rounded-xl ">
                         <div className="mb-4">

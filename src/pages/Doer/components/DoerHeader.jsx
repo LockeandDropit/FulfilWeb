@@ -649,12 +649,10 @@ const DoerHeader = () => {
                   onChange={(e) => setUserSubmission(e.target.value)}
                   class=" py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                   rows="4"
-                  placeholder="ex: I've recently graduated from highschool and want to work with my hands. I'd like to do something mechanical, but don;t know where to get started."
+                  placeholder="ex: I've recently graduated from highschool and want to work with my hands. I'd like to do something mechanical, but don't know where to get started."
                 ></textarea>
               </div>
-            </div>
-
-            <div className="w-full flex mt-6">
+              <div className="w-full flex mt-6">
               {loading ? (
                 <button
                   type="button"
@@ -669,15 +667,29 @@ const DoerHeader = () => {
                   </div>
                 </button>
               ) : (
-                <button
+               
+response?.length > 0 ? ( <button
+  onClick={() => testAI()}
+  type="button"
+  class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+>
+  Ask again
+</button>) : (<button
                   onClick={() => testAI()}
                   type="button"
                   class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                 >
                   Submit
-                </button>
+                </button>)
+               
+                
+               
               )}
             </div>
+            
+            </div>
+
+            
             {loading && (
               <div>
                 <h2 className="text-lg text-black font-semibold mt-3 mb-4">
@@ -742,9 +754,10 @@ const DoerHeader = () => {
             )}
             {Array.isArray(response) && (
               <div>
-                <h2 className="text-xl text-slate-800 font-semibold mt-3 mb-4">
+               {response?.length > 0 && (<h2 className="text-xl text-slate-800 font-semibold mt-3 mb-4">
                   Career Options:
-                </h2>
+                </h2>)}
+                
                 <p className="mt-1">
                   {response?.map((resp) => (
                     <div className="flex flex-col sm:flex-row mt-4 md:mt-2 p-1 w-full border rounded-lg shadow-sm mb-4">

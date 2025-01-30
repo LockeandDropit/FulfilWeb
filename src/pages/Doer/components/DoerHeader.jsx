@@ -11,7 +11,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-
+import "react-toastify/dist/ReactToastify.css";
 import {
   Modal,
   ModalOverlay,
@@ -49,6 +49,7 @@ import {
   Box,
   Heading,
 } from "@chakra-ui/react";
+import { ToastContainer, toast } from "react-toastify";
 import Markdown from "react-markdown";
 import { CheckIcon } from "@chakra-ui/icons";
 
@@ -121,8 +122,8 @@ const DoerHeader = () => {
   };
 
   const handleLinkOpen = (step) => {
-    window.open(step.link)
-  }
+    window.open(step.link);
+  };
 
   console.log(profilePicture);
 
@@ -197,6 +198,18 @@ const DoerHeader = () => {
     }
   }, [subscriptionID]);
 
+  const contextClass = {
+    default: "bg-green-600",
+  };
+
+  const notify = () => {
+    toast("Success! This has been added to your interests.", {
+      autoClose: 3000,
+      type: "success",
+      position: "bottom-right",
+    });
+  };
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [showDropdown, setShowDropdown] = useState(false);
@@ -210,94 +223,108 @@ const DoerHeader = () => {
   //test response
   const [response, setResponse] = useState([
     {
-      "id": 1,
-      "career_name": "Art Teacher",
-      "explanation": "As an Art Teacher, you can inspire and educate students in various artistic disciplines, sharing your love for painting and abstract art. This role allows you to foster creativity and appreciation for art in others.",
-      "starting_salary": "$40,000 - $60,000",
-      "career_range": "$40,000 - $80,000",
-      "steps": [
+      id: 1,
+      career_name: "Art Teacher",
+      explanation:
+        "As an Art Teacher, you can inspire and educate students in various artistic disciplines, sharing your love for painting and abstract art. This role allows you to foster creativity and appreciation for art in others.",
+      starting_salary: "$40,000 - $60,000",
+      career_range: "$40,000 - $80,000",
+      steps: [
         {
-          "step_number": 1,
-          "description": "Obtain a bachelor's degree in Art Education or a related field.",
-          "link": "https://www.cehd.umn.edu/ci/academics/visual-art-education/"
+          step_number: 1,
+          description:
+            "Obtain a bachelor's degree in Art Education or a related field.",
+          link: "https://www.cehd.umn.edu/ci/academics/visual-art-education/",
         },
         {
-          "step_number": 2,
-          "description": "Complete a teacher preparation program to gain classroom experience.",
-          "link": null
+          step_number: 2,
+          description:
+            "Complete a teacher preparation program to gain classroom experience.",
+          link: null,
         },
         {
-          "step_number": 3,
-          "description": "Acquire state teaching certification to teach in public schools.",
-          "link": "https://education.mn.gov/MDE/dse/lic/"
+          step_number: 3,
+          description:
+            "Acquire state teaching certification to teach in public schools.",
+          link: "https://education.mn.gov/MDE/dse/lic/",
         },
         {
-          "step_number": 4,
-          "description": "Apply for art teaching positions in schools or community centers.",
-          "link": "https://www.indeed.com/q-Art-Teacher-l-Minnesota-jobs.html"
-        }
-      ]
+          step_number: 4,
+          description:
+            "Apply for art teaching positions in schools or community centers.",
+          link: "https://www.indeed.com/q-Art-Teacher-l-Minnesota-jobs.html",
+        },
+      ],
     },
     {
-      "id": 2,
-      "career_name": "Teaching Artist",
-      "explanation": "As a Teaching Artist, you can integrate your artistic skills into educational settings, conducting workshops and programs that combine art creation with learning. This role allows you to work with diverse groups and share your passion for art.",
-      "starting_salary": "$30,000 - $50,000",
-      "career_range": "$30,000 - $70,000",
-      "steps": [
+      id: 2,
+      career_name: "Teaching Artist",
+      explanation:
+        "As a Teaching Artist, you can integrate your artistic skills into educational settings, conducting workshops and programs that combine art creation with learning. This role allows you to work with diverse groups and share your passion for art.",
+      starting_salary: "$30,000 - $50,000",
+      career_range: "$30,000 - $70,000",
+      steps: [
         {
-          "step_number": 1,
-          "description": "Develop a strong portfolio showcasing your abstract paintings and teaching experience.",
-          "link": null
+          step_number: 1,
+          description:
+            "Develop a strong portfolio showcasing your abstract paintings and teaching experience.",
+          link: null,
         },
         {
-          "step_number": 2,
-          "description": "Network with local arts organizations and schools to find opportunities.",
-          "link": null
+          step_number: 2,
+          description:
+            "Network with local arts organizations and schools to find opportunities.",
+          link: null,
         },
         {
-          "step_number": 3,
-          "description": "Consider joining professional associations, such as the Teaching Artists Guild.",
-          "link": "https://teachingartistsguild.org/"
+          step_number: 3,
+          description:
+            "Consider joining professional associations, such as the Teaching Artists Guild.",
+          link: "https://teachingartistsguild.org/",
         },
         {
-          "step_number": 4,
-          "description": "Apply for teaching artist positions or propose workshops to educational institutions.",
-          "link": "https://www.indeed.com/q-Teaching-Artist-l-Minnesota-jobs.html"
-        }
-      ]
+          step_number: 4,
+          description:
+            "Apply for teaching artist positions or propose workshops to educational institutions.",
+          link: "https://www.indeed.com/q-Teaching-Artist-l-Minnesota-jobs.html",
+        },
+      ],
     },
     {
-      "id": 3,
-      "career_name": "Art Therapist",
-      "explanation": "As an Art Therapist, you can use the creative process of art to improve the mental and emotional well-being of clients. This role combines your artistic skills with a desire to help people, providing therapeutic support through art.",
-      "starting_salary": "$45,000 - $55,000",
-      "career_range": "$45,000 - $90,000",
-      "steps": [
+      id: 3,
+      career_name: "Art Therapist",
+      explanation:
+        "As an Art Therapist, you can use the creative process of art to improve the mental and emotional well-being of clients. This role combines your artistic skills with a desire to help people, providing therapeutic support through art.",
+      starting_salary: "$45,000 - $55,000",
+      career_range: "$45,000 - $90,000",
+      steps: [
         {
-          "step_number": 1,
-          "description": "Earn a master's degree in Art Therapy from an accredited program.",
-          "link": "https://www.adler.edu/programs/art-therapy-ma/"
+          step_number: 1,
+          description:
+            "Earn a master's degree in Art Therapy from an accredited program.",
+          link: "https://www.adler.edu/programs/art-therapy-ma/",
         },
         {
-          "step_number": 2,
-          "description": "Complete required supervised clinical experience hours.",
-          "link": null
+          step_number: 2,
+          description:
+            "Complete required supervised clinical experience hours.",
+          link: null,
         },
         {
-          "step_number": 3,
-          "description": "Obtain Art Therapy Certification through the Art Therapy Credentials Board.",
-          "link": "https://www.atcb.org/"
+          step_number: 3,
+          description:
+            "Obtain Art Therapy Certification through the Art Therapy Credentials Board.",
+          link: "https://www.atcb.org/",
         },
         {
-          "step_number": 4,
-          "description": "Apply for art therapist positions in healthcare settings, schools, or private practice.",
-          "link": "https://www.indeed.com/q-Art-Therapist-l-Minnesota-jobs.html"
-        }
-      ]
-    }
-  ]
-  );
+          step_number: 4,
+          description:
+            "Apply for art therapist positions in healthcare settings, schools, or private practice.",
+          link: "https://www.indeed.com/q-Art-Therapist-l-Minnesota-jobs.html",
+        },
+      ],
+    },
+  ]);
 
   // const [response, setResponse] = useState(null);
   const [userSubmission, setUserSubmission] = useState(null);
@@ -646,256 +673,174 @@ const DoerHeader = () => {
               )}
             </div>
             {loading && (
-               <div>
-               <h2 className="text-lg text-black font-semibold mt-3">
-                 Career advice:
-               </h2>
-               <p className="mt-1">
-                 {response.map((resp) => (
-                   <div className="flex flex-col sm:flex-row mt-4 md:mt-2 p-1 w-full ">
-                     <div class=" p-5 space-y-4 flex flex-col  rounded-xl ">
-                       {/* <div class="flex justify-between">
-                         <div class="flex flex-col justify-center items-center rounded-lg ">
-                           <span class="ml-1 inline-flex items-center gap-x-1 text-base font-medium text-green-600 rounded-full">
-                             <svg
-                               class="shrink-0 size-4"
-                               xmlns="http://www.w3.org/2000/svg"
-                               width="24"
-                               height="24"
-                               viewBox="0 0 24 24"
-                               fill="none"
-                               stroke="currentColor"
-                               stroke-width="2"
-                               stroke-linecap="round"
-                               stroke-linejoin="round"
-                             >
-                               <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-                               <polyline points="16 7 22 7 22 13"></polyline>
-                             </svg>
-                           </span>
-                         </div>
-                       </div> */}
-
-                       <div>
-                         <h3 class="font-medium text-xl text-gray-800">
-                           {resp.career_name}
-                         </h3>
-
-                         <div className="mt-1 flex flex-col">
-                           <div className="flex flex-row">
-                            
-                               <p className="mr-1 font-medium text-sm text-gray-800">
-                                 Starting Salary:
-                               </p>{" "}
-                               <h3 class="text-sm text-gray-500">
-                               {resp.starting_salary}
-                             </h3>{" "}
-                           </div>
-                           <div className="flex flex-row">
-                 
-                               <p className="mr-1 font-medium text-sm text-gray-800">
-                                 Average Salary:
-                               </p>{" "}
-                               <h3 class="text-sm text-gray-500 ">
-                               {resp.career_range}
-                 
-                             </h3>
-                           </div>
-                         </div>
-                         <p className="mt-5 font-medium  text-gray-800">
-                                About
-                               </p>{" "}
-                         <p class=" text-gray-700 line-clamp-4 ">
-                           {resp.explanation}
-                         </p>
-
-                         <p className="mt-5 font-medium  text-gray-800">
-                                Steps
-                               </p>{" "}
-                         <ul class="ml-4 text-gray-700 list-decimal">
-                           {resp.steps.map((step) => (
-                             step.link ? (
-                             <div className="flex flex-row">
-<li className="hover:underline cursor-pointer" onClick={() => handleLinkOpen(step)}>{step.description}</li> <span> <svg
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke-width="1.25"
-                                 stroke="currentColor"
-                                 class="size-3 ml-1 hover:underline"
-                               >
-                                 <path
-                                   stroke-linecap="round"
-                                   stroke-linejoin="round"
-                                   d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                                 />
-                               </svg></span>
-                               
-                             </div>): ( <div className="flex flex-row">
-<li className="">{step.description}</li> 
-                             </div>) 
-
-                            
-                           ))}
-                         </ul>
-                       </div>
-
-                       <div className="flex mt-auto mb-1">
-                         <button
-                           type="button"
-                           class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50  "
-                         >
-                           Save
-                         </button>
-                         {/* <button
-         type="button"
-         class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
-         onClick={() => handleOpenJob(edu)}
-       >
-         Apply
-       </button> */}
-                         <button
-                           type="button"
-                           class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500 "
-                           // onClick={() => handleOpenJob(edu)}
-                         >
-                           Add to interests
-                         </button>
-                       </div>
-                     </div>
-                   </div>
-                 ))}
+              <div>
+                <h2 className="text-lg text-black font-semibold mt-3 mb-4">
+                  Career advice:
+                </h2>
              
-               </p>
-             </div>
+                  <div className="flex flex-col sm:flex-row mt-4 md:mt-2 p-1 w-full border rounded-lg shadow-sm mb-4 ">
+                    <div class=" p-5 space-y-4 flex flex-col  rounded-xl w-full">
+                      <div className="mb-4 w-full">
+                        <div className="w-full  flex flex-row ">
+                          <p class="h-6 bg-gray-200 rounded-full  animate-pulse w-1/4"></p>
+
+                          <div className="ml-auto cursor-pointer border border-gray-300 rounded-md p-0.5">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="#7D7F7C"
+                              className="size-6 "
+                              // onClick={() => notify()}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                        <div className="mt-2 flex flex-col space-y-1">
+                          <div className="flex flex-row">
+                            <p className="mr-1 font-medium text-sm text-gray-800">
+                              Starting Salary:
+                            </p>{" "}
+                            <p class="h-4 bg-gray-200 rounded-full  w-1/5 animate-pulse"></p>
+                          </div>
+                          <div className="flex flex-row">
+                            <p className="mr-1 font-medium text-sm text-gray-800">
+                              Average Salary:
+                            </p>{" "}
+                            <p class="h-4 bg-gray-200 rounded-full  w-1/5 animate-pulse"></p>
+                          </div>
+                        </div>
+                        <p className="mt-5 font-medium  text-gray-800">About</p>{" "}
+                        <div className=" space-y-2 animate-pulse">
+                          <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>{" "}
+                          <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>{" "}
+                          <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>
+                        </div>
+                        <p className="mt-5 font-medium  text-gray-800">Steps</p>{" "}
+                        <div className=" space-y-2 animate-pulse">
+                          <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>{" "}
+                          <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>{" "}
+                          <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+         
+              </div>
             )}
             {response && (
               <div>
-                <h2 className="text-lg text-black font-semibold mt-3">
-                  Career advice:
+                <h2 className="text-xl text-slate-800 font-semibold mt-3 mb-4">
+                  Career Options:
                 </h2>
                 <p className="mt-1">
                   {response.map((resp) => (
-                    <div className="flex flex-col sm:flex-row mt-4 md:mt-2 p-1 w-full ">
+                    <div className="flex flex-col sm:flex-row mt-4 md:mt-2 p-1 w-full border rounded-lg shadow-sm mb-4">
                       <div class=" p-5 space-y-4 flex flex-col  rounded-xl ">
-                        {/* <div class="flex justify-between">
-                          <div class="flex flex-col justify-center items-center rounded-lg ">
-                            <span class="ml-1 inline-flex items-center gap-x-1 text-base font-medium text-green-600 rounded-full">
+                        <div className="mb-4">
+                          <div className="w-full  flex flex-row ">
+                            <h3 class="font-medium text-xl text-gray-800">
+                              {resp.career_name}
+                            </h3>
+                            <div className="ml-auto cursor-pointer border border-gray-300 rounded-md p-0.5">
                               <svg
-                                class="shrink-0 size-4"
                                 xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
                                 fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="#7D7F7C"
+                                className="size-6 "
+                                onClick={() => notify()}
                               >
-                                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-                                <polyline points="16 7 22 7 22 13"></polyline>
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                                />
                               </svg>
-                            </span>
+                            </div>
                           </div>
-                        </div> */}
-
-                        <div>
-                          <h3 class="font-medium text-xl text-gray-800">
-                            {resp.career_name}
-                          </h3>
-
                           <div className="mt-1 flex flex-col">
                             <div className="flex flex-row">
-                             
-                                <p className="mr-1 font-medium text-sm text-gray-800">
-                                  Starting Salary:
-                                </p>{" "}
-                                <h3 class="text-sm text-gray-500">
+                              <p className="mr-1 font-medium text-sm text-gray-800">
+                                Starting Salary:
+                              </p>{" "}
+                              <h3 class="text-sm text-gray-500">
                                 {resp.starting_salary}
                               </h3>{" "}
                             </div>
                             <div className="flex flex-row">
-                  
-                                <p className="mr-1 font-medium text-sm text-gray-800">
-                                  Average Salary:
-                                </p>{" "}
-                                <h3 class="text-sm text-gray-500 ">
+                              <p className="mr-1 font-medium text-sm text-gray-800">
+                                Average Salary:
+                              </p>{" "}
+                              <h3 class="text-sm text-gray-500 ">
                                 {resp.career_range}
-                  
                               </h3>
                             </div>
                           </div>
                           <p className="mt-5 font-medium  text-gray-800">
-                                 About
-                                </p>{" "}
+                            About
+                          </p>{" "}
                           <p class=" text-gray-700 line-clamp-4 ">
                             {resp.explanation}
                           </p>
-
                           <p className="mt-5 font-medium  text-gray-800">
-                                 Steps
-                                </p>{" "}
+                            Steps
+                          </p>{" "}
                           <ul class="ml-4 text-gray-700 list-decimal">
-                            {resp.steps.map((step) => (
+                            {resp.steps.map((step) =>
                               step.link ? (
-                              <div className="flex flex-row">
- <li className="hover:underline cursor-pointer" onClick={() => handleLinkOpen(step)}>{step.description}</li> <span> <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke-width="1.25"
-                                  stroke="currentColor"
-                                  class="size-3 ml-1 hover:underline"
-                                >
-                                  <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                                  />
-                                </svg></span>
-                                
-                              </div>): ( <div className="flex flex-row">
- <li className="">{step.description}</li> 
-                              </div>) 
- 
-                             
-                            ))}
+                                <div className="flex flex-row">
+                                  <li
+                                    className="hover:underline cursor-pointer"
+                                    onClick={() => handleLinkOpen(step)}
+                                  >
+                                    {step.description}
+                                  </li>{" "}
+                                  <span>
+                                    {" "}
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke-width="1.25"
+                                      stroke="currentColor"
+                                      class="size-3 ml-1 hover:underline"
+                                    >
+                                      <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                                      />
+                                    </svg>
+                                  </span>
+                                </div>
+                              ) : (
+                                <div className="flex flex-row">
+                                  <li className="">{step.description}</li>
+                                </div>
+                              )
+                            )}
                           </ul>
-                        </div>
-
-                        <div className="flex mt-auto mb-1">
-                          <button
-                            type="button"
-                            class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50  "
-                          >
-                            Save
-                          </button>
-                          {/* <button
-          type="button"
-          class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
-          onClick={() => handleOpenJob(edu)}
-        >
-          Apply
-        </button> */}
-                          <button
-                            type="button"
-                            class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500 "
-                            // onClick={() => handleOpenJob(edu)}
-                          >
-                            Add to interests
-                          </button>
                         </div>
                       </div>
                     </div>
                   ))}
-                  {/* <Markdown>{response}</Markdown> */}
                 </p>
               </div>
             )}
           </ModalBody>
         </ModalContent>
       </Modal>
+      <div className="flex items-center justify-center w-full">
+        <ToastContainer />
+      </div>
     </>
   );
 };

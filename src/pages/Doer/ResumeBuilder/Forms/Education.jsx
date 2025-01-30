@@ -63,7 +63,7 @@ const Education = ({
   const navigate = useNavigate();
 
   const notify = () => {
-    toast("Success! Your education has been updated", {
+    toast("Success! Your edu has been updated.", {
       autoClose: 3000,
       type: "success",
     });

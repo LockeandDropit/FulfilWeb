@@ -355,6 +355,8 @@ const DoerHeader = () => {
   useEffect(() => {
     if (response) {
       setLoading(false);
+     console.log("type", typeof response)
+     console.log("response", response)
     }
   }, [response]);
   return (

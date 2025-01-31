@@ -74,7 +74,7 @@ const HomepageEducation = ({ user }) => {
 
   return (
     <div className="w-full  py-6 py-12 mb-16">
-      <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 ">
+      <div class="max-w-[85rem] mx-auto mt-6  px-4 sm:px-6 lg:px-8 ">
         <div className="flex flex-row w-full">
           <div>
             <h1 class="block text-3xl font-semibold text-gray-800 sm:text-2xl lg:text-3xl lg:leading-tight ">
@@ -96,7 +96,7 @@ const HomepageEducation = ({ user }) => {
               </div>
             </button>
           ) : (
-            <button className="border border-gray-300 px-4 py-1 h-2/3 ml-auto bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-md shadow-sm"
+            <button className="border border-gray-300 px-5 py-1 h-2/3 ml-auto bg-white hover:bg-gray-100 text-gray-800 text-sm font-medium rounded-md shadow-sm"
             onClick={() => getEdu()}
             >
               Refresh
@@ -105,7 +105,7 @@ const HomepageEducation = ({ user }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row mt-4 md:mt-6">
-          {returnedJobs?.map((edu) => (
+          {!loading && returnedJobs?.map((edu) => (
             <div className="flex flex-col sm:flex-row mt-4 md:mt-6 p-1 w-full sm:w-1/3">
               <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                 <div class="flex justify-between">

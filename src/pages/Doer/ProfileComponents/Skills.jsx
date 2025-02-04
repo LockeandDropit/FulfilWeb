@@ -152,7 +152,7 @@ const Skills = ({changeListener}) => {
   };
 
   const handleUpdate = () => {
-    if (!userInterests || !currentIncome || !goalIncome) {
+    if (!skillName) {
       setFormValidationMessage("Please fill out all fields");
     } else {
       // check if it has an id, if it has an id it exists, so route to uploadEditedWorkExperience(). Else route to uploadEorkExperience().

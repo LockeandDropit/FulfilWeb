@@ -9,11 +9,12 @@ import {
   AccordionPanel,
   AccordionIcon,
 } from "@chakra-ui/react";
+import { v4 as uuidv4 } from "uuid";
 import Markdown from "react-markdown";
 import { Box } from "@chakra-ui/react";
 import Select from "react-select";
 import { useUserStore } from "./Chat/lib/userStore";
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, getDoc, arrayUnion } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import Education from "./ProfileComponents/Education";
 import Work from "./ProfileComponents/Work";
@@ -40,6 +41,9 @@ const MyProfile = () => {
       setCurrentIncome(currentUser.currentIncome);
       setGoalIncome(currentUser.goalIncome);
       setUserInterests(currentUser.userInterests);
+    
+      setSavedCareers(currentUser.savedCareerInterests.filter(x => x.savedInterest ));
+      console.log("interests saved", currentUser.savedCareerInterests.filter(x => x.savedInterest ));
     }
   }, [currentUser]);
 
@@ -47,7 +51,7 @@ const MyProfile = () => {
   const [goalIncome, setGoalIncome] = useState(null);
   const [finalGoalIncome, setGoalFinalIncome] = useState(null);
   const [userInterests, setUserInterests] = useState(null);
-
+  const [savedCareers, setSavedCareers] = useState(null);
   useEffect(() => {
     if (goalIncome) {
       setGoalFinalIncome(goalIncome.label);
@@ -70,6 +74,44 @@ const MyProfile = () => {
     });
   };
 
+
+  //lets see. How would I do this, delete locally and in fb
+
+
+
+  const handleDeleteSelected = async (saved) => {
+
+    setSavedCareers(savedCareers.filter(x => x.id !== saved.id))
+   
+
+    const resumeSnapshot = await getDoc(
+          doc(db, "users", currentUser.uid)
+        );
+
+        const resumeData = resumeSnapshot.data();
+
+        const resumeIndex = resumeData.savedCareerInterests
+        .map(function (x) {
+          return x.id;
+        })
+        .indexOf(saved.id);
+  
+      let newData = resumeData.savedCareerInterests.splice(resumeIndex, 1);
+
+          await updateDoc(doc(db, "users", currentUser.uid), {
+            savedCareerInterests: resumeData.savedCareerInterests,
+          }).then(() => {
+            // changeListener();
+            // setUpdateIsLoading(false);
+   
+            // setSelectedExperience(null);
+            // setSkillName(null)
+            // setIsEditCareerGoals(!isEditCareerGoals);
+          });
+  }
+
+
+
   // regex credit Rogit Jain 8/3/2013 https://stackoverflow.com/questions/18033088/javascript-function-need-allow-numbers-dot-and-comma
   let regex = /^[0-9.,]+$/;
 
@@ -88,6 +130,36 @@ const MyProfile = () => {
     }
   };
 
+
+//update in fb
+  useEffect(() => {
+    if (newInterest) {
+      let newID = savedCareers.filter(x => x.savedInterest === newInterest)
+
+      console.log("newID", newID)
+       updateDoc(doc(db, "users", currentUser.uid), {
+        savedCareerInterests: arrayUnion({
+          id: newID[0].id,
+          savedInterest: newInterest,
+        })
+      }).then(() => 
+      
+         setNewInterest("")
+      
+      )
+
+      setNewInterest("")
+    }
+      }, [savedCareers])
+  const [newInterest, setNewInterest] = useState(null)
+
+  const addNewInterest = async () => {
+    //update Locally
+    setSavedCareers([...savedCareers, {id: uuidv4(),
+      savedInterest: newInterest
+    }])
+  }
+
   const [changeOccured, setChangeOccured] = useState(false);
 
   const changeListener = () => {
@@ -96,16 +168,10 @@ const MyProfile = () => {
   };
 
   const notify = () => {
-    toast.success("Success! Your information has been updated.", {
-      position: "top-right",
+    toast("Success, your profile has been updated!", {
       autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: "light",
       type: "success",
+      position: "bottom-right",
     });
   };
 
@@ -450,7 +516,7 @@ const MyProfile = () => {
 
                   <div class="xl:ps-5  w-full sm:w-3/4 space-y-1 mt-2">
                     <div class="flex flex-col bg-white rounded-xl shadow-sm xl:shadow-none  w-full ml-auto">
-                      <Accordion allowMultiple>
+                      <Accordion defaultIndex={[0]} allowMultiple>
                         <AccordionItem>
                           <AccordionButton>
                             <Box flex="1" textAlign="left">
@@ -464,7 +530,7 @@ const MyProfile = () => {
                             <AccordionIcon />
                           </AccordionButton>
                           <AccordionPanel pb={4}>
-                            <div className="flex flex-col  space-y-1 z-50">
+                            <div className="flex flex-col  space-y-2 z-50">
                               <div class="grid sm:grid-cols-4  align-center items-center">
                                 <div class="sm:col-span-1 2xl:col-span-1">
                                   <p className="font-medium text-sm text-gray-800">
@@ -529,10 +595,10 @@ const MyProfile = () => {
                                   )}
                                 </div>
                               </div>
-                              <div class="grid sm:grid-cols-4  mb-2 align-center items-center">
+                              <div class="grid sm:grid-cols-4  mb-2 align-center">
                                 <div class="sm:col-span-1 2xl:col-span-1">
                                   <p className="font-medium text-sm text-gray-800">
-                                    Career Interests:
+                                    About me:
                                   </p>
                                 </div>
                                 <div class="sm:col-span-2 align-center items-center">
@@ -544,7 +610,7 @@ const MyProfile = () => {
                                       }
                                       className="py-2 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                                       rows="3"
-                                      placeholder="This is placeholder"
+                                      placeholder="I enjoy working with my hands, being around people, and generally excel in leadership positions."
                                       value={
                                         userInterests ? userInterests : null
                                       }
@@ -557,15 +623,74 @@ const MyProfile = () => {
                                   )}
                                 </div>
                               </div>
+                              <div class="grid sm:grid-cols-4 mb-6 align-center">
+                                <div class="sm:col-span-1 2xl:col-span-1">
+                                  <p className="font-medium text-sm text-gray-800">
+                                    Career Interests:
+                                  </p>
+                                </div>
+                                <div class="sm:col-span-2 align-center items-center">
+                                  {isEditCareerGoals && (
+                                    <div className="flex flex-row space-x-1 mb-4">
+                                    <input
+                                      type="text"
+                                      onChange={(e) =>
+                                        setNewInterest(e.target.value)
+                                      }
+                                      className="py-2 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                                    value={newInterest}
+                                      placeholder="Mechanic, HVAC Technician, etc."
+                                   
+                                    />
+                                     <button
+                                    type="button"
+                                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                                    onClick={() => addNewInterest()}
+                                  >
+                                    Add
+                                  </button>
+                                    </div>
+                                  )}
+                                    <div className="flex flex-row flex-wrap mb-8">
+                                      {savedCareers?.map((saved) => (
+                                        <>
+                                          <div class="mt-1 mb-1 text-sm ml-2 cursor-default inline-flex flex-nowrap items-center bg-sky-400 rounded-lg p-1.5 ">
+                                            <div class="whitespace-nowrap text-sm font-medium text-white ">
+                                              {saved.savedInterest} 
+                                            </div>
+                                            <div class="ms-2.5 inline-flex justify-center items-center size-5 rounded-full text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-gray-400  cursor-pointer" onClick={() => handleDeleteSelected(saved)}>
+                                              <svg
+                                                class="shrink-0 size-3"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                              >
+                                                <path d="M18 6 6 18"></path>
+                                                <path d="m6 6 12 12"></path>
+                                              </svg>
+                                            </div>
+                                          </div>
+                                        </>
+                                      ))}
+                                    </div>
+                                  
+                                </div>
+                              </div>
                               {isEditCareerGoals ? (
-                                <div className="ml-auto mt-2">
-                                  <button
+                                <div className="ml-auto ">
+                                  {/* <button
                                     type="button"
                                     class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700"
                                     //    onClick={() => handleUpdate()}
                                   >
                                     Delete
-                                  </button>
+                                  </button> */}
                                   <button
                                     type="button"
                                     class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -593,7 +718,7 @@ const MyProfile = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-center w-full">
+          {/* <div className="flex items-center justify-center w-full">
             <ToastContainer
               toastClassName={(context) =>
                 contextClass[context?.type || "default"] +
@@ -603,7 +728,7 @@ const MyProfile = () => {
               autoClose={3000}
               bodyClassName={() => "text-sm text-gray-800 font-med block p-3"}
             />
-          </div>
+          </div> */}
         </main>
       )}
     </>

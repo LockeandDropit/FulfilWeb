@@ -9,8 +9,10 @@ import {
   getDoc,
   doc,
   updateDoc,
+  arrayUnion,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Modal,
@@ -184,6 +186,74 @@ const DoerHeader = () => {
       });
   };
 
+  const [savedInterestID, setSavedInterestID] = useState([]);
+
+  const [newSavedInterest, setNewSavedInterest] = useState(null);
+
+  const updateUserCareerInterests = async () => {
+    updateDoc(doc(db, "users", user.uid), {
+      savedCareerInterests: arrayUnion({ savedInterest: newSavedInterest,
+              id: uuidv4(),
+       }),
+    })
+      .then(() => {
+        //all good
+        notify();
+      })
+      .catch((error) => {
+        // no bueno
+      });
+  };
+
+  const handleNewSavedInterest = (x) => {
+    savedInterestID.push(x.id);
+    setNewSavedInterest(x.career_name);
+  };
+
+  useEffect(() => {
+    if (newSavedInterest) {
+      updateUserCareerInterests();
+      console.log("saved interest id", savedInterestID);
+    }
+  }, [newSavedInterest]);
+
+  const SavedComponent = (resp) => {
+    if (savedInterestID?.includes(resp.resp.id) === true) {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="#38BDF8"
+          className="size-6"
+        >
+          <path
+            fillRule="evenodd"
+            d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+            clipRule="evenodd"
+          />
+        </svg>
+      );
+    } else {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="#7D7F7C"
+          className="size-6"
+          onClick={() => handleNewSavedInterest(resp.resp)}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+          />
+        </svg>
+      );
+    }
+  };
+
   useEffect(() => {
     if (subscriptionID) {
       updateDoc(doc(db, "users", user.uid), {
@@ -221,112 +291,113 @@ const DoerHeader = () => {
   } = useDisclosure();
 
   //test response
-  // const [response, setResponse] = useState([
-  //   {
-  //     id: 1,
-  //     career_name: "Art Teacher",
-  //     explanation:
-  //       "As an Art Teacher, you can inspire and educate students in various artistic disciplines, sharing your love for painting and abstract art. This role allows you to foster creativity and appreciation for art in others.",
-  //     starting_salary: "$40,000 - $60,000",
-  //     career_range: "$40,000 - $80,000",
-  //     steps: [
-  //       {
-  //         step_number: 1,
-  //         description:
-  //           "Obtain a bachelor's degree in Art Education or a related field.",
-  //         link: "https://www.cehd.umn.edu/ci/academics/visual-art-education/",
-  //       },
-  //       {
-  //         step_number: 2,
-  //         description:
-  //           "Complete a teacher preparation program to gain classroom experience.",
-  //         link: null,
-  //       },
-  //       {
-  //         step_number: 3,
-  //         description:
-  //           "Acquire state teaching certification to teach in public schools.",
-  //         link: "https://education.mn.gov/MDE/dse/lic/",
-  //       },
-  //       {
-  //         step_number: 4,
-  //         description:
-  //           "Apply for art teaching positions in schools or community centers.",
-  //         link: "https://www.indeed.com/q-Art-Teacher-l-Minnesota-jobs.html",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 2,
-  //     career_name: "Teaching Artist",
-  //     explanation:
-  //       "As a Teaching Artist, you can integrate your artistic skills into educational settings, conducting workshops and programs that combine art creation with learning. This role allows you to work with diverse groups and share your passion for art.",
-  //     starting_salary: "$30,000 - $50,000",
-  //     career_range: "$30,000 - $70,000",
-  //     steps: [
-  //       {
-  //         step_number: 1,
-  //         description:
-  //           "Develop a strong portfolio showcasing your abstract paintings and teaching experience.",
-  //         link: null,
-  //       },
-  //       {
-  //         step_number: 2,
-  //         description:
-  //           "Network with local arts organizations and schools to find opportunities.",
-  //         link: null,
-  //       },
-  //       {
-  //         step_number: 3,
-  //         description:
-  //           "Consider joining professional associations, such as the Teaching Artists Guild.",
-  //         link: "https://teachingartistsguild.org/",
-  //       },
-  //       {
-  //         step_number: 4,
-  //         description:
-  //           "Apply for teaching artist positions or propose workshops to educational institutions.",
-  //         link: "https://www.indeed.com/q-Teaching-Artist-l-Minnesota-jobs.html",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: 3,
-  //     career_name: "Art Therapist",
-  //     explanation:
-  //       "As an Art Therapist, you can use the creative process of art to improve the mental and emotional well-being of clients. This role combines your artistic skills with a desire to help people, providing therapeutic support through art.",
-  //     starting_salary: "$45,000 - $55,000",
-  //     career_range: "$45,000 - $90,000",
-  //     steps: [
-  //       {
-  //         step_number: 1,
-  //         description:
-  //           "Earn a master's degree in Art Therapy from an accredited program.",
-  //         link: "https://www.adler.edu/programs/art-therapy-ma/",
-  //       },
-  //       {
-  //         step_number: 2,
-  //         description:
-  //           "Complete required supervised clinical experience hours.",
-  //         link: null,
-  //       },
-  //       {
-  //         step_number: 3,
-  //         description:
-  //           "Obtain Art Therapy Certification through the Art Therapy Credentials Board.",
-  //         link: "https://www.atcb.org/",
-  //       },
-  //       {
-  //         step_number: 4,
-  //         description:
-  //           "Apply for art therapist positions in healthcare settings, schools, or private practice.",
-  //         link: "https://www.indeed.com/q-Art-Therapist-l-Minnesota-jobs.html",
-  //       },
-  //     ],
-  //   },
-  // ]);
+  const [response, setResponse] = useState([
+    {
+      id: 1,
+      career_name: "Art Teacher",
+      explanation:
+        "As an Art Teacher, you can inspire and educate students in various artistic disciplines, sharing your love for painting and abstract art. This role allows you to foster creativity and appreciation for art in others.",
+      starting_salary: "$40,000 - $60,000",
+      career_range: "$40,000 - $80,000",
+      steps: [
+        {
+          step_number: 1,
+          description:
+            "Obtain a bachelor's degree in Art Education or a related field.",
+          link: "https://www.cehd.umn.edu/ci/academics/visual-art-education/",
+        },
+        {
+          step_number: 2,
+          description:
+            "Complete a teacher preparation program to gain classroom experience.",
+          link: null,
+        },
+        {
+          step_number: 3,
+          description:
+            "Acquire state teaching certification to teach in public schools.",
+          link: "https://education.mn.gov/MDE/dse/lic/",
+        },
+        {
+          step_number: 4,
+          description:
+            "Apply for art teaching positions in schools or community centers.",
+          link: "https://www.indeed.com/q-Art-Teacher-l-Minnesota-jobs.html",
+        },
+      ],
+    },
+    {
+      id: 2,
+      career_name: "Teaching Artist",
+      explanation:
+        "As a Teaching Artist, you can integrate your artistic skills into educational settings, conducting workshops and programs that combine art creation with learning. This role allows you to work with diverse groups and share your passion for art.",
+      starting_salary: "$30,000 - $50,000",
+      career_range: "$30,000 - $70,000",
+      steps: [
+        {
+          step_number: 1,
+          description:
+            "Develop a strong portfolio showcasing your abstract paintings and teaching experience.",
+          link: null,
+        },
+        {
+          step_number: 2,
+          description:
+            "Network with local arts organizations and schools to find opportunities.",
+          link: null,
+        },
+        {
+          step_number: 3,
+          description:
+            "Consider joining professional associations, such as the Teaching Artists Guild.",
+          link: "https://teachingartistsguild.org/",
+        },
+        {
+          step_number: 4,
+          description:
+            "Apply for teaching artist positions or propose workshops to educational institutions.",
+          link: "https://www.indeed.com/q-Teaching-Artist-l-Minnesota-jobs.html",
+        },
+      ],
+    },
+    {
+      id: 3,
+      career_name: "Art Therapist",
+      explanation:
+        "As an Art Therapist, you can use the creative process of art to improve the mental and emotional well-being of clients. This role combines your artistic skills with a desire to help people, providing therapeutic support through art.",
+      starting_salary: "$45,000 - $55,000",
+      career_range: "$45,000 - $90,000",
+      steps: [
+        {
+          step_number: 1,
+          description:
+            "Earn a master's degree in Art Therapy from an accredited program.",
+          link: "https://www.adler.edu/programs/art-therapy-ma/",
+        },
+        {
+          step_number: 2,
+          description:
+            "Complete required supervised clinical experience hours.",
+          link: null,
+        },
+        {
+          step_number: 3,
+          description:
+            "Obtain Art Therapy Certification through the Art Therapy Credentials Board.",
+          link: "https://www.atcb.org/",
+        },
+        {
+          step_number: 4,
+          description:
+            "Apply for art therapist positions in healthcare settings, schools, or private practice.",
+          link: "https://www.indeed.com/q-Art-Therapist-l-Minnesota-jobs.html",
+        },
+      ],
+    },
+  ]);
 
-  const [response, setResponse] = useState([]);
+  //REAL RESPONSE SETTER
+  // const [response, setResponse] = useState([]);
   const [userSubmission, setUserSubmission] = useState(null);
 
   const testAI = async () => {
@@ -349,9 +420,9 @@ const DoerHeader = () => {
     const json = await response.json();
     console.log("json resopnse", json.message.content);
 
-    const obj = JSON.parse(json.message.content)
+    const obj = JSON.parse(json.message.content);
 
-    console.log("obj", obj)
+    console.log("obj", obj);
 
     setResponse(obj);
   };
@@ -359,8 +430,8 @@ const DoerHeader = () => {
   useEffect(() => {
     if (response) {
       setLoading(false);
-     console.log("type", typeof response)
-     console.log("response", response)
+      console.log("type", typeof response);
+      console.log("response", response);
     }
   }, [response]);
   return (
@@ -653,111 +724,108 @@ const DoerHeader = () => {
                 ></textarea>
               </div>
               <div className="w-full flex mt-6">
-              {loading ? (
-                <button
-                  type="button"
-                  class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                >
-                  <div
-                    class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full"
-                    role="status"
-                    aria-label="loading"
+                {loading ? (
+                  <button
+                    type="button"
+                    class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                   >
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                </button>
-              ) : (
-               
-response?.length > 0 ? ( <button
-  onClick={() => testAI()}
-  type="button"
-  class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
->
-  Ask again
-</button>) : (<button
-                  onClick={() => testAI()}
-                  type="button"
-                  class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                >
-                  Submit
-                </button>)
-               
-                
-               
-              )}
-            </div>
-            
+                    <div
+                      class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-white rounded-full"
+                      role="status"
+                      aria-label="loading"
+                    >
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </button>
+                ) : response?.length > 0 ? (
+                  <button
+                    onClick={() => testAI()}
+                    type="button"
+                    class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                  >
+                    Ask again
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => testAI()}
+                    type="button"
+                    class="ml-auto py-3 px-6 items-center gap-x-2 font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                  >
+                    Submit
+                  </button>
+                )}
+              </div>
             </div>
 
-            
             {loading && (
               <div>
                 <h2 className="text-lg text-black font-semibold mt-3 mb-4">
                   Career advice:
                 </h2>
-             
-                  <div className="flex flex-col sm:flex-row mt-4 md:mt-2 p-1 w-full border rounded-lg shadow-sm mb-4 ">
-                    <div class=" p-5 space-y-4 flex flex-col  rounded-xl w-full">
-                      <div className="mb-4 w-full">
-                        <div className="w-full  flex flex-row ">
-                          <p class="h-6 bg-gray-200 rounded-full  animate-pulse w-1/4"></p>
 
-                          <div className="ml-auto cursor-pointer border border-gray-300 rounded-md p-0.5">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="#7D7F7C"
-                              className="size-6 "
-                              // onClick={() => notify()}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
-                              />
-                            </svg>
-                          </div>
+                <div className="flex flex-col sm:flex-row mt-4 md:mt-2 p-1 w-full border rounded-lg shadow-sm mb-4 ">
+                  <div class=" p-5 space-y-4 flex flex-col  rounded-xl w-full">
+                    <div className="mb-4 w-full">
+                      <div className="w-full  flex flex-row ">
+                        <p class="h-6 bg-gray-200 rounded-full  animate-pulse w-1/4"></p>
+
+                        <div className="ml-auto cursor-pointer border border-gray-300 rounded-md p-0.5">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="#7D7F7C"
+                            className="size-6 "
+                            // onClick={() => notify()}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                            />
+                          </svg>
                         </div>
-                        <div className="mt-2 flex flex-col space-y-1">
-                          <div className="flex flex-row">
-                            <p className="mr-1 font-medium text-sm text-gray-800">
-                              Starting Salary:
-                            </p>{" "}
-                            <p class="h-4 bg-gray-200 rounded-full  w-1/5 animate-pulse"></p>
-                          </div>
-                          <div className="flex flex-row">
-                            <p className="mr-1 font-medium text-sm text-gray-800">
-                              Average Salary:
-                            </p>{" "}
-                            <p class="h-4 bg-gray-200 rounded-full  w-1/5 animate-pulse"></p>
-                          </div>
+                      </div>
+                      <div className="mt-2 flex flex-col space-y-1">
+                        <div className="flex flex-row">
+                          <p className="mr-1 font-medium text-sm text-gray-800">
+                            Starting Salary:
+                          </p>{" "}
+                          <p class="h-4 bg-gray-200 rounded-full  w-1/5 animate-pulse"></p>
                         </div>
-                        <p className="mt-5 font-medium  text-gray-800">About</p>{" "}
-                        <div className=" space-y-2 animate-pulse">
-                          <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>{" "}
-                          <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>{" "}
-                          <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>
+                        <div className="flex flex-row">
+                          <p className="mr-1 font-medium text-sm text-gray-800">
+                            Average Salary:
+                          </p>{" "}
+                          <p class="h-4 bg-gray-200 rounded-full  w-1/5 animate-pulse"></p>
                         </div>
-                        <p className="mt-5 font-medium  text-gray-800">Steps</p>{" "}
-                        <div className=" space-y-2 animate-pulse">
-                          <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>{" "}
-                          <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>{" "}
-                          <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>
-                        </div>
+                      </div>
+                      <p className="mt-5 font-medium  text-gray-800">About</p>{" "}
+                      <div className=" space-y-2 animate-pulse">
+                        <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>{" "}
+                        <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>{" "}
+                        <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>
+                      </div>
+                      <p className="mt-5 font-medium  text-gray-800">Steps</p>{" "}
+                      <div className=" space-y-2 animate-pulse">
+                        <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>{" "}
+                        <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>{" "}
+                        <p class="h-4 bg-gray-200 rounded-full  w-3/4"></p>
                       </div>
                     </div>
                   </div>
-         
+                </div>
               </div>
             )}
             {Array.isArray(response) && (
               <div>
-               {response?.length > 0 && (<h2 className="text-xl text-slate-800 font-semibold mt-3 mb-4">
-                  Career Options:
-                </h2>)}
-                
+                {response?.length > 0 && (
+                  <h2 className="text-xl text-slate-800 font-semibold mt-3 mb-4">
+                    Career Options:
+                  </h2>
+                )}
+
                 <p className="mt-1">
                   {response?.map((resp) => (
                     <div className="flex flex-col sm:flex-row mt-4 md:mt-2 p-1 w-full border rounded-lg shadow-sm mb-4">
@@ -768,21 +836,7 @@ response?.length > 0 ? ( <button
                               {resp.career_name}
                             </h3>
                             <div className="ml-auto cursor-pointer border border-gray-300 rounded-md p-0.5">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="#7D7F7C"
-                                className="size-6 "
-                                onClick={() => notify()}
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
-                                />
-                              </svg>
+                              <SavedComponent resp={resp} />
                             </div>
                           </div>
                           <div className="mt-1 flex flex-col">

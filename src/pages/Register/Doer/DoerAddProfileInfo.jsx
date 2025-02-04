@@ -42,6 +42,7 @@ import {
   addDoc,
   setDoc,
   arrayUnion,
+  addCollection
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -205,11 +206,27 @@ const DoerAddProfileInfo = () => {
     });
   };
 
+  //creates My Resume in firestore
+  const addResumeHolder = async () => {
+      
+     
+      await setDoc(doc(db, "users", user.uid, "Resumes", "My Resume"), {
+        education: [],
+        experience: [],
+        skills: [],
+      }).then(() => {
+        updateUserProfileFirestore();
+      });
+    };
+
   //yeah baby it WORKS. The below connects the user's auth ID with the firebase user document ID.. hopefully this helps in persistant auth and redux.
 
   //firestore help came from https://www.youtube.com/@NetNinja
 
   const updateUserProfileFirestore = () => {
+
+  
+
     //submit data
     setDoc(doc(db, "users", user.uid), {
       firstName: firstName,
@@ -228,6 +245,7 @@ const DoerAddProfileInfo = () => {
       emailVerified: false,
       resumeUploaded: false,
       stripeOnboarded: false,
+      savedCareerInterests: [],
       PrivacyPolicyAgree: privacyPolicy,
       ageAgreement: ageAgreement,
       termsOfService: termsOfService,
@@ -279,7 +297,12 @@ const DoerAddProfileInfo = () => {
       setPhoneValidationMessage("Phone number format invalid");
     } else {
       sendTylerEmail();
-      updateUserProfileFirestore();
+      //recent change, this was working.
+      //old
+      // updateUserProfileFirestore();
+
+      //new
+      addResumeHolder();
     }
   };
 

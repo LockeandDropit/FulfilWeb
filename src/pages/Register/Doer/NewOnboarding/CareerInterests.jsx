@@ -141,7 +141,7 @@ const uploadAnswer = async () => {
               }, [currentUser]);
       
           useEffect(() => {
-            if (userInfo && loading) { 
+            if (userInfo && loading === true) { 
               console.log("userInfo", userInfo)
               getJobs();   
               getEdu();

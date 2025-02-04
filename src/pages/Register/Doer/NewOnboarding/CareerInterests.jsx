@@ -141,12 +141,12 @@ const uploadAnswer = async () => {
               }, [currentUser]);
       
           useEffect(() => {
-            if (userInfo) { 
+            if (userInfo && loading) { 
               console.log("userInfo", userInfo)
               getJobs();   
               getEdu();
             }
-          }, [userInfo]);
+          }, [userInfo, loading]);
       
        
             const uploadJobsAndEdu = async () => {

@@ -59,6 +59,9 @@ const uploadAnswer = async () => {
         // setLoading(false);
       };
 
+      
+      const [returnedJobs, setReturnedJobs] = useState(null);
+      const [returnedEducation, setReturnedEducation] = useState(null);
 
       useEffect(() => {
       if (industryReccomendation && returnedEducation && returnedJobs) {
@@ -68,8 +71,6 @@ const uploadAnswer = async () => {
 
 
 
-          const [returnedJobs, setReturnedJobs] = useState(null);
-          const [returnedEducation, setReturnedEducation] = useState(null);
          
         
           const getJobs = async () => {

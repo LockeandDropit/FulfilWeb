@@ -52,6 +52,7 @@ const MyProfile = () => {
   const [finalGoalIncome, setGoalFinalIncome] = useState(null);
   const [userInterests, setUserInterests] = useState(null);
   const [savedCareers, setSavedCareers] = useState(null);
+  
   useEffect(() => {
     if (goalIncome) {
       setGoalFinalIncome(goalIncome.label);

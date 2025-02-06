@@ -25,7 +25,7 @@ const Greeting = ({ user }) => {
     <div className="w-full pb-6 md:pb-20 pt-10">
       <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 mt-6 md:mt-16 ">
         <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center ">
-          {preferredIndustry ? (
+          {preferredIndustry?.recommendation ? (
             <div className="w-full mx-auto ">
              
                <div className="flex flex-col">

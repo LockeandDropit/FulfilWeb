@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
+import { useJobRecommendationStore } from "../lib/jobRecommendations";
 
 const HomepageJobs = ({ user }) => {
   //fetch info from chatGPT
@@ -10,6 +11,11 @@ const HomepageJobs = ({ user }) => {
   const [returnedJobs, setReturnedJobs] = useState(null);
   const [newReturnedJobs, setNewReturnedJobs] = useState(null);
   const [loading, setLoading] = useState(true);
+
+   const { recommendedJobs, setRecommendedJobs } = useJobRecommendationStore();
+
+
+  console.log("recommended jobs", recommendedJobs)
 
   const getJobs = async () => {
     setLoading(true);
@@ -112,7 +118,7 @@ const HomepageJobs = ({ user }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row mt-4 md:mt-6">
-          {!loading && returnedJobs?.map((job) => (
+          {!loading && recommendedJobs?.map((job) => (
             <div className="flex flex-col sm:flex-row mt-4 md:mt-6 p-1 w-full sm:w-1/3">
               <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                 <div class="flex justify-between">

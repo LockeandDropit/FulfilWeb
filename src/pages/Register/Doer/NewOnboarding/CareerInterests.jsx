@@ -12,6 +12,7 @@ const CareerInterests = () => {
 
 const [interests, setInterests] = useState(null)
 const [userInfo, setUserInfo] = useState(null)
+
 const uploadAnswer = async () => {
   await updateDoc(doc(db, "users", currentUser.uid), {
     userInterests: interests,

@@ -2,12 +2,16 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { db } from "../../../firebaseConfig";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
+import { useEduRecommendationStore } from "../lib/eduRecommendations";
 const HomepageEducation = ({ user }) => {
+
   const [userResumeInformation, setUserResumeInformation] = useState(null);
 
   const [returnedJobs, setReturnedJobs] = useState(null);
   const [newReturnedEdu, setNewReturnedEdu] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  const { recommendedEdu, setRecommendedEdu } = useEduRecommendationStore();
 
   const getEdu = async () => {
     setLoading(true);
@@ -72,6 +76,8 @@ const HomepageEducation = ({ user }) => {
     window.open(x.link);
   };
 
+  console.log("recommendedEdu", recommendedEdu)
+
   return (
     <div className="w-full  py-6 py-12 mb-16">
       <div class="max-w-[85rem] mx-auto mt-6  px-4 sm:px-6 lg:px-8 ">
@@ -105,7 +111,7 @@ const HomepageEducation = ({ user }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row mt-4 md:mt-6">
-          {!loading && returnedJobs?.map((edu) => (
+          {!loading && recommendedEdu?.map((edu) => (
             <div className="flex flex-col sm:flex-row mt-4 md:mt-6 p-1 w-full sm:w-1/3">
               <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                 <div class="flex justify-between">

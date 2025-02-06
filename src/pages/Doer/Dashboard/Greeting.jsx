@@ -150,7 +150,7 @@ const Greeting = ({ user }) => {
                     </div>
                     <div className="mt-1 flex items-center gap-x-2">
                       <h3 className="text-xl sm:text-xl font-medium text-gray-800">
-                        {recommendedIndustry.recommendation}
+                        {recommendedIndustry?.recommendation}
                       </h3>
                     </div>
                   </div>
@@ -165,7 +165,7 @@ const Greeting = ({ user }) => {
                     </div>
                     <div className="mt-1 flex items-center gap-x-2">
                       <h3 className="text-xl font-medium text-gray-800">
-                        ${recommendedIndustry.average_pay}
+                        ${recommendedIndustry?.average_pay}
                       </h3>
                     </div>
                   </div>
@@ -208,10 +208,10 @@ const Greeting = ({ user }) => {
 
               <div>
                 <h3 class="text-lg font-semibold text-gray-800 mt-4 ">
-                  Why the {recommendedIndustry.recommendation}?
+                  Why the {recommendedIndustry?.recommendation}?
                 </h3>
                 <p class="mt-2 text-gray-600 ">
-                  {recommendedIndustry.overview}
+                  {recommendedIndustry?.overview}
                 </p>
               </div>
             </div>

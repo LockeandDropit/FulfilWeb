@@ -291,113 +291,113 @@ const DoerHeader = () => {
   } = useDisclosure();
 
   //test response
-  const [response, setResponse] = useState([
-    {
-      id: 1,
-      career_name: "Art Teacher",
-      explanation:
-        "As an Art Teacher, you can inspire and educate students in various artistic disciplines, sharing your love for painting and abstract art. This role allows you to foster creativity and appreciation for art in others.",
-      starting_salary: "$40,000 - $60,000",
-      career_range: "$40,000 - $80,000",
-      steps: [
-        {
-          step_number: 1,
-          description:
-            "Obtain a bachelor's degree in Art Education or a related field.",
-          link: "https://www.cehd.umn.edu/ci/academics/visual-art-education/",
-        },
-        {
-          step_number: 2,
-          description:
-            "Complete a teacher preparation program to gain classroom experience.",
-          link: null,
-        },
-        {
-          step_number: 3,
-          description:
-            "Acquire state teaching certification to teach in public schools.",
-          link: "https://education.mn.gov/MDE/dse/lic/",
-        },
-        {
-          step_number: 4,
-          description:
-            "Apply for art teaching positions in schools or community centers.",
-          link: "https://www.indeed.com/q-Art-Teacher-l-Minnesota-jobs.html",
-        },
-      ],
-    },
-    {
-      id: 2,
-      career_name: "Teaching Artist",
-      explanation:
-        "As a Teaching Artist, you can integrate your artistic skills into educational settings, conducting workshops and programs that combine art creation with learning. This role allows you to work with diverse groups and share your passion for art.",
-      starting_salary: "$30,000 - $50,000",
-      career_range: "$30,000 - $70,000",
-      steps: [
-        {
-          step_number: 1,
-          description:
-            "Develop a strong portfolio showcasing your abstract paintings and teaching experience.",
-          link: null,
-        },
-        {
-          step_number: 2,
-          description:
-            "Network with local arts organizations and schools to find opportunities.",
-          link: null,
-        },
-        {
-          step_number: 3,
-          description:
-            "Consider joining professional associations, such as the Teaching Artists Guild.",
-          link: "https://teachingartistsguild.org/",
-        },
-        {
-          step_number: 4,
-          description:
-            "Apply for teaching artist positions or propose workshops to educational institutions.",
-          link: "https://www.indeed.com/q-Teaching-Artist-l-Minnesota-jobs.html",
-        },
-      ],
-    },
-    {
-      id: 3,
-      career_name: "Art Therapist",
-      explanation:
-        "As an Art Therapist, you can use the creative process of art to improve the mental and emotional well-being of clients. This role combines your artistic skills with a desire to help people, providing therapeutic support through art.",
-      starting_salary: "$45,000 - $55,000",
-      career_range: "$45,000 - $90,000",
-      steps: [
-        {
-          step_number: 1,
-          description:
-            "Earn a master's degree in Art Therapy from an accredited program.",
-          link: "https://www.adler.edu/programs/art-therapy-ma/",
-        },
-        {
-          step_number: 2,
-          description:
-            "Complete required supervised clinical experience hours.",
-          link: null,
-        },
-        {
-          step_number: 3,
-          description:
-            "Obtain Art Therapy Certification through the Art Therapy Credentials Board.",
-          link: "https://www.atcb.org/",
-        },
-        {
-          step_number: 4,
-          description:
-            "Apply for art therapist positions in healthcare settings, schools, or private practice.",
-          link: "https://www.indeed.com/q-Art-Therapist-l-Minnesota-jobs.html",
-        },
-      ],
-    },
-  ]);
+  // const [response, setResponse] = useState([
+  //   {
+  //     id: 1,
+  //     career_name: "Art Teacher",
+  //     explanation:
+  //       "As an Art Teacher, you can inspire and educate students in various artistic disciplines, sharing your love for painting and abstract art. This role allows you to foster creativity and appreciation for art in others.",
+  //     starting_salary: "$40,000 - $60,000",
+  //     career_range: "$40,000 - $80,000",
+  //     steps: [
+  //       {
+  //         step_number: 1,
+  //         description:
+  //           "Obtain a bachelor's degree in Art Education or a related field.",
+  //         link: "https://www.cehd.umn.edu/ci/academics/visual-art-education/",
+  //       },
+  //       {
+  //         step_number: 2,
+  //         description:
+  //           "Complete a teacher preparation program to gain classroom experience.",
+  //         link: null,
+  //       },
+  //       {
+  //         step_number: 3,
+  //         description:
+  //           "Acquire state teaching certification to teach in public schools.",
+  //         link: "https://education.mn.gov/MDE/dse/lic/",
+  //       },
+  //       {
+  //         step_number: 4,
+  //         description:
+  //           "Apply for art teaching positions in schools or community centers.",
+  //         link: "https://www.indeed.com/q-Art-Teacher-l-Minnesota-jobs.html",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: 2,
+  //     career_name: "Teaching Artist",
+  //     explanation:
+  //       "As a Teaching Artist, you can integrate your artistic skills into educational settings, conducting workshops and programs that combine art creation with learning. This role allows you to work with diverse groups and share your passion for art.",
+  //     starting_salary: "$30,000 - $50,000",
+  //     career_range: "$30,000 - $70,000",
+  //     steps: [
+  //       {
+  //         step_number: 1,
+  //         description:
+  //           "Develop a strong portfolio showcasing your abstract paintings and teaching experience.",
+  //         link: null,
+  //       },
+  //       {
+  //         step_number: 2,
+  //         description:
+  //           "Network with local arts organizations and schools to find opportunities.",
+  //         link: null,
+  //       },
+  //       {
+  //         step_number: 3,
+  //         description:
+  //           "Consider joining professional associations, such as the Teaching Artists Guild.",
+  //         link: "https://teachingartistsguild.org/",
+  //       },
+  //       {
+  //         step_number: 4,
+  //         description:
+  //           "Apply for teaching artist positions or propose workshops to educational institutions.",
+  //         link: "https://www.indeed.com/q-Teaching-Artist-l-Minnesota-jobs.html",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: 3,
+  //     career_name: "Art Therapist",
+  //     explanation:
+  //       "As an Art Therapist, you can use the creative process of art to improve the mental and emotional well-being of clients. This role combines your artistic skills with a desire to help people, providing therapeutic support through art.",
+  //     starting_salary: "$45,000 - $55,000",
+  //     career_range: "$45,000 - $90,000",
+  //     steps: [
+  //       {
+  //         step_number: 1,
+  //         description:
+  //           "Earn a master's degree in Art Therapy from an accredited program.",
+  //         link: "https://www.adler.edu/programs/art-therapy-ma/",
+  //       },
+  //       {
+  //         step_number: 2,
+  //         description:
+  //           "Complete required supervised clinical experience hours.",
+  //         link: null,
+  //       },
+  //       {
+  //         step_number: 3,
+  //         description:
+  //           "Obtain Art Therapy Certification through the Art Therapy Credentials Board.",
+  //         link: "https://www.atcb.org/",
+  //       },
+  //       {
+  //         step_number: 4,
+  //         description:
+  //           "Apply for art therapist positions in healthcare settings, schools, or private practice.",
+  //         link: "https://www.indeed.com/q-Art-Therapist-l-Minnesota-jobs.html",
+  //       },
+  //     ],
+  //   },
+  // ]);
 
   //REAL RESPONSE SETTER
-  // const [response, setResponse] = useState([]);
+  const [response, setResponse] = useState([]);
   const [userSubmission, setUserSubmission] = useState(null);
 
   const testAI = async () => {

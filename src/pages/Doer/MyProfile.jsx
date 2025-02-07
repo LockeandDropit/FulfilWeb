@@ -23,6 +23,7 @@ import StepperComponent from "./ProfileComponents/StepperComponent";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ResumePreview from "./ResumeBuilder/ResumePreview";
 
 const MyProfile = () => {
   const { currentUser } = useUserStore();
@@ -179,6 +180,11 @@ const MyProfile = () => {
   const contextClass = {
     default: "bg-green-600",
   };
+
+  const [openModal, setOpenModal] = useState(false)
+  const setModalClosed = () => {
+setOpenModal(false)
+  }
 
   return (
     <>
@@ -511,6 +517,10 @@ const MyProfile = () => {
                           changeListener={changeListener}
                           changeOccured={changeOccured}
                         />
+                        <div>
+                          <button onClick={() => setOpenModal(true)}>create resume</button>
+
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -525,7 +535,7 @@ const MyProfile = () => {
                                 for="hs-pro-epdsku"
                                 class="block font-medium text-stone-800 "
                               >
-                                Career Goals
+                                Career Goals <span className="text-gray-500 text-sm">(only you can see this)</span>
                               </label>
                             </Box>
                             <AccordionIcon />
@@ -719,17 +729,8 @@ const MyProfile = () => {
               </div>
             </div>
           </div>
-          {/* <div className="flex items-center justify-center w-full">
-            <ToastContainer
-              toastClassName={(context) =>
-                contextClass[context?.type || "default"] +
-                " relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer"
-              }
-              position="bottom-center"
-              autoClose={3000}
-              bodyClassName={() => "text-sm text-gray-800 font-med block p-3"}
-            />
-          </div> */}
+    
+               {openModal && <ResumePreview setModalClosed={() => setModalClosed()}/>}
         </main>
       )}
     </>

@@ -1,7 +1,7 @@
 import React from "react";
 
-const AboutPreview = ({ resumeInfo }) => {
-  console.log("resume info", resumeInfo);
+const AboutPreview = ({ resumeInfo, currentUser }) => {
+  console.log("currentUser", currentUser);
 
   return (
     <div>
@@ -13,7 +13,7 @@ const AboutPreview = ({ resumeInfo }) => {
           }
         }
       >
-        {resumeInfo?.firstName} {resumeInfo?.lastName}
+        {currentUser?.firstName} {currentUser?.lastName}
       </h2>
       {/* <h2 className="text-center text-sm font-medium">
         {resumeInfo?.jobTitle}
@@ -26,7 +26,7 @@ const AboutPreview = ({ resumeInfo }) => {
           }
         }
       >
-        {resumeInfo?.city}, {resumeInfo?.state}
+        {currentUser?.city}, {currentUser?.state}
       </h2>
       <div className="text-center">
 
@@ -38,7 +38,7 @@ const AboutPreview = ({ resumeInfo }) => {
             }
           }
         >
-          {resumeInfo?.phoneNumber}
+          {currentUser?.phoneNumber}
         </h2>
         <h2
           className="font-normal text-sm"
@@ -48,30 +48,12 @@ const AboutPreview = ({ resumeInfo }) => {
             }
           }
         >
-          {resumeInfo?.email}
+          {currentUser?.email}
         </h2>
       </div>
 
       
 
-      {resumeInfo?.aboutDescription && (
-        <>
-          <hr
-            className="border-[1.5px] my-2"
-            style={
-              {
-                // borderColor:resumeInfo?.themeColor
-              }
-            }
-          />
-          <div className="flex flex-col justify-start mt-2 mb-1">
-            {/* <h2 className="text-base font-bold text-black">About</h2> */}
-            <h2 className="font-normal text-sm">
-              {resumeInfo?.aboutDescription}
-            </h2>
-          </div>
-        </>
-      )}
     </div>
   );
 };

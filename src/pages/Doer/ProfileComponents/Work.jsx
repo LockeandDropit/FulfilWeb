@@ -1,7 +1,7 @@
-import React from 'react'
-import { useUserStore } from '../Chat/lib/userStore'
-import { db } from '../../../firebaseConfig'
-import RichTextEditor from '../../Needer/Components/RichTextEditor'
+import React from "react";
+import { useUserStore } from "../Chat/lib/userStore";
+import { db } from "../../../firebaseConfig";
+import RichTextEditor from "../../Needer/Components/RichTextEditor";
 import { useState, useEffect } from "react";
 import {
   Accordion,
@@ -9,6 +9,13 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Markdown from "react-markdown";
 import { Box } from "@chakra-ui/react";
@@ -38,15 +45,15 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import DatePicker from "react-datepicker";
 
-const Work = ({ changeListener}) => {
+const Work = ({ changeListener }) => {
   const { currentUser } = useUserStore();
-  useEffect(() => {
-    if (currentUser) {
-      setCurrentIncome(currentUser.currentIncome);
-      setGoalIncome(currentUser.goalIncome);
-      setUserInterests(currentUser.userInterests);
-    }
-  }, [currentUser]);
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     setCurrentIncome(currentUser.currentIncome);
+  //     setGoalIncome(currentUser.goalIncome);
+  //     setUserInterests(currentUser.userInterests);
+  //   }
+  // }, [currentUser]);
 
   const [currentIncome, setCurrentIncome] = useState(null);
   const [goalIncome, setGoalIncome] = useState(null);
@@ -56,6 +63,7 @@ const Work = ({ changeListener}) => {
   const [isEditCareerGoals, setIsEditCareerGoals] = useState(false);
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
   const [formValidationMessage, setFormValidationMessage] = useState();
+  const [aiPromtInput, setAIPromtInput] = useState(null);
 
   const [companyName, setCompanyName] = useState(null);
   const [startDate, setStartDate] = useState(null);
@@ -64,6 +72,39 @@ const Work = ({ changeListener}) => {
 
   const [positionTitle, setPositionTitle] = useState(null);
   const [isEmployed, setIsEmployed] = useState(false);
+  const [returnedResponse, setReturnedResponse] = useState(null);
+
+  const handleSubmitAIInput = async () => {
+
+      setTextEditorLoading(true);
+
+      const response = await fetch(
+        "http://localhost:8000/getResumeHelp",
+        // "https://openaiapi-c7qc.onrender.com/getResumeHelp",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userInput: `${aiPromtInput}`,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      
+      console.log("response", json.message.content)
+      // console.log("json resopnse w array", JSON.parse(json.message.content));
+
+      setReturnedResponse(json.message.content)
+      // setReturnedResponse(JSON.parse(json.message.content));
+
+  };
 
   const uploadWorkExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
@@ -84,6 +125,8 @@ const Work = ({ changeListener}) => {
       setIsAddNew(!isAddNew);
     });
   };
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const uploadEditedWorkExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
@@ -127,9 +170,8 @@ const Work = ({ changeListener}) => {
       ? selectedExperience.endDate
       : null;
 
-    resumeData.experience[resumeIndex].isEmployed = isEmployed === true
-      ? true
-      : false;
+    resumeData.experience[resumeIndex].isEmployed =
+      isEmployed === true ? true : false;
 
     //test conmditions
     // setUpdateIsLoading(false);
@@ -191,14 +233,12 @@ const Work = ({ changeListener}) => {
       setFormValidationMessage("Please fill out all fields");
     } else {
       // check if it has an id, if it has an id it exists, so route to uploadEditedWorkExperience(). Else route to uploadEorkExperience().
-        uploadEditedWorkExperience();
-        setFormValidationMessage();
+      uploadEditedWorkExperience();
+      setFormValidationMessage();
     }
   };
 
-  
   const addExperience = () => {
-
     if (!companyName || !startDate || !description || !positionTitle) {
       setFormValidationMessage("Please fill out all fields");
     } else {
@@ -207,10 +247,7 @@ const Work = ({ changeListener}) => {
       //update firestore
       uploadWorkExperience();
     }
-
   };
-
-  
 
   const [loading, setLoading] = useState(false);
   const [workExperience, setWorkExperience] = useState(null);
@@ -228,8 +265,8 @@ const Work = ({ changeListener}) => {
       const unSub = onSnapshot(
         doc(db, "users", currentUser.uid, "Resumes", "My Resume"),
         async (res) => {
-          if (res.data()?.skills) {
-            setWorkExperience(res.data().skills);
+          if (res.data()?.experience) {
+            setWorkExperience(res.data().experience);
           }
 
           // res.data().experience.forEach((exp) => {
@@ -258,13 +295,11 @@ const Work = ({ changeListener}) => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
 
-  const resumeSnapshot = await getDoc(
+    const resumeSnapshot = await getDoc(
       doc(db, "users", currentUser.uid, "Resumes", "My Resume")
     );
 
-  const resumeData = resumeSnapshot.data();
-
-
+    const resumeData = resumeSnapshot.data();
 
     //ty https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu credit Pablo Francisco Perez Hidalgo 04/19/2013
     const resumeIndex = resumeData.experience
@@ -273,14 +308,14 @@ const Work = ({ changeListener}) => {
       })
       .indexOf(selectedExperience.id);
 
-      //DO NOT REMOVE THESE CONSOLE LOGS. THEY ARE HANDLING THE REMOVAL OF THE SELECTED ITEM??????
+    //DO NOT REMOVE THESE CONSOLE LOGS. THEY ARE HANDLING THE REMOVAL OF THE SELECTED ITEM??????
     console.log("resume Index", resumeIndex);
-    console.log("data", resumeData)
-    console.log("splice", resumeData.experience.splice(resumeIndex, 1))
-    console.log("new data", resumeData.experience)
+    console.log("data", resumeData);
+    console.log("splice", resumeData.experience.splice(resumeIndex, 1));
+    console.log("new data", resumeData.experience);
 
     await updateDoc(doc(userChatsRef, "My Resume"), {
-      experience: resumeData.experience
+      experience: resumeData.experience,
     }).then(() => {
       changeListener();
       setUpdateIsLoading(false);
@@ -302,18 +337,16 @@ const Work = ({ changeListener}) => {
   //thgis handles toggling back and forth between the person being currently employed/having an end date.
 
   useEffect(() => {
-    
     if (isEmployed) {
-      setEndDate(null)
+      setEndDate(null);
     }
-  }, [ isEmployed])
+  }, [isEmployed]);
 
   useEffect(() => {
-
     if (endDate) {
-      setIsEmployed(false)
+      setIsEmployed(false);
     }
-  }, [endDate])
+  }, [endDate]);
 
   const handleNew = () => {
     setSelectedExperience(null);
@@ -338,12 +371,32 @@ const Work = ({ changeListener}) => {
   const [contentState, setContentState] = useState(null);
   const [selectedExperience, setSelectedExperience] = useState(null);
 
+
+  //duplicate these two but change it to receive the markdown response from the api call
   useEffect(() => {
     if (selectedExperience) {
       setContentState(stateFromMarkdown(selectedExperience.description));
       console.log("any issues?", selectedExperience.description);
     }
   }, [selectedExperience]);
+
+  useEffect(() => {
+    if (contentState) {
+      setEditorState(EditorState.createWithContent(contentState));
+      setTimeout(() => {
+        setTextEditorLoading(false);
+      }, 500);
+    }
+  }, [contentState]);
+
+  //new
+
+  useEffect(() => {
+    if (returnedResponse) {
+      setContentState(stateFromMarkdown(returnedResponse));
+      console.log("any issues?", returnedResponse);
+    }
+  }, [returnedResponse]);
 
   useEffect(() => {
     if (contentState) {
@@ -442,7 +495,7 @@ const Work = ({ changeListener}) => {
                   {isEditCareerGoals &&
                   experience.id === selectedExperience.id ? (
                     <>
-                      <div className="flex align-center items-center">
+                      <div className="flex align-center items-center ">
                         <DatePicker
                           selected={
                             startDate !== null
@@ -465,8 +518,11 @@ const Work = ({ changeListener}) => {
                           className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                         />
                       </div>
-                      <div className="w-full">
-                        <div className="ml-auto mt-2.5" onClick={() => setIsEmployed(!isEmployed)}>
+                      <div className="col-span-2  flex ">
+                        <div
+                          className="ml-auto  mt-2"
+                          onClick={() => setIsEmployed(!isEmployed)}
+                        >
                           <input
                             type="checkbox"
                             class="mr-2 ml-auto shrink-0 border-gray-200 rounded text-blue-600 cursor-pointer"
@@ -496,25 +552,32 @@ const Work = ({ changeListener}) => {
                   )}
                 </div>
               </div>
-              <div class="grid sm:grid-cols-4  mb-10 align-center items-center">
+              <div class="grid sm:grid-cols-4  mb-10 align-center ">
                 <div class="sm:col-span-1 2xl:col-span-1">
                   <p className="font-medium text-sm text-gray-800">
                     Role & Responsibilities:
                   </p>
                 </div>
-                <div class="sm:col-span-2 align-center items-center">
+                <div class="sm:col-span-3 align-center items-center">
                   {/* got this from chat gpt but idk if this is even copyrightable */}
                   {isEditCareerGoals &&
                   experience.id === selectedExperience.id ? (
                     textEditorLoading ? (
                       <p>loading...</p>
                     ) : (
-                      <RichTextEditor
-                        defaultEditorState={editorState}
-                        onChange={(editorState) =>
-                          handleEditorChange(editorState)
-                        }
-                      />
+                      <>
+                        <RichTextEditor
+                          defaultEditorState={editorState}
+                          onChange={(editorState) =>
+                            handleEditorChange(editorState)
+                          }
+                        />
+                        <div className="col-span-4 flex mb-8">
+                          <button className="ml-auto mt-4">
+                            help me write
+                          </button>
+                        </div>
+                      </>
                     )
                   ) : (
                     <div className="prose prose-li text-sm marker:text-black text-gray-800">
@@ -524,7 +587,7 @@ const Work = ({ changeListener}) => {
                 </div>
               </div>
               {isEditCareerGoals && experience.id === selectedExperience.id ? (
-                <div className="ml-auto mt-2">
+                <div className="ml-auto mt-8">
                   <button
                     type="button"
                     class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200"
@@ -627,18 +690,20 @@ const Work = ({ changeListener}) => {
                   </div>
                 </div>
               </div>
-              <div class="grid sm:grid-cols-4  mb-2 align-center items-center">
-                <div class="sm:col-span-1 2xl:col-span-1">
+              <div class="grid sm:grid-cols-4  mb-2 align-center">
+                <div class="sm:col-span-1 2xl:col-span-1 flex flex-col">
                   <p className="font-medium text-sm text-gray-800">
                     Role & Responsibilities:
                   </p>
+                  <button onClick={() => onOpen()}>Help me write</button>
                 </div>
-                <div class="sm:col-span-2 align-center items-center">
+                {textEditorLoading ? (<p>loading...</p>) : (    <div class="sm:col-span-2 align-center items-center">
                   <RichTextEditor
                     defaultEditorState={editorState}
                     onChange={(editorState) => handleEditorChange(editorState)}
                   />
-                </div>
+                </div>)}
+            
               </div>
 
               <div className="ml-auto space-x-2 mt-2">
@@ -661,6 +726,24 @@ const Work = ({ changeListener}) => {
               {formValidationMessage ? (
                 <p className="text-red-500 text-sm">{formValidationMessage}</p>
               ) : null}
+
+              <Modal isOpen={isOpen} onClose={onClose} size="3xl">
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader></ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <div className="w-full p-4">
+                      <h1>Tell me wha you did here</h1>
+                      <textarea
+                        className="w-full"
+                        onChange={(e) => setAIPromtInput(e.target.value)}
+                      ></textarea>
+                      <button onClick={() =>handleSubmitAIInput()}>submit</button>
+                    </div>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
             </div>
           ) : null}
 

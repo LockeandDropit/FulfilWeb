@@ -179,3 +179,24 @@ justify-content: center;
   color: #999;
   text-transform: uppercase;
 }
+
+
+
+@media print {
+  body {
+    visibility: hidden;
+  
+  }
+  #section-to-print {
+    visibility: visible;
+    margin: 0;
+    padding: 0;
+    height: auto;
+    display: block;
+    position: static; /* Ensures normal document flow */
+
+  }
+    @page {
+    margin: 0; /* Removes automatic browser page margins */
+  }
+}

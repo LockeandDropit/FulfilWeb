@@ -411,7 +411,7 @@ const DoerAccountManager = () => {
                   
                 </div>
               </div>
-              <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
+              {/* <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
                 <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
                   <div class="sm:col-span-4 2xl:col-span-2">
                     <label class="sm:mt-2.5 inline-block text-sm text-gray-500 ">
@@ -441,7 +441,7 @@ const DoerAccountManager = () => {
                   </div>
                   
                 </div>
-              </div>
+              </div> */}
               <div class="py-6 sm:py-8 space-y-5 border-t border-gray-200 first:border-t-0 ">
                 <div class="grid sm:grid-cols-12 gap-y-1.5 sm:gap-y-0 sm:gap-x-5">
                   <div class="sm:col-span-4 2xl:col-span-2">

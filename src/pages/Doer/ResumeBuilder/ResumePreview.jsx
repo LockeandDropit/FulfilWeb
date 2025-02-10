@@ -110,6 +110,12 @@ const ResumePreview = ({setModalClosed}) => {
   </Document>
   );
 
+  const handlePrint = () => {
+    setTimeout(() => {
+      window.print();
+    }, 300); // Delay allows layout to settle
+  };
+
 
   return (
     
@@ -121,7 +127,7 @@ const ResumePreview = ({setModalClosed}) => {
           <ModalBody>
         
           {resumeInfo ? (
-            <div className="h-4/5">
+           
               <div id="section-to-print" className="w-full  px-2 py-3">
                 <AboutPreview resumeInfo={resumeInfo} currentUser={currentUser}/>
                 {resumeInfo?.education?.length > 0 && (
@@ -134,7 +140,7 @@ const ResumePreview = ({setModalClosed}) => {
                   <SkillPreview resumeInfo={resumeInfo} />
                 )}
               </div>
-              </div>
+         
           ) : (
             <p>Loading</p>
           )}
@@ -150,7 +156,7 @@ const ResumePreview = ({setModalClosed}) => {
             <button
               type="button"
               class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
-              onClick={() => window.print()}
+              onClick={() => handlePrint()}
             >
               Print
             </button>

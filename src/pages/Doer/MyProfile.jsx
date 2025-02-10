@@ -36,6 +36,11 @@ const MyProfile = () => {
   const [isEditCareerGoals, setIsEditCareerGoals] = useState(false);
   const [isEditGoalIncome, setIsEditGoalIncome] = useState(false);
   const [isEditCurrentIncome, setIsEditCurrentIncome] = useState(false);
+  const [accordionHidden, setAccordionHidden] = useState(false)
+
+  const handleAccordionForPrint = () => {
+    setAccordionHidden(!accordionHidden)
+  }
 
   useEffect(() => {
     if (currentUser) {
@@ -182,8 +187,16 @@ const MyProfile = () => {
   };
 
   const [openModal, setOpenModal] = useState(false)
+
+  const handleOpenModalCloseAccordion = () => {
+     setOpenModal(true)
+     setAccordionHidden("hidden")
+  }
+
+
   const setModalClosed = () => {
 setOpenModal(false)
+setAccordionHidden(false)
   }
 
   return (
@@ -518,17 +531,25 @@ setOpenModal(false)
                           changeOccured={changeOccured}
                         />
                         <div>
-                          <button onClick={() => setOpenModal(true)}>create resume</button>
-
+                          
+                          <button
+                  type="button"
+                  class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                  // onClick={() => setOpenModal(true)}
+                  onClick={() => handleOpenModalCloseAccordion()}
+                >
+                  Create Resume
+                </button>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   <div class="xl:ps-5  w-full sm:w-3/4 space-y-1 mt-2">
-                    <div class="flex flex-col bg-white rounded-xl shadow-sm xl:shadow-none  w-full ml-auto">
-                      <Accordion defaultIndex={[0]} allowMultiple>
-                        <AccordionItem>
+                    <div className="flex flex-col bg-white rounded-xl shadow-sm xl:shadow-none  w-full ml-auto">
+                      
+                      {accordionHidden ? (null) : (  <Accordion  defaultIndex={[0]} allowMultiple>
+                        <AccordionItem >
                           <AccordionButton>
                             <Box flex="1" textAlign="left">
                               <label
@@ -722,7 +743,8 @@ setOpenModal(false)
                         <Work changeListener={changeListener} />
                         <Education changeListener={changeListener} />
                         <Skills changeListener={changeListener} />
-                      </Accordion>
+                      </Accordion>)}
+                    
                     </div>
                   </div>
                 </div>
@@ -730,7 +752,7 @@ setOpenModal(false)
             </div>
           </div>
     
-               {openModal && <ResumePreview setModalClosed={() => setModalClosed()}/>}
+               {openModal && <ResumePreview setModalClosed={() => setModalClosed()} handleAccordionForPrint={() => handleAccordionForPrint()}/>}
         </main>
       )}
     </>

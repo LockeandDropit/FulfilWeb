@@ -73,37 +73,40 @@ const Work = ({ changeListener }) => {
   const [positionTitle, setPositionTitle] = useState(null);
   const [isEmployed, setIsEmployed] = useState(false);
   const [returnedResponse, setReturnedResponse] = useState(null);
+  const [loadingAIResponse, setLoadingAIResponse] = useState(false);
 
   const handleSubmitAIInput = async () => {
+    setTextEditorLoading(true);
+    setAITextGenLoading(true);
+    setLoadingAIResponse(true);
 
-      setTextEditorLoading(true);
-
-      const response = await fetch(
-        "http://localhost:8000/getResumeHelp",
-        // "https://openaiapi-c7qc.onrender.com/getResumeHelp",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userInput: `${aiPromtInput}`,
-          }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
+    const response = await fetch(
+      "http://localhost:8000/getResumeHelp",
+      // "https://openaiapi-c7qc.onrender.com/getResumeHelp",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userInput: `${aiPromtInput}`,
+        }),
       }
+    );
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
 
-      const json = await response.json();
-      
-      console.log("response", json.message.content)
-      // console.log("json resopnse w array", JSON.parse(json.message.content));
+    const json = await response.json();
 
-      setReturnedResponse(json.message.content)
-      // setReturnedResponse(JSON.parse(json.message.content));
+    console.log("response", json.message.content);
+    // console.log("response2", json.responsibilities.map(item => `- ${item}`).join("\n"))
 
+    // console.log("json resopnse w array", JSON.parse(json.message.content));
+
+    setReturnedResponse(json.message.content);
+    // setReturnedResponse(JSON.parse(json.message.content));
   };
 
   const uploadWorkExperience = async () => {
@@ -363,6 +366,8 @@ const Work = ({ changeListener }) => {
   const [editorState, setEditorState] = useState(null);
   const [textEditorLoading, setTextEditorLoading] = useState(true);
 
+  const [aiTextGenLoading, setAITextGenLoading] = useState(false);
+
   const handleEditorChange = (editorState) => {
     // (console.log("here it is", draftToMarkdown(editorState)))
     setDescription(draftToMarkdown(editorState));
@@ -370,7 +375,6 @@ const Work = ({ changeListener }) => {
 
   const [contentState, setContentState] = useState(null);
   const [selectedExperience, setSelectedExperience] = useState(null);
-
 
   //duplicate these two but change it to receive the markdown response from the api call
   useEffect(() => {
@@ -403,6 +407,8 @@ const Work = ({ changeListener }) => {
       setEditorState(EditorState.createWithContent(contentState));
       setTimeout(() => {
         setTextEditorLoading(false);
+        setAITextGenLoading(false);
+        onClose();
       }, 500);
     }
   }, [contentState]);
@@ -557,6 +563,29 @@ const Work = ({ changeListener }) => {
                   <p className="font-medium text-sm text-gray-800">
                     Role & Responsibilities:
                   </p>
+                  {isEditCareerGoals &&
+                  experience.id === selectedExperience.id ? (
+                    <button
+                    onClick={() => onOpen()}
+                    type="button"
+                    class="mt-2 w-3/4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                  >
+                    AI Assistant
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="white"
+                      className="size-5"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  ) : (null)}
+                 
                 </div>
                 <div class="sm:col-span-3 align-center items-center">
                   {/* got this from chat gpt but idk if this is even copyrightable */}
@@ -572,11 +601,7 @@ const Work = ({ changeListener }) => {
                             handleEditorChange(editorState)
                           }
                         />
-                        <div className="col-span-4 flex mb-8">
-                          <button className="ml-auto mt-4">
-                            help me write
-                          </button>
-                        </div>
+                      
                       </>
                     )
                   ) : (
@@ -625,12 +650,12 @@ const Work = ({ changeListener }) => {
                     Position Title:
                   </p>
                 </div>
-                <div class="sm:col-span-2 align-center items-center">
+                <div class="sm:col-span-3 align-center items-center">
                   <input
                     type="text"
                     onChange={(e) => setPositionTitle(e.target.value)}
                     className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                    placeholder="This is placeholder"
+                    placeholder="Your job title goes here"
                   />
                 </div>
                 <div className="sm:col-span-1 ml-auto"></div>
@@ -640,22 +665,22 @@ const Work = ({ changeListener }) => {
                 <div class="sm:col-span-1 2xl:col-span-1">
                   <p className="font-medium text-sm text-gray-800">Company:</p>
                 </div>
-                <div class="sm:col-span-2 align-center items-center">
+                <div class="sm:col-span-3 align-center items-center">
                   <input
                     type="text"
                     onChange={(e) => setCompanyName(e.target.value)}
                     className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                    placeholder="This is placeholder"
+                    placeholder="The company name goes here"
                   />
                 </div>
               </div>
-              <div class="grid sm:grid-cols-4  mb-2 align-center items-center">
+              <div class="grid sm:grid-cols-4  mb-2 align-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">
+                  <p className="font-medium text-sm text-gray-800 sm:mt-3">
                     Dates Employed:
                   </p>
                 </div>
-                <div class="sm:col-span-2 align-center items-center">
+                <div class="sm:col-span-3 align-center items-center">
                   <div className="flex align-center items-center">
                     <DatePicker
                       selected={startDate}
@@ -695,15 +720,38 @@ const Work = ({ changeListener }) => {
                   <p className="font-medium text-sm text-gray-800">
                     Role & Responsibilities:
                   </p>
-                  <button onClick={() => onOpen()}>Help me write</button>
+                  <button
+                    onClick={() => onOpen()}
+                    type="button"
+                    class="mt-2 w-3/4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                  >
+                    AI Assistant
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="white"
+                      className="size-5"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
                 </div>
-                {textEditorLoading ? (<p>loading...</p>) : (    <div class="sm:col-span-2 align-center items-center">
-                  <RichTextEditor
-                    defaultEditorState={editorState}
-                    onChange={(editorState) => handleEditorChange(editorState)}
-                  />
-                </div>)}
-            
+                {aiTextGenLoading ? (
+                  <p>loading...</p>
+                ) : (
+                  <div class="sm:col-span-3 align-center items-center border border-gray-200 rounded-lg">
+                    <RichTextEditor
+                      defaultEditorState={editorState}
+                      onChange={(editorState) =>
+                        handleEditorChange(editorState)
+                      }
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="ml-auto space-x-2 mt-2">
@@ -727,23 +775,6 @@ const Work = ({ changeListener }) => {
                 <p className="text-red-500 text-sm">{formValidationMessage}</p>
               ) : null}
 
-              <Modal isOpen={isOpen} onClose={onClose} size="3xl">
-                <ModalOverlay />
-                <ModalContent>
-                  <ModalHeader></ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody>
-                    <div className="w-full p-4">
-                      <h1>Tell me wha you did here</h1>
-                      <textarea
-                        className="w-full"
-                        onChange={(e) => setAIPromtInput(e.target.value)}
-                      ></textarea>
-                      <button onClick={() =>handleSubmitAIInput()}>submit</button>
-                    </div>
-                  </ModalBody>
-                </ModalContent>
-              </Modal>
             </div>
           ) : null}
 
@@ -758,6 +789,75 @@ const Work = ({ changeListener }) => {
               </button>
             </div>
           )}
+
+<Modal isOpen={isOpen} onClose={onClose} size="3xl">
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader></ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <div className="w-full p-4">
+                      <h1 className="text-lg font-medium text-gray-800">
+                        Tell me what you did at this job in plain english and
+                        I'll turn it into resume-ready bullet points!
+                      </h1>
+
+                      <div className="w-full mt-8">
+                        <label
+                          htmlFor="textarea-label"
+                          className="block text-sm font-medium mb-2"
+                        >
+                          Write a few sentences here (be specific!):
+                        </label>
+                        <textarea
+                          id="textarea-label"
+                          className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                          rows="3"
+                          placeholder="I was in charge of making sure all the materials were orderd and keeping track of our stock. I interacted with customers on a regular basis. I reported to my senior manager and was involved in some decision making."
+                          onChange={(e) => setAIPromtInput(e.target.value)}
+                        ></textarea>
+                      </div>
+
+                      <div className="w-full flex">
+                        {aiTextGenLoading ? (
+                          <button
+                            onClick={() => handleSubmitAIInput()}
+                            type="button"
+                            class="mt-3 w-fit ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                          >
+                            Generating
+                            <div
+                              className="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+                              role="status"
+                              aria-label="loading"
+                            ></div>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleSubmitAIInput()}
+                            type="button"
+                            class="mt-3 w-fit ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                          >
+                            Generate
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="white"
+                              className="size-5"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
         </div>
       </AccordionPanel>
     </AccordionItem>

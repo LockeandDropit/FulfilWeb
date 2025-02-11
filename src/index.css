@@ -183,14 +183,15 @@ justify-content: center;
 
 
 @media print {
+
+
   body {
     visibility: hidden;
-  
   }
   #section-to-print {
     visibility: visible;
-    margin: 0;
-    padding: 0;
+    margin-top: 8px;
+    padding: 16px;
     height: auto;
     display: block;
     position: static; /* Ensures normal document flow */

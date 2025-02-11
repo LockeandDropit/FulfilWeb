@@ -16,7 +16,16 @@ const Greeting = ({ user }) => {
     setModalIsOpen(!modalIsOpen);
   };
 
-  console.log("greeting", user);
+
+  
+  const [progressWidth, setProgressWidth] = useState(null)
+
+  useEffect(() => {
+    if (user) {
+      setProgressWidth((parseInt(user.currentIncome.replace(/,/g, ""))/parseInt(user.goalIncome.replace(/,/g, ""))) * 100)
+    }
+  }, [user])
+
   // create stores for both recommendations and preferred. [x]
   // initialize stores on app render [x] and onChange. [x]
   //!preferred ? (<recommendations>) : (<preferred) [x]
@@ -36,9 +45,6 @@ const Greeting = ({ user }) => {
                   Welcome {user?.firstName}
                 </label>
               </div>
-          
-             
-            
               <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 mt-4">
                 <div className="relative flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer hover:shadow-md" onClick={() => setModalIsOpen(!modalIsOpen)}>
                   <div className="p-4 md:p-5">
@@ -49,9 +55,6 @@ const Greeting = ({ user }) => {
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
   <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
 </svg>
-
-                        
-
                     </div>
                     <div className="mt-1 flex items-center gap-x-2">
                       <h3 className="text-xl sm:text-xl font-medium text-gray-800">
@@ -247,8 +250,7 @@ const Greeting = ({ user }) => {
                     <h4 className="font-semibold text-xl md:text-2xl text-stone-800 cursor-default">
                       ${user?.currentIncome}
                     </h4>
-
-                    <div className="relative mt-3">
+            {progressWidth !== null && progressWidth !== undefined && (<div className="relative mt-3">
                       <div
                         className="flex w-full h-2 bg-stone-200 rounded-sm overflow-hidden"
                         role="progressbar"
@@ -258,19 +260,18 @@ const Greeting = ({ user }) => {
                       >
                         <div
                           className="flex flex-col justify-center rounded-sm overflow-hidden bg-green-600 text-xs text-white text-center whitespace-nowrap transition duration-500"
-                          style={{ width: "72%" }}
+                          style={{ width: `${progressWidth}%` }}
                         ></div>
                       </div>
-                      <div className="absolute top-1/2 start-[71%] w-2 h-5 bg-green-600 border-2 border-white rounded-sm transform -translate-y-1/2"></div>
-                    </div>
-
+                      <div className={`absolute top-1/2  w-2 h-5 bg-green-600 border-2 border-white rounded-sm transform -translate-y-1/2`}
+                        style={{ left: `${progressWidth}%` }}></div>
+                    </div>)}
                     <div className="mt-3 flex justify-between items-center">
                       <span className="text-xs text-stone-800">0</span>
                       <span className="text-sm text-stone-800">
                         ${user?.goalIncome}
                       </span>
                     </div>
-
                     <p className="mt-4 text-sm text-stone-600">
                       Next steps to further your career:
                     </p>
@@ -278,7 +279,6 @@ const Greeting = ({ user }) => {
                 </div>
               </div>
             </div>
-
             <div>
               <a
                 className="p-2 flex items-center gap-x-2 text-sm font-medium text-stone-800 rounded-lg hover:bg-stone-100 focus:outline-none focus:bg-stone-100 cursor-pointer"

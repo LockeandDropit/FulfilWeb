@@ -63,6 +63,7 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.8.3",
     "react-share": "^5.1.0",
+    "react-to-print": "^3.0.5",
     "react-toastify": "^11.0.3",
     "react-tooltip": "^5.28.0",
     "recharts": "^2.12.7",

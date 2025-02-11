@@ -4,7 +4,7 @@ const AboutPreview = ({ resumeInfo, currentUser }) => {
   console.log("currentUser", currentUser);
 
   return (
-    <div className="">
+    <div className="px-2">
       <h2
         className="font-bold text-xl text-center"
         style={

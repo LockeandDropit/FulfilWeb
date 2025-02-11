@@ -59,7 +59,7 @@ const StepperComponent = ({ currentUser, changeOccured }) => {
 
   return (
     <ol class="ml-2 relative text-gray-700 border-s border-gray-200 mt-2">
-      <li class="mb-6 ms-5">
+      {/* <li class="mb-6 ms-5">
         <span class="mt-0.5 absolute flex items-center justify-center w-4 h-4 bg-green-200 rounded-full -start-2 ring-1 ring-white ">
           <svg
             class="w-2 h-2 text-green-500"
@@ -78,7 +78,7 @@ const StepperComponent = ({ currentUser, changeOccured }) => {
           </svg>
         </span>
         <h3 class="font-medium text-sm">Personal Info & Goals</h3>
-      </li>
+      </li> */}
       <li class="mb-6 ms-5">
         {experienceComplete ? (
           <span class="mt-0.5 absolute flex items-center justify-center w-4 h-4 bg-green-200 rounded-full -start-2 ring-1 ring-white ">

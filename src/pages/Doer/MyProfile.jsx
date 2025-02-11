@@ -36,20 +36,25 @@ const MyProfile = () => {
   const [isEditCareerGoals, setIsEditCareerGoals] = useState(false);
   const [isEditGoalIncome, setIsEditGoalIncome] = useState(false);
   const [isEditCurrentIncome, setIsEditCurrentIncome] = useState(false);
-  const [accordionHidden, setAccordionHidden] = useState(false)
+  const [accordionHidden, setAccordionHidden] = useState(false);
 
   const handleAccordionForPrint = () => {
-    setAccordionHidden(!accordionHidden)
-  }
+    setAccordionHidden(!accordionHidden);
+  };
 
   useEffect(() => {
     if (currentUser) {
       setCurrentIncome(currentUser.currentIncome);
       setGoalIncome(currentUser.goalIncome);
       setUserInterests(currentUser.userInterests);
-    
-      setSavedCareers(currentUser.savedCareerInterests.filter(x => x.savedInterest ));
-      console.log("interests saved", currentUser.savedCareerInterests.filter(x => x.savedInterest ));
+
+      setSavedCareers(
+        currentUser.savedCareerInterests.filter((x) => x.savedInterest)
+      );
+      console.log(
+        "interests saved",
+        currentUser.savedCareerInterests.filter((x) => x.savedInterest)
+      );
     }
   }, [currentUser]);
 
@@ -58,7 +63,7 @@ const MyProfile = () => {
   const [finalGoalIncome, setGoalFinalIncome] = useState(null);
   const [userInterests, setUserInterests] = useState(null);
   const [savedCareers, setSavedCareers] = useState(null);
-  
+
   useEffect(() => {
     if (goalIncome) {
       setGoalFinalIncome(goalIncome.label);
@@ -81,43 +86,33 @@ const MyProfile = () => {
     });
   };
 
-
   //lets see. How would I do this, delete locally and in fb
 
-
-
   const handleDeleteSelected = async (saved) => {
+    setSavedCareers(savedCareers.filter((x) => x.id !== saved.id));
 
-    setSavedCareers(savedCareers.filter(x => x.id !== saved.id))
-   
+    const resumeSnapshot = await getDoc(doc(db, "users", currentUser.uid));
 
-    const resumeSnapshot = await getDoc(
-          doc(db, "users", currentUser.uid)
-        );
+    const resumeData = resumeSnapshot.data();
 
-        const resumeData = resumeSnapshot.data();
+    const resumeIndex = resumeData.savedCareerInterests
+      .map(function (x) {
+        return x.id;
+      })
+      .indexOf(saved.id);
 
-        const resumeIndex = resumeData.savedCareerInterests
-        .map(function (x) {
-          return x.id;
-        })
-        .indexOf(saved.id);
-  
-      let newData = resumeData.savedCareerInterests.splice(resumeIndex, 1);
+    let newData = resumeData.savedCareerInterests.splice(resumeIndex, 1);
 
-          await updateDoc(doc(db, "users", currentUser.uid), {
-            savedCareerInterests: resumeData.savedCareerInterests,
-          }).then(() => {
-            // changeListener();
-            // setUpdateIsLoading(false);
-   
-            // setSelectedExperience(null);
-            // setSkillName(null)
-            // setIsEditCareerGoals(!isEditCareerGoals);
-          });
-  }
-
-
+    await updateDoc(doc(db, "users", currentUser.uid), {
+      savedCareerInterests: resumeData.savedCareerInterests,
+    }).then(() => {
+      // changeListener();
+      // setUpdateIsLoading(false);
+      // setSelectedExperience(null);
+      // setSkillName(null)
+      // setIsEditCareerGoals(!isEditCareerGoals);
+    });
+  };
 
   // regex credit Rogit Jain 8/3/2013 https://stackoverflow.com/questions/18033088/javascript-function-need-allow-numbers-dot-and-comma
   let regex = /^[0-9.,]+$/;
@@ -137,35 +132,31 @@ const MyProfile = () => {
     }
   };
 
-
-//update in fb
+  //update in fb
   useEffect(() => {
     if (newInterest) {
-      let newID = savedCareers.filter(x => x.savedInterest === newInterest)
+      let newID = savedCareers.filter((x) => x.savedInterest === newInterest);
 
-      console.log("newID", newID)
-       updateDoc(doc(db, "users", currentUser.uid), {
+      console.log("newID", newID);
+      updateDoc(doc(db, "users", currentUser.uid), {
         savedCareerInterests: arrayUnion({
           id: newID[0].id,
           savedInterest: newInterest,
-        })
-      }).then(() => 
-      
-         setNewInterest("")
-      
-      )
+        }),
+      }).then(() => setNewInterest(""));
 
-      setNewInterest("")
+      setNewInterest("");
     }
-      }, [savedCareers])
-  const [newInterest, setNewInterest] = useState(null)
+  }, [savedCareers]);
+  const [newInterest, setNewInterest] = useState(null);
 
   const addNewInterest = async () => {
     //update Locally
-    setSavedCareers([...savedCareers, {id: uuidv4(),
-      savedInterest: newInterest
-    }])
-  }
+    setSavedCareers([
+      ...savedCareers,
+      { id: uuidv4(), savedInterest: newInterest },
+    ]);
+  };
 
   const [changeOccured, setChangeOccured] = useState(false);
 
@@ -186,18 +177,17 @@ const MyProfile = () => {
     default: "bg-green-600",
   };
 
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModalCloseAccordion = () => {
-     setOpenModal(true)
-     setAccordionHidden("hidden")
-  }
-
+    setOpenModal(true);
+    setAccordionHidden("hidden");
+  };
 
   const setModalClosed = () => {
-setOpenModal(false)
-setAccordionHidden(false)
-  }
+    setOpenModal(false);
+    setAccordionHidden(false);
+  };
 
   return (
     <>
@@ -531,20 +521,27 @@ setAccordionHidden(false)
                           changeOccured={changeOccured}
                         />
                         <div>
-                          
                           <button
-                  type="button"
-                  class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                  // onClick={() => setOpenModal(true)}
-                  onClick={() => handleOpenModalCloseAccordion()}
-                >
-                  Create Resume
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4">
-  <path fillRule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clipRule="evenodd" />
-  <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
-</svg>
-
-                </button>
+                            type="button"
+                            class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                            // onClick={() => setOpenModal(true)}
+                            onClick={() => handleOpenModalCloseAccordion()}
+                          >
+                            Create Resume
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z"
+                                clipRule="evenodd"
+                              />
+                              <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                            </svg>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -552,150 +549,159 @@ setAccordionHidden(false)
 
                   <div class="xl:ps-5  w-full sm:w-3/4 space-y-1 mt-2">
                     <div className="flex flex-col bg-white rounded-xl shadow-sm xl:shadow-none  w-full ml-auto">
-                      
-                      {accordionHidden ? (null) : (  <Accordion  defaultIndex={[0]} allowMultiple>
-                        <AccordionItem >
-                          <AccordionButton>
-                            <Box flex="1" textAlign="left">
-                              <label
-                                for="hs-pro-epdsku"
-                                class="block font-medium text-stone-800 "
-                              >
-                                Career Goals <span className="text-gray-500 text-sm">(only you can see this)</span>
-                              </label>
-                            </Box>
-                            <AccordionIcon />
-                          </AccordionButton>
-                          <AccordionPanel pb={4}>
-                            <div className="flex flex-col  space-y-2 z-50">
-                              <div class="grid sm:grid-cols-4  align-center items-center">
-                                <div class="sm:col-span-1 2xl:col-span-1">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Current Income:
-                                  </p>
-                                </div>
-                                <div class="sm:col-span-2 align-center items-center">
-                                  {isEditCareerGoals ? (
-                                    <input
-                                      type="text"
-                                      onChange={(e) =>
-                                        setCurrentIncome(e.target.value)
-                                      }
-                                      className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                                      placeholder="This is placeholder"
-                                      value={
-                                        currentIncome ? currentIncome : null
-                                      }
-                                    />
-                                  ) : (
-                                    <p className="text-sm ml-2">
-                                      {" "}
-                                      {currentIncome}
+                      {accordionHidden ? null : (
+                        <Accordion defaultIndex={[0]} allowMultiple>
+                          <AccordionItem>
+                            <AccordionButton>
+                              <Box flex="1" textAlign="left">
+                                <label
+                                  for="hs-pro-epdsku"
+                                  class="block font-medium text-stone-800 "
+                                >
+                                  Career Goals{" "}
+                                  <span className="text-gray-500 text-sm">
+                                    (only you can see this)
+                                  </span>
+                                </label>
+                              </Box>
+                              <AccordionIcon />
+                            </AccordionButton>
+                            <AccordionPanel pb={4}>
+                              <div className="flex flex-col  space-y-2 z-50">
+                                <div class="grid sm:grid-cols-4  align-center items-center">
+                                  <div class="sm:col-span-1 2xl:col-span-1">
+                                    <p className="font-medium text-sm text-gray-800">
+                                      Current Income:
                                     </p>
-                                  )}
+                                  </div>
+                                  <div class="sm:col-span-2 align-center items-center">
+                                    {isEditCareerGoals ? (
+                                      <input
+                                        type="text"
+                                        onChange={(e) =>
+                                          setCurrentIncome(e.target.value)
+                                        }
+                                        className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                                        placeholder="This is placeholder"
+                                        value={
+                                          currentIncome ? currentIncome : null
+                                        }
+                                      />
+                                    ) : (
+                                      <p className="text-sm ml-2">
+                                        {" "}
+                                        {currentIncome}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <div className="sm:col-span-1 ml-auto">
+                                    {isEditCareerGoals ? null : (
+                                      <div
+                                        className=" text-sm ml-auto cursor-pointer text-blue-400 hover:text-blue-600 hover:underline"
+                                        onClick={() =>
+                                          setIsEditCareerGoals(
+                                            !isEditCareerGoals
+                                          )
+                                        }
+                                      >
+                                        Edit
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="sm:col-span-1 ml-auto">
-                                  {isEditCareerGoals ? null : (
-                                    <div
-                                      className=" text-sm ml-auto cursor-pointer text-blue-400 hover:text-blue-600 hover:underline"
-                                      onClick={() =>
-                                        setIsEditCareerGoals(!isEditCareerGoals)
-                                      }
-                                    >
-                                      Edit
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                              <div class="grid sm:grid-cols-4  align-center items-center">
-                                <div class="sm:col-span-1 2xl:col-span-1">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Goal Income:
-                                  </p>
-                                </div>
-                                <div class="sm:col-span-2 align-center items-center">
-                                  {isEditCareerGoals ? (
-                                    <input
-                                      type="text"
-                                      onChange={(e) =>
-                                        setGoalIncome(e.target.value)
-                                      }
-                                      className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                                      placeholder="This is placeholder"
-                                      value={goalIncome ? goalIncome : null}
-                                    />
-                                  ) : (
-                                    <p className="text-sm ml-2">
-                                      {" "}
-                                      {goalIncome}
+                                <div class="grid sm:grid-cols-4  align-center items-center">
+                                  <div class="sm:col-span-1 2xl:col-span-1">
+                                    <p className="font-medium text-sm text-gray-800">
+                                      Goal Income:
                                     </p>
-                                  )}
+                                  </div>
+                                  <div class="sm:col-span-2 align-center items-center">
+                                    {isEditCareerGoals ? (
+                                      <input
+                                        type="text"
+                                        onChange={(e) =>
+                                          setGoalIncome(e.target.value)
+                                        }
+                                        className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                                        placeholder="This is placeholder"
+                                        value={goalIncome ? goalIncome : null}
+                                      />
+                                    ) : (
+                                      <p className="text-sm ml-2">
+                                        {" "}
+                                        {goalIncome}
+                                      </p>
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                              <div class="grid sm:grid-cols-4  mb-2 align-center">
-                                <div class="sm:col-span-1 2xl:col-span-1">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    About me:
-                                  </p>
-                                </div>
-                                <div class="sm:col-span-2 align-center items-center">
-                                  {isEditCareerGoals ? (
-                                    <textarea
-                                      type="text"
-                                      onChange={(e) =>
-                                        setUserInterests(e.target.value)
-                                      }
-                                      className="py-2 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                                      rows="3"
-                                      placeholder="I enjoy working with my hands, being around people, and generally excel in leadership positions."
-                                      value={
-                                        userInterests ? userInterests : null
-                                      }
-                                    />
-                                  ) : (
-                                    <p className="text-sm ml-2">
-                                      {" "}
-                                      {userInterests}
+                                <div class="grid sm:grid-cols-4  mb-2 align-center">
+                                  <div class="sm:col-span-1 2xl:col-span-1">
+                                    <p className="font-medium text-sm text-gray-800">
+                                      About me:
                                     </p>
-                                  )}
+                                  </div>
+                                  <div class="sm:col-span-2 align-center items-center">
+                                    {isEditCareerGoals ? (
+                                      <textarea
+                                        type="text"
+                                        onChange={(e) =>
+                                          setUserInterests(e.target.value)
+                                        }
+                                        className="py-2 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                                        rows="3"
+                                        placeholder="I enjoy working with my hands, being around people, and generally excel in leadership positions."
+                                        value={
+                                          userInterests ? userInterests : null
+                                        }
+                                      />
+                                    ) : (
+                                      <p className="text-sm ml-2">
+                                        {" "}
+                                        {userInterests}
+                                      </p>
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                              <div class="grid sm:grid-cols-4 mb-6 align-center">
-                                <div class="sm:col-span-1 2xl:col-span-1">
-                                  <p className="font-medium text-sm text-gray-800">
-                                    Career Interests:
-                                  </p>
-                                </div>
-                                <div class="sm:col-span-2 align-center items-center">
-                                  {isEditCareerGoals && (
-                                    <div className="flex flex-row space-x-1 mb-4">
-                                    <input
-                                      type="text"
-                                      onChange={(e) =>
-                                        setNewInterest(e.target.value)
-                                      }
-                                      className="py-2 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                                    value={newInterest}
-                                      placeholder="Mechanic, HVAC Technician, etc."
-                                   
-                                    />
-                                     <button
-                                    type="button"
-                                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                                    onClick={() => addNewInterest()}
-                                  >
-                                    Add
-                                  </button>
-                                    </div>
-                                  )}
+                                <div class="grid sm:grid-cols-4 mb-6 align-center">
+                                  <div class="sm:col-span-1 2xl:col-span-1">
+                                    <p className="font-medium text-sm text-gray-800">
+                                      Career Interests:
+                                    </p>
+                                  </div>
+                                  <div class="sm:col-span-2 align-center items-center">
+                                    {isEditCareerGoals && (
+                                      <div className="flex flex-row space-x-1 mb-4">
+                                        <input
+                                          type="text"
+                                          onChange={(e) =>
+                                            setNewInterest(e.target.value)
+                                          }
+                                          className="py-2 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                                          value={newInterest}
+                                          placeholder="Mechanic, HVAC Technician, etc."
+                                        />
+                                        <button
+                                          type="button"
+                                          class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                                          onClick={() => addNewInterest()}
+                                        >
+                                          Add
+                                        </button>
+                                      </div>
+                                    )}
                                     <div className="flex flex-row flex-wrap mb-8">
                                       {savedCareers?.map((saved) => (
                                         <>
                                           <div class="mt-1 mb-1 text-sm ml-2 cursor-default inline-flex flex-nowrap items-center bg-sky-400 rounded-lg p-1.5 ">
                                             <div class="whitespace-nowrap text-sm font-medium text-white ">
-                                              {saved.savedInterest} 
+                                              {saved.savedInterest}
                                             </div>
-                                            <div class="ms-2.5 inline-flex justify-center items-center size-5 rounded-full text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-gray-400  cursor-pointer" onClick={() => handleDeleteSelected(saved)}>
+                                            <div
+                                              class="ms-2.5 inline-flex justify-center items-center size-5 rounded-full text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-gray-400  cursor-pointer"
+                                              onClick={() =>
+                                                handleDeleteSelected(saved)
+                                              }
+                                            >
                                               <svg
                                                 class="shrink-0 size-3"
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -716,48 +722,52 @@ setAccordionHidden(false)
                                         </>
                                       ))}
                                     </div>
-                                  
+                                  </div>
                                 </div>
-                              </div>
-                              {isEditCareerGoals ? (
-                                <div className="ml-auto ">
-                                  {/* <button
+                                {isEditCareerGoals ? (
+                                  <div className="ml-auto ">
+                                    {/* <button
                                     type="button"
                                     class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700"
                                     //    onClick={() => handleUpdate()}
                                   >
                                     Delete
                                   </button> */}
-                                  <button
-                                    type="button"
-                                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                                    onClick={() => handleUpdate()}
-                                  >
-                                    Update
-                                  </button>
-                                </div>
-                              ) : null}
-                              {formValidationMessage ? (
-                                <p className="text-red-500 text-sm">
-                                  {formValidationMessage}
-                                </p>
-                              ) : null}
-                            </div>
-                          </AccordionPanel>
-                        </AccordionItem>
-                        <Work changeListener={changeListener} />
-                        <Education changeListener={changeListener} />
-                        <Skills changeListener={changeListener} />
-                      </Accordion>)}
-                    
+                                    <button
+                                      type="button"
+                                      class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                                      onClick={() => handleUpdate()}
+                                    >
+                                      Update
+                                    </button>
+                                  </div>
+                                ) : null}
+                                {formValidationMessage ? (
+                                  <p className="text-red-500 text-sm">
+                                    {formValidationMessage}
+                                  </p>
+                                ) : null}
+                              </div>
+                            </AccordionPanel>
+                          </AccordionItem>
+                          <Work changeListener={changeListener} />
+                          <Education changeListener={changeListener} />
+                          <Skills changeListener={changeListener} />
+                        </Accordion>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-    
-               {openModal && <ResumePreview setModalClosed={() => setModalClosed()} handleAccordionForPrint={() => handleAccordionForPrint()}/>}
+
+          {openModal && (
+            <ResumePreview
+              setModalClosed={() => setModalClosed()}
+              handleAccordionForPrint={() => handleAccordionForPrint()}
+            />
+          )}
         </main>
       )}
     </>

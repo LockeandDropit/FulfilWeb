@@ -194,7 +194,9 @@ justify-content: center;
     height: auto;
     display: block;
     position: static; /* Ensures normal document flow */
-
+    page-break-before: always;
+    page-break-after: always;
+    overflow: hidden;
   }
     @page {
     margin: 0; /* Removes automatic browser page margins */

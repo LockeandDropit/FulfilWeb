@@ -24,14 +24,11 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import DoerHeader from "../components/DoerHeader.jsx";
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
-import { PDFViewer } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import { PDFViewer } from "@react-pdf/renderer";
 
-const ResumePreview = ({setModalClosed}) => {
-
+const ResumePreview = ({ setModalClosed }) => {
   const { currentUser } = useUserStore();
-
-
 
   const navigate = useNavigate();
 
@@ -42,24 +39,24 @@ const ResumePreview = ({setModalClosed}) => {
   const handleCloseModal = () => {
     onClose();
     setModalClosed();
-  }
+  };
 
   useEffect(() => {
-    console.log("modal")
-  }, [])
+    console.log("modal");
+  }, []);
 
   useEffect(() => {
-    if (currentUser ) {
+    if (currentUser) {
       onOpen();
-      getDoc(
-        doc(db, "users", currentUser.uid, "Resumes", "My Resume")
-      ).then((snapshot) => {
-        if (!snapshot.data()) {
-        } else {
-          console.log("from firestore", snapshot.data());
-          setResumeInfo(snapshot.data());
+      getDoc(doc(db, "users", currentUser.uid, "Resumes", "My Resume")).then(
+        (snapshot) => {
+          if (!snapshot.data()) {
+          } else {
+            console.log("from firestore", snapshot.data());
+            setResumeInfo(snapshot.data());
+          }
         }
-      });
+      );
     }
   }, [currentUser, currentResumeName]);
 
@@ -67,7 +64,11 @@ const ResumePreview = ({setModalClosed}) => {
 
   const handleDownload = () => {
     var prtContent = document.getElementById("print");
-    var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+    var WinPrint = window.open(
+      "",
+      "",
+      "left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0"
+    );
     WinPrint.document.write(prtContent.innerHTML);
     WinPrint.document.close();
     WinPrint.focus();
@@ -92,22 +93,20 @@ const ResumePreview = ({setModalClosed}) => {
     });
   };
 
-
-
   //lets turn this into a modal for now.
   // see how that goes for v1
 
   const MyDocument = () => (
     <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text>Section #1</Text>
-      </View>
-      <View style={styles.section}>
-        <Text>Section #2</Text>
-      </View>
-    </Page>
-  </Document>
+      <Page size="A4" style={styles.page}>
+        <View style={styles.section}>
+          <Text>Section #1</Text>
+        </View>
+        <View style={styles.section}>
+          <Text>Section #2</Text>
+        </View>
+      </Page>
+    </Document>
   );
 
   const handlePrint = () => {
@@ -116,20 +115,28 @@ const ResumePreview = ({setModalClosed}) => {
     }, 300); // Delay allows layout to settle
   };
 
-
   return (
-    
-     <Modal isOpen={isOpen} onClose={() => handleCloseModal()} size={"3xl"}>
-        <ModalOverlay />
-        <ModalContent>
-       
-          <ModalCloseButton />
-          <ModalBody>
-        
-          {resumeInfo ? (
-           
-              <div id="section-to-print" className="w-full  px-2 py-3">
-                <AboutPreview resumeInfo={resumeInfo} currentUser={currentUser}/>
+    <Modal isOpen={isOpen} onClose={() => handleCloseModal()} size={"4xl"}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>
+          <button
+            type="button"
+            class="py-1 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
+            onClick={() => handlePrint()}
+          >
+            Print
+          </button>
+        </ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <div className="">
+            {resumeInfo ? (
+              <div id="section-to-print" className="w-full   px-2 ">
+                <AboutPreview
+                  resumeInfo={resumeInfo}
+                  currentUser={currentUser}
+                />
                 {resumeInfo?.education?.length > 0 && (
                   <EducationPreview resumeInfo={resumeInfo} />
                 )}
@@ -140,44 +147,43 @@ const ResumePreview = ({setModalClosed}) => {
                   <SkillPreview resumeInfo={resumeInfo} />
                 )}
               </div>
-         
-          ) : (
-            <p>Loading</p>
-          )}
-             </ModalBody>
-          <ModalFooter>
-            <button
-              type="button"
-              class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
-              onClick={onClose}
-            >
-              Nevermind
-            </button>
-            <button
-              type="button"
-              class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
-              onClick={() => handlePrint()}
-            >
-              Print
-            </button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+            ) : (
+              <p>Loading</p>
+            )}
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <button
+            type="button"
+            class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
+            onClick={onClose}
+          >
+            Nevermind
+          </button>
+          <button
+            type="button"
+            class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
+            onClick={() => handlePrint()}
+          >
+            Print
+          </button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 
 export default ResumePreview;
 
-
 const styles = StyleSheet.create({
   page: {
     width: 100,
-    flexDirection: 'row',
-    backgroundColor: '#E4E4E4'
+    flexDirection: "row",
+    backgroundColor: "#E4E4E4",
   },
   section: {
     margin: 10,
     padding: 10,
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 });

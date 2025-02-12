@@ -18,7 +18,7 @@ const ExperiencePreview = ({ resumeInfo }) => {
       <hr
         style={
           {
-            borderColor: "black",
+            borderColor: "gray",
           }
         }
       />
@@ -38,18 +38,18 @@ const ExperiencePreview = ({ resumeInfo }) => {
           <h2 className="text-xs flex justify-between">
             {experience?.companyName}
             <span>
-              {experience?.startDate} -{" "}
-              {experience?.isCurrentlyEmployed ? "Present" : experience.endDate}{" "}
+              {experience?.displayStartDate} -{" "}
+              {experience?.isCurrentlyEmployed ? "Present" : experience.displayEndDate}{" "}
             </span>
           </h2>
           {/* <p className='text-xs my-2'>
                 {experience.workSummery}
             </p> */}
           <div
-            className="w-full"
+            className="w-full "
             // dangerouslySetInnerHTML={{ __html: experience?.description }}
           />
-          <p className="text-sm prose prose-li  font-inter marker:text-black my-2 align-center items-center">
+          <p className="w-full max-w-none  text-sm prose prose-li  font-inter marker:text-black my-2 align-center items-center">
           <Markdown>
             {experience?.description}
           </Markdown>

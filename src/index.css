@@ -191,7 +191,7 @@ justify-content: center;
   #section-to-print {
     visibility: visible;
     margin-top: 8px;
-    padding: 16px;
+    padding: 32px;
     height: auto;
     display: block;
     position: static; /* Ensures normal document flow */

@@ -273,7 +273,7 @@ const Skills = ({changeListener}) => {
       <AccordionPanel pb={4}>
         <div className="flex flex-col ">
           {workExperience?.map((experience) => (
-            <div className="flex flex-col  space-y-2 mb-16">
+            <div className="flex flex-col  space-y-2 mb-3">
               <div class="grid sm:grid-cols-4  align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
                   <p className="font-medium text-sm text-gray-800">

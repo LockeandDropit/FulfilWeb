@@ -24,6 +24,7 @@ import StepperComponent from "../ProfileComponents/StepperComponent";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResumePreview from "../ResumeBuilder/ResumePreview";
+import AboutInfo from "../ProfileComponents/AboutInfo";
 
 const ResumeBuilder = () => {
   const { currentUser } = useUserStore();
@@ -276,7 +277,7 @@ const ResumeBuilder = () => {
                     
                       {accordionHidden ? null : (
                         <Accordion defaultIndex={[0]} allowMultiple>
-                         
+                         <AboutInfo changeListener={changeListener}/>
                           <Work changeListener={changeListener} />
                           <Education changeListener={changeListener} />
                           <Skills changeListener={changeListener} />

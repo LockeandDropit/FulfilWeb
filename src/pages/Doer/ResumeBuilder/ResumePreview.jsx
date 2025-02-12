@@ -131,13 +131,13 @@ const reactToPrintFn = useReactToPrint({ contentRef });
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <button
+          {/* <button
             type="button"
-            class="py-1 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
-            onClick={() => handlePrint()}
+            class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
+            onClick={() => reactToPrintFn()}
           >
             Print
-          </button>
+          </button> */}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
@@ -172,17 +172,16 @@ const reactToPrintFn = useReactToPrint({ contentRef });
           <button
             type="button"
             class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
-            onClick={onClose}
+            onClick={() => handleCloseModal()}
           >
             Nevermind
           </button>
           <button
             type="button"
-            class="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-gray-800 hover:bg-gray-100 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
-            // onClick={() => handlePrint()}
+            class="py-2 px-6 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
             onClick={() => reactToPrintFn()}
           >
-            Print
+            Save
           </button>
       
         </ModalFooter>

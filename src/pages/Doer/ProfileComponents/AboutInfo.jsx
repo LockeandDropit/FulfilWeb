@@ -38,9 +38,8 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import DatePicker from "react-datepicker";
 
-const Education = ({ changeListener }) => {
+const AboutInfo = ({ changeListener }) => {
   const { currentUser } = useUserStore();
-
   useEffect(() => {
     if (currentUser) {
       setCurrentIncome(currentUser.currentIncome);
@@ -48,6 +47,9 @@ const Education = ({ changeListener }) => {
       setUserInterests(currentUser.userInterests);
     }
   }, [currentUser]);
+
+  const [phoneNumber, setPhoneNumber] = useState(null)
+  const [about, setAbout] = useState(null)
 
   const [currentIncome, setCurrentIncome] = useState(null);
   const [goalIncome, setGoalIncome] = useState(null);
@@ -57,7 +59,8 @@ const Education = ({ changeListener }) => {
   const [isEditCareerGoals, setIsEditCareerGoals] = useState(false);
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
   const [formValidationMessage, setFormValidationMessage] = useState();
-
+  const [isAddNew, setIsAddNew] = useState(false);
+  console.log("issAddNew", isAddNew);
   const [companyName, setCompanyName] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -70,77 +73,51 @@ const Education = ({ changeListener }) => {
   const [institutionName, setInstitutionName] = useState(null);
   const [isEmployed, setIsEmployed] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [skillName, setSkillName] = useState(null);
 
   const uploadWorkExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
     await updateDoc(doc(userChatsRef, "My Resume"), {
-      education: arrayUnion({
-        degree: degree,
-        institutionName: institutionName,
-        startDate: startDate.toLocaleDateString(),
-        displayStartDate: startDate.toLocaleDateString("en-US", options),
-        endDate: endDate ? endDate.toLocaleDateString() : null,
-        displayEndDate: endDate
-          ? endDate.toLocaleDateString("en-US", options)
-          : null,
-        isEnrolled: isEnrolled,
-        id: uuidv4(),
-      }),
+     phoneNumber: phoneNumber ? phoneNumber : null,
+     about: about ? about : null
     }).then(() => {
       changeListener();
       setUpdateIsLoading(false);
       setIsAddNew(!isAddNew);
+      setIsEditCareerGoals(!isEditCareerGoals)
     });
   };
-
-  var options = { year: "numeric", month: "numeric" };
 
   const uploadEditedWorkExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
+
     const resumeSnapshot = await getDoc(
       doc(db, "users", currentUser.uid, "Resumes", "My Resume")
     );
+
     const resumeData = resumeSnapshot.data();
+
     console.log("resume data", resumeData);
     console.log("selected id", selectedExperience.id);
     console.log("isEmployed", isEmployed);
 
     //ty https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu credit Pablo Francisco Perez Hidalgo 04/19/2013
-    const resumeIndex = resumeData.education
+    const resumeIndex = resumeData.skills
       .map(function (x) {
         return x.id;
       })
       .indexOf(selectedExperience.id);
 
+    console.log("resume Index", resumeIndex);
+
     // go back live
-    resumeData.education[resumeIndex].degree = degree
-      ? degree
-      : selectedExperience.degree
-      ? selectedExperience.degree
+    resumeData.skills[resumeIndex].skillName = skillName
+      ? skillName
+      : selectedExperience.skillName
+      ? selectedExperience.skillName
       : null;
-    resumeData.education[resumeIndex].institutionName = institutionName
-      ? institutionName
-      : selectedExperience.institutionName;
-    resumeData.education[resumeIndex].startDate = startDate
-      ? startDate.toLocaleDateString()
-      : selectedExperience.startDate;
-    resumeData.experience[resumeIndex].displayStartDate = startDate
-      ? startDate.toLocaleDateString("en-US", options)
-      : selectedExperience.displayStartDate;
-    resumeData.education[resumeIndex].endDate = endDate
-      ? endDate.toLocaleDateString()
-      : selectedExperience.endDate
-      ? selectedExperience.endDate
-      : null;
-    resumeData.experience[resumeIndex].displayEndDate = endDate
-      ? endDate.toLocaleDateString("en-US", options)
-      : selectedExperience.displayEndDate
-      ? selectedExperience.displayEndDate
-      : null;
-    resumeData.education[resumeIndex].isEnrolled =
-      isEnrolled === true ? true : false;
 
     //test conmditions
     // setUpdateIsLoading(false);
@@ -148,69 +125,48 @@ const Education = ({ changeListener }) => {
 
     //live when fixed
     await updateDoc(doc(userChatsRef, "My Resume"), {
-      education: resumeData.education,
+      skills: resumeData.skills,
     }).then(() => {
       changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
       setSelectedExperience(null);
-      setEndDate(null);
-      setStartDate(null);
-      setDegree(null);
-      setInstitutionName(null);
-      setIsEnrolled(false);
+
+      setSkillName(null);
       setIsEditCareerGoals(!isEditCareerGoals);
     });
   };
 
   const handleCancel = () => {
     setSelectedExperience(null);
-    setFormValidationMessage();
-    setEndDate(null);
-    setStartDate(null);
-    setDegree(null);
-    setInstitutionName(null);
-    setIsEnrolled(false);
+    setSkillName(null);
     setIsEditCareerGoals(!isEditCareerGoals);
   };
   const handleCancelNew = () => {
-    setFormValidationMessage();
     setSelectedExperience(null);
-    setEndDate(null);
-    setStartDate(null);
-    setDegree(null);
-    setInstitutionName(null);
-    setIsEnrolled(false);
+    setSkillName(null);
     setIsAddNew(!isAddNew);
   };
 
   const handleSelectedEdit = (x) => {
     setSelectedExperience(x);
-    setIsEnrolled(x.isEnrolled);
-    console.log("handleSelectedEdit", x);
     setIsEditCareerGoals(!isEditCareerGoals);
   };
+  //add regex test when you can
+  let phoneNumberValid = true
 
-  const handleUpdate = (selectedExperience) => {
-    if (!institutionName && !selectedExperience.institutionName) {
-      setFormValidationMessage("Please fill out all fields");
-    } else if (!selectedExperience.startDate && !startDate) {
+  const handleUpdate = () => {
+    if (!phoneNumberValid) {
       setFormValidationMessage("Please fill out all fields");
     } else {
       // check if it has an id, if it has an id it exists, so route to uploadEditedWorkExperience(). Else route to uploadEorkExperience().
-      uploadEditedWorkExperience();
-      setFormValidationMessage();
-    }
-  };
 
-  const addEducation = () => {
-    if (!institutionName || !startDate) {
-      setFormValidationMessage("Please fill out all fields");
-    } else {
-      setUpdateIsLoading(true);
-      setFormValidationMessage();
-      //update firestore
-      uploadWorkExperience();
+    
+        setUpdateIsLoading(true);
+        //update firestore
+        uploadWorkExperience();
+        setFormValidationMessage()
+    
     }
   };
 
@@ -230,8 +186,11 @@ const Education = ({ changeListener }) => {
       const unSub = onSnapshot(
         doc(db, "users", currentUser.uid, "Resumes", "My Resume"),
         async (res) => {
-          if (res.data()?.education) {
-            setWorkExperience(res.data().education);
+          if (res.data()?.phoneNumber) {
+            setPhoneNumber(res.data().phoneNumber);
+          }
+          if (res.data().about) {
+            setAbout(res.data().about)
           }
         }
       );
@@ -255,15 +214,13 @@ const Education = ({ changeListener }) => {
     const resumeData = resumeSnapshot.data();
 
     //ty https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu credit Pablo Francisco Perez Hidalgo 04/19/2013
-    const resumeIndex = resumeData.education
+    const resumeIndex = resumeData.skills
       .map(function (x) {
         return x.id;
       })
       .indexOf(selectedExperience.id);
 
-    let newData = resumeData.education.splice(resumeIndex, 1);
-
-    console.log("new data", resumeData.education);
+    let newData = resumeData.skills.splice(resumeIndex, 1);
 
     // let finalResume = resumeData.experience.splice(resumeIndex, 1);
 
@@ -274,46 +231,25 @@ const Education = ({ changeListener }) => {
     //  resumeData.experience[resumeIndex].id = "deleted"
 
     await updateDoc(doc(userChatsRef, "My Resume"), {
-      education: resumeData.education,
+      skills: resumeData.skills,
     }).then(() => {
       changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
       setSelectedExperience(null);
-      setEndDate(null);
-      setStartDate(null);
-      setDegree(null);
-      setInstitutionName(null);
-      setIsEnrolled(false);
+      setSkillName(null);
       setIsEditCareerGoals(!isEditCareerGoals);
     });
   };
 
-  const [isAddNew, setIsAddNew] = useState(false);
-
   //thgis handles toggling back and forth between the person being currently employed/having an end date.
-
-  useEffect(() => {
-    if (isEnrolled) {
-      setEndDate(null);
-    }
-  }, [isEnrolled]);
-
-  useEffect(() => {
-    if (endDate) {
-      setIsEnrolled(false);
-    }
-  }, [endDate]);
 
   const handleNew = () => {
     setSelectedExperience(null);
-    setEndDate(null);
-    setStartDate(null);
-    setDegree(null);
-    setInstitutionName(null);
-    setIsEnrolled(false);
+    setSkillName(null);
     setIsAddNew(!isAddNew);
   };
+
 
   const [selectedExperience, setSelectedExperience] = useState(null);
 
@@ -326,7 +262,7 @@ const Education = ({ changeListener }) => {
               for="hs-pro-epdsku"
               class="block font-medium text-stone-800 "
             >
-              Education
+              Personal Information
             </label>
           </Box>
           <AccordionIcon />
@@ -334,140 +270,65 @@ const Education = ({ changeListener }) => {
       </h2>
       <AccordionPanel pb={4}>
         <div className="flex flex-col ">
-          {workExperience?.map((experience) => (
-            <div className="flex flex-col  space-y-2 mb-16">
+       
+            <div className="flex flex-col  space-y-2 mb-3">
               <div class="grid sm:grid-cols-4  align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
                   <p className="font-medium text-sm text-gray-800">
-                    Institution Name:
+                    Phone Number:
                   </p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
-                  {isEditCareerGoals &&
-                  experience.id === selectedExperience.id ? (
+                  {isEditCareerGoals ?
+                  (
                     <input
                       type="text"
-                      onChange={(e) => setInstitutionName(e.target.value)}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
                       className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                       placeholder="This is placeholder"
                       value={
-                        institutionName !== null
-                          ? institutionName
-                          : experience.institutionName
+                        phoneNumber
                       }
                     />
-                  ) : (
-                    <p className="text-sm ">{experience.institutionName}</p>
+                  ) : ( phoneNumber ? (<p className="text-sm ">{phoneNumber}</p>) : (<p className="text-sm text-gray-500 italic">Nothing here yet</p>)
+                    
                   )}
                 </div>
                 <div className="sm:col-span-1 ml-auto">
                   {isEditCareerGoals ? null : (
                     <div
                       className=" text-sm ml-auto cursor-pointer text-blue-400 hover:text-blue-600 hover:underline"
-                      onClick={() => handleSelectedEdit(experience)}
+                      onClick={() => handleSelectedEdit()}
                     >
                       Edit
                     </div>
                   )}
                 </div>
               </div>
-              <div className="flex flex-row align-center items-center"></div>
-              <div class="grid sm:grid-cols-4  align-center items-center">
+              <div class="grid sm:grid-cols-4  align-center items-center mb-8">
                 <div class="sm:col-span-1 2xl:col-span-1">
                   <p className="font-medium text-sm text-gray-800">
-                    Degree (optional):
+                    About:
                   </p>
                 </div>
-                <div class="sm:col-span-2 align-center items-center">
-                  {isEditCareerGoals &&
-                  experience.id === selectedExperience.id ? (
-                    <input
-                      type="text"
-                      onChange={(e) => setDegree(e.target.value)}
-                      className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      placeholder="This is placeholder"
-                      value={degree !== null ? degree : experience.degree}
-                    />
-                  ) : (
-                    <p className="text-sm ">{experience.degree}</p>
+                <div class="sm:col-span-3 align-center items-center">
+                  {isEditCareerGoals ?
+                  (
+                    <div className="space-y-3">
+                    <textarea className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none" rows="3" placeholder="Enter some information about yourself and what you offer professionally." onChange={(e) => setAbout(e.target.value)} value={about}></textarea>
+                  </div>
+                  ) : ( about ? (<p className="text-sm ">{about}</p>) : (<p className="text-sm text-gray-500 italic">Nothing here yet</p>)
+                    
                   )}
                 </div>
-              </div>
-              <div class="grid sm:grid-cols-4  mb-2 align-center items-center">
-                <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">
-                    Attendance:
-                  </p>
-                </div>
-                <div class="sm:col-span-2 align-center items-center">
-                  {isEditCareerGoals &&
-                  experience.id === selectedExperience.id ? (
-                    <div className="w-full">
-                      <div className="flex align-center items-center">
-                        <DatePicker
-                          dateFormat="MM/yyyy"
-                          showMonthYearPicker
-                          showFullMonthYearPicker
-                          selected={
-                            startDate !== null
-                              ? startDate
-                              : experience.startDate
-                          }
-                          onChange={(date) => setStartDate(date)}
-                          className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                        />
-
-                        <span className="font-medium text-gray-800 mx-2">
-                          -
-                        </span>
-
-                        <DatePicker
-                          dateFormat="MM/yyyy"
-                          showMonthYearPicker
-                          showFullMonthYearPicker
-                          selected={
-                            endDate !== null ? endDate : experience.endDate
-                          }
-                          onChange={(date) => setEndDate(date)}
-                          className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                        />
-                      </div>
-                      <div className="ml-auto">
-                        <div
-                          className="ml-auto mt-2.5"
-                          onClick={() => setIsEnrolled(!isEnrolled)}
-                        >
-                          <input
-                            type="checkbox"
-                            class="mr-2 ml-auto shrink-0 border-gray-200 rounded text-blue-600 cursor-pointer"
-                            onChange={() => setIsEnrolled(!isEnrolled)}
-                            checked={isEnrolled}
-                          />
-                          <label
-                            for="af-account-full-name"
-                            class="inline-block text-sm text-gray-600 ml-auto"
-                          >
-                            Currently Enrolled
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex align-center items-center">
-                      <p className="text-sm">{experience.displayStartDate}</p>
-                      <span className="font-medium text-gray-800 mx-1">-</span>
-                      {experience.isEnrolled === true ? (
-                        <p className="text-sm">Currently Enrolled</p>
-                      ) : (
-                        <p className="text-sm">{experience.displayEndDate}</p>
-                      )}
-                    </div>
-                  )}
-                </div>
+               
               </div>
 
-              {isEditCareerGoals && experience.id === selectedExperience.id ? (
+              {isEditCareerGoals  ? (
+                
                 <div className="ml-auto mt-2">
+                 <div className="h-[40px]">
+                  </div>
                   <button
                     type="button"
                     class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200"
@@ -475,17 +336,11 @@ const Education = ({ changeListener }) => {
                   >
                     Cancel
                   </button>
+                  
                   <button
                     type="button"
-                    class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600"
-                    onClick={() => handleDeleteSelected()}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    type="button"
-                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                    onClick={() => handleUpdate(selectedExperience)}
+                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                    onClick={() => handleUpdate()}
                   >
                     Update
                   </button>
@@ -495,8 +350,7 @@ const Education = ({ changeListener }) => {
                 <p className="text-red-500 text-sm">{formValidationMessage}</p>
               ) : null}
             </div>
-          ))}
-
+        
           {workExperience?.length <= 0 && isAddNew === false && (
             <div class="p-5 min-h-[328px] flex flex-col justify-center items-center text-center">
               <svg
@@ -710,133 +564,18 @@ const Education = ({ changeListener }) => {
                   <path d="M5 12h14" />
                   <path d="M12 5v14" />
                 </svg>
-                Add Education
+                Add Skill
               </button>
             </div>
           )}
 
-          {isAddNew ? (
-            <div className="flex flex-col  space-y-3 z-50 mt-4">
-              <div class="grid sm:grid-cols-4  align-center items-center mt-8">
-                <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">
-                    Institution Name:
-                  </p>
-                </div>
-                <div class="sm:col-span-2 align-center items-center">
-                  <input
-                    type="text"
-                    onChange={(e) => setInstitutionName(e.target.value)}
-                    className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                    placeholder="This is placeholder"
-                  />
-                </div>
-                <div className="sm:col-span-1 ml-auto"></div>
-              </div>
-              <div className="flex flex-row align-center items-center"></div>
-              <div class="grid sm:grid-cols-4  align-center items-center">
-                <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">
-                    Degree (optional):
-                  </p>
-                </div>
-                <div class="sm:col-span-2 align-center items-center">
-                  <input
-                    type="text"
-                    onChange={(e) => setDegree(e.target.value)}
-                    className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                    placeholder="This is placeholder"
-                  />
-                </div>
-              </div>
-              <div class="grid sm:grid-cols-4  mb-2 align-center items-center">
-                <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">
-                    Dates Employed:
-                  </p>
-                </div>
-                <div class="sm:col-span-2 align-center items-center">
-                  <div className="flex align-center items-center">
-                    <DatePicker
-                      dateFormat="MM/yyyy"
-                      showMonthYearPicker
-                      showFullMonthYearPicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                    />
 
-                    <span className="font-medium text-gray-800 mx-2">-</span>
 
-                    <DatePicker
-                      dateFormat="MM/yyyy"
-                      showMonthYearPicker
-                      showFullMonthYearPicker
-                      selected={endDate}
-                      onChange={(date) => setEndDate(date)}
-                      className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                    />
-                  </div>
-                  <div class="flex mb-1">
-                    <div className="ml-auto mt-2.5">
-                      <input
-                        type="checkbox"
-                        class="mr-2 ml-auto shrink-0 border-gray-200 rounded text-blue-600 cursor-pointer"
-                        onChange={() => setIsEnrolled(!isEnrolled)}
-                        checked={isEnrolled}
-                      />
-                      <label
-                        for="af-account-full-name"
-                        class="inline-block text-sm text-gray-600 cursor-pointer"
-                        onClick={() => setIsEnrolled(!isEnrolled)}
-                      >
-                        Currently employed
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="ml-auto space-x-2 mt-2">
-                <button
-                  type="button"
-                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
-                  onClick={() => handleCancelNew()}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                  onClick={() => addEducation()}
-                >
-                  Add
-                </button>
-              </div>
-
-              {formValidationMessage ? (
-                <p className="text-red-500 text-sm">{formValidationMessage}</p>
-              ) : null}
-            </div>
-          ) : null}
-
-          {isAddNew ||
-          isEditCareerGoals ||
-          workExperience?.length <= 0 ? null : (
-            <div className="ml-auto mt-3">
-              <button
-                type="button"
-                class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                onClick={() => handleNew()}
-              >
-                Add More
-              </button>
-            </div>
-          )}
+      
         </div>
       </AccordionPanel>
     </AccordionItem>
   );
 };
 
-export default Education;
+export default AboutInfo;

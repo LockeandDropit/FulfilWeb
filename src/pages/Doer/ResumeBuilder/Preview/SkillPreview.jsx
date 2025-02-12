@@ -11,11 +11,11 @@ const SkillPreview = ({ resumeInfo }) => {
           color: "black",
         }}
       >
-        Skills
+        Skills & Certifications
       </h2>
       <hr
         style={{
-          borderColor: "black",
+          borderColor: "gray",
         }}
       />
 

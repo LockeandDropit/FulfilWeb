@@ -6,7 +6,7 @@ const EducationPreview = ({ resumeInfo }) => {
   return (
     <div className="my-6">
       <h2
-        className="text-start font-bold mb-1"
+        className="text-start text-lg font-bold mb-1"
         style={{
           color: "Black",
         }}
@@ -15,14 +15,14 @@ const EducationPreview = ({ resumeInfo }) => {
       </h2>
       <hr
         style={{
-          borderColor: "black",
+          borderColor: "gray",
         }}
       />
 
       {resumeInfo?.education.map((education, index) => (
         <div key={index} className="my-5 mb-2">
           <h2
-            className="text-sm font-bold"
+            className=" font-medium"
             style={{
               color: "black",
             }}
@@ -30,9 +30,9 @@ const EducationPreview = ({ resumeInfo }) => {
             {education?.institutionName}
           </h2>
           <h2 className="text-xs flex justify-between">
-            {education?.degree} in {education?.major}
+            {education?.degree} 
             <span className="flex">
-              {education?.startDate} - {education?.endDate ? (<p>{education?.endDate}</p>) : (<p className="text-gray-700 ml-1">Currently attending</p>)}
+              {education?.displayStartDate} - {education?.isEnrolled === true ? (<p className="text-gray-700 ml-1">Currently attending</p>) : (<p>{education?.displayEndDate}</p>) }
             </span>
           </h2>
         </div>

@@ -511,10 +511,10 @@ const MyProfile = () => {
                             </div>
                           </li>
                         </ul>
-                        <h2 class="text-sm font-semibold text-gray-800 mt-4 mb-3">
+                        {/* <h2 class="text-sm font-semibold text-gray-800 mt-4 mb-3">
                           Profile Progress
                         </h2>{" "}
-                        {/* stepper component */}
+                       
                         <StepperComponent
                           currentUser={currentUser}
                           changeListener={changeListener}
@@ -524,7 +524,7 @@ const MyProfile = () => {
                           <button
                             type="button"
                             class="mt-4 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                            // onClick={() => setOpenModal(true)}
+                      
                             onClick={() => handleOpenModalCloseAccordion()}
                           >
                             Create Resume
@@ -542,7 +542,7 @@ const MyProfile = () => {
                               <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
                             </svg>
                           </button>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -750,9 +750,26 @@ const MyProfile = () => {
                               </div>
                             </AccordionPanel>
                           </AccordionItem>
-                          <Work changeListener={changeListener} />
+                          <AccordionItem>
+                            <AccordionButton>
+                              <Box flex="1" textAlign="left">
+                                <label
+                                  for="hs-pro-epdsku"
+                                  class="block font-medium text-stone-800 "
+                                >
+                                  Saved Jobs
+                                
+                                </label>
+                              </Box>
+                              <AccordionIcon />
+                            </AccordionButton>
+                            <AccordionPanel pb={4}>
+                           
+                            </AccordionPanel>
+                          </AccordionItem>
+                          {/* <Work changeListener={changeListener} />
                           <Education changeListener={changeListener} />
-                          <Skills changeListener={changeListener} />
+                          <Skills changeListener={changeListener} /> */}
                         </Accordion>
                       )}
                     </div>

@@ -81,8 +81,8 @@ const Work = ({ changeListener }) => {
     setLoadingAIResponse(true);
 
     const response = await fetch(
-      "http://localhost:8000/getResumeHelp",
-      // "https://openaiapi-c7qc.onrender.com/getResumeHelp",
+      // "http://localhost:8000/getResumeHelp",
+      "https://openaiapi-c7qc.onrender.com/getResumeHelp",
       {
         method: "POST",
         headers: {

@@ -6,8 +6,8 @@ const SkillPreview = ({ resumeInfo }) => {
   return (
     <div className="my-6">
       <h2
-        className="text-start font-bold mb-1"
-        style={{
+        className="text-start text-lg font-bold mb-1"
+        style={{  
           color: "black",
         }}
       >

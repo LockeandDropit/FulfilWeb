@@ -26,20 +26,20 @@ const AboutPreview = ({ resumeInfo, currentUser }) => {
         {resumeInfo?.jobTitle}
       </h2> */}
 
-      <div className=" flex flex-row space-x-2">
-      
-      {resumeInfo?.phoneNumber && (<h2
-          className="font-normal text-sm"
-          style={
-            {
-              // color:resumeInfo?.themeColor
-            }
+<h2
+        className=" font-normal text-sm"
+        style={
+          {
+            // color:resumeInfo?.themeColor
           }
-        >
-          {resumeInfo.phoneNumber}
-        </h2>)}
-        
-        <h2
+        }
+      >
+        {currentUser?.city}, {currentUser?.state}
+      </h2>
+      
+      <ul className=" flex flex-row space-x-7 list-disc">
+      
+      <p
           className="font-normal text-sm"
           style={
             {
@@ -49,21 +49,21 @@ const AboutPreview = ({ resumeInfo, currentUser }) => {
         >
           {currentUser?.email}
 
-        </h2>
-      </div>
-      {/* <h2
-        className=" font-normal text-sm"
-        style={
-          {
-            // color:resumeInfo?.themeColor
-          }
-        }
-      >
-        {currentUser?.city}, {currentUser?.state}
-      </h2> */}
-      <div className="">
+        </p>
 
-      <h2
+      {resumeInfo?.phoneNumber && (<li
+          className="font-normal text-sm"
+          style={
+            {
+              // color:resumeInfo?.themeColor
+            }
+          }
+        >
+          {resumeInfo.phoneNumber}
+        </li>)}
+        
+        
+        {/* <li
         className=" font-normal text-sm text-gray-600"
         style={
           {
@@ -72,7 +72,21 @@ const AboutPreview = ({ resumeInfo, currentUser }) => {
         }
       >
         {currentUser?.city}, {currentUser?.state}
-      </h2>
+      </li> */}
+      </ul>
+      
+      <div className="">
+
+      {/* <h2
+        className=" font-normal text-sm text-gray-600"
+        style={
+          {
+            // color:resumeInfo?.themeColor
+          }
+        }
+      >
+        {currentUser?.city}, {currentUser?.state}
+      </h2> */}
       </div>
 
 {resumeInfo?.about && (

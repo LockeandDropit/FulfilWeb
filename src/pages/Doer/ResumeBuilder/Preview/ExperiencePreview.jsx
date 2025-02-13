@@ -6,7 +6,7 @@ const ExperiencePreview = ({ resumeInfo }) => {
   return (
     <div className="my-6">
       <h2
-        className="text-start font-bold mb-1"
+        className="text-start text-lg font-bold mb-1"
         style={
           {
             // color: resumeInfo?.themeColor,

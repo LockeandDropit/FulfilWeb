@@ -2,7 +2,7 @@ import React from 'react'
 
 const SubHeroCopy = () => {
   return (
-    <div className="bg-white bg-gradient-to-t ">
+    <div className="bg-white bg-gradient-to-t mt-16">
         
           <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8  pt-24 pb-24 mx-auto">
             {/* <div className="max-w-3xl mb-10 lg:mb-14">
@@ -14,6 +14,12 @@ const SubHeroCopy = () => {
               
               </p>
             </div> */}
+
+              <div className="flex flex-col items-center justify-center mb-12">
+              <h1 className='text-4xl font-bold text-gray-900'>No College Required.</h1>
+              <p className='text-gray-700'>Fulfil exclusively focuses on careers that don't require a 4-year degree.</p>
+              </div>
+           
 
             <div className="grid grid-cols-1 lg:grid-cols-3 items-center border border-blue-400 divide-y lg:divide-y-0 lg:divide-x divide-blue-700 rounded-xl">
               <a

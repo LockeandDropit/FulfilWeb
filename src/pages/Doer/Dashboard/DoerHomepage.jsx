@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import DoerHeader from "../components/DoerHeader";
 import { auth, db } from "../../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import { getDoc, doc } from "firebase/firestore";
+import { getDoc, doc, updateDoc } from "firebase/firestore";
 import Greeting from "./Greeting";
 import HomepageJobs from "./HomepageJobs";
 import HomepageEducation from "./HomepageEducation";
@@ -53,11 +53,56 @@ const DoerHomepage = () => {
       }
     }, [user]);
 
+      useEffect(() => {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const sessionId = urlParams.get("session_id");
+    
+        console.log("new update outer");
+    
+        console.log("test");
+        if (sessionId && user !== null && currentUser !== null) {
+          console.log("test 2");
+          if (!currentUser.isPremium) {
+            console.log("new update inner");
+            setHasRun(false);
+            fetch(
+              `https://fulfil-api.onrender.com/create-subscription-session-status?session_id=${sessionId}`
+            )
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.status === "complete") {
+                  console.log(data.status);
+                  console.log(user.uid);
+                  updateDoc(doc(db, "users", user.uid), {
+                    isPremium: true,
+                  }).catch((error) => console.log(error));
+                  fetchUserInfo(user.uid);
+    
+                  // onOpen();
+    
+                  //set user as premium
+                } else {
+                  alert(
+                    "There was an error processing your payment. Please try again later."
+                  );
+                  // addJobInfo(null)
+                }
+              });
+          } else {
+          }
+        } else {
+        }
+      }, [user, currentUser]);
 
+
+      const testIfPremium = () =>{
+        console.log("test")
+      }
 //access zustand store. One for each portion of the returned data (jobs, edu,  recommended/preferred industry)
 
   return (
-    <div className="w-full">
+    <div className="w-full" onClick={() => testIfPremium()}>
       {currentUser ? (
         <>
           

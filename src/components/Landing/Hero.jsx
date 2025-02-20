@@ -16,9 +16,19 @@ const Hero = () => {
       <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 ">
         <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
           <div>
+            {/* <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
+              <span class="text-black">
+              Fulfil is the best way to enter the job market
+              </span>{" "}
+            </h1> */}
+              <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
+              <span class="text-black">
+              Your career matters.
+              </span>{" "}
+            </h1>
             <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
               <span class="text-black">
-                Fulfil is your career search assistant.
+              Make the right choice.
               </span>{" "}
             </h1>
 
@@ -32,7 +42,7 @@ const Hero = () => {
               onClick={handleNavigateAndCaptureFunnel}
             >
               <a class="py-3 px-4 inline-flex justify-center cursor-pointer items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-non">
-                Browse careers
+                Get Started
                 <svg
                   class="shrink-0 size-4"
                   xmlns="http://www.w3.org/2000/svg"

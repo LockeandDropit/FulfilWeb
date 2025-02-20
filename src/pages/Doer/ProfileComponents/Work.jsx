@@ -68,6 +68,7 @@ const Work = ({ changeListener }) => {
   const [companyName, setCompanyName] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [userBaseDescription, setUserBaseDescription] = useState(null);
   const [description, setDescription] = useState(null);
 
   const [positionTitle, setPositionTitle] = useState(null);
@@ -81,8 +82,8 @@ const Work = ({ changeListener }) => {
     setLoadingAIResponse(true);
 
     const response = await fetch(
-      // "http://localhost:8000/getResumeHelp",
-      "https://openaiapi-c7qc.onrender.com/getResumeHelp",
+      "http://localhost:8000/getResumeHelp",
+      // "https://openaiapi-c7qc.onrender.com/getResumeHelp",
       {
         method: "POST",
         headers: {
@@ -90,7 +91,7 @@ const Work = ({ changeListener }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userInput: `${aiPromtInput}`,
+          userInput: `${userBaseDescription}`,
         }),
       }
     );
@@ -117,6 +118,7 @@ const Work = ({ changeListener }) => {
         companyName: companyName,
         positionTitle: positionTitle,
         description: description,
+        userBaseDescription: userBaseDescription ? userBaseDescription : null,
         startDate: startDate.toLocaleDateString(),
         displayStartDate: startDate.toLocaleDateString("en-US", options),
         endDate: endDate ? endDate.toLocaleDateString() : null,
@@ -168,6 +170,9 @@ const Work = ({ changeListener }) => {
     resumeData.experience[resumeIndex].description = description
       ? description
       : selectedExperience.description;
+    resumeData.experience[resumeIndex].userBaseDescription = userBaseDescription
+      ? userBaseDescription
+      : selectedExperience.userBaseDescription;
     resumeData.experience[resumeIndex].startDate = startDate
       ? startDate.toLocaleDateString()
       : selectedExperience.startDate;
@@ -218,6 +223,7 @@ const Work = ({ changeListener }) => {
     setEndDate(null);
     setStartDate(null);
     setDescription(null);
+    setUserBaseDescription(null);
     setCompanyName(null);
     setPositionTitle(null);
     setIsEmployed(false);
@@ -230,6 +236,7 @@ const Work = ({ changeListener }) => {
     setEndDate(null);
     setStartDate(null);
     setDescription(null);
+    setUserBaseDescription(null);
     setCompanyName(null);
     setPositionTitle(null);
     setIsEmployed(false);
@@ -243,7 +250,11 @@ const Work = ({ changeListener }) => {
     setIsEditCareerGoals(!isEditCareerGoals);
   };
 
+
+  
+
   const handleUpdate = (selectedExperience) => {
+    console.log(description, positionTitle, companyName, startDate)
     if (!description && !selectedExperience.description) {
       setFormValidationMessage("Please fill out all fields");
     } else if (!selectedExperience.positionTitle && !positionTitle) {
@@ -260,6 +271,7 @@ const Work = ({ changeListener }) => {
   };
 
   const addExperience = () => {
+    console.log(description, positionTitle, companyName, startDate)
     if (!companyName || !startDate || !description || !positionTitle) {
       setFormValidationMessage("Please fill out all fields");
     } else {
@@ -387,6 +399,7 @@ const Work = ({ changeListener }) => {
   const [aiTextGenLoading, setAITextGenLoading] = useState(false);
 
   const handleEditorChange = (editorState) => {
+    console.log("handlechange editpor state", editorState)
     // (console.log("here it is", draftToMarkdown(editorState)))
     setDescription(draftToMarkdown(editorState));
   };
@@ -423,13 +436,36 @@ const Work = ({ changeListener }) => {
   useEffect(() => {
     if (contentState) {
       setEditorState(EditorState.createWithContent(contentState));
+
       setTimeout(() => {
         setTextEditorLoading(false);
         setAITextGenLoading(false);
+        
         onClose();
       }, 500);
     }
   }, [contentState]);
+
+
+
+
+  // if editor state has changed x1 setDescription w/Editor state. Else let handelEditorStateChange do the work.
+
+  const [editorInitialChange, setEditorInitialChange] = useState(false)
+
+  useEffect(() => {
+    if (editorState) {
+
+      console.log(" use effecvy", editorState)
+   
+    }
+  }, [editorState])
+
+
+
+  useEffect(() => {
+    console.log("description listener", description)
+  }, [description])
 
   var options = { year: "numeric", month: "numeric" };
 
@@ -584,12 +620,59 @@ const Work = ({ changeListener }) => {
                   )}
                 </div>
               </div>
+              {isEditCareerGoals && experience.id === selectedExperience.id ? (
+                <>
+                  <div class="grid sm:grid-cols-4  mb-10 align-center ">
+                    <div class="sm:col-span-1 2xl:col-span-1">
+                      <p className="font-medium text-sm text-gray-800">
+                        Describe your responsibilities: (optional)
+                      </p>
+                    </div>
+                    <div class="sm:col-span-3 align-center items-center space-y-2">
+                      {/* got this from chat gpt but idk if this is even copyrightable */}
+                      <textarea
+                        id="textarea-label"
+                        className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                        rows="5"
+                        placeholder="I was in charge of making sure all the materials were orderd and keeping track of our stock. I interacted with customers on a regular basis. I reported to my senior manager and was involved in some decision making."
+                        onChange={(e) => setUserBaseDescription(e.target.value)}
+                        value={
+                          userBaseDescription !== null ? userBaseDescription : experience.userBaseDescription
+                        }
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div className="ml-auto mt-8">
+                    <button
+                      // onClick={() => onOpen()}
+                      onClick={() => handleSubmitAIInput()}
+                      type="button"
+                      class=" w-full py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                    >
+                      AI Assistant
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="white"
+                        className="size-5"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </>
+              ) : null}
+
               <div class="grid sm:grid-cols-4  mb-10 align-center ">
                 <div class="sm:col-span-1 2xl:col-span-1">
                   <p className="font-medium text-sm text-gray-800">
                     Role & Responsibilities:
                   </p>
-                  {isEditCareerGoals &&
+                  {/* {isEditCareerGoals &&
                   experience.id === selectedExperience.id ? (
                     <button
                       onClick={() => onOpen()}
@@ -610,7 +693,7 @@ const Work = ({ changeListener }) => {
                         />
                       </svg>
                     </button>
-                  ) : null}
+                  ) : null} */}
                 </div>
                 <div class="sm:col-span-3 align-center items-center">
                   {/* got this from chat gpt but idk if this is even copyrightable */}
@@ -656,7 +739,7 @@ const Work = ({ changeListener }) => {
                     class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                     onClick={() => handleUpdate(selectedExperience)}
                   >
-                    Update
+                    Save
                   </button>
                 </div>
               ) : null}
@@ -1064,7 +1147,7 @@ const Work = ({ changeListener }) => {
                       className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                       rows="3"
                       placeholder="I was in charge of making sure all the materials were orderd and keeping track of our stock. I interacted with customers on a regular basis. I reported to my senior manager and was involved in some decision making."
-                      onChange={(e) => setAIPromtInput(e.target.value)}
+                      onChange={(e) => setUserBaseDescription(e.target.value)}
                     ></textarea>
                   </div>
 

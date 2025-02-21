@@ -34,6 +34,7 @@ import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
+import ModifiedResumePreview from "../ResumeBuilder/ModifiedResumePreview";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
@@ -90,6 +91,8 @@ const HomepageJobs = ({ user }) => {
   }, [returnedJobs]);
 
   const [aiTextGenLoading, setAITextGenLoading] = useState(false);
+
+  const [finishedLoading, setFinishedLoading] = useState(false)
 
   const handleOpenPrompt = () => {
     // open modal
@@ -164,6 +167,7 @@ const HomepageJobs = ({ user }) => {
         .concat(" ", x.positionTitle)
         .concat(" ", "where")
         .concat(" ", x.userBaseDescription)
+        .concat (". ", "I'm applying to a job titled ", currentSelectedJobTitle)
     );
 
     for (let i = 0; i < resumeIndex.length; i++) {
@@ -189,6 +193,7 @@ const HomepageJobs = ({ user }) => {
       }
       console.log("finished");
       //fire something so editor with new resume data for each option is available to view and edit
+      setAITextGenLoading(false)
       setNewDescriptionsReady(true);
     } else {
       setTimeout(() => {
@@ -237,6 +242,23 @@ const HomepageJobs = ({ user }) => {
     // (console.log("here it is", draftToMarkdown(editorState)))
     setDescription(draftToMarkdown(editorState));
   };
+
+
+
+  //update local job description
+
+  const updateWithUserEdit = () => {
+    const resumeIndex = baseResumeData[0].experience
+    .map(function (x) {
+      return x.id;
+    })
+    .indexOf(selectedExperience.id);
+
+    baseResumeData[0].experience[resumeIndex].description = description;
+
+    handleCancel();
+
+  }
 
   const [contentState, setContentState] = useState(null);
   const [selectedExperience, setSelectedExperience] = useState(null);
@@ -298,8 +320,14 @@ const HomepageJobs = ({ user }) => {
     setIsEditCareerGoals(!isEditCareerGoals);
   };
 
+  const [resumeVisible, setResumeVisible] = useState(false)
+
   const handleUpdate = () => {
     //handle update here 
+    setResumeVisible(true)
+    //trigger open for a new modal that has the new resume displayed on it?
+
+
   }
 
 
@@ -362,6 +390,11 @@ const HomepageJobs = ({ user }) => {
           //open stripe
           handleOpenPayment()
         }
+
+        const setModalClosed = () => {
+          setResumeVisible(false);
+     
+        };
 
 
   return (
@@ -673,7 +706,7 @@ const HomepageJobs = ({ user }) => {
           )}
         </div>
       </div>
-      {paymentModalOpen && (<PaymentModal handleCloseOfferOpenPayment={() => handleCloseOfferOpenPayment()} />)}
+      {/* {paymentModalOpen && (<PaymentModal handleCloseOfferOpenPayment={() => handleCloseOfferOpenPayment()} />)}
       {stripeOpen && (
             <Modal
               isOpen={isOpenStripe}
@@ -692,16 +725,16 @@ const HomepageJobs = ({ user }) => {
                 </EmbeddedCheckoutProvider>
               </ModalContent>
             </Modal>
-          )}
+          )} */}
       <Modal isOpen={isOpen} onClose={onClose} size="3xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <div className="w-full p-4">
-              <h1 className="text-lg font-medium text-gray-800">
-                Do you want us to modify your resume so it fits this job
+            <div className="w-full p-4 ">
+              <h1 className="text-2xl font-medium text-gray-800 mb-8">
+                Do you want us to modify your resume so it fits this job ({currentSelectedJobTitle})
                 specifically?
               </h1>
 
@@ -710,13 +743,13 @@ const HomepageJobs = ({ user }) => {
                   <>
                     {/* got this from chat gpt but idk if this is even copyrightable */}
                     <div class="grid sm:grid-cols-4  align-center items-center">
-                        <div class="sm:col-span-1 2xl:col-span-1">
+                        <div class="sm:col-span-1 2xl:col-span-1 mb-5">
                           <p className="font-medium text-sm text-gray-800">
                             Position Title:
                           </p>
                         </div>
-                        <div class="sm:col-span-2 align-center items-center">
-                          <p className="text-sm ">
+                        <div class="sm:col-span-2 align-center items-center mb-5">
+                          <p className="text-sm font-semibold ">
                             {" "}
                             {experience.positionTitle}
                           </p>
@@ -798,7 +831,8 @@ const HomepageJobs = ({ user }) => {
                   <button
                     type="button"
                     class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                    onClick={() => handleUpdate(selectedExperience)}
+                    // onClick={() => handleUpdate(selectedExperience)}
+                    onClick={() => updateWithUserEdit(selectedExperience)}
                   >
                     Save
                   </button>
@@ -822,13 +856,13 @@ const HomepageJobs = ({ user }) => {
                       aria-label="loading"
                     ></div>
                   </button>
-                ) : (
+                ) : newDescriptionsReady ? (
                   <button
-                    onClick={() => retrieveResumeAndStartAPICall()}
+                  onClick={() => handleUpdate(selectedExperience)}
                     type="button"
                     class="mt-3 w-fit ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                   >
-                    Yes
+                    Apply To Resume
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -842,12 +876,32 @@ const HomepageJobs = ({ user }) => {
                       />
                     </svg>
                   </button>
-                )}
+                ) : (<button
+                  onClick={() => retrieveResumeAndStartAPICall()}
+                  type="button"
+                  class="mt-3 w-fit ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  Yes
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    className="size-5"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>)}
               </div>
             </div>
           </ModalBody>
         </ModalContent>
       </Modal>
+
+      {resumeVisible && (<ModifiedResumePreview setModalClosed={() => setModalClosed()} updatedExperience={baseResumeData[0].experience}/>)}
     </div>
   );
 };

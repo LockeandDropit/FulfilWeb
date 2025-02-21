@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import DoerHeader from "../components/DoerHeader";
 import { auth, db } from "../../../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
@@ -14,6 +14,28 @@ import { useJobRecommendationStore } from "../lib/jobRecommendations";
 import { useEduRecommendationStore } from "../lib/eduRecommendations";
 import { useIndustryRecommendationStore } from "../lib/industryRecommendation";
 import { usePreferredIndustryStore } from "../lib/userPreferredIndustry";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout,
+} from "@stripe/react-stripe-js";
+import PaymentModal from "./PaymentModal/PaymentModal";
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
 
 const DoerHomepage = () => {
   const [user, setUser] = useState(null);
@@ -97,8 +119,77 @@ const DoerHomepage = () => {
 
 
       const testIfPremium = () =>{
-        console.log("test")
+        if (currentUser.isPremium === true) {
+          
+        } else {
+          setPaymentModalOpen(true)
+        }
       }
+
+      
+  //PAYMENT HANDLERS
+
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false)
+  const handleOpenPaymentModal = () => {
+    setPaymentModalOpen(true)
+  }
+
+    const [stripeOpen, setStripeOpen] = useState(false);
+
+     const {
+        isOpen: isOpenStripe,
+        onOpen: onOpenStripe,
+        onClose: onCloseStripe,
+      } = useDisclosure();
+
+
+      const handleOpenPayment = () => {
+        setStripeOpen(true)
+        onOpenStripe()
+      }
+
+       const fetchClientSecret = useCallback(() => {
+          // Create a Checkout Session
+      
+          //do i need a callback function or can I pass something here?
+          //I could try storing it in a store and pullling from there?
+          // also change the dollar amount on the stripe card entering field.
+       console.log("fetch client secret called $29")
+      
+      
+        return (
+           
+          fetch("https://fulfil-api.onrender.com/create-subscription",
+        
+                {
+                  method: "POST",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                }
+              )
+                .then((res) => res.json())
+                //   .then((data) => console.log(data))
+                .then((data) => data.clientSecret)
+            );
+       
+      
+        }, []);
+      
+      
+        const options = { fetchClientSecret };
+
+        const handleCloseOfferOpenPayment = () => {
+          //close Modal
+          setPaymentModalOpen(false)
+          //open stripe
+          handleOpenPayment()
+        }
+
+        const handleCloseOffer = () => {
+          setPaymentModalOpen(false)
+        }
 //access zustand store. One for each portion of the returned data (jobs, edu,  recommended/preferred industry)
 
   return (
@@ -110,7 +201,26 @@ const DoerHomepage = () => {
           <Greeting user={currentUser}/>
           <HomepageJobs user={currentUser} />
           <HomepageEducation user={currentUser} />
+  {paymentModalOpen && (<PaymentModal handleCloseOffer={() => handleCloseOffer()} handleCloseOfferOpenPayment={() => handleCloseOfferOpenPayment()} />)}
+      {stripeOpen && (
+            <Modal
+              isOpen={isOpenStripe}
+              onClose={() => setStripeOpen(false)}
+              size="xl"
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalCloseButton />
 
+                <EmbeddedCheckoutProvider
+                  stripe={stripePromise}
+                  options={options}
+                >
+                  <EmbeddedCheckout />
+                </EmbeddedCheckoutProvider>
+              </ModalContent>
+            </Modal>
+          )}
         </>
       ) : null}
     </div>

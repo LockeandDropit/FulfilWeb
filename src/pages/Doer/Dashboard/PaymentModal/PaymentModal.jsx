@@ -14,7 +14,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-const PaymentModal = ( {handleCloseOfferOpenPayment} ) => {
+const PaymentModal = ( {handleCloseOfferOpenPayment, handleCloseOffer} ) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const PaymentModal = ( {handleCloseOfferOpenPayment} ) => {
 
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="5xl">
+    <Modal isOpen={isOpen} onClose={() => handleCloseOffer()} size="5xl">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader></ModalHeader>
@@ -39,7 +39,7 @@ const PaymentModal = ( {handleCloseOfferOpenPayment} ) => {
                   <div class="mt-8 space-y-8 md:-mx-4 md:flex md:items-center md:justify-center md:space-y-0 xl:mt-0">
                     <div class="max-w-sm mx-auto border rounded-lg md:mx-4 ">
                       <div class="p-6">
-                        <h1 class="text-xl font-medium text-gray-700 capitalize lg:text-2xl ">
+                        <h1 class="text-xl font-medium text-gray-600 capitalize lg:text-2xl ">
                           The other guys
                         </h1>
 
@@ -48,9 +48,9 @@ const PaymentModal = ( {handleCloseOfferOpenPayment} ) => {
                           elit. Nostrum quam voluptatibus
                         </p>
 
-                        <h2 class="mt-4 text-2xl font-semibold text-gray-700 sm:text-3xl ">
+                        <h2 class="mt-4 text-xl font-medium text-gray-600 sm:text-xl ">
                           $20.00{" "}
-                          <span class="text-base font-medium">/Month</span>
+                          <span class="text-lg font-medium">/Month</span>
                         </h2>
 
                        

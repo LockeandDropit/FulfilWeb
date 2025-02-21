@@ -111,7 +111,7 @@ const reactToPrintFn = useReactToPrint({ contentRef });
           <EducationPreview resumeInfo={resumeInfo} />
         )}
         {resumeInfo?.experience?.length > 0 && (
-          <ExperiencePreview resumeInfo={updatedExperience}  />
+          <ExperiencePreview resumeInfo={resumeInfo} updatedExperience={updatedExperience}  />
         )}
         {resumeInfo?.skills?.length > 0 && (
           <SkillPreview resumeInfo={resumeInfo} />

@@ -124,13 +124,15 @@ const HomepageJobs = ({ user }) => {
   const [loadingAIResponse, setLoadingAIResponse] = useState(false);
 
   const handleSubmitAIInput = async (passedData) => {
+
+    console.log("passedData", passedData)
     // setTextEditorLoading(true);
     setAITextGenLoading(true);
     setLoadingAIResponse(true);
 
     const response = await fetch(
       // "http://localhost:8000/getResumeModification",
-      "https://openaiapi-c7qc.onrender.com/getResumeHelp",
+      "https://openaiapi-c7qc.onrender.com/getResumeModification",
       {
         method: "POST",
         headers: {

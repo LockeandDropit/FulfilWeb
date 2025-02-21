@@ -50,7 +50,8 @@ const uploadAnswer = async () => {
           }
         );
         if (!response.ok) {
-          throw new Error(`Response status: ${response.status}`);
+          // throw new Error(`Response status: ${response.status}`);
+          getRecommendation()
         }
     
         const json = await response.json();
@@ -92,7 +93,8 @@ const uploadAnswer = async () => {
               }
             );
             if (!response.ok) {
-              throw new Error(`Response status: ${response.status}`);
+              // throw new Error(`Response status: ${response.status}`);
+              getJobs()
             }
         
             const json = await response.json();
@@ -116,7 +118,8 @@ const uploadAnswer = async () => {
               }),
             });
             if (!response.ok) {
-              throw new Error(`Response status: ${response.status}`);
+              // throw new Error(`Response status: ${response.status}`);
+              getEdu()
             }
         
             const json = await response.json();
@@ -197,6 +200,7 @@ const uploadAnswer = async () => {
         Finish
           </button>
         )}
+        {loading && (<p className="text-gray-600 font-medium text-sm mt-4">This can take up to 20 seconds.</p>)}
       </div>
     </div>
   );

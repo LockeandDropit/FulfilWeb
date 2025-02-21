@@ -21,8 +21,11 @@ const Greeting = ({ user }) => {
   const [progressWidth, setProgressWidth] = useState(null)
 
   useEffect(() => {
-    if (user) {
-      setProgressWidth((parseInt(user.currentIncome.replace(/,/g, ""))/parseInt(user.goalIncome.replace(/,/g, ""))) * 100)
+    if (user !== null) {
+      setTimeout(() => (
+        setProgressWidth((parseInt(user.currentIncome.replace(/,/g, ""))/parseInt(user.goalIncome.replace(/,/g, ""))) * 100)
+      ), 400)
+     
     }
   }, [user])
 

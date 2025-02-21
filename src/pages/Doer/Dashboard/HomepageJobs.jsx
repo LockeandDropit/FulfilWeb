@@ -129,8 +129,8 @@ const HomepageJobs = ({ user }) => {
     setLoadingAIResponse(true);
 
     const response = await fetch(
-      "http://localhost:8000/getResumeModification",
-      // "https://openaiapi-c7qc.onrender.com/getResumeHelp",
+      // "http://localhost:8000/getResumeModification",
+      "https://openaiapi-c7qc.onrender.com/getResumeHelp",
       {
         method: "POST",
         headers: {

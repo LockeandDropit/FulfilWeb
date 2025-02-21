@@ -624,6 +624,12 @@ const DoerHeader = () => {
                     </a>
                   </MenuButton>
                   <MenuList>
+                  {/* <MenuItem onClick={() => navigate("/UploadToBackEnd")}>
+                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                        {" "}
+                        Upload
+                      </p>
+                    </MenuItem> */}
                     <MenuItem onClick={() => navigate("/DoerAccountManager")}>
                       <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
                         {" "}

@@ -32,20 +32,25 @@ const PaymentModal = ( {handleCloseOfferOpenPayment, handleCloseOffer} ) => {
         <ModalBody>
           <div class="bg-white ">
             <div class="container px-6 py-8 mx-auto">
+              <div className="flex w-full justify-center items-center mb-8">
+              <h1 className="text-4xl font-semibold text-gray-800">Jumpstart your career.</h1>
+              </div>
+            
               <div class="xl:items-center xl:-mx-8 xl:flex">
                
-
+    
                 <div class="flex-1 xl:mx-8">
                   <div class="mt-8 space-y-8 md:-mx-4 md:flex md:items-center md:justify-center md:space-y-0 xl:mt-0">
-                    <div class="max-w-sm mx-auto border rounded-lg md:mx-4 ">
+                    
+                    
+                    <div class="bg-white max-w-sm mx-auto border rounded-lg md:mx-4 ">
                       <div class="p-6">
                         <h1 class="text-xl font-medium text-gray-600 capitalize lg:text-2xl ">
                           The other guys
                         </h1>
 
                         <p class="mt-4 text-gray-500 ">
-                          Lorem ipsum dolor sit amet consectetur, adipisicing
-                          elit. Nostrum quam voluptatibus
+                          Pay $20 to make a resume
                         </p>
 
                         <h2 class="mt-4 text-xl font-medium text-gray-600 sm:text-xl ">
@@ -185,19 +190,22 @@ const PaymentModal = ( {handleCloseOfferOpenPayment, handleCloseOffer} ) => {
                       </div>
                     </div>
 
-                    <div class="max-w-sm mx-auto border rounded-lg md:mx-4 ">
+                    <div class="max-w-sm mx-auto border rounded-lg md:mx-4 shadow-sm">
                       <div class="p-6">
                         <h1 class="text-xl font-semibold text-sky-500 capitalize lg:text-3xl ">
                           Fulfil
                         </h1>
 
-                        <p class="mt-4 text-gray-500">
-                          Lorem ipsum dolor sit amet consectetur, adipisicing
-                          elit. Nostrum quam voluptatibus
+                        <p class="mt-4 text-gray-700">
+                          Discover your passion and get connected with employers and educators in well-paying industries.
                         </p>
 
+                        <h2 class="mt-4 line-through text-xl font-medium text-gray-500 sm:text-xl ">
+                          $20/month
+                         
+                        </h2>
                         <h2 class="mt-4 text-2xl font-semibold text-gray-700 sm:text-3xl ">
-                          $14.00{" "}
+                          $14{" "}
                           <span class="text-base font-medium">/Month</span>
                         </h2>
 

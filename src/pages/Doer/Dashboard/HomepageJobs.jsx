@@ -113,7 +113,7 @@ const HomepageJobs = ({ user }) => {
       setTimeout(() => {
         setLoading(false);
         console.log("returnedJobs", returnedJobs);
-      }, 250);
+      }, 500);
     }
   }, [returnedJobs]);
 

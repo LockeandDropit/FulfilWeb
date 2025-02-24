@@ -68,7 +68,10 @@ const HomepageEducation = ({ user }) => {
 
   useEffect(() => {
     if (returnedJobs) {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+   console.log("returnedEdu", returnedJobs)
+      }, 500);
     }
   }, [returnedJobs]);
 

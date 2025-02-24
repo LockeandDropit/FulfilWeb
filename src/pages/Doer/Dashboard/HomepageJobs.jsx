@@ -109,13 +109,13 @@ const HomepageJobs = ({ user }) => {
   }, []);
 
   useEffect(() => {
-    if (newReturnedJobs) {
+    if (returnedJobs) {
       setTimeout(() => {
         setLoading(false);
         console.log("returnedJobs", returnedJobs);
       }, 250);
     }
-  }, [newReturnedJobs]);
+  }, [returnedJobs]);
 
   const [aiTextGenLoading, setAITextGenLoading] = useState(false);
 

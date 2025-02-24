@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from "react";
 import { useState } from "react";
 import { getDoc, doc, updateDoc, collection } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 import {
   Accordion,
   AccordionItem,
@@ -42,14 +43,38 @@ const HomepageJobs = ({ user }) => {
   //fetch info from chatGPT
   const [userResumeInformation, setUserResumeInformation] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+    const navigate = useNavigate();
 
   const [returnedJobs, setReturnedJobs] = useState(null);
   const [newReturnedJobs, setNewReturnedJobs] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hasResumeExperience, setHasResumeExperience] = useState(false)
 
   const { recommendedJobs, setRecommendedJobs } = useJobRecommendationStore();
+  const {
+    isOpen: isOpenSuggestResume,
+    onOpen: onOpenSuggestResume,
+    onClose: onCloseSuggestResume,
+  } = useDisclosure();
 
-  console.log("user", user);
+  useEffect(() => {
+    if (user) {
+   
+      getDoc(doc(db, "users", user.uid, "Resumes", "My Resume")).then(
+        (snapshot) => {
+          if (!snapshot.data()) {
+            setHasResumeExperience(false)
+          } else {
+        if (snapshot.data().experience.length >= 1) {
+setHasResumeExperience(true)
+        } else {
+          setHasResumeExperience(false)
+        }
+          }
+        }
+      );
+    }
+  }, [user]);
 
   const getJobs = async () => {
     setLoading(true);
@@ -87,6 +112,7 @@ const HomepageJobs = ({ user }) => {
   useEffect(() => {
     if (returnedJobs) {
       setLoading(false);
+      console.log("returnedJobs", returnedJobs)
     }
   }, [returnedJobs]);
 
@@ -110,7 +136,15 @@ const HomepageJobs = ({ user }) => {
     // window.open(x.link);
     setCurrentSelectedJobTitle(x.job_title);
     setCurrentSelectedLink(x.link);
-    onOpen();
+
+    if (hasResumeExperience) {
+      onOpen();
+    } else {
+      //open modal that gives an option to set up their resume
+      onOpenSuggestResume()
+    }
+
+    
   };
 
   const uploadJobs = async () => {
@@ -484,12 +518,12 @@ onClose()
                   </div>
 
                   <div className="flex mt-auto mb-1">
-                    <button
-                      type="button"
-                      class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 "
-                    >
-                      Save
-                    </button>
+                      {/* <button
+                        type="button"
+                        class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 "
+                      >
+                        Save
+                      </button> */}
 
                     <button
                       type="button"
@@ -559,12 +593,12 @@ onClose()
                   </div>
 
                   <div className="flex mt-auto mb-1">
-                    <button
+                    {/* <button
                       type="button"
                       class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
                     >
                       Save
-                    </button>
+                    </button> */}
                     <button
                       type="button"
                       class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
@@ -628,12 +662,12 @@ onClose()
                   </div>
 
                   <div className="flex mt-auto mb-1">
-                    <button
+                    {/* <button
                       type="button"
                       class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
                     >
                       Save
-                    </button>
+                    </button> */}
                     <button
                       type="button"
                       class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
@@ -697,12 +731,12 @@ onClose()
                   </div>
 
                   <div className="flex mt-auto mb-1">
-                    <button
+                    {/* <button
                       type="button"
                       class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
                     >
                       Save
-                    </button>
+                    </button> */}
                     <button
                       type="button"
                       class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
@@ -912,6 +946,54 @@ onClose()
                     />
                   </svg>
                 </button> </div>)}
+              </div>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isOpenSuggestResume} onClose={onCloseSuggestResume} size="3xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader></ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <div className="w-full p-4 ">
+              <h1 className="text-2xl font-medium text-gray-800 mb-8">
+                Do you want to build a resume before you go to this job post?
+              </h1>
+
+                   
+                 
+                
+              
+
+              <div className="w-full flex">
+               <div className="w-full flex space-x-2 "><button
+                  onClick={() => handleGoToSite()}
+                  type="button"
+                  class="mt-3 w-fit ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-blue-600 hover:text-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  No thanks
+                
+                </button><button
+                  onClick={() => navigate("/ResumeBuilder")}
+                  type="button"
+                  class="mt-3 w-fit  py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  Yes
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    className="size-5"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button> </div>
               </div>
             </div>
           </ModalBody>

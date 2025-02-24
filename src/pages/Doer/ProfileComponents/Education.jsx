@@ -752,7 +752,7 @@ const Education = ({ changeListener }) => {
               <div class="grid sm:grid-cols-4  mb-2 align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
                   <p className="font-medium text-sm text-gray-800">
-                    Dates Employed:
+                    Dates Attended:
                   </p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
@@ -790,7 +790,7 @@ const Education = ({ changeListener }) => {
                         class="inline-block text-sm text-gray-600 cursor-pointer"
                         onClick={() => setIsEnrolled(!isEnrolled)}
                       >
-                        Currently employed
+                        Currently enrolled
                       </label>
                     </div>
                   </div>

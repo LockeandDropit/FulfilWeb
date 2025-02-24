@@ -76,7 +76,13 @@ const Work = ({ changeListener }) => {
   const [returnedResponse, setReturnedResponse] = useState(null);
   const [loadingAIResponse, setLoadingAIResponse] = useState(false);
 
+  const [modalInputError, setModalInputError] = useState(null)
+
   const handleSubmitAIInput = async () => {
+    if (!userBaseDescription) {
+setModalInputError("Please provide a brief description of your role.")
+    } else {
+      setModalInputError(null)
     setTextEditorLoading(true);
     setAITextGenLoading(true);
     setLoadingAIResponse(true);
@@ -100,14 +106,8 @@ const Work = ({ changeListener }) => {
     }
 
     const json = await response.json();
-
-    console.log("response", json.message.content);
-    // console.log("response2", json.responsibilities.map(item => `- ${item}`).join("\n"))
-
-    // console.log("json resopnse w array", JSON.parse(json.message.content));
-
     setReturnedResponse(json.message.content);
-    // setReturnedResponse(JSON.parse(json.message.content));
+  }
   };
 
   const uploadWorkExperience = async () => {
@@ -1149,12 +1149,14 @@ const Work = ({ changeListener }) => {
                       placeholder="I was in charge of making sure all the materials were orderd and keeping track of our stock. I interacted with customers on a regular basis. I reported to my senior manager and was involved in some decision making."
                       onChange={(e) => setUserBaseDescription(e.target.value)}
                     ></textarea>
+
+                    {modalInputError && (<p className="mt-1text-sm text-red-500">{modalInputError}</p>)}
                   </div>
 
                   <div className="w-full flex">
                     {aiTextGenLoading ? (
                       <button
-                        onClick={() => handleSubmitAIInput()}
+                        // onClick={() => handleSubmitAIInput()}
                         type="button"
                         class="mt-3 w-fit ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                       >

@@ -59,9 +59,9 @@ const ResumePreview = ({ setModalClosed }) => {
         }
       );
     }
-  }, [currentUser, currentResumeName]);
+  }, [currentUser, ]);
 
-  console.log(currentResumeName);
+
 
   const handleDownload = () => {
     var prtContent = document.getElementById("print");

@@ -43,12 +43,12 @@ const HomepageJobs = ({ user }) => {
   //fetch info from chatGPT
   const [userResumeInformation, setUserResumeInformation] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [returnedJobs, setReturnedJobs] = useState(null);
   const [newReturnedJobs, setNewReturnedJobs] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [hasResumeExperience, setHasResumeExperience] = useState(false)
+  const [hasResumeExperience, setHasResumeExperience] = useState(false);
 
   const { recommendedJobs, setRecommendedJobs } = useJobRecommendationStore();
   const {
@@ -59,17 +59,16 @@ const HomepageJobs = ({ user }) => {
 
   useEffect(() => {
     if (user) {
-   
       getDoc(doc(db, "users", user.uid, "Resumes", "My Resume")).then(
         (snapshot) => {
           if (!snapshot.data()) {
-            setHasResumeExperience(false)
+            setHasResumeExperience(false);
           } else {
-        if (snapshot.data().experience.length >= 1) {
-setHasResumeExperience(true)
-        } else {
-          setHasResumeExperience(false)
-        }
+            if (snapshot.data().experience.length >= 1) {
+              setHasResumeExperience(true);
+            } else {
+              setHasResumeExperience(false);
+            }
           }
         }
       );
@@ -110,15 +109,17 @@ setHasResumeExperience(true)
   }, []);
 
   useEffect(() => {
-    if (returnedJobs) {
-      setLoading(false);
-      console.log("returnedJobs", returnedJobs)
+    if (newReturnedJobs) {
+      setTimeout(() => {
+        setLoading(false);
+        console.log("returnedJobs", returnedJobs);
+      }, 250);
     }
-  }, [returnedJobs]);
+  }, [newReturnedJobs]);
 
   const [aiTextGenLoading, setAITextGenLoading] = useState(false);
 
-  const [finishedLoading, setFinishedLoading] = useState(false)
+  const [finishedLoading, setFinishedLoading] = useState(false);
 
   const handleOpenPrompt = () => {
     // open modal
@@ -141,10 +142,8 @@ setHasResumeExperience(true)
       onOpen();
     } else {
       //open modal that gives an option to set up their resume
-      onOpenSuggestResume()
+      onOpenSuggestResume();
     }
-
-    
   };
 
   const uploadJobs = async () => {
@@ -158,8 +157,7 @@ setHasResumeExperience(true)
   const [loadingAIResponse, setLoadingAIResponse] = useState(false);
 
   const handleSubmitAIInput = async (passedData) => {
-
-    console.log("passedData", passedData)
+    console.log("passedData", passedData);
     // setTextEditorLoading(true);
     setAITextGenLoading(true);
     setLoadingAIResponse(true);
@@ -203,7 +201,7 @@ setHasResumeExperience(true)
         .concat(" ", x.positionTitle)
         .concat(" ", "where")
         .concat(" ", x.userBaseDescription)
-        .concat (". ", "I'm applying to a job titled ", currentSelectedJobTitle)
+        .concat(". ", "I'm applying to a job titled ", currentSelectedJobTitle)
     );
 
     for (let i = 0; i < resumeIndex.length; i++) {
@@ -229,7 +227,7 @@ setHasResumeExperience(true)
       }
       console.log("finished");
       //fire something so editor with new resume data for each option is available to view and edit
-      setAITextGenLoading(false)
+      setAITextGenLoading(false);
       setNewDescriptionsReady(true);
     } else {
       setTimeout(() => {
@@ -279,22 +277,19 @@ setHasResumeExperience(true)
     setDescription(draftToMarkdown(editorState));
   };
 
-
-
   //update local job description
 
   const updateWithUserEdit = () => {
     const resumeIndex = baseResumeData[0].experience
-    .map(function (x) {
-      return x.id;
-    })
-    .indexOf(selectedExperience.id);
+      .map(function (x) {
+        return x.id;
+      })
+      .indexOf(selectedExperience.id);
 
     baseResumeData[0].experience[resumeIndex].description = description;
 
     handleCancel();
-
-  }
+  };
 
   const [contentState, setContentState] = useState(null);
   const [selectedExperience, setSelectedExperience] = useState(null);
@@ -356,97 +351,91 @@ setHasResumeExperience(true)
     setIsEditCareerGoals(!isEditCareerGoals);
   };
 
-  const [resumeVisible, setResumeVisible] = useState(false)
+  const [resumeVisible, setResumeVisible] = useState(false);
 
   const handleUpdate = () => {
-    //handle update here 
-    setResumeVisible(true)
+    //handle update here
+    setResumeVisible(true);
     //trigger open for a new modal that has the new resume displayed on it?
-
-  }
+  };
 
   const handleGoToSite = () => {
     //close modal
-onClose()
+    onClose();
     //open site
 
-    window.open(currentSelectedLink)
-  }
-
+    window.open(currentSelectedLink);
+  };
 
   //PAYMENT HANDLERS
 
-  const [paymentModalOpen, setPaymentModalOpen] = useState(false)
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const handleOpenPaymentModal = () => {
-    setPaymentModalOpen(true)
-  }
+    setPaymentModalOpen(true);
+  };
 
-    const [stripeOpen, setStripeOpen] = useState(false);
+  const [stripeOpen, setStripeOpen] = useState(false);
 
-     const {
-        isOpen: isOpenStripe,
-        onOpen: onOpenStripe,
-        onClose: onCloseStripe,
-      } = useDisclosure();
+  const {
+    isOpen: isOpenStripe,
+    onOpen: onOpenStripe,
+    onClose: onCloseStripe,
+  } = useDisclosure();
 
+  const handleOpenPayment = () => {
+    setStripeOpen(true);
+    onOpenStripe();
+  };
 
-      const handleOpenPayment = () => {
-        setStripeOpen(true)
-        onOpenStripe()
-      }
+  const fetchClientSecret = useCallback(() => {
+    // Create a Checkout Session
 
-       const fetchClientSecret = useCallback(() => {
-          // Create a Checkout Session
-      
-          //do i need a callback function or can I pass something here?
-          //I could try storing it in a store and pullling from there?
-          // also change the dollar amount on the stripe card entering field.
-       console.log("fetch client secret called $29")
-      
-      
-        return (
-           
-          fetch("https://fulfil-api.onrender.com/create-subscription",
-        
-                {
-                  method: "POST",
-                  headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                  },
-                }
-              )
-                .then((res) => res.json())
-                //   .then((data) => console.log(data))
-                .then((data) => data.clientSecret)
-            );
-       
-      
-        }, []);
-      
-      
-        const options = { fetchClientSecret };
+    //do i need a callback function or can I pass something here?
+    //I could try storing it in a store and pullling from there?
+    // also change the dollar amount on the stripe card entering field.
+    console.log("fetch client secret called $29");
 
-        const handleCloseOfferOpenPayment = () => {
-          //close Modal
-          setPaymentModalOpen(false)
-          //open stripe
-          handleOpenPayment()
+    return (
+      fetch(
+        "https://fulfil-api.onrender.com/create-subscription",
+
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
         }
+      )
+        .then((res) => res.json())
+        //   .then((data) => console.log(data))
+        .then((data) => data.clientSecret)
+    );
+  }, []);
 
-        const setModalClosed = () => {
-          setResumeVisible(false);
-          handleGoToSite()
-     
-        };
+  const options = { fetchClientSecret };
 
+  const handleCloseOfferOpenPayment = () => {
+    //close Modal
+    setPaymentModalOpen(false);
+    //open stripe
+    handleOpenPayment();
+  };
+
+  const setModalClosed = () => {
+    setResumeVisible(false);
+    handleGoToSite();
+  };
 
   return (
     <div className="w-full bg-sky-400 6 py-12">
       <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-6">
-        <div className="flex flex-row w-full" >
+        <div className="flex flex-row w-full">
           <div>
-            <h1 class="block text-3xl font-semibold text-white sm:text-2xl lg:text-3xl lg:leading-tight " onClick={() => setPaymentModalOpen(true)}>
+            <h1
+              class="block text-3xl font-semibold text-white sm:text-2xl lg:text-3xl lg:leading-tight "
+              onClick={() => setPaymentModalOpen(true)}
+            >
               Open Positions
             </h1>
             <p class="mt-2 text text-white">
@@ -518,7 +507,7 @@ onClose()
                   </div>
 
                   <div className="flex mt-auto mb-1">
-                      {/* <button
+                    {/* <button
                         type="button"
                         class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 "
                       >
@@ -778,8 +767,8 @@ onClose()
           <ModalBody>
             <div className="w-full p-4 ">
               <h1 className="text-2xl font-medium text-gray-800 mb-8">
-                Do you want us to modify your resume so it fits this job ({currentSelectedJobTitle})
-                specifically?
+                Do you want us to modify your resume so it fits this job (
+                {currentSelectedJobTitle}) specifically?
               </h1>
 
               {newDescriptionsReady &&
@@ -787,35 +776,35 @@ onClose()
                   <>
                     {/* got this from chat gpt but idk if this is even copyrightable */}
                     <div class="grid sm:grid-cols-4  align-center items-center">
-                        <div class="sm:col-span-1 2xl:col-span-1 mb-5">
-                          <p className="font-medium text-sm text-gray-800">
-                            Position Title:
-                          </p>
-                        </div>
-                        <div class="sm:col-span-2 align-center items-center mb-5">
-                          <p className="text-sm font-semibold ">
-                            {" "}
-                            {experience.positionTitle}
-                          </p>
-                        </div>
-                        <div className="sm:col-span-1 ml-auto">
-                          {isEditCareerGoals ? null : (
-                            <div
-                              className=" text-sm ml-auto cursor-pointer text-blue-400 hover:text-blue-600 hover:underline"
-                              onClick={() => handleSelectedEdit(experience)}
-                            >
-                              Edit
-                            </div>
-                          )}
-                        </div>
+                      <div class="sm:col-span-1 2xl:col-span-1 mb-5">
+                        <p className="font-medium text-sm text-gray-800">
+                          Position Title:
+                        </p>
                       </div>
-                  
-                  <div class="grid sm:grid-cols-4  mb-10 align-center ">
-                    <div class="sm:col-span-1 2xl:col-span-1">
-                      <p className="font-medium text-sm text-gray-800">
-                        Role & Responsibilities:
-                      </p>
-                      {/* {isEditCareerGoals &&
+                      <div class="sm:col-span-2 align-center items-center mb-5">
+                        <p className="text-sm font-semibold ">
+                          {" "}
+                          {experience.positionTitle}
+                        </p>
+                      </div>
+                      <div className="sm:col-span-1 ml-auto">
+                        {isEditCareerGoals ? null : (
+                          <div
+                            className=" text-sm ml-auto cursor-pointer text-blue-400 hover:text-blue-600 hover:underline"
+                            onClick={() => handleSelectedEdit(experience)}
+                          >
+                            Edit
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-4  mb-10 align-center ">
+                      <div class="sm:col-span-1 2xl:col-span-1">
+                        <p className="font-medium text-sm text-gray-800">
+                          Role & Responsibilities:
+                        </p>
+                        {/* {isEditCareerGoals &&
                                experience.id === selectedExperience.id ? (
                                  <button
                                    onClick={() => onOpen()}
@@ -837,52 +826,54 @@ onClose()
                                    </svg>
                                  </button>
                                ) : null} */}
-                    </div>
-                    <div class="sm:col-span-3 align-center items-center">
-                    
-                      {isEditCareerGoals &&
-                      experience.id === selectedExperience.id ? (
-                        textEditorLoading ? (
-                          <p>loading...</p>
+                      </div>
+                      <div class="sm:col-span-3 align-center items-center">
+                        {isEditCareerGoals &&
+                        experience.id === selectedExperience.id ? (
+                          textEditorLoading ? (
+                            <p>loading...</p>
+                          ) : (
+                            <>
+                              <RichTextEditor
+                                defaultEditorState={editorState}
+                                onChange={(editorState) =>
+                                  handleEditorChange(editorState)
+                                }
+                              />
+                            </>
+                          )
                         ) : (
-                          <>
-                            <RichTextEditor
-                              defaultEditorState={editorState}
-                              onChange={(editorState) =>
-                                handleEditorChange(editorState)
-                              }
-                            />
-                          </>
-                        )
-                      ) : (
-                        <div className="prose prose-li text-sm marker:text-black text-gray-800">
-                          <Markdown>{experience.description}</Markdown>
-                        </div>
-                      )}
+                          <div className="prose prose-li text-sm marker:text-black text-gray-800">
+                            <Markdown>{experience.description}</Markdown>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  {isEditCareerGoals && experience.id === selectedExperience.id ? (
-               <div className="w-full flex">
-               <div className="ml-auto mt-6">
-                  <button
-                    type="button"
-                    class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200"
-                    onClick={() => handleCancel()}
-                  >
-                    Cancel
-                  </button>
-                   
-                  <button
-                    type="button"
-                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                    // onClick={() => handleUpdate(selectedExperience)}
-                    onClick={() => updateWithUserEdit(selectedExperience)}
-                  >
-                    Save
-                  </button>
-                </div>
-                </div>
-              ) : null}
+                    {isEditCareerGoals &&
+                    experience.id === selectedExperience.id ? (
+                      <div className="w-full flex">
+                        <div className="ml-auto mt-6">
+                          <button
+                            type="button"
+                            class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200"
+                            onClick={() => handleCancel()}
+                          >
+                            Cancel
+                          </button>
+
+                          <button
+                            type="button"
+                            class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                            // onClick={() => handleUpdate(selectedExperience)}
+                            onClick={() =>
+                              updateWithUserEdit(selectedExperience)
+                            }
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    ) : null}
                   </>
                 ))}
 
@@ -902,7 +893,7 @@ onClose()
                   </button>
                 ) : newDescriptionsReady ? (
                   <button
-                  onClick={() => handleUpdate(selectedExperience)}
+                    onClick={() => handleUpdate(selectedExperience)}
                     type="button"
                     class="mt-3 w-fit ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                   >
@@ -920,38 +911,46 @@ onClose()
                       />
                     </svg>
                   </button>
-                ) : (<div className="w-full flex space-x-2 "><button
-                  onClick={() => handleGoToSite()}
-                  type="button"
-                  class="mt-3 w-fit ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-blue-600 hover:text-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                >
-                  No thanks
-                
-                </button><button
-                  onClick={() => retrieveResumeAndStartAPICall()}
-                  type="button"
-                  class="mt-3 w-fit  py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                >
-                  Yes
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="white"
-                    className="size-5"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button> </div>)}
+                ) : (
+                  <div className="w-full flex space-x-2 ">
+                    <button
+                      onClick={() => handleGoToSite()}
+                      type="button"
+                      class="mt-3 w-fit ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-blue-600 hover:text-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                    >
+                      No thanks
+                    </button>
+                    <button
+                      onClick={() => retrieveResumeAndStartAPICall()}
+                      type="button"
+                      class="mt-3 w-fit  py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                    >
+                      Yes
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="white"
+                        className="size-5"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>{" "}
+                  </div>
+                )}
               </div>
             </div>
           </ModalBody>
         </ModalContent>
       </Modal>
-      <Modal isOpen={isOpenSuggestResume} onClose={onCloseSuggestResume} size="3xl">
+      <Modal
+        isOpen={isOpenSuggestResume}
+        onClose={onCloseSuggestResume}
+        size="3xl"
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader></ModalHeader>
@@ -962,45 +961,47 @@ onClose()
                 Do you want to build a resume before you go to this job post?
               </h1>
 
-                   
-                 
-                
-              
-
               <div className="w-full flex">
-               <div className="w-full flex space-x-2 "><button
-                  onClick={() => handleGoToSite()}
-                  type="button"
-                  class="mt-3 w-fit ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-blue-600 hover:text-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                >
-                  No thanks
-                
-                </button><button
-                  onClick={() => navigate("/ResumeBuilder")}
-                  type="button"
-                  class="mt-3 w-fit  py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                >
-                  Yes
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="white"
-                    className="size-5"
+                <div className="w-full flex space-x-2 ">
+                  <button
+                    onClick={() => handleGoToSite()}
+                    type="button"
+                    class="mt-3 w-fit ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-white text-blue-600 hover:text-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button> </div>
+                    No thanks
+                  </button>
+                  <button
+                    onClick={() => navigate("/ResumeBuilder")}
+                    type="button"
+                    class="mt-3 w-fit  py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                  >
+                    Yes
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="white"
+                      className="size-5"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>{" "}
+                </div>
               </div>
             </div>
           </ModalBody>
         </ModalContent>
       </Modal>
 
-      {resumeVisible && (<ModifiedResumePreview setModalClosed={() => setModalClosed()} updatedExperience={baseResumeData[0].experience}/>)}
+      {resumeVisible && (
+        <ModifiedResumePreview
+          setModalClosed={() => setModalClosed()}
+          updatedExperience={baseResumeData[0].experience}
+        />
+      )}
     </div>
   );
 };

@@ -119,7 +119,7 @@ const DoerHomepage = () => {
 
 
       const testIfPremium = () =>{
-        if (currentUser.isPremium === true) {
+        if (currentUser.isPremium === true || currentUser.state === "Minnesota") {
           
         } else {
           setPaymentModalOpen(true)
@@ -154,7 +154,7 @@ const DoerHomepage = () => {
           //do i need a callback function or can I pass something here?
           //I could try storing it in a store and pullling from there?
           // also change the dollar amount on the stripe card entering field.
-       console.log("fetch client secret called $29")
+     
       
       
         return (

@@ -33,18 +33,20 @@ const IndustryChoiceModal = ({ modalControl, user }) => {
     modalControl();
   };
 
+  console.log("user from modal", user)
+
 
   const {setRecommendedEdu} = useEduRecommendationStore();
   const {setRecommendedJobs} = useJobRecommendationStore();
 
 
-
+ 
   const getJobs = async () => {
     setLoading(true);
 
     const response = await fetch(
-        "https://openaiapi-c7qc.onrender.com/getJobs",
-      // "http://localhost:8000/getJobs",
+       
+ "https://openaiapi-c7qc.onrender.com/getJobs",
       {
         method: "POST",
         headers: {
@@ -72,8 +74,8 @@ const IndustryChoiceModal = ({ modalControl, user }) => {
   const getEdu = async () => {
     setLoading(true);
 
+        
     const response = await fetch(
-        // "http://localhost:8000/getEdu", {
         "https://openaiapi-c7qc.onrender.com/getEdu", {
       method: "POST",
       headers: {
@@ -96,12 +98,15 @@ const IndustryChoiceModal = ({ modalControl, user }) => {
     // setLoading(false);
   };
 
+  
   const getPreferredIndustry = async () => {
     setLoading(true);
 
+    console.log("new pref ind", newPreferredIndustry)
+    
     const response = await fetch(
-        // "http://localhost:8000/getIndustryRecommendation",
-      "https://openaiapi-c7qc.onrender.com/getIndustryRecommendation",
+  "https://openaiapi-c7qc.onrender.com/getIndustryRecommendation",
+      
       {
         method: "POST",
         headers: {
@@ -118,7 +123,7 @@ const IndustryChoiceModal = ({ modalControl, user }) => {
     }
 
     const json = await response.json();
-    console.log("json resopnse w array", JSON.parse(json.message.content));
+    console.log("json industry resopnse w array", JSON.parse(json.message.content));
 
     //sets new industry so it can be changed in FB
     setReturnedIndustry(JSON.parse(json.message.content));
@@ -135,12 +140,18 @@ const IndustryChoiceModal = ({ modalControl, user }) => {
   };
 
   const uploadNewData = async () => {
+
+    console.log("returned from modal", returnedIndustry, returnedJobs, returnedEducation)
     await updateDoc(doc(db, "users", user.uid), {
       userPreferredIndustry: returnedIndustry,
       returnedJobs: returnedJobs,
       returnedEducation: returnedEducation,
     }).then(() => {
-        handleOnClose();
+      setTimeout(() => {
+         setLoading(false);
+        handleOnClose();  
+      }, 500)
+        
     })
   };
 
@@ -179,7 +190,7 @@ const IndustryChoiceModal = ({ modalControl, user }) => {
                 </p>
               </div>
               <div className="mt-5">
-                <form>
+               
                   <div className="grid gap-y-4">
                     <div>
                       <label htmlFor="email" className="block text-sm mb-2">
@@ -200,7 +211,7 @@ const IndustryChoiceModal = ({ modalControl, user }) => {
                     {loading ? (
                       <button
                         //   onClick={() => fetchNewPathData()}
-                        type="submit"
+                     
                         className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-600 focus:outline-none  disabled:opacity-50 disabled:pointer-events-none"
                       >
                         Loading...
@@ -208,14 +219,14 @@ const IndustryChoiceModal = ({ modalControl, user }) => {
                     ) : (
                       <button
                         onClick={() => fetchNewPathData()}
-                        type="submit"
+                  
                         className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                       >
                         Generate Profile
                       </button>
                     )}
                   </div>
-                </form>
+          
               </div>
             </div>
           </div>

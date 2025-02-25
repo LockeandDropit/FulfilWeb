@@ -25,7 +25,6 @@ const Greeting = ({ user }) => {
       setTimeout(() => (
         setProgressWidth((parseInt(user.currentIncome.replace(/,/g, ""))/parseInt(user.goalIncome.replace(/,/g, ""))) * 100)
       ), 400)
-     
     }
   }, [user])
 

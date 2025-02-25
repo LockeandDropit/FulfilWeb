@@ -75,10 +75,12 @@ const HomepageJobs = ({ user }) => {
     }
   }, [user]);
 
+  // "https://openaiapi-c7qc.onrender.com/getJobs",
   const getJobs = async () => {
     setLoading(true);
 
     const response = await fetch(
+     
       "https://openaiapi-c7qc.onrender.com/getJobs",
       {
         method: "POST",
@@ -96,8 +98,8 @@ const HomepageJobs = ({ user }) => {
     }
 
     const json = await response.json();
-    console.log("json resopnse w array", JSON.parse(json.message.content));
-
+    console.log("json resopnse w array new", JSON.parse(json.message.content));
+    setRecommendedJobs(JSON.parse(json.message.content));
     setReturnedJobs(JSON.parse(json.message.content));
     setNewReturnedJobs(JSON.parse(json.message.content));
   };
@@ -113,7 +115,7 @@ const HomepageJobs = ({ user }) => {
       setTimeout(() => {
         setLoading(false);
         console.log("returnedJobs", returnedJobs);
-      }, 500);
+      }, 2000);
     }
   }, [returnedJobs]);
 

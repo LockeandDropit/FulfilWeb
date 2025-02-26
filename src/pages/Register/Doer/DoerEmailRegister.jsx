@@ -293,7 +293,7 @@ const DoerEmailRegister = () => {
       <LoggedOutHeader props={openModal} />
 
       <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-        <div class="sm:w-1/3 md:items-center ">
+        <div class="sm:w-2/5 md:items-center ">
           <div class=" bg-white  mt-4 rounded-xl shadow-sm ">
             <div class="p-4 sm:p-7">
               <div class="text-center">
@@ -301,7 +301,7 @@ const DoerEmailRegister = () => {
                   Find the right fit.
                 </h1>
                 <h1 class="block text-3xl font-bold text-gray-800">
-                  Get connected with your <span className="text-sky-400 text-4xl">future.</span>
+                  Connect with your <span className="text-sky-400 text-4xl">future.</span>
                 </h1>
                 <p class="mt-2 text-sm text-gray-600">
                   Already have an account?

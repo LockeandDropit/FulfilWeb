@@ -147,6 +147,7 @@ import MyProfile from "./pages/Doer/MyProfile";
 import CareerPaths from "./pages/Doer/CareerPaths/CareerPaths";
 import Resources from "./pages/Doer/Resources";
 import UploadToBackEnd from "./pages/Doer/Dashboard/UploadToBackEnd";
+import EntryResumeBuilder from "./components/LoggedOutResumeBuilder/ResumeBuilder/EntryResumeBuilder";
  
 const tagManagerArgs = {
     gtmId: 'AW-16521233370'
@@ -594,6 +595,10 @@ const router = createBrowserRouter([
   {
     path: "/ResumeBuilder",
     element: <ResumeBuilder/>,
+  },
+  {
+    path: "/EntryResumeBuilder",
+    element: <EntryResumeBuilder/>,
   },
   {
     path: "/UploadToBackEnd",

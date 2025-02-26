@@ -1,7 +1,7 @@
 import React from "react";
-import { useUserStore } from "../Chat/lib/userStore";
+import { useUserStore } from "../../../pages/Doer/Chat/lib/userStore";
 import { db } from "../../../firebaseConfig";
-import RichTextEditor from "../../Needer/Components/RichTextEditor";
+
 import { useState, useEffect } from "react";
 import {
   Accordion,

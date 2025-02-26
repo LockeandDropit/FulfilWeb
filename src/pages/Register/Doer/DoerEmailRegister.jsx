@@ -298,10 +298,10 @@ const DoerEmailRegister = () => {
             <div class="p-4 sm:p-7">
               <div class="text-center">
                 <h1 class="block text-4xl font-bold text-gray-800">
-                  Looking for work?
+                  Find the right fit.
                 </h1>
                 <h1 class="block text-3xl font-bold text-gray-800">
-                  We make it <span className="text-sky-400">easy.</span>
+                  Get connected with your <span className="text-sky-400 text-4xl">future.</span>
                 </h1>
                 <p class="mt-2 text-sm text-gray-600">
                   Already have an account?

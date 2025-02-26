@@ -1,7 +1,7 @@
 import React from "react";
-import { useUserStore } from "../Chat/lib/userStore";
+import { useUserStore } from "../../../pages/Doer/Chat/lib/userStore";
 import { db } from "../../../firebaseConfig";
-import RichTextEditor from "../../Needer/Components/RichTextEditor";
+import RichTextEditor from "../../../pages/Needer/Components/RichTextEditor";
 import { useState, useEffect } from "react";
 import {
   Accordion,
@@ -45,8 +45,37 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import DatePicker from "react-datepicker";
 
+import { useExperienceStore } from "../ResumeBuilder/lib/experienceStore";
+
 const Work = ({ changeListener }) => {
   const { currentUser } = useUserStore();
+
+  const {
+    companyName,
+    positionTitle,
+    description,
+    userBaseDescription,
+    startDate,
+    displayStartDate,
+    endDate,
+    displayEndDate,
+    isEmployed,
+    id,
+    isLoading,
+    allExperiences,
+    setAllExperiences,
+    setStartDate,
+    setCompanyName,
+    setPositionTitle,
+    setDescription,
+    setUserBaseDescription,
+    setDisplayStartDate,
+    setEndDate,
+    setDisplayEndDate,
+    setIsEmployed,
+    setId,
+  } = useExperienceStore();
+
   // useEffect(() => {
   //   if (currentUser) {
   //     setCurrentIncome(currentUser.currentIncome);
@@ -65,49 +94,79 @@ const Work = ({ changeListener }) => {
   const [formValidationMessage, setFormValidationMessage] = useState();
   const [aiPromtInput, setAIPromtInput] = useState(null);
 
-  const [companyName, setCompanyName] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [userBaseDescription, setUserBaseDescription] = useState(null);
-  const [description, setDescription] = useState(null);
+  // const [companyName, setCompanyName] = useState(null);
+  // const [startDate, setStartDate] = useState(null);
+  // const [endDate, setEndDate] = useState(null);
+  // const [userBaseDescription, setUserBaseDescription] = useState(null);
+  // const [description, setDescription] = useState(null);
 
-  const [positionTitle, setPositionTitle] = useState(null);
-  const [isEmployed, setIsEmployed] = useState(false);
+  // const [positionTitle, setPositionTitle] = useState(null);
+  // const [isEmployed, setIsEmployed] = useState(false);
   const [returnedResponse, setReturnedResponse] = useState(null);
   const [loadingAIResponse, setLoadingAIResponse] = useState(false);
 
-  const [modalInputError, setModalInputError] = useState(null)
+  const [modalInputError, setModalInputError] = useState(null);
 
   const handleSubmitAIInput = async () => {
     if (!userBaseDescription) {
-setModalInputError("Please provide a brief description of your role.")
+      setModalInputError("Please provide a brief description of your role.");
     } else {
-      setModalInputError(null)
-    setTextEditorLoading(true);
-    setAITextGenLoading(true);
-    setLoadingAIResponse(true);
+      setModalInputError(null);
+      setTextEditorLoading(true);
+      setAITextGenLoading(true);
+      setLoadingAIResponse(true);
 
-    const response = await fetch(
-      // "http://localhost:8000/getResumeHelp",
-      "https://openaiapi-c7qc.onrender.com/getResumeHelp",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userInput: `${userBaseDescription}`,
-        }),
+      const response = await fetch(
+        // "http://localhost:8000/getResumeHelp",
+        "https://openaiapi-c7qc.onrender.com/getResumeHelp",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userInput: `${userBaseDescription}`,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
       }
-    );
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
 
-    const json = await response.json();
-    setReturnedResponse(json.message.content);
-  }
+      const json = await response.json();
+      setReturnedResponse(json.message.content);
+    }
+  };
+
+  const saveLocally = () => {
+    let newId = uuidv4();
+
+    setAllExperiences([
+      ...allExperiences,
+      {
+        companyName: companyName,
+        positionTitle: positionTitle,
+        description: description,
+        userBaseDescription: userBaseDescription,
+        startDate: startDate.toLocaleDateString(),
+        displayStartDate: startDate.toLocaleDateString("en-US", options),
+        endDate: endDate ? endDate.toLocaleDateString() : null,
+        displayEndDate: endDate
+          ? endDate.toLocaleDateString("en-US", options)
+          : null,
+        isEmployed: isEmployed,
+        id: newId,
+      },
+    ]);
+
+    setTimeout(() => {
+      changeListener();
+      setUpdateIsLoading(false);
+      setIsAddNew(!isAddNew);
+    }, 200);
+
+    // here
   };
 
   const uploadWorkExperience = async () => {
@@ -136,6 +195,59 @@ setModalInputError("Please provide a brief description of your role.")
   };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const editExperience = () => {
+    const resumeIndex = allExperiences
+      .map(function (x) {
+        return x.id;
+      })
+      .indexOf(selectedExperience.id);
+
+    allExperiences[resumeIndex].companyName = companyName
+      ? companyName
+      : allExperiences[resumeIndex].companyName;
+    allExperiences[resumeIndex].positionTitle = positionTitle
+      ? positionTitle
+      : selectedExperience.positionTitle;
+    allExperiences[resumeIndex].description = description
+      ? description
+      : selectedExperience.description;
+    allExperiences[resumeIndex].userBaseDescription = userBaseDescription
+      ? userBaseDescription
+      : selectedExperience.userBaseDescription;
+    allExperiences[resumeIndex].startDate = startDate
+      ? startDate.toLocaleDateString()
+      : selectedExperience.startDate;
+    allExperiences[resumeIndex].displayStartDate = startDate
+      ? startDate.toLocaleDateString("en-US", options)
+      : selectedExperience.displayStartDate;
+    allExperiences[resumeIndex].endDate = endDate
+      ? endDate.toLocaleDateString()
+      : selectedExperience.endDate
+      ? selectedExperience.endDate
+      : null;
+    allExperiences[resumeIndex].displayEndDate = endDate
+      ? endDate.toLocaleDateString("en-US", options)
+      : selectedExperience.displayEndDate
+      ? selectedExperience.displayEndDate
+      : null;
+    allExperiences[resumeIndex].isEmployed = isEmployed === true ? true : false;
+
+    setTimeout(() => {
+      changeListener();
+      setUpdateIsLoading(false);
+      //set all local values null for updating/editing purposes.
+      setTextEditorLoading(true);
+      setSelectedExperience(null);
+      setEditorState(null);
+      setEndDate(null);
+      setStartDate(null);
+      setDescription(null);
+      setCompanyName(null);
+      setPositionTitle(null);
+      setIsEditCareerGoals(!isEditCareerGoals);
+    }, 300)
+  };
 
   const uploadEditedWorkExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
@@ -250,11 +362,8 @@ setModalInputError("Please provide a brief description of your role.")
     setIsEditCareerGoals(!isEditCareerGoals);
   };
 
-
-  
-
   const handleUpdate = (selectedExperience) => {
-    console.log(description, positionTitle, companyName, startDate)
+    console.log(description, positionTitle, companyName, startDate);
     if (!description && !selectedExperience.description) {
       setFormValidationMessage("Please fill out all fields");
     } else if (!selectedExperience.positionTitle && !positionTitle) {
@@ -265,20 +374,22 @@ setModalInputError("Please provide a brief description of your role.")
       setFormValidationMessage("Please fill out all fields");
     } else {
       // check if it has an id, if it has an id it exists, so route to uploadEditedWorkExperience(). Else route to uploadEorkExperience().
-      uploadEditedWorkExperience();
+      // uploadEditedWorkExperience();
+      editExperience();
       setFormValidationMessage();
     }
   };
 
   const addExperience = () => {
-    console.log(description, positionTitle, companyName, startDate)
+    console.log(description, positionTitle, companyName, startDate);
     if (!companyName || !startDate || !description || !positionTitle) {
       setFormValidationMessage("Please fill out all fields");
     } else {
       setUpdateIsLoading(true);
       setFormValidationMessage();
       //update firestore
-      uploadWorkExperience();
+      // uploadWorkExperience();
+      saveLocally();
     }
   };
 
@@ -325,44 +436,38 @@ setModalInputError("Please provide a brief description of your role.")
   }, [currentUser]);
 
   const handleDeleteSelected = async () => {
-    const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
-    //make resume1 dynamic
-
-    const resumeSnapshot = await getDoc(
-      doc(db, "users", currentUser.uid, "Resumes", "My Resume")
-    );
-
-    const resumeData = resumeSnapshot.data();
-
     //ty https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu credit Pablo Francisco Perez Hidalgo 04/19/2013
-    const resumeIndex = resumeData.experience
+    const resumeIndex = allExperiences
       .map(function (x) {
         return x.id;
       })
       .indexOf(selectedExperience.id);
 
     //DO NOT REMOVE THESE CONSOLE LOGS. THEY ARE HANDLING THE REMOVAL OF THE SELECTED ITEM??????
-    console.log("resume Index", resumeIndex);
-    console.log("data", resumeData);
-    console.log("splice", resumeData.experience.splice(resumeIndex, 1));
-    console.log("new data", resumeData.experience);
 
-    await updateDoc(doc(userChatsRef, "My Resume"), {
-      experience: resumeData.experience,
-    }).then(() => {
-      changeListener();
-      setUpdateIsLoading(false);
-      //set all local values null for updating/editing purposes.
-      setTextEditorLoading(true);
-      setSelectedExperience(null);
-      setEditorState(null);
-      setEndDate(null);
-      setStartDate(null);
-      setDescription(null);
-      setCompanyName(null);
-      setPositionTitle(null);
-      setIsEditCareerGoals(!isEditCareerGoals);
-    });
+    console.log("splice", allExperiences.splice(resumeIndex, 1));
+    console.log("new data", allExperiences);
+
+    if (allExperiences?.length > 0) {
+      setAllExperiences([allExperiences]);
+    } else {
+      setAllExperiences([]);
+    }
+
+    // .then(() => {
+    changeListener();
+    setUpdateIsLoading(false);
+
+    setTextEditorLoading(true);
+    setSelectedExperience(null);
+    setEditorState(null);
+    setEndDate(null);
+    setStartDate(null);
+    setDescription(null);
+    setCompanyName(null);
+    setPositionTitle(null);
+    setIsEditCareerGoals(!isEditCareerGoals);
+    // });
   };
 
   const [isAddNew, setIsAddNew] = useState(false);
@@ -399,7 +504,7 @@ setModalInputError("Please provide a brief description of your role.")
   const [aiTextGenLoading, setAITextGenLoading] = useState(false);
 
   const handleEditorChange = (editorState) => {
-    console.log("handlechange editpor state", editorState)
+    console.log("handlechange editpor state", editorState);
     // (console.log("here it is", draftToMarkdown(editorState)))
     setDescription(draftToMarkdown(editorState));
   };
@@ -440,32 +545,25 @@ setModalInputError("Please provide a brief description of your role.")
       setTimeout(() => {
         setTextEditorLoading(false);
         setAITextGenLoading(false);
-        
+
         onClose();
       }, 500);
     }
   }, [contentState]);
 
-
-
-
   // if editor state has changed x1 setDescription w/Editor state. Else let handelEditorStateChange do the work.
 
-  const [editorInitialChange, setEditorInitialChange] = useState(false)
+  const [editorInitialChange, setEditorInitialChange] = useState(false);
 
   useEffect(() => {
     if (editorState) {
-
-      console.log(" use effecvy", editorState)
-   
+      console.log(" use effecvy", editorState);
     }
-  }, [editorState])
-
-
+  }, [editorState]);
 
   useEffect(() => {
-    console.log("description listener", description)
-  }, [description])
+    console.log("description listener", description);
+  }, [description]);
 
   var options = { year: "numeric", month: "numeric" };
 
@@ -486,7 +584,7 @@ setModalInputError("Please provide a brief description of your role.")
       </h2>
       <AccordionPanel pb={4}>
         <div className="flex flex-col ">
-          {workExperience?.map((experience) => (
+          {allExperiences?.map((experience) => (
             <div className="flex flex-col  space-y-2 mb-16">
               <div class="grid sm:grid-cols-4  align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
@@ -637,7 +735,9 @@ setModalInputError("Please provide a brief description of your role.")
                         placeholder="I was in charge of making sure all the materials were orderd and keeping track of our stock. I interacted with customers on a regular basis. I reported to my senior manager and was involved in some decision making."
                         onChange={(e) => setUserBaseDescription(e.target.value)}
                         value={
-                          userBaseDescription !== null ? userBaseDescription : experience.userBaseDescription
+                          userBaseDescription !== null
+                            ? userBaseDescription
+                            : experience.userBaseDescription
                         }
                       ></textarea>
                     </div>
@@ -749,7 +849,7 @@ setModalInputError("Please provide a brief description of your role.")
             </div>
           ))}
 
-          {workExperience?.length <= 0 && isAddNew === false && (
+          {allExperiences?.length === 0 && isAddNew === false && (
             <div class="p-5 min-h-[328px] flex flex-col justify-center items-center text-center">
               <svg
                 class="w-48 mx-auto mb-4"
@@ -1111,7 +1211,7 @@ setModalInputError("Please provide a brief description of your role.")
 
           {isAddNew ||
           isEditCareerGoals ||
-          workExperience?.length === 0 ? null : (
+          allExperiences?.length === 0 ? null : (
             <div className="ml-auto mt-3">
               <button
                 type="button"
@@ -1150,7 +1250,11 @@ setModalInputError("Please provide a brief description of your role.")
                       onChange={(e) => setUserBaseDescription(e.target.value)}
                     ></textarea>
 
-                    {modalInputError && (<p className="mt-1text-sm text-red-500">{modalInputError}</p>)}
+                    {modalInputError && (
+                      <p className="mt-1text-sm text-red-500">
+                        {modalInputError}
+                      </p>
+                    )}
                   </div>
 
                   <div className="w-full flex">

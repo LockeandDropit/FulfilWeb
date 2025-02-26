@@ -1,7 +1,7 @@
 import React from "react";
-import { useUserStore } from "../Chat/lib/userStore";
+import { useUserStore } from "../../../pages/Doer/Chat/lib/userStore";
 import { db } from "../../../firebaseConfig";
-import RichTextEditor from "../../Needer/Components/RichTextEditor";
+
 import { useState, useEffect } from "react";
 import {
   Accordion,
@@ -24,16 +24,6 @@ import {
   deleteField,
 } from "firebase/firestore";
 
-// import RichTextEditor from "../../Needer/Components/RichTextEditor";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { draftToMarkdown } from "markdown-draft-js";
-import { stateFromMarkdown } from "draft-js-import-markdown";
-import {
-  EditorState,
-  convertToRaw,
-  convertFromRaw,
-  onEditorStateChange,
-} from "draft-js";
 
 import { v4 as uuidv4 } from "uuid";
 import DatePicker from "react-datepicker";

@@ -8,7 +8,7 @@ const Hero = () => {
   const handleNavigateAndCaptureFunnel = () => {
     posthog.capture("logged_out_click_to_map");
     // navigate("/DoerEmailRegister");
-    navigate("/OnboardingOneDoer");
+    navigate("/DoerEmailRegister");
   };
   const navigate = useNavigate();
   return (
@@ -42,7 +42,7 @@ const Hero = () => {
               onClick={handleNavigateAndCaptureFunnel}
             >
               <a class="py-3 px-4 inline-flex justify-center cursor-pointer items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-non">
-                Get Started
+                Take the career match quiz!
                 <svg
                   class="shrink-0 size-4"
                   xmlns="http://www.w3.org/2000/svg"

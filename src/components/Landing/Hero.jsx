@@ -41,7 +41,7 @@ const Hero = () => {
               class="mt-7 grid gap-3 w-full sm:inline-flex"
               onClick={handleNavigateAndCaptureFunnel}
             >
-              <a class="py-3 px-4 inline-flex justify-center cursor-pointer items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-non">
+              <a class="py-3 px-4 inline-flex justify-center cursor-pointer items-center gap-x-2 font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-non">
                 Take the career match quiz!
                 <svg
                   class="shrink-0 size-4"

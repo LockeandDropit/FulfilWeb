@@ -1,7 +1,7 @@
 import React from "react";
 
-const AboutPreview = ({ resumeInfo, currentUser }) => {
-  console.log("resumeInfo fromn about", resumeInfo);
+const AboutPreview = ({ aboutInfo }) => {
+  console.log("resumeInfo fromn about", aboutInfo);
 
 
 
@@ -20,7 +20,7 @@ const AboutPreview = ({ resumeInfo, currentUser }) => {
           } 
         }
       >
-        {currentUser?.firstName} {currentUser?.lastName}
+        {aboutInfo?.fullName}
       </h2>
       {/* <h2 className="text-center text-sm font-medium">
         {resumeInfo?.jobTitle}
@@ -34,7 +34,7 @@ const AboutPreview = ({ resumeInfo, currentUser }) => {
           }
         }
       >
-        {currentUser?.city}, {currentUser?.state}
+        {aboutInfo?.city}, {aboutInfo?.state}
       </h2>
       
       <ul className=" flex flex-row space-x-7 list-disc">
@@ -47,11 +47,11 @@ const AboutPreview = ({ resumeInfo, currentUser }) => {
             }
           }
         >
-          {currentUser?.email}
+          {aboutInfo?.email}
 
         </p>
 
-      {resumeInfo?.phoneNumber && (<li
+      {aboutInfo?.phoneNumber && (<li
           className="font-normal text-sm"
           style={
             {
@@ -59,7 +59,7 @@ const AboutPreview = ({ resumeInfo, currentUser }) => {
             }
           }
         >
-          {resumeInfo.phoneNumber}
+          {aboutInfo.phoneNumber}
         </li>)}
         
         
@@ -89,8 +89,8 @@ const AboutPreview = ({ resumeInfo, currentUser }) => {
       </h2> */}
       </div>
 
-{resumeInfo?.about && (
-        <div className="w-full mt-4 mb-2 text-sm text-gray-800">{resumeInfo.about}</div>
+{aboutInfo?.about && (
+        <div className="w-full mt-4 mb-2 text-sm text-gray-800">{aboutInfo.about}</div>
 )}
   
       

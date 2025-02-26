@@ -11,7 +11,7 @@ import ExperiencePreview from "./Preview/ExperiencePreview.jsx";
 import SkillPreview from "./Preview/SkillPreview.jsx";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { useResumeStore } from "./lib/resumeStore.js";
+
 import { useReactToPrint } from "react-to-print";
 import {
   Modal,
@@ -27,14 +27,23 @@ import { useNavigate } from "react-router-dom";
 
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 import { PDFViewer } from "@react-pdf/renderer";
+import { useEducationStore } from "./lib/educationStore.js";
+import { useExperienceStore } from "./lib/experienceStore.js";
+import { useResumeStore } from "./lib/resumeStore.js";
+import { useSkillStore } from "./lib/skillStore.js";
 
 const ResumePreview = ({ setModalClosed }) => {
   const { currentUser } = useUserStore();
 
+  const {allEducation} = useEducationStore();
+  const {allExperiences} = useExperienceStore();
+  const {allSkills} = useSkillStore()
+  const {fullName, email, phoneNumber, about} = useResumeStore()
+
   const navigate = useNavigate();
 
   const [resumeInfo, setResumeInfo] = useState(null);
-  const { currentResumeName } = useResumeStore();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleCloseModal = () => {
@@ -44,22 +53,10 @@ const ResumePreview = ({ setModalClosed }) => {
 
   useEffect(() => {
     console.log("modal");
+    onOpen()
   }, []);
 
-  useEffect(() => {
-    if (currentUser) {
-      onOpen();
-      getDoc(doc(db, "users", currentUser.uid, "Resumes", "My Resume")).then(
-        (snapshot) => {
-          if (!snapshot.data()) {
-          } else {
-            console.log("from firestore", snapshot.data());
-            setResumeInfo(snapshot.data());
-          }
-        }
-      );
-    }
-  }, [currentUser, ]);
+
 
 
 
@@ -98,21 +95,31 @@ const ResumePreview = ({ setModalClosed }) => {
   // see how that goes for v1
 
 
+  const aboutInfo = {
+    fullName: fullName,
+    phoneNumber: phoneNumber,
+    email: email,
+    about: about
+  }
+
+
   const contentRef = useRef(null);
 const reactToPrintFn = useReactToPrint({ contentRef });
+
+console.log("all exp", allExperiences)
 
   function ResumePrintComponent({ resumeInfo, currentUser }) {
     return (
       <div id="section-to-print" className="w-full px-2" ref={contentRef}>
-        <AboutPreview resumeInfo={resumeInfo} currentUser={currentUser}/>
-        {resumeInfo?.education?.length > 0 && (
-          <EducationPreview resumeInfo={resumeInfo} />
+        <AboutPreview aboutInfo={aboutInfo}/>
+        {allEducation?.length > 0 && (
+          <EducationPreview allEducation={allEducation} />
         )}
-        {resumeInfo?.experience?.length > 0 && (
-          <ExperiencePreview resumeInfo={resumeInfo} />
+        {allExperiences?.length > 0 && (
+          <ExperiencePreview allExperiences={allExperiences} />
         )}
-        {resumeInfo?.skills?.length > 0 && (
-          <SkillPreview resumeInfo={resumeInfo} />
+        {allSkills?.length > 0 && (
+          <SkillPreview allSkills={allSkills} />
         )}
       </div>
     );
@@ -142,30 +149,13 @@ const reactToPrintFn = useReactToPrint({ contentRef });
         <ModalCloseButton />
         <ModalBody>
           <div className="">
-            {resumeInfo ? (
+            
                <ResumePrintComponent
-              
                resumeInfo={resumeInfo}
                currentUser={currentUser}
              />
-              // <div id="section-to-print" className="w-full   px-2 ">
-              //   <AboutPreview
-              //     resumeInfo={resumeInfo}
-              //     currentUser={currentUser}
-              //   />
-              //   {resumeInfo?.education?.length > 0 && (
-              //     <EducationPreview resumeInfo={resumeInfo} />
-              //   )}
-              //   {resumeInfo?.experience?.length > 0 && (
-              //     <ExperiencePreview resumeInfo={resumeInfo} />
-              //   )}
-              //   {resumeInfo?.skills?.length > 0 && (
-              //     <SkillPreview resumeInfo={resumeInfo} />
-              //   )}
-              // </div>
-            ) : (
-              <p>Loading</p>
-            )}
+           
+          
           </div>
         </ModalBody>
         <ModalFooter>

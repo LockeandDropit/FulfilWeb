@@ -234,7 +234,7 @@ const Work = ({ changeListener }) => {
     allExperiences[resumeIndex].isEmployed = isEmployed === true ? true : false;
 
     setTimeout(() => {
-      changeListener();
+ changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
       setTextEditorLoading(true);
@@ -399,41 +399,7 @@ const Work = ({ changeListener }) => {
   //this is for editing
   const [selectedEducation, setSelectedEducation] = useState(null);
 
-  useEffect(() => {
-    if (currentUser) {
-      setLoading(true);
-      //   onOpenChoose();
-
-      let intermediateHold = [];
-
-      const unSub = onSnapshot(
-        doc(db, "users", currentUser.uid, "Resumes", "My Resume"),
-        async (res) => {
-          if (res.data()?.experience) {
-            setWorkExperience(res.data().experience);
-          }
-
-          // res.data().experience.forEach((exp) => {
-          //   console.log("here are ids", exp.id)
-          //   if (exp.id !== "deleted") {
-          //     intermediateHold.push(res.data().experience);
-          //     console.log("hjerer", res.data().experience)
-          //   }
-
-          // })
-
-          //   setIsEnrolled(res.data().isEnrolled);
-          // setLoading(false);
-        }
-      );
-
-      return () => {
-        unSub();
-      };
-    } else {
-      setLoading(false);
-    }
-  }, [currentUser]);
+ 
 
   const handleDeleteSelected = async () => {
     //ty https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu credit Pablo Francisco Perez Hidalgo 04/19/2013
@@ -449,7 +415,7 @@ const Work = ({ changeListener }) => {
     console.log("new data", allExperiences);
 
     if (allExperiences?.length > 0) {
-      setAllExperiences([allExperiences]);
+      setAllExperiences(allExperiences);
     } else {
       setAllExperiences([]);
     }

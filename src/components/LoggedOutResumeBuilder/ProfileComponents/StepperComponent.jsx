@@ -11,7 +11,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 
-const StepperComponent = ({ currentUser, changeOccured }) => {
+const StepperComponent = ({ allSkills, allEducation, allExperiences, changeOccured }) => {
   // uhh lets grab the info from db, check for section length, conditionally render complete or incomplete symbol.
 
   const [infoComplete, setInfoComplete] = useState(false);
@@ -24,35 +24,28 @@ const StepperComponent = ({ currentUser, changeOccured }) => {
   const [finalGoalIncome, setGoalFinalIncome] = useState(null);
   const [userInterests, setUserInterests] = useState(null);
 
-  useEffect(() => {
-    if (currentUser) {
-      setCurrentIncome(currentUser.currentIncome);
-      setGoalIncome(currentUser.goalIncome);
-      setUserInterests(currentUser.userInterests);
-    }
-  }, [currentUser]);
+
 
   useEffect(() => {
-    getDoc(doc(db, "users", currentUser.uid, "Resumes", "My Resume"))
-      .then((snapshot) => {
-        if (snapshot.data().skills.length > 0) {
+
+        if (allSkills.length > 0) {
           setSkillsComplete(true);
         } else {
           setSkillsComplete(false);
         }
-        if (snapshot.data().experience.length > 0) {
+        if (allExperiences.length > 0) {
           setExperienceComplete(true);
         } else {
           setExperienceComplete(false);
         }
-        if (snapshot.data().education.length > 0) {
+        if (allEducation.length > 0) {
           setEducationComplete(true);
         } else {
           setEducationComplete(false);
         }
         console.log("fired");
-      })
-      .catch((e) => console.log(e));
+
+     
   }, [changeOccured]);
 
   // nice to have----> link to the expand section needing to be completed.

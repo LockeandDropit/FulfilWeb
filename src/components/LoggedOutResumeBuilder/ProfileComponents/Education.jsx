@@ -24,42 +24,65 @@ import {
   deleteField,
 } from "firebase/firestore";
 
-
 import { v4 as uuidv4 } from "uuid";
 import DatePicker from "react-datepicker";
+
+import { useEducationStore } from "../ResumeBuilder/lib/educationStore";
 
 const Education = ({ changeListener }) => {
   const { currentUser } = useUserStore();
 
-  useEffect(() => {
-    if (currentUser) {
-      setCurrentIncome(currentUser.currentIncome);
-      setGoalIncome(currentUser.goalIncome);
-      setUserInterests(currentUser.userInterests);
-    }
-  }, [currentUser]);
-
-  const [currentIncome, setCurrentIncome] = useState(null);
-  const [goalIncome, setGoalIncome] = useState(null);
-  const [finalGoalIncome, setGoalFinalIncome] = useState(null);
-  const [userInterests, setUserInterests] = useState(null);
+  const {
+    degree,
+    startDate,
+    institutionName,
+    displayStartDate,
+    endDate,
+    displayEndDate,
+    isEnrolled,
+    id,
+    isLoading,
+    allEducation,
+    setAllEducation,
+    setStartDate,
+    setDegree,
+    setInstitutionName,
+    setDisplayStartDate,
+    setEndDate,
+    setDisplayEndDate,
+    setIsEnrolled,
+    setId,
+  } = useEducationStore();
 
   const [isEditCareerGoals, setIsEditCareerGoals] = useState(false);
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
   const [formValidationMessage, setFormValidationMessage] = useState();
 
-  const [companyName, setCompanyName] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [description, setDescription] = useState(null);
+  const saveLocally = () => {
+    let newId = uuidv4();
 
-  const [positionTitle, setPositionTitle] = useState(null);
+    setAllEducation([
+      ...allEducation,
+      {
+        degree: degree,
+        institutionName: institutionName,
+        startDate: startDate.toLocaleDateString(),
+        displayStartDate: startDate.toLocaleDateString("en-US", options),
+        endDate: endDate ? endDate.toLocaleDateString() : null,
+        displayEndDate: endDate
+          ? endDate.toLocaleDateString("en-US", options)
+          : null,
+        isEnrolled: isEnrolled,
+        id: newId,
+      },
+    ]);
 
-  // new
-  const [degree, setDegree] = useState(null);
-  const [institutionName, setInstitutionName] = useState(null);
-  const [isEmployed, setIsEmployed] = useState(false);
-  const [isEnrolled, setIsEnrolled] = useState(false);
+    setTimeout(() => {
+      changeListener();
+      setUpdateIsLoading(false);
+      setIsAddNew(!isAddNew);
+    }, 200);
+  };
 
   const uploadWorkExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
@@ -86,6 +109,60 @@ const Education = ({ changeListener }) => {
 
   var options = { year: "numeric", month: "numeric" };
 
+  const editEducation = () => {
+    //ty https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu credit Pablo Francisco Perez Hidalgo 04/19/2013
+    const resumeIndex = allEducation
+      .map(function (x) {
+        return x.id;
+      })
+      .indexOf(selectedExperience.id);
+
+    // go back live
+    allEducation[resumeIndex].degree = degree
+      ? degree
+      : selectedExperience.degree
+      ? selectedExperience.degree
+      : null;
+    allEducation[resumeIndex].institutionName = institutionName
+      ? institutionName
+      : selectedExperience.institutionName;
+    allEducation[resumeIndex].startDate = startDate
+      ? startDate.toLocaleDateString()
+      : selectedExperience.startDate;
+    allEducation[resumeIndex].displayStartDate = startDate
+      ? startDate.toLocaleDateString("en-US", options)
+      : selectedExperience.displayStartDate;
+    allEducation[resumeIndex].endDate = endDate
+      ? endDate.toLocaleDateString()
+      : selectedExperience.endDate
+      ? selectedExperience.endDate
+      : null;
+    allEducation[resumeIndex].displayEndDate = endDate
+      ? endDate.toLocaleDateString("en-US", options)
+      : selectedExperience.displayEndDate
+      ? selectedExperience.displayEndDate
+      : null;
+    allEducation[resumeIndex].isEnrolled = isEnrolled === true ? true : false;
+
+    //test conmditions
+    // setUpdateIsLoading(false);
+    // setIsEditCareerGoals(!isEditCareerGoals);
+
+    //live when fixed
+    setTimeout(() => {
+      changeListener();
+      setUpdateIsLoading(false);
+      //set all local values null for updating/editing purposes.
+      setSelectedExperience(null);
+      setEndDate(null);
+      setStartDate(null);
+      setDegree(null);
+      setInstitutionName(null);
+      setIsEnrolled(false);
+      setIsEditCareerGoals(!isEditCareerGoals);
+    }, 300);
+  };
+
   const uploadEditedWorkExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
@@ -95,7 +172,6 @@ const Education = ({ changeListener }) => {
     const resumeData = resumeSnapshot.data();
     console.log("resume data", resumeData);
     console.log("selected id", selectedExperience.id);
-    console.log("isEmployed", isEmployed);
 
     //ty https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu credit Pablo Francisco Perez Hidalgo 04/19/2013
     const resumeIndex = resumeData.education
@@ -137,9 +213,7 @@ const Education = ({ changeListener }) => {
     // setIsEditCareerGoals(!isEditCareerGoals);
 
     //live when fixed
-    await updateDoc(doc(userChatsRef, "My Resume"), {
-      education: resumeData.education,
-    }).then(() => {
+    setTimeout(() => {
       changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
@@ -150,7 +224,7 @@ const Education = ({ changeListener }) => {
       setInstitutionName(null);
       setIsEnrolled(false);
       setIsEditCareerGoals(!isEditCareerGoals);
-    });
+    }, 300);
   };
 
   const handleCancel = () => {
@@ -188,7 +262,8 @@ const Education = ({ changeListener }) => {
       setFormValidationMessage("Please fill out all fields");
     } else {
       // check if it has an id, if it has an id it exists, so route to uploadEditedWorkExperience(). Else route to uploadEorkExperience().
-      uploadEditedWorkExperience();
+      // uploadEditedWorkExperience();
+      editEducation();
       setFormValidationMessage();
     }
   };
@@ -200,7 +275,8 @@ const Education = ({ changeListener }) => {
       setUpdateIsLoading(true);
       setFormValidationMessage();
       //update firestore
-      uploadWorkExperience();
+      // uploadWorkExperience();
+      saveLocally();
     }
   };
 
@@ -235,37 +311,28 @@ const Education = ({ changeListener }) => {
   }, [currentUser]);
 
   const handleDeleteSelected = async () => {
-    const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
-    //make resume1 dynamic
+   
 
-    const resumeSnapshot = await getDoc(
-      doc(db, "users", currentUser.uid, "Resumes", "My Resume")
-    );
-
-    const resumeData = resumeSnapshot.data();
-
-    //ty https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu credit Pablo Francisco Perez Hidalgo 04/19/2013
-    const resumeIndex = resumeData.education
+      //ty https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu credit Pablo Francisco Perez Hidalgo 04/19/2013
+      const resumeIndex = allEducation
       .map(function (x) {
         return x.id;
       })
       .indexOf(selectedExperience.id);
 
-    let newData = resumeData.education.splice(resumeIndex, 1);
+    //DO NOT REMOVE THESE CONSOLE LOGS. THEY ARE HANDLING THE REMOVAL OF THE SELECTED ITEM??????
 
-    console.log("new data", resumeData.education);
+    let newData = allEducation.splice(resumeIndex, 1);
 
-    // let finalResume = resumeData.experience.splice(resumeIndex, 1);
+    console.log("new data", allEducation);
 
-    // setWorkExperience(finalResume)
+    if (allEducation?.length > 0) {
+      setAllEducation(allEducation);
+    } else {
+      setAllEducation([]);
+    }
 
-    // console.log("final resume", finalResume);
 
-    //  resumeData.experience[resumeIndex].id = "deleted"
-
-    await updateDoc(doc(userChatsRef, "My Resume"), {
-      education: resumeData.education,
-    }).then(() => {
       changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
@@ -276,7 +343,7 @@ const Education = ({ changeListener }) => {
       setInstitutionName(null);
       setIsEnrolled(false);
       setIsEditCareerGoals(!isEditCareerGoals);
-    });
+
   };
 
   const [isAddNew, setIsAddNew] = useState(false);
@@ -324,7 +391,7 @@ const Education = ({ changeListener }) => {
       </h2>
       <AccordionPanel pb={4}>
         <div className="flex flex-col ">
-          {workExperience?.map((experience) => (
+          {allEducation?.map((experience) => (
             <div className="flex flex-col  space-y-2 mb-16">
               <div class="grid sm:grid-cols-4  align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
@@ -474,7 +541,7 @@ const Education = ({ changeListener }) => {
                   </button>
                   <button
                     type="button"
-                  class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                     onClick={() => handleUpdate(selectedExperience)}
                   >
                     Update
@@ -487,7 +554,7 @@ const Education = ({ changeListener }) => {
             </div>
           ))}
 
-          {workExperience?.length <= 0 && isAddNew === false && (
+          {allEducation?.length <= 0 && isAddNew === false && (
             <div class="p-5 min-h-[328px] flex flex-col justify-center items-center text-center">
               <svg
                 class="w-48 mx-auto mb-4"
@@ -810,9 +877,7 @@ const Education = ({ changeListener }) => {
             </div>
           ) : null}
 
-          {isAddNew ||
-          isEditCareerGoals ||
-          workExperience?.length <= 0 ? null : (
+          {isAddNew || isEditCareerGoals || allEducation?.length <= 0 ? null : (
             <div className="ml-auto mt-3">
               <button
                 type="button"

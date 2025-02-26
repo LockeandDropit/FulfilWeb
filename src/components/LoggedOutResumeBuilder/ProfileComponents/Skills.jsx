@@ -37,9 +37,14 @@ import {
 
 import { v4 as uuidv4 } from "uuid";
 import DatePicker from "react-datepicker";
+import { useSkillStore } from "../ResumeBuilder/lib/skillStore";
 
 const Skills = ({changeListener}) => {
   const { currentUser } = useUserStore();
+
+
+
+  const {allSkills, setAllSkills, skillName, setSkillName, id, setId} = useSkillStore()
   useEffect(() => {
     if (currentUser) {
       setCurrentIncome(currentUser.currentIncome);
@@ -70,7 +75,47 @@ const Skills = ({changeListener}) => {
   const [institutionName, setInstitutionName] = useState(null);
   const [isEmployed, setIsEmployed] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const [skillName, setSkillName] = useState(null);
+  // const [skillName, setSkillName] = useState(null);
+
+
+  const saveLocally = () => {
+
+  let newId = uuidv4();
+
+    setAllSkills([...allSkills, {
+      skillName: skillName,
+      id: newId,
+    }]);
+
+    setTimeout(() => {
+      changeListener();
+      setUpdateIsLoading(false);
+      setIsAddNew(!isAddNew);
+    }, 200);
+  }
+
+
+  const editSkill = () => {
+
+    const skillIndex = allSkills.map(x => x.id).indexOf(selectedExperience.id)
+
+    allSkills[skillIndex].skillName = skillName
+    ? skillName
+    : selectedExperience.skillName
+    ? selectedExperience.skillName
+    : null;
+
+    setTimeout(() => {
+      changeListener();
+      setUpdateIsLoading(false);
+      //set all local values null for updating/editing purposes.
+      setSelectedExperience(null);
+
+      setSkillName(null)
+      setIsEditCareerGoals(!isEditCareerGoals);
+    }, 300)
+
+  }
 
   const uploadWorkExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
@@ -86,6 +131,8 @@ const Skills = ({changeListener}) => {
       setIsAddNew(!isAddNew);
     });
   };
+
+  
 
   const uploadEditedWorkExperience = async () => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
@@ -159,15 +206,36 @@ const Skills = ({changeListener}) => {
       // check if it has an id, if it has an id it exists, so route to uploadEditedWorkExperience(). Else route to uploadEorkExperience().
 
       if (selectedExperience) {
-        uploadEditedWorkExperience();
+        editSkill();
         console.log("edited handle");
       } else {
         setUpdateIsLoading(true);
         //update firestore
-        uploadWorkExperience();
+        // uploadWorkExperience();
+        saveLocally();
       }
     }
   };
+
+  
+  // const handleEdit = () => {
+  //   if (!skillName) {
+  //     setFormValidationMessage("Please fill out all fields");
+  //   } else {
+  //     // check if it has an id, if it has an id it exists, so route to uploadEditedWorkExperience(). Else route to uploadEorkExperience().
+
+  //     if (selectedExperience) {
+  //       uploadEditedWorkExperience();
+  //       console.log("edited handle");
+  //     } else {
+  //       setUpdateIsLoading(true);
+  //       //update firestore
+  //       // uploadWorkExperience();
+  //       editSkill();
+  //       setSkillName(null)
+  //     }
+  //   }
+  // };
 
   const [loading, setLoading] = useState(false);
   const [workExperience, setWorkExperience] = useState(null);
@@ -201,26 +269,23 @@ const Skills = ({changeListener}) => {
   }, [currentUser]);
 
   const handleDeleteSelected = async () => {
-    const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
-    //make resume1 dynamic
-
-    const resumeSnapshot = await getDoc(
-      doc(db, "users", currentUser.uid, "Resumes", "My Resume")
-    );
-
-    const resumeData = resumeSnapshot.data();
+ 
 
     //ty https://stackoverflow.com/questions/10557486/in-an-array-of-objects-fastest-way-to-find-the-index-of-an-object-whose-attribu credit Pablo Francisco Perez Hidalgo 04/19/2013
-    const resumeIndex = resumeData.skills
+    const resumeIndex = allSkills
       .map(function (x) {
         return x.id;
       })
       .indexOf(selectedExperience.id);
 
-    let newData = resumeData.skills.splice(resumeIndex, 1);
+    let newData = allSkills.splice(resumeIndex, 1);
 
 
-
+      if (allSkills.length > 0) {
+        setAllSkills(allSkills)
+      } else {
+        setAllSkills([])
+      }
     // let finalResume = resumeData.experience.splice(resumeIndex, 1);
 
     // setWorkExperience(finalResume)
@@ -229,16 +294,14 @@ const Skills = ({changeListener}) => {
 
     //  resumeData.experience[resumeIndex].id = "deleted"
 
-    await updateDoc(doc(userChatsRef, "My Resume"), {
-      skills: resumeData.skills,
-    }).then(() => {
+    
       changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
       setSelectedExperience(null);
       setSkillName(null)
       setIsEditCareerGoals(!isEditCareerGoals);
-    });
+    
   };
 
 
@@ -272,7 +335,7 @@ const Skills = ({changeListener}) => {
       </h2>
       <AccordionPanel pb={4}>
         <div className="flex flex-col ">
-          {workExperience?.map((experience) => (
+          {allSkills?.map((experience) => (
             <div className="flex flex-col  space-y-2 mb-3">
               <div class="grid sm:grid-cols-4  align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
@@ -340,7 +403,7 @@ const Skills = ({changeListener}) => {
               ) : null}
             </div>
           ))}
-          {workExperience?.length <= 0 && isAddNew === false && (
+          {allSkills?.length <= 0 && isAddNew === false && (
                 <div class="p-5 min-h-[328px] flex flex-col justify-center items-center text-center">
                             <svg
                               class="w-48 mx-auto mb-4"
@@ -604,7 +667,7 @@ const Skills = ({changeListener}) => {
             </div>
           ) : null}
 
-          {isAddNew || isEditCareerGoals || workExperience?.length <= 0 ? null : (
+          {isAddNew || isEditCareerGoals || allSkills?.length <= 0 ? null : (
             <div className="ml-auto mt-3">
               <button
                 type="button"

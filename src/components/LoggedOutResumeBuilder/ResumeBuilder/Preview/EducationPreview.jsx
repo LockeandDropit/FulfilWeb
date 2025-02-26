@@ -1,7 +1,7 @@
 import React from "react";
 
-const EducationPreview = ({ resumeInfo }) => {
-  console.log("resume info", resumeInfo.education);
+const EducationPreview = ({ allEducation }) => {
+  console.log("resume info", allEducation);
 
   return (
     <div className="my-6">
@@ -19,7 +19,7 @@ const EducationPreview = ({ resumeInfo }) => {
         }}
       />
 
-      {resumeInfo?.education.map((education, index) => (
+      {allEducation.map((education, index) => (
         <div key={index} className="my-5 mb-2">
           <h2
             className="text font-medium"

@@ -26,7 +26,7 @@ const [selectedExperience, setSelectedExperience] = useState(null);
    const [updateIsLoading, setUpdateIsLoading] = useState(false);
 
 
-   const {fullName, setFullName, phoneNumber, setPhoneNumber, email, setEmail, about, setAbout} = useResumeStore()
+   const {fullName, setFullName, city, setCity, state, setState, phoneNumber, setPhoneNumber, email, setEmail, about, setAbout} = useResumeStore()
 
 const handleSelectedEdit = (x) => {
   setSelectedExperience(x);
@@ -37,6 +37,10 @@ const handleCancel = () => {
   setSelectedExperience(null);
   setIsEditCareerGoals(!isEditCareerGoals);
 };
+
+const handleUpdateAbout = () => {
+
+}
 
   //add regex test when you can
   let phoneNumberValid = true
@@ -52,6 +56,7 @@ const handleCancel = () => {
         //update local store
         // uploadWorkExperience();
         setFormValidationMessage()
+        handleCancel()
     
     }
   };
@@ -96,7 +101,7 @@ const handleCancel = () => {
                       type="text"
                       onChange={(e) => setFullName(e.target.value)}
                       className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      placeholder="This is placeholder"
+                      placeholder="John Doe"
                       value={
                         fullName
                       }
@@ -119,7 +124,78 @@ const handleCancel = () => {
               <div class="grid sm:grid-cols-4  align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
                   <p className="font-medium text-sm text-gray-800">
-                    Phone Number:
+                    City
+                  </p>
+                </div>
+                <div class="sm:col-span-2 align-center items-center">
+                  {isEditCareerGoals ?
+                  (
+                    <input
+                      type="text"
+                      onChange={(e) => setCity(e.target.value)}
+                      className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                      placeholder="Minneapolis"
+                      value={
+                        city
+                      }
+                    />
+                  ) : ( city ? (<p className="text-sm ">{city}</p>) : (<p className="text-sm text-gray-500 italic">Nothing here yet</p>)
+                    
+                  )}
+                </div>
+              
+              </div> <div class="grid sm:grid-cols-4  align-center items-center">
+                <div class="sm:col-span-1 2xl:col-span-1">
+                  <p className="font-medium text-sm text-gray-800">
+                    State:
+                  </p>
+                </div>
+                <div class="sm:col-span-2 align-center items-center">
+                  {isEditCareerGoals ?
+                  (
+                    <input
+                      type="text"
+                      onChange={(e) => setState(e.target.value)}
+                      className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                      placeholder="Minnesota"
+                      value={
+                        state
+                      }
+                    />
+                  ) : ( state ? (<p className="text-sm ">{state}</p>) : (<p className="text-sm text-gray-500 italic">Nothing here yet</p>)
+                    
+                  )}
+                </div>
+              
+              </div>
+              <div class="grid sm:grid-cols-4  align-center items-center">
+                <div class="sm:col-span-1 2xl:col-span-1">
+                  <p className="font-medium text-sm text-gray-800">
+                    E-mail:
+                  </p>
+                </div>
+                <div class="sm:col-span-2 align-center items-center">
+                  {isEditCareerGoals ?
+                  (
+                    <input
+                      type="text"
+                      onChange={(e) => setEmail(e.target.value)}
+                      className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
+                      placeholder="applicant@gmail.com"
+                      value={
+                        email
+                      }
+                    />
+                  ) : ( email ? (<p className="text-sm ">{email}</p>) : (<p className="text-sm text-gray-500 italic">Nothing here yet</p>)
+                    
+                  )}
+                </div>
+              
+              </div>
+              <div class="grid sm:grid-cols-4  align-center items-center">
+                <div class="sm:col-span-1 2xl:col-span-1">
+                  <p className="font-medium text-sm text-gray-800">
+                    Phone Number (optional):
                   </p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
@@ -129,7 +205,7 @@ const handleCancel = () => {
                       type="text"
                       onChange={(e) => setPhoneNumber(e.target.value)}
                       className=" w-3/4 py-2 px-4 block  border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      placeholder="This is placeholder"
+                      placeholder="(xxx) xxx-xxxx"
                       value={
                         phoneNumber
                       }
@@ -138,21 +214,12 @@ const handleCancel = () => {
                     
                   )}
                 </div>
-                <div className="sm:col-span-1 ml-auto">
-                  {isEditCareerGoals ? null : (
-                    <div
-                      className=" text-sm ml-auto cursor-pointer text-blue-400 hover:text-blue-600 hover:underline"
-                      onClick={() => handleSelectedEdit()}
-                    >
-                      Edit
-                    </div>
-                  )}
-                </div>
+              
               </div>
               <div class="grid sm:grid-cols-4  align-center items-center mb-8">
                 <div class="sm:col-span-1 2xl:col-span-1">
                   <p className="font-medium text-sm text-gray-800">
-                    About:
+                    About (optional):
                   </p>
                 </div>
                 <div class="sm:col-span-3 align-center items-center">

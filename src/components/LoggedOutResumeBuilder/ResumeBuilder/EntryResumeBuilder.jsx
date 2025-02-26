@@ -26,9 +26,19 @@ import "react-toastify/dist/ReactToastify.css";
 import ResumePreview from "./ResumePreview";
 import AboutInfo from "../ProfileComponents/AboutInfo";
 import LoggedOutHeader from "../../Landing/LoggedOutHeader";
+import { useEducationStore } from "./lib/educationStore.js";
+import { useExperienceStore } from "./lib/experienceStore.js";
+import { useResumeStore } from "./lib/resumeStore.js";
+import { useSkillStore } from "./lib/skillStore.js";
 
 const EntryResumeBuilder = () => {
   const { currentUser } = useUserStore();
+
+    const {allEducation} = useEducationStore();
+    const {allExperiences} = useExperienceStore();
+    const {allSkills} = useSkillStore()
+
+
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
   const [profilePicture, setProfilePicture] = useState(null);
   const [resume, setResume] = useState(null);
@@ -208,9 +218,12 @@ const EntryResumeBuilder = () => {
                      
                       {/* stepper component */}
                       {/* <StepperComponent
-                        currentUser={currentUser}
-                        changeListener={changeListener}
-                      /> */}
+                          allEducation={allEducation}
+                          allSkills={allSkills}
+                          allExperiences={allExperiences}
+                          changeListener={changeListener}
+                          changeOccured={changeOccured}
+                        /> */}
                     </div>
                   </div>
                 </>
@@ -231,19 +244,20 @@ const EntryResumeBuilder = () => {
                           Resume Progress
                         </h2>{" "} */}
                         {/* stepper component */}
-                        {/* <StepperComponent
-                          currentUser={currentUser}
+                        <StepperComponent
+                          allEducation={allEducation}
+                          allSkills={allSkills}
+                          allExperiences={allExperiences}
                           changeListener={changeListener}
                           changeOccured={changeOccured}
-                        /> */}
-                        <div>
-                          <button
+                        />
+                         <button
                             type="button"
                             class="mt-6 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                             // onClick={() => setOpenModal(true)}
                             onClick={() => handleOpenModalCloseAccordion()}
                           >
-                            Create Resume
+                            Preview Resume
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 24 24"
@@ -258,7 +272,7 @@ const EntryResumeBuilder = () => {
                               <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
                             </svg>
                           </button>
-                        </div>
+                      
                       </div>
                     </div>
                   </div>
@@ -278,23 +292,48 @@ const EntryResumeBuilder = () => {
                         <Accordion defaultIndex={[0]} allowMultiple>
                          <AboutInfo changeListener={changeListener}/>
                           <Work changeListener={changeListener} />
-                          {/* <Education changeListener={changeListener} />
-                          <Skills changeListener={changeListener} /> */}
+                          <Education changeListener={changeListener} />
+                          <Skills changeListener={changeListener} />
                         </Accordion>
                       )}
                     </div>
                   </div>
+
+                  {isDesktop ? null : ( <div className="w-full flex">
+                  <button
+                            type="button"
+                            class="ml-auto mt-6 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                            // onClick={() => setOpenModal(true)}
+                            onClick={() => handleOpenModalCloseAccordion()}
+                          >
+                            Preview Resume
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z"
+                                clipRule="evenodd"
+                              />
+                              <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                            </svg>
+                          </button>
+                          </div>)}
+                 
                 </div>
               </div>
             </div>
           </div>
 
-          {/* {openModal && (
+          {openModal && (
             <ResumePreview
               setModalClosed={() => setModalClosed()}
               handleAccordionForPrint={() => handleAccordionForPrint()}
             />
-          )} */}
+          )}
         </main>
 
     </>

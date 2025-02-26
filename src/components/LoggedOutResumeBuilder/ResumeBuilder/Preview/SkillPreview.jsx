@@ -1,7 +1,7 @@
 import React from "react";
 import Markdown from "react-markdown";
-const SkillPreview = ({ resumeInfo }) => {
-  console.log("resume info experience", resumeInfo);
+const SkillPreview = ({ allSkills }) => {
+  
 
   return (
     <div className="my-6">
@@ -20,7 +20,7 @@ const SkillPreview = ({ resumeInfo }) => {
       />
 
       <div className="grid grid-cols-2 my-1">
-        {resumeInfo?.skills?.map((skill, index) => (
+        {allSkills?.map((skill, index) => (
           <div key={index} className="flex items-center justify-between">
          
               <p className="prose prose-li  font-inter marker:text-black">

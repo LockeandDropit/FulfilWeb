@@ -38,7 +38,7 @@ const ResumePreview = ({ setModalClosed }) => {
   const {allEducation} = useEducationStore();
   const {allExperiences} = useExperienceStore();
   const {allSkills} = useSkillStore()
-  const {fullName, email, phoneNumber, about} = useResumeStore()
+  const {fullName, email, phoneNumber, about, city, state} = useResumeStore()
 
   const navigate = useNavigate();
 
@@ -99,7 +99,9 @@ const ResumePreview = ({ setModalClosed }) => {
     fullName: fullName,
     phoneNumber: phoneNumber,
     email: email,
-    about: about
+    about: about,
+    city: city,
+    state: state,
   }
 
 

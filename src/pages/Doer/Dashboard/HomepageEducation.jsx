@@ -4,13 +4,12 @@ import { db } from "../../../firebaseConfig";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
 import { useEduRecommendationStore } from "../lib/eduRecommendations";
 const HomepageEducation = ({ user }) => {
-
   const [userResumeInformation, setUserResumeInformation] = useState(null);
 
   const [returnedJobs, setReturnedJobs] = useState(null);
   const [newReturnedEdu, setNewReturnedEdu] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   const { recommendedEdu, setRecommendedEdu } = useEduRecommendationStore();
 
   const getEdu = async () => {
@@ -35,6 +34,8 @@ const HomepageEducation = ({ user }) => {
 
     setReturnedJobs(JSON.parse(json.message.content));
     setNewReturnedEdu(JSON.parse(json.message.content));
+    setRecommendedEdu(JSON.parse(json.message.content));
+    
     // setLoading(false);
   };
 
@@ -50,8 +51,6 @@ const HomepageEducation = ({ user }) => {
       console.log("oops!");
     }
   }, [user]);
-
-
 
   const uploadEdu = async () => {
     await updateDoc(doc(db, "users", user.uid), {
@@ -70,8 +69,8 @@ const HomepageEducation = ({ user }) => {
     if (returnedJobs) {
       setTimeout(() => {
         setLoading(false);
-   console.log("returnedEdu", returnedJobs)
-      }, 500);
+        console.log("returnedEdu", returnedJobs);
+      }, 2000);
     }
   }, [returnedJobs]);
 
@@ -79,7 +78,7 @@ const HomepageEducation = ({ user }) => {
     window.open(x.link);
   };
 
-  console.log("recommendedEdu", recommendedEdu)
+  console.log("recommendedEdu", recommendedEdu);
 
   return (
     <div className="w-full  py-6 py-12 mb-16">
@@ -105,8 +104,9 @@ const HomepageEducation = ({ user }) => {
               </div>
             </button>
           ) : (
-            <button className="border border-gray-300 px-5 py-1 h-2/3 ml-auto bg-white hover:bg-gray-100 text-gray-800 text-sm font-medium rounded-md shadow-sm"
-            onClick={() => getEdu()}
+            <button
+              className="border border-gray-300 px-5 py-1 h-2/3 ml-auto bg-white hover:bg-gray-100 text-gray-800 text-sm font-medium rounded-md shadow-sm"
+              onClick={() => getEdu()}
             >
               Refresh
             </button>
@@ -114,68 +114,71 @@ const HomepageEducation = ({ user }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row mt-4 md:mt-6">
-          {!loading && recommendedEdu?.map((edu) => (
-            <div className="flex flex-col sm:flex-row mt-4 md:mt-6 p-1 w-full sm:w-1/3">
-              <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
-                <div class="flex justify-between">
-                  <div class="flex flex-col justify-center items-center rounded-lg ">
-                    <span class="ml-1 inline-flex items-center gap-x-1 text-base font-medium text-green-600 rounded-full">
-                      {edu.percent_increase}% pay increase
-                      <svg
-                        class="shrink-0 size-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-                        <polyline points="16 7 22 7 22 13"></polyline>
-                      </svg>
-                    </span>
+          {!loading &&
+            recommendedEdu?.map((edu) => (
+              <div className="flex flex-col sm:flex-row mt-4 md:mt-6 p-1 w-full sm:w-1/3">
+                <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
+                  <div class="flex justify-between">
+                    <div class="flex flex-col justify-center items-center rounded-lg ">
+                      <span class="ml-1 inline-flex items-center gap-x-1 text-base font-medium text-green-600 rounded-full">
+                        {edu.percent_increase}% pay increase
+                        <svg
+                          class="shrink-0 size-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                          <polyline points="16 7 22 7 22 13"></polyline>
+                        </svg>
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <h3 class="font-medium text-gray-800">{edu.program_name}</h3>
-                  <h3 class="font-medium text-gray-800">{edu.institution}</h3>
-                  <h3 class="text-sm text-gray-500">{edu.location}</h3>
-                  <div className="mt-1 flex ">
-                    <h3 class="text-sm text-gray-500">
-                      <p className="mr-1 font-medium text-sm text-gray-800">
-                        Avg. Salary:
-                      </p>{" "}
-                      ${edu.salary_after_completion}
+                  <div>
+                    <h3 class="font-medium text-gray-800">
+                      {edu.program_name}
                     </h3>
+                    <h3 class="font-medium text-gray-800">{edu.institution}</h3>
+                    <h3 class="text-sm text-gray-500">{edu.location}</h3>
+                    <div className="mt-1 flex ">
+                      <h3 class="text-sm text-gray-500">
+                        <p className="mr-1 font-medium text-sm text-gray-800">
+                          Avg. Salary:
+                        </p>{" "}
+                        ${edu.salary_after_completion}
+                      </h3>
+                    </div>
+                    <p class="mt-3 text-gray-700 line-clamp-4 ">
+                      {edu.description}
+                    </p>
                   </div>
-                  <p class="mt-3 text-gray-700 line-clamp-4 ">
-                    {edu.description}
-                  </p>
-                </div>
 
-                <div className="flex mt-auto mb-1">
-                  <button
-                    type="button"
-                    class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50  "
-                  >
-                    Save
-                  </button>
-            
-                  <button
-                    type="button"
-                    class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500 "
-                    onClick={() => handleOpenJob(edu)}
-                  >
-                    Apply
-                  </button>
+                  <div className="flex mt-auto mb-1">
+                    <button
+                      type="button"
+                      class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50  "
+                    >
+                      Save
+                    </button>
+
+                    <button
+                      type="button"
+                      class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500 "
+                      onClick={() => handleOpenJob(edu)}
+                    >
+                      Apply
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
 
           {loading && (
             <div className="flex flex-col sm:flex-row sm:w-full">

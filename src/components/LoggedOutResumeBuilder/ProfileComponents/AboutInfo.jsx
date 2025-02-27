@@ -18,7 +18,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const AboutInfo = ({ changeListener }) => {
 
-const [isEditCareerGoals, setIsEditCareerGoals] = useState(false)
+const [isEditCareerGoals, setIsEditCareerGoals] = useState(true)
 const [selectedExperience, setSelectedExperience] = useState(null);
   // const [phoneNumber, setPhoneNumber] = useState(null)
   // const [about, setAbout] = useState(null)

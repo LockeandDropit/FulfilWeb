@@ -8,8 +8,10 @@ const Hero = () => {
   const handleNavigateAndCaptureFunnel = () => {
     posthog.capture("logged_out_click_to_map");
     // navigate("/DoerEmailRegister");
-    navigate("/DoerEmailRegister");
+    // navigate("/DoerEmailRegister");
+    navigate("/OnboardingOneDoer");
   };
+
   const navigate = useNavigate();
   return (
     <div className="w-full  ">
@@ -23,12 +25,12 @@ const Hero = () => {
             </h1> */}
               <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
               <span class="text-black">
-              Your career matters.
+              Fulfil is the new way to 
               </span>{" "}
             </h1>
             <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight ">
               <span class="text-black">
-              Make the right choice.
+              enter the job market.
               </span>{" "}
             </h1>
 
@@ -42,7 +44,7 @@ const Hero = () => {
               onClick={handleNavigateAndCaptureFunnel}
             >
               <a class="py-3 px-4 inline-flex justify-center cursor-pointer items-center gap-x-2 font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-non">
-                Take the career match quiz!
+                Get Started
                 <svg
                   class="shrink-0 size-4"
                   xmlns="http://www.w3.org/2000/svg"

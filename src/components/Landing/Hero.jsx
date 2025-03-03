@@ -6,7 +6,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 
 const Hero = () => {
   const handleNavigateAndCaptureFunnel = () => {
-    posthog.capture("logged_out_click_to_map");
+    posthog.capture("navigate_to_sign_up");
     // navigate("/DoerEmailRegister");
     // navigate("/DoerEmailRegister");
     navigate("/OnboardingOneDoer");

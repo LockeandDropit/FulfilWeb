@@ -12,23 +12,37 @@ import {
   DrawerCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import "./treeStyles.css"; // Custom CSS for thicker lines
-import CDLDriverDrawer from "./cdl_drawers/CDLDriverDrawer";
-import HubManagerDrawer from "./cdl_drawers/HubManagerDrawer";
-import OwnerOperatorDrawer from "./cdl_drawers/OwnerOperatorDrawer";
-import CDLStarterDrawer from "./cdl_drawers/CDLStarterDrawer";
-import HVACApprenticeDrawer from "./hvac_drawers/HVACApprenticeDrawer";
-import HVACTechnicianDrawer from "./hvac_drawers/HVACTechnicianDrawer";
-import HVACSpecialistInstallerDrawer from "./hvac_drawers/HVACSpecialistInstallerDrawer";
-import HVACSupervisorManagerDrawer from "./hvac_drawers/HVACSupervisorManagerDrawer";
-import HVACEngineerDesignerDrawer from "./hvac_drawers/HVACEngineerDesignerDrawer";
-import HVACBusinessOwner from "./hvac_drawers/HVACBusinessOwner";
-import HVACStarterDrawer from "./hvac_drawers/HVACStarterDrawer";
+import { getDoc, doc, snapshot } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
+import { useUserStore } from "../Chat/lib/userStore";
 
-const HVACTree = () => {
+import "./treeStyles.css"; // Custom CSS for thicker lines
+
+
+import MachinistStarterDrawer from "./machinist_drawers/MachinistStarterDrawer";
+
+import MaintenanceTechnicianDrawer from "./industrial_mechanic_drawers/MaintenanceTechnicianDrawer";
+import MachineryMechanicDrawer from "./industrial_mechanic_drawers/MachineryMechanicDrawer";
+import MachinerySpecialistDrawer from "./industrial_mechanic_drawers/MachinerySpecialistDrawer";
+import MaintenanceSupervisorDrawer from "./industrial_mechanic_drawers/MaintenanceSupervisorDrawer";
+import BusinessOwner from "./industrial_mechanic_drawers/BusinessOwner";
+import MechanicStarterDrawer from "./industrial_mechanic_drawers/MechanicStarterDrawer";
+import EntryLevelEquipmentOperatorDrawer from "./construction_equipment_operator_drawers/EntryLevelEquipmentOperatorDrawer";
+import ExperiencedEquipmentOperatorDrawer from "./construction_equipment_operator_drawers/ExperiencedEquipmentOperatorDrawer";
+import SpecializedEquipmentOperatorDrawer from "./construction_equipment_operator_drawers/SpecializedEquipmentOperatorDrawer";
+import LeadOperatorForemanDrawer from "./construction_equipment_operator_drawers/LeadOperatorForemanDrawer";
+import StarterDrawer from "./construction_equipment_operator_drawers/StarterDrawer";
+
+const TestTree = () => {
   const shouldRecenterTreeRef = useRef(true);
   const [treeTranslate, setTreeTranslate] = useState({ x: 0, y: 0 });
   const treeContainerRef = useRef(null);
+
+  const {currentUser} = useUserStore();
+
+
+
+
 
   const {
     isOpen: isOpenDrawer,
@@ -42,32 +56,68 @@ const HVACTree = () => {
       const dimensions = treeContainerRef.current.getBoundingClientRect();
 
       setTreeTranslate({
+        // x: dimensions.width / 2,
         x: dimensions.width / 2,
-        // x: dimensions.width / 3,
         y: dimensions.height - 50,
       });
     }
   }, []);
 
 
-  //test
-  const jobDetails = [
-    {
-      id: 1234,
-      jobTitle:"Title",
-      JobOverview: " ",
-      KeyResponsibilities: [""],
-      Qualifications: [""],
-      OpeningsOrEducation: [],
+  const [newOrg, setNewOrg] = useState(null)
+
+
+useEffect(() => {
+   const docRef = doc(db, "Career Paths", 'hvac');
+        getDoc(docRef)
+          .then((snapshot) => {
+            console.log("new career path node",snapshot.data());
+            setNewOrg(snapshot.data().nodes);
+          })
+
+}, [])
+
+
+
+const [newNodes, setNewNodes] = useState(null)
+
+const [processedData, setProcessedData] = useState(null)
+
+useEffect(() => {
+  if (newOrg) {
+
+    // all credit Nick 4/21/22 https://stackoverflow.com/questions/71950276/create-hierarchy-from-flat-array-with-children-ids 
+    const nodemap = new Map(newOrg.map(n => [n.id, n]));
+
+    const tree = (node) => {
+      nodemap.delete(node.id);
+      return node.children.length ? {
+        id : node.id, 
+        attributes: node.attributes,
+        name: node.name,
+        children : node.children.map(c => tree(nodemap.get(c)))
+        
+      } 
+      : node
     }
-  ]
+      
+    let result = []
+    
+    newOrg.forEach(node => {
+      if (nodemap.has(node.id)) result.push(tree(node))
+    })
+    
+    console.log("bingo", result)
+
+    setNewNodes(result)
+
+    setProcessedData(preprocessNodeData(result))
+  }
+}, [newOrg])
 
 
 
 
-
-
-  //live
   const orgChart = {
     name: "Start Here",
     attributes: {
@@ -77,72 +127,61 @@ const HVACTree = () => {
     },
     children: [
       {
-        name: "$35k/year",
+        name: "$42k/year",
         attributes: {
-          jobTitle: "HVAC Apprentice",
+          jobTitle: "Equipment Operator",
           bullet1:
-            "Work under a licensed HVAC technician to learn the trade.",
-          bullet2:
-            "Assist with installations, maintenance, basic repairs.",
+            "Operating equipment like skid steers, backhoes, or forklifts; assisting in loading/unloading; and basic maintenance.",
 
-          timeCommitment: "6-12 months (certification)",
+          timeCommitment: "0-2 years",
         },
         children: [
           {
-            name: "$45k-65k/year",
+            name: "$65k/year",
             attributes: {
-              jobTitle: "HVAC Technician",
+              jobTitle: "Experienced Equipment Operator",
               bullet1:
-                "Perform installations, maintenance, and repair of HVAC systems",
-              bullet2: "May specialize in residential, commercial, or industrial.",
-              timeCommitment: "2-4 years",
+                "Proficiently operating bulldozers, excavators, or cranes; adhering to safety regulations.",
+
+              timeCommitment: "3-5 years",
 
               yOffset: 20,
             },
             children: [
               {
-                name: "$55k-75k/year",
+                name: "$90k/year",
                 attributes: {
-                  jobTitle: "HVAC Specialist or Installer",
+                  jobTitle: "Lead Operator / Foreman",
                   bullet1:
-                    "Focus on more complex installations, retrofits, and system designs.",
-                  bullet2:
-                    "Specialize in areas like refrigeration or geothermal systems.",
-        
-                  timeCommitment: "5+ years ",
+                    "Supervises a team of operators, ensuring that work is completed on schedule and within safety standards.",
+
+                  timeCommitment: "5-8",
+
+                  yOffset: 20,
                 },
               },
             ],
           },
-         
+
           {
-            name: "$70k-90k/year",
+            name: "$85k/year",
             attributes: {
-              jobTitle: "HVAC Supervisor/Manager",
-              bullet1: "Oversee a team of technicians and manage projects.",
-              bullet2: "Scheduling, budgeting, and ensuring saftey regulation compliance.",
-           
-              timeCommitment: "7-10 years",
+              jobTitle: "Specialized Equipment Operator",
+              bullet1:
+                "Mastering niche equipment, handling high-stakes operations, and working on complex or large-scale projects.",
+
+              timeCommitment: "5-7 years ",
+
+              yOffset: 20,
             },
           },
           {
-            name: "$85k-120k/year",
+            name: "$150k+/year",
             attributes: {
-              jobTitle: "HVAC Engineer/Designer",
-              bullet1: "Design and engineer HVAC systems for large buildings/industrial settings.",
-              bullet2:
-                "May involve advanced energy-efficient systems and custom solutions.",
-              timeCommitment: "Degree in ME + experience.",
-            },
-          },
-          {
-            name: "$85k-150k+/year",
-            attributes: {
-              jobTitle: "Business Owner or Contractor",
-              bullet1: "Start and operate your own HVAC business or contracting firm.",
-              bullet2:
-                "Oversee operations, manage teams, and handle business development.",
-              timeCommitment: "5+ years",
+              jobTitle: "Manager/Business Owner",
+              bullet1:
+                "Manages equipment fleets or owns an independent operation offering equipment rental or construction services.",
+              timeCommitment: "10+ years (recomended)",
             },
           },
         ],
@@ -198,7 +237,8 @@ const HVACTree = () => {
         <>
           <div
             onMouseOver={() => handleMouseOver(nodeDatum.name)}
-            className="w-[160px]  py-2 px-3 inline-flex items-center justify-center gap-x-2 text-md font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600"
+             className="w-[160px]  py-2 px-3 inline-flex items-center justify-center gap-x-2 text-md font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600"
+            //  className="w-[100px]  py-1 px-2 inline-flex items-center justify-center gap-x-2 text-md font-medium rounded-full border border-sky-500 bg-white text-sky-500 hover:text-sky-600 hover:border-sky-600"
           >
             {nodeDatum.name}
           </div>
@@ -229,17 +269,11 @@ const HVACTree = () => {
                           {nodeDatum.attributes.bullet1}
                         </p>
                       </li>
-                      <li class=" text-gray-700">
-                        <p className="text-sm">
-                          {nodeDatum.attributes.bullet2}
-                        </p>
-                      </li>
-                     
                     </ul>
                     <a
                       class="w-full mt-2 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 "
                       href="#"
-                      onClick={() => handleOpenDrawer(nodeDatum.name)}
+                      onClick={() => handleOpenDrawer(nodeDatum.id)}
                     >
                       Explore path
                     </a>
@@ -248,31 +282,23 @@ const HVACTree = () => {
               </div>
             </>
           ) : null}
-          {nodeDatum.name === selectedNodeNameDrawer &&
-          selectedNodeNameDrawer === "Start Here" ? (
-            <HVACStarterDrawer open={open} toggle={toggleModal} />
+          {nodeDatum.id === selectedNodeNameDrawer ? (
+            <StarterDrawer open={open} toggle={toggleModal} />
+          ) : nodeDatum.id ===  selectedNodeNameDrawer ? (
+            <EntryLevelEquipmentOperatorDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$35k/year" ? (
-            <HVACApprenticeDrawer open={open} toggle={toggleModal} />
+            selectedNodeNameDrawer === "$50k-65k/year" ? (
+            <ExperiencedEquipmentOperatorDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$45k-65k/year" ? (
-            <HVACTechnicianDrawer open={open} toggle={toggleModal} />
+            selectedNodeNameDrawer === "$65k-85k/year" ? (
+            <SpecializedEquipmentOperatorDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$55k-75k/year" ? (
-            <HVACSpecialistInstallerDrawer open={open} toggle={toggleModal} />
+            selectedNodeNameDrawer === "$75k-90k/year" ? (
+            <LeadOperatorForemanDrawer open={open} toggle={toggleModal} />
           ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$70k-90k/year" ? (
-            <HVACSupervisorManagerDrawer open={open} toggle={toggleModal} />
-          ) : nodeDatum.name === selectedNodeNameDrawer &&
-          selectedNodeNameDrawer === "$70k-90k/year" ? (
-          <HVACSupervisorManagerDrawer open={open} toggle={toggleModal} />
-        ) : nodeDatum.name === selectedNodeNameDrawer &&
-        selectedNodeNameDrawer === "$85k-120k/year" ? (
-        <HVACEngineerDesignerDrawer open={open} toggle={toggleModal} />
-      ) : nodeDatum.name === selectedNodeNameDrawer &&
-      selectedNodeNameDrawer === "$85k-150k+/year" ? (
-      <HVACBusinessOwner open={open} toggle={toggleModal} />
-    ) :  null}
+            selectedNodeNameDrawer === "$90k-150k+/year" ? (
+            <BusinessOwner open={open} toggle={toggleModal} />
+          ) : null}
         </>
       </foreignObject>
     </>
@@ -289,7 +315,7 @@ const HVACTree = () => {
   };
 
   const nodeSeparation = {
-    siblings: 1.5,
+    siblings: 2,
   };
 
   //almost all code for centering the tree comes from amberv0 2/13/2021 https://github.com/bkrem/react-d3-tree/issues/272
@@ -297,36 +323,35 @@ const HVACTree = () => {
   const preprocessNodeData = (node, depth = 0, xPosition = 0) => {
     // Assign custom x and y coordinates based on depth and xPosition
     node.x = xPosition; // Custom horizontal position
-    node.y = depth * 200; // Custom vertical spacing (200 is an example)
+    node.y = depth * 100; // Custom vertical spacing (200 is an example)
 
     if (node.children) {
       node.children.forEach((child, index) => {
         // Adjust xPosition for children (e.g., spacing them out horizontally)
-        preprocessNodeData(child, depth + 50, xPosition + index * 200);
+        preprocessNodeData(child, depth + 50, xPosition + index * 100);
       });
     }
     console.log("here", node);
     return node;
   };
 
-  const processedData = preprocessNodeData(orgChart);
+  // const processedData = preprocessNodeData(newNodes);
 
-  // const customPathFunc = (linkData, orientation) => {
-  //   const { source, target } = linkData;
-
-  //   // Example of using offsets
-  //   const xOffset = target.data.attributes?.xOffset || 0;
-  //   const yOffset = target.data.attributes?.yOffset || 0;
-
-  //   return `M${source.x},${source.y}
-  //           C${source.x + xOffset},${(source.y + target.y) / 2 + yOffset}
-  //           ${target.x - xOffset},${(source.y + target.y) / 2 - yOffset}
-  //           ${target.x},${target.y}`;
-  // };
+  const customPathFunc = (linkData) => {
+    const { source, target } = linkData;
+    // Increase the xOffset value to shift the line to the right
+    const xOffset = 0; 
+    const yOffset = target.data.attributes?.yOffset || 0;
+    return `M${source.x + xOffset},${source.y}
+            C${source.x + xOffset},${(source.y + target.y) / 2 + yOffset}
+             ${target.x + xOffset},${(source.y + target.y) / 2 - yOffset}
+             ${target.x + xOffset},${target.y}`;
+  };
+  
 
   return (
-    <div ref={treeContainerRef} className="md:h-[880px] w-full">
-      <Tree
+    <div ref={treeContainerRef} className="md:h-[860px] w-full">
+      {newNodes && (     <Tree
         separation={nodeSeparation}
         translate={treeTranslate}
         data={processedData}
@@ -335,16 +360,17 @@ const HVACTree = () => {
         zoomable={false}
         draggable={false}
         orientation="vertical"
-        depthFactor={-270}
+        depthFactor={-200}
         // pathFunc={customPathFunc}
         pathClassFunc={() => "custom-link"}
         onNodeClick={handleClick}
         renderCustomNodeElement={(rd3tProps) =>
           renderForeignObjectNode({ ...rd3tProps, foreignObjectProps })
         }
-      />
+      />)}
+ 
     </div>
   );
 };
 
-export default HVACTree;
+export default TestTree;

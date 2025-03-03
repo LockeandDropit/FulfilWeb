@@ -55,7 +55,7 @@ import { ToastContainer, toast } from "react-toastify";
 import Markdown from "react-markdown";
 import { CheckIcon } from "@chakra-ui/icons";
 
-const DoerHeader = () => {
+const OnboardingHeader = () => {
   const [user, setUser] = useState(null);
 
   const [hasRun, setHasRun] = useState(false);
@@ -454,42 +454,7 @@ const DoerHeader = () => {
 
                   </MenuButton>
                   <MenuList>
-                  <MenuItem   onClick={() => onOpen()}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Career Coach
-                      </p>
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate("/CareerPaths")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Career Paths
-                      </p>
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate("/Resources")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Resources Near Me
-                      </p>
-                    </MenuItem>
-                    <MenuItem  onClick={() => navigate("/ResumeBuilder")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Resume Builder
-                      </p>
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate("/DoerAccountManager")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Account Settings
-                      </p>
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate("/MyProfile")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        My Profile
-                      </p>
-                    </MenuItem>
+                
                     {/* <MenuItem onClick={() => navigate("/DoerPaymentHistory")}>Payment History</MenuItem> */}
 
                     {loggingOut ? (
@@ -1038,4 +1003,4 @@ const DoerHeader = () => {
   );
 };
 
-export default DoerHeader;
+export default OnboardingHeader;

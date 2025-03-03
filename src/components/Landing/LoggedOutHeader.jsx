@@ -39,6 +39,7 @@ import {
 } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
+import posthog from "posthog-js";
 
 import fulfil180 from "../../images/fulfil180.jpg";
 import { useNavigate } from "react-router-dom";
@@ -251,6 +252,11 @@ const LoggedOutHeader = (props) => {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleCaptureAndNavigate = () => {
+    posthog.capture("navigate_to_sign_up");
+    navigate("/OnboardingOneDoer")
+  }
+
   // credit Sreenath H B input instead of button for submission/log in https://stackoverflow.com/questions/23420795/why-would-a-button-click-event-cause-site-to-reload-in-a-bootstrap-form
   return (
     <>
@@ -316,7 +322,7 @@ const LoggedOutHeader = (props) => {
                   <button
                     type="button"
                     className="py-2.5 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    onClick={() => navigate("/OnboardingOneDoer")}
+                    onClick={() => handleCaptureAndNavigate()}
                   >
                     <svg
                       class="flex-shrink-0 size-4"

@@ -18,20 +18,17 @@ const Resources = () => {
   //working... need to keep image continuity when filtering.
 
   const filterResources = () => {
+    
     let filteredResources = [];
-
 
     for (let i = 0; i < resources.length; i++) {
       resources[i].services.forEach((service) => {
-        console.log("befpre", service.toLowerCase(), selected);
+     
         if (service.toLowerCase().includes(selected)) {
-          // filteredResources.push({resource: x}).assign({index: i});
 
           let y = { index: i };
 
           let mergedResource = Object.assign(resources[i], y);
-
-          console.log("merged", mergedResource);
 
           filteredResources.push(mergedResource);
         }
@@ -46,10 +43,6 @@ const Resources = () => {
       setErrorAlert(null)
     }
 
-   
-
- 
-    console.log(filteredResources);
   };
 
   useEffect(() => {
@@ -74,6 +67,11 @@ const Resources = () => {
   const handleOpen = (x) => {
     window.open(x);
   };
+
+  const resetSearch = () => {
+    setFilteredResources(null)
+    setErrorAlert(null)  
+  }
 
   const images = [
     "/landingImages/threepersonmeeting.jpg",
@@ -101,7 +99,6 @@ const Resources = () => {
   return (
     <div className="w-full">
       <DoerHeader />
-
       <div className="w-full bg-sky-400 py-6 py-12 mt-16">
         <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 ">
           <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center ">
@@ -132,8 +129,14 @@ const Resources = () => {
                 {" "}
                 Search
               </button>
+              <button
+                onClick={() => resetSearch()}
+                className=" px-5 inline-flex justify-center cursor-pointer items-center gap-x-2 font-medium text-base rounded-lg border border-transparent bg-white hover:bg-gray-100 text-slate-800 ml-4 "
+              >
+                {" "}
+                Reset
+              </button>
               </div>
-             
             </div>
           </div>
 

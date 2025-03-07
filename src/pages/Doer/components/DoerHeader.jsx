@@ -446,6 +446,7 @@ const DoerHeader = () => {
             >
               Fulfil
             </button>
+            <div className=" sm:invisible">
             <Menu>
                   <MenuButton _hover={{ textDecoration: "underline" }}>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -512,6 +513,7 @@ const DoerHeader = () => {
                 
                   </MenuList>
                 </Menu>
+                </div>
           </div>
           <div
             id="hs-header-base"

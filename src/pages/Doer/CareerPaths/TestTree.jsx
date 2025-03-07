@@ -18,7 +18,6 @@ import { useUserStore } from "../Chat/lib/userStore";
 
 import "./treeStyles.css"; // Custom CSS for thicker lines
 
-
 import MachinistStarterDrawer from "./machinist_drawers/MachinistStarterDrawer";
 
 import MaintenanceTechnicianDrawer from "./industrial_mechanic_drawers/MaintenanceTechnicianDrawer";
@@ -32,17 +31,14 @@ import ExperiencedEquipmentOperatorDrawer from "./construction_equipment_operato
 import SpecializedEquipmentOperatorDrawer from "./construction_equipment_operator_drawers/SpecializedEquipmentOperatorDrawer";
 import LeadOperatorForemanDrawer from "./construction_equipment_operator_drawers/LeadOperatorForemanDrawer";
 import StarterDrawer from "./construction_equipment_operator_drawers/StarterDrawer";
+import MyDrawer from "./MyDrawer";
 
-const TestTree = () => {
+const TestTree = ({ category }) => {
   const shouldRecenterTreeRef = useRef(true);
   const [treeTranslate, setTreeTranslate] = useState({ x: 0, y: 0 });
   const treeContainerRef = useRef(null);
 
-  const {currentUser} = useUserStore();
-
-
-
-
+  const { currentUser } = useUserStore();
 
   const {
     isOpen: isOpenDrawer,
@@ -63,60 +59,53 @@ const TestTree = () => {
     }
   }, []);
 
+  const [newOrg, setNewOrg] = useState(null);
+  const [drawers, setDrawers] = useState(null);
 
-  const [newOrg, setNewOrg] = useState(null)
+  useEffect(() => {
+    const docRef = doc(db, "Career Paths", category);
+    getDoc(docRef).then((snapshot) => {
+      console.log("new career path node", snapshot.data());
+      setNewOrg(snapshot.data().nodes);
+      // setDrawers(snapshot.data().drawers)
+    });
+  }, [category]);
 
+  const [newNodes, setNewNodes] = useState(null);
 
-useEffect(() => {
-   const docRef = doc(db, "Career Paths", 'hvac');
-        getDoc(docRef)
-          .then((snapshot) => {
-            console.log("new career path node",snapshot.data());
-            setNewOrg(snapshot.data().nodes);
-          })
+  const [processedData, setProcessedData] = useState(null);
 
-}, [])
+  useEffect(() => {
+    if (newOrg) {
+      // all credit Nick 4/21/22 https://stackoverflow.com/questions/71950276/create-hierarchy-from-flat-array-with-children-ids
+      const nodemap = new Map(newOrg.map((n) => [n.attributes.id, n]));
 
+      const tree = (node) => {
+        nodemap.delete(node.attributes.id);
+        return node.children.length
+          ? {
+              id: node.attributes.id,
+              attributes: node.attributes,
+              salary: node.salary,
+              name: node.name,
+              children: node.children.map((c) => tree(nodemap.get(c))),
+            }
+          : node;
+      };
 
+      let result = [];
 
-const [newNodes, setNewNodes] = useState(null)
+      newOrg.forEach((node) => {
+        if (nodemap.has(node.attributes.id)) result.push(tree(node));
+      });
 
-const [processedData, setProcessedData] = useState(null)
+      console.log("bingo", result);
 
-useEffect(() => {
-  if (newOrg) {
+      setNewNodes(result);
 
-    // all credit Nick 4/21/22 https://stackoverflow.com/questions/71950276/create-hierarchy-from-flat-array-with-children-ids 
-    const nodemap = new Map(newOrg.map(n => [n.id, n]));
-
-    const tree = (node) => {
-      nodemap.delete(node.id);
-      return node.children.length ? {
-        id : node.id, 
-        attributes: node.attributes,
-        name: node.name,
-        children : node.children.map(c => tree(nodemap.get(c)))
-        
-      } 
-      : node
+      setProcessedData(preprocessNodeData(result));
     }
-      
-    let result = []
-    
-    newOrg.forEach(node => {
-      if (nodemap.has(node.id)) result.push(tree(node))
-    })
-    
-    console.log("bingo", result)
-
-    setNewNodes(result)
-
-    setProcessedData(preprocessNodeData(result))
-  }
-}, [newOrg])
-
-
-
+  }, [newOrg]);
 
   const orgChart = {
     name: "Start Here",
@@ -195,13 +184,14 @@ useEffect(() => {
   const handleClick = (x) => {
     setPopOverVisible(!popOverVisible);
     console.log("pspsps", popOverVisible, x);
-    handleOpenDrawer(x);
+    // handleOpenDrawer(x);
   };
 
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseOver = (x) => {
     setSelectedNodeName(x);
     setIsHovering(true);
+    console.log("mouser over");
   };
 
   const handleMouseOut = () => {
@@ -209,6 +199,7 @@ useEffect(() => {
     setIsHovering(false);
   };
   const [open, setOpen] = useState(false);
+
   const toggleModal = () => {
     setOpen(!open);
   };
@@ -216,6 +207,7 @@ useEffect(() => {
 
   const handleOpenDrawer = (x) => {
     setSelectedNodeNameDrawer(x);
+    console.log("open drawer id", x);
     // onOpenDrawer();
     setOpen(!open);
   };
@@ -231,73 +223,82 @@ useEffect(() => {
     <>
       <foreignObject
         {...foreignObjectProps}
-        onMouseOut={() => handleMouseOut(nodeDatum.name)}
-        onClick={() => handleOpenDrawer(nodeDatum.name)}
+        onMouseOut={() => handleMouseOut(nodeDatum.attributes.id)}
+        onClick={() => handleOpenDrawer(nodeDatum.attributes.id)}
       >
         <>
           <div
-            onMouseOver={() => handleMouseOver(nodeDatum.name)}
-             className="w-[160px]  py-2 px-3 inline-flex items-center justify-center gap-x-2 text-md font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600"
+            onMouseOver={() => handleMouseOver(nodeDatum.attributes.id)}
+            className="z-50 w-[140px]  py-2 px-3 inline-flex items-center justify-center gap-x-2 text-md font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600"
             //  className="w-[100px]  py-1 px-2 inline-flex items-center justify-center gap-x-2 text-md font-medium rounded-full border border-sky-500 bg-white text-sky-500 hover:text-sky-600 hover:border-sky-600"
           >
-            {nodeDatum.name}
+            {nodeDatum.salary}
           </div>
+
           {/* hovering credit https://codesandbox.io/p/sandbox/react-hover-example-hooks-0to7u?file=%2Findex.js%3A34%2C3-41%2C11 */}
-          {isHovering & (nodeDatum.name === selectedNodeName) ? (
+          {isHovering & (nodeDatum.attributes.id === selectedNodeName) ? (
             <>
               <div
-                onMouseOver={() => handleMouseOver(nodeDatum.name)}
+                onMouseOver={() => handleMouseOver(nodeDatum.attributes.id)}
+                onClick={() => handleOpenDrawer(nodeDatum.attributes.id)}
                 class=" items-center  flex flex-col bg-white "
               >
                 <div
-                  onMouseOver={() => handleMouseOver(nodeDatum.name)}
+                  onMouseOver={() => handleMouseOver(nodeDatum.attributes.id)}
                   class=" mt-2 items-center  flex flex-col bg-white border shadow-sm rounded-xl "
                 >
-                  <div class="p-4 md:p-5">
-                    <h3 class="text-lg font-bold text-gray-800 ">
+                  <div class="p-2 md:p-2">
+                    <h3 class=" font-bold text-gray-800 ">
                       {nodeDatum.attributes.jobTitle}
                     </h3>
-                    <div className="flex flex-row">
+                    <p className="text-sm">{nodeDatum.attributes.bullet1}</p>
+                    {/* <div className="flex flex-row">
                       <p className="text-sm text-gray-800">Experience:</p>
                       <p className="ml-1 text-sm text-gray-600">
                         {nodeDatum.attributes.timeCommitment}
                       </p>
-                    </div>
-                    <ul className="list-disc px-3 text-sm">
+                    </div> */}
+                    {/* <ul className="list-disc px-3 text-sm">
                       <li class="mt-1 text-gray-700">
                         <p className="text-sm">
                           {nodeDatum.attributes.bullet1}
                         </p>
                       </li>
-                    </ul>
+                    </ul> */}
                     <a
-                      class="w-full mt-2 py-2 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 "
+                      class="w-full mt-2 py-1 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 "
                       href="#"
-                      onClick={() => handleOpenDrawer(nodeDatum.id)}
+                      onClick={() => handleOpenDrawer(nodeDatum.attributes.id)}
                     >
                       Explore path
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2.5}
+                        stroke="currentColor"
+                        className="size-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                        />
+                      </svg>
                     </a>
                   </div>
                 </div>
               </div>
             </>
           ) : null}
-          {nodeDatum.id === selectedNodeNameDrawer ? (
-            <StarterDrawer open={open} toggle={toggleModal} />
-          ) : nodeDatum.id ===  selectedNodeNameDrawer ? (
-            <EntryLevelEquipmentOperatorDrawer open={open} toggle={toggleModal} />
-          ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$50k-65k/year" ? (
-            <ExperiencedEquipmentOperatorDrawer open={open} toggle={toggleModal} />
-          ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$65k-85k/year" ? (
-            <SpecializedEquipmentOperatorDrawer open={open} toggle={toggleModal} />
-          ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$75k-90k/year" ? (
-            <LeadOperatorForemanDrawer open={open} toggle={toggleModal} />
-          ) : nodeDatum.name === selectedNodeNameDrawer &&
-            selectedNodeNameDrawer === "$90k-150k+/year" ? (
-            <BusinessOwner open={open} toggle={toggleModal} />
+
+          {nodeDatum.attributes.id === selectedNodeNameDrawer ? (
+            <MyDrawer
+              open={open}
+              toggle={toggleModal}
+              nodeId={nodeDatum.attributes.id}
+              category={category}
+            />
           ) : null}
         </>
       </foreignObject>
@@ -310,12 +311,12 @@ useEffect(() => {
 
   const foreignObjectProps = {
     width: nodeSize.x + 100,
-    height: nodeSize.y + 70,
-    x: -80,
+    height: nodeSize.y,
+    x: -70,
   };
 
   const nodeSeparation = {
-    siblings: 2,
+    siblings: 2.5,
   };
 
   //almost all code for centering the tree comes from amberv0 2/13/2021 https://github.com/bkrem/react-d3-tree/issues/272
@@ -340,35 +341,35 @@ useEffect(() => {
   const customPathFunc = (linkData) => {
     const { source, target } = linkData;
     // Increase the xOffset value to shift the line to the right
-    const xOffset = 0; 
+    const xOffset = 0;
     const yOffset = target.data.attributes?.yOffset || 0;
     return `M${source.x + xOffset},${source.y}
             C${source.x + xOffset},${(source.y + target.y) / 2 + yOffset}
              ${target.x + xOffset},${(source.y + target.y) / 2 - yOffset}
              ${target.x + xOffset},${target.y}`;
   };
-  
 
   return (
-    <div ref={treeContainerRef} className="md:h-[860px] w-full">
-      {newNodes && (     <Tree
-        separation={nodeSeparation}
-        translate={treeTranslate}
-        data={processedData}
-        // data={orgChart}
-        collapsible={false}
-        zoomable={false}
-        draggable={false}
-        orientation="vertical"
-        depthFactor={-200}
-        // pathFunc={customPathFunc}
-        pathClassFunc={() => "custom-link"}
-        onNodeClick={handleClick}
-        renderCustomNodeElement={(rd3tProps) =>
-          renderForeignObjectNode({ ...rd3tProps, foreignObjectProps })
-        }
-      />)}
- 
+    <div ref={treeContainerRef} className="h-dvh md:h-[860px] w-full">
+      {newNodes && (
+        <Tree
+          separation={nodeSeparation}
+          translate={treeTranslate}
+          data={processedData}
+          // data={orgChart}
+          collapsible={false}
+          zoomable={false}
+          draggable={false}
+          orientation="vertical"
+          depthFactor={-200}
+          // pathFunc={customPathFunc}
+          pathClassFunc={() => "custom-link"}
+          onNodeClick={handleClick}
+          renderCustomNodeElement={(rd3tProps) =>
+            renderForeignObjectNode({ ...rd3tProps, foreignObjectProps })
+          }
+        />
+      )}
     </div>
   );
 };

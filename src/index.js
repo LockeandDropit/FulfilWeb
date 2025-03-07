@@ -148,6 +148,8 @@ import CareerPaths from "./pages/Doer/CareerPaths/CareerPaths";
 import Resources from "./pages/Doer/Resources";
 import UploadToBackEnd from "./pages/Doer/Dashboard/UploadToBackEnd";
 import EntryResumeBuilder from "./components/LoggedOutResumeBuilder/ResumeBuilder/EntryResumeBuilder";
+import QuizFormHolder from "./pages/Register/Doer/CareerQuiz/QuizFormHolder";
+import QuizResults from "./pages/Register/Doer/CareerQuiz/QuizResults";
  
 const tagManagerArgs = {
     gtmId: 'AW-16521233370'
@@ -579,6 +581,14 @@ const router = createBrowserRouter([
   {
     path: "/OnboardingFormHolder",
     element: <OnboardingFormHolder />,
+  },
+  {
+    path: "/QuizFormHolder",
+    element: <QuizFormHolder />,
+  },
+  {
+    path: "/QuizResults",
+    element: <QuizResults />,
   },
   {
     path: "/CareerPaths",

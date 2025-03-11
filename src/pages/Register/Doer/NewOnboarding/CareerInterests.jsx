@@ -37,8 +37,8 @@ const uploadAnswer = async () => {
         setLoading(true);
     
         const response = await fetch(
-          // "https://openaiapi-c7qc.onrender.com/getIndustryRecommendation",
-          "http://localhost:8000/getIndustryRecommendation",
+          "https://openaiapi-c7qc.onrender.com/getIndustryRecommendation",
+          // "http://localhost:8000/getIndustryRecommendation",
           {
             method: "POST",
             headers: {
@@ -81,8 +81,8 @@ const uploadAnswer = async () => {
             setLoading(true);
         
             const response = await fetch(
-              // "https://openaiapi-c7qc.onrender.com/getJobs",
-              "http://localhost:8000/getJobs",
+              "https://openaiapi-c7qc.onrender.com/getJobs",
+              // "http://localhost:8000/getJobs",
               {
                 method: "POST",
                 headers: {
@@ -110,8 +110,8 @@ const uploadAnswer = async () => {
             setLoading(true);
         
             const response = await fetch(
-              "http://localhost:8000/getEdu", {
-              // "https://openaiapi-c7qc.onrender.com/getEdu", {
+              // "http://localhost:8000/getEdu", {
+              "https://openaiapi-c7qc.onrender.com/getEdu", {
               method: "POST",
               headers: {
                 Accept: "application/json",

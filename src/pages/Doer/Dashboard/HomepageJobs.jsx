@@ -38,6 +38,8 @@ import {
 } from "@stripe/react-stripe-js";
 import ModifiedResumePreview from "../ResumeBuilder/ModifiedResumePreview";
 import ImageSlider from "../components/ImageSlider";
+import Carousel from "../components/Carousel";
+
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const HomepageJobs = ({ user }) => {
@@ -45,7 +47,6 @@ const HomepageJobs = ({ user }) => {
   const [userResumeInformation, setUserResumeInformation] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
-
 
   const [returnedJobs, setReturnedJobs] = useState(null);
   const [newReturnedJobs, setNewReturnedJobs] = useState(null);
@@ -466,12 +467,13 @@ const HomepageJobs = ({ user }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row mt-4 md:mt-6">
-        
-        <div className="w-full h-[400px]">
-        {!loading && recommendedJobs ? ( <ImageSlider slides={returnedJobs}/>) : null}
-        </div>
-             
-            {/* {recommendedJobs?.map((job) => (
+          <div className="w-full h-[400px]">
+            {!loading && recommendedJobs ? (
+              <Carousel slides={returnedJobs} />
+            ) : null}
+          </div>
+
+          {/* {recommendedJobs?.map((job) => (
               
           
                   <div className="flex flex-col sm:flex-row mt-4 md:mt-6 p-1 w-5/6  ">
@@ -532,11 +534,6 @@ const HomepageJobs = ({ user }) => {
        
               
             ))} */}
-             
-    
-  
-
-       
 
           {/* {!loading &&
             recommendedJobs?.map((job) => (

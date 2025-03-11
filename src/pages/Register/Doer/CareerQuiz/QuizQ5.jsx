@@ -36,7 +36,7 @@ const QuizQ5 = ({ handleIncrementFormIndex }) => {
 
 
   useEffect(() => {
-    if (answer.length === 3) {
+    if (answer.length >= 1) {
       setAnswersComplete(true);
     } else {
       setAnswersComplete(false);
@@ -67,7 +67,7 @@ const QuizQ5 = ({ handleIncrementFormIndex }) => {
         <h1 className="font-medium text-gray-800 text-center text-2xl ">
         I learn best through:
         </h1>
-        <h2 className=" text-gray-800 text-center "></h2>
+        <h2 className=" text-gray-700 text-center mt-2 text-sm">(Choose up to 3)</h2>
 
         <div className="mt-2 sm:min-w-96 mb-8"></div>
 

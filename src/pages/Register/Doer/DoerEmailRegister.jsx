@@ -284,7 +284,6 @@ const DoerEmailRegister = () => {
   // help from Can Küçükyılmaz per https://stackoverflow.com/questions/71679442/show-hide-multiple-password-in-react-js
   const [isVisible, setIsVisible] = useState(false);
 
-
   //credit template split screen with image https://chakra-templates.vercel.app/forms/authentication
   return (
     <>
@@ -301,7 +300,8 @@ const DoerEmailRegister = () => {
                   Find the right fit.
                 </h1>
                 <h1 class="block text-3xl font-bold text-gray-800">
-                  Connect with your <span className="text-sky-400 text-4xl">future.</span>
+                  Connect with your{" "}
+                  <span className="text-sky-400 text-4xl">future.</span>
                 </h1>
                 <p class="mt-2 text-sm text-gray-600">
                   Already have an account?
@@ -372,9 +372,7 @@ const DoerEmailRegister = () => {
                             {validationMessage}
                           </p>
                         ) : null}
-                    
                       </div>
-                    
                     </div>
 
                     <div>
@@ -385,7 +383,6 @@ const DoerEmailRegister = () => {
                         {/* <a class="text-sm text-blue-600 decoration-2 hover:underline font-medium" href="../examples/html/recover-account.html">Forgot password?</a> */}
                       </div>
                       <div class="relative">
-                    
                         <input
                           type={isVisible ? "text" : "password"}
                           id="password"
@@ -395,63 +392,63 @@ const DoerEmailRegister = () => {
                           required
                           aria-describedby="password-error "
                         />
-                         {isVisible ? (
-
-<div onClick={() => setIsVisible(!isVisible)} className="absolute inset-y-0 end-2 flex items-center ps-4 ">
-<svg
- xmlns="http://www.w3.org/2000/svg"
- fill="none"
- viewBox="0 0 24 24"
- strokeWidth={1.5}
- stroke="currentColor"
- className="size-5 flex-end"
->
- <path
-   strokeLinecap="round"
-   strokeLinejoin="round"
-   d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
- />
- <path
-   strokeLinecap="round"
-   strokeLinejoin="round"
-   d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
- />
-</svg>{" "}
-</div>
-
-
-) : (
-<div onClick={() => setIsVisible(!isVisible)} className="absolute inset-y-0 end-2 flex items-center ps-4 ">
-<svg
- xmlns="http://www.w3.org/2000/svg"
- fill="none"
- viewBox="0 0 24 24"
- strokeWidth={1.5}
- stroke="currentColor"
- className="size-5 flex-end"
->
- <path
-   strokeLinecap="round"
-   strokeLinejoin="round"
-   d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
- />
- <path
-   strokeLinecap="round"
-   strokeLinejoin="round"
-   d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
- />
-</svg>{" "}
-</div>
-)}
-
-                     
-                       
+                        {isVisible ? (
+                          <div
+                            onClick={() => setIsVisible(!isVisible)}
+                            className="absolute inset-y-0 end-2 flex items-center ps-4 "
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-5 flex-end"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                              />
+                            </svg>{" "}
+                          </div>
+                        ) : (
+                          <div
+                            onClick={() => setIsVisible(!isVisible)}
+                            className="absolute inset-y-0 end-2 flex items-center ps-4 "
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-5 flex-end"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                              />
+                            </svg>{" "}
+                          </div>
+                        )}
                       </div>
                       {passwordValidationBegun === true ? (
-                          <p class="mt-1 block text-sm mb-2 text-red-500">
-                            {passwordValidationMessage}
-                          </p>
-                        ) : null}
+                        <p class="mt-1 block text-sm mb-2 text-red-500">
+                          {passwordValidationMessage}
+                        </p>
+                      ) : null}
                     </div>
 
                     <div className="">

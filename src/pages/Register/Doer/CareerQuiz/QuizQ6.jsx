@@ -229,35 +229,35 @@ setPersonalValues([a,b,c, h])
   <div className="flex justify-between items-center gap-5 relative after:absolute after:top-1/2 after:inset-x-0 after:w-full after:h-px after:bg-gray-200 after:-translate-y-1/2">
     {/* Radio */}
     <label htmlFor="hs-pro-shprft-too-tight" className="group relative z-1 inline-flex items-center cursor-pointer text-sm">
-      <input onClick={(e) => setH({"Recognition and professional advancement": e.target.value})}  type="radio" name="group3" className="shrink-0 size-5 border-gray-300 rounded-full text-sky-500 cursor-pointer focus:ring-sky-500 disabled:opacity-50 disabled:pointer-events-none" id="1b" value="1" />
+      <input onClick={(e) => setH({"Recognition and professional advancement": e.target.value})}  type="radio" name="group4" className="shrink-0 size-5 border-gray-300 rounded-full text-sky-500 cursor-pointer focus:ring-sky-500 disabled:opacity-50 disabled:pointer-events-none" id="1b" value="1" />
       <span className="sr-only">1</span>
     </label>
     {/* End Radio */}
 
     {/* Radio */}
     <label htmlFor="hs-pro-shprft-slightly-tight" className="group relative z-1 inline-flex items-center cursor-pointer text-sm">
-      <input  onClick={(e) => setH({"Recognition and professional advancement": e.target.value})} type="radio" name="group3" className="shrink-0 size-5 border-gray-300 rounded-full text-sky-500 cursor-pointer focus:ring-sky-500 disabled:opacity-50 disabled:pointer-events-none" id="2b" value="2" />
+      <input  onClick={(e) => setH({"Recognition and professional advancement": e.target.value})} type="radio" name="group4" className="shrink-0 size-5 border-gray-300 rounded-full text-sky-500 cursor-pointer focus:ring-sky-500 disabled:opacity-50 disabled:pointer-events-none" id="2b" value="2" />
       <span className="sr-only">2</span>
     </label>
     {/* End Radio */}
 
     {/* Radio */}
     <label htmlFor="hs-pro-shprft-perfect" className="group relative z-1 inline-flex items-center cursor-pointer text-sm">
-      <input onClick={(e) => setH({"Recognition and professional advancement": e.target.value})} type="radio" name="group3" className="shrink-0 size-5 border-gray-300 rounded-full text-sky-500 cursor-pointer focus:ring-sky-500 disabled:opacity-50 disabled:pointer-events-none" id="3b" value="3" />
+      <input onClick={(e) => setH({"Recognition and professional advancement": e.target.value})} type="radio" name="group4" className="shrink-0 size-5 border-gray-300 rounded-full text-sky-500 cursor-pointer focus:ring-sky-500 disabled:opacity-50 disabled:pointer-events-none" id="3b" value="3" />
       <span className="sr-only">3</span>
     </label>
     {/* End Radio */}
 
     {/* Radio */}
     <label htmlFor="hs-pro-shprft-slightly-loose" className="group relative z-1 inline-flex items-center cursor-pointer text-sm">
-      <input onClick={(e) => setH({"Recognition and professional advancement": e.target.value})} type="radio" name="group3" className="shrink-0 size-5 border-gray-300 rounded-full text-sky-500 cursor-pointer focus:ring-sky-500 disabled:opacity-50 disabled:pointer-events-none" id="4b" value="4" />
+      <input onClick={(e) => setH({"Recognition and professional advancement": e.target.value})} type="radio" name="group4" className="shrink-0 size-5 border-gray-300 rounded-full text-sky-500 cursor-pointer focus:ring-sky-500 disabled:opacity-50 disabled:pointer-events-none" id="4b" value="4" />
       <span className="sr-only">4</span>
     </label>
     {/* End Radio */}
 
     {/* Radio */}
     <label htmlFor="hs-pro-shprft-too-loose" className="group relative z-1 inline-flex items-center cursor-pointer text-sm">
-      <input onClick={(e) => setH({"Recognition and professional advancement": e.target.value})} type="radio" name="group3" className="shrink-0 size-5 border-gray-300 rounded-full text-sky-500 cursor-pointer focus:ring-sky-500 disabled:opacity-50 disabled:pointer-events-none" id="5b" value="5" />
+      <input onClick={(e) => setH({"Recognition and professional advancement": e.target.value})} type="radio" name="group4" className="shrink-0 size-5 border-gray-300 rounded-full text-sky-500 cursor-pointer focus:ring-sky-500 disabled:opacity-50 disabled:pointer-events-none" id="5b" value="5" />
       <span className="sr-only">5</span>
     </label>
     {/* End Radio */}

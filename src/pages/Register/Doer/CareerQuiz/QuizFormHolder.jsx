@@ -15,6 +15,10 @@ import OnboardingProgressBar from "./OnboardingProgressBar";
 import QuizQ5 from "./QuizQ5";
 import QuizQ6 from "./QuizQ6";
 import QuizQ6P2 from "./QuizQ6P2";
+import LoggedOutHeader from "../../../../components/Landing/LoggedOutHeader";
+import QuizHeader from "./components/QuizHeader";
+import QuizIncome from "./QuizIncome";
+import QuizUserLocation from "./QuizUserLocation";
 
 const QuizFormHolder = () => {
   const [activeFormIndex, setActiveFormIndex] = useState(1);
@@ -27,28 +31,30 @@ const QuizFormHolder = () => {
 
   return (
     <div>
-     <OnboardingHeader />
- <OnboardingProgressBar />
-   
+      <QuizHeader />
+      {/* <OnboardingProgressBar /> */}
+
       {activeFormIndex === 1 ? (
         <QuizQ1 handleIncrementFormIndex={handleIncrementFormIndex} />
       ) : activeFormIndex === 2 ? (
-        // <GoalIncome handleIncrementFormIndex={handleIncrementFormIndex} />
         <QuizQ1P2 handleIncrementFormIndex={handleIncrementFormIndex} />
       ) : activeFormIndex === 3 ? (
-       <QuizQ2 handleIncrementFormIndex={handleIncrementFormIndex} />
+        <QuizQ2 handleIncrementFormIndex={handleIncrementFormIndex} />
       ) : activeFormIndex === 4 ? (
         <QuizQ3 handleIncrementFormIndex={handleIncrementFormIndex} />
-       ) : activeFormIndex === 5 ? (
-        // <GoalIncome handleIncrementFormIndex={handleIncrementFormIndex} />
+      ) : activeFormIndex === 5 ? (
         <QuizQ4 handleIncrementFormIndex={handleIncrementFormIndex} />
       ) : activeFormIndex === 6 ? (
-       <QuizQ5 handleIncrementFormIndex={handleIncrementFormIndex} />
+        <QuizQ5 handleIncrementFormIndex={handleIncrementFormIndex} />
       ) : activeFormIndex === 7 ? (
         <QuizQ6 handleIncrementFormIndex={handleIncrementFormIndex} />
-       ) : activeFormIndex === 8 ? (
+      ) : activeFormIndex === 8 ? (
         <QuizQ6P2 handleIncrementFormIndex={handleIncrementFormIndex} />
-       ): null}
+      ) : activeFormIndex === 9 ? (
+        <QuizIncome handleIncrementFormIndex={handleIncrementFormIndex} />
+      ) : activeFormIndex === 10 ? (
+        <QuizUserLocation handleIncrementFormIndex={handleIncrementFormIndex} />
+      ) : null}
     </div>
   );
 };

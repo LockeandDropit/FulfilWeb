@@ -36,9 +36,9 @@ const [answersComplete, setAnswersComplete] = useState(null)
     //submit locally
 setPersonalValues([...personalValues, d,e,f,g])
     //increment form
-    // handleIncrementFormIndex()
+    handleIncrementFormIndex()
 
-    navigate("/QuizResults")  
+    // navigate("/QuizResults")  
   };
 
 

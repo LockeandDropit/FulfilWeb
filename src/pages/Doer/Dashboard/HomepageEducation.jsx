@@ -3,6 +3,7 @@ import { useState } from "react";
 import { db } from "../../../firebaseConfig";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
 import { useEduRecommendationStore } from "../lib/eduRecommendations";
+import EduCarousel from "../components/EduCarousel";
 const HomepageEducation = ({ user }) => {
   const [userResumeInformation, setUserResumeInformation] = useState(null);
 
@@ -114,7 +115,15 @@ const HomepageEducation = ({ user }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row mt-4 md:mt-6">
-          {!loading &&
+          <div className="w-full h-[400px]">
+            {!loading && recommendedEdu ? (
+              <EduCarousel slides={recommendedEdu} />
+            ) : null}
+          </div>
+          </div>
+
+        <div className="flex flex-col sm:flex-row mt-4 md:mt-6">
+          {/* {!loading &&
             recommendedEdu?.map((edu) => (
               <div className="flex flex-col sm:flex-row mt-4 md:mt-6 p-1 w-full sm:w-1/3">
                 <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
@@ -178,7 +187,7 @@ const HomepageEducation = ({ user }) => {
                   </div>
                 </div>
               </div>
-            ))}
+            ))} */}
 
           {loading && (
             <div className="flex flex-col sm:flex-row sm:w-full">

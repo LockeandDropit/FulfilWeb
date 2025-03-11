@@ -4,22 +4,27 @@ import Select from "react-select";
 import { useQuizStore } from "./quizStore";
 import OnboardingHeader from "../../../Doer/components/OnboardingHeader";
 import QuizResultJobs from "./components/QuizResultJobs";
+import LoggedOutHeader from "../../../../components/Landing/LoggedOutHeader";
+import QuizHeader from "./components/QuizHeader";
+import GoalIncome from "./GoalIncome";
 
 const QuizResults = ({ handleIncrementFormIndex }) => {
   const {
     personalValues,
     currentPay,
     payGoal,
+    city, 
+    state,
     talents,
     workEnvironment,
     passion,
-    personality,
     learningAndDevelopment,
     longTerm,
   } = useQuizStore();
 
   const [isLoading, setIsLoading] = useState(true);
   const [result, setResult] = useState(null)  
+    const [returnedEducation, setReturnedEducation] = useState(null);
 
   const [answersComplete, setAnswersComplete] = useState(null);
 
@@ -39,14 +44,39 @@ const QuizResults = ({ handleIncrementFormIndex }) => {
 
   const [personalValuesString, setPersonalValuesString] = useState(null)
 
-  
-  const getRecommendation = async () => {
-        
+  const getEdu = async () => {
 
 
     const response = await fetch(
-      // "https://openaiapi-c7qc.onrender.com/getIndustryRecommendation",
-      "http://localhost:8000/careerQuizResponse",
+      // "http://localhost:8000/getEdu", {
+      "https://openaiapi-c7qc.onrender.com/getEdu", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userInput: `The user's location is ${city}, ${state}. The user's current pay is ${currentPay}. The user is interested in ${result.career_title}`,
+      }),
+    });
+    if (!response.ok) {
+      // throw new Error(`Response status: ${response.status}`);
+      getEdu()
+    }
+
+    const json = await response.json();
+    console.log("json resopnse w array EDU", JSON.parse(json.message.content));
+
+    setReturnedEducation(JSON.parse(json.message.content));
+    setIsLoading(false);
+  };
+
+
+  
+  const getRecommendation = async () => {
+    const response = await fetch(
+      "https://openaiapi-c7qc.onrender.com/careerQuizResponse",
+      // "http://localhost:8000/careerQuizResponse",
       {
         method: "POST",
         headers: {
@@ -54,7 +84,7 @@ const QuizResults = ({ handleIncrementFormIndex }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userInput: `Here are the user's personal values ranked from 1-5: ${JSON.stringify(personalValues)}. Here are the user's abilities ranked from 1-5: ${JSON.stringify(talents)}. They prefer the following work environment(s): ${JSON.stringify(workEnvironment)}. The following are things they are passionate about: ${JSON.stringify(passion)}. They learn and develop best in the following ways: ${JSON.stringify(learningAndDevelopment)}. They want to see the following in their long term career outlook: ${JSON.stringify(longTerm)}.`,
+          userInput: `Here are the user's personal values ranked from 1-5: ${JSON.stringify(personalValues)}. Here are the user's abilities ranked from 1-5: ${JSON.stringify(talents)}. They prefer the following work environment(s): ${JSON.stringify(workEnvironment)}. The following are things they are passionate about: ${JSON.stringify(passion)}. They learn and develop best in the following ways: ${JSON.stringify(learningAndDevelopment)}. They want to see the following in their long term career outlook: ${JSON.stringify(longTerm)}. They live in ${city}, ${state}. They make ${currentPay} and would like to make ${payGoal}`,
         }),
       }
     );
@@ -76,6 +106,9 @@ const QuizResults = ({ handleIncrementFormIndex }) => {
     personalValues,
     currentPay,
     payGoal,
+    city,
+    state,
+    payGoal,
     talents,
     workEnvironment,
     passion,
@@ -88,20 +121,28 @@ const QuizResults = ({ handleIncrementFormIndex }) => {
   useEffect(() => {
 setTimeout(() => {
 getRecommendation()
-}, 1000)
+}, 2000)
   },[])
 
   useEffect(() => {
 if (result) {
-  setIsLoading(false)
+  getEdu()
+  // setIsLoading(false);
 }
   },[result])
+
+
+  const [openSignUp, setOpenSignUp] = useState(false)
+
+  const handleOpenSignUp = () => {
+    setOpenSignUp(!openSignUp)
+  }
 
   //add current pay, pay ggoal, user location (city/state), blue collar or non blue collar option?
 
   return (
     <div className="w-full ">
-      <OnboardingHeader />
+<QuizHeader result={result} returnedEducation={returnedEducation} props={openSignUp}/>
     {isLoading ? ( <div className="mx-auto w-full  flex flex-col items-center justify-center mt-16">
           <span className="inline-flex items-center gap-x-1.5  px-3 rounded-full font-medium  text-slate-700 underline">
             Note: Loading your results could take up to 1 minute...
@@ -147,7 +188,7 @@ if (result) {
             <div class="mt-5">
               <a
                 class="group py-2 px-3 md:py-2.5 md:px-4 inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg border border-transparent text-white bg-sky-500 hover:bg-sky-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden"
-                href="#"
+                onClick={() => handleOpenSignUp()} 
               >
                 See Full Career Path
                 <svg
@@ -194,31 +235,26 @@ if (result) {
                 <h2 class="text-sm text-gray-500 ">Industry Growth</h2>
 
                 <div class="flex items-center justify-center gap-x-1.5">
-                  <p class="text-2xl font-semibold text-gray-800 ">4%</p>
+                  <p class="text-2xl font-semibold text-gray-800 ">{result.industry_growth}</p>
                 </div>
               </div>
             </div>
 
             <div className="flex flex-row mt-4 space-x-2">
-              <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-800">
-                Badge
-              </span>
-              <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-800">
-                Badge
-              </span>
-              <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-800">
-                Badge
-              </span>
+              {result.badges.map(badge => <span className="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-green-100 text-green-800">
+               {badge}
+              </span>)}
+            
             </div>
 
-            <p class="mt-3 text-gray-500 sm:max-w-md ">
+            <p class="mt-3 text-gray-500 sm:max-w-xl ">
              {result.description}
             </p>
 
             <div class="mt-5">
               <a
                 class="group py-2 px-3 md:py-2.5 md:px-4 inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg border border-transparent text-white bg-sky-500 hover:bg-sky-700 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden"
-                href="#"
+               onClick={() => handleOpenSignUp()}
               >
                 See Full Career Path
                 <svg
@@ -247,7 +283,7 @@ if (result) {
           </div>
         </div>)}
    
-      <QuizResultJobs />
+      <QuizResultJobs result={result} handleOpenSignUp={handleOpenSignUp} />
     </div>
   );
 };

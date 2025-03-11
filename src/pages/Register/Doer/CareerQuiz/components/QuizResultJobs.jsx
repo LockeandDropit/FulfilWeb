@@ -3,22 +3,24 @@ import { useState } from "react";
 
 import { getDoc, doc, updateDoc } from "firebase/firestore";
 
-const QuizResultJobs = () => {
+const QuizResultJobs = ({result, handleOpenSignUp }) => {
   const [userResumeInformation, setUserResumeInformation] = useState(null);
 
   const [returnedJobs, setReturnedJobs] = useState(null);
   const [newReturnedEdu, setNewReturnedEdu] = useState(null);
   const [loading, setLoading] = useState(true);
 
+console.log("handle open sign up", handleOpenSignUp)
+
 
   useEffect(() => {
-    if (returnedJobs) {
+    if (result) {
       setTimeout(() => {
         setLoading(false);
-        console.log("returnedEdu", returnedJobs);
+    
       }, 2000);
     }
-  }, [returnedJobs]);
+  }, [result]);
 
   const handleOpenJob = (x) => {
     window.open(x.link);
@@ -44,7 +46,7 @@ const QuizResultJobs = () => {
 
         <div className="flex flex-col sm:flex-row mt-4 md:mt-4">
           {!loading &&
-            recommendedEdu?.map((edu) => (
+            result?.job_openings.map((edu) => (
               <div className="flex flex-col sm:flex-row mt-4 md:mt-6 p-1 w-full sm:w-1/3">
                 <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                   <div class="flex justify-between">
@@ -72,20 +74,20 @@ const QuizResultJobs = () => {
 
                   <div>
                     <h3 class="font-medium text-gray-800">
-                      {edu.program_name}
+                      {edu.job_title}
                     </h3>
-                    <h3 class="font-medium text-gray-800">{edu.institution}</h3>
+                    <h3 class="font-medium text-gray-800">{edu.company}</h3>
                     <h3 class="text-sm text-gray-500">{edu.location}</h3>
                     <div className="mt-1 flex ">
                       <h3 class="text-sm text-gray-500">
                         <p className="mr-1 font-medium text-sm text-gray-800">
-                          Avg. Salary:
+                          Avg. Pay Rate:
                         </p>{" "}
-                        ${edu.salary_after_completion}
+                        {edu.pay_rate}
                       </h3>
                     </div>
                     <p class="mt-3 text-gray-700 line-clamp-4 ">
-                      {edu.description}
+                      {edu.job_description}
                     </p>
                   </div>
 
@@ -100,7 +102,7 @@ const QuizResultJobs = () => {
                     <button
                       type="button"
                       class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500 "
-                      onClick={() => handleOpenJob(edu)}
+                      onClick={handleOpenSignUp}
                     >
                       Apply
                     </button>
@@ -210,6 +212,7 @@ const QuizResultJobs = () => {
                     <button
                       type="button"
                       class="mr-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
+                      onClick={handleOpenSignUp}
                     >
                       Apply
                     </button>

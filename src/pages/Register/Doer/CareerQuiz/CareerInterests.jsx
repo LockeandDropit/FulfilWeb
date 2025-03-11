@@ -68,7 +68,7 @@ const uploadAnswer = async () => {
 
       useEffect(() => {
       if (industryReccomendation && returnedEducation && returnedJobs) {
-        submit()
+        submit();
       }
       }, [industryReccomendation, returnedEducation, returnedJobs])
 

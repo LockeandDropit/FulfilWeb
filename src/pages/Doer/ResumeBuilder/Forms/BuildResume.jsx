@@ -74,7 +74,7 @@ const BuildResume = ({ handleIncrementFormIndex, isEdit }) => {
         if (!snapshot.data()) {
         } else {
           console.log("from firestore", snapshot.data().aboutDescription);
-          setAboutDescription(snapshot.data().aboutDescription);
+          setAboutDescription(snapshot.data().aboutDescription ? snapshot.data().aboutDescription : null);
           setPhoneNumber(snapshot.data().phoneNumber)
         }
         setLoading(false);

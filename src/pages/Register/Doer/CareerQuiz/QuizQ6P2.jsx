@@ -57,7 +57,7 @@ setPersonalValues([...personalValues, d,e,f,g])
   // Opportunity to travel or work globally
 
   return (
-    <div className=" max-w-[85rem] w-full  mx-auto flex flex-col  justify-center items-center md:gap-3 pt-4 pb-2 px-4 sm:px-6 lg:px-8">
+    <div className=" max-w-[85rem] w-full  mx-auto flex flex-col  justify-center items-center md:gap-3 pt-4 pb-2 px-6 sm:px-6 lg:px-8">
       <div className="mx-auto flex flex-col items-center justify-center mt-16">
         <h1 className="font-medium text-gray-800 text-center text-2xl ">
         What matters to you the most?
@@ -67,7 +67,7 @@ setPersonalValues([...personalValues, d,e,f,g])
         </h2>
        
        {/* Rating */}
-<div className="mt-16 sm:min-w-96 mb-8">
+<div className="mt-16 min-w-full sm:min-w-96 mb-8">
   <h3 className="mb-3  font-medium text-gray-800">
   Personal growth and continuous learning
   </h3>
@@ -122,7 +122,7 @@ setPersonalValues([...personalValues, d,e,f,g])
 </div>
 </div>
 
-<div className="mt-8 min-w-sm sm:min-w-96 mb-8">
+<div className="mt-8 min-w-full sm:min-w-96 mb-8">
   <h3 className="mb-3  font-medium text-gray-800">
   Financial stability and high earning potential
   </h3>
@@ -175,7 +175,7 @@ setPersonalValues([...personalValues, d,e,f,g])
   {/* End Radio Group */}
 </div>
 
-<div className="mt-8 min-w-sm sm:min-w-96 mb-8">
+<div className="mt-8 min-w-full sm:min-w-96 mb-8">
   <h3 className="mb-3  font-medium text-gray-800">
   Making a positive social impact
   </h3>
@@ -228,7 +228,7 @@ setPersonalValues([...personalValues, d,e,f,g])
   {/* End Radio Group */}
 </div>
 
-<div className="mt-8 min-w-sm sm:min-w-96 mb-8">
+<div className="mt-8 min-w-full sm:min-w-96 mb-8">
   <h3 className="mb-3  font-medium text-gray-800">
   Creative freedom and self-expression
   </h3>

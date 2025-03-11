@@ -42,7 +42,7 @@ setPersonalValues([a,b,c, h])
  
 
   return (
-    <div className=" max-w-[85rem] w-full  mx-auto flex flex-col  justify-center items-center md:gap-3 pt-4 pb-2 px-4 sm:px-6 lg:px-8">
+    <div className=" max-w-[85rem] w-full  mx-auto flex flex-col  justify-center items-center md:gap-3 pt-4 pb-2 px-6 sm:px-6 lg:px-8">
       <div className="mx-auto flex flex-col items-center justify-center mt-16">
         <h1 className="font-medium text-gray-800 text-center text-2xl ">
         What matters to you the most?
@@ -52,7 +52,7 @@ setPersonalValues([a,b,c, h])
         </h2>
        
        {/* Rating */}
-<div className="mt-16 sm:min-w-96 mb-8">
+<div className="mt-16 min-w-full sm:min-w-96 mb-8">
   <h3 className="mb-3  font-medium text-gray-800">
   Work-life balance
   </h3>
@@ -107,7 +107,7 @@ setPersonalValues([a,b,c, h])
 </div>
 </div>
 
-<div className="mt-8 min-w-sm sm:min-w-96 mb-8">
+<div className="mt-8 min-w-full sm:min-w-96 mb-8">
   <h3 className="mb-3  font-medium text-gray-800">
   Autonomy and independence
   </h3>
@@ -160,7 +160,7 @@ setPersonalValues([a,b,c, h])
   {/* End Radio Group */}
 </div>
 
-<div className="mt-8 min-w-sm sm:min-w-96 mb-8">
+<div className="mt-8 min-w-full sm:min-w-96 mb-8">
   <h3 className="mb-3  font-medium text-gray-800">
   Job security
   </h3>
@@ -212,7 +212,7 @@ setPersonalValues([a,b,c, h])
   </div>
   {/* End Radio Group */}
 </div>
-<div className="mt-8 min-w-sm sm:min-w-96 mb-8">
+<div className="mt-8 min-w-full sm:min-w-96 mb-8">
   <h3 className="mb-3  font-medium text-gray-800">
   Recognition and professional advancement
   </h3>

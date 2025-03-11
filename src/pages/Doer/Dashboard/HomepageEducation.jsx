@@ -115,7 +115,7 @@ const HomepageEducation = ({ user }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row mt-4 md:mt-6">
-          <div className="w-full h-[400px]">
+          <div className="w-full sm:h-[400px]">
             {!loading && recommendedEdu ? (
               <EduCarousel slides={recommendedEdu} />
             ) : null}

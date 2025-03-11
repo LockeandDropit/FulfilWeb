@@ -50,7 +50,7 @@ setTalents([...talents, d,e,f, g])
 // g. Research and deep learning
 
   return (
-    <div className=" max-w-[85rem] w-full  mx-auto flex flex-col  justify-center items-center md:gap-3 pt-4 pb-2 px-4 sm:px-6 lg:px-8">
+    <div className=" max-w-[85rem] w-full  mx-auto flex flex-col  justify-center items-center md:gap-3 pt-4 pb-2 px-6 sm:px-6 lg:px-8">
       <div className="mx-auto flex flex-col items-center justify-center mt-16">
         <h1 className="font-medium text-gray-800 text-center text-2xl ">
         Rate your comfort in the following areas 
@@ -60,7 +60,7 @@ setTalents([...talents, d,e,f, g])
         </h2>
        
        {/* Rating */}
-<div className="mt-16 sm:min-w-96 mb-8">
+<div className="mt-16 min-w-full sm:min-w-96 mb-8">
   <h3 className="mb-3  font-medium text-gray-800">
   Technical and mathematical skills
   </h3>
@@ -115,7 +115,7 @@ setTalents([...talents, d,e,f, g])
 </div>
 </div>
 
-<div className="mt-8 min-w-sm sm:min-w-96 mb-8">
+<div className="mt-8 min-w-full sm:min-w-96 mb-8">
   <h3 className="mb-3  font-medium text-gray-800">
   Physical dexterity and hands-on work
   </h3>
@@ -168,7 +168,7 @@ setTalents([...talents, d,e,f, g])
   {/* End Radio Group */}
 </div>
 
-<div className="mt-8 min-w-sm sm:min-w-96 mb-8">
+<div className="mt-8 min-w-full sm:min-w-96 mb-8">
   <h3 className="mb-3  font-medium text-gray-800">
   Leadership and team management
   </h3>
@@ -221,7 +221,7 @@ setTalents([...talents, d,e,f, g])
   {/* End Radio Group */}
 </div>
 
-<div className="mt-8 min-w-sm sm:min-w-96 mb-8">
+<div className="mt-8 min-w-full sm:min-w-96 mb-8">
   <h3 className="mb-3  font-medium text-gray-800">
   Research and learning
   </h3>

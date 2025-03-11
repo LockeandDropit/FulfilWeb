@@ -193,7 +193,7 @@ const DoerHomepage = () => {
 //access zustand store. One for each portion of the returned data (jobs, edu,  recommended/preferred industry)
 
   return (
-    <div className="w-full" onClick={() => testIfPremium()}>
+    <div className="w-full" >
       {currentUser ? (
         <>
           

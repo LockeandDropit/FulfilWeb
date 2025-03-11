@@ -90,7 +90,7 @@ const uploadAnswer = async () => {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  userInput: `The user's location is ${userInfo.city}, ${userInfo.state}. The user's current pay is ${userInfo.currentIncome} a year. The user is interested in ${userInfo.userInterests}`,
+                  userInput: `The user's location is ${userInfo.city}, ${userInfo.state}. The user's current pay is ${userInfo.currentIncome} a year. The user is interested in ${interests}`,
                 }),
               }
             );
@@ -118,7 +118,7 @@ const uploadAnswer = async () => {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                userInput: `The user's location is ${userInfo.city}, ${userInfo.state}. The user's current pay is ${userInfo.currentIncome}. The user is interested in ${userInfo.userInterests}`,
+                userInput: `The user's location is ${userInfo.city}, ${userInfo.state}. The user's current pay is ${userInfo.currentIncome}. The user is interested in ${interests}`,
               }),
             });
             if (!response.ok) {

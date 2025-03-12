@@ -14,8 +14,11 @@ import {
 import { getDoc, doc, snapshot } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 
-const MyDrawer = ({ toggle, open, nodeId, category }) => {
+const MyDrawer = ({ toggle, open, nodeId, category, nodeData }) => {
+  
   const [drawerInfo, setDrawerInfo] = useState(null);
+  const [misc, setMisc] = useState(null);
+
 
   useEffect(() => {
     console.log("node & category", nodeId, category);
@@ -25,14 +28,30 @@ const MyDrawer = ({ toggle, open, nodeId, category }) => {
       snapshot.data().drawers.forEach((data) => {
         if (data.id === nodeId) {
           setDrawerInfo(data);
+         
         }
       });
+      setMisc(snapshot.data().misc)
     });
   }, [category]);
 
   const handleClose = () => {
     toggle();
   };
+
+  const handleOpenLink = (x) => {
+    window.open(
+      x.link
+    )
+  }
+
+  const handleOpenIndeedLink = (x) => {
+    window.open(
+      x
+    )
+  }
+
+  console.log("drawerinfo",drawerInfo)
 
   return (
     <div>
@@ -75,7 +94,7 @@ const MyDrawer = ({ toggle, open, nodeId, category }) => {
 
                                 <div className="mt-1 flex items-center gap-x-2">
                                   <h3 className="text-xl sm:text-2xl font-medium text-gray-800">
-                                    $60,000
+                                    {nodeData.salary === "Start here" ? (<p></p>) : (<p>{nodeData.salary}</p>)}
                                   </h3>
                                 </div>
                               </div>
@@ -84,9 +103,7 @@ const MyDrawer = ({ toggle, open, nodeId, category }) => {
                             <div
                               className="flex flex-col cursor-pointer bg-white border shadow-sm rounded-xl"
                               onClick={() =>
-                                window.open(
-                                  "https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm"
-                                )
+                                handleOpenIndeedLink(misc.growth.link)
                               }
                             >
                               <div className="p-4 md:p-5">
@@ -98,7 +115,7 @@ const MyDrawer = ({ toggle, open, nodeId, category }) => {
 
                                 <div className="mt-1 flex items-center gap-x-2">
                                   <h3 className="text-xl sm:text-2xl font-medium text-gray-800">
-                                    6%
+                                  {misc.growth.percent_growth}
                                   </h3>
                                 </div>
                               </div>
@@ -107,9 +124,7 @@ const MyDrawer = ({ toggle, open, nodeId, category }) => {
                             <div
                               className="flex flex-col bg-white border shadow-sm rounded-xl cursor-pointer"
                               onClick={() =>
-                                window.open(
-                                  "https://www.indeed.com/jobs?q=plumber&l=Minneapolis&radius=35&vjk=ff9dc1d63ea6ffa5"
-                                )
+                                handleOpenIndeedLink(misc.jobs.link)
                               }
                             >
                               <div className="p-4 md:p-5">
@@ -121,7 +136,7 @@ const MyDrawer = ({ toggle, open, nodeId, category }) => {
 
                                 <div className="mt-1 flex items-center gap-x-2">
                                   <h3 className="text-xl sm:text-2xl font-medium text-gray-800">
-                                    50+
+                                    {misc.jobs.number_of_openings}
                                   </h3>
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -199,8 +214,8 @@ const MyDrawer = ({ toggle, open, nodeId, category }) => {
                           for="dactmi"
                           class="block mb-2 text-lg font-medium text-gray-800 "
                         >
-                          Open Positions{" "}
-                          <span
+                          Get Started{" "}
+                          {/* <span
                             className="cursor-pointer hover:underline text-base text-gray-700 "
                             onClick={() =>
                               window.open(
@@ -209,7 +224,7 @@ const MyDrawer = ({ toggle, open, nodeId, category }) => {
                             }
                           >
                             (See more)
-                          </span>
+                          </span> */}
                         </label>
                         <div class="mb-4">
                           <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
@@ -226,19 +241,17 @@ const MyDrawer = ({ toggle, open, nodeId, category }) => {
                             </div>
                             <div>
                               <h3 class="font-medium text-gray-800">
-                                Licenced Plumber
+                                {misc.OpeningsOrEducation.name}
                               </h3>
-                              <h3 class="font-medium text-gray-800">
+                              {/* <h3 class="font-medium text-gray-800">
                                 Street Plumbing Inc.
-                              </h3>
+                              </h3> */}
                               <h3 class="text-sm text-gray-500">
-                                Burnsville, MN
+                               {misc.OpeningsOrEducation.city}
                               </h3>
 
                               <p class="mt-3 text-gray-700 line-clamp-4">
-                                Apply to open positions that provide on the job
-                                training. Learn to install, repair, deal with
-                                waste, vents, and water piping.
+                           {misc.OpeningsOrEducation.overview}
                               </p>
                             </div>
                             <div className="flex items-center justify-center mt-auto mb-1">
@@ -246,9 +259,7 @@ const MyDrawer = ({ toggle, open, nodeId, category }) => {
                                 type="button"
                                 class="ml-1 py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-50 "
                                 onClick={() =>
-                                  window.open(
-                                    "https://www.streetplumbinginc.com/careers.html"
-                                  )
+                                 handleOpenLink(misc.OpeningsOrEducation)
                                 }
                               >
                                 Apply

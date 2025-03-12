@@ -79,7 +79,7 @@ const TestTree = ({ category }) => {
   useEffect(() => {
     if (newOrg) {
       // all credit Nick 4/21/22 https://stackoverflow.com/questions/71950276/create-hierarchy-from-flat-array-with-children-ids
-      const nodemap = new Map(newOrg.map((n) => [n.id, n]));
+      const nodemap = new Map(newOrg.map((n) => [n.attributes.id, n]));
 
       const tree = (node) => {
         nodemap.delete(node.attributes.id);
@@ -97,7 +97,7 @@ const TestTree = ({ category }) => {
       let result = [];
 
       newOrg.forEach((node) => {
-        if (nodemap.has(node.id)) result.push(tree(node));
+        if (nodemap.has(node.attributes.id)) result.push(tree(node));
       });
 
       console.log("bingo", result);
@@ -108,76 +108,6 @@ const TestTree = ({ category }) => {
     }
   }, [newOrg]);
 
-  const orgChart = {
-    name: "Start Here",
-    attributes: {
-      jobTitle: "",
-      snippet: "",
-      timeCommitment: "",
-    },
-    children: [
-      {
-        name: "$42k/year",
-        attributes: {
-          jobTitle: "Equipment Operator",
-          bullet1:
-            "Operating equipment like skid steers, backhoes, or forklifts; assisting in loading/unloading; and basic maintenance.",
-
-          timeCommitment: "0-2 years",
-        },
-        children: [
-          {
-            name: "$65k/year",
-            attributes: {
-              jobTitle: "Experienced Equipment Operator",
-              bullet1:
-                "Proficiently operating bulldozers, excavators, or cranes; adhering to safety regulations.",
-
-              timeCommitment: "3-5 years",
-
-              yOffset: 20,
-            },
-            children: [
-              {
-                name: "$90k/year",
-                attributes: {
-                  jobTitle: "Lead Operator / Foreman",
-                  bullet1:
-                    "Supervises a team of operators, ensuring that work is completed on schedule and within safety standards.",
-
-                  timeCommitment: "5-8",
-
-                  yOffset: 20,
-                },
-              },
-            ],
-          },
-
-          {
-            name: "$85k/year",
-            attributes: {
-              jobTitle: "Specialized Equipment Operator",
-              bullet1:
-                "Mastering niche equipment, handling high-stakes operations, and working on complex or large-scale projects.",
-
-              timeCommitment: "5-7 years ",
-
-              yOffset: 20,
-            },
-          },
-          {
-            name: "$150k+/year",
-            attributes: {
-              jobTitle: "Manager/Business Owner",
-              bullet1:
-                "Manages equipment fleets or owns an independent operation offering equipment rental or construction services.",
-              timeCommitment: "10+ years (recomended)",
-            },
-          },
-        ],
-      },
-    ],
-  };
 
   const [popOverVisible, setPopOverVisible] = useState(false);
   const [selectedNodeName, setSelectedNodeName] = useState(null);
@@ -299,6 +229,7 @@ const TestTree = ({ category }) => {
               toggle={toggleModal}
               nodeId={nodeDatum.attributes.id}
               category={category}
+              nodeData={nodeDatum}
             />
           ) : null}
         </>

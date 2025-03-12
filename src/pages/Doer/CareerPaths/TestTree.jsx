@@ -63,12 +63,13 @@ const TestTree = ({ category }) => {
   const [drawers, setDrawers] = useState(null);
 
   useEffect(() => {
+    if (category) {
     const docRef = doc(db, "Career Paths", category);
     getDoc(docRef).then((snapshot) => {
-      console.log("new career path node", snapshot.data());
+      console.log("new career path node", snapshot.data().nodes);
       setNewOrg(snapshot.data().nodes);
       // setDrawers(snapshot.data().drawers)
-    });
+    }); }
   }, [category]);
 
   const [newNodes, setNewNodes] = useState(null);
@@ -78,13 +79,13 @@ const TestTree = ({ category }) => {
   useEffect(() => {
     if (newOrg) {
       // all credit Nick 4/21/22 https://stackoverflow.com/questions/71950276/create-hierarchy-from-flat-array-with-children-ids
-      const nodemap = new Map(newOrg.map((n) => [n.attributes.id, n]));
+      const nodemap = new Map(newOrg.map((n) => [n.id, n]));
 
       const tree = (node) => {
         nodemap.delete(node.attributes.id);
         return node.children.length
           ? {
-              id: node.attributes.id,
+              id: node.id,
               attributes: node.attributes,
               salary: node.salary,
               name: node.name,
@@ -96,7 +97,7 @@ const TestTree = ({ category }) => {
       let result = [];
 
       newOrg.forEach((node) => {
-        if (nodemap.has(node.attributes.id)) result.push(tree(node));
+        if (nodemap.has(node.id)) result.push(tree(node));
       });
 
       console.log("bingo", result);

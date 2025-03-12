@@ -490,7 +490,7 @@ setModalInputError("Please provide a brief description of your role.")
             <div className="flex flex-col  space-y-2 mb-16">
               <div class="grid sm:grid-cols-4  align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">
+                  <p className="text-sm text-gray-600">
                     Position Title:
                   </p>
                 </div>
@@ -512,8 +512,22 @@ setModalInputError("Please provide a brief description of your role.")
                     <p className="text-sm "> {experience.positionTitle}</p>
                   )}
                 </div>
+
+              
+             
+
                 <div className="sm:col-span-1 ml-auto">
-                  {isEditCareerGoals ? null : (
+                  {isEditCareerGoals ? ( <button
+                    type="button"
+                    class=" ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm  rounded-lg border border-transparent  text-gray-700 hover:text-gray-900 hover:font-medium"
+                    onClick={() => handleCancel()}
+                  >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7   ">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+</svg>
+
+
+                  </button>) : (
                     <div
                       className=" text-sm ml-auto cursor-pointer text-blue-400 hover:text-blue-600 hover:underline"
                       onClick={() => handleSelectedEdit(experience)}
@@ -526,7 +540,7 @@ setModalInputError("Please provide a brief description of your role.")
               <div className="flex flex-row align-center items-center"></div>
               <div class="grid sm:grid-cols-4  align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">Company:</p>
+                  <p className="text-sm text-gray-600">Company:</p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
                   {isEditCareerGoals &&
@@ -547,9 +561,9 @@ setModalInputError("Please provide a brief description of your role.")
                   )}
                 </div>
               </div>
-              <div class="grid sm:grid-cols-4  mb-2 align-center items-center">
+              <div class="grid sm:grid-cols-4  mb-4 align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">
+                  <p className="text-sm text-gray-600">
                     Dates Employed:
                   </p>
                 </div>
@@ -599,7 +613,7 @@ setModalInputError("Please provide a brief description of your role.")
                           />
                           <label
                             for="af-account-full-name"
-                            class="inline-block text-sm text-gray-600"
+                            class="text-sm text-gray-600"
                             // onClick={() => setIsEmployed(!isEmployed)}
                           >
                             Currently employed
@@ -610,7 +624,7 @@ setModalInputError("Please provide a brief description of your role.")
                   ) : (
                     <div className="flex align-center items-center">
                       <p className="text-sm">{experience.displayStartDate}</p>
-                      <span className="font-medium text-gray-800 mx-1">-</span>
+                      <span className="text-sm text-gray-600 mx-1">-</span>
                       {experience.isEmployed === true ? (
                         <p className="text-sm">Currently Employed</p>
                       ) : (
@@ -622,9 +636,9 @@ setModalInputError("Please provide a brief description of your role.")
               </div>
               {isEditCareerGoals && experience.id === selectedExperience.id ? (
                 <>
-                  <div class="grid sm:grid-cols-4  mb-10 align-center ">
+                  <div class="grid sm:grid-cols-4  mb-10 align-center mt-4">
                     <div class="sm:col-span-1 2xl:col-span-1">
-                      <p className="font-medium text-sm text-gray-800">
+                      <p className="text-sm text-gray-600">
                         Describe your responsibilities: (optional)
                       </p>
                     </div>
@@ -643,7 +657,7 @@ setModalInputError("Please provide a brief description of your role.")
                     </div>
                   </div>
                   <div className="ml-auto mt-8">
-                    <button
+                    {/* <button
                       // onClick={() => onOpen()}
                       onClick={() => handleSubmitAIInput()}
                       type="button"
@@ -662,14 +676,14 @@ setModalInputError("Please provide a brief description of your role.")
                           clipRule="evenodd"
                         />
                       </svg>
-                    </button>
+                    </button> */}
                   </div>
                 </>
               ) : null}
 
               <div class="grid sm:grid-cols-4  mb-10 align-center ">
                 <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">
+                  <p className="text-sm text-gray-600">
                     Role & Responsibilities:
                   </p>
                   {/* {isEditCareerGoals &&
@@ -720,23 +734,23 @@ setModalInputError("Please provide a brief description of your role.")
               </div>
               {isEditCareerGoals && experience.id === selectedExperience.id ? (
                 <div className="ml-auto mt-8">
-                  <button
+                  {/* <button
                     type="button"
                     class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200"
                     onClick={() => handleCancel()}
                   >
                     Cancel
-                  </button>
+                  </button> */}
                   <button
                     type="button"
-                    class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600"
+                    class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm  rounded-lg border border-transparent  text-red-500 hover:text-red-700 hover:font-medium"
                     onClick={() => handleDeleteSelected()}
                   >
                     Delete
                   </button>
                   <button
                     type="button"
-                    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                    class="py-2 px-7 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-500 text-white hover:bg-sky-600 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                     onClick={() => handleUpdate(selectedExperience)}
                   >
                     Save
@@ -971,7 +985,7 @@ setModalInputError("Please provide a brief description of your role.")
             <div className="flex flex-col  space-y-3 z-50 mt-4">
               <div class="grid sm:grid-cols-4  align-center items-center mt-8">
                 <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">
+                  <p className="text-sm text-gray-600">
                     Position Title:
                   </p>
                 </div>
@@ -988,7 +1002,7 @@ setModalInputError("Please provide a brief description of your role.")
               <div className="flex flex-row align-center items-center"></div>
               <div class="grid sm:grid-cols-4  align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800">Company:</p>
+                  <p className="text-sm text-gray-600">Company:</p>
                 </div>
                 <div class="sm:col-span-3 align-center items-center">
                   <input
@@ -1001,7 +1015,7 @@ setModalInputError("Please provide a brief description of your role.")
               </div>
               <div class="grid sm:grid-cols-4  mb-2 align-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
-                  <p className="font-medium text-sm text-gray-800 sm:mt-3">
+                  <p className="text-sm text-gray-600 sm:mt-3">
                     Dates Employed:
                   </p>
                 </div>
@@ -1017,7 +1031,7 @@ setModalInputError("Please provide a brief description of your role.")
                       className="mt-1 py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
                     />
 
-                    <span className="font-medium text-gray-800 mx-2">-</span>
+                    <span className="text-sm text-gray-600 mx-2">-</span>
 
                     <DatePicker
                       dateFormat="MM/yyyy"
@@ -1049,7 +1063,7 @@ setModalInputError("Please provide a brief description of your role.")
               </div>
               <div class="grid sm:grid-cols-4  mb-2 align-center">
                 <div class="sm:col-span-1 2xl:col-span-1 flex flex-col">
-                  <p className="font-medium text-sm text-gray-800">
+                  <p className="text-sm text-gray-600">
                     Role & Responsibilities:
                   </p>
                   <button

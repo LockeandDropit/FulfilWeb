@@ -645,12 +645,12 @@ const DoerHeader = () => {
                         Career Coach
                       </p>
                     </MenuItem>
-                    <MenuItem onClick={() => navigate("/CareerPaths")}>
+                    {/* <MenuItem onClick={() => navigate("/CareerPaths")}>
                       <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
                         {" "}
                         Career Paths
                       </p>
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem onClick={() => navigate("/Resources")}>
                       <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
                         {" "}

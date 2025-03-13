@@ -27,23 +27,32 @@ const CareerPaths = () => {
             class="mt-2 py-3 px-4 pe-9 block sm:w-1/4 w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
           >
             <option value="">Open this select menu</option>
+            <option value="boilermaker">Boilermaker</option>
             <option value="carpentry">Carpentry</option>
+         
             <option value="class b">Class B Driver</option>
             <option value="construction">Construction</option>
             <option value="construction equipment operator">
               Construction Equipment Operator
             </option>
+            <option value="crane operator">Crane Operator</option>
             <option value="electrician">Electrician</option>
             <option value="hvac">HVAC</option>
             <option value="industrial mechanic">Industrial Mechanic</option>
             <option value="lineman">Lineman</option>
+            <option value="landscaper & groundskeeper">Landscaper/Groundskeeper</option>
+           
             <option value="machinist">Machinist</option>
+            <option value="mason">Mason (Bricklayer/Block Mason)</option>
             <option value="metal fabrication">Metal Fabrication</option>
             <option value="nuclear technician">Nuclear Technician</option>
+            <option value="painter (residential & commercial)">Painter (Residential & Commercial)</option>
             <option value="plumbing">Plumbing</option>
             <option value="power plant operators, distributors, and dispatchers">
               Power plant operators, distributors, and dispatchers
             </option>
+           
+            <option value="solar panel installer">Solar Panel Installer</option>
             <option value="trucking">Trucking</option>
             <option value="warehouse operations">Warehouse Operations</option>
             <option value="welding">Welding</option>

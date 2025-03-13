@@ -2,256 +2,289 @@ import { useState, useEffect } from "react";
 import { getDoc, doc, updateDoc, collection } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 
-
 const UploadToBackEnd = () => {
-  
-  
   //call open ai, fetch data for state.
 
-    const [returnedResponse, setReturnedResponse] = useState(
-     [  {
-      "id": 1,
-      "jobTitle": "Warehouse Operations Entry Overview",
-      "JobOverview": "The warehouse operations field is a dynamic and integral component of the supply chain, providing a foundation for diverse career paths. This entry overview introduces newcomers to the core functions of warehousing—including material handling, inventory control, safety compliance, and equipment operation—while outlining the fundamental skills and training necessary to progress in the trade.",
-      "KeyResponsibilities": [
-        "Gain a comprehensive understanding of warehouse functions including order processing, inventory storage, and distribution.",
-        "Learn and apply basic inventory management techniques such as stock rotation, cycle counts, and data entry using warehouse management systems.",
-        "Operate essential warehouse equipment under close supervision, ensuring adherence to established safety protocols.",
-        "Develop a basic understanding of workplace safety standards and emergency procedures."
-      ],
-      "Qualifications": [
-        "High school diploma or equivalent with an emphasis on math and communication skills.",
-        "Basic understanding of physical work environments and willingness to learn through on-the-job training.",
-        "Commitment to following safety guidelines and protocols.",
-        "Ability to work in a physically demanding environment and adapt to new operational processes."
-      ]
-    },
-    {
-      "id": 2,
-      "jobTitle": "Warehouse Associate",
-      "JobOverview": "Warehouse Associates are the backbone of daily warehouse operations. They manage the intake and organization of shipments, ensure that products are correctly stocked, and assist with order fulfillment. Their role is critical to maintaining the flow of inventory and ensuring that safety and quality standards are consistently met.",
-      "KeyResponsibilities": [
-        "Efficiently receive, inspect, and document incoming shipments while verifying quality and accuracy.",
-        "Stock shelves and systematically organize inventory to facilitate efficient retrieval.",
-        "Assist with order picking, packing, and shipping processes using handheld scanners and warehouse management systems.",
-        "Maintain a clean, organized work area by adhering to safety and operational standards."
-      ],
-      "Qualifications": [
-        "High school diploma or equivalent; previous warehouse or manual labor experience is beneficial.",
-        "Basic understanding of warehouse processes and inventory management systems.",
-        "Good communication skills and strong attention to detail.",
-        "Physical stamina and ability to operate basic warehouse equipment safely."
-      ]
-    },
-    {
-      "id": 3,
-      "jobTitle": "Forklift Operator",
-      "JobOverview": "Forklift Operators are responsible for the safe and efficient movement of heavy materials throughout the warehouse. Their expertise in operating forklifts ensures that materials are transported and stored properly, reducing the risk of damage and injury while maintaining operational flow.",
-      "KeyResponsibilities": [
-        "Safely operate forklifts to move heavy loads across designated areas within the warehouse.",
-        "Conduct routine safety and maintenance checks on equipment to ensure optimal performance.",
-        "Coordinate with team members to plan the best routes for moving materials.",
-        "Document and report any equipment issues or safety hazards immediately."
-      ],
-      "Qualifications": [
-        "Valid forklift certification along with a high school diploma or equivalent.",
-        "Prior experience with heavy machinery is preferred, though training may be provided.",
-        "Strong adherence to safety procedures and protocols.",
-        "Excellent spatial awareness and coordination skills."
-      ]
-    },
-    {
-      "id": 4,
-      "jobTitle": "Senior Warehouse Associate",
-      "JobOverview": "Senior Warehouse Associates take on advanced operational responsibilities within the warehouse. They lead day-to-day activities, mentor new staff, and ensure that inventory management and order fulfillment processes are executed with high accuracy and efficiency.",
-      "KeyResponsibilities": [
-        "Supervise daily warehouse activities to ensure timely and accurate processing of orders.",
-        "Train and mentor new associates on best practices in inventory handling and safety protocols.",
-        "Oversee and perform periodic inventory audits and reconcile discrepancies.",
-        "Implement process improvements to optimize workflow and maintain high safety standards."
-      ],
-      "Qualifications": [
-        "2-4 years of hands-on warehouse experience with proven leadership and mentoring skills.",
-        "Familiarity with inventory management systems and standard operating procedures.",
-        "Strong organizational skills and the ability to handle multiple tasks simultaneously.",
-        "Ability to maintain high accuracy in a fast-paced work environment."
-      ]
-    },
-    {
-      "id": 5,
-      "jobTitle": "Inventory Control Specialist",
-      "JobOverview": "Inventory Control Specialists ensure the accuracy and integrity of inventory records by conducting systematic audits and reconciling discrepancies. Their analytical approach and proficiency with warehouse management systems support efficient procurement and distribution processes.",
-      "KeyResponsibilities": [
-        "Perform regular inventory audits and reconcile stock levels using advanced management systems.",
-        "Maintain detailed and accurate records to support operational efficiency.",
-        "Collaborate with purchasing and sales teams to forecast inventory needs.",
-        "Develop strategies to reduce shrinkage and improve overall inventory accuracy."
-      ],
-      "Qualifications": [
-        "2-4 years of experience in warehouse or inventory management roles.",
-        "Proficiency in using inventory management software and data analysis tools.",
-        "Strong analytical skills and attention to detail.",
-        "Ability to communicate effectively with cross-functional teams."
-      ]
-    },
-    {
-      "id": 6,
-      "jobTitle": "Forklift Supervisor",
-      "JobOverview": "Forklift Supervisors manage teams of forklift operators to ensure that material handling tasks are executed safely and efficiently. They are responsible for scheduling, conducting training sessions, and enforcing maintenance and safety protocols across the team.",
-      "KeyResponsibilities": [
-        "Oversee and schedule forklift operators to optimize material handling operations.",
-        "Conduct regular training sessions and performance evaluations focused on safety and operational efficiency.",
-        "Coordinate maintenance schedules and ensure timely repairs for all forklift equipment.",
-        "Monitor daily operations and enforce adherence to all safety guidelines and protocols."
-      ],
-      "Qualifications": [
-        "3-5 years of forklift operation experience with demonstrated leadership abilities.",
-        "Current forklift certification and comprehensive knowledge of safety regulations.",
-        "Strong communication skills and the ability to manage a team effectively.",
-        "Experience with scheduling, training, and equipment maintenance coordination."
-      ]
-    },
-    {
-      "id": 7,
-      "jobTitle": "Lead Forklift Operator",
-      "JobOverview": "Lead Forklift Operators combine expert equipment handling with team leadership. They ensure that daily forklift operations run smoothly by coordinating activities, monitoring equipment performance, and serving as a critical link between frontline operators and management.",
-      "KeyResponsibilities": [
-        "Direct the daily operations of forklift teams to ensure efficient material movement.",
-        "Closely monitor equipment performance and oversee routine safety inspections.",
-        "Collaborate with management to identify and implement process improvements.",
-        "Maintain detailed logs and records of operational activities, supporting training initiatives."
-      ],
-      "Qualifications": [
-        "3-5 years of hands-on forklift operation experience with proven leadership skills.",
-        "Strong understanding of warehouse logistics and safety procedures.",
-        "Excellent problem-solving abilities and the capability to work under pressure.",
-        "Effective communication skills and a proactive approach to team management."
-      ]
-    },
-    {
-      "id": 8,
-      "jobTitle": "Warehouse Manager",
-      "JobOverview": "Warehouse Managers oversee the comprehensive operations of a warehouse facility, managing logistics, inventory control, staffing, and safety compliance. They develop strategic initiatives to improve efficiency, reduce costs, and ensure that operations meet both regulatory and company standards.",
-      "KeyResponsibilities": [
-        "Supervise all aspects of daily warehouse operations, including order fulfillment and logistics coordination.",
-        "Develop and implement strategic initiatives to optimize operational efficiency and reduce costs.",
-        "Manage staffing, including recruitment, scheduling, and performance evaluations.",
-        "Ensure strict adherence to safety regulations and implement proactive risk management measures."
-      ],
-      "Qualifications": [
-        "5-7 years of experience in warehouse management or related operational roles.",
-        "Strong leadership skills and a track record of effective team management.",
-        "Experience with inventory, logistics software, and budget management.",
-        "Excellent organizational and strategic planning abilities with a focus on continuous improvement."
-      ]
-    },
-    {
-      "id": 9,
-      "jobTitle": "Logistics Coordinator",
-      "JobOverview": "Logistics Coordinators are key to ensuring the smooth distribution of goods both within and outside the warehouse. They plan and coordinate shipments, work closely with transportation providers, and analyze data to optimize logistics and supply chain efficiency.",
-      "KeyResponsibilities": [
-        "Plan and schedule shipments to guarantee timely delivery and efficient resource allocation.",
-        "Coordinate with transportation providers and internal departments to optimize routing and distribution.",
-        "Monitor and manage inventory distribution to ensure alignment with order fulfillment standards.",
-        "Analyze logistics data to identify inefficiencies and propose actionable improvements."
-      ],
-      "Qualifications": [
-        "4-6 years of experience in logistics or warehouse operations with a focus on coordination.",
-        "Proficiency in logistics software and data analysis tools.",
-        "Strong analytical skills and the ability to develop actionable insights from operational data.",
-        "Excellent communication and collaboration skills to work with multiple stakeholders."
-      ]
-    },
-    {
-      "id": 10,
-      "jobTitle": "Operations Manager",
-      "JobOverview": "Operations Managers are responsible for the overall performance of warehouse operations, including strategic planning, team management, and budget oversight. They drive continuous improvement initiatives and ensure that the facility operates at peak efficiency while meeting all quality and safety standards.",
-      "KeyResponsibilities": [
-        "Develop and implement comprehensive strategic plans to drive operational efficiency.",
-        "Oversee multiple teams and coordinate cross-departmental activities within the warehouse.",
-        "Monitor key performance indicators (KPIs) and implement continuous improvement processes.",
-        "Manage budgets, vendor relationships, and resource allocation to ensure cost-effective operations."
-      ],
-      "Qualifications": [
-        "6-8 years of experience in warehouse and logistics operations with proven leadership skills.",
-        "Strong analytical and problem-solving skills with a focus on strategic planning.",
-        "Experience in budget management, process optimization, and cross-functional team leadership.",
-        "Excellent communication skills and the ability to manage complex operational challenges."
-      ]
-    },
-    {
-      "id": 11,
-      "jobTitle": "Warehouse Operations Entrepreneur",
-      "JobOverview": "Warehouse Operations Entrepreneurs leverage extensive industry expertise to launch and grow their own warehouse businesses. They are responsible for business planning, operational oversight, and implementing innovative strategies that drive efficiency, profitability, and market expansion.",
-      "KeyResponsibilities": [
-        "Develop comprehensive business plans, secure financing, and establish operational frameworks for new ventures.",
-        "Oversee all aspects of warehouse operations including procurement, logistics, staffing, and customer service.",
-        "Implement innovative technologies and strategies to improve efficiency and reduce operational costs.",
-        "Cultivate strong client relationships and identify new market opportunities to drive business growth."
-      ],
-      "Qualifications": [
-        "8+ years of industry experience with a deep understanding of warehouse operations and market dynamics.",
-        "Strong entrepreneurial mindset coupled with advanced skills in business management and strategic planning.",
-        "Demonstrated ability to manage risk, innovate, and drive continuous improvement in operations.",
-        "Excellent leadership, communication, and financial management skills."
-      ]
-    }]
-);
-
+  const [returnedResponse, setReturnedResponse] = useState(
+    [
+      {
+        "id": 1,
+        "jobTitle": "Solar Panel Installer Career Overview",
+        "JobOverview": "This overview provides a comprehensive introduction to the solar panel installation trade in Minnesota. It covers the progression from entry-level positions to specialized technical roles and entrepreneurial opportunities, emphasizing rigorous hands-on training, adherence to stringent safety protocols, and continuous technical education. Professionals in this field benefit from union-supported training programs and competitive wages, with a focus on sustainable energy solutions.",
+        "KeyResponsibilities": [
+          "Explore and evaluate various career pathways and training programs in the solar energy field.",
+          "Develop a strong foundation in solar technology, electrical systems, and renewable energy principles.",
+          "Gain in-depth knowledge of safety protocols, regulatory standards, and union guidelines specific to Minnesota.",
+          "Engage in ongoing education through certifications, workshops, and practical on-site training.",
+          "Research local industry trends, technological advancements, and wage standards in the renewable energy sector."
+        ],
+        "Qualifications": [
+          "High school diploma or equivalent; coursework in math, physics, or technical subjects is advantageous.",
+          "Basic understanding of electrical systems and mechanical principles.",
+          "Strong interest in renewable energy, sustainability, and new technology.",
+          "Willingness to engage in comprehensive on-the-job training, including union-sponsored programs.",
+          "Good physical condition with the ability to work outdoors in varying weather conditions."
+        ]
+      },
+      {
+        "id": 2,
+        "jobTitle": "Solar Panel Installer Apprentice",
+        "JobOverview": "As a Solar Panel Installer Apprentice, you will start your career by acquiring essential hands-on skills under the guidance of seasoned professionals. This entry-level role emphasizes learning fundamental installation techniques, safety protocols, and the proper use and maintenance of tools in a union-supported training environment.",
+        "KeyResponsibilities": [
+          "Assist experienced installers with mounting solar panels, wiring systems, and configuration of components.",
+          "Learn and practice proper tool usage, maintenance, and storage techniques.",
+          "Follow detailed safety protocols to maintain a secure work environment at all times.",
+          "Prepare and organize job sites by setting up ladders, scaffolding, and safety barriers.",
+          "Document daily tasks, report challenges, and actively participate in training sessions."
+        ],
+        "Qualifications": [
+          "High school diploma or GED; additional vocational or technical coursework is a plus.",
+          "Basic electrical knowledge and mechanical aptitude with a keen interest in learning.",
+          "Physically fit and capable of handling manual labor, including working at heights.",
+          "Strong attention to detail and a commitment to adhering to safety protocols.",
+          "Good communication skills and the ability to work effectively within a team."
+        ]
+      },
+      {
+        "id": 3,
+        "jobTitle": "Junior Solar Panel Installer",
+        "JobOverview": "Building on apprenticeship experience, the Junior Solar Panel Installer undertakes more independent installation tasks. This role is pivotal in executing standard residential and small-scale commercial solar projects while ensuring compliance with local codes, safety standards, and union regulations.",
+        "KeyResponsibilities": [
+          "Independently install solar panels on residential rooftops and small commercial properties following established guidelines.",
+          "Assist in the setup, maintenance, and orderly breakdown of job sites.",
+          "Conduct routine inspections, perform troubleshooting, and make minor repairs as needed.",
+          "Collaborate with team members to ensure timely completion and quality of installations.",
+          "Adhere to local building codes, safety standards, and union requirements throughout all projects."
+        ],
+        "Qualifications": [
+          "Successful completion of an apprenticeship or equivalent training in solar installations.",
+          "Basic understanding of electrical circuits, solar technology, and essential safety practices.",
+          "Ability to interpret technical drawings, installation blueprints, and schematics.",
+          "Strong work ethic, attention to detail, and commitment to high-quality workmanship.",
+          "Ability to work in outdoor environments under diverse weather conditions."
+        ]
+      },
+      {
+        "id": 4,
+        "jobTitle": "Certified Solar Panel Technician",
+        "JobOverview": "The Certified Solar Panel Technician is a highly skilled professional with recognized certifications, capable of independently executing installations and advanced diagnostics. This role requires a deep understanding of solar system configurations, electrical troubleshooting, and adherence to strict safety and quality standards.",
+        "KeyResponsibilities": [
+          "Execute complete solar panel installations on various roof types, including complex configurations.",
+          "Perform thorough system diagnostics, identify issues, and implement corrective measures.",
+          "Ensure compliance with local, state, and federal safety regulations, including union guidelines.",
+          "Maintain comprehensive documentation of installation procedures, test results, and certifications.",
+          "Provide technical guidance and training support to junior installers when required."
+        ],
+        "Qualifications": [
+          "Possession of industry certification in solar panel installation (e.g., NABCEP).",
+          "1-2 years of hands-on installation experience demonstrating technical proficiency.",
+          "Comprehensive knowledge of local building codes, electrical standards, and safety protocols.",
+          "Strong problem-solving skills with the ability to troubleshoot complex technical issues.",
+          "Excellent communication skills and a collaborative approach to team training."
+        ]
+      },
+      {
+        "id": 5,
+        "jobTitle": "Residential Solar Panel Installer",
+        "JobOverview": "Specializing in residential projects, the Residential Solar Panel Installer designs and installs customized solar systems for homeowners. This role focuses on providing energy-efficient solutions that meet unique residential needs while ensuring high-quality workmanship and customer satisfaction.",
+        "KeyResponsibilities": [
+          "Conduct detailed assessments of residential properties to determine optimal solar panel placement.",
+          "Design and install custom solar systems, integrating panels, inverters, and electrical components.",
+          "Perform comprehensive system inspections and routine maintenance to ensure efficiency and longevity.",
+          "Advise homeowners on energy consumption, potential system upgrades, and cost-saving measures.",
+          "Collaborate closely with clients to tailor installations to specific energy needs and aesthetic preferences."
+        ],
+        "Qualifications": [
+          "Proven experience in residential solar installations with a portfolio of successful projects.",
+          "Strong understanding of residential electrical systems, solar technology, and energy efficiency standards.",
+          "Excellent customer service skills and the ability to communicate technical information clearly.",
+          "Ability to work independently, manage project timelines, and deliver high-quality results.",
+          "Familiarity with local building codes, permit processes, and safety regulations."
+        ]
+      },
+      {
+        "id": 6,
+        "jobTitle": "Experienced Solar Panel Installer",
+        "JobOverview": "With several years of practical experience, the Experienced Solar Panel Installer manages complex installation projects independently. This role demands advanced technical expertise, proactive problem-solving, and the leadership required to mentor junior team members within a unionized environment.",
+        "KeyResponsibilities": [
+          "Plan and execute complex solar panel installations, ensuring alignment with project specifications and deadlines.",
+          "Diagnose and resolve intricate technical issues during installation using advanced troubleshooting techniques.",
+          "Provide mentorship and on-the-job training to apprentices and junior installers.",
+          "Coordinate with project managers, contractors, and other stakeholders to ensure project success.",
+          "Maintain meticulous documentation of installation procedures, safety compliance, and quality control metrics."
+        ],
+        "Qualifications": [
+          "Minimum of 3-5 years of hands-on solar panel installation experience with a proven record of success.",
+          "Advanced technical knowledge of solar systems, electrical circuits, and modern installation methods.",
+          "Strong leadership and project management skills with a focus on mentoring and teamwork.",
+          "Ability to work independently under challenging conditions and adapt to evolving project requirements.",
+          "Familiarity with union standards and a commitment to continuous professional development."
+        ]
+      },
+      {
+        "id": 7,
+        "jobTitle": "Commercial Solar Panel Installer",
+        "JobOverview": "The Commercial Solar Panel Installer specializes in large-scale projects for commercial and industrial facilities. This role requires meticulous planning, precise execution, and strong coordination with multiple stakeholders to meet the rigorous standards of commercial installations.",
+        "KeyResponsibilities": [
+          "Plan, design, and execute large-scale solar installations for commercial and industrial facilities.",
+          "Coordinate with architects, engineers, and contractors to ensure installations meet commercial building requirements.",
+          "Conduct thorough quality assurance inspections and enforce strict safety protocols on all projects.",
+          "Manage logistics such as equipment transport, site setup, and adherence to regulatory standards.",
+          "Adapt installation techniques to accommodate diverse commercial structures and energy demands."
+        ],
+        "Qualifications": [
+          "A minimum of 3 years of specialized experience in commercial solar installations.",
+          "Proficient in reading and interpreting technical blueprints, electrical schematics, and detailed installation plans.",
+          "Strong organizational and project management skills with an acute attention to detail.",
+          "Excellent problem-solving abilities and experience coordinating multi-stakeholder projects.",
+          "In-depth understanding of commercial building codes, safety regulations, and union wage standards."
+        ]
+      },
+      {
+        "id": 8,
+        "jobTitle": "Lead Solar Panel Technician",
+        "JobOverview": "The Lead Solar Panel Technician holds an advanced role, overseeing complex projects and multiple installation teams. This position requires exceptional technical acumen, strategic planning, and effective communication to drive operational excellence and maintain stringent quality and safety standards.",
+        "KeyResponsibilities": [
+          "Supervise and coordinate multiple installation teams on high-priority projects.",
+          "Implement and monitor rigorous quality control measures and safety protocols across installations.",
+          "Develop and refine installation strategies to optimize efficiency and reduce project timelines.",
+          "Conduct advanced diagnostics, technical audits, and performance evaluations on installed systems.",
+          "Mentor both new and experienced technicians, providing guidance on complex technical issues."
+        ],
+        "Qualifications": [
+          "Over 5 years of extensive experience in solar panel installations with proven leadership capabilities.",
+          "Advanced technical certifications in solar energy systems and electrical work (e.g., NABCEP, OSHA).",
+          "Demonstrated expertise in managing complex projects and coordinating cross-functional teams.",
+          "Excellent strategic planning, decision-making, and communication skills.",
+          "Strong commitment to quality, safety, and continuous process improvement."
+        ]
+      },
+      {
+        "id": 9,
+        "jobTitle": "Senior Solar Panel Installer",
+        "JobOverview": "The Senior Solar Panel Installer is a top-tier professional responsible for managing the most challenging installations. This role requires innovative thinking, high technical proficiency, and a strong ability to mentor and guide junior installers while ensuring optimal system performance and compliance with strict safety standards.",
+        "KeyResponsibilities": [
+          "Independently execute advanced solar panel installations using the latest industry technologies.",
+          "Develop and implement innovative solutions to enhance system performance and energy efficiency.",
+          "Provide technical leadership and mentorship to junior installers, fostering professional growth.",
+          "Maintain detailed records of installation processes, performance data, and troubleshooting efforts.",
+          "Ensure all installations adhere to the most current safety regulations, union standards, and quality benchmarks."
+        ],
+        "Qualifications": [
+          "Over 5 years of extensive hands-on experience in solar panel installation across diverse environments.",
+          "Expert-level proficiency with advanced installation techniques, system diagnostics, and optimization.",
+          "Strong leadership qualities with a proven history of mentoring and guiding junior team members.",
+          "Ability to work independently, manage complex projects, and integrate emerging technologies.",
+          "In-depth knowledge of regulatory standards, union wage guidelines, and safety protocols in Minnesota."
+        ]
+      },
+      {
+        "id": 10,
+        "jobTitle": "Solar Installation Contractor",
+        "JobOverview": "The Solar Installation Contractor represents the entrepreneurial pathway within the solar installation industry. This role not only requires advanced technical expertise but also demands strong business acumen to oversee project management, financial planning, and regulatory compliance from bid to completion.",
+        "KeyResponsibilities": [
+          "Oversee the entire project lifecycle, including bidding, planning, scheduling, and execution.",
+          "Manage installation crews, subcontractors, and vendor relationships to ensure high-quality outcomes.",
+          "Handle budgeting, cost estimation, and resource allocation for multiple concurrent projects.",
+          "Ensure strict compliance with regulatory, safety, and union guidelines across all projects.",
+          "Cultivate and maintain strong client relationships through effective communication and reliable service delivery."
+        ],
+        "Qualifications": [
+          "At least 7+ years of extensive experience in solar panel installations with proven project management skills.",
+          "Robust understanding of construction management, financial planning, and regulatory compliance.",
+          "Excellent leadership skills with experience managing large teams and complex projects.",
+          "Valid contractor’s license along with relevant industry certifications and credentials.",
+          "Proven ability to negotiate contracts, manage budgets, and deliver projects on time and within scope."
+        ]
+      },
+      {
+        "id": 11,
+        "jobTitle": "Master Residential Installer",
+        "JobOverview": "The Master Residential Installer specializes in high-end, custom residential solar projects. This role demands exceptional technical expertise, advanced design capabilities, and a deep understanding of client needs to deliver tailor-made, energy-efficient solutions that exceed expectations.",
+        "KeyResponsibilities": [
+          "Design, plan, and execute custom solar panel installations tailored to the unique requirements of each residential client.",
+          "Conduct comprehensive assessments of residential properties to determine optimal system configurations.",
+          "Implement cutting-edge installation techniques and advanced troubleshooting for complex projects.",
+          "Provide detailed post-installation support, including regular maintenance and system optimization.",
+          "Offer expert consultation on energy efficiency improvements, potential upgrades, and innovative solar technologies."
+        ],
+        "Qualifications": [
+          "Over 7 years of specialized experience in high-end residential solar installations.",
+          "Expert-level technical skills in solar system design, electrical engineering, and custom installations.",
+          "Outstanding customer service and advisory capabilities with a proven track record of successful projects.",
+          "In-depth knowledge of residential construction, local building codes, and safety regulations.",
+          "Ability to innovate and adapt to emerging solar technologies and evolving industry standards."
+        ]
+      }
+    ]
+    
+  );
 
   //return data
 
   //on return, upload to firebase.
 
-    const uploadCareerPathNodes = async () => {
-      await updateDoc(doc(db, "Career Paths", 'warehouse operations'), {
-        nodes: returnedResponse,
-      });
-    };
+  const uploadCareerPathNodes = async () => {
+    await updateDoc(doc(db, "Career Paths", "solar panel installer"), {
+      nodes: returnedResponse,
+    });
+  };
 
-    const uploadCareerPathDrawers = async () => {
-      await updateDoc(doc(db, "Career Paths", 'warehouse operations'), {
-        drawers: returnedResponse,
-      });
-    };
+  const uploadCareerPathDrawers = async () => {
+    await updateDoc(doc(db, "Career Paths", "solar panel installer"), {
+      drawers: returnedResponse,
+    });
+  };
 
-    const uploadCareerPathMisc = async () => {
-      await updateDoc(doc(db, "Career Paths", 'warehouse operations'), {
-        misc: returnedResponse,
-      });
-    };
+  const uploadCareerPathMisc = async () => {
+    await updateDoc(doc(db, "Career Paths", "solar panel installer"), {
+      misc: returnedResponse,
+    });
+  };
 
-  //test render for Data structure  
+  //test render for Data structure
 
+  const [resources, setResources] = useState(null);
 
-
-  const [resources, setResources] = useState(null)
-  
-  const testRender =  async () => {
+  const testRender = async () => {
     await getDoc(doc(db, "ResourcesByState", "wyoming")).then((snapshot) => {
-        setResources(snapshot.data().resources)
-        console.log("resources", snapshot.data().resources)
-    })
-  } 
+      setResources(snapshot.data().resources);
+      console.log("resources", snapshot.data().resources);
+    });
+  };
 
-  
-  
-  
-    return (
-<>
-    <div>UploadToBackEnd</div>
+  return (
+    <>
+      <div>UploadToBackEnd</div>
 
-    <button className=" white text-black border ml-2" onClick={() => uploadCareerPathNodes()} > upload nodes </button>
+      <button
+        className=" white text-black border ml-2"
+        onClick={() => uploadCareerPathNodes()}
+      >
+        {" "}
+        upload nodes{" "}
+      </button>
 
-    <button className=" white text-black border ml-4" onClick={() => uploadCareerPathDrawers()} > upload drawers </button>
-    <button className=" white text-black border ml-4" onClick={() => uploadCareerPathMisc()} > upload misc </button>
+      <button
+        className=" white text-black border ml-4"
+        onClick={() => uploadCareerPathDrawers()}
+      >
+        {" "}
+        upload drawers{" "}
+      </button>
+      <button
+        className=" white text-black border ml-4"
+        onClick={() => uploadCareerPathMisc()}
+      >
+        {" "}
+        upload misc{" "}
+      </button>
 
-    
-    {resources?.map((resource) => (
+      {resources?.map((resource) => (
         <p>{resource.name}</p>
-    ))}
+      ))}
     </>
-  )
-}
+  );
+};
 
-export default UploadToBackEnd
+export default UploadToBackEnd;

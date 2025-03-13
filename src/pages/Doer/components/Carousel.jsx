@@ -49,7 +49,7 @@ const Carousel = ({slides}) => {
  {slides?.map((job) => (
               
           
-              <div className="flex flex-col sm:flex-row mt-4 md:mt-6 p-1 w-5/6  ">
+              <div className="flex flex-col sm:flex-row mt-4 md:mt-6 p-1 w-5/6  h-full">
                 <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                   <div class="flex justify-between">
                     <div class="flex flex-col justify-center items-center  ">
@@ -87,7 +87,7 @@ const Carousel = ({slides}) => {
                       ${job.pay_rate}
                     </h3>
 
-                    <p class="mt-3 text-gray-700 line-clamp-4">
+                    <p class="mt-3 text-gray-700 line-clamp-3">
                       {job.job_description}
                     </p>
                   </div>

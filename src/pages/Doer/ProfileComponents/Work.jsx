@@ -15,8 +15,13 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   useDisclosure,
 } from "@chakra-ui/react";
+
 import Markdown from "react-markdown";
 import { Box } from "@chakra-ui/react";
 // import { useUserStore } from "../Chat/lib/userStore";
@@ -324,7 +329,7 @@ setModalInputError("Please provide a brief description of your role.")
     }
   }, [currentUser]);
 
-  const handleDeleteSelected = async () => {
+  const handleDeleteSelected = async (item) => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
 
@@ -339,7 +344,7 @@ setModalInputError("Please provide a brief description of your role.")
       .map(function (x) {
         return x.id;
       })
-      .indexOf(selectedExperience.id);
+      .indexOf(item.id);
 
     //DO NOT REMOVE THESE CONSOLE LOGS. THEY ARE HANDLING THE REMOVAL OF THE SELECTED ITEM??????
     console.log("resume Index", resumeIndex);
@@ -351,10 +356,9 @@ setModalInputError("Please provide a brief description of your role.")
       experience: resumeData.experience,
     }).then(() => {
       changeListener();
-      setUpdateIsLoading(false);
+      
       //set all local values null for updating/editing purposes.
       setTextEditorLoading(true);
-      setSelectedExperience(null);
       setEditorState(null);
       setEndDate(null);
       setStartDate(null);
@@ -362,6 +366,12 @@ setModalInputError("Please provide a brief description of your role.")
       setCompanyName(null);
       setPositionTitle(null);
       setIsEditCareerGoals(!isEditCareerGoals);
+
+      //this set timeout is so the ui doesn't try to rebnder the selectedExperience while ther is no selectedExperience
+      setTimeout(() => {
+        setSelectedExperience(null);
+        setUpdateIsLoading(false);
+      }, 300)
     });
   };
 
@@ -517,23 +527,50 @@ setModalInputError("Please provide a brief description of your role.")
              
 
                 <div className="sm:col-span-1 ml-auto">
-                  {isEditCareerGoals ? ( <button
-                    type="button"
-                    class=" ml-auto py-2 px-3 inline-flex items-center gap-x-2 text-sm  rounded-lg border border-transparent  text-gray-700 hover:text-gray-900 hover:font-medium"
-                    onClick={() => handleCancel()}
-                  >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-7   ">
-  <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  {isEditCareerGoals ? (null) : (
+
+<Menu>
+<MenuButton _hover={{ textDecoration: "underline" }}>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
 </svg>
 
 
-                  </button>) : (
-                    <div
-                      className=" text-sm ml-auto cursor-pointer text-blue-400 hover:text-blue-600 hover:underline"
-                      onClick={() => handleSelectedEdit(experience)}
+</MenuButton>
+<MenuList>
+<MenuItem   onClick={() => handleSelectedEdit(experience)}>
+<div
+                      className=" text-sm cursor-pointer text-blue-400 hover:text-blue-600 hover:underline flex w-full"
+                 
                     >
-                      Edit
+                
+Edit
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 ml-auto">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+</svg>
+
+
                     </div>
+  </MenuItem>
+  <MenuItem onClick={() => handleDeleteSelected(experience)}>
+  <div
+                      className="flex text-sm cursor-pointer text-red-400 hover:text-red-600 hover:underline w-full"
+                 
+                    >
+                
+Delete
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5  ml-auto ">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+</svg>
+                    </div>
+  </MenuItem>
+
+
+ 
+
+</MenuList>
+</Menu>
+                    
                   )}
                 </div>
               </div>
@@ -743,10 +780,10 @@ setModalInputError("Please provide a brief description of your role.")
                   </button> */}
                   <button
                     type="button"
-                    class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm  rounded-lg border border-transparent  text-red-500 hover:text-red-700 hover:font-medium"
-                    onClick={() => handleDeleteSelected()}
+                    class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm  rounded-lg border border-transparent  text-gray-600 hover:text-gray-700 hover:bg-gray-100 font-medium "
+                    onClick={() => handleCancel()}
                   >
-                    Delete
+                    Cancel
                   </button>
                   <button
                     type="button"

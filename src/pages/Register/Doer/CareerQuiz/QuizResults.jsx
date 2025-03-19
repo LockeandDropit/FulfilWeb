@@ -120,7 +120,7 @@ const QuizResults = ({ handleIncrementFormIndex }) => {
 
   useEffect(() => {
 setTimeout(() => {
-getRecommendation()
+// getRecommendation()
 }, 2000)
   },[])
 

@@ -6,10 +6,10 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 
 const Hero = () => {
   const handleNavigateAndCaptureFunnel = () => {
-    posthog.capture("navigate_to_sign_up");
+    posthog.capture("navigate_to_quiz");
     // navigate("/DoerEmailRegister");
     // navigate("/DoerEmailRegister");
-    navigate("/OnboardingOneDoer");
+    navigate("/QuizFormHolder");
   };
 
   const navigate = useNavigate();
@@ -44,6 +44,29 @@ const Hero = () => {
               onClick={handleNavigateAndCaptureFunnel}
             >
               <a class="py-3 px-4 inline-flex justify-center cursor-pointer items-center gap-x-2 font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-non">
+              📝 Career Match Quiz (2 Minutes)   
+                <svg
+                  class="shrink-0 size-4 mt-0.5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </a>
+            </div>
+
+            {/* <div
+              class="mt-7 grid gap-3 w-full sm:inline-flex"
+              onClick={handleNavigateAndCaptureFunnel}
+            >
+              <a class="py-3 px-4 inline-flex justify-center cursor-pointer items-center gap-x-2 font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-non">
                 Get Started
                 <svg
                   class="shrink-0 size-4"
@@ -60,7 +83,7 @@ const Hero = () => {
                   <path d="m9 18 6-6-6-6" />
                 </svg>
               </a>
-            </div>
+            </div> */}
           </div>
 
           <div class="relative">

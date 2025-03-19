@@ -233,6 +233,13 @@ const LoggedOutHeader = (props) => {
     }
   };
 
+  const handleNavigateAndCaptureFunnel = () => {
+    posthog.capture("navigate_to_quiz");
+    // navigate("/DoerEmailRegister");
+    // navigate("/DoerEmailRegister");
+    navigate("/QuizFormHolder");
+  };
+
   const handleClose = () => {
     onClose();
   };
@@ -285,14 +292,14 @@ const LoggedOutHeader = (props) => {
                       About
                     </a>
                   </div>
-                  <div>
+                  {/* <div>
                     <a
                       class="inline-block text-gray-500 hover:text-gray-700 cursor-pointer focus:outline-none focus:text-gray-600 "
                       onClick={() => navigate("/Careers")}
                     >
                       Careers
                     </a>
-                  </div>
+                  </div> */}
                   <div>
                     <a
                       class="inline-block text-gray-500 hover:text-gray-700 cursor-pointer focus:outline-none focus:text-gray-600 "
@@ -330,7 +337,7 @@ const LoggedOutHeader = (props) => {
                   <button
                     type="button"
                     className="py-2.5 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    onClick={() => handleCaptureAndNavigate()}
+                    onClick={() => handleNavigateAndCaptureFunnel()}
                   >
                     <svg
                       class="flex-shrink-0 size-4"
@@ -392,7 +399,7 @@ const LoggedOutHeader = (props) => {
                   <button
                     type="button"
                     className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
-                    onClick={() => navigate("/OnboardingOneDoer")}
+                    onClick={() => handleNavigateAndCaptureFunnel()}
                   >
                     <svg
                       class="flex-shrink-0 size-4"
@@ -568,7 +575,7 @@ const LoggedOutHeader = (props) => {
                       Don't have an account yet?
                       <button
                         class="text-sky-400 decoration-2 hover:underline ml-1 font-medium"
-                        onClick={() => navigate("/OnboardingOneDoer")}
+                        onClick={() => handleNavigateAndCaptureFunnel()}
                       >
                         Sign up here
                       </button>

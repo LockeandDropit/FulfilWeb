@@ -57,21 +57,28 @@ const QuizHeader = (props) => {
     onClose: onCloseWrongInfo,
   } = useDisclosure();
 
-    const [result, setResult] = useState(null)  
+  const [result, setResult] = useState(null);
 
-      const {
-        personalValues,
-        currentPay,
-        payGoal,
-        city, 
-        state,
-        talents,
-        workEnvironment,
-        passion,
-        personality,
-        learningAndDevelopment,
-        longTerm,
-      } = useQuizStore();
+  const {chosenCareerPath} = useQuizStore(); 
+
+  const {
+    personalValues,
+    currentPay,
+    payGoal,
+    city,
+    state,
+    talents,
+    workEnvironment,
+    passion,
+    personality,
+    learningAndDevelopment,
+    longTerm,
+    allCareerPathOptions,
+    quizCompleted,
+   
+  } = useQuizStore();
+
+  console.log("chose career path", chosenCareerPath)
 
   useEffect(() => {
     if (props.props === true) {
@@ -79,18 +86,17 @@ const QuizHeader = (props) => {
     }
   }, [props]);
 
+  //TODO: Do i have to ipass the selected job as a prop to this component? Will it not register quickly enough for local storage?
+
   useEffect(() => {
     if (props.result !== null) {
-
-setResult(props.result)
+      setResult(props.result);
     }
   }, [props]);
 
-useEffect(() => {
-console.log("props", props.result)
-}, [props]);
-
-
+  useEffect(() => {
+    console.log("props", props.result);
+  }, [props]);
 
   const { fetchUserInfo } = useUserStore();
 
@@ -106,8 +112,6 @@ console.log("props", props.result)
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
   const [isSignedIn, setIsSignedIn] = useState(false);
-
- 
 
   const logIn = () => {
     setIsLoading(true);
@@ -221,19 +225,6 @@ console.log("props", props.result)
   const [emailValidationBegun, setEmailValidationBegun] = useState(false);
 
   const [nameValidationMessage, setNameValidationMessage] = useState();
-  // useEffect(() => {
-  //   document.addEventListener('keydown', handleKeyDown, true);
-  // }, [])
-  // const handleKeyDown = (e) => {
-  // if (e.key === "Enter") {
-  //   e.preventDefault();
-  //   modalValidate()
-  // }
-  // };
-
-  useEffect(() => {
-    console.log("returnedEdu", props.returnedEducation);
-  }, [email]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -274,21 +265,78 @@ console.log("props", props.result)
     onClose();
     navigate("/NeederEmailRegister");
   };
+
   const [isDesktop] = useMediaQuery("(min-width: 500px)");
 
-  const dropdownButton = document.querySelector("#dropdown");
-  const dropdownList = document.querySelector("#dropdown + div.hidden");
+  const [returnedEducation, setReturnedEducation] = useState(null);
+  const [returnedJobs, setReturnedJobs] = useState(null);
 
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [jobsReady, setJobsReady] = useState(false);
+  const [eduReady, setEduReady] = useState(false);
 
-  const handleToggle = () => {
-    setMobileOpen(!mobileOpen);
+  const getEdu = async () => {
+    const response = await fetch(
+      // "http://localhost:8000/getEdu", {
+      "https://openaiapi-c7qc.onrender.com/getEdu", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userInput: `The user's location is ${city}, ${state}. The user's current pay is ${currentPay}. The user is interested in ${chosenCareerPath[0].career_title}`,
+      }),
+    });
+    if (!response.ok) {
+      // throw new Error(`Response status: ${response.status}`);
+      getEdu();
+    }
+
+    const json = await response.json();
+    console.log("json resopnse w array EDU", JSON.parse(json.message.content));
+
+    setReturnedEducation(JSON.parse(json.message.content));
+    setEduReady(true);
   };
 
-  const handleCaptureAndNavigate = () => {
-    posthog.capture("navigate_to_sign_up");
-    navigate("/OnboardingOneDoer");
+  const getjobs = async () => {
+    const response = await fetch(
+      // "http://localhost:8000/getJobs",
+      "https://openaiapi-c7qc.onrender.com/getJobs",
+
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userInput: `The user would like to work in ${chosenCareerPath[0].career_title} They live in ${city}, ${state}. They make ${currentPay} and would like to make ${payGoal}`,
+        }),
+      }
+    );
+    if (!response.ok) {
+      // throw new Error(`Response status: ${response.status}`);
+      getjobs();
+    }
+
+    const json = await response.json();
+    console.log("response", JSON.parse(json.message.content));
+
+    setReturnedJobs(JSON.parse(json.message.content));
+
+    setJobsReady(true);
   };
+
+  useEffect(() => {
+    console.log("check", chosenCareerPath, allCareerPathOptions, quizCompleted)
+    if (quizCompleted === true && chosenCareerPath ) {
+      getjobs();
+      getEdu();
+
+      console.log("check if all is passed correctly", chosenCareerPath, allCareerPathOptions)
+    }
+  }, [ chosenCareerPath, quizCompleted]);
 
   const updateUserProfileFirestore = (user) => {
     //submit data
@@ -313,23 +361,30 @@ console.log("props", props.result)
       termsOfService: termsOfService,
       currentIncome: currentPay,
       goalIncome: payGoal,
-      quizAnswers: {personalValues: personalValues,
+      allCareerPathOptions: allCareerPathOptions,
+      chosenCareerPath: chosenCareerPath[0],
+      quizAnswers: {
+        personalValues: personalValues,
         talents: talents,
         workEnvironment: workEnvironment,
-        passion:  passion,
+        passion: passion,
         learningAndDevelopment: learningAndDevelopment,
-        longTerm: longTerm
+        longTerm: longTerm,
       },
-      returnedEducation: props.returnedEducation,
-      returnedJobs: props.result.job_openings,
-      industryReccomendation: {average_pay: result.average_salary,
-        outlook: result.description,
-        overview: result.description,
-        recommendation: result.career_title
-       }
+      returnedEducation: returnedEducation,
+      returnedJobs: returnedJobs,
+
+      industryReccomendation: {
+        average_pay: chosenCareerPath[0].average_salary,
+        outlook: chosenCareerPath[0].description,
+        overview: chosenCareerPath[0].description,
+        recommendation: chosenCareerPath[0].career_title,
+        growth: chosenCareerPath[0].industry_growth,
+      },
     })
       .then(() => {
         fetchUserInfo(user.uid);
+        //call api job/education fetch here
         console.log("data submitted, new chat profile created");
         navigate("/DoerHomepage");
       })
@@ -339,25 +394,27 @@ console.log("props", props.result)
   };
 
   const onSignUp = async () => {
-    console.log("hit sign up" )
-    const authentication = getAuth();
+    console.log("hit sign up", jobsReady, eduReady);
 
-    await createUserWithEmailAndPassword(authentication, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
+  
+      const authentication = getAuth();
 
-        // Send localstore info to FB backend, include firstname and last name
-console.log("hit sign up ehres tghe user obj", user)
-        // handleSendEmail();
-        updateUserProfileFirestore(user)
-        
-      })
-      .catch((error) => {
-        alert("oops! That email is already being used.");
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
-      });
+      await createUserWithEmailAndPassword(authentication, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+
+          // Send localstore info to FB backend, include firstname and last name
+          console.log("hit sign up ehres tghe user obj", user);
+          // handleSendEmail();
+          updateUserProfileFirestore(user);
+        })
+        .catch((error) => {
+          alert("oops! That email is already being used.");
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorMessage);
+        });
+  
   };
 
   const handleSendEmail = async () => {
@@ -649,10 +706,7 @@ console.log("hit sign up ehres tghe user obj", user)
                           name="First Name"
                           onChange={(e) => setFirstName(e.target.value)}
                           class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      
-                        
                         />
-                     
                       </div>
                     </div>
                     <div>
@@ -664,13 +718,12 @@ console.log("hit sign up ehres tghe user obj", user)
                           name="Last Name"
                           onChange={(e) => setLastName(e.target.value)}
                           class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none"
-                      
                         />
                         {nameValidationMessage && (
                           <p class="mt-1 block text-sm mb-2 text-red-500">
                             {nameValidationMessage}
                           </p>
-                        ) }
+                        )}
                       </div>
                     </div>
 
@@ -823,7 +876,7 @@ console.log("hit sign up ehres tghe user obj", user)
                       </div>
                     </div>
 
-                    {agreedAll === true ? (
+                    {agreedAll && jobsReady && eduReady ? (
                       <input
                         type="button"
                         onClick={() => validate()}

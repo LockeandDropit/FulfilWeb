@@ -284,7 +284,7 @@ const Greeting = ({ user }) => {
             <div>
               <a
                 className="p-2 flex items-center gap-x-2 text-sm font-medium text-stone-800 rounded-lg hover:bg-stone-100 focus:outline-none focus:bg-stone-100 cursor-pointer"
-                onClick={() => navigate("/MyProfile")}
+                onClick={() => navigate("/ResumeBuilder")}
               >
                 <span className="flex shrink-0 justify-center items-center size-7 bg-white border border-stone-200 rounded-lg">
                   <svg
@@ -299,7 +299,7 @@ const Greeting = ({ user }) => {
                   </svg>
                 </span>
                 <div className="grow">
-                  <p>Set up my profile</p>
+                  <p>Start up my resume</p>
                 </div>
                 <svg
                   className="shrink-0 size-4"

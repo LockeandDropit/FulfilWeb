@@ -84,7 +84,7 @@ const QuizUserLocation = ({ handleIncrementFormIndex }) => {
       setCity(cityIntermediate);
       setState(finalState);
 console.log("handling submit")
-      navigate("/QuizResults");
+      navigate("/QuizResultsCareerOptions");
     }
   };
 

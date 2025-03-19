@@ -54,17 +54,20 @@ const SubHeroCopy = () => {
               </a>
 
               <a
-                className="group relative z-10 p-4 md:p-6 h-full flex flex-col bg-blue-200 bg-opacity-40 first:rounded-t-xl last:rounded-b-xl lg:first:rounded-l-xl lg:first:rounded-tr-none lg:last:rounded-r-xl lg:last:rounded-bl-none before:absolute before:inset-0 before:bg-gradient-to-b before:hover:from-transparent before:hover:via-transparent before:hover:to-[#ff0]/10 before:via-80% before:-z-[1] before:last:rounded-b-xl lg:before:first:rounded-s-xl lg:before:last:rounded-e-xl lg:before:last:rounded-bl-none before:opacity-0 before:hover:opacity-100"
-                href="#"
+                className="group cursor-pointer relative z-10 p-4 md:p-6 h-full flex flex-col bg-blue-200 bg-opacity-40 first:rounded-t-xl last:rounded-b-xl lg:first:rounded-l-xl lg:first:rounded-tr-none lg:last:rounded-r-xl lg:last:rounded-bl-none before:absolute before:inset-0 before:bg-gradient-to-b before:hover:from-transparent before:hover:via-transparent before:hover:to-[#ff0]/10 before:via-80% before:-z-[1] before:last:rounded-b-xl lg:before:first:rounded-s-xl lg:before:last:rounded-e-xl lg:before:last:rounded-bl-none before:opacity-0 before:hover:opacity-100"
+                onClick={() => window.open("https://www.bestcolleges.com/research/average-student-loan-debt/")}
               >
                 <div className="mb-5">
                   <div className="mt-5">
-                    <p className="font-semibold text-5xl text-gray-900">$30,872</p>
+                    <p className="font-semibold text-5xl text-gray-900">$38,375</p>
                     <h3 className="mt-5 font-semibold text-lg text-black">
                       Average Student Debt
                     </h3>
                     <p className="mt-1 text-gray-900">
                      That's a lot.
+                    </p>
+                    <p className="mt-1 text-xs hover:underline text-gray-700">
+                     (source)
                     </p>
                   </div>
                 </div>

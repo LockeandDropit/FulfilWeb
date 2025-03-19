@@ -75,6 +75,7 @@ import DoerListView from "./pages/Doer/MapView/DoerListView";
 import NotFound404 from "./components/NotFound404";
 import DoerHomepage from "./pages/Doer/Dashboard/DoerHomepage";
 import ResumeBuilder from "./pages/Doer/ResumeBuilder/ResumeBuilder";
+import QuizResultsCareerOptions from "./pages/Register/Doer/CareerQuiz/QuizResultsCareerOptions";
 //Stream Chat
 import {
   Chat,
@@ -609,6 +610,10 @@ const router = createBrowserRouter([
   {
     path: "/EntryResumeBuilder",
     element: <EntryResumeBuilder/>,
+  },
+  {
+    path: "/QuizResultsCareerOptions",
+    element: <QuizResultsCareerOptions />,
   },
   {
     path: "/UploadToBackEnd",

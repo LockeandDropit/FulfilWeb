@@ -289,15 +289,22 @@ const LoggedOutHeaderAbout = (props) => {
                   <div>
                     <a
                       class="inline-block text-gray-500 hover:text-gray-700 cursor-pointer focus:outline-none focus:text-gray-600 "
-                      onClick={() => navigate("/Careers")}
+                      onClick={() => navigate("/EntryResumeBuilder")}
                     >
-                      Careers
+                     Resume Builder
+                    </a>
+                  </div>
+                  <div>
+                    <a
+                      class="inline-block text-gray-500 hover:text-gray-700 cursor-pointer focus:outline-none focus:text-gray-600 "
+                      onClick={() => navigate("/QuizFormHolder")}
+                    >
+                    Career Quiz
                     </a>
                   </div>
                 </div>
                 {/* <!-- End Logo --> */}
               </div>
-
               {/* <!-- Button Group --> */}
               <div class="flex items-center align-center justify-center md:order-3 md:col-span-3 mt-4">
                 <div className="md:space-x-3 ">

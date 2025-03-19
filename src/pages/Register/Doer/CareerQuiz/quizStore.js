@@ -15,6 +15,9 @@ export const useQuizStore = create((set) => ({
   learningAndDevelopment: null,
   longTerm: [],
   isLoading: true,
+  allCareerPathOptions: [],
+  chosenCareerPath: null,
+  quizCompleted: false,
 
 
   setTalents: (talents) => set({ talents: talents }),
@@ -27,10 +30,8 @@ export const useQuizStore = create((set) => ({
   setCurrentPay: (currentPay) => set({ currentPay: currentPay }),
   setPayGoal: (payGoal) => set({ payGoal: payGoal }),
   setCity: (city) => set({ city: city }),
-  setState: (state) => set({ state: state })
-
-
-
-
-
+  setState: (state) => set({ state: state }),
+  setAllCareerPathOptions: ( allCareerPathOptions) => set({  allCareerPathOptions:  allCareerPathOptions }),
+  setChosenCareerPath: (chosenCareerPath) => set({chosenCareerPath: chosenCareerPath }),
+  setQuizCompleted: (quizCompleted) => set({ quizCompleted: quizCompleted }),
 }));

@@ -83,7 +83,7 @@ const Greeting = ({ user }) => {
                     </div>
                     <div className="mt-1 flex items-center gap-x-2">
                       <h3 className="text-xl font-medium text-gray-800">
-                        ${preferredIndustry?.average_pay}
+                        {preferredIndustry?.average_pay}
                       </h3>
                     </div>
                   </div>

@@ -205,4 +205,25 @@ justify-content: center;
 }
 
 
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 16px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 25vh;
+    background: #ffffff;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #e4e4e4;
+    border-radius: 100vh;
+  
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c2c1c1;
+  }
+}
 

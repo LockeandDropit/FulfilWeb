@@ -151,6 +151,7 @@ import UploadToBackEnd from "./pages/Doer/Dashboard/UploadToBackEnd";
 import EntryResumeBuilder from "./components/LoggedOutResumeBuilder/ResumeBuilder/EntryResumeBuilder";
 import QuizFormHolder from "./pages/Register/Doer/CareerQuiz/QuizFormHolder";
 import QuizResults from "./pages/Register/Doer/CareerQuiz/QuizResults";
+import SearchJobs from "./pages/Doer/search_jobs/SearchJobs";
  
 const tagManagerArgs = {
     gtmId: 'AW-16521233370'
@@ -618,6 +619,10 @@ const router = createBrowserRouter([
   {
     path: "/UploadToBackEnd",
     element: <UploadToBackEnd />,
+  },
+  {
+    path: "/SearchJobs",
+    element: <SearchJobs />,
   },
   {
     path: "*",

@@ -227,3 +227,6 @@ justify-content: center;
   }
 }
 
+.markdown > * {
+  all: revert;
+}

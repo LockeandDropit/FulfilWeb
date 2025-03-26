@@ -657,12 +657,12 @@ const DoerHeader = () => {
                         Resources Near Me
                       </p>
                     </MenuItem>
-                    {/* <MenuItem onClick={() => navigate("/SearchJobs")}>
+                    <MenuItem onClick={() => navigate("/SearchJobs")}>
                       <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
                         {" "}
                         Jobs
                       </p>
-                    </MenuItem> */}
+                    </MenuItem>
                 
                   </MenuList>
                 </Menu>

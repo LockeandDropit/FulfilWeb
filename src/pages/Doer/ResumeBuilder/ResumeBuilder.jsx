@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import DoerHeader from "../components/DoerHeader";
 import { useMediaQuery } from "@chakra-ui/react";
 import {
@@ -9,6 +9,8 @@ import {
   AccordionPanel,
   AccordionIcon,
 } from "@chakra-ui/react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { v4 as uuidv4 } from "uuid";
 import Markdown from "react-markdown";
 import { Box } from "@chakra-ui/react";
@@ -20,11 +22,17 @@ import Education from "../ProfileComponents/Education";
 import Work from "../ProfileComponents/Work";
 import Skills from "../ProfileComponents/Skills";
 import StepperComponent from "../ProfileComponents/StepperComponent";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResumePreview from "../ResumeBuilder/ResumePreview";
 import AboutInfo from "../ProfileComponents/AboutInfo";
+
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import EducationPreview from "./Preview/EducationPreview";
+import ExperiencePreview from "./Preview/ExperiencePreview";
+import SkillPreview from "./Preview/SkillPreview";
+import AboutPreview from "./Preview/AboutPreview";
+
 
 const ResumeBuilder = () => {
   const { currentUser } = useUserStore();
@@ -190,8 +198,116 @@ const ResumeBuilder = () => {
     setAccordionHidden(false);
   };
 
+  //save to firebbase
+  const [resumeInfo, setResumeInfo] = useState(null);
+
+
+  useEffect(() => {
+    if (currentUser) {
+   
+      getDoc(doc(db, "users", currentUser.uid, "Resumes", "My Resume")).then(
+        (snapshot) => {
+          if (!snapshot.data()) {
+          } else {
+            console.log("from firestore", snapshot.data());
+            setResumeInfo(snapshot.data());
+          }
+        }
+      );
+    }
+  }, [currentUser]);
+
+  const contentRef = useRef(null);
+  //   const reactToPrintFn = useReactToPrint({ contentRef });
+  
+    function ResumePrintComponent() {
+      return (
+        <div id="section-to-print" className="w-full px-2" ref={contentRef}>
+          <AboutPreview resumeInfo={resumeInfo} currentUser={currentUser} />
+          {resumeInfo?.education?.length > 0 && (
+            <EducationPreview resumeInfo={resumeInfo} />
+          )}
+          {resumeInfo?.experience?.length > 0 && (
+            <ExperiencePreview resumeInfo={resumeInfo} />
+          )}
+          {resumeInfo?.skills?.length > 0 && (
+            <SkillPreview resumeInfo={resumeInfo} />
+          )}
+        </div>
+      );
+    }
+
+  
+ const saveToFirebase = async () => {
+
+        // This whole thing is essentially GPT code.
+
+
+        // Capture the content using html2canvas
+        const canvas = await html2canvas(contentRef.current, { scale: 2 });
+        const imgData = canvas.toDataURL("image/png");
+    
+        // Create a new PDF and add the captured image
+        const pdf = new jsPDF("portrait", "in", "letter");
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+    
+        // Get canvas dimensions in pixels
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+    
+        // Calculate the scaling ratio to fit the canvas width to the PDF width
+        const ratio = pdfWidth / canvasWidth;
+        let imgWidth = pdfWidth;
+        let imgHeight = canvasHeight * ratio;
+    
+        // If the scaled image height is too tall, recalculate based on the PDF height
+        if (imgHeight > pdfHeight) {
+          const newRatio = pdfHeight / canvasHeight;
+          imgWidth = canvasWidth * newRatio;
+          imgHeight = pdfHeight;
+        }
+    
+        // Optionally, center the image vertically/horizontally if it's smaller than the page
+        const marginX = (pdfWidth - imgWidth) / 2;
+        const marginY = 0.5; // Fixed margin at the top (0.5 inches)
+    
+        // Add the image to the PDF at the computed position and size
+        pdf.addImage(imgData, "PNG", marginX, marginY, imgWidth, imgHeight);
+    
+        // Instead of saving locally, get a Blob of the PDF
+        const pdfBlob = pdf.output("blob");
+    
+        console.log("blolb", pdfBlob);
+    
+        const storage = getStorage();
+        const resumeRef = ref(storage, "users/" + currentUser.uid + "/resume.jpg");
+    
+        await uploadBytes(resumeRef, pdfBlob).then((snapshot) => {});
+    
+        await getDownloadURL(resumeRef).then((response) => {
+          updateDoc(doc(db, "users", currentUser.uid), {
+            resume: response,
+          })
+            .then(() => {
+              //all good
+            })
+            .catch((error) => {
+              // no bueno
+            });
+        });
+ }
+
+
+
+
+
+
+
+
   return (
     <>
+  
       <DoerHeader />
 
       {currentUser && (
@@ -238,7 +354,30 @@ const ResumeBuilder = () => {
                           changeOccured={changeOccured}
                         />
                         <div>
-                          <button
+                        <div className="flex w-full">
+                    <button
+                            type="button"
+                            class="mt-6 py-2 px-3 inline-flex w-full items-center justify-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                            onClick={() => setOpenModal(true)}
+                            // onClick={() => saveToFirebase()}
+                          >
+                           Save
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z"
+                                clipRule="evenodd"
+                              />
+                              <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                            </svg>
+                          </button>
+                    </div>
+                          {/* <button
                             type="button"
                             class="mt-6 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
                             // onClick={() => setOpenModal(true)}
@@ -258,7 +397,7 @@ const ResumeBuilder = () => {
                               />
                               <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
                             </svg>
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                     </div>
@@ -282,10 +421,41 @@ const ResumeBuilder = () => {
                           <Education changeListener={changeListener} />
                           <Skills changeListener={changeListener} />
                         </Accordion>
+                        
                       )}
                     </div>
+                    <div className=" sm:invisible flex w-full">
+                    <button
+                            type="button"
+                            class="mt-6 py-2 px-3 inline-flex w-full justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                            onClick={() => setOpenModal(true)}
+                            // onClick={() => saveToFirebase()}
+                          >
+                           Save
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              className="size-4"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z"
+                                clipRule="evenodd"
+                              />
+                              <path d="M12.971 1.816A5.23 5.23 0 0 1 14.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 0 1 3.434 1.279 9.768 9.768 0 0 0-6.963-6.963Z" />
+                            </svg>
+                          </button>
+                    </div>
+                    
                   </div>
+               
                 </div>
+                <div className="invisible">
+                <ResumePrintComponent 
+                   resumeInfo={resumeInfo}
+                   currentUser={currentUser}/>
+               </div>
               </div>
             </div>
           </div>

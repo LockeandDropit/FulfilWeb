@@ -43,6 +43,7 @@ const Carousel = ({slides}) => {
     ]
   };
  
+  
       
   return (
     <Slider {...settings}>

@@ -14,7 +14,14 @@ import Markdown from "react-markdown";
 import { Box } from "@chakra-ui/react";
 import Select from "react-select";
 import { useUserStore } from "./Chat/lib/userStore";
-import { updateDoc, doc, getDoc, arrayUnion } from "firebase/firestore";
+import {
+  updateDoc,
+  doc,
+  getDoc,
+  arrayUnion,
+  getDocs,
+  collection,
+} from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import Education from "./ProfileComponents/Education";
 import Work from "./ProfileComponents/Work";
@@ -24,6 +31,7 @@ import StepperComponent from "./ProfileComponents/StepperComponent";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResumePreview from "./ResumeBuilder/ResumePreview";
+import SavedJobsCarousel from "./components/SavedJobsCarousel";
 
 const MyProfile = () => {
   const { currentUser } = useUserStore();
@@ -188,6 +196,21 @@ const MyProfile = () => {
     setOpenModal(false);
     setAccordionHidden(false);
   };
+
+  const [savedJobs, setSavedJobs] = useState(null);
+
+  const [jobs, setJobs] = useState([]);
+
+  const fetchJobs = async () => {
+    const querySnapshot = await getDocs(collection(db, "users", currentUser.uid, "Saved Jobs"));
+    querySnapshot.docs.forEach((doc) => {
+      setJobs((prevState) => [...prevState, doc.data()]);
+    });
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
 
   return (
     <>
@@ -551,7 +574,7 @@ const MyProfile = () => {
                     <div className="flex flex-col bg-white rounded-xl shadow-sm xl:shadow-none  w-full ml-auto">
                       {accordionHidden ? null : (
                         <Accordion defaultIndex={[0]} allowMultiple>
-                          <AccordionItem>
+                          {/* <AccordionItem>
                             <AccordionButton>
                               <Box flex="1" textAlign="left">
                                 <label
@@ -726,13 +749,7 @@ const MyProfile = () => {
                                 </div>
                                 {isEditCareerGoals ? (
                                   <div className="ml-auto ">
-                                    {/* <button
-                                    type="button"
-                                    class=" mr-2 py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-red-600 text-white hover:bg-red-700"
-                                    //    onClick={() => handleUpdate()}
-                                  >
-                                    Delete
-                                  </button> */}
+                                 
                                     <button
                                       type="button"
                                       class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
@@ -749,7 +766,7 @@ const MyProfile = () => {
                                 ) : null}
                               </div>
                             </AccordionPanel>
-                          </AccordionItem>
+                          </AccordionItem> */}
                           <AccordionItem>
                             <AccordionButton>
                               <Box flex="1" textAlign="left">
@@ -758,14 +775,27 @@ const MyProfile = () => {
                                   class="block font-medium text-stone-800 "
                                 >
                                   Saved Jobs
-                                
                                 </label>
                               </Box>
                               <AccordionIcon />
                             </AccordionButton>
                             <AccordionPanel pb={4}>
-                           
+                              <SavedJobsCarousel slides={jobs} />
                             </AccordionPanel>
+                          </AccordionItem>
+                          <AccordionItem>
+                            <AccordionButton>
+                              <Box flex="1" textAlign="left">
+                                <label
+                                  for="hs-pro-epdsku"
+                                  class="block font-medium text-stone-800 "
+                                >
+                                  Applied
+                                </label>
+                              </Box>
+                              <AccordionIcon />
+                            </AccordionButton>
+                            <AccordionPanel pb={4}></AccordionPanel>
                           </AccordionItem>
                           {/* <Work changeListener={changeListener} />
                           <Education changeListener={changeListener} />

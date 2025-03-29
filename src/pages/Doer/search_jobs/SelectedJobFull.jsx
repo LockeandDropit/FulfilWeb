@@ -70,11 +70,14 @@ const SelectedJobFull = () => {
       formatBulletList(selectedJob);
       formatBenefitsBulletList(selectedJob);
       formatResponsibilitiesBulletList(selectedJob);
+      setSaved(false)
+      setHasApplied(false)
     }
   }, [selectedJob]);
 
   const [resumeIsComplete, setResumeIsComplete] = useState(false);
   const [resume, setResume] = useState(null);
+
 
   useEffect(() => {
     if (currentUser) {
@@ -89,6 +92,9 @@ const SelectedJobFull = () => {
       });
     }
   }, [currentUser]);
+
+  
+
 
   const [hasApplied, setHasApplied] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -160,18 +166,23 @@ const SelectedJobFull = () => {
     setSaved(true);
   };
 
-
   // TODO TODAY 3/26:
 
-  // make sure google ads is running
-
-  //get emails for the recruiters associated with each job
-
-  //clean up ui on job board/ reset save/apply when changing between jobs
-
-  //scrape a few more job boards (see chat gpt deep research), make sure you're getting an email as well
+  // integrate search. 
   
-  // make applied jobs visible.
+  //Need to migrate db to mySQL
+
+  // scrape a few more job boards (see chat gpt deep research), make sure you're getting an email as well
+
+  // put nodemailer api on server
+
+ 
+
+  // get side scrolling on white careousels to show arrows (half done...)
+
+  // filter originally showed jobs by user's category of interest(s)
+
+  // make sure google ads is running
 
   return selectedJob ? (
     <>

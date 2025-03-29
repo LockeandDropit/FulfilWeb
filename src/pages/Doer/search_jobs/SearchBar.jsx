@@ -1,6 +1,47 @@
-import React from 'react'
-
+import { useState } from "react"
+import {
+  getDocs,
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+} from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
 const SearchBar = () => {
+
+
+const [keyword, setKeyword] = useState(null)
+
+
+  const [jobs, setJobs] = useState([]);
+
+  const jobsRef = query(collection(db, "scraped"), limit(10), where("job_title" , "==" , keyword || "job_title" , "==" , keyword));
+
+  // const q = query(jobsRef, where("population", ">", 100000), orderBy("population"), limit(2));
+  // const q = query(collection(db, "cities"), where("capital", "==", true));
+
+  // const querySnapshot = await getDocs(q);
+  // querySnapshot.forEach((doc) => {
+  //   // doc.data() is never undefined for query doc snapshots
+  //   console.log(doc.id, " => ", doc.data());
+  // });
+
+  const [lastVisible, setLastVisible] = useState(0);
+
+  const fetchJobs = async () => {
+    const querySnapshot = await getDocs(jobsRef);
+    querySnapshot.forEach((doc) => {
+      setJobs((prevState) => [...prevState, doc.data()]);
+    });
+    // Get the last visible document
+    setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+
+    console.log("jobResults from search bar")
+  };
+
+
   return (
     // max-w-[85rem] w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 pt-4 pb-2 px-4 sm:px-6 lg:px-8
 <div className="max-w-[84rem] w-full mx-auto mt-8 py-6 flex gap-y-2 lg:gap-y-0 lg:gap-x-5 px-5  rounded-md bg-sky-100">
@@ -27,7 +68,7 @@ const SearchBar = () => {
   <option>2</option>
   <option>3</option>
 </select>
-<button type="button" class="ml-auto py-3 px-8 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+<button onClick={() => fetchJobs()} type="button" class="ml-auto py-3 px-8 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
   Search
 </button>
 </div>

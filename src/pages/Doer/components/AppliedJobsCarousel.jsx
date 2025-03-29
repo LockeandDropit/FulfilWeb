@@ -1,22 +1,79 @@
-import React from "react";
-import { useSelectedJobStore } from "./SelectedJobStore";
+import React, { useEffect, useState } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { getDocs, collection } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
 
-const JobCard = ({ jobs }) => {
+const AppliedJobsCarousel = ({ slides }) => {
 
+  console.log("slides id from applied", slides)
 
-  const { setSelectedJob } = useSelectedJobStore();
   
 
-  console.log("jobcaraas", jobs);
+  const [jobs, setJobs] = useState([])
 
-  
+  useEffect(() => {
+    if (slides) {
+      slides.forEach(async (x) => {
+        const querySnapshot = await getDocs(collection(db, "scraped"));
+            querySnapshot.docs.forEach((doc) => {
+              if (doc.id === x.jobID) {
+              setJobs((prevState) => [...prevState, doc.data()]);
+            }})
+      })
+    }
+  }, [slides])
+
+
+
+
+
+
+  var settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 0,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+    ],
+  };
 
   return (
-    <>
-      {jobs ? (jobs?.map((job) => (
+    <Slider {...settings}>
+      {jobs?.map((job) => (
         <div className="flex flex-col sm:flex-row  p-1 w-full auto">
-          <div class=" p-5 space-y-2 flex flex-col bg-white border w-full border-gray-200 rounded-xl hover:shadow-md cursor-pointer" onClick={() => setSelectedJob(job)
-          }>
+          <div class=" p-5 space-y-2 flex flex-col bg-white border w-full border-gray-200 rounded-xl hover:shadow-md cursor-pointer">
             <div>
               <div className="flex justify-between">
                 <h3 class="font-semibold text-lg text-gray-800 line-clamp-1">
@@ -46,12 +103,12 @@ const JobCard = ({ jobs }) => {
                 </div>
               </div>
 
-              <div className="flex space-x-1.5 mt-1">
+              <div className="flex space-x-1.5 mt-1 text-sm">
                 {" "}
-                <h3 class=" text-gray-700">{job.company}</h3>
+                <h3 class=" text-gray-700 ">{job.company}</h3>
                 <ul className="flex flex-row gap-y-1 text-gray-600">
                   <li className="flex gap-x-1.5">
-                    <div className="shrink-0 size-1.5 mt-2.5  bg-gray-600 rounded-full"></div>
+                    <div className="shrink-0 size-1 mt-2  bg-gray-600 rounded-full"></div>
                     {job.location}
                   </li>
                 </ul>
@@ -61,7 +118,7 @@ const JobCard = ({ jobs }) => {
                 <span className="text-sm  text-gray-600">{job.pay_range}</span>{" "}
               </h3>
 
-              <p class="my-3 text-gray-600 line-clamp-3">{job.job_summary}</p>
+              <p class="my-3 text-gray-600 line-clamp-3 text-sm">{job.job_summary}</p>
             </div>
 
             <div className="flex mt-auto mb-1">
@@ -71,7 +128,7 @@ const JobCard = ({ jobs }) => {
                 //   onClick={() => handleOpenJob(job)}
               >
                 Save
-              </button>
+              </button> 
               <button
                 type="button"
                 class="ml-1 py-2 px-3 w-3/4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500 "
@@ -82,18 +139,9 @@ const JobCard = ({ jobs }) => {
             </div>
           </div>
         </div>
-      ))) : (<p>loading </p>)}
-    {/* <div className="flex w-full py-5 items-center px-2 ">
-    <button
-                type="button"
-                class=" py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500 "
-                //   onClick={() => handleOpenJob(job)}
-              >
-                Load more
-              </button>
-    </div> */}
-    </>
+      ))}
+    </Slider>
   );
 };
 
-export default JobCard;
+export default AppliedJobsCarousel;

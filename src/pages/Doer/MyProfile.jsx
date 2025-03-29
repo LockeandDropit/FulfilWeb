@@ -32,6 +32,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResumePreview from "./ResumeBuilder/ResumePreview";
 import SavedJobsCarousel from "./components/SavedJobsCarousel";
+import AppliedJobsCarousel from "./components/AppliedJobsCarousel";
 
 const MyProfile = () => {
   const { currentUser } = useUserStore();
@@ -197,19 +198,32 @@ const MyProfile = () => {
     setAccordionHidden(false);
   };
 
-  const [savedJobs, setSavedJobs] = useState(null);
+  const [savedJobs, setSavedJobs] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState([]);
 
   const [jobs, setJobs] = useState([]);
 
   const fetchJobs = async () => {
-    const querySnapshot = await getDocs(collection(db, "users", currentUser.uid, "Saved Jobs"));
+    const querySnapshot = await getDocs(
+      collection(db, "users", currentUser.uid, "Saved Jobs")
+    );
     querySnapshot.docs.forEach((doc) => {
       setJobs((prevState) => [...prevState, doc.data()]);
     });
   };
 
+  const fetchAppliedJobs = async () => {
+    const querySnapshot = await getDocs(
+      collection(db, "users", currentUser.uid, "Applied Jobs")
+    );
+    querySnapshot.docs.forEach((doc) => {
+      setAppliedJobs((prevState) => [...prevState, doc.data()]);
+    });
+  };
+
   useEffect(() => {
     fetchJobs();
+    fetchAppliedJobs();
   }, []);
 
   return (
@@ -774,12 +788,12 @@ const MyProfile = () => {
                                   for="hs-pro-epdsku"
                                   class="block font-medium text-stone-800 "
                                 >
-                                  Saved Jobs
+                                  Saved Jobs 
                                 </label>
                               </Box>
                               <AccordionIcon />
                             </AccordionButton>
-                            <AccordionPanel pb={4}>
+                            <AccordionPanel pb={8}>
                               <SavedJobsCarousel slides={jobs} />
                             </AccordionPanel>
                           </AccordionItem>
@@ -795,7 +809,9 @@ const MyProfile = () => {
                               </Box>
                               <AccordionIcon />
                             </AccordionButton>
-                            <AccordionPanel pb={4}></AccordionPanel>
+                            <AccordionPanel pb={8}>
+                            <AppliedJobsCarousel slides={appliedJobs} />
+                            </AccordionPanel>
                           </AccordionItem>
                           {/* <Work changeListener={changeListener} />
                           <Education changeListener={changeListener} />

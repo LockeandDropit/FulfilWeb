@@ -4,6 +4,10 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const Carousel = ({slides}) => {
+
+
+
+
   var settings = {
     dots: true,
     infinite: true,
@@ -42,15 +46,21 @@ const Carousel = ({slides}) => {
       }
     ]
   };
+
+  //<button onClick={() => slider?.current?.slickPrev()}>Prev</button>
+{/* <button onClick={() => slider?.current?.slickNext()}>Next</button> */}
  
   
       
   return (
-    <Slider {...settings}>
+
+    <Slider  {...settings}>
+      
  {slides?.map((job) => (
               
-          
+        
               <div className="flex flex-col sm:flex-row mt-4 md:mt-6 p-1 w-5/6  h-full">
+               
                 <div class=" p-5 space-y-4 flex flex-col bg-white border border-gray-200 rounded-xl ">
                   <div class="flex justify-between">
                     <div class="flex flex-col justify-center items-center  ">
@@ -105,12 +115,12 @@ const Carousel = ({slides}) => {
                   </div>
                 </div>
               </div>
-   
-          
+
         ))}
 
 
         </Slider>
+     
   )
 }
 

@@ -230,3 +230,12 @@ justify-content: center;
 .markdown > * {
   all: revert;
 }
+
+.slick-prev:before, .slick-next:before { 
+  color:#38BDF8 !important;
+  font-size: 2.5rem;
+}
+
+.slick-prev-white:before, .slick-next-white:before { 
+  color:#38BDF8 !important;
+}

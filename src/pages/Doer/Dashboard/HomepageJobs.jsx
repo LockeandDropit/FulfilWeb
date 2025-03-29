@@ -466,12 +466,13 @@ const HomepageJobs = ({ user }) => {
           )}
         </div>
 
-        <div className="flex flex-col sm:flex-row items-stretch mt-4 md:mt-6 h-full">
+        <div className="flex flex-col sm:flex-row mt-4 md:mt-6 h-full ">
         
             {!loading && recommendedJobs ? (
                 <div className="w-full  h-full flex-1 min-h-0">
               <Carousel slides={returnedJobs} />
               </div>
+             
             ) : null}
          
 

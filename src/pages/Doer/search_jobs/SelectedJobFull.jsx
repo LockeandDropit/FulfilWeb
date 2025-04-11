@@ -65,15 +65,15 @@ const SelectedJobFull = () => {
     }
   }
 
-  useEffect(() => {
-    if (selectedJob !== null) {
-      formatBulletList(selectedJob);
-      formatBenefitsBulletList(selectedJob);
-      formatResponsibilitiesBulletList(selectedJob);
-      setSaved(false)
-      setHasApplied(false)
-    }
-  }, [selectedJob]);
+  // useEffect(() => {
+  //   if (selectedJob !== null) {
+  //     formatBulletList(selectedJob);
+  //     formatBenefitsBulletList(selectedJob);
+  //     formatResponsibilitiesBulletList(selectedJob);
+  //     setSaved(false)
+  //     setHasApplied(false)
+  //   }
+  // }, [selectedJob]);
 
   const [resumeIsComplete, setResumeIsComplete] = useState(false);
   const [resume, setResume] = useState(null);
@@ -330,14 +330,14 @@ const SelectedJobFull = () => {
                         About The Job
                       </h4>
 
-                      <p className="text-gray-600">{selectedJob.job_summary}</p>
+                      <p className="text-gray-600">{selectedJob?.job_summary}</p>
 
                       <h4 className="font-medium text-lg text-gray-800">
                         Qualifications
                       </h4>
 
                       <ol className="flex flex-col gap-y-1 text-gray-600 list-disc markdown pl-5">
-                        {sortedQualifications?.map((x) => (
+                        {selectedJob?.requirements?.map((x) => (
                           <li className="flex gap-x-3">
                             <div>{x}</div>
                           </li>
@@ -349,7 +349,7 @@ const SelectedJobFull = () => {
                       </h4>
 
                       <ol className="flex flex-col gap-y-1 text-gray-600 list-disc markdown pl-5">
-                        {sortedResponsibilities?.map((x) => (
+                        {selectedJob?.responsibilities?.map((x) => (
                           <li className="flex gap-x-3">
                             <div>{x}</div>
                           </li>
@@ -361,7 +361,7 @@ const SelectedJobFull = () => {
                       </h4>
 
                       <ul className=" flex flex-col gap-y-1 text-gray-600 list-disc markdown pl-5">
-                        {sortedBenefits?.map((x) => (
+                        {selectedJob.benefits?.map((x) => (
                           <li className="flex gap-x-3">
                             <div>{x}</div>
                           </li>

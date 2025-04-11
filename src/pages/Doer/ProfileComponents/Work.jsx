@@ -289,6 +289,7 @@ setModalInputError("Please provide a brief description of your role.")
 
   const [loading, setLoading] = useState(false);
   const [workExperience, setWorkExperience] = useState(null);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   //this is for editing
   const [selectedEducation, setSelectedEducation] = useState(null);
@@ -296,9 +297,7 @@ setModalInputError("Please provide a brief description of your role.")
   useEffect(() => {
     if (currentUser) {
       setLoading(true);
-      //   onOpenChoose();
 
-      let intermediateHold = [];
 
       const unSub = onSnapshot(
         doc(db, "users", currentUser.uid, "Resumes", "My Resume"),
@@ -307,17 +306,6 @@ setModalInputError("Please provide a brief description of your role.")
             setWorkExperience(res.data().experience);
           }
 
-          // res.data().experience.forEach((exp) => {
-          //   console.log("here are ids", exp.id)
-          //   if (exp.id !== "deleted") {
-          //     intermediateHold.push(res.data().experience);
-          //     console.log("hjerer", res.data().experience)
-          //   }
-
-          // })
-
-          //   setIsEnrolled(res.data().isEnrolled);
-          // setLoading(false);
         }
       );
 
@@ -326,8 +314,9 @@ setModalInputError("Please provide a brief description of your role.")
       };
     } else {
       setLoading(false);
+      setIsUpdated(false);
     }
-  }, [currentUser]);
+  }, [currentUser, isUpdated]);
 
   const handleDeleteSelected = async (item) => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
@@ -352,10 +341,13 @@ setModalInputError("Please provide a brief description of your role.")
     console.log("splice", resumeData.experience.splice(resumeIndex, 1));
     console.log("new data", resumeData.experience);
 
+
+
     await updateDoc(doc(userChatsRef, "My Resume"), {
       experience: resumeData.experience,
     }).then(() => {
       changeListener();
+      setIsUpdated(!isUpdated);
       
       //set all local values null for updating/editing purposes.
       setTextEditorLoading(true);
@@ -368,6 +360,8 @@ setModalInputError("Please provide a brief description of your role.")
       setIsEditCareerGoals(!isEditCareerGoals);
 
       //this set timeout is so the ui doesn't try to rebnder the selectedExperience while ther is no selectedExperience
+     
+    }).then(() => {
       setTimeout(() => {
         setSelectedExperience(null);
         setUpdateIsLoading(false);
@@ -505,8 +499,7 @@ setModalInputError("Please provide a brief description of your role.")
                   </p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
-                  {isEditCareerGoals &&
-                  experience.id === selectedExperience.id ? (
+                  {isEditCareerGoals && selectedExperience && experience.id === selectedExperience.id ? (
                     <input
                       type="text"
                       onChange={(e) => setPositionTitle(e.target.value)}
@@ -580,8 +573,7 @@ Delete
                   <p className="text-sm text-gray-600">Company:</p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
-                  {isEditCareerGoals &&
-                  experience.id === selectedExperience.id ? (
+                  {isEditCareerGoals && selectedExperience && experience.id === selectedExperience.id  ? (
                     <input
                       type="text"
                       onChange={(e) => setCompanyName(e.target.value)}
@@ -598,15 +590,14 @@ Delete
                   )}
                 </div>
               </div>
-              <div class="grid sm:grid-cols-4  mb-4 align-center items-center">
+              <div class="grid sm:grid-cols-4  mb-2 align-center items-center">
                 <div class="sm:col-span-1 2xl:col-span-1">
                   <p className="text-sm text-gray-600">
                     Dates Employed:
                   </p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
-                  {isEditCareerGoals &&
-                  experience.id === selectedExperience.id ? (
+                  {isEditCareerGoals && selectedExperience && experience.id === selectedExperience.id  ? (
                     <>
                       <div className="flex align-center items-center ">
                         <DatePicker
@@ -671,7 +662,7 @@ Delete
                   )}
                 </div>
               </div>
-              {isEditCareerGoals && experience.id === selectedExperience.id ? (
+              {isEditCareerGoals && selectedExperience && experience.id === selectedExperience.id  ? (
                 <>
                   <div class="grid sm:grid-cols-4  mb-10 align-center mt-4">
                     <div class="sm:col-span-1 2xl:col-span-1">
@@ -748,8 +739,7 @@ Delete
                 </div>
                 <div class="sm:col-span-3 align-center items-center">
                   {/* got this from chat gpt but idk if this is even copyrightable */}
-                  {isEditCareerGoals &&
-                  experience.id === selectedExperience.id ? (
+                  {isEditCareerGoals && selectedExperience && experience.id === selectedExperience.id  ? (
                     textEditorLoading ? (
                       <p>loading...</p>
                     ) : (
@@ -769,7 +759,7 @@ Delete
                   )}
                 </div>
               </div>
-              {isEditCareerGoals && experience.id === selectedExperience.id ? (
+              {isEditCareerGoals && selectedExperience && experience.id === selectedExperience.id  ? (
                 <div className="ml-auto mt-8">
                   {/* <button
                     type="button"

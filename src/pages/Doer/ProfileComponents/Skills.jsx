@@ -202,7 +202,7 @@ const Skills = ({ changeListener }) => {
     }
   }, [currentUser]);
 
-  const handleDeleteSelected = async () => {
+  const handleDeleteSelected = async (item) => {
     const userChatsRef = collection(db, "users", currentUser.uid, "Resumes");
     //make resume1 dynamic
 
@@ -217,9 +217,10 @@ const Skills = ({ changeListener }) => {
       .map(function (x) {
         return x.id;
       })
-      .indexOf(selectedExperience.id);
+      .indexOf(item.id);
 
     let newData = resumeData.skills.splice(resumeIndex, 1);
+    console.log("new data", newData);
 
     // let finalResume = resumeData.experience.splice(resumeIndex, 1);
 
@@ -235,14 +236,16 @@ const Skills = ({ changeListener }) => {
       changeListener();
       setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
-      setSelectedExperience(null);
-      setSkillName(null)
+   
+
       setIsEditCareerGoals(!isEditCareerGoals);
-    
+      setSkillName(null)
       console.log("skills error check", workExperience, resumeData.skills, selectedExperience, isEditCareerGoals)
-      // setUpdateIsLoading(false);
-
-
+    }).then(() => {
+      setTimeout(() => {
+        setSelectedExperience(null);
+        setUpdateIsLoading(false);
+      }, 300)
     });
   };
 
@@ -282,8 +285,7 @@ const Skills = ({ changeListener }) => {
                   </p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
-                  {isEditCareerGoals &&
-                  experience.id === selectedExperience.id ? (
+                  {isEditCareerGoals && selectedExperience && experience.id === selectedExperience.id  ? (
                     <input
                       type="text"
                       onChange={(e) => setSkillName(e.target.value)}
@@ -339,7 +341,7 @@ const Skills = ({ changeListener }) => {
                           </div>
                         </MenuItem>
                         <MenuItem>
-                          <div className="flex text-sm cursor-pointer text-red-400 hover:text-red-600 hover:underline w-full" onClick={() => handleDeleteSelected()}>
+                          <div className="flex text-sm cursor-pointer text-red-400 hover:text-red-600 hover:underline w-full" onClick={() => handleDeleteSelected(experience)}>
                             Delete
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -363,7 +365,7 @@ const Skills = ({ changeListener }) => {
                 </div>
               </div>
 
-              {isEditCareerGoals && experience.id === selectedExperience.id ? (
+              {isEditCareerGoals && selectedExperience && experience.id === selectedExperience.id  ? (
                 <div className="ml-auto mt-2">
                   <button
                     type="button"

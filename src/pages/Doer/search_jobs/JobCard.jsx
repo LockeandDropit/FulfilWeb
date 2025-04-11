@@ -15,11 +15,11 @@ const JobCard = ({ jobs }) => {
     <>
       {jobs ? (jobs?.map((job) => (
         <div className="flex flex-col sm:flex-row  p-1 w-full auto">
-          <div class=" p-5 space-y-2 flex flex-col bg-white border w-full border-gray-200 rounded-xl hover:shadow-md cursor-pointer" onClick={() => setSelectedJob(job)
+          <div class=" p-5 space-y-2 flex flex-col bg-white border w-full border-gray-200 rounded-xl shadow-sm hover:shadow-sm hover:ring-2 ring-sky-200 cursor-pointer" onClick={() => setSelectedJob(job)
           }>
             <div>
               <div className="flex justify-between">
-                <h3 class="font-semibold text-lg text-gray-800 line-clamp-1">
+                <h3 class="font-bold text-xl text-gray-800 line-clamp-1">
                   {job.job_title}
                 </h3>
                 <div class="flex justify-between min-w-fit pl-1">
@@ -48,10 +48,10 @@ const JobCard = ({ jobs }) => {
 
               <div className="flex space-x-1.5 mt-1">
                 {" "}
-                <h3 class=" text-gray-700">{job.company}</h3>
+                <h3 class=" text-sm text-gray-600">{job.company}</h3>
                 <ul className="flex flex-row gap-y-1 text-gray-600">
-                  <li className="flex gap-x-1.5">
-                    <div className="shrink-0 size-1.5 mt-2.5  bg-gray-600 rounded-full"></div>
+                  <li className="flex gap-x-1.5 text-sm text-gray-600">
+                    <div className="shrink-0 size-1 mt-2.5  bg-gray-600 rounded-full"></div>
                     {job.location}
                   </li>
                 </ul>

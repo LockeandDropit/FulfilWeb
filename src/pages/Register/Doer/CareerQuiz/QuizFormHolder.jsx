@@ -32,7 +32,7 @@ const QuizFormHolder = () => {
   return (
     <div>
       <QuizHeader />
-      {/* <OnboardingProgressBar /> */}
+      <OnboardingProgressBar />
 
       {activeFormIndex === 1 ? (
         <QuizQ1 handleIncrementFormIndex={handleIncrementFormIndex} />

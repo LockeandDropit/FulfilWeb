@@ -281,15 +281,19 @@ const Education = ({ changeListener }) => {
       education: resumeData.education,
     }).then(() => {
       changeListener();
-      setUpdateIsLoading(false);
       //set all local values null for updating/editing purposes.
-      setSelectedExperience(null);
       setEndDate(null);
       setStartDate(null);
       setDegree(null);
       setInstitutionName(null);
       setIsEnrolled(false);
       setIsEditCareerGoals(!isEditCareerGoals);
+    })
+    .then(() => {
+      setTimeout(() => {
+        setSelectedExperience(null);
+        setUpdateIsLoading(false);
+      }, 300)
     });
   };
 
@@ -347,8 +351,7 @@ const Education = ({ changeListener }) => {
                   </p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
-                  {isEditCareerGoals &&
-                  experience.id === selectedExperience.id ? (
+                  {isEditCareerGoals && selectedExperience && experience.id === selectedExperience.id ? (
                     <input
                       type="text"
                       onChange={(e) => setInstitutionName(e.target.value)}
@@ -437,8 +440,7 @@ const Education = ({ changeListener }) => {
                   </p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
-                  {isEditCareerGoals &&
-                  experience.id === selectedExperience.id ? (
+                  {isEditCareerGoals && selectedExperience && experience.id === selectedExperience.id ? (
                     <input
                       type="text"
                       onChange={(e) => setDegree(e.target.value)}
@@ -458,8 +460,7 @@ const Education = ({ changeListener }) => {
                   </p>
                 </div>
                 <div class="sm:col-span-2 align-center items-center">
-                  {isEditCareerGoals &&
-                  experience.id === selectedExperience.id ? (
+                  {isEditCareerGoals && selectedExperience && experience.id === selectedExperience.id ? (
                     <div className="w-full">
                       <div className="flex align-center items-center">
                         <DatePicker
@@ -524,7 +525,7 @@ const Education = ({ changeListener }) => {
                 </div>
               </div>
 
-              {isEditCareerGoals && experience.id === selectedExperience.id ? (
+              {isEditCareerGoals && selectedExperience && experience.id === selectedExperience.id ? (
                 <div className="ml-auto mt-2">
                   <button
                     type="button"

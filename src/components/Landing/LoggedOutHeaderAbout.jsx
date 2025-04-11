@@ -286,14 +286,14 @@ const LoggedOutHeaderAbout = (props) => {
                       About
                     </a>
                   </div>
-                  <div>
+                  {/* <div>
                     <a
                       class="inline-block text-gray-500 hover:text-gray-700 cursor-pointer focus:outline-none focus:text-gray-600 "
                       onClick={() => navigate("/EntryResumeBuilder")}
                     >
                      Resume Builder
                     </a>
-                  </div>
+                  </div> */}
                   <div>
                     <a
                       class="inline-block text-gray-500 hover:text-gray-700 cursor-pointer focus:outline-none focus:text-gray-600 "

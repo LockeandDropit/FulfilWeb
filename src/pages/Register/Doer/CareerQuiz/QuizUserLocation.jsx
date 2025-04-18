@@ -16,73 +16,138 @@ const QuizUserLocation = ({ handleIncrementFormIndex }) => {
   const [isSearchable, setIsSearchable] = useState(true);
 
   const stateOptions = [
-    { label: "Alabama", id: 1 },
-    { label: "Alaska", id: 2 },
-    { label: "Arizona", id: 3 },
-    { label: "Arkansas", id: 4 },
-    { label: "California", id: 5 },
-    { label: "Colorado", id: 6 },
-    { label: "Connecticut", id: 7 },
-    { label: "Delaware", id: 8 },
-    { label: "Florida", id: 9 },
-    { label: "Georgia", id: 10 },
-    { label: "Hawaii", id: 11 },
-    { label: "Idaho", id: 12 },
-    { label: "Illinois", id: 13 },
-    { label: "Indiana", id: 14 },
-    { label: "Iowa", id: 15 },
-    { label: "Kansas", id: 16 },
-    { label: "Kentucky", id: 17 },
-    { label: "Louisiana", id: 18 },
-    { label: "Maine", id: 19 },
-    { label: "Maryland", id: 20 },
-    { label: "Massachusetts", id: 21 },
-    { label: "Michigan", id: 22 },
+   
     { label: "Minnesota", id: 23 },
-    { label: "Mississippi", id: 24 },
-    { label: "Missouri", id: 25 },
-    { label: "Montana", id: 26 },
-    { label: "Nebraska", id: 27 },
-    { label: "Nevada", id: 28 },
-    { label: "New Hampshire", id: 29 },
-    { label: "New Jersey", id: 30 },
-    { label: "New Mexico", id: 31 },
-    { label: "New York", id: 32 },
-    { label: "North Carolina", id: 33 },
-    { label: "North Dakota", id: 34 },
-    { label: "Ohio", id: 35 },
-    { label: "Oklahoma", id: 36 },
-    { label: "Oregon", id: 37 },
-    { label: "Pennsylvania", id: 38 },
-    { label: "Rhode Island", id: 39 },
-    { label: "South Carolina", id: 40 },
-    { label: "South Dakota", id: 41 },
-    { label: "Tennessee", id: 42 },
-    { label: "Texas", id: 43 },
-    { label: "Utah", id: 44 },
-    { label: "Vermont", id: 45 },
-    { label: "Virginia", id: 46 },
-    { label: "Washington", id: 47 },
-    { label: "West Virginia", id: 48 },
-    { label: "Wisconsin", id: 49 },
-    { label: "Wyoming", id: 50 },
+   
   ];
 
-  const [finalState, setFinalState] = useState(null);
+  const cityOptions = [
+    { label: "Minneapolis", id: 1 },
+    { label: "Saint Paul", id: 2 },
+    { label: "Rochester", id: 3 },
+    { label: "Duluth", id: 4 },
+    { label: "Bloomington", id: 5 },
+    { label: "Brooklyn Park", id: 6 },
+    { label: "Woodbury", id: 7 },
+    { label: "Plymouth", id: 8 },
+    { label: "Lakeville", id: 9 },
+    { label: "Blaine", id: 10 },
+    { label: "Maple Grove", id: 11 },
+    { label: "St. Cloud", id: 12 },
+    { label: "Eagan", id: 13 },
+    { label: "Burnsville", id: 14 },
+    { label: "Coon Rapids", id: 15 },
+    { label: "Eden Prairie", id: 16 },
+    { label: "Apple Valley", id: 17 },
+    { label: "Edina", id: 18 },
+    { label: "Minnetonka", id: 19 },
+    { label: "St. Louis Park", id: 20 },
+    { label: "Shakopee", id: 21 },
+    { label: "Mankato", id: 22 },
+    { label: "Moorhead", id: 23 },
+    { label: "Cottage Grove", id: 24 },
+    { label: "Maplewood", id: 25 },
+    { label: "Richfield", id: 26 },
+    { label: "Inver Grove Heights", id: 27 },
+    { label: "Roseville", id: 28 },
+    { label: "Andover", id: 29 },
+    { label: "Savage", id: 30 },
+    { label: "Brooklyn Center", id: 31 },
+    { label: "Fridley", id: 32 },
+    { label: "Chaska", id: 33 },
+    { label: "Ramsey", id: 34 },
+    { label: "Oakdale", id: 35 },
+    { label: "Prior Lake", id: 36 },
+    { label: "Rosemount", id: 37 },
+    { label: "Elk River", id: 38 },
+    { label: "Owatonna", id: 39 },
+    { label: "Shoreview", id: 40 },
+    { label: "Austin", id: 41 },
+    { label: "Winona", id: 42 },
+    { label: "Chanhassen", id: 43 },
+    { label: "Faribault", id: 44 },
+    { label: "Farmington", id: 45 },
+    { label: "White Bear Lake", id: 46 },
+    { label: "Otsego", id: 47 },
+    { label: "Champlin", id: 48 },
+    { label: "Lino Lakes", id: 49 },
+    { label: "Columbia Heights", id: 50 },
+    { label: "New Brighton", id: 51 },
+    { label: "Hastings", id: 52 },
+    { label: "Crystal", id: 53 },
+    { label: "West St. Paul", id: 54 },
+    { label: "Willmar", id: 55 },
+    { label: "Golden Valley", id: 56 },
+    { label: "St. Michael", id: 57 },
+    { label: "Northfield", id: 58 },
+    { label: "New Hope", id: 59 },
+    { label: "Forest Lake", id: 60 },
+    { label: "South St. Paul", id: 61 },
+    { label: "Sartell", id: 62 },
+    { label: "Stillwater", id: 63 },
+    { label: "Hopkins", id: 64 },
+    { label: "Albert Lea", id: 65 },
+    { label: "Anoka", id: 66 },
+    { label: "Red Wing", id: 67 },
+    { label: "Ham Lake", id: 68 },
+    { label: "Buffalo", id: 69 },
+    { label: "Hugo", id: 70 },
+    { label: "Hibbing", id: 71 },
+    { label: "Bemidji", id: 72 },
+    { label: "Alexandria", id: 73 },
+    { label: "Monticello", id: 74 },
+    { label: "Hutchinson", id: 75 },
+    { label: "Brainerd", id: 76 },
+    { label: "Fergus Falls", id: 77 },
+    { label: "North Mankato", id: 78 },
+    { label: "Robbinsdale", id: 79 },
+    { label: "New Ulm", id: 80 },
+    { label: "Marshall", id: 81 },
+    { label: "Sauk Rapids", id: 82 },
+    { label: "Lake Elmo", id: 83 },
+    { label: "Waconia", id: 84 },
+    { label: "Rogers", id: 85 },
+    { label: "Worthington", id: 86 },
+    { label: "Mounds View", id: 87 },
+    { label: "Vadnais Heights", id: 88 },
+    { label: "Big Lake", id: 89 },
+    { label: "North St. Paul", id: 90 },
+    { label: "Cloquet", id: 91 },
+    { label: "St. Peter", id: 92 },
+    { label: "East Bethel", id: 93 },
+    { label: "North Branch", id: 94 },
+    { label: "Mendota Heights", id: 95 },
+    { label: "Victoria", id: 96 },
+    { label: "Grand Rapids", id: 97 },
+    { label: "Cambridge", id: 98 },
+    { label: "Little Canada", id: 99 },
+    { label: "Fairmont", id: 100 }
+  ];
+
+
+  // const [finalState, setFinalState] = useState(null);
+
+  // useEffect(() => {
+  //   if (stateIntermediate) {
+  //     setFinalState(stateIntermediate.label);
+  //   }
+  // }, [stateIntermediate]);
+
+  const [finalCity, setFinalCity] = useState(null);
 
   useEffect(() => {
-    if (stateIntermediate) {
-      setFinalState(stateIntermediate.label);
+    if (cityIntermediate) {
+      setFinalCity(cityIntermediate.label);
     }
-  }, [stateIntermediate]);
+  }, [cityIntermediate]);
 
   const handleSubmit = () => {
-    if (!finalState || !cityIntermediate) {
+    if (!cityIntermediate) {
       //error
       console.log("issue on submit")
     } else {
-      setCity(cityIntermediate);
-      setState(finalState);
+      setCity(finalCity);
+      setState("MN");
 console.log("handling submit")
       navigate("/QuizResultsCareerOptions");
     }
@@ -108,12 +173,13 @@ console.log("handling submit")
                       >
                         City
                       </label>
-                      <input
-                        onChange={(e) => setCityIntermediate(e.target.value)}
-                        type="text"
-                        name="hs-company-hire-us-1"
-                        id="hs-company-hire-us-1"
-                        class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                       <Select
+                        className="w-full mt-4 sm: mt-10"
+                        isClearable={isClearable}
+                        isSearchable={isSearchable}
+                        options={cityOptions}
+                        onSelect={(e) => setCityIntermediate(e.target.value)}
+                        onChange={setCityIntermediate}
                       />
                     </div>
                     <div>

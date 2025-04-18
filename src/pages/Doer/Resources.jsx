@@ -52,7 +52,7 @@ const Resources = () => {
       const docRef = doc(
         db,
         "ResourcesByState",
-        currentUser.state.toLowerCase()
+        "minnesota"
       );
 
       getDoc(docRef).then((snapshot) => {

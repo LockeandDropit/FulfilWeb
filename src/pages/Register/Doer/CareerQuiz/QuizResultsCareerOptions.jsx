@@ -11,6 +11,7 @@ import Carousel from "./components/Carousel";
 import Slider from "react-slick";
 
 const QuizResultsCareerOptions = ({ handleIncrementFormIndex }) => {
+
   const {
     personalValues,
     currentPay,
@@ -211,7 +212,7 @@ const QuizResultsCareerOptions = ({ handleIncrementFormIndex }) => {
       />
       {isLoading ? (
         <div className="mx-auto w-full  flex flex-col items-center justify-center mt-16">
-          <span className="inline-flex items-center gap-x-1.5  px-3 rounded-full font-medium  text-slate-700 underline">
+          <span onClick={() => handleOpenSignUp()}className="inline-flex items-center gap-x-1.5  px-3 rounded-full font-medium  text-slate-700 underline">
             Note: Loading your results could take up to 1 minute...
           </span>
 

@@ -14,61 +14,53 @@ import {
   startAfter,
 } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
+import { useListJobStore } from "./ListJobStore";
 
 const SearchJobs = () => {
   // jobs pulled in here, fed to jobList
   // how to query a limited number at a time?
 
+  const { listJob, setListJob } = useListJobStore();
+
   const [jobs, setJobs] = useState([]);
 
-  const jobsRef = query(collection(db, "scraped"), limit(10));
+  // sql fetch
+  const sqlFetch = async () => {
+    const url = "http://localhost:8000/initialLoad";
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
 
-  // const q = query(jobsRef, where("population", ">", 100000), orderBy("population"), limit(2));
-  // const q = query(collection(db, "cities"), where("capital", "==", true));
+      const json = await response.json();
+      console.log("initial load", json);
 
-  // const querySnapshot = await getDocs(q);
-  // querySnapshot.forEach((doc) => {
-  //   // doc.data() is never undefined for query doc snapshots
-  //   console.log(doc.id, " => ", doc.data());
-  // });
 
-  const [lastVisible, setLastVisible] = useState(null);
+      const updatedJobs = [...jobs, ...json];
 
-  const fetchJobs = async () => {
-    const querySnapshot = await getDocs(jobsRef);
-    querySnapshot.forEach((doc) => {
-      setJobs((prevState) => [...prevState, doc.data()]);
-    });
-    // Get the last visible document
-    setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+// Update state in one go:
+setJobs(updatedJobs);
+setListJob(updatedJobs);
+
+      //  json.forEach(function(x){
+      //   setJobs((prevState) => [...prevState, x])
+      // })
+
+      // setListJob(jobs)
+   
+      
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
-  const loadMoreJobs = async () => {
-    console.log("last", lastVisible);
-
-    // Construct a new query starting at this document,
-    // get the next 25 cities.
-    const next = query(
-      collection(db, "scraped"),
-      startAfter(lastVisible),
-      limit(10)
-    );
-
-    const querySnapshot = await getDocs(next);
-    querySnapshot.forEach((doc) => {
-      setJobs((prevState) => [...prevState, doc.data()]);
-    });
-    // Get the last visible document
-    setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
-  };
 
   useEffect(() => {
-    fetchJobs();
+    // fetchJobs();
+    sqlFetch();
   }, []);
 
-  // local store for the selected job to be passed to the SelectedJob component
-
-  // then add search functionallity
 
   return (
     <div className="">
@@ -79,12 +71,12 @@ const SearchJobs = () => {
 
       <div className="max-w-[85rem] w-full mx-auto flex h-screen px-4 sm:px-0 py-4">
         <div className="w-1/3 p-2 h-screen">
-          <JobList jobs={jobs} />
+          <JobList jobs={listJob} />
           <div className="flex w-full py-5 items-center px-2 ">
             <button
               type="button"
               class=" py-2 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg  bg-sky-400 text-white shadow-sm hover:bg-sky-500 "
-              onClick={() => loadMoreJobs()}
+   
             >
               Load more
             </button>

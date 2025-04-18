@@ -78,7 +78,20 @@ const QuizHeader = (props) => {
    
   } = useQuizStore();
 
-  console.log("chose career path", chosenCareerPath)
+  console.log("chose career path",   personalValues,
+    currentPay,
+    payGoal,
+    city,
+    state,
+    talents,
+    workEnvironment,
+    passion,
+    personality,
+    learningAndDevelopment,
+    longTerm,
+    allCareerPathOptions,
+    quizCompleted,
+  )
 
   useEffect(() => {
     if (props.props === true) {
@@ -338,6 +351,35 @@ const QuizHeader = (props) => {
     }
   }, [ chosenCareerPath, quizCompleted]);
 
+  const submitToDB = async (user) => {
+    const payload = {
+      user_id:    user.uid,
+      city:       city,
+      state:      state,
+      first_name: firstName,
+      last_name:  lastName
+    };
+  
+    try {
+      const response = await fetch('http://localhost:8000/addUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+      console.log('User added successfully');
+    } catch (err) {
+      console.error('Fetch failed:', err);
+    }
+    }
+  
+  
+
   const updateUserProfileFirestore = (user) => {
     //submit data
     setDoc(doc(db, "users", user.uid), {
@@ -346,45 +388,47 @@ const QuizHeader = (props) => {
       city: city,
       state: state,
       uid: user.uid,
-      isPremium: false,
-      isEmployer: false,
-      email: user.email,
-      streamChatID: user.uid,
-      isOnboarded: false,
-      emailVerified: false,
-      userPreferredIndustry: null,
-      resumeUploaded: false,
-      stripeOnboarded: false,
-      savedCareerInterests: [],
-      PrivacyPolicyAgree: privacyPolicy,
-      ageAgreement: ageAgreement,
-      termsOfService: termsOfService,
-      currentIncome: currentPay,
-      goalIncome: payGoal,
-      allCareerPathOptions: allCareerPathOptions,
-      chosenCareerPath: chosenCareerPath[0],
-      quizAnswers: {
-        personalValues: personalValues,
-        talents: talents,
-        workEnvironment: workEnvironment,
-        passion: passion,
-        learningAndDevelopment: learningAndDevelopment,
-        longTerm: longTerm,
-      },
-      returnedEducation: returnedEducation,
-      returnedJobs: returnedJobs,
+      // isPremium: false,
+      // isEmployer: false,
+      // email: user.email,
+      // streamChatID: user.uid,
+      // isOnboarded: false,
+      // emailVerified: false,
+      // userPreferredIndustry: null,
+      // resumeUploaded: false,
+      // stripeOnboarded: false,
+      // savedCareerInterests: [],
+      // PrivacyPolicyAgree: privacyPolicy,
+      // ageAgreement: ageAgreement,
+      // termsOfService: termsOfService,
+      // currentIncome: currentPay,
+      // goalIncome: payGoal,
+      // allCareerPathOptions: allCareerPathOptions,
+      // chosenCareerPath: chosenCareerPath[0],
+      // quizAnswers: {
+      //   personalValues: personalValues,
+      //   talents: talents,
+      //   workEnvironment: workEnvironment,
+      //   passion: passion,
+      //   learningAndDevelopment: learningAndDevelopment,
+      //   longTerm: longTerm,
+      // },
+      // returnedEducation: returnedEducation,
+      // returnedJobs: returnedJobs,
 
-      industryReccomendation: {
-        average_pay: chosenCareerPath[0].average_salary,
-        outlook: chosenCareerPath[0].description,
-        overview: chosenCareerPath[0].description,
-        recommendation: chosenCareerPath[0].career_title,
-        growth: chosenCareerPath[0].industry_growth,
-      },
+      // industryReccomendation: {
+      //   average_pay: chosenCareerPath[0].average_salary,
+      //   outlook: chosenCareerPath[0].description,
+      //   overview: chosenCareerPath[0].description,
+      //   recommendation: chosenCareerPath[0].career_title,
+      //   growth: chosenCareerPath[0].industry_growth,
+      // },
     })
       .then(() => {
         fetchUserInfo(user.uid);
         //call api job/education fetch here
+        //pass user data to SQL db
+        // submitToDB(user)
         console.log("data submitted, new chat profile created");
         navigate("/DoerHomepage");
       })
@@ -405,8 +449,9 @@ const QuizHeader = (props) => {
 
           // Send localstore info to FB backend, include firstname and last name
           console.log("hit sign up ehres tghe user obj", user);
-          // handleSendEmail();
+          submitToDB(user)
           updateUserProfileFirestore(user);
+        
         })
         .catch((error) => {
           alert("oops! That email is already being used.");
@@ -876,10 +921,12 @@ const QuizHeader = (props) => {
                       </div>
                     </div>
 
-                    {agreedAll && jobsReady && eduReady ? (
+                    {/* {agreedAll && jobsReady && eduReady ? ( */}
+                    {agreedAll ? (
                       <input
                         type="button"
                         onClick={() => validate()}
+                        // onClick={() => submitToDB()}
                         value="Sign Up"
                         className="cursor-pointer w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-sky-400 text-white hover:bg-sky-500 disabled:opacity-50 disabled:pointer-events-none"
                       ></input>

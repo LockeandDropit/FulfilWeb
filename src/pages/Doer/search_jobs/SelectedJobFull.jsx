@@ -24,56 +24,19 @@ const SelectedJobFull = () => {
 
   const [drawerInfo, setDrawerInfo] = useState("");
 
-  const [sortedQualifications, setSortedQualifications] = useState(null);
-  const [sortedBenefits, setSortedBenefits] = useState(null);
-  const [sortedResponsibilities, setSortedResponsibilities] = useState(null);
+  const [parsedRequirements, setParsedRequirements] = useState(null)
+  const [parsedBenefits, setParsedBenefits] = useState(null)
+  const [parsedResponsibilities, setParsedResponsibilities] = useState(null)
 
-  function formatBulletList(selectedJob) {
-    // Check if the string starts with a bullet
-    console.log("sele", selectedJob);
-    let splitHolder = [];
-
-    if (selectedJob.qualifications.startsWith("- ")) {
-      splitHolder.push(selectedJob.qualifications.split(/-/g));
-
-      console.log("splitholder", splitHolder[0]);
-      setSortedQualifications(splitHolder[0]);
+  useEffect(() => {
+    if (selectedJob) {
+      setParsedRequirements(JSON.parse(selectedJob?.requirements))
+      setParsedBenefits(JSON.parse(selectedJob?.benefits))
+      setParsedResponsibilities(JSON.parse(selectedJob?.responsibilities))
     }
-  }
+  }, [selectedJob])
 
-  function formatBenefitsBulletList(selectedJob) {
-    let splitHolder = [];
 
-    if (
-      selectedJob.benefits.startsWith("- ") ||
-      selectedJob.benefits.startsWith("• ")
-    ) {
-      splitHolder.push(selectedJob.benefits.split(/•/g));
-      setSortedBenefits(splitHolder[0]);
-    }
-  }
-
-  function formatResponsibilitiesBulletList(selectedJob) {
-    let splitHolder = [];
-
-    if (
-      selectedJob.responsibilities.startsWith("- ") ||
-      selectedJob.responsibilities.startsWith("• ")
-    ) {
-      splitHolder.push(selectedJob.responsibilities.split(/-/g));
-      setSortedResponsibilities(splitHolder[0]);
-    }
-  }
-
-  // useEffect(() => {
-  //   if (selectedJob !== null) {
-  //     formatBulletList(selectedJob);
-  //     formatBenefitsBulletList(selectedJob);
-  //     formatResponsibilitiesBulletList(selectedJob);
-  //     setSaved(false)
-  //     setHasApplied(false)
-  //   }
-  // }, [selectedJob]);
 
   const [resumeIsComplete, setResumeIsComplete] = useState(false);
   const [resume, setResume] = useState(null);
@@ -337,7 +300,8 @@ const SelectedJobFull = () => {
                       </h4>
 
                       <ol className="flex flex-col gap-y-1 text-gray-600 list-disc markdown pl-5">
-                        {selectedJob?.requirements?.map((x) => (
+                 
+                        {parsedRequirements?.map((x) => (
                           <li className="flex gap-x-3">
                             <div>{x}</div>
                           </li>
@@ -349,7 +313,8 @@ const SelectedJobFull = () => {
                       </h4>
 
                       <ol className="flex flex-col gap-y-1 text-gray-600 list-disc markdown pl-5">
-                        {selectedJob?.responsibilities?.map((x) => (
+                     
+                      {parsedResponsibilities?.map((x) => (
                           <li className="flex gap-x-3">
                             <div>{x}</div>
                           </li>
@@ -361,7 +326,7 @@ const SelectedJobFull = () => {
                       </h4>
 
                       <ul className=" flex flex-col gap-y-1 text-gray-600 list-disc markdown pl-5">
-                        {selectedJob.benefits?.map((x) => (
+                      {parsedBenefits?.map((x) => (
                           <li className="flex gap-x-3">
                             <div>{x}</div>
                           </li>

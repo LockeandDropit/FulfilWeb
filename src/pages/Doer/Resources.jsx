@@ -46,7 +46,7 @@ const Resources = () => {
   };
 
   useEffect(() => {
-    if (currentUser) {
+ 
       console.log("state");
 
       const docRef = doc(
@@ -56,12 +56,10 @@ const Resources = () => {
       );
 
       getDoc(docRef).then((snapshot) => {
-        // console.log(snapshot.data());
+        console.log(snapshot.data());
         setResources(snapshot.data().resources);
       });
-    } else {
-      console.log("oops!");
-    }
+  
   }, []);
 
   const handleOpen = (x) => {
@@ -104,7 +102,7 @@ const Resources = () => {
           <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center ">
             <div className="">
               <h1 class="block text-3xl font-semibold text-white sm:text-2xl lg:text-3xl lg:leading-tight ">
-                Resources in {currentUser?.state}
+                Resources in Minnesota
               </h1>
               <p class="mt-2 text text-white">
                 Browse free resources that will help you find and prepare for a

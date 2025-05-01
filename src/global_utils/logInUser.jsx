@@ -8,7 +8,7 @@ export function useAppAuth() {
 
   useEffect(() => {
     // 1) Call your sessionInfo endpoint to exchange the cookie for a custom token
-    fetch("http://localhost:8000/api/sessionInfo", {
+    fetch("https://auth-api-3txs.onrender.com/api/sessionInfo", {
       credentials: "include"
     })
       .then((res) => {

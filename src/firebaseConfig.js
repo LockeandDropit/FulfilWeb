@@ -45,6 +45,14 @@ export const storage = getStorage(app)
 
 //logout user
 
-export function logout() {
-  return signOut(auth);
+export async function logout() {
+  await signOut(auth)
+
+  await fetch("https://auth.getfulfil.com/api/logout", {
+    // await fetch("http://localhost:8000/api/logout", {
+    method:"POST",
+    credentials: "include",
+  })
+  window.location.href = "https://getfulfil.com";
+  // window.location.href = "http://localhost:5173";
 }

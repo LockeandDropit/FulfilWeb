@@ -1,6 +1,6 @@
 import React from "react";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
-import { auth, db } from "../../../firebaseConfig";
+import { auth, db, logout } from "../../../firebaseConfig";
 import { useState, useEffect } from "react";
 import {
   query,
@@ -73,16 +73,12 @@ const DoerHeader = () => {
   }, []);
 
   const [loggingOut, setLoggingOut] = useState(false);
+  
   const handleLogOut = async () => {
     setLoggingOut(true);
 
-    await signOut(auth)
-      .then(
-        setTimeout(() => {
-          navigate("/");
-        }, 2000)
-      ) // undefined
-      .catch((e) => console.log(e));
+    await logout().catch((e) => console.log(e));
+
   };
 
   const [userFirstName, setUserFirstName] = useState("User");
@@ -192,9 +188,10 @@ const DoerHeader = () => {
 
   const updateUserCareerInterests = async () => {
     updateDoc(doc(db, "users", user.uid), {
-      savedCareerInterests: arrayUnion({ savedInterest: newSavedInterest,
-              id: uuidv4(),
-       }),
+      savedCareerInterests: arrayUnion({
+        savedInterest: newSavedInterest,
+        id: uuidv4(),
+      }),
     })
       .then(() => {
         //all good
@@ -447,73 +444,82 @@ const DoerHeader = () => {
               Fulfil
             </button>
             <div className=" sm:invisible">
-            <Menu>
-                  <MenuButton _hover={{ textDecoration: "underline" }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-</svg>
+              <Menu>
+                <MenuButton _hover={{ textDecoration: "underline" }}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                    />
+                  </svg>
+                </MenuButton>
+                <MenuList>
+                  <MenuItem onClick={() => onOpen()}>
+                    <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                      {" "}
+                      Career Coach
+                    </p>
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("/CareerPaths")}>
+                    <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                      {" "}
+                      Career Paths
+                    </p>
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("/Resources")}>
+                    <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                      {" "}
+                      Resources Near Me
+                    </p>
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("/ResumeBuilder")}>
+                    <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                      {" "}
+                      Resume Builder
+                    </p>
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("/DoerAccountManager")}>
+                    <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                      {" "}
+                      Account Settings
+                    </p>
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("/MyProfile")}>
+                    <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                      {" "}
+                      My Profile
+                    </p>
+                  </MenuItem>
+                  {/* <MenuItem onClick={() => navigate("/DoerPaymentHistory")}>Payment History</MenuItem> */}
 
-                  </MenuButton>
-                  <MenuList>
-                  <MenuItem   onClick={() => onOpen()}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Career Coach
-                      </p>
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate("/CareerPaths")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Career Paths
-                      </p>
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate("/Resources")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Resources Near Me
-                      </p>
-                    </MenuItem>
-                    <MenuItem  onClick={() => navigate("/ResumeBuilder")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Resume Builder
-                      </p>
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate("/DoerAccountManager")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Account Settings
-                      </p>
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate("/MyProfile")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        My Profile
-                      </p>
-                    </MenuItem>
-                    {/* <MenuItem onClick={() => navigate("/DoerPaymentHistory")}>Payment History</MenuItem> */}
-
-                    {loggingOut ? (
-                      <Center>
-                        <Spinner />
-                      </Center>
-                    ) : (
-                      <Center>
-                        <Button
-                          width="160px"
-                          colorScheme="red"
-                          height="32px"
-                          marginTop="8px"
-                          onClick={() => handleLogOut()}
-                        >
-                          Log Out
-                        </Button>
-                      </Center>
-                    )}
-                
-                  </MenuList>
-                </Menu>
-                </div>
+                  {loggingOut ? (
+                    <Center>
+                      <Spinner />
+                    </Center>
+                  ) : (
+                    <Center>
+                      <Button
+                        width="160px"
+                        colorScheme="red"
+                        height="32px"
+                        marginTop="8px"
+                        onClick={() => handleLogOut()}
+                      >
+                        Log Outt
+                      </Button>
+                    </Center>
+                  )}
+                </MenuList>
+              </Menu>
+            </div>
           </div>
           <div
             id="hs-header-base"
@@ -566,7 +572,7 @@ const DoerHeader = () => {
                         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                         <circle cx="12" cy="7" r="4" />
                       </svg>
-                     Resume Builder
+                      Resume Builder
                     </a>
                     {/* <a
                       class="pt-2  px-2 flex items-center font-medium  text-gray-800 hover:underline cursor-pointer rounded-lg   "
@@ -613,59 +619,58 @@ const DoerHeader = () => {
                       Career Coach
                     </button> */}
                     <Menu>
-                  <MenuButton _hover={{ textDecoration: "underline" }}>
-                    <a
-                      class="pt-2  px-2 flex items-center font-medium  text-gray-800 hover:underline  rounded-lg"
-                      aria-current="page"
-                    >
-                      <svg
-                        class="shrink-0 size-4 me-3 md:me-2 block md:hidden"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
-                        <path d="M18 14h-8" />
-                        <path d="M15 18h-5" />
-                        <path d="M10 6h8v4h-8V6Z" />
-                      </svg>
-                     Resources
-                    </a>
-                  </MenuButton>
-                  <MenuList>
-                    <MenuItem   onClick={() => onOpen()}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Career Coach
-                      </p>
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate("/CareerPaths")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Career Paths
-                      </p>
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate("/Resources")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Resources Near Me
-                      </p>
-                    </MenuItem>
-                    <MenuItem onClick={() => navigate("/SearchJobs")}>
-                      <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
-                        {" "}
-                        Jobs
-                      </p>
-                    </MenuItem>
-                
-                  </MenuList>
-                </Menu>
+                      <MenuButton _hover={{ textDecoration: "underline" }}>
+                        <a
+                          class="pt-2  px-2 flex items-center font-medium  text-gray-800 hover:underline  rounded-lg"
+                          aria-current="page"
+                        >
+                          <svg
+                            class="shrink-0 size-4 me-3 md:me-2 block md:hidden"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
+                            <path d="M18 14h-8" />
+                            <path d="M15 18h-5" />
+                            <path d="M10 6h8v4h-8V6Z" />
+                          </svg>
+                          Resources
+                        </a>
+                      </MenuButton>
+                      <MenuList>
+                        <MenuItem onClick={() => onOpen()}>
+                          <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                            {" "}
+                            Career Coach
+                          </p>
+                        </MenuItem>
+                        <MenuItem onClick={() => navigate("/CareerPaths")}>
+                          <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                            {" "}
+                            Career Paths
+                          </p>
+                        </MenuItem>
+                        <MenuItem onClick={() => navigate("/Resources")}>
+                          <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                            {" "}
+                            Resources Near Me
+                          </p>
+                        </MenuItem>
+                        <MenuItem onClick={() => navigate("/SearchJobs")}>
+                          <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex   text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
+                            {" "}
+                            Jobs
+                          </p>
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
                   </div>
                 </div>
                 <div class="mt-2 md:mt-2 md:mx-2">
@@ -698,7 +703,7 @@ const DoerHeader = () => {
                     </a>
                   </MenuButton>
                   <MenuList>
-                  {/* <MenuItem onClick={() => navigate("/UploadToBackEnd")}>
+                    {/* <MenuItem onClick={() => navigate("/UploadToBackEnd")}>
                       <p class="hs-accordion-toggle px-4 mb-1.5 hs-accordion-active:bg-gray-100 w-full text-start flex    text-sm text-gray-800 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100">
                         {" "}
                         Upload

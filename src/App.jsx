@@ -1,24 +1,14 @@
 import Landing from "./Landing";
 import React, { useState, useEffect } from "react";
-import {
-  Chat,
-  Channel,
-  ChannelList,
-  Window,
-  ChannelHeader,
-  MessageList,
-  MessageInput,
-  Thread,
-  useCreateChatClient,
-  StreamChat,
-  useChatContext,
-} from "stream-chat-react";
+
 import "stream-chat-react/dist/css/v2/index.css";
 import { onAuthStateChanged, getAuth, signInWithCustomToken } from "firebase/auth";
-import { auth, db } from "./firebaseConfig";
+
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { useAppAuth } from "./global_utils/logInUser";
+import { auth } from "./firebaseConfig";
+// import { useAppAuth } from '@full/shared';
+import { useAppAuth } from './logInUser';
 import { Spinner, Center } from "@chakra-ui/react";
 import TagManager from "react-gtm-module";
 
@@ -75,7 +65,10 @@ function App() {
   //   }
   // }, [user]);
 
-  const { user, initializing } = useAppAuth();
+
+  console.log("new change");
+
+  const { user, initializing } = useAppAuth(auth);
   
   useEffect(() => {
     if (initializing) return; // still figuring out state
